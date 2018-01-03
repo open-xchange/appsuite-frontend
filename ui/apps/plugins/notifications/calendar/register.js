@@ -360,7 +360,39 @@ define('plugins/notifications/calendar/register', [
                         };
                     },
                     //#. Invitations (notifications) about appointments
-                    hideAllLabel: gt('Hide all appointment invitations.')
+                    hideAllLabel: gt('Hide all appointment invitations.'),
+                    onClick: function (e) {
+                        if ((!(this.model.get('detailview'))) ||
+                            ((e.type !== 'click') && (e.which !== 13)) ||
+                            $(e.target).filter('.dropdown, select, a:not(.notification-info), button, .btn').length > 0) {
+                            return;
+                        }
+
+                        var options = util.cid(e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')));
+                        options.perspective = 'week:week';
+                        ox.launch('io.ox/calendar/main', options).done(function () {
+                            this.folders.add(options.folder);
+                            // no need for a redraw, just select the folder
+                            this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
+                            var currentPage =  this.pages.getCurrentPage();
+                            // resume calendar app
+                            if (currentPage && currentPage.perspective) {
+                                var e = $.Event('click', { target: currentPage.perspective.main });
+                                currentPage.perspective.setNewStart = true;
+                                currentPage.perspective.showAppointment(e, options, { arrow: false });
+                            } else {
+                                // perspective is not initialized yet on newly launched calendar app
+                                var self = this;
+                                this.on('aftershow:done', function (perspective) {
+                                    var e = $.Event('click', { target: perspective.main });
+                                    perspective.setNewStart = true;
+                                    perspective.showAppointment(e, options, { arrow: false });
+                                    self.off('aftershow:donw');
+                                });
+                            }
+                        });
+
+                    }
                 },
                 subview = new Subview(options);
 
