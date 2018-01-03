@@ -220,7 +220,7 @@ define('io.ox/calendar/week/perspective', [
                     end: index < 0 ? params.start : params.end + range
                 });
             }
-            return function (index, prevCollection) {
+            return _.debounce(function (index, prevCollection) {
                 var self = this,
                     params = this.view.getRequestParam(),
                     newParams = getNewParams(params, index),
@@ -230,7 +230,7 @@ define('io.ox/calendar/week/perspective', [
                         if (index < 0) self.prefetch(1, collection);
                     };
                 prevCollection.once('load reload', cont);
-            };
+            }, 0);
         }()),
 
         /**
