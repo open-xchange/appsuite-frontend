@@ -178,6 +178,17 @@ define('io.ox/keychain/api', [
         });
     };
 
+    // clean up used to simulate an "ignore" in case
+    // password was changed, see Bug #56412
+    api.cleanUp = function () {
+        return http.GET({
+            module: 'recovery/secret',
+            params: {
+                action: 'clean_up'
+            }
+        });
+    };
+
     api.cleanUpIrrecoverableItems = function () {
         return http.GET({
             module: 'recovery/secret',

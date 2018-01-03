@@ -37,9 +37,23 @@ define('io.ox/keychain/secretRecoveryDialog', [
                     );
                 })
                 .addPrimaryButton('migrate', gt('Recover'), 'migrate')
+                .addButton('ignore', gt('Ignore'), 'ignore')
                 .addButton('cancel', gt('Cancel'), 'cancel')
                 .on('cancel', function () {
                     this.getContentNode().find('input').val('');
+                })
+                .on('ignore', function () {
+                    var self = this.busy();
+                    return api.cleanUp().done(function () {
+                        self.close();
+                    }).fail(function (e) {
+                        notifications.yell({
+                            headline: gt('Error'),
+                            type: 'error',
+                            message: e.error
+                        });
+                        self.idle();
+                    });
                 })
                 .on('migrate', function () {
                     var self = this.busy();
