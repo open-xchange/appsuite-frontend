@@ -396,18 +396,18 @@ define('io.ox/core/viewer/views/types/documentview', [
                 if (_.isNumber(pageNumberToRefresh)) {
                     // Process the page node
                     var pageNode = this.getPageNode(pageNumberToRefresh);
-                    Util.logPerformanceTimer('DocumentView:refresh_before_pdf_render_' + pageNumberToRefresh);
+                    Util.logPerformanceTimer('DocumentView:refresh_before_set_pagezoom_' + pageNumberToRefresh);
                     this.pageLoader.setPageZoom(pageNode, this.currentZoomFactor / 100).done(function () {
-                        Util.logPerformanceTimer('DocumentView:refresh_' + pageNumberToRefresh);
+                        Util.logPerformanceTimer('DocumentView:refresh_then_from_set_pagezoom_' + pageNumberToRefresh);
                     });
 
                 } else {
                     // empty all pages in case of a complete refresh request
                     this.pages.detach().each(function () {
                         self.emptyPageNode($(this));
-                        Util.logPerformanceTimer('DocumentView:refresh_before_pdf_render_' + pageNumberToRefresh);
+                        Util.logPerformanceTimer('DocumentView:refresh_before_set_pagezoom_' + pageNumberToRefresh);
                         self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100).done(function () {
-                            Util.logPerformanceTimer('DocumentView:refresh_' + pageNumberToRefresh);
+                            Util.logPerformanceTimer('DocumentView:refresh_then_from_set_pagezoom_' + pageNumberToRefresh);
                         });
                     }).appendTo(self.documentContainer);
                 }
@@ -613,8 +613,6 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadSuccess(pageCount) {
 
-                Util.logPerformanceTimer('DocumentView:pdfDocumentLoadSuccess');
-
                 // do nothing and quit if a document is already disposed.
                 if (this.disposed || !this.pdfDocument) {
                     return;
@@ -716,10 +714,19 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.$el.addClass('io-ox-busy');
 
             // wait for PDF document to finish loading
-            $.when(this.pdfDocument.getLoadPromise()).then(
+            var pdfLoadPromise = $.when(this.pdfDocument.getLoadPromise());
+
+            // adding log timer in synchronous done handler
+            pdfLoadPromise.done(function () {
+                // the document is NOT completely loaded yet! Often further chunks are downloaded during page rendering.
+                Util.logPerformanceTimer('DocumentView:show_getLoadPromise_done_handler');
+            });
+
+            pdfLoadPromise.then(
                 pdfDocumentLoadSuccess.bind(this),
                 pdfDocumentLoadError.bind(this)
             );
+
             return this;
         },
 

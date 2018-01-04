@@ -329,6 +329,11 @@ define('io.ox/core/viewer/util', [
                         if (performanceTimer && performanceLogger) {
                             // adding default information to the performance logger object
                             Util.addDefaultPerformanceInfo(data);
+
+                            // debug code
+                            // console.log('Performance: ');
+                            // for (var key in performanceLogger) { console.log(key + ' : ' + performanceLogger[key]); }
+
                             // sending the http post request to save data
                             httpPromise = http.POST({ module: 'oxodocumentfilter', params: { action: 'logperformancedata', performanceData: JSON.stringify(performanceLogger) } });
                             // resetting the logger and the timer
