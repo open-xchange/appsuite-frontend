@@ -429,7 +429,9 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onSelectDate: function (e) {
-            var date = moment($(e.currentTarget).data('date'));
+            var target = $(e.currentTarget),
+                date = moment(target.data('date'));
+            if (target.hasClass('cw')) return;
             this.trigger('select', date);
         },
 
