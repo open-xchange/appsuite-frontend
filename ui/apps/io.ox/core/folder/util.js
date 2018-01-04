@@ -14,8 +14,9 @@
 define('io.ox/core/folder/util', [
     'io.ox/core/api/account',
     'settings!io.ox/mail',
-    'settings!io.ox/core'
-], function (account, mailSettings, coreSettings) {
+    'settings!io.ox/core',
+    'settings!io.ox/calendar'
+], function (account, mailSettings, coreSettings, calSettings) {
 
     'use strict';
 
@@ -30,8 +31,7 @@ define('io.ox/core/folder/util', [
 
     function getDefaultFolder(type) {
         type = type || 'mail';
-        // TODO can we get this out of a setting?
-        if (type === 'calendar') return 'cal://0/' + coreSettings.get('folder/calendar');
+        if (type === 'calendar') return calSettings.get('chronos/defaultFolderId');
         return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 

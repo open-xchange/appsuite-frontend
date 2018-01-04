@@ -25,9 +25,10 @@ define('io.ox/core/folder/api', [
     'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'settings!io.ox/calendar',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, calSettings, filestorageApi, gt) {
 
     'use strict';
 
@@ -58,7 +59,7 @@ define('io.ox/core/folder/api', [
                 // only for calendar
                 if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
                 // rename default calendar
-                if (item.id === String(settings.get('folder/calendar'))) return true;
+                if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
                 // any shared folder
                 return util.is('shared', item);
             }),
@@ -75,7 +76,7 @@ define('io.ox/core/folder/api', [
             var hash = _.object(ids, list);
 
             _(renameItems).each(function (item) {
-                if (item.id === String(settings.get('folder/calendar')) || item.title === gt('Calendar')) {
+                if (item.id === String(calSettings.get('chronos/defaultFolderId')) || item.title === gt('Calendar')) {
                     item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
                 } else {
                     //#. %1$s is the folder owner

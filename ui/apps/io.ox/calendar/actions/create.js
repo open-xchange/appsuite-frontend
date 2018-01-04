@@ -17,7 +17,7 @@ define('io.ox/calendar/actions/create', [
     'io.ox/core/api/user',
     'io.ox/contacts/util',
     'gettext!io.ox/calendar',
-    'settings!io.ox/core'
+    'settings!io.ox/calendar'
 ], function (api, dialogs, userAPI, util, gt, settings) {
 
     'use strict';
@@ -54,7 +54,7 @@ define('io.ox/calendar/actions/create', [
             })
             .on('invite', function () {
                 params.participants = [{ id: user.id, type: 1 }];
-                params.folder_id = settings.get('folder/calendar');
+                params.folderId = settings.get('chronos/defaultFolderId');
                 openEditDialog(params);
             })
             .show();

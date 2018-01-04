@@ -11,7 +11,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/invite', ['settings!io.ox/core'], function (settings) {
+define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (settings) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/calendar/actions/invite', ['settings!io.ox/core'], function (setti
             // open create dialog with same participants
             // TODO REMOVE WHEN FOLDERS ARE SAVED CORRECTLY
             data = {
-                folder: 'cal://0/' + settings.get('folder/calendar'),
+                folder: settings.get('chronos/defaultFolderId'),
                 attendees: attendees,
                 startDate: { value: moment().startOf('hour').format('YYYYMMDD[T]HHmmss'), tzid: moment().tz() },
                 endDate: { value: moment().startOf('hour').add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: moment().tz() }
