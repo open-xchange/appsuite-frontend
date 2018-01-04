@@ -533,6 +533,8 @@ define('io.ox/mail/main', [
                 folder: app.folder.get(),
                 thread: app.settings.get('threadSupport', true)
             });
+            // for debugging
+            window.list = app.listView;
         },
 
         'list-view-checkboxes': function (app) {
