@@ -24,7 +24,7 @@ define('io.ox/calendar/actions/edit', [
         var params = baton.data,
             o = api.reduce(baton.data);
 
-        if (params.recurrenceId) {
+        if (params.recurrenceId && params.id === params.seriesId) {
             util.getRecurrenceEditDialog()
                 .show()
                 .done(function (action) {
@@ -35,7 +35,7 @@ define('io.ox/calendar/actions/edit', [
                     if (action === 'series') {
                         // edit the series, discard recurrenceId and reference to seriesId if exception
                         delete o.recurrenceId;
-                        o.id = params.seriedId || params.id;
+                        o.id = params.seriesId || params.id;
                     }
 
                     // disable cache with second param
