@@ -505,7 +505,10 @@ define('io.ox/calendar/edit/extensions', [
             });
 
             this.$el.append(
-                picker.render().$el
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Color')),
+                    picker.render().$el
+                )
             );
 
             function onChangeClass() {
