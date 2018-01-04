@@ -73,6 +73,9 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
+        requires: function (e) {
+            return e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+        },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (recipients) {
                 var hash = {};
@@ -99,6 +102,9 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
+        requires: function (e) {
+            return e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+        },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/invite']).done(function (action) {
                 action(baton);
@@ -108,6 +114,9 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
+        requires: function (e) {
+            return e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+        },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (distlist) {
                 ox.load(['io.ox/contacts/distrib/main', 'settings!io.ox/core']).done(function (m, coreSettings) {
@@ -621,38 +630,44 @@ define('io.ox/calendar/actions', [
         ref: 'io.ox/calendar/detail/actions/print-appointment'
     }));
 
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 700,
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'send mail',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
+        label: gt('Send mail to all participants'),
+        ref: 'io.ox/calendar/detail/actions/sendmail'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 800,
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'invite',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
+        label: gt('Invite to new appointment'),
+        ref: 'io.ox/calendar/detail/actions/invite'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 900,
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'save as distlist',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+    }));
+
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links-participant',
         ref: 'io.ox/calendar/links/inline-participants',
         classes: 'io-ox-inline-links embedded'
-    }));
-
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        mobile: 'lo',
-        id: 'send mail',
-        label: gt('Send mail to all participants'),
-        ref: 'io.ox/calendar/detail/actions/sendmail'
-    }));
-
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 200,
-        prio: 'hi',
-        mobile: 'lo',
-        id: 'invite',
-        label: gt('Invite to new appointment'),
-        ref: 'io.ox/calendar/detail/actions/invite'
-    }));
-
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 300,
-        prio: 'hi',
-        mobile: 'lo',
-        id: 'save as distlist',
-        label: gt('Save as distribution list'),
-        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
     }));
 
     ext.point('io.ox/calendar/folderview/premium-area').extend(new links.InlineLinks({
