@@ -423,9 +423,6 @@ define('io.ox/mail/listview', [
 
         reprocessThread: function (model) {
 
-            // only used when in thread mode
-            if (!(this.app && this.app.isThreaded())) return;
-
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
 
@@ -454,6 +451,9 @@ define('io.ox/mail/listview', [
         },
 
         map: function (model) {
+            // only used when in thread mode
+            if (!(this.app && this.app.isThreaded())) return model.toJSON();
+
             // in case thread property has changed (e.g. latest mail of thread deleted)
             this.reprocessThread(model);
 
@@ -466,9 +466,6 @@ define('io.ox/mail/listview', [
                 useRecipientAddress = !isThread && account.is('sent|drafts', data.folder_id),
                 address = useRecipientAddress ? data.to : data.from;
             data.picture = address && address[0] && address[0][1];
-
-            // not threaded?
-            if (!(this.app && this.app.isThreaded())) return data;
 
             // get unseen flag for entire thread
             var unseen = _(thread).reduce(function (memo, obj) {
