@@ -108,7 +108,7 @@ define('io.ox/core/main/appcontrol', [
                 $('<div id="io-ox-quicklaunch">').append(
                     drawQuicklaunch()
                 ),
-                $('<div id="io-ox-topsearch">').text('Search'),
+                $('<div id="io-ox-topsearch" class="hidden-xs hidden-sm">').text('Search'),
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')
                 )
