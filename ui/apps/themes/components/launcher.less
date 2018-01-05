@@ -5,11 +5,20 @@
 @launcher-fg-hover: #fff;
 @launcher-bg-hover: @brand-primary;
 
-@launcher-size: 84px;
+@launcher-stroke-width: 2px;
+
+@launcher-text-size: 12px;
+@launcher-badge-color: #757575; //#c30000;
+
+@launcher-size: 96px;
 @launcher-vertical-amount: 3;
 @launcher-spacing: 2px;
 
 @quicklaunch-width: @appcontrol-height;
+@quicklaunch-stroke-width: 1px;
+
+@svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
+
 // adjust positions of top-bar and screens
 #io-ox-core {
     #io-ox-topbar { display: none; }
@@ -104,6 +113,8 @@
             .stroke-c1 { stroke: #fff; }
             .fill-none { fill: none;   }
             .fill-c1   { fill: #fff;   }
+            .stroke-w1 { stroke-width: @quicklaunch-stroke-width; }
+
 
         }
 
@@ -211,7 +222,7 @@
             position: absolute;
             top: 75%;
             color: @launcher-fg;
-            font-size: 11px;
+            font-size: @launcher-text-size;
             text-align: center;
         }
         .badge {
@@ -220,10 +231,10 @@
             right: 17%;
             font-size: 9px;
             z-index: 1;
-            background-color: #c80000;
+            background-color: @launcher-badge-color;
         }
         .svgwrap {
-            width: 57%;
+            width: @svg-wrap-size;
             height: 100%;
         }
         svg {
@@ -233,15 +244,61 @@
             width: 100%;
             overflow: visible;
 
+            // overwrite stroke colors if coloredicons are configured
+            &.colored {
+                &.app-icon-mail {
+                    .stroke-c1 { stroke: @app-color-mail; }
+                    .fill-c1 { fill: @app-color-mail; }
+                }
+                &.app-icon-calendar {
+                    .stroke-c1 { stroke: @app-color-calendar; }
+                    .fill-c1 { fill: @app-color-calendar; }
+                }
+                &.app-icon-addressbook {
+                    .stroke-c1 { stroke: @app-color-addressbook; }
+                    .fill-c1 { fill: @app-color-addressbook; }
+                }
+                &.app-icon-drive {
+                    .stroke-c1 { stroke: @app-color-drive; }
+                    .fill-c1 { fill: @app-color-drive; }
+                }
+                &.app-icon-tasks {
+                    .stroke-c1 { stroke: @app-color-tasks; }
+                    .fill-c1 { fill: @app-color-tasks; }
+                }
+                &.app-icon-portal {
+                    .stroke-c1 { stroke: @app-color-portal; }
+                    .fill-c1 { fill: @app-color-portal; }
+                }
+                &.app-icon-text {
+                    .stroke-c1 { stroke: @app-color-text; }
+                    .fill-c1 { fill: @app-color-text; }
+                }
+                &.app-icon-spreadsheet {
+                    .stroke-c1 { stroke: @app-color-spreadsheet; }
+                    .fill-c1 { fill: @app-color-spreadsheet; }
+                }
+                &.app-icon-presentation {
+                    .stroke-c1 { stroke: @app-color-presentation; }
+                    .fill-c1 { fill: @app-color-presentation; }
+                }
+            }
+
             .stroke-c1 { stroke: @launcher-fg; }
             .fill-none { fill: none;   }
-            .fill-c1   { fill: @launcher-fg;   }
+            .fill-c1   { fill: @launcher-fg; }
+            .stroke-w1 { stroke-width: @launcher-stroke-width; }
+
         }
         &:focus, &:hover {
-            svg .stroke-c1 { stroke: @launcher-fg-hover; }
-            svg .fill-c1   { fill: @launcher-fg-hover;   }
-        }
-        &:focus, &:hover {
+            .colored {
+                &[class^="app-icon-"] {
+                    .stroke-c1 { stroke: @launcher-fg-hover }
+                    .fill-c1 { fill: @launcher-fg-hover }
+                }
+            }
+            .stroke-c1 { stroke: @launcher-fg-hover }
+            .fill-c1 { fill: @launcher-fg-hover }
             background: @launcher-bg-hover;
             .title { color: white; }
         }

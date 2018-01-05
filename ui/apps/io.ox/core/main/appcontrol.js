@@ -12,38 +12,40 @@
  */
 
 define('io.ox/core/main/appcontrol', [
-    'io.ox/core/extensions'
-], function (ext) {
+    'io.ox/core/extensions',
+    'settings!io.ox/core'
+], function (ext, settings) {
 
+    var coloredIcons = settings.get('features/appLauncher/colored', false);
     var appLauncherIcon = '<svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><g class="fill-c1" fill-rule="evenodd"><path d="M0 0h16v16H0zM25 0h16v16H25zM50 0h16v16H50zM0 25h16v16H0zM25 25h16v16H25zM50 25h16v16H50zM0 50h16v16H0zM25 50h16v16H25zM50 50h16v16H50z"/></g></svg>';
 
     var meta = [{
         name: 'Mail',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g class="stroke-c1 fill-none" stroke-width="2" fill-rule="evenodd"><path d="M17.012 25.012l66 .192a4 4 0 0 1 3.988 4V71a4 4 0 0 1-4 4H17a4 4 0 0 1-4-4V29.012a4 4 0 0 1 4.012-4z"/><path d="M13 28l37 26 37-25.73"/></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-mail"><g class="stroke-w1 stroke-c1" stroke-width="3" fill="none" fill-rule="evenodd"><path d="M8 16h48v32H8z"/><path d="M8 20l24 16 24-16"/></g></svg>'
     }, {
         name: 'Calendar',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(10 14)" fill="none" fill-rule="evenodd"><rect class="stroke-c1" stroke-opacity=".695" stroke-width="2" x="1" y="1" width="78" height="70" rx="4"/><text class="fill-c1" text-anchor="middle" font-family="HelveticaNeue, Helvetica Neue" font-size="34" y="55"><tspan x="41">21</tspan></text><text class="fill-c1" text-anchor="middle" font-family="HelveticaNeue, Helvetica Neue" font-size="11" y="21"><tspan x="41">Monday</tspan></text></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-calendar"><g fill="none" fill-rule="evenodd"><g font-family="HelveticaNeue, Helvetica Neue" transform="translate(5 0)"><text class="fill-c1" font-size="18"><tspan x="21.992" y="45">31</tspan></text><text class="fill-c1" font-size="11" text-anchor="middle"><tspan x="27.27" y="24">Thu</tspan></text></g><path class="stroke-c1 stroke-w1" stroke-width="3" d="M8 11v42h48V11z"/></g></svg>'
     }, {
         name: 'Addressbook',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g class="stroke-c1" stroke-width="2" transform="translate(24 23)" fill="none" fill-rule="evenodd"><ellipse cx="26.19" cy="14.423" rx="14" ry="14.423"/><path d="M0 55c.793-11.146 7.519-20.484 16.75-24.29 2.471 2.218 5.707 3.563 9.25 3.563s6.779-1.345 9.25-3.564C44.48 34.516 51.207 43.854 52 55H0z"/></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-addressbook"><g class="stroke-c1 stroke-w1" transform="translate(16 13)" stroke-width="3" fill="none" fill-rule="evenodd"><circle cx="16" cy="8" r="8"/><path d="M0 34c.488-6.369 4.627-11.705 10.308-13.88A8.864 8.864 0 0 0 16 22.156c2.18 0 4.172-.768 5.692-2.036C27.373 22.295 31.512 27.63 32 34H0z"/></g></svg>'
     }, {
         name: 'Drive',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path class="stroke-c1" d="M27.405 70.244h45.923c2.307 0 12.657-3.797 11.789-14.734-.579-7.29-5.277-11.393-14.096-12.306-1.344-6.363-5.148-8.465-11.41-6.307-.932.321-6.296-8.598-17.89-6.607C29.107 32.456 26.99 42.705 26.31 43.204c-.649.477-13.492 1.309-12.222 15.175.87 9.49 9.606 11.865 13.317 11.865z" stroke-width="2" fill="none"/></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-drive"><path class="stroke-c1 stroke-w1" d="M17.041 46h30.973c1.556 0 8.537-2.642 7.951-10.25-.39-5.074-3.56-7.928-9.507-8.563-.906-4.427-3.472-5.89-7.696-4.388-.628.223-4.246-5.982-12.065-4.597-8.508 1.507-9.937 8.638-10.395 8.985-.437.332-9.099.91-8.242 10.558C8.646 44.348 14.538 46 17.04 46z" stroke-width="3" fill="none" fill-rule="evenodd"/></svg>'
     }, {
         name: 'Portal',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path class="stroke-c1" d="M25 36h14v13H25zm18 0h14v13H43zM25 53h14v13H25zm18 0h14v13H43zm18-17h14v13H61zm0 17h14v13H61z" stroke-width="2" fill="none" fill-rule="evenodd" opacity=".868"/></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-portal"><g class="stroke-c1 stroke-w1" stroke-width="3" fill="none" fill-rule="evenodd"><path d="M9 17h16v12H9zM31 17h24v12H31zM55 47H39V35h16zM33 47H9V35h24z"/></g></svg>'
     }, {
         name: 'Tasks',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g class="stroke-c1" fill="none" fill-rule="evenodd"><path stroke-width="4" d="M37 43.154l12.119 11.539L74 28"/><path d="M71 40.776V68a4 4 0 0 1-4 4H31a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h29.74" stroke-width="2"/></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-tasks"><g class="stroke-c1 stroke-w1" stroke-width="3" fill="none" fill-rule="evenodd"><path d="M47 30v18H16V16h28"/><g stroke-linecap="square"><path d="M23.166 28.397l8.248 8.248M31.385 36.615l18.85-18.85"/></g></g></svg>'
     }, {
         name: 'Text',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path class="fill-c1" d="M33 48h30v4H33zm0 9h34v4H33zm0-18h34v4H33z"/><g class="stroke-c1" stroke-width="2"><path d="M66 17v9h9"/><path d="M25 17h41l9 9v58H25z"/></g></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-text"><g fill="none" fill-rule="evenodd"><g class="fill-c1"><path d="M21 38h22v3H21zM21 31h18v3H21zM21 24h22v3H21z"/></g><g class="stroke-c1 stroke-w1" stroke-width="3"><path d="M38.93 11.5H17.5v41h29V19.07l-7.57-7.57z"/><path d="M37 11.833v7.334M45 19.167h-8" stroke-linecap="square"/></g></g></svg>'
     }, {
         name: 'Spreadsheet',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path class="fill-c1" fill-opacity=".197" d="M19.711 24.711H83v10.263H19.711z"/><path class="stroke-c1" stroke-width="1.711" d="M18.855 23.855h63.289v53.026H18.855z"/><path class="stroke-c1" d="M34.25 23.855v53.027M68.46 23.855v53.027M51.355 23.855v53.027M18.855 35.829h63.29M18.985 49.513h63.03M18.985 63.197h63.03" stroke-width="1.711" stroke-linecap="square"/></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-spreadsheet"><g class="stroke-c1 stroke-w1" fill="none" fill-rule="evenodd"><path class="stroke-c1 stroke-w1" stroke-width="3" d="M13 15h38v34H13z"/><path d="M13.5 24h37M13.5 32h37M13.5 40h37M22 15v34M32 15v34M42 15v34" stroke-linecap="square"/></g></svg>'
     }, {
         name: 'Presentation',
-        svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(15 24)" fill="none" fill-rule="evenodd"><g class="fill-c1"><path d="M33.384 13.509v14.064H46.62c-.592 6.574-6.117 11.725-12.845 11.725-7.123 0-12.898-5.774-12.898-12.897 0-6.993 5.565-12.686 12.507-12.892z"/><path d="M35.614 11.058c.13-.003.26-.005.39-.005 7.124 0 12.899 5.774 12.899 12.897 0 .396-.018.787-.053 1.173H35.614V11.058z"/></g><rect class="stroke-c1" stroke-width="2.456" x="1.228" y="1.228" width="67.544" height="49.123" rx="1.228"/></g></svg>'
+        svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-presentation"><g fill="none" fill-rule="evenodd"><path d="M10 15h44v34H10z" class="stroke-c1 stroke-w1" stroke-width="3"/><g class="fill-c1"><path d="M32 23v9.004h9a9.001 9.001 0 1 1-18-.002A9.001 9.001 0 0 1 32 23z"/><path d="M34 21.014c.165-.01.332-.014.5-.014 4.694 0 8.5 3.582 8.5 8 0 .339-.022.672-.066 1H34v-8.986z"/></g></g></svg>'
     }];
 
     var quicklaunchSettings = 'Mail,Calendar';
@@ -54,12 +56,14 @@ define('io.ox/core/main/appcontrol', [
     }
 
     function drawIcon(o) {
-        var svg = o.svg,
+        var $svg = $(o.svg),
             badge = $();
+
+        if (coloredIcons) $svg.addClass('colored');
+
         if (o.name === 'Calendar') {
-            svg = $(o.svg);
-            svg.find('tspan:first').text(moment().format('D'));
-            svg.find('tspan:last').text(moment().format('dddd'));
+            $svg.find('tspan:first').text(moment().format('D'));
+            $svg.find('tspan:last').text(moment().format('MMM'));
         }
         if (o.name === 'Mail') {
             badge = $('<span class="badge" aria-hidden="true">').text(
@@ -68,7 +72,7 @@ define('io.ox/core/main/appcontrol', [
         }
         return $('<div class="lcell">').append(
             badge,
-            $('<div class="svgwrap">').append(svg),
+            $('<div class="svgwrap">').append($svg),
             $('<div class="title">').text(o.name)
         );
     }
