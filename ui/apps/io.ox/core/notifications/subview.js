@@ -402,9 +402,6 @@ define('io.ox/core/notifications/subview', [
             this.collection.reset(items, { silent: silent });
         },
         onClick: function (e) {
-            if (this.model.get('onClick')) {
-                return this.model.get('onClick').call(this, e);
-            }
             if ((!(this.model.get('detailview'))) ||
                 ((e.type !== 'click') && (e.which !== 13)) ||
                 $(e.target).filter('.dropdown, select, a:not(.notification-info), button, .btn').length > 0) {
