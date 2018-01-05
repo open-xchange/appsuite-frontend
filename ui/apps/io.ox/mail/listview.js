@@ -410,7 +410,7 @@ define('io.ox/mail/listview', [
             }
 
             this.$el.on('scrollend', this.fetchTextPreview.bind(this));
-            this.on('collection:load', this.fetchTextPreview);
+            this.on('collection:load collection:reload', this.fetchTextPreview);
         },
 
         fetchTextPreview: function () {

@@ -312,8 +312,6 @@
 
     .contact-picture {
         display: inline-block;
-
-        html.high-contrast & { display: none; }
     }
 
     .from {
@@ -419,14 +417,14 @@
         .low  { color: @mail-priority-low; }
     }
 
-    .contact-picture {
-        position: absolute;
+    &.mail-item .contact-picture {
         top: @default-padding;
         right: @default-padding;
+        left: auto;
+        margin: 0;
         .picture(@picture-width, @picture-width);
     }
 
-    &.mail-item .contact-picture { margin: 0; }
     &.no-padding .contact-picture { right: 0; }
 
     .io-ox-label {
@@ -566,11 +564,20 @@
 .mail-item {
 
     .contact-picture {
-        float: left;
+        position: absolute;
+        left: 0;
+        top: 0;
         margin: 0 @default-padding 0 0;
         .picture(40px, 40px);
+    }
 
-        html.high-contrast & { display: none; }
+    &.show-contact-pictures .list-item-content {
+        position: relative;
+        padding-left: 56px;
+    }
+
+    &.show-contact-pictures.show-text-preview .contact-picture {
+        top: 6px;
     }
 
     .selected:not(:focus) .contact-picture {

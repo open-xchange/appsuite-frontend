@@ -1559,10 +1559,20 @@ define('io.ox/mail/main', [
          * Respond to change of view options that require redraw
          */
         'change:viewOptions': function (app) {
+
             app.props.on('change:contactPictures change:exactDates change:alwaysShowSize change:textPreview', function () {
                 app.listView.redraw();
                 app.listView.$el.trigger('scroll');
+                toggleClasses();
             });
+
+            toggleClasses();
+
+            function toggleClasses() {
+                app.listView.$el
+                    .toggleClass('show-contact-pictures', app.props.get('contactPictures'))
+                    .toggleClass('show-text-preview', app.props.get('textPreview'));
+            }
         },
 
         'fix-mobile-lazyload': function (app) {
