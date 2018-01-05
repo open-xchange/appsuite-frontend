@@ -36,7 +36,8 @@ define('io.ox/calendar/edit/main', [
             title: gt('Edit Appointment'),
             userContent: true,
             closable: true,
-            floating: !_.device('smartphone')
+            floating: !_.device('smartphone'),
+            sendInternalNotifications: true
         });
 
         _.extend(app, {
@@ -284,15 +285,16 @@ define('io.ox/calendar/edit/main', [
                                 }
                             })
                             .on('ignore', function () {
+                                var sendNotifications = self.get('sendInternalNotifications');
                                 if (self.view.options.mode === 'create') {
                                     api.create(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), { sendInternalNotifications: sendNotifications, checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), { sendInternalNotifications: sendNotifications, checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
                             });

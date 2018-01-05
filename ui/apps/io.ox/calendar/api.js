@@ -223,7 +223,8 @@ define('io.ox/calendar/api', [
                         action: 'new',
                         folder: obj.folder,
                         // convert to true boolean
-                        checkConflicts: !!options.checkConflicts
+                        checkConflicts: !!options.checkConflicts,
+                        sendInternalNotifications: !!options.sendInternalNotifications
                     },
                     def;
 
@@ -280,7 +281,8 @@ define('io.ox/calendar/api', [
                         id: obj.id,
                         timestamp: obj.timestamp,
                         // convert to true boolean
-                        checkConflicts: !!options.checkConflicts
+                        checkConflicts: !!options.checkConflicts,
+                        sendInternalNotifications: !!options.sendInternalNotifications
                     };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;

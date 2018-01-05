@@ -73,7 +73,8 @@ define('io.ox/calendar/edit/extensions', [
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder'),
                         attachments = [],
-                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
+                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val(),
+                        sendNotifications = baton.app.get('sendInternalNotifications');
 
                     // check if attachments have changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0) {
@@ -132,13 +133,12 @@ define('io.ox/calendar/edit/extensions', [
                     if (!baton.model.isValid({ isSave: true })) return;
 
                     baton.app.getWindow().busy();
-
                     if (baton.mode === 'edit') {
-                        api.update(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true })).then(save, fail);
+                        api.update(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
                         return;
                     }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true })).then(save, fail);
+                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
                 })
             );
 
@@ -618,8 +618,13 @@ define('io.ox/calendar/edit/extensions', [
         index: 1510,
         className: 'col-md-6',
         render: function () {
+            var app = this.baton.app,
+                model = new Backbone.Model({ notification: app.get('sendInternalNotifications') });
+            model.on('change:notification', function () {
+                app.set('sendInternalNotifications', this.get('notification'), { silent: true });
+            });
             this.$el.append(
-                new mini.CustomCheckboxView({ label: gt('Notify all participants by email.'), name: 'notification', model: this.model }).render().$el
+                new mini.CustomCheckboxView({ label: gt('Notify all participants by email.'), name: 'notification', model: model }).render().$el
             );
         }
     }, {
