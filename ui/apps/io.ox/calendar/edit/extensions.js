@@ -474,14 +474,14 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-md-6',
         index: 800,
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div class="checkbox">').append(
-                    $('<label class="control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'transp', model: this.model, customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' }, defaultVal: 'OPAQUE' }).render().$el,
-                        $.txt(gt('Show as free'))//#. Describes how a appointment is shown in the calendar
-                    )
-                )
+                new mini.CustomCheckboxView({
+                    label: gt('Show as free'),
+                    name: 'transp',
+                    model: this.model,
+                    customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' },
+                    defaultVal: 'OPAQUE'
+                }).render().$el
             );
         }
     }, {
