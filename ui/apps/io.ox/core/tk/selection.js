@@ -74,12 +74,14 @@ define('io.ox/core/tk/selection', [
             mousedownHandler,
             touchHandler,
             update,
+            clearTabIndex,
             clear,
             isSelected,
             fastSelect,
             select,
             selectOnly,
             deselect,
+            getLastSelectedItem,
             toggle,
             isSelectable,
             isCheckbox,
@@ -195,12 +197,21 @@ define('io.ox/core/tk/selection', [
             }
         };
 
-        selectFirst = function (e) {
+        selectFirst = function (e, giveFocus) {
             if (bHasIndex && observedItems.length) {
                 var item = observedItems[0];
                 clear(e);
                 apply(item.data, e);
                 self.trigger('select:first', item.data);
+
+                // whether the selected item should get the focus
+                if (giveFocus) {
+                    var
+                        key = self.serialize(item.data),
+                        $node = getNode(key);
+
+                    $node.focus();
+                }
             }
         };
 
@@ -249,7 +260,7 @@ define('io.ox/core/tk/selection', [
                     e.preventDefault();
                     if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                     // cursor up
-                    if (e.metaKey || e.ctrlKey) {
+                    if (e.metaKey) {
                         selectFirst(e);
                     } else {
                         selectPrevious(e);
@@ -265,24 +276,30 @@ define('io.ox/core/tk/selection', [
                     // last is the current selected/focussed
                     if (options.markable) {
                         e.preventDefault();
+                        // only deselect via space when a marker is active
+                        if (!$(e.target).hasClass('marked')) return;
                         toggle(last);
+                        // toggle() is called directly instead of apply(), therefore changed()
+                        // must be called too to get consistent fired events at toggling items
+                        changed();
                     }
                     break;
                 case 40:
                     e.preventDefault();
                     if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                     // cursor down
-                    if (e.metaKey || e.crtlKey) {
+                    if (e.metaKey) {
                         selectLast(e);
                     } else {
                         selectNext(e);
                     }
                     break;
-                case 9:
-                    if (options.markable) {
-                        clearMarks();
-                    }
-                    break;
+                // it's better to use the blur as a trigger for a lost focus instead if the 'Tab' key to get also mouse clicks
+                // case 9:
+                //     if (options.markable) {
+                //         clearMarks();
+                //     }
+                //     break;
                 // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
                 case 8:
                 case 46:
@@ -323,6 +340,12 @@ define('io.ox/core/tk/selection', [
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
+
+                // clear all marks on mousedown in markable mode
+                // to prevent a marked element without a focus (focus is set
+                // due to this mouse event to a different target)
+                if (options.markable) { clearMarks(); }
+
                 handleMouseDown = function () {
                     // exists?
                     if (id !== undefined && !isCheckbox(e)) {
@@ -339,7 +362,9 @@ define('io.ox/core/tk/selection', [
                             }
                         } else {
                             if (isRange(e)) {
-                                prev = self.get()[0] || empty;
+                                //  must NOT be set when 'prev' is already set -> otherwise bug 56087
+                                if (prev === empty) prev = self.get()[0] || empty;
+
                             }
                             clear();
                             apply(id, e);
@@ -419,6 +444,12 @@ define('io.ox/core/tk/selection', [
             var $node = (node || getNode(key));
             // set focus?
             if (container.has(document.activeElement).length) $node.focus();
+            // cleanup all tabIndex targets: there should be only one tabindex=0
+            // at a time in the list, this must be done when setting the selection,
+            // not at deselecting/cleaning, because otherwise it will not work
+            // with a multi-selection (e.g. shift+up/down)
+            clearTabIndex();
+
             return $node
                 .addClass(self.classSelected)
                 .attr({
@@ -455,10 +486,32 @@ define('io.ox/core/tk/selection', [
                     tabindex: -1
                 });
             self.trigger('deselect', key);
+
+            // When deselecting an item the following two points are important to restore a correct tabindex state:
+
+            // 1) when there is a marker active: give it a tabindex=0 at deselect (e.g. move the marker on a selected
+            // item and deselect -> marker should have tabindex=0)
+            if (options.markable && container.find('.marked').length > 0) {
+                container.find('.marked').attr({ tabindex: 0 });
+
+            // 2) as long as one selected item exists: give a tabindex = 0 to the item that was last selected,
+            // otherwise there is no tabindex = 0 in the list
+            } else if (_.size(selectedItems) > 0) {
+                getNode(getLastSelectedItem()).attr({ tabindex: 0 });
+            }
+        };
+
+        getLastSelectedItem = function () {
+            // get the last selected item from the selection
+            return _.last(self.get());
         };
 
         toggle = function (id) {
             if (isSelected(id)) {
+
+                // keep at least one selected in markable mode (so only for drive filepicker)
+                if (options.markable && !hasMultiple()) return;
+
                 deselect(id);
             } else {
                 select(id);
@@ -487,9 +540,15 @@ define('io.ox/core/tk/selection', [
                     self.addToIndex(objID);
                 }
                 if (isSelected(objID)) {
-                    node.addClass(self.classSelected);
+                    node.addClass(self.classSelected).attr({
+                        'aria-selected': 'true' }); // 56085: the selection had a wrong aria-selected=false values before
                 }
             }
+        };
+
+        clearTabIndex = function () {
+            // set tabindex to -1 for all selectable items
+            container.find('.selectable[tabindex="0"]').attr({ 'tabindex': -1 });
         };
 
         clear = function () {
@@ -510,7 +569,8 @@ define('io.ox/core/tk/selection', [
 
             // overwrite
             isMarker = function (e) {
-                return multiple && e && (e.which === 38 || e.which === 40);
+                // only use the marker when crtl is pressed in addition to arrow up/down
+                return multiple && e && (e.which === 38 || e.which === 40) && e.ctrlKey;
             };
             // clear wrapper
             clear = function (e) {
@@ -527,6 +587,8 @@ define('io.ox/core/tk/selection', [
                 // set focus?
                 if (container.has(document.activeElement).length) $node.focus();
                 var guid = $node.attr('id') || _.uniqueId('option-');
+                // cleanup all tabIndex, there should be only one tabindex=0 at a time in the list
+                clearTabIndex();
 
                 return $node
                         .addClass(self.classMarked)
@@ -892,8 +954,8 @@ define('io.ox/core/tk/selection', [
                 for (i = a; reverse ? i >= b : i <= b; reverse ? i-- : i++) {
                     // get id
                     item = observedItems[i];
-                    // select first & last one via "normal" select
-                    if (i === a || i === b) {
+                    // select first OR last one, depending on if upward or downwards selected
+                    if (i === b) {
                         select(item.data);
                     } else {
                         // fast & simple
@@ -911,8 +973,10 @@ define('io.ox/core/tk/selection', [
             return this;
         };
 
-        this.selectFirst = function () {
-            selectFirst();
+        //  @param {Boolean} [giveFocus]
+        //   Optional parameter. When it is 'true', the focus is set to the selected element.
+        this.selectFirst = function (giveFocus) {
+            selectFirst(null, giveFocus);
             return this;
         };
 
@@ -1065,6 +1129,24 @@ define('io.ox/core/tk/selection', [
                 _.delay(function () {
                     if (container.find(':focus').length === 0) {
                         container.removeClass('has-focus');
+
+                        // clear marks when the focus moves out of the container, e.g. clicked outside
+                        // by mouse or tab
+                        if (options.markable) {
+                            clearMarks();
+                            // restore a valid tabindex
+                            getNode(getLastSelectedItem()).attr({ tabindex: 0 });
+
+                            // 56086
+                            //TODO revisit when a focus indicator is implemented: it sets prev
+                            // to the last selected element and doesn't leave it at the last focused element
+                            // -> I think it should jump back to the prev focused element like it happens without
+                            // this line below, but since unselected focused element are not handled so far it feels
+                            // very wrong to jump back to an element without a visual indicator.
+                            if (getLastSelectedItem()) {
+                                last = prev = getLastSelectedItem();
+                            }
+                        }
                     }
                 }, 10);
             });
