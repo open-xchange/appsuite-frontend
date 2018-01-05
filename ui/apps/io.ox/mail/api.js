@@ -1406,6 +1406,17 @@ define('io.ox/mail/api', [
         };
     }());
 
+    api.fetchTextPreview = function (ids) {
+        // return api.getList(ids, false, { columns: '1,20,1000' });
+        return _.wait(500).then(function () {
+            var hash = {};
+            _(ids).each(function (item) {
+                hash[_.cid(item)] = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr';
+            });
+            return hash;
+        });
+    };
+
     /**
      * save mail attachments in files app
      * @param  {array} list
@@ -1990,6 +2001,10 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === api.allMessagesFolder && params.unseen === true;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
+                // inject text preview (for testing)
+                _(data).each(function (item, i) {
+                    item.text_preview = i % 2 ? null : 'This is a placeholder for the upcoming new feature "Text preview" that allows you to preview the content of the message. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat';
+                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });

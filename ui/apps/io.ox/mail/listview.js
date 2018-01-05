@@ -257,6 +257,16 @@ define('io.ox/mail/listview', [
                 ext.point('io.ox/mail/listview/item/default/row2').invoke('draw', row, baton);
                 this.append(row);
             }
+        },
+        {
+            id: 'row3',
+            index: 300,
+            draw: function (baton) {
+                if (!baton.app.props.get('textPreview')) return;
+                var row = $('<div class="list-item-row">');
+                ext.point('io.ox/mail/listview/item/default/row3').invoke('draw', row, baton);
+                this.append(row);
+            }
         }
     );
 
@@ -342,6 +352,18 @@ define('io.ox/mail/listview', [
         }
     );
 
+    ext.point('io.ox/mail/listview/item/default/row3').extend(
+        {
+            id: 'text-preview',
+            index: 100,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="text-preview gray">').text(baton.data.text_preview || '')
+                );
+            }
+        }
+    );
+
     ext.point('io.ox/mail/listview/notification/empty').extend({
         id: 'default',
         index: 100,
@@ -386,6 +408,36 @@ define('io.ox/mail/listview', [
                     this.options.sort = value;
                 });
             }
+
+            this.$el.on('scrollend', this.fetchTextPreview.bind(this));
+            this.on('collection:load', this.fetchTextPreview);
+        },
+
+        fetchTextPreview: function () {
+
+            if (!this.app || !this.app.props.get('textPreview')) return;
+
+            var top = this.el.scrollTop,
+                bottom = top + this.el.offsetHeight,
+                itemHeight = this.getItems().outerHeight(),
+                start = Math.floor(0, top / itemHeight),
+                stop = Math.ceil(bottom / itemHeight),
+                models = this.collection.slice(start, stop);
+
+            // get models inside viewport that have no text preview yet
+            models = _(models).filter(function (model) {
+                return !model.get('text_preview');
+            });
+
+            var ids = _(models).map(function (model) {
+                return model.pick('id', 'folder_id');
+            });
+
+            api.fetchTextPreview(ids).done(function (hash) {
+                _(models).each(function (model) {
+                    model.set('text_preview', hash[model.cid]);
+                });
+            });
         },
 
         lookForUnseenMessage: function () {
@@ -485,6 +537,8 @@ define('io.ox/mail/listview', [
             data.thread = thread;
             // set subject to first message in thread so a Thread has a constant subject
             data.subject = api.threads.subject(data) || data.subject || '';
+            // get text preview
+            data.text_preview = _(thread).last().text_preview || data.text_preview || '';
             // done
             return data;
         },

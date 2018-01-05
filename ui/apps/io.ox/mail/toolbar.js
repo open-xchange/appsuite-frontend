@@ -286,6 +286,7 @@ define('io.ox/mail/toolbar', [
                 dropdown.option('checkboxes', true, gt('Checkboxes'));
             }
             dropdown
+            .option('textPreview', true, gt('Text preview'))
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))

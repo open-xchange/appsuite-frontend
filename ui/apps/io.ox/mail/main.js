@@ -429,6 +429,7 @@ define('io.ox/mail/main', [
                 'layout': getLayout(),
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
+                'textPreview': app.settings.get('showTextPreview', true),
                 'exactDates': app.settings.get('showExactDates', false),
                 'alwaysShowSize': app.settings.get('alwaysShowSize', false),
                 'categories': app.settings.get('categories/enabled', false),
@@ -642,6 +643,7 @@ define('io.ox/mail/main', [
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
+                    .set('showTextPreview', data.textPreview)
                     .set('showExactDates', data.exactDates)
                     .set('alwaysShowSize', data.alwaysShowSize)
                     .set('categories/enabled', data.categories);
@@ -1554,29 +1556,12 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Respond to change:contactPictures
+         * Respond to change of view options that require redraw
          */
-        'change:contactPictures': function (app) {
-            app.props.on('change:contactPictures', function () {
+        'change:viewOptions': function (app) {
+            app.props.on('change:contactPictures change:exactDates change:alwaysShowSize change:textPreview', function () {
                 app.listView.redraw();
-            });
-        },
-
-        /*
-         * Respond to change:exactDates
-         */
-        'change:exactDates': function (app) {
-            app.props.on('change:exactDates', function () {
-                app.listView.redraw();
-            });
-        },
-
-        /*
-         * Respond to change:alwaysShowSize
-         */
-        'change:alwaysShowSize': function (app) {
-            app.settings.on('change:alwaysShowSize', function () {
-                app.listView.redraw();
+                app.listView.$el.trigger('scroll');
             });
         },
 

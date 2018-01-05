@@ -395,7 +395,7 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 $('<div class="subject">').append(
                     $('<span class="flags">'),
-                    node = $('<span class="drag-title gray">').text(subject)
+                    node = $('<span class="drag-title">').text(subject)
                 )
             );
 

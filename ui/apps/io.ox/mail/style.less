@@ -601,6 +601,18 @@
         .date { opacity: 1; }
     }
 
+    .text-preview {
+        @lines: 2;
+        font-size: 13px;
+        line-height: 16px;
+        height: 16px * @lines;
+        display: block; /* Fallback for non-webkit */
+        display: -webkit-box;
+        -webkit-line-clamp: @lines;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+    }
+
     @item-line-height: 20px;
 
     .list-item-content {
