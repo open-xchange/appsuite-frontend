@@ -802,9 +802,9 @@ define('io.ox/core/desktop', [
 
         restore: function () {
             var self = this;
-            return this.getSavePoints().then(function (data) {
+            return this.getSavePoints().then(function (list) {
                 return $.when.apply($,
-                    _(data).map(function (obj) {
+                    _(list).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
@@ -822,7 +822,7 @@ define('io.ox/core/desktop', [
                 .done(function () {
                     // we don't remove that savepoint now because the app might crash during restore!
                     // in this case, data would be lost
-                    self.setSavePoints(data);
+                    self.setSavePoints(list);
                 });
             });
         },
