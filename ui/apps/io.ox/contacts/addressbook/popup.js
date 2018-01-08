@@ -683,10 +683,11 @@ define('io.ox/contacts/addressbook/popup', [
             });
 
             this.renderItems = function (list, options) {
-                // avoid duplicates
+                // avoid duplicates (name + email address; see bug 56040)
                 list = _(list).filter(function (item) {
                     if (item.label) return true;
-                    if (this[item.email]) return false; return (this[item.email] = true);
+                    var cid = item.full_name + ' ' + item.email;
+                    if (this[cid]) return false; return (this[cid] = true);
                 }, {});
                 // get defaults
                 options = _.extend({
