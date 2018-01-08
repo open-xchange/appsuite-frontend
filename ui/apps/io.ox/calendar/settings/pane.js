@@ -18,8 +18,9 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/backbone/mini-views/alarms',
     'io.ox/core/settings/util',
     'settings!io.ox/calendar',
-    'gettext!io.ox/calendar'
-], function (ext, ExtensibleView, mini, AlarmsView, util, settings, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/folder/api'
+], function (ext, ExtensibleView, mini, AlarmsView, util, settings, gt, folderAPI) {
 
     'use strict';
 
@@ -123,6 +124,52 @@ define('io.ox/calendar/settings/pane', [
                     )
                 );
             }
+        },
+        {
+            id: 'birthday',
+            index: INDEX += 100,
+            render: (function () {
+                var folderId;
+
+                function getFolder() {
+                    if (folderId) return folderAPI.get(folderId);
+                    return folderAPI.flat({ module: 'event', all: true }).then(function (data) {
+                        data = _(data).chain().values().flatten().value();
+                        var birthdayFolder = _(data).findWhere({ 'com.openexchange.calendar.provider': 'birthdays' });
+                        if (!birthdayFolder) throw new Error('Cannot find birthdays folder');
+                        folderId = birthdayFolder.id;
+                        return birthdayFolder;
+                    });
+                }
+
+                return function () {
+                    var model = new Backbone.Model({ birthday: undefined }),
+                        checkbox = util.checkbox('birthday', gt('Show birthday calendar'), model),
+                        view = checkbox.data('view'), fieldset;
+
+                    checkbox.css('visibility', 'hidden');
+
+                    getFolder().then(function (folder) {
+                        checkbox.css('visibility', '');
+                        fieldset.idle();
+                        model.set('birthday', !!folder.subscribed);
+                    }, function () {
+                        fieldset.remove();
+                    });
+
+                    view.listenTo(model, 'change:birthday', _.debounce(function (model) {
+                        if (_.isUndefined(model.previous('birthday'))) return;
+                        folderAPI.update(folderId, { subscribed: !!model.get('birthday') });
+                    }, 500));
+
+                    this.$el.append(
+                        fieldset = util.fieldset(
+                            gt('Birthday'),
+                            $('<div class="form-group">').append(checkbox)
+                        ).busy()
+                    );
+                };
+            }())
         },
         //
         // Work week

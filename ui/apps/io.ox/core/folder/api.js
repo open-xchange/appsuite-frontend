@@ -829,8 +829,6 @@ define('io.ox/core/folder/api', [
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
-        // TODO needs another solution. but will do for now. maybe the whole module is renamed to event.
-        if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
         if (ox.debug && !options.module) {
@@ -860,7 +858,8 @@ define('io.ox/core/folder/api', [
                 altNames: true,
                 content_type: module,
                 timezone: 'UTC',
-                tree: 1
+                tree: 1,
+                all: !!options.all
             }
         })
         .then(function (data) {
@@ -1416,7 +1415,7 @@ define('io.ox/core/folder/api', [
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            defs.push(flat({ module: module, cache: false }));
+            defs.push(flat({ module: module, all: module === 'event', cache: false }));
         });
 
         // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool

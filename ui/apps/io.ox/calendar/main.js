@@ -335,12 +335,13 @@ define('io.ox/calendar/main', [
                 getData: function () {
                     return $.when.apply($, folders.map(function (folder) {
                         return folderAPI.get(folder).then(function (folder) {
+                            if (!folder.subscribed) return;
                             return folder;
                         }, function () {
                             app.folders.remove(folder);
                         });
                     })).then(function () {
-                        var data = _(arguments).toArray();
+                        var data = _(arguments).chain().toArray().compact().value();
                         return _.indexBy(data, 'id');
                     });
                 },

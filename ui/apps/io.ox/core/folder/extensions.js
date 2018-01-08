@@ -823,7 +823,7 @@ define('io.ox/core/folder/extensions', [
                     baton = ext.Baton({ module: module, view: tree, context: tree.context }),
                     folder = 'virtual/flat/' + moduleName,
                     model_id = 'flat/' + moduleName,
-                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
+                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree, filter: function (id, model) { return !!model.get('subscribed'); } },
                     privateFolders,
                     publicFolders,
                     placeholder = $('<li role="treeitem">');
@@ -836,9 +836,9 @@ define('io.ox/core/folder/extensions', [
                 this.append(placeholder);
 
                 // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
-                api.flat({ module: moduleName }).always(function () {
+                api.flat({ module: moduleName, all: moduleName === 'event' }).always(function () {
 
-                    privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
+                    privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private'), filter: function (id, model) { return !!model.get('subscribed'); } }));
 
                     // open private folder whenever a folder is added to it
                     api.pool.getCollection('flat/' + moduleName + '/private').on('add', function () {
