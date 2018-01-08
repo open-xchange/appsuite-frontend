@@ -188,6 +188,12 @@ define('io.ox/calendar/model', [
     var Model = BasicModel.extend({
         idAttribute: 'cid',
         ref: 'io.ox/chronos/model/',
+        // use function here, so defaults are not overwritten by accident
+        defaults: function () {
+            return {
+                class: 'PUBLIC'
+            };
+        },
         init: function () {
             // models in create view do not have an id yet. avoid undefined.undefined cids
             if (this.attributes.folder && this.attributes.id) {

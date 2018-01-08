@@ -1025,7 +1025,7 @@ define('io.ox/calendar/util', [
 
         isPrivate: function (data) {
             if (data.attributes) data = data.attributes;
-            return data['class'] === 'CONFIDENTIAL';
+            return data['class'] === 'CONFIDENTIAL' || data['class'] === 'PRIVATE';
         },
 
         getCurrentRangeOptions: function () {

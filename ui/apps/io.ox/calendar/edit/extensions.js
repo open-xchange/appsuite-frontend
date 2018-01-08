@@ -539,16 +539,40 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-md-6',
         render: function () {
 
-            // private flag only works in private folders
+            // visibility flag only works in private folders
             var folder = this.model.get('folder');
             if (!folderAPI.pool.getModel(folder).is('private')) return;
+            var self = this,
+                viewNode = new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
+                    { value: 'PUBLIC', label: gt('Public') },
+                    { value: 'CONFIDENTIAL', label: gt('Confidential') },
+                    { value: 'PRIVATE', label: gt('Private') }]
+                }).render().$el.addClass('visibility-select').attr({ 'data-toggle': 'tooltip', 'data-placement': 'bottom' }),
+                updateTextNode =  function () {
+                    switch (self.model.get('class')) {
+                        case 'PUBLIC':
+                            viewNode.attr('title', gt('All appointment properties are exposed to non-attending users in shared folders.'));
+                            break;
+                        case 'CONFIDENTIAL':
+                            viewNode.attr('title', gt('Only certain non-classified appointment properties are exposed to non-attending users in shared folders. The appointment appears as an anonymous block for them. The appointment is still considered for conflicts and in scheduling view'));
+                            break;
+                        case 'PRIVATE':
+                            viewNode.attr('title', gt('The appointment is not exposed to non-attending users in shared folders at all. Additionally, the appointment is only considered for conflicts and in the scheduling view, in case of a resource attendee.'));
+                            break;
+                        // no default
+                    }
+                };
 
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Type')),
-                    new mini.CustomCheckboxView({ label: gt('Private'), name: 'class', model: this.model, customValues: { 'false': 'PUBLIC', 'true': 'CONFIDENTIAL' }, defaultVal: 'PUBLIC' }).render().$el
+                    viewNode
                 )
             );
+
+            updateTextNode();
+            this.model.on('change:class', updateTextNode);
+
         }
     }, {
         nextTo: 'color',
