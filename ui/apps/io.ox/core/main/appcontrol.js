@@ -63,7 +63,7 @@ define('io.ox/core/main/appcontrol', [
 
         if (o.name === 'Calendar') {
             $svg.find('tspan:first').text(moment().format('D'));
-            $svg.find('tspan:last').text(moment().format('MMM'));
+            $svg.find('tspan:last').text(moment().format('ddd'));
         }
         if (o.name === 'Mail') {
             badge = $('<span class="badge" aria-hidden="true">').text(
