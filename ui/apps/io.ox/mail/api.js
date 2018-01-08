@@ -705,9 +705,7 @@ define('io.ox/mail/api', [
             var trashId = accountAPI.getFoldersByType('trash');
             _(trashId).each(function (id) {
                 folderAPI.list(id, { cache: false });
-                _(pool.getByFolder(id)).each(function (collection) {
-                    collection.expired = true;
-                });
+                _(pool.getByFolder(id)).invoke('expire');
             });
         }
     });
