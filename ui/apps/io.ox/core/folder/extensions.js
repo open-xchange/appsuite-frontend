@@ -222,12 +222,18 @@ define('io.ox/core/folder/extensions', [
     function openSubscriptionDialog(e) {
         e.preventDefault();
         if (capabilities.has('subscription')) {
-            require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
-                subscriptions.buildSubscribeDialog({
-                    module: e.data.baton.module,
-                    app: e.data.baton.view.app
+            if (e.data.baton.module === 'calendar') {
+                require(['io.ox/calendar/subscribe-calendar'], function (openDialog) {
+                    openDialog(e.data.baton);
                 });
-            });
+            } else {
+                require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
+                    subscriptions.buildSubscribeDialog({
+                        module: e.data.baton.module,
+                        app: e.data.baton.view.app
+                    });
+                });
+            }
         } else {
             if (!upsell.enabled(['subscription'])) return;
 
@@ -417,20 +423,6 @@ define('io.ox/core/folder/extensions', [
                     )
                 );
             });
-        },
-
-        subscribeSchedjoules: function (baton) {
-            if (baton.module === 'calendar') {
-                var self = this;
-
-                require(['io.ox/calendar/settings/schedjoules/schedjoules'], function (schedjoules) {
-                    self.append(
-                        $('<li role="presentation">').append(
-                            $('<a href="#" data-action="subscribe-schedjoules-calendar" role="treeitem">').text(gt('Subscribe schedjoules calendar')).on('click', schedjoules.open)
-                        )
-                    );
-                });
-            }
         },
 
         treeLinks: function () {
@@ -764,12 +756,6 @@ define('io.ox/core/folder/extensions', [
             index: 300,
             capabilities: ['subscription'],
             draw: extensions.subscribe
-        },
-        {
-            id: 'subscribeSchedjoules',
-            index: 300,
-            // capabilities: ['subscription'], ??
-            draw: extensions.subscribeSchedjoules
         }
     );
 
