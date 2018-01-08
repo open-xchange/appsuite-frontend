@@ -30,7 +30,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         UNFOLD_TIME =       100,
         UNFOLD_TIME_FULL =   50,
         RESET_CELL_TIME =   100,
-        CELL_HEIGHT = '-68px', // todo: calculate this
+        CELL_HEIGHT = '-84px', // todo: calculate this
         cell,
         recentWindowsKey = false;
 
@@ -257,7 +257,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         pickRange: function (index, items) {
-            var cursor = this.getPosition(items),
+            var cursor = this.getPosition(items, index),
                 start = Math.min(index, cursor),
                 end = Math.max(index, cursor);
 
@@ -553,7 +553,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 }, {
                     duration: MOVE_UP_TIME,
                     complete: function () {
-                        self.view.trigger('selection:delete', [cid]);
                         self.view.on('remove-mobile', resetStyle, cellsBelow);
                         self.view.trigger('selection:delete', [cid]);
                         self.currentSelection.swipeCell.remove();
@@ -563,7 +562,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     }
                 });
             } else {
-                self.view.trigger('selection:delete', [cid]);
                 self.view.on('remove-mobile', resetStyle, cellsBelow);
                 self.view.trigger('selection:delete', [cid]);
                 self.currentSelection.swipeCell.remove();
@@ -741,6 +739,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             }
 
             cell = $(this); // save for later animation
+
             if (this.unfold) {
                 this.expandDelete = false;
 
@@ -813,6 +812,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 e.data.resetSwipeCell.call(this, e.data, Math.abs(this.distanceX));
                 return false;
             }
+
+            // maybe the deletion will be canceled, keep reference for reverting
+            // the transformation
+            ox.off('delete:canceled').on('delete:canceled', function () {
+                cell.removeAttr('style');
+                cell.nextAll().velocity({
+                    translateY: -CELL_HEIGHT
+                });
+            });
         },
 
         onSwipeLeft: function (e) {
@@ -827,7 +835,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetSwipe($(e.currentTarget));
         },
 
-        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o" aria-hidden="true"/></div>'),
+        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o" aria-hidden="true"></i></div>'),
 
         renderInplaceRemove: function (node) {
             node.append(this.inplaceRemoveScaffold.clone());
@@ -990,18 +998,21 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 .on('click', SELECTABLE, $.proxy(this.onClick, this))
                 .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
                 .on('focus', $.proxy(this.onFocus, this));
+
+            this.view.on('selection:empty', $.proxy(this.onSelectionEmpty, this));
         },
 
         isMultiple: function () {
+            // allow select/deselect via space
             return true;
         },
 
-        isRange: function () {
-            return false;
+        onSelectionEmpty: function () {
+            if (this.getItems().parent().find('li:focus').length > 0) return;
+            this._lastposition = -1;
         },
 
         onFocus: function () {
-
             var items = this.getItems(),
                 first = items.filter('[tabindex="0"]:first'),
                 index = items.index(first);
@@ -1010,17 +1021,16 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onClick: function (e) {
-
             var items = this.getItems(),
                 index = items.index($(e.currentTarget));
 
             this.resetTabIndex(items, items.eq(index));
-            this.pick(index, items);
+            this.pick(index, items, e);
             this.triggerChange(items);
+            this.setPosition(e);
         },
 
         onKeydown: function (e) {
-
             switch (e.which) {
 
                 // space
@@ -1063,18 +1073,37 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             e.preventDefault();
         },
 
-        onCursor: function (e) {
+        setPosition: function (e, index) {
+            this._lastposition = _.isUndefined(index) ? this.getItems().index($(e.target).closest('li')) || 0 : index;
+        },
 
+        getPosition: function (items, index) {
+            return this._lastposition > -1 ? this._lastposition : index;
+        },
+
+        onCursor: function (e) {
             // get current index
             var items = this.getItems(),
                 current = $(document.activeElement),
                 index = (items.index(current) || 0),
                 cursorDown = e.which === 40;
 
+            // prevent default to avoid unwanted scrolling
+            e.preventDefault();
+            if (!/^(40|38)$/.test(e.which)) return;
+
             index += cursorDown ? +1 : -1;
             index = this.outOfBounds(index, items);
 
-            this.resetTabIndex(items, items.eq(index));
+            if (this.isRange(e)) {
+                // range select includes previous node
+                this.setPosition(e);
+                return this.pickRange(index, items);
+            }
+
+            // simple select includes only current node
+            this.triggerChange(items);
+            this.setPosition(e, index);
             this.focus(index, items);
         }
     };

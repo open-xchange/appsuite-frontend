@@ -152,7 +152,7 @@ define('plugins/portal/birthdays/register', [
                         $('<div class="buy-a-gift">').append(
                             $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
                             $.txt(' '),
-                            $('<i class="fa fa-external-link">')
+                            $('<i class="fa fa-external-link" aria-hidden="true">')
                         )
                     );
                 }
@@ -189,7 +189,7 @@ define('plugins/portal/birthdays/register', [
                                 ),
                                 $('<div class="name">').text(name),
                                 $('<div>').append(
-                                    $('<span class="date">').text(birthday.format(birthday.year() === 1 ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l')), $.txt(' '),
+                                    $('<span class="date">').text(birthday.format((birthday.year() === 1 || birthday.year() === 1604) ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l')), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

@@ -31,14 +31,13 @@ define('io.ox/mail/categories/train', [
                 message: $('<div class="content category-toast">').append(
                     $('<p>').html(getSuccessMessage(addresses, category)),
                     $('<p>').html(getQuestion(addresses)),
-                    $('<button type="button" class="btn btn-default" data-action="move-all">')
-                        .text(gt('Move all messages'))
-                        .on('click', function () {
-                            api.train(options).fail(yell);
-                            yell('close');
-                        })
+                    $('<button type="button" class="btn btn-default" data-action="move-all">').text(gt('Move all messages')).on('click', function () {
+                        api.train(options).fail(yell);
+                        yell('close');
+                    })
                 ),
-                type: 'success'
+                type: 'success',
+                focus: true
             });
         }
     };

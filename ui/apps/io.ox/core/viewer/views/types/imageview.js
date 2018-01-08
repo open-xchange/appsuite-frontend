@@ -60,7 +60,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                     image.removeClass('hidden');
                 });
                 image.one('error', function () {
-                    var notification = self.createNotificationNode(gt('Sorry, there is no preview available for this image.'));
+                    var notification = self.displayDownloadNotification(gt('Sorry, there is no preview available for this image.'));
                     self.$el.idle().append(notification);
                 });
                 this.$el.append($('<div class="viewer-displayer-item-container">').append(image));

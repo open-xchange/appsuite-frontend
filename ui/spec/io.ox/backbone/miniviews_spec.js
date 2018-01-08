@@ -273,8 +273,8 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
                 expect(this.view.$el.find('div > select').length).to.equal(3);
             });
 
-            it('contains 0001 as fallback year', function () {
-                expect(this.view.$el.find('.year').children().first().attr('value')).to.equal('0001');
+            it('contains 1604 as fallback year', function () {
+                expect(this.view.$el.find('.year').children().first().attr('value')).to.equal('1604');
             });
 
             it('contains an empty option for month', function () {
@@ -317,20 +317,20 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             });
 
             it('updates the model (without a year)', function () {
-                this.view.$el.find('.year').val('0001').trigger('change');
+                this.view.$el.find('.year').val('1604').trigger('change');
                 this.view.$el.find('.month').val('0').trigger('change');
                 this.view.$el.find('.date').val('29').trigger('change');
-                expect(this.model.get('test')).to.equal(-62133177600000); // 0001-01-29
+                expect(this.model.get('test')).to.equal(-11547446400000); // 1604-01-29
             });
 
             it('handles non-existent days correctly (without a year)', function () {
                 // start end of January
-                this.model.set('test', moment.utc({ year: 1, month: 0, date: 31 }).valueOf());
-                expect(this.view.value()).to.equal('0001-01-31');
+                this.model.set('test', moment.utc({ year: 1604, month: 0, date: 31 }).valueOf());
+                expect(this.view.value()).to.equal('1604-01-31');
                 // jump to February
                 this.view.$el.find('.month').val('1').trigger('change');
-                expect(this.view.value()).to.equal('0001-02-28');
-                expect(this.model.get('test')).to.equal(-62130585600000); // 0001-02-28Error while detecting browser, using fallback
+                expect(this.view.value()).to.equal('1604-02-29');
+                expect(this.model.get('test')).to.equal(-11544768000000); // 1604-02-29 Error while detecting browser, using fallback
             });
         });
 

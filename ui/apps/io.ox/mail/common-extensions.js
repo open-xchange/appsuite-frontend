@@ -40,6 +40,21 @@ define('io.ox/mail/common-extensions', [
         return !!baton.app && !!baton.app.props.get('find-result');
     }
 
+    function pictureHalo(node, data) {
+        // user should be in cache from rampup data
+        // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+        var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
+        userAPI.get({ id: ox.user_id }).then(function (user) {
+            var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
+            contactsAPI.pictureHalo(
+                node,
+                (useUserApi ? { id: ox.user_id } : { email: address }),
+                { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+            );
+        });
+    }
+
     var extensions = {
 
         a11yLabel: function (baton) {
@@ -85,27 +100,8 @@ define('io.ox/mail/common-extensions', [
 
             this.append(node);
 
-            if (isSearchResult(baton) && data.picture) {
-                return contactsAPI.pictureHalo(
-                    node,
-                    { email: data.picture },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                );
-            }
-
-            // user should be in cache from rampup data
-            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
-            userAPI.get({ id: ox.user_id }).then(function (user) {
-                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1],
-                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-
-                contactsAPI.pictureHalo(
-                    node,
-                    (useUserApi ? { id: ox.user_id } : { email: address }),
-                    { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                );
-            });
+            if (isSearchResult(baton) && data.picture) return pictureHalo(node, data.picture);
+            pictureHalo(node, addresses);
         },
 
         senderPicture: function (baton) {
@@ -114,20 +110,7 @@ define('io.ox/mail/common-extensions', [
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
             this.append(node);
-
-            // user should be in cache from rampup data
-            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
-            userAPI.get({ id: ox.user_id }).then(function (user) {
-                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1],
-                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-
-                contactsAPI.pictureHalo(
-                    node,
-                    (useUserApi ? { id: ox.user_id } : { email: address }),
-                    { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                );
-            });
+            pictureHalo(node, addresses);
         },
 
         date: function (baton, options) {
@@ -162,6 +145,41 @@ define('io.ox/mail/common-extensions', [
                     util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'unescapeDisplayName'))
                 )
             );
+        },
+
+        fromDetail: function (baton) {
+
+            var $el = $('<div class="from">'),
+                data = baton.data,
+                from = data.from || [],
+                length = from.length;
+
+            // from is special as we need to consider the "sender" header
+            // plus making the mail address visible (see bug 56407)
+
+            _(from).each(function (item, i) {
+
+                var email = String(item[1] || '').toLowerCase(),
+                    name = util.getDisplayName(item);
+                if (!email) return;
+
+                $el.append(
+                    $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                        .data({ email: email, email1: email })
+                        .text(name)
+                );
+
+                if (name !== email) {
+                    $el.append($('<span class="address">').text('<' + email + '>'));
+                }
+
+                // save space on mobile by showing address only for suspicious mails
+                if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
+
+                if (i < length - 1) $el.append('<span class="delimiter">,</span>');
+            });
+
+            this.append($el);
         },
 
         fromPipeline: {
@@ -348,7 +366,7 @@ define('io.ox/mail/common-extensions', [
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) extensions.envelope.call(this).attr('title', 'Unread');
+            if (isUnseen) extensions.envelope.call(this).attr('title', gt('Unread'));
         },
 
         answered: function (baton) {
@@ -377,7 +395,7 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 $('<div class="subject">').append(
                     $('<span class="flags">'),
-                    node = $('<span class="drag-title gray">').text(subject)
+                    node = $('<span class="drag-title">').text(subject)
                 )
             );
 

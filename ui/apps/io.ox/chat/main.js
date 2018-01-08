@@ -156,8 +156,8 @@ define('io.ox/chat/main', [
                 contactsAPI.pictureHalo(
                     $('<div class="picture" aria-hidden="true">'), user, { width: 40, height: 40 }
                 ),
-                $('<button type="button" class="btn btn-default" data-cmd="start-chat"><i class="fa fa-plus"></i></button>'),
-                $('<i class="fa state online fa-check-circle">'),
+                $('<button type="button" class="btn btn-default" data-cmd="start-chat"><i class="fa fa-plus" aria-hidden="true"></i></button>'),
+                $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
                 $('<div class="name">').text(contactsUtil.getFullName(user))
             ),
             $('<div class="search">').append(
@@ -169,15 +169,15 @@ define('io.ox/chat/main', [
                 // navigation
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
-                        $('<i class="fa fa-clock-o btn-icon">'),
+                        $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
                         $.txt('Recent conversations')
                     ),
                     $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
-                        $('<i class="fa fa-hashtag btn-icon">'),
+                        $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">'),
                         $.txt('All channels')
                     ),
                     $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
-                        $('<i class="fa fa-paperclip btn-icon">'),
+                        $('<i class="fa fa-paperclip btn-icon" aria-hidden="true">'),
                         $.txt('All files')
                     )
                 )
@@ -190,9 +190,9 @@ define('io.ox/chat/main', [
 
     function renderOverlay() {
         return $('<div class="overlay abs" tabindex="-1">').append(
-            $('<button type="button" data-cmd="prev-file"><i class="fa fa-chevron-left"></i></button>'),
-            $('<button type="button" data-cmd="next-file"><i class="fa fa-chevron-right"></i></button>'),
-            $('<button type="button" data-cmd="close-file"><i class="fa fa-close"></i></button>')
+            $('<button type="button" data-cmd="prev-file"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
+            $('<button type="button" data-cmd="next-file"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>'),
+            $('<button type="button" data-cmd="close-file"><i class="fa fa-close" aria-hidden="true"></i></button>')
         );
     }
 

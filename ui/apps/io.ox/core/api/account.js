@@ -572,8 +572,9 @@ define('io.ox/core/api/account', [
                 // remember types (explicit order!)
                 _('drafts sent spam trash archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
-                    var short_name = account[type], full_name = account[type + '_fullname'];
-                    typeHash[full_name || short_name] = type;
+                    var short_name = account[type], full_name = account[type + '_fullname'], name = full_name || short_name;
+                    // check to avoid unwanted overrides
+                    if (!typeHash[name]) typeHash[name] = type;
                 });
             });
         });
@@ -636,8 +637,10 @@ define('io.ox/core/api/account', [
             appendColumns: false
         })
         .done(function () {
+            var accountId = (api.cache[data] || {}).root_folder;
             // remove from local cache
             delete api.cache[data];
+            ox.trigger('account:delete', accountId);
             api.trigger('refresh.all');
             api.trigger('delete');
             require(['io.ox/core/folder/api'], function (api) {

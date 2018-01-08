@@ -203,33 +203,29 @@ define('io.ox/files/filepicker', [
         return $previewPane;
     }
 
-    function appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject) {
-        //console.log('+++ appendFileInfoToPreviewPane +++ [$previewPane, $fileinfo, fileObject] : ', $previewPane, $fileinfo, fileObject);
+    function appendFileInfoToPreviewPane($previewPane, $fileinfo, model) {
+        //console.log('+++ appendFileInfoToPreviewPane +++ [$previewPane, $fileinfo, fileObject, fileModel] : ', $previewPane, $fileinfo, fileObject, fileModel);
 
-        filesAPI.get(fileObject).done(function (fileDescriptor) {
+        if (model) {
+            var
+                jsonModel = model.toJSON(),
+                baton     = ext.Baton({
+                    model:  model,
+                    data:   jsonModel,
+                    options: {
+                        disableFolderInfo:  true,
+                        disableSharesInfo:  true,
+                        disableLink:        true
+                    }
+                });
 
-            var model = filesAPI.pool.get('detail').get(_.cid(fileDescriptor));
-            if (model) {
-                var
-                    jsonModel = model.toJSON(),
-                    baton     = ext.Baton({
-                        model:  model,
-                        data:   jsonModel,
-                        options: {
-                            disableFolderInfo:  true,
-                            disableSharesInfo:  true,
-                            disableLink:        true
-                        }
-                    });
+            //  - invoke `FileInfoView`s rendering service (extension point)
+            //    as of 'io.ox/core/viewer/views/sidebar/fileinfoview'
+            //
+            ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', $fileinfo, baton);
+        }
+        $previewPane.append($fileinfo);
 
-                //  - invoke `FileInfoView`s rendering service (extension point)
-                //    as of 'io.ox/core/viewer/views/sidebar/fileinfoview'
-                //
-                ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', $fileinfo, baton);
-            }
-            $previewPane.append($fileinfo);
-
-        })/*.fail(function () { console.warn('Filepicker::renderImagePreview ... async loading did fail'); })*/;
     }
 
     /**
@@ -238,7 +234,7 @@ define('io.ox/files/filepicker', [
      * @param $previewPane
      * @param fileObject
      */
-    function renderImagePreview($previewPane, fileObject/*, previewStore*/) {
+    function renderImagePreview($previewPane, fileObject, fileModel/*, previewStore*/) {
         //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
             $preview      = $('<div class="preview"></div>'),
@@ -256,10 +252,10 @@ define('io.ox/files/filepicker', [
         $previewPane.empty();
         $previewPane.append($preview);
 
-        appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject);
+        appendFileInfoToPreviewPane($previewPane, $fileinfo, fileModel);
     }
 
-    function renderNonImagePreview($previewPane, fileObject/*, previewStore*/) {
+    function renderNonImagePreview($previewPane, fileObject, fileModel/*, previewStore*/) {
         //console.log('+++ renderNonImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
             $preview      = $('<div class="preview"></div>'),
@@ -275,7 +271,7 @@ define('io.ox/files/filepicker', [
         $previewPane.empty();
         $previewPane.append($preview);
 
-        appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject);
+        appendFileInfoToPreviewPane($previewPane, $fileinfo, fileModel);
     }
 
     // Constructor ------------------------------------------------------------------
@@ -403,9 +399,9 @@ define('io.ox/files/filepicker', [
 
             if (isFileTypeImage(mimeType, fileModel)) {
 
-                renderImagePreview($previewPane, fileObject/*, previewStore*/);
+                renderImagePreview($previewPane, fileObject, fileModel/*, previewStore*/);
             } else {
-                renderNonImagePreview($previewPane, fileObject/*, previewStore*/);
+                renderNonImagePreview($previewPane, fileObject, fileModel/*, previewStore*/);
 
                 //deletePreviewPane();
             }
@@ -477,8 +473,12 @@ define('io.ox/files/filepicker', [
                 }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
                 self.selection.clear();
                 self.selection.init(files); // - provide the filtered model ... see 1st point above.
-                if (options.multiselect) {
-                    self.selection.markFirst();
+
+                // at first load: the file list should be focused
+                if (options.multiselect && options.wasLoaded === undefined) {
+                    self.selection.selectFirst(true);
+                    // flag to indicate the initial load
+                    options.wasLoaded = true;
                 } else {
                     self.selection.selectFirst();
                 }

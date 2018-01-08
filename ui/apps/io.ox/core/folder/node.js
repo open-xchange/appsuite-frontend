@@ -22,9 +22,6 @@ define('io.ox/core/folder/node', [
 
     'use strict';
 
-    // angle caret chevron
-    var ICON = 'caret';
-
     var TreeNodeView = DisposableView.extend({
 
         tagName: 'li',
@@ -228,17 +225,12 @@ define('io.ox/core/folder/node', [
         // respond to new sub-folders
         onChangeSubFolders: function () {
             // has subfolders?
-            var hasSubFolders = this.hasSubFolders(), isOpen = this.isOpen();
+            var hasSubFolders = this.hasSubFolders(), isOpen = this.isOpen(), icon = 'fa-fw';
+            if (hasSubFolders) icon = isOpen ? 'fa-caret-down' : 'fa-caret-right';
             // update arrow
             this.$.arrow
             .toggleClass('invisible', !hasSubFolders)
-            .html(
-                /*eslint-disable no-nested-ternary */
-                hasSubFolders ?
-                    (isOpen ? '<i class="fa fa-' + ICON + '-down" aria-hidden="true">' : '<i class="fa fa-' + ICON + '-right" aria-hidden="true">') :
-                    '<i class="fa fa-fw" aria-hidden="true">'
-                /*eslint-enable no-nested-ternary */
-            );
+            .html($('<i class="fa" aria-hidden="true">').addClass(icon));
             // a11y
             if (hasSubFolders && !this.options.headless) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');
             // toggle subfolder node
@@ -393,9 +385,9 @@ define('io.ox/core/folder/node', [
                 })
                 .append(
                     this.$.selectable = $('<div class="folder-node" aria-hidden="true">').css('padding-left', (o.level * this.indentation) + offset).append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
-                        this.$.label = $('<div class="folder-label">').text(this.getTitle()),
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
+                        $('<div class="folder-label">').append(this.$.label = $('<div role="presentation">').text(this.getTitle())),
                         this.$.counter = $('<div class="folder-counter">'),
                         this.$.buttons = $('<div class="folder-buttons">')
                     ),
@@ -473,13 +465,16 @@ define('io.ox/core/folder/node', [
                 return;
             }
 
-            this.$.selectable.append(this.$.accountLink = $('<a href="#" class="account-link">')
-                .attr('data-dsc', this.options.model_id)
-                .append('<i class="fa fa-exclamation-triangle">'))
-                .on('click', function (e) {
-                    e.preventDefault();
-                    self.options.tree.trigger('accountlink:dsc', self.options.model_id);
-                });
+            this.$.selectable.append(
+                this.$.accountLink = $('<a href="#" class="account-link">').attr('data-dsc', this.options.model_id)
+                    .append(
+                        $('<i class="fa fa-exclamation-triangle" aria-hidden="true">')
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        self.options.tree.trigger('accountlink:dsc', self.options.model_id);
+                    })
+            );
             if (error) {
                 this.$.accountLink.attr('title', error);
             }

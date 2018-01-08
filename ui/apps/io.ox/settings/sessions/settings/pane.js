@@ -19,9 +19,8 @@ define('io.ox/settings/sessions/settings/pane', [
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/disposable',
     'io.ox/backbone/mini-views/listutils',
-    'settings!io.ox/core',
     'less!io.ox/settings/sessions/settings/style'
-], function (ext, ExtensibleView, gt, http, SettingsListView, DisposableView, listUtils, settings) {
+], function (ext, ExtensibleView, gt, http, SettingsListView, DisposableView, listUtils) {
 
     'use strict';
 
@@ -32,16 +31,6 @@ define('io.ox/settings/sessions/settings/pane', [
         index: 200,
         advancedMode: true
     });
-
-    var operatingSystems = {
-        //#. Context: Session Management. Active session on platform/os.
-        windows: gt('Windows'),
-        //#. Context: Session Management. Active session platform/os.
-        windows8: gt('Windows'),
-        macos: gt('macOS'),
-        android: gt('Android'),
-        ios: gt('iOS')
-    };
 
     function buildConfirmationDialog(text) {
         var def = new $.Deferred();
@@ -62,129 +51,47 @@ define('io.ox/settings/sessions/settings/pane', [
 
         initialize: function () {
             this.browser = _.detectBrowser({ userAgent: this.get('userAgent') }) || {};
-            this.setPlatform();
-            this.setClient();
+            this.setIcon();
         },
 
-        setPlatform: function () {
-            if (this.browser.ios || this.browser.android || this.browser.blackberry || this.browser.windowsphone) this.set('platform', 'smartphone');
-            else if (this.browser.windows || this.browser.windows8 || this.browser.macos) this.set('platform', 'desktop');
-            else this.set('platform', 'other');
-        },
-
-        setClient: function () {
-            ext.point('io.ox/settings/sessions/display-name').invoke('customize', this);
+        setIcon: function () {
+            ext.point('io.ox/settings/sessions/icon').invoke('customize', this);
         }
 
     });
 
-    ext.point('io.ox/settings/sessions/display-name').extend({
-        id: 'browser',
+    ext.point('io.ox/settings/sessions/icon').extend({
+        id: 'generic-icons',
         index: 100,
         customize: function () {
-            if (this.get('client') !== 'open-xchange-appsuite') return;
-            var self = this,
-                os = _(operatingSystems).find(function (value, key) {
-                    return !!self.browser[key];
-                }) || gt('Unknown Operating System');
-
-            if (this.browser.firefox) {
-                // .# Used to display the current version on the current platform, i.e. Firefox 50 on Windows
-                this.set('displayName', gt('Firefox %1$s on %2$s', this.browser.firefox, os));
-                this.set('icon', 'ff');
-
-            } else if (this.browser.chrome) {
-                // .# Used to display the current version on the current platform, i.e. Chrome 50 on Windows
-                this.set('displayName', gt('Chrome %1$s on %2$s', this.browser.chrome, os));
-                this.set('icon', 'chrome');
-
-            } else if (this.browser.safari) {
-                // .# Used to display the current version on the current platform, i.e. Safari 50 on OS X
-                this.set('displayName', gt('Safari %1$s on %2$s', this.browser.safari, os));
-                this.set('icon', 'safari');
-
-            } else if (this.browser.ie) {
-                // .# Used to display the current version on the current platform, i.e. Internet Explorer 11 on Windows
-                this.set('displayName', gt('Internet Explorer on %1$s', os));
-                this.set('icon', 'ie');
-
-            } else if (this.browser.edge) {
-                // .# Used to display the current version on the current platform, i.e. Edge on Windows
-                this.set('displayName', gt('Edge on %1$s', os));
-                this.set('icon', 'ie');
-
-            } else {
-                this.set({ displayName: gt('Unknown client'), other: true });
-
+            switch (this.get('client')) {
+                case 'open-xchange-mailapp':
+                case 'open-xchange-mobile-api-facade':
+                case 'OpenXchange.iosClient.OXDrive':
+                case 'OpenXchange.Android.OXDrive':
+                case 'USM-EAS':
+                    this.set('icon', 'phone-generic');
+                    break;
+                case 'OpenXchange.HTTPClient.OXDrive':
+                case 'OXDrive':
+                case 'OSX.OXDrive':
+                case 'USM-JSON':
+                default:
+                    this.set('icon', 'desktop-generic');
+                    break;
             }
         }
     });
 
-    ext.point('io.ox/settings/sessions/display-name').extend({
-        id: 'fatclients',
+    ext.point('io.ox/settings/sessions/icon').extend({
+        id: 'browser-icons',
         index: 200,
         customize: function () {
-            if (this.get('client') === 'open-xchange-appsuite') return;
-            var self = this,
-                client = this.get('client'),
-                os = _(operatingSystems).find(function (value, key) {
-                    return !!self.browser[key];
-                }) || gt('Unknown Operating System');
-            if (client === 'open-xchange-mailapp' ||
-                client === 'open-xchange-mobile-api-facade') {
-                this.set('displayName',
-                    //#. %1$s the productname of the mailapp
-                    //#. %2$s the operating system
-                    //#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
-                    gt('%1$s for %2$s', settings.get('productname/mailapp'), os)
-                );
-                this.set('icon', 'phone-generic');
-            } else if (client === 'OpenXchange.HTTPClient.OXDrive') {
-                this.set('displayName',
-                    //#. %1$s the producname of the drive app
-                    //#. Example: OX Drive for Windows
-                    gt('%1$s for Windows', settings.get('productname/oxdrive'))
-                );
-                this.set('icon', 'desktop-generic');
-            } else if (client === 'OpenXchange.iosClient.OXDrive') {
-                this.set('displayName',
-                    //#. %1$s the producname of the drive app
-                    //#. Example: OX Drive for iOS
-                    gt('%1$s for iOS', settings.get('productname/oxdrive'))
-                );
-                this.set('icon', 'phone-generic');
-            } else if (client === 'OpenXchange.Android.OXDrive') {
-                this.set('displayName',
-                    //#. %1$s the producname of the drive app
-                    //#. Example: OX Drive for Android
-                    gt('%1$s for Android', settings.get('productname/oxdrive'))
-                );
-                this.set('icon', 'phone-generic');
-            } else if (client === 'OXDrive') {
-                this.set('displayName',
-                    //#. %1$s the producname of the drive app
-                    //#. %2$s the operating system
-                    //#. Example: OX Drive for Windows
-                    gt('%1$s for %2$s', settings.get('productname/oxdrive'), os)
-                );
-                this.set('icon', 'desktop-generic');
-            } else if (client === 'OSX.OXDrive') {
-                this.set('displayName',
-                    //#. %1$s the producname of the drive app
-                    //#. Example: OX Drive for macOS
-                    gt('%1$s for MacOS', settings.get('productname/oxdrive'))
-                );
-                this.set('icon', 'desktop-generic');
-            } else if (client === 'USM-EAS') {
-                this.set({ 'displayName': gt('Exchange Active Sync'), other: true });
-                this.set('icon', 'phone-generic');
-            } else if (client === 'USM-JSON') {
-                this.set({ 'displayName': settings.get('productname/oxtender'), other: true });
-                this.set('icon', 'desktop-generic');
-            } else {
-                this.set({ displayName: this.get('client') || gt('Unkown client'), other: true });
-                this.set('icon', 'desktop-generic');
-            }
+            var browser = this.browser;
+            if (browser.firefox) this.set('icon', 'ff');
+            else if (browser.chrome) this.set('icon', 'chrome');
+            else if (browser.safari) this.set('icon', 'safari');
+            else if (browser.ie || browser.edge) this.set('icon', 'edge');
         }
     });
 
@@ -206,7 +113,7 @@ define('io.ox/settings/sessions/settings/pane', [
         fetch: function () {
             var self = this;
             return http.GET({
-                url: '/ajax/sessionmanagement?action=getSessions'
+                url: '/ajax/sessionmanagement?action=all'
             }).then(function success(data) {
                 self.set(data);
             });
@@ -228,14 +135,15 @@ define('io.ox/settings/sessions/settings/pane', [
                 $('<div>').append(
                     $('<div>').append(
                         $('<div class="client-icon">').addClass(this.model.get('icon')),
-                        $('<div>').text(this.model.get('displayName'))
+                        $('<div>').text((this.model.get('device') || {}).info || gt('Unknown device'))
                     ),
                     $('<div class="location">').append(
                         $('<span>')
                             .text(this.model.get('location') || gt('Unkown location'))
                             .tooltip({ title: gt('IP: %s', this.model.get('ipAddress')) })
                     ),
-                    $('<div class="logintime">').text(moment(this.model.get('loginTime')).fromNow())
+                    this.model.has('lastActive') ? $('<div class="activetime">').text(gt('Last active: %1$s', moment(this.model.get('lastActive')).fromNow())) : '',
+                    this.model.has('loginTime') ? $('<div class="logintime">').text(gt('Logged in: %1$s', moment(this.model.get('loginTime')).fromNow())) : ''
                 ),
                 (this.model.get('sessionId') !== ox.session ? listUtils.makeControls().append(
                     listUtils.controlsDelete({
@@ -256,11 +164,9 @@ define('io.ox/settings/sessions/settings/pane', [
                 http.PUT({
                     url: '/ajax/sessionmanagement',
                     params: {
-                        action: 'removeSession'
+                        action: 'delete'
                     },
-                    data: {
-                        sessionIdToRemove: self.model.get('sessionId')
-                    }
+                    data: [self.model.get('sessionId')]
                 }).fail(function (error) {
                     require(['io.ox/core/yell'], function (yell) {
                         yell(error);
@@ -366,7 +272,8 @@ define('io.ox/settings/sessions/settings/pane', [
                     title: gt('Browser'),
                     collection: baton.view.collection,
                     filter: function (model) {
-                        return model.get('client') === 'open-xchange-appsuite' && !model.get('other');
+                        var device = model.get('device') || {};
+                        return device.type === 'browser';
                     }
                 }).render().$el
             );
@@ -382,7 +289,25 @@ define('io.ox/settings/sessions/settings/pane', [
                     title: gt('Mobile and Desktop Apps'),
                     collection: baton.view.collection,
                     filter: function (model) {
-                        return model.get('client') !== 'open-xchange-appsuite' && !model.get('other');
+                        var device = model.get('device') || {};
+                        return device.type === 'oxapp';
+                    }
+                }).render().$el
+            );
+        }
+    });
+
+    ext.point('io.ox/settings/sessions/settings/detail/view').extend({
+        id: 'sync-list',
+        index: 500,
+        render: function (baton) {
+            this.$el.append(
+                new SessionView({
+                    title: gt('Sync clients'),
+                    collection: baton.view.collection,
+                    filter: function (model) {
+                        var device = model.get('device') || {};
+                        return device.type === 'sync';
                     }
                 }).render().$el
             );
@@ -398,7 +323,8 @@ define('io.ox/settings/sessions/settings/pane', [
                     title: gt('Other clients'),
                     collection: baton.view.collection,
                     filter: function (model) {
-                        return !!model.get('other');
+                        var device = model.get('device') || {};
+                        return !device.type || device.type === 'other';
                     }
                 }).render().$el
             );
@@ -418,12 +344,7 @@ define('io.ox/settings/sessions/settings/pane', [
                         this.busy();
                         http.GET({
                             url: '/ajax/sessionmanagement',
-                            params: {
-                                action: 'removeAllOtherSessions'
-                            },
-                            data: {
-                                sessionIdToKeep: ox.session
-                            }
+                            params: { action: 'clear' }
                         }).fail(function (error) {
                             require(['io.ox/core/yell'], function (yell) {
                                 yell(error);

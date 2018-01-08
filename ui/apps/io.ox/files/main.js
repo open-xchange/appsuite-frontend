@@ -52,7 +52,8 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true, app: app });
+        sidebarView = new Sidebarview({ closable: true, app: app }),
+        contextmenu;
 
     app.mediator({
 
@@ -197,6 +198,12 @@ define('io.ox/files/main', [
             app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+
+            // cleans up folders that are part of an external account that was deleted recently
+            folderAPI.on('error:FILE_STORAGE-0004', function (error, id) {
+                if (!id) return;
+                folderAPI.pool.removeCollection(id, { removeModels: true });
+            });
         },
 
         'files-quota': function (app) {
@@ -332,7 +339,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, contextMenu: contextmenu });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -432,7 +439,8 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true
+                            noPullToRefresh: true,
+                            contextMenu: contextmenu
                         });
 
                         app.mysharesListViewControl = new ListViewControl({
@@ -493,6 +501,7 @@ define('io.ox/files/main', [
                 'change': function () {
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.hide().siblings().show();
+                        app.mysharesListView.trigger('listview:shown');
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -588,6 +597,7 @@ define('io.ox/files/main', [
                     if (app.myFavoritesListViewControl) {
                         app.myFavoritesListViewControl.$el.hide().siblings().show();
                         app.myFavoriteListView.selection.clear();
+                        app.mysharesListView.trigger('listview:shown');
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -1197,8 +1207,9 @@ define('io.ox/files/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
 
-            app.searchable();
+            app.initFind();
         },
 
         // respond to search results
@@ -1404,28 +1415,12 @@ define('io.ox/files/main', [
         'select-file': function (app) {
 
             app.selectFile = function (obj) {
-
-                function isCurrentFolder() {
-                    return app.listView.collection.cid && app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
-                }
-
-                function select() {
-                    if (!isCurrentFolder()) return;
-                    app.listView.off('collection:load', select);
-                    app.listView.selection.set([obj], true);
-
-                    // must trigger for a updated toolbar
-                    app.listView.trigger('selection:change');
-                }
-
                 obj = _.isString(obj) ? _.cid(obj) : obj;
 
-                if (isCurrentFolder()) {
-                    select();
-                } else {
-                    app.listView.on('collection:load', select);
-                    app.folder.set(obj.folder_id);
-                }
+                api.get(obj).done(function (model) {
+                    var models = api.resolve(model, false);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({ models: models, app: app }));
+                });
             };
         },
 
@@ -1505,7 +1500,14 @@ define('io.ox/files/main', [
 
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
-            .always(function () {
+            .then(function () {
+                return require(['io.ox/files/contextmenu']);
+            })
+            .then(function (Contextmenu) {
+                // contextmenu for all listviews
+                if (!(_.device('smartphone') && _.device('tablet'))) {
+                    contextmenu = new Contextmenu({ el: win.nodes.outer });
+                }
                 app.mediate();
                 win.show(function () {
                     // trigger grid resize

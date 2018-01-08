@@ -52,7 +52,7 @@ define('io.ox/files/toolbar', [
                             }
                         }, baton);
 
-                    this.append('<i class="fa fa-caret-down">');
+                    this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                     this.addClass('dropdown-toggle').attr({
                         'aria-haspopup': 'true',
@@ -92,7 +92,7 @@ define('io.ox/files/toolbar', [
                             }
                         }, baton);
 
-                    this.append('<i class="fa fa-caret-down">');
+                    this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                     this.addClass('dropdown-toggle').attr({
                         'aria-haspopup': 'true',

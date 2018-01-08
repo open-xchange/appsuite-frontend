@@ -183,9 +183,6 @@ settings!io.ox/core
 **topbar/order**
 > defines order of apps in topbar
 
-**transform/multipleEmptyLines**
-> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
-
 ## Mail compose: tinyMCE
 
 **maxUploadIdleTimeout**
@@ -200,6 +197,8 @@ settings!io.ox/core
 **tinyMCE/theme_advanced_buttons3**
 > list of tinyMCE toolbar actions separated by space - targets toolbar3
 
+**tinyMCE/font_format**
+> list of availabe fonts (also used for settings pane). Details: [link](http://archive.tinymce.com/wiki.php/Configuration:font_formats)
 
 ## Folders
 
@@ -769,6 +768,9 @@ settings!io.ox/mail
 
 **prefetch/next**
 > Prefetch the next \[number\] mails in line
+
+**transform/multipleEmptyLines**
+> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
 
 **viewOptions/<folder>/order**<br>
 **viewOptions/<folder>/sort**<br>

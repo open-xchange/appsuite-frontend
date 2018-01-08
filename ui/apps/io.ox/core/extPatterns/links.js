@@ -406,8 +406,8 @@ define('io.ox/core/extPatterns/links', [
                     .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions'))
                     .append(
                         isSmartphone && !extension.compactDropdown ?
-                            $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
-                            $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
+                            $().add($.txt(gt('Actions'))).add($('<i class="fa fa-caret-down" aria-hidden="true">')) :
+                            $('<span class="sr-only">').text(gt('Actions')).add($('<i class="fa fa-bars" aria-hidden="true">'))
                     ),
                     node = $('<ul class="dropdown-menu pull-right" role="menu">')
                         .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
@@ -695,7 +695,7 @@ define('io.ox/core/extPatterns/links', [
         }
 
         function icon() {
-            return $('<i class="fa fa-magic">');
+            return $('<i class="fa fa-magic" aria-hidden="true">');
         }
 
         return function ActionGroup(id, extension) {

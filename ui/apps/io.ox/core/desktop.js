@@ -389,6 +389,8 @@ define('io.ox/core/desktop', [
                             self.listenTo(ox, 'http:error', function (error, request) {
                                 var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
                                 if (folder !== self.folder.get()) return;
+                                // don't show expected errors see Bug 56276
+                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && api.isBeingDeleted(folder)) return;
                                 if (!regex.test(error.code)) return;
                                 // special handling for no permission. if api.get fails, 'http-error' is triggered again
                                 if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return api.get(self.folder.get(), { cache: false });
@@ -432,17 +434,18 @@ define('io.ox/core/desktop', [
             return this.get('window');
         },
 
-        searchable: function () {
-            if (this.get('find')) return;
+        isFindSupported: function () {
+            return supportsFind(this.getName());
+        },
 
-            // break for non supported apps
-            if (!supportsFind(this.getName())) return;
+        initFind: function () {
+            if (this.get('find')) return true;
 
             var find = findFactory.getApp({ parent: this });
             //TODO: bottleneck
             find.prepare();
             this.set('find', find);
-            return this;
+            return find;
         },
 
         getWindowNode: function () {
@@ -878,6 +881,7 @@ define('io.ox/core/desktop', [
      */
     ox.ui.createApp = function (options) {
         options.guid = appGuid++;
+        if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
         return new ox.ui.App(options);
     };
 
@@ -1274,11 +1278,11 @@ define('io.ox/core/desktop', [
                                 //#. %1$s is the name of the page, e.g. OX App Suite
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
-                                ox.serverConfig.pageTitle,
+                                ox.serverConfig.pageTitle || '',
                                 self.getTitle()
                             );
                         } else {
-                            document.title = document.customTitle = ox.serverConfig.pageTitle;
+                            document.title = document.customTitle = ox.serverConfig.pageTitle || '';
                         }
 
                         if (firstShow) {
@@ -1315,7 +1319,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.hide', this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = document.customTitle = ox.serverConfig.pageTitle;
+                        document.title = document.customTitle = ox.serverConfig.pageTitle || '';
                     }
                     return this;
                 };
@@ -1444,11 +1448,11 @@ define('io.ox/core/desktop', [
                                     //#. %1$s is the name of the page, e.g. OX App Suite
                                     //#. %2$s is the title of the active app, e.g. Calendar
                                     gt.pgettext('window title', '%1$s %2$s'),
-                                    ox.serverConfig.pageTitle,
+                                    ox.serverConfig.pageTitle || '',
                                     title
                                 );
                             } else {
-                                document.title = document.customTitle = ox.serverConfig.pageTitle;
+                                document.title = document.customTitle = ox.serverConfig.pageTitle || '';
                             }
                         }
                         this.trigger('change:title');

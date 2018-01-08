@@ -62,9 +62,9 @@ define('plugins/portal/client-onboarding/register', [
                         ),
                         $('<div class="paragraph text-justify devices">').css(style.devices)
                             .append(
-                                $('<i class="fa fa-fw fa-mobile">'),
-                                $('<i class="fa fa-fw fa-tablet">'),
-                                $('<i class="fa fa-fw fa-laptop">')
+                                $('<i class="fa fa-fw fa-mobile" aria-hidden="true">'),
+                                $('<i class="fa fa-fw fa-tablet" aria-hidden="true">'),
+                                $('<i class="fa fa-fw fa-laptop" aria-hidden="true">')
                             ),
                         $('<div class="paragraph">').append(
                             $('<a role="button" class="action">')

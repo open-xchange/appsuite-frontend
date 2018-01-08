@@ -34,7 +34,7 @@
 
     function runCode(name, code) {
         /*eslint no-eval: 0*/
-        eval('//# sourceURL=' + name + '.js\n' + code);
+        eval(code);
     }
 
     // With 7.10 Indexeddb should work with all browsers. We do not need to exclude Safari here any more

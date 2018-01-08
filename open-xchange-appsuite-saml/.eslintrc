@@ -1,7 +1,5 @@
 {
     "root": true,
-    "extends": ["open-xchange-appsuite"],
-    "rules": {
-        "no-else-return": 0
-    }
+
+    "extends": ["open-xchange-appsuite"]
 }

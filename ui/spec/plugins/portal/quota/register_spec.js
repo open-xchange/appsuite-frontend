@@ -13,104 +13,112 @@
 define([
     'plugins/portal/quota/register',
     'io.ox/core/extensions',
-    'spec/shared/capabilities'
-], function (quotaPlugin, ext, caputil) {
+    'io.ox/core/api/quota',
+    'io.ox/core/capabilities'
+], function (quotaPlugin, ext, quotaAPI, capabilities) {
     'use strict';
 
-    var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
-
     describe('Portal Quota plugin', function () {
-        beforeEach(function (done) {
+        let capStub;
+        beforeEach(function () {
             this.server.responses = this.server.responses.filter(function (r) {
                 return r.method !== 'PUT' || String(r.url) !== '/api\\/multiple\\?/';
             });
-            capabilities.reset().then(function () {
-                done();
-            });
+            capStub = sinon.stub(capabilities, 'has');
+            //Default
+            capStub.returns(true);
+            // we are not a guest
+            capStub.withArgs('guest').returns(false);
         });
 
-        describe('should', function () {
-            beforeEach(function (done) {
+        afterEach(function () {
+            capStub.restore();
+        });
+
+        function drawQuotaTo(node) {
+            var def = ext.point('io.ox/portal/widget/quota').invoke('preview', node, {});
+            return def._wrapped[0];
+        }
+        const node = $('<div>');
+
+        describe('with user below quota', function () {
+            beforeEach(function () {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '[{ "timestamp":1368791630910,"data": {"quota":1200, "countquota":50, "use":1200, "countuse":5}},' +
                         '{ "timestamp":1368791630910,"data": {"quota":' + 100 * 1024 * 1024 + ', "use":' + 91 * 1024 * 1024 + '} }]');
                 });
-                this.node = $('<div>');
-
-                var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-
-                def._wrapped[0].done(function () {
-                    done();
-                });
+                return drawQuotaTo(node.empty());
             });
 
-            afterEach(function () {
-                this.node.remove();
+            it('should draw content', function () {
+                expect(node.children()).to.have.length(1);
             });
+            it('should have 3 bars', function () {
+                expect(node.find('li.paragraph')).to.have.length(3);
+                expect(node.find('.progress')).to.have.length(3);
+            });
+            it('should show correct values', function () {
+                expect(node.find('li:nth-child(1) .numbers', 'File quota numbers').text()).to.equal('91 MB von 100 MB');
+                expect(node.find('li:nth-child(2) .numbers', 'Mail quota numbers').text()).to.equal('100%');
+                expect(node.find('li:nth-child(3) .numbers', 'Mail count quota numbers').text()).to.equal('5 von 50');
+            });
+            it('show show correct bar colors and lengths', function () {
+                expect(node.find('li:nth-child(1) .progress-bar').hasClass('bar-danger'), 'File quota bar has danger class').to.be.true;
+                expect(node.find('li:nth-child(1) .progress-bar').css('width'), 'File quota bar width').to.equal('91%');
 
-            it('draw content', function () {
-                expect(this.node.children()).to.have.length(1);
-            });
-            it('have 3 bars', function () {
-                expect(this.node.find('li.paragraph')).to.have.length(3);
-                expect(this.node.find('.progress')).to.have.length(3);
-            });
-            it.skip('show correct values', function () {
-                expect(this.node.find('.quota-memory-mail').text()).to.equal('100%');
-                expect(this.node.find('.quota-memory-file').text()).to.equal('91 MB von 100 MB');
-                expect(this.node.find('.quota-mailcount').text()).to.equal('5 von 50');
-            });
-            it.skip('show correct bar colors and lengths', function () {
-                expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().hasClass('bar-danger')).to.be.true;
-                expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().css('width')).to.equal('91%');
-                expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().hasClass('bar-danger')).to.be.true;
-                expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().css('width')).to.equal('100%');
-                expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().hasClass('bar-danger')).to.be.false;
-                expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().css('width')).to.equal('10%');
+                expect(node.find('li:nth-child(2) .progress-bar').hasClass('bar-danger'), 'Mail quota bar has danger class').to.be.true;
+                expect(node.find('li:nth-child(2) .progress-bar').css('width'), 'Mail quota bar width').to.equal('100%');
+
+                expect(node.find('li:nth-child(3) .progress-bar').hasClass('bar-danger'), 'Mail count bar has class danger').to.be.false;
+                expect(node.find('li:nth-child(3) .progress-bar').css('width'), 'Mail count bar width').to.equal('10%');
             });
         });
-        describe('should', function () {
-            beforeEach(function (done) {
-                this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                        '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
-                        '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
-                });
-                this.node = $('<div>');
-
-                var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                def._wrapped[0].done(function () { // wait till its actually drawn
-                    done();
-                });
+        describe('with unlimited quota', function () {
+            before(function () {
+                quotaAPI.mailQuota.fetched = false;
+                quotaAPI.fileQuota.fetched = false;
             });
-            it.skip('show correct unlimited values', function () {
-                expect(this.node.find('li.paragraph')).to.have.length(3);
-                expect(this.node.find('.progress')).to.have.length(0);
+            beforeEach(function () {
+                this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
+                    if (xhr.requestBody.indexOf('mail') < 0) {
+                        //for whatever reason, the request is fired separately during this test
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                            '[{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '}}]');
+                    } else {
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
+                            '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
+                    }
+                });
 
-                expect(this.node.find('.quota-memory-mail').text()).to.equal('unbegrenzt');
-                expect(this.node.find('.quota-memory-file').text()).to.equal('unbegrenzt');
-                expect(this.node.find('.quota-mailcount').text()).to.equal('unbegrenzt');
+                return drawQuotaTo(node.empty());
+            });
+            it('show correct unlimited values', function () {
+                expect(node.find('li.paragraph')).to.have.length(3);
+                expect(node.find('.progress')).to.have.length(0);
+
+                expect(node.find('li:nth-child(1) .numbers').text(), 'File quota text').to.equal('unbegrenzt');
+                expect(node.find('li:nth-child(2) .numbers').length, 'Mail quota numbers rendered').to.equal(0);
+                expect(node.find('li:nth-child(3) .numbers').length, 'Mail count quota numbers rendered').to.equal(0);
             });
         });
-        describe('should', function () {
-            beforeEach(function (done) {
-                capabilities.disable('infostore');
+        describe('without infostore capability', function () {
+            before(function () {
+                quotaAPI.mailQuota.fetched = false;
+                //quotaAPI.fileQuota.fetched = true;
+            });
+            beforeEach(function () {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                        '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
-                        '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
+                        '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}}]');
                 });
-                this.node = $('<div>');
-
-                var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                def._wrapped[0].done(function () { // wait till its actually drawn
-                    done();
-                });
+                capStub.withArgs('infostore').returns(false);
+                return drawQuotaTo(node.empty());
             });
-            it.skip('react to missing infostore capability', function () {
-                expect(this.node.find('li.paragraph')).to.have.length(2);
-                expect(this.node.find('.progress')).to.have.length(0);
+            it('react to missing infostore capability', function () {
+                expect(node.find('li.paragraph')).to.have.length(2);
+                expect(node.find('.progress')).to.have.length(0);
             });
         });
     });

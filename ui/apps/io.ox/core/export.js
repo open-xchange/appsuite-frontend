@@ -51,7 +51,7 @@ define('io.ox/core/export', [
                 enter: false,
                 maximize: 500,
                 point: 'io.ox/core/export',
-                title: params.folder ? gt('Export folder') : gt('Export selected'),
+                title: params.folder ? gt('Export folder') : /*#. export selected items (folders), title of a dialog */gt('Export selected'),
                 model: new Backbone.Model(),
                 // custom
                 module: module,

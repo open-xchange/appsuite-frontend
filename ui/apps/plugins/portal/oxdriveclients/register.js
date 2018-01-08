@@ -68,14 +68,14 @@ define('plugins/portal/oxdriveclients/register', [
                 .append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
         } else if (platform === 'windows' && settings.get('standaloneWindowsClient') === true) {
             return [
-                $('<i class="fa fa-download">'),
+                $('<i class="fa fa-download" aria-hidden="true">'),
                 $.txt(' '),
                 $('<a class="shoplink" target="_blank" rel="noopener">').attr('href', ox.apiRoot + url + '?session=' + ox.session)
                     .text(gt.format(gt('Download %s'), settings.get('productName')))
             ];
         } else if (platform === 'windows' && capabilities.has('oxupdater')) {
             return [
-                $('<i class="fa fa-download">'),
+                $('<i class="fa fa-download" aria-hidden="true">'),
                 $.txt(' '),
                 $('<a class="shoplink" target="_blank">').attr(
                     'href', ox.apiRoot + url + '?session=' + ox.session

@@ -57,7 +57,7 @@ define('io.ox/calendar/freetime/timeView', [
                             //#. %1$d = Calendar week
                             gt('CW %1$d', moment(baton.model.get('currentWeek')).isoWeek())
                         ),
-                        $('<i class="fa fa-caret-down fa-fw">').attr('aria-hidden', true)
+                        $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
                     );
                 };
 
@@ -229,9 +229,9 @@ define('io.ox/calendar/freetime/timeView', [
                 table.parent().scrollLeft(scrollpos);
                 if (baton.view.center) {
                     table.parent().scrollLeft(scrollpos - this.width() / 2);
-                    delete baton.view.center;
+                    if (!baton.view.popupClosed) delete baton.view.center;
                 }
-                delete baton.view.keepScrollpos;
+                if (!baton.view.popupClosed) delete baton.view.keepScrollpos;
             }
             // participantsview and timeview must be the same height or they scroll out off sync (happens when timeview has scrollbars)
             // use margin so resize event does not change things
@@ -373,6 +373,14 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.on('change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateVisibility.bind(this));
 
             this.parentView = options.parentView;
+
+            if (this.parentView.options.popup) {
+                this.popupClosed = true;
+                this.parentView.options.popup.on('open', function () {
+                    self.popupClosed = false;
+                    self.renderBody();
+                });
+            }
 
             // calculate 15min grid for lasso
             this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 28);

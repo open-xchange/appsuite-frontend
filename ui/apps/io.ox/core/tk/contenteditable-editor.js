@@ -199,6 +199,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         if (!range.startContainer) return;
         splitContent_W3C(ed);
         ed.dom.events.cancel(e);
+        //focus is lost after content has been split, at least starting with tinyMCE 4.6.6 (4.6.5 didn't)
+        ed.focus();
     }
 
     function lookupTinyMCELanguage() {
@@ -425,8 +427,8 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             ln2br = function (str) {
                 return String(str || '').replace(/\r/g, '')
-                    // '\n' is for IE
-                    .replace(new RegExp('\\n', 'g'), '<br>');
+                    // '\n' is for IE; do not add for signatures
+                    .replace(new RegExp('\\n', 'g'), str.indexOf('io-ox-signature') > -1 ? '\n' : '<br>');
             },
 
             // get editor content

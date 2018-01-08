@@ -42,7 +42,7 @@ define('io.ox/contacts/toolbar', [
             ref: 'io.ox/contacts/dropdown/new',
             customize: function (baton) {
 
-                this.append('<i class="fa fa-caret-down" aria-hidden="true">');
+                this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
                 new Dropdown({
                     el: this.parent().addClass('dropdown'),

@@ -62,8 +62,8 @@ define('io.ox/search/view-template', [
                         $('<i class="fa fa-search" aria-hidden="true">')
                     ),
                     // clear icon/button
-                    $('<a href="#" class="btn-clear" role="button">').attr('aria-label', gt('Clear field')).append(
-                        $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Clear field'))
+                    $('<a href="#" class="btn-clear" role="button">').attr('title', gt('Clear field')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
                     )
                 ),
                 cell = $('<div class="col-xs-11">')
@@ -101,18 +101,16 @@ define('io.ox/search/view-template', [
                 title = titles[id] = /*#, dynamic*/gt.pgettext('app', title);
                 items.push(
                     $('<li>').append(
-                        $('<a href="#">')
+                        $('<a href="#" role="button" tabindex="-1">')
                             .attr({
                                 'title': title,
-                                'data-app': id,
-                                'tabindex': '-1',
-                                'role': 'button'
+                                'data-app': id
                             })
                             .append(
-                                $('<i class="fa fa-fw icon"></i>'),
+                                $('<i class="fa fa-fw icon" aria-hidden="true"></i>'),
                                 $('<span>').text(title),
                                 // countpart to keep title centered
-                                $('<i class="fa fa-fw"></i>')
+                                $('<i class="fa fa-fw" aria-hidden="true"></i>')
                             )
                     )
                 );
@@ -120,11 +118,7 @@ define('io.ox/search/view-template', [
 
             // create button and append dropdown menue
             cell.append(
-                $('<a href="#" type="button" class="dropdown-toggle pull-left">')
-                    .attr({
-                        'data-toggle': 'dropdown',
-                        'role': 'menuitemcheckbox'
-                    })
+                $('<a href="#" type="button" class="dropdown-toggle pull-left" data-toggle="dropdown" role="menuitemcheckbox">')
                     .append(
                         $('<span class="name">'),
                         $('<span class="caret">')

@@ -96,51 +96,6 @@ define('io.ox/settings/main', [
             });
         }
 
-        var changeStatus = false,
-            ignoreChangeEvent,
-
-            saveSettings = function (triggeredBy) {
-                var settingsID;
-                switch (triggeredBy) {
-                    case 'changeMain':
-                        if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
-                            settingsID = currentSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save');
-                        } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
-                            changeStatus = true;
-                        }
-                        break;
-                    case 'changeGrid':
-                        if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
-                            settingsID = previousSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save', null, right);
-                            changeStatus = false;
-                        }
-                        break;
-                    case 'changeGridMobile':
-                        if (currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            settingsID = currentSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save');
-                            changeStatus = false;
-                        }
-                        break;
-                    case 'hide':
-                    case 'logout':
-                        if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            settingsID = currentSelection.id + '/settings';
-                            var defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
-                            changeStatus = false;
-                            return $.when.apply($, defs);
-                        }
-                        break;
-                    default:
-                        settingsID = currentSelection.id + '/settings';
-                        ext.point(settingsID + '/detail').invoke('save');
-                }
-
-                return $.when();
-            };
-
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
@@ -238,17 +193,23 @@ define('io.ox/settings/main', [
             id: 'standard-folders',
             index: 100,
             draw: function (tree) {
-                var defaults = { headless: true, count: 0, empty: false, indent: false, open: true, tree: tree, parent: tree, folder: 'virtual/settings' };
+                var defaults = {
+                    headless: true,
+                    count: 0,
+                    empty: false,
+                    indent: false,
+                    open: true,
+                    tree: tree,
+                    parent: tree,
+                    folder: 'virtual/settings',
+                    className: 'folder selectable'
+                };
 
                 this.append(
 
-                    mainGroups.map(function (groupName) {
-                        var folderOptions = _.extend({}, defaults);
-                        if (groupName === 'virtual/settings/security') _.extend(folderOptions, { headless: false, title: gt('Security') });
-                        return new TreeNodeView(_.extend({}, folderOptions, {
-                            className: groupName === 'virtual/settings/security' ? 'folder un-selectable' : 'folder selectable',
-                            model_id: groupName
-                        }))
+                    mainGroups.map(function (group) {
+                        var folderOptions = _.extend({}, defaults, group.folderOptions || {}, { model_id: group.id });
+                        return new TreeNodeView(folderOptions)
                         .render().$el.addClass('standard-folders');
                     })
 
@@ -322,12 +283,6 @@ define('io.ox/settings/main', [
 
             left.trigger('select');
 
-            // change event
-            if (ignoreChangeEvent) {
-                ignoreChangeEvent = false;
-                return;
-            }
-            saveSettings('changeGrid');
         }
 
         // metrics
@@ -351,9 +306,6 @@ define('io.ox/settings/main', [
                 left.trigger('select');
             });
 
-            tree.$container.on('changeMobile', function () {
-                saveSettings('changeGridMobile');
-            });
         }
 
         function addModelsToPool(groupList) {
@@ -385,7 +337,10 @@ define('io.ox/settings/main', [
             _.each(groupList, function (val) {
 
                 if (val.subgroup) {
-                    mainGroups.push('virtual/settings/' + val.id);
+                    mainGroups.push({
+                        id: 'virtual/settings/' + val.id,
+                        folderOptions: val.folderOptions
+                    });
                     disableListetSettingsPanes(val.subgroup);
                     var list = _(ext.point(val.subgroup).list()).map(function (p) {
                         processSubgroup(p, val.subgroup);
@@ -498,7 +453,13 @@ define('io.ox/settings/main', [
         ext.point('io.ox/settings/pane').extend({
             id: 'security',
             index: 200,
-            subgroup: 'io.ox/settings/pane/security'
+            subgroup: 'io.ox/settings/pane/security',
+            folderOptions: {
+                title: gt('Security'),
+                headless: false,
+                indent: true,
+                className: 'folder un-selectable'
+            }
         });
 
         var submodules = _(keychainAPI.submodules).filter(function (submodule) {
@@ -575,23 +536,6 @@ define('io.ox/settings/main', [
             });
         };
 
-        // trigger auto save on any change
-
-        win.nodes.main.on('change', function () {
-            saveSettings('changeMain');
-        });
-        win.on('hide', function () {
-            saveSettings('hide');
-        });
-
-        // listen for logout event
-        ext.point('io.ox/core/logout').extend({
-            id: 'saveSettings',
-            logout: function () {
-                return saveSettings('logout');
-            }
-        });
-
         app.setSettingsPane = function (options) {
 
             getAllSettingsPanes().done(function (data) {
@@ -599,7 +543,6 @@ define('io.ox/settings/main', [
                 if (vsplit.left.find('.folder-tree').length === 0) {
                     vsplit.left.append(tree.render().$el);
                 }
-                ignoreChangeEvent = true;
 
                 if (options && (options.id || options.folder)) {
 

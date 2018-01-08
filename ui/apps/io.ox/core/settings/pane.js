@@ -211,7 +211,7 @@ define('io.ox/core/settings/pane', [
             id: 'buttons',
             render: function () {
 
-                var $group = $('<div class="form-group">');
+                var $group = $('<div class="form-group buttons">');
 
                 // check if users can edit their own data (see bug 34617)
                 if (settings.get('user/internalUserEdit', true)) {
@@ -383,16 +383,16 @@ define('io.ox/core/settings/pane', [
             id: 'request-notifications',
             index: INDEX += 100,
             render: function () {
-
-                this.$requestLink = desktopNotifications.getPermissionStatus() === 'default' ?
-                    // add ask now link (by design browsers only allow asking if there was no decision yet)
-                    //#. Opens popup to decide if desktop notifications should be shown
-                    $('<a href="#" role="button" class="request-desktop-notifications">').text(gt('Manage permission now')).on('click', onClick) :
-                    $();
+                var self = this;
+                // add ask now link (by design browsers only allow asking if there was no decision yet)
+                this.$requestLink =
+                    //#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
+                    $('<a href="#" role="button" class="request-desktop-notifications">').text(gt('Manage browser permissions now')).on('click', onClick);
 
                 function onClick(e) {
                     e.preventDefault();
                     desktopNotifications.requestPermission(function (result) {
+                        if (result !== 'default') self.$requestLink.hide();
                         switch (result) {
                             case 'granted': settings.set('showDesktopNotifications', true).save(); break;
                             case 'denied': settings.set('showDesktopNotifications', false).save(); break;
@@ -402,22 +402,21 @@ define('io.ox/core/settings/pane', [
                 }
 
                 if (desktopNotifications.isSupported()) {
-                    this.listenTo(this.model, 'change:showDesktopNotifications', function (model, value) {
+                    this.listenTo(this.model, 'change:showDesktopNotifications', function (value) {
                         if (value !== true) return;
                         var view = this;
                         desktopNotifications.requestPermission(function (result) {
+                            if (result !== 'default') self.$requestLink.hide();
                             if (result !== 'denied' || view.disposed) return;
                             // revert if user denied the permission
                             // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
                             // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
                             notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
-                            view.model.set('showDesktopNotifications', false);
-                            // remove request link because it is useless. We cannot trigger requestPermission if the user denied. It has to be enabled via the browser settings.
-                            view.$('.request-desktop-notifications').remove();
+                            view.model.set('showDesktopNotifications', false, { silent: true });
                         });
                     });
 
-                    if (this.$requestLink.length) this.$requestLink = $('<br>').add(this.$requestLink);
+                    this.$requestLink = $('<br>').add(this.$requestLink);
                 }
             }
         },

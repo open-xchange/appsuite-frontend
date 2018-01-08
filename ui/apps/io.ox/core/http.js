@@ -335,7 +335,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1032': 'pop3_refresh_rate',
                 '1033': 'pop3_expunge_on_quit',
                 '1034': 'pop3_delete_write_through',
-                '1035': 'pop3_storage ',
+                '1035': 'pop3_storage',
                 '1036': 'pop3_path',
                 '1037': 'personal',
                 '1038': 'reply_to',

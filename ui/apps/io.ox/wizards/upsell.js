@@ -124,7 +124,7 @@ define('io.ox/wizards/upsell', [
 
             /* draw cart */
             $cart.append(
-                $('<i class="fa fa-shopping-cart fa-2x">'),
+                $('<i class="fa fa-shopping-cart fa-2x" aria-hidden="true">'),
                 $('<span class="title">').text(gt('Shopping cart')),
                 $('<br/>'),
                 $('<span class="upsell-shopping-cart-status">').text(gt('Cart is empty.'))

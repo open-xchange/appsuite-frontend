@@ -62,7 +62,8 @@ define('io.ox/core/settings/user', [
                         dialog.editView.on('sync:start', function () {
                             // if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
                             if (model.get('birthday') !== null) return;
-                            dialog.$body.find('[data-field="birthday"]').find('.year,.month,.date').val('');
+                            dialog.$body.find('[data-field="birthday"]').find('.month,.date').val('');
+                            dialog.$body.find('[data-field="birthday"]').find('.year').val('1604');
                         });
                     });
 

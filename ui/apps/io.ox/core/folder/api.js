@@ -125,9 +125,7 @@ define('io.ox/core/folder/api', [
             // use account API so it works with non standard accounts as well
             var type = account.getType(model.get('id'));
             // don't count trash or spam root folders
-            if (type === 'trash' || type === 'spam') {
-                return total;
-            }
+            if (type === 'trash' || type === 'spam' || type === 'confirmed_spam') return total;
             return total + (model.get('subtotal') || 0) + (model.get('unread') || 0);
         }, 0);
     }
@@ -294,6 +292,15 @@ define('io.ox/core/folder/api', [
             return model;
         },
 
+        removeModels: function (accountId) {
+            if (!accountId) return;
+            _.each(this.models, function (model, id) {
+                if (!model.get('account_id')) return true;
+                if (model.get('account_id') !== accountId) return true;
+                delete this.models[id];
+            }.bind(this));
+        },
+
         addCollection: function (id, list, options) {
             // drop 'subfolders' attribute unless all=true (see bug 46677)
             if (options && !options.all) {
@@ -325,7 +332,7 @@ define('io.ox/core/folder/api', [
                 for (var i = 0; i < models.length; i++) {
                     // use account API so it works with non standard accounts as well
                     var ctype = account.getType(models[i].get('id'));
-                    if (ctype !== 'trash' && ctype !== 'spam') {
+                    if (ctype !== 'trash' && ctype !== 'spam' && ctype !== 'confirmed_spam') {
                         subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
                         // add virtual parent references
                         if (isVirtual(id)) {
@@ -362,6 +369,7 @@ define('io.ox/core/folder/api', [
                 var data = this.models[id].toJSON();
                 this.models[id] = null;
                 delete this.models[id];
+                api.trigger('before:remove', data);
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
@@ -616,7 +624,7 @@ define('io.ox/core/folder/api', [
                 return renameDefaultCalendarFolders(data);
             },
             function (error) {
-                api.trigger('error error:' + error.code, error);
+                api.trigger('error error:' + error.code, error, id);
                 return error;
             }
         )
@@ -707,7 +715,7 @@ define('io.ox/core/folder/api', [
             appendColumns: true
         })
         .then(renameDefaultCalendarFolders, function (error) {
-            api.trigger('error error:' + error.code, error);
+            api.trigger('error error:' + error.code, error, id);
             throw error;
         })
         .then(function (array) {
@@ -1149,6 +1157,11 @@ define('io.ox/core/folder/api', [
         _(pool.collections).invoke('remove', model);
     }
 
+    var currentlyDeleted = [];
+    function isBeingDeleted(id) {
+        return _(currentlyDeleted).contains(id);
+    }
+
     function remove(ids, options) {
 
         // ensure array
@@ -1200,6 +1213,7 @@ define('io.ox/core/folder/api', [
                     if (api.is('trash', data) || (response[index] && _.isEmpty(response[index].new_path))) {
                         api.pool.removeCollection(id, { removeModels: true });
                     } else {
+                        currentlyDeleted.push(id);
                         // use new path if available, else use id
                         var pathOrId = (response[index] ? response[index].new_path : id);
                         api.get(pathOrId, { cache: false }).fail(function (error) {
@@ -1207,6 +1221,8 @@ define('io.ox/core/folder/api', [
                             if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
                                 api.pool.removeCollection(id, { removeModels: true });
                             }
+                        }).always(function () {
+                            currentlyDeleted = _(currentlyDeleted).without(id);
                         });
                     }
                 }
@@ -1423,9 +1439,10 @@ define('io.ox/core/folder/api', [
     }
 
     ox.on('please:refresh refresh^', refresh);
+    ox.on('account:delete', pool.removeModels.bind(pool));
 
     // If there is a new filestorage refresh the folders
-    filestorageApi.on('create delete update', refresh);
+    filestorageApi.on('create update', refresh);
 
     //
     // Get standard mail folders
@@ -1507,6 +1524,7 @@ define('io.ox/core/folder/api', [
         move: move,
         create: create,
         remove: remove,
+        isBeingDeleted: isBeingDeleted,
         clear: clear,
         reload: reload,
         hide: hide,

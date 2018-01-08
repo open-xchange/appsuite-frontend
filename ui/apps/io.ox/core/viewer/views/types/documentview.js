@@ -47,6 +47,9 @@ define('io.ox/core/viewer/views/types/documentview', [
     var DocumentView =  BaseView.extend({
 
         initialize: function (options) {
+
+            Util.logPerformanceTimer('DocumentView:initialize');
+
             _.extend(this, options);
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = _.device('desktop') ? 20 : 10;
@@ -297,6 +300,8 @@ define('io.ox/core/viewer/views/types/documentview', [
         loadVisiblePages: function () {
             this.documentLoad.done(function () {
 
+                Util.logPerformanceTimer('DocumentView:loadVisiblePages');
+
                 var pagesToRender = this.getPagesToRender();
                 var beginPageNumber = _.first(pagesToRender);
                 var endPageNumber = _.last(pagesToRender);
@@ -391,14 +396,19 @@ define('io.ox/core/viewer/views/types/documentview', [
                 if (_.isNumber(pageNumberToRefresh)) {
                     // Process the page node
                     var pageNode = this.getPageNode(pageNumberToRefresh);
-                    this.pageLoader.setPageZoom(pageNode, this.currentZoomFactor / 100);
+                    Util.logPerformanceTimer('DocumentView:refresh_before_set_pagezoom_' + pageNumberToRefresh);
+                    this.pageLoader.setPageZoom(pageNode, this.currentZoomFactor / 100).done(function () {
+                        Util.logPerformanceTimer('DocumentView:refresh_then_from_set_pagezoom_' + pageNumberToRefresh);
+                    });
 
                 } else {
                     // empty all pages in case of a complete refresh request
                     this.pages.detach().each(function () {
                         self.emptyPageNode($(this));
-                        self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100);
-
+                        Util.logPerformanceTimer('DocumentView:refresh_before_set_pagezoom_' + pageNumberToRefresh);
+                        self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100).done(function () {
+                            Util.logPerformanceTimer('DocumentView:refresh_then_from_set_pagezoom_' + pageNumberToRefresh);
+                        });
                     }).appendTo(self.documentContainer);
                 }
 
@@ -575,6 +585,9 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         show: function (options) {
+
+            Util.logPerformanceTimer('DocumentView:show');
+
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 // document pages are drawn, but there is no visible page rendered yet
@@ -599,6 +612,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  page count of the pdf document delivered by the PDF.js library.
              */
             function pdfDocumentLoadSuccess(pageCount) {
+
                 // do nothing and quit if a document is already disposed.
                 if (this.disposed || !this.pdfDocument) {
                     return;
@@ -671,7 +685,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var notificationIconClass = (response.cause === 'passwordProtected') ? 'fa-lock' : null;
 
                 // display error message
-                this.displayNotification(notificationText, notificationIconClass);
+                this.displayDownloadNotification(notificationText, notificationIconClass);
 
                 // store error info in meta data of the file model
                 if (this.model.isFile()) {
@@ -684,7 +698,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             if (isPasswordProtected(this.model)) {
-                this.displayNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
+                this.displayDownloadNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
                 this.documentLoad.reject();
                 return this;
             }
@@ -700,10 +714,19 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.$el.addClass('io-ox-busy');
 
             // wait for PDF document to finish loading
-            $.when(this.pdfDocument.getLoadPromise()).then(
+            var pdfLoadPromise = $.when(this.pdfDocument.getLoadPromise());
+
+            // adding log timer in synchronous done handler
+            pdfLoadPromise.done(function () {
+                // the document is NOT completely loaded yet! Often further chunks are downloaded during page rendering.
+                Util.logPerformanceTimer('DocumentView:show_getLoadPromise_done_handler');
+            });
+
+            pdfLoadPromise.then(
                 pdfDocumentLoadSuccess.bind(this),
                 pdfDocumentLoadError.bind(this)
             );
+
             return this;
         },
 

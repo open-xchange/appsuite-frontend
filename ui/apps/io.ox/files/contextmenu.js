@@ -18,7 +18,8 @@ define('io.ox/files/contextmenu', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/collection',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/files/share/toolbar'
 ], function (ext, extAction, AbstractView, Dropdown, ContextUtils, Collection, gt) {
 
     'use strict';
@@ -107,13 +108,20 @@ define('io.ox/files/contextmenu', [
                 lastSection = currentSection;
             });
 
-            def.resolve();
+            // reject when no entry available to prevent that a empty context
+            // menu is shown (would be only visible in the DOM, not for the user)
+            if (menuIsEmtpy) {
+                def.reject();
+            } else {
+                def.resolve();
+            }
+
         });
 
         return def.promise();
     }
 
-    // define point for the file context menu
+    // define point for the default file context menu
     ext.point('io.ox/core/file/contextmenu/default').extend({
         id: 'drive-list-dropdown',
         index: 10000,
@@ -122,7 +130,63 @@ define('io.ox/files/contextmenu', [
         }
     });
 
-    // file context menu definition
+    // define point for the outside-list context menu
+    ext.point('io.ox/core/file/contextmenu/default/outsideList').extend({
+        id: 'drive-list-dropdown-outsideList',
+        index: 10000,
+        draw: function (baton) {
+            return renderActionPointItems(this, 'io.ox/core/file/contextmenu/default/outsideList/items', baton);
+        }
+    });
+
+    // define point for the myshares file context menu
+    ext.point('io.ox/core/file/contextmenu/myshares').extend({
+        id: 'drive-myshares-dropdown',
+        index: 10000,
+        draw: function (baton) {
+            return renderActionPointItems(this, 'io.ox/core/file/contextmenu/myshares/items', baton);
+        }
+    });
+
+    // ======  context menu definition ======
+
+    // default/outside-list file context menu definition
+    ext.point('io.ox/core/file/contextmenu/default/outsideList/items').extend(
+        {
+            id: 'addfolder',
+            index: 1000,
+            ref: 'io.ox/files/actions/add-folder',
+            section: '5',
+            label: gt('Add folder')
+        }
+    );
+
+    // myshares file context menu definition
+    ext.point('io.ox/core/file/contextmenu/myshares/items').extend(
+        {
+            id: 'permissions',
+            index: 1000,
+            ref: 'io.ox/files/actions/permissions',
+            section: '10',
+            label: gt('Edit share')
+        },
+        {
+            id: 'show-in-folder',
+            index: 1100,
+            ref: 'io.ox/files/actions/show-in-folder',
+            section: '20',
+            label: gt('Show in Drive')
+        },
+        {
+            id: 'revoke-access',
+            index: '1200',
+            ref: 'io.ox/files/share/revoke',
+            section: '30',
+            label: gt('Revoke access')
+        }
+    );
+
+    // default file context menu definition
     ext.point('io.ox/core/file/contextmenu/default/items').extend(
 
         {
@@ -222,7 +286,7 @@ define('io.ox/files/contextmenu', [
                 margin: 24
             });
 
-            option.el.after(
+            option.el.append(
                 this.dropdown.render().$el
             );
 
@@ -231,8 +295,12 @@ define('io.ox/files/contextmenu', [
 
         showContextMenu: function (e, baton) {
 
+            var link = this.getLink(e, baton);
+            // when no link available cancel the current process to show the context menu
+            if (!link) { return; }
+
             var positionData = this.calcPositionFromEvent(e);
-            var updateFinished = this.updateContextMenu(baton);
+            var updateFinished = this.updateContextMenu(link, baton);
             var view = this;
             $.when.apply($, updateFinished.value()).done(function () {
 
@@ -244,6 +312,10 @@ define('io.ox/files/contextmenu', [
                 var appHasNotChanged = ox.ui.App.getCurrentApp().getName() === baton.app.options.name;
 
                 if (appHasNotChanged) {
+
+                    // a11y: The role menu should only be set if there are menuitems in it - as we don't have a case with no items in the menu no check is needed so far
+                    view.$dropdownMenu.attr('role', 'menu');
+
                     view.$dropdownMenu.css({ top: positionData.top, left: positionData.left, bottom: 'auto' });
                     view.dropdown.$toggle = positionData.target;
                     view.$dropdownToggle.dropdown('toggle');
@@ -269,11 +341,47 @@ define('io.ox/files/contextmenu', [
             return { target: target, top: top, left: left };
         },
 
-        updateContextMenu: function (baton) {
+        // Check if clicked below the list entries in the outside-list area.
+        checkEventTargetOutsideList: function (e) {
+            // target when clicking in a empty folder
+            var emptyList = $(e.target).hasClass('abs notification');
+            // target when clicked below a list
+            var areaBelowList = $(e.target).is('ul');
+
+            return areaBelowList || emptyList;
+        },
+
+        /**
+         * Get the link depending on on the target (list | outside-list).
+         * @param e
+         * @param baton
+         *   @param {String} baton.linkContextMenu
+         *   @param {String} baton.linkContextMenuOutsideList [optional]
+         *   In case outside-list context-menu is wanted.
+         *
+         * @returns {String} link
+         */
+        getLink: function (e, baton) {
+            var link = null;
+
+            if (this.checkEventTargetOutsideList(e)) {
+                link = baton.linkContextMenuOutsideList;
+            } else {
+                link = baton.linkContextMenu;
+            }
+
+            return link;
+        },
+
+        updateContextMenu: function (link, baton) {
 
             var ul = this.$dropdownMenu.empty();
+
+            // a11y: remove menu role when no items in the menu on empty
+            this.$dropdownMenu.removeAttr('role');
+
             //baton.$el = ul; NOTE: found no case were needed, but when there is a bug with certain actions, check if this helps
-            var finishedRendering = ext.point('io.ox/core/file/contextmenu/default').invoke('draw', ul, baton);
+            var finishedRendering = ext.point(link).invoke('draw', ul, baton);
             return finishedRendering;
         }
     });

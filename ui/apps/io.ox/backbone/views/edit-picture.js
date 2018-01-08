@@ -143,7 +143,10 @@ define('io.ox/backbone/views/edit-picture', [
                         var $slider = $body.find('input.cr-slider'),
                             min = $slider.attr('min'),
                             max = $slider.attr('max'),
+                            step = $slider.attr('step'),
                             current = $body.croppie('get').zoom;
+                        // remove 'blind spot' at range end (last step would exceed max)
+                        $slider.attr('max', max = max - ((max - min) % step));
                         // maps absolute numbers to percental values
                         $body.find('#zoom').text(((current - min) * 100 / (max - min)).toFixed(0) + '%');
                     }

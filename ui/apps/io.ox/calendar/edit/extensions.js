@@ -349,12 +349,7 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div class="checkbox">').append(
-                    $('<label class="control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'full_time', model: this.model }).render().$el,
-                        $.txt(gt('All day'))
-                    )
-                )
+                new mini.CustomCheckboxView({ id: guid, name: 'full_time', label: gt('All day'), model: this.model }).render().$el
             );
         }
     });
@@ -537,14 +532,10 @@ define('io.ox/calendar/edit/extensions', [
             var folder_id = this.model.get('folder_id');
             if (!folderAPI.pool.getModel(folder_id).is('private')) return;
 
-            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
-                        $.txt(gt('Private'))
-                    )
+                    new mini.CustomCheckboxView({ label: gt('Private'), name: 'private_flag', model: this.model }).render().$el
                 )
             );
         }
@@ -597,12 +588,8 @@ define('io.ox/calendar/edit/extensions', [
         index: 1510,
         className: 'col-md-6',
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<label class="checkbox-inline control-label">').attr('for', guid).append(
-                    new mini.CheckboxView({ id: guid, name: 'notification', model: this.model }).render().$el,
-                    $.txt(gt('Notify all participants by email.'))
-                )
+                new mini.CustomCheckboxView({ label: gt('Notify all participants by email.'), name: 'notification', model: this.model }).render().$el
             );
         }
     }, {

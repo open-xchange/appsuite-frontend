@@ -27,7 +27,7 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
         el: '<div class="alert alert-info alert-dismissable ellipsis indicator" role="alert">',
 
         events: {
-            'click .close': 'onClose',
+            'click .btn-close': 'onClose',
             'click a[data-action="edit-vacation-notice"]': 'onEdit'
         },
 
@@ -53,49 +53,59 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             $listview.css('top', ($listview.position().top - 40));
         },
 
+        activeElements: [],
+
+        setActiveState: function (model) {
+            var key = _.indexOf(this.activeElements, model.id);
+            if (model.isActive() && key === -1) {
+                this.activeElements.push(model.id);
+            } else if (key !== -1) {
+                this.activeElements.splice(key, 1);
+            }
+        },
+
         onChange: function (model) {
-            var active = model.isActive(),
-                $listview = this.$el.nextAll('.list-view-control'),
-                top = parseInt($listview.css('top'), 0);
+
+            this.setActiveState(model);
+
+            var active = _.indexOf(this.activeElements, model.id) !== -1,
+                $listview = this.$el.nextAll('.list-view-control');
 
             this.$el.toggle(active);
 
-            if (top === 40) {
-                // one already showing
-                $listview.css('top', active ? 80 : 0);
-            } else if (top === 80) {
-                // two showing
+            if (this.activeElements.length === 1) {
                 $listview.css('top', 40);
-            } else {
-                // nothing is shown
-                $listview.css('top', active ? 40 : 0);
-            }
 
+            } else if (this.activeElements.length === 2) {
+                $listview.css('top', 80);
+
+            } else {
+                $listview.css('top', 0);
+            }
         }
     });
 
     ext.point('io.ox/mail/vacation-notice/indicator').extend(
         {
-            id: 'close',
+            id: 'link',
             index: 100,
             render: function () {
+                var title = gt('Your vacation notice is active');
                 this.$el.append(
-                    $('<button type="button" class="close"><span aria-hidden="true">&times;</span></button>')
-                        .attr('aria-label', gt('Close'))
+                    $('<i class="fa fa-warning" aria-hidden="true">'),
+                    $('<span class="sr-only">').text(gt('Warning')),
+                    $('<a href="#" data-action="edit-vacation-notice">').text(title)
                 );
             }
         },
         {
-            id: 'link',
+            id: 'close',
             index: 200,
             render: function () {
-                var title = gt('Your vacation notice is active');
                 this.$el.append(
-                    $('<i class="fa fa-warning">'),
-                    $.txt(' '),
-                    $('<a href="#" data-action="edit-vacation-notice">')
-                        .attr('title', title)
-                        .text(title)
+                    $('<button type="button" class="btn btn-link btn-close">').attr('title', gt('Close')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
+                    )
                 );
             }
         }

@@ -263,6 +263,9 @@ define('io.ox/mail/main', [
 
         'folder-view-dsc-folder-setup-notice': function () {
 
+            // TODO - A11y: Why is this in the Tree?
+            // The Foldertree is for Folders only!
+
             function returnFakeFolder(account) {
                 var fakeFolder = $('<li class="folder remote-account-setup">').attr({
                     'data-id': account.root_folder,
@@ -277,11 +280,11 @@ define('io.ox/mail/main', [
                     'aria-expanded': 'false'
                 })
                 .append(
-                    $('<div class="folder-node" style="padding-left: 0px;">').attr('aria-hidden', 'true').append(
+                    $('<div class="folder-node" style="padding-left: 0px;" aria-hidden="true">').append(
                         $('<div class="folder-arrow">').append(
                         ),
                         $('<div class="folder-icon">').append(
-                            $('<i class="fa fa-fw">')
+                            $('<i class="fa fa-fw" aria-hidden="true">')
                         ),
                         $('<div class="folder-label">').append(
                             $('<div>').text(account.name)
@@ -289,9 +292,9 @@ define('io.ox/mail/main', [
                         $('<div class="folder-counter">'),
                         $('<a href="#" class="account-link">').attr({
                             'data-dsc': account.root_folder,
-                            title: 'Account is being created'
+                            title: gt('Account is being created')
                         }).append(
-                            $('<i class="fa fa-exclamation-triangle">')
+                            $('<i class="fa fa-exclamation-triangle" aria-hidden="true">')
                         ),
                         $('<ul class="subfolders" role="group">')
                     )
@@ -426,6 +429,7 @@ define('io.ox/mail/main', [
                 'layout': getLayout(),
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
+                'textPreview': app.settings.get('showTextPreview', true),
                 'exactDates': app.settings.get('showExactDates', false),
                 'alwaysShowSize': app.settings.get('alwaysShowSize', false),
                 'categories': app.settings.get('categories/enabled', false),
@@ -485,7 +489,7 @@ define('io.ox/mail/main', [
                         data.id = data.original_id;
                         data.folder_id = data.original_folder_id;
                         // drop messages from spam and trash
-                        return !accountAPI.is('spam|trash', data.folder_id);
+                        return !accountAPI.is('spam|confirmed_spam|trash', data.folder_id);
                     }).pluck('folder_id').uniq().value();
                     folderAPI.multiple(folders);
                 });
@@ -530,6 +534,8 @@ define('io.ox/mail/main', [
                 folder: app.folder.get(),
                 thread: app.settings.get('threadSupport', true)
             });
+            // for debugging
+            window.list = app.listView;
         },
 
         'list-view-checkboxes': function (app) {
@@ -637,6 +643,7 @@ define('io.ox/mail/main', [
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
+                    .set('showTextPreview', data.textPreview)
                     .set('showExactDates', data.exactDates)
                     .set('alwaysShowSize', data.alwaysShowSize)
                     .set('categories/enabled', data.categories);
@@ -981,6 +988,12 @@ define('io.ox/mail/main', [
             };
         },
 
+        'page-change-detail-view-mobile': function () {
+            app.pages.getPage('detailView').on('header_ready', function () {
+                app.pages.changePage('detailView');
+            });
+        },
+
         'selection-mobile': function (app) {
 
             if (!_.device('smartphone')) return;
@@ -1008,8 +1021,8 @@ define('io.ox/mail/main', [
                             app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
                         } else {
+                            // no page change here, bound via event
                             app.showMail(cid);
-                            app.pages.changePage('detailView');
                         }
                     }
                 }
@@ -1543,30 +1556,23 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Respond to change:contactPictures
+         * Respond to change of view options that require redraw
          */
-        'change:contactPictures': function (app) {
-            app.props.on('change:contactPictures', function () {
-                app.listView.redraw();
-            });
-        },
+        'change:viewOptions': function (app) {
 
-        /*
-         * Respond to change:exactDates
-         */
-        'change:exactDates': function (app) {
-            app.props.on('change:exactDates', function () {
+            app.props.on('change:contactPictures change:exactDates change:alwaysShowSize change:textPreview', function () {
                 app.listView.redraw();
+                app.listView.$el.trigger('scroll');
+                toggleClasses();
             });
-        },
 
-        /*
-         * Respond to change:alwaysShowSize
-         */
-        'change:alwaysShowSize': function (app) {
-            app.settings.on('change:alwaysShowSize', function () {
-                app.listView.redraw();
-            });
+            toggleClasses();
+
+            function toggleClasses() {
+                app.listView.$el
+                    .toggleClass('show-contact-pictures', app.props.get('contactPictures'))
+                    .toggleClass('show-text-preview', app.props.get('textPreview'));
+            }
         },
 
         'fix-mobile-lazyload': function (app) {
@@ -1578,18 +1584,13 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
-
             if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
 
-            app.searchable();
-
-            var find = app.get('find'),
-                each = function (obj) {
+            app.initFind().on('collectionLoader:created', function (loader) {
+                loader.each = function (obj) {
                     api.pool.add('detail', obj);
                 };
-
-            find.on('collectionLoader:created', function (loader) {
-                loader.each = each;
             });
         },
         // respond to pull-to-refresh in mail list on mobiles

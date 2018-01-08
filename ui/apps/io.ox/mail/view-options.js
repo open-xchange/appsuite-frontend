@@ -194,6 +194,11 @@ define('io.ox/mail/view-options', [
         }
     });
 
+    function toggleByState(app, node) {
+        if (app.folder.get() === 'virtual/all-unseen') return node.hide();
+        node.toggle(!app.props.get('find-result'));
+    }
+
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
         id: 'dropdown',
         index: 300,
@@ -205,21 +210,19 @@ define('io.ox/mail/view-options', [
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort'),
+                dataAction: 'sort',
                 model: model
             });
-
-            function toggle() {
-                var folder = app.folder.get();
-                dropdown.$el.toggle(folder !== 'virtual/all-unseen');
-            }
-
-            app.on('folder:change', toggle);
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 
+            // hide in all-unseen folder and for search results
+            var toggle = _.partial(toggleByState, app, dropdown.$el);
+            app.props.on('change:find-result change:find-result', toggle);
+            app.on('folder:change', toggle);
             toggle();
         }
     });
@@ -255,6 +258,7 @@ define('io.ox/mail/view-options', [
                 caret: true,
                 //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
                 label: gt.pgettext('dropdown', 'All'),
+                dataAction: 'all',
                 model: model
             });
 
@@ -264,14 +268,9 @@ define('io.ox/mail/view-options', [
                 e.stopPropagation();
             }));
 
-            function toggle() {
-                var folder = app.folder.get();
-                dropdown.$el.toggle(folder !== 'virtual/all-unseen');
-                dropdown.$ul.empty();
-                ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
-
-            }
-
+            // hide in all-unseen folder and for search results
+            var toggle = _.partial(toggleByState, app, dropdown.$el);
+            app.props.on('change:find-result change:find-result', toggle);
             app.on('folder:change', toggle);
             toggle();
         }

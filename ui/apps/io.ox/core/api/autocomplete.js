@@ -171,7 +171,7 @@ define('io.ox/core/api/autocomplete', [
                             }
                             // when there is a contact with the same email as a user we prever the user, so we must store them to check
                             if (obj.type === 'user') {
-                                users[obj[field]] = true;
+                                users[obj.sort_name + '_' + obj[field]] = true;
                             }
                         }
                     });
@@ -191,7 +191,7 @@ define('io.ox/core/api/autocomplete', [
                 if (obj.mark_as_distributionlist) {
                     return inHash(_.cid(obj));
                 }
-                return inHash(obj[obj.field], obj.type);
+                return inHash(obj.sort_name + '_' + obj[obj.field], obj.type);
             });
             hash = null;
             users = null;

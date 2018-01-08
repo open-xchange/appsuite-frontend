@@ -50,7 +50,10 @@ define('io.ox/mail/compose/actions/extensions', [
     api.applySimpleLinebreaks = function (baton) {
         if (baton.mail.attachments[0].content_type === 'text/plain') return;
         if (!mailSettings.get('compose/simpleLineBreaks', false)) return;
-        baton.mail.attachments[0].content = $('<div>').append($.parseHTML(baton.mail.attachments[0].content)).children('p').css('margin', 0).end().html();
+        baton.mail.attachments[0].content = $('<div>').append($.parseHTML(baton.mail.attachments[0].content))
+            .children('p').css('margin', 0).end()
+            .find('.io-ox-signature > p').css('margin', 0).end()
+            .html();
     };
 
     api.attachmentMissingCheck = function (baton) {
@@ -67,12 +70,11 @@ define('io.ox/mail/compose/actions/extensions', [
             'siehe Anhang|angehängt|anbei|hinzugefügt|ist angehängt|angehängt ist|sind angehängt|angehängt sind|an diese E-Mail angehängt|an diese Nachricht angehängt|Anhang hinzufügen|Anhang anbei|Anhang hinzugefügt|anbei finden|anbei|im Anhang|mit dieser E-Mail sende ich|angehängte Datei|siehe angehängte Datei|siehe Anhänge|angehängte Dateien|siehe Anlage|siehe Anlagen'
         ]).uniq().join('|').split('|')).uniq().join('|');
 
-        var mailContent;
-
+        var mailContent = (baton.model.get('subject') || '') + '|';
         if (baton.view.editor.getMode() === 'html') {
-            mailContent = $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature').text();
+            mailContent += $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature').text();
         } else {
-            mailContent = baton.view.editor.getContent().replace(/^>.*\n/gm, '');
+            mailContent += baton.view.editor.getContent().replace(/^>.*\n/gm, '');
         }
 
         var detectedString = new RegExp('(' + wordList + ')', 'i').exec(mailContent);

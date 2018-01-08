@@ -18,9 +18,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/util',
     'io.ox/mail/util',
     'io.ox/core/capabilities',
+    'io.ox/core/viewer/util',
     'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, settings, gt) {
+], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, settings, gt) {
 
     'use strict';
 
@@ -41,29 +42,20 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         });
     }
 
-    function renderFileName(model) {
-        var name = model.getDisplayName() || '-',
-            link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
+    function renderFileName(model, options) {
+        var name = model.getDisplayName() || '-';
+        var disableLink = options.disableLink || false;
 
+        //fix for 53324
         if (model.get('source') !== 'drive') return $.txt(name);
 
+        // fix for 56070
+        if (disableLink) return $.txt(name);
+
+        var link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
         return $('<a href="#" target="_blank" style="word-break: break-all">')
             .attr('href', link)
             .text(name);
-    }
-
-    function renderItemSize(model) {
-        var size, total, sizeString;
-
-        if (model.isFile()) {
-            size = model.get('file_size');
-            sizeString = (_.isNumber(size)) ? _.filesize(size) : '-';
-        } else {
-            total = model.get('total');
-            sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
-        }
-
-        return sizeString;
     }
 
     function renderDateString(model) {
@@ -93,11 +85,11 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 // filename
                 $('<dt>').text(gt('Name')),
                 $('<dd class="file-name">').append(
-                    renderFileName(model)
+                    renderFileName(model, options)
                 ),
                 // size
                 $('<dt>').text(gt('Size')),
-                $('<dd class="size">').text(renderItemSize(model))
+                $('<dd class="size">').text(ViewerUtil.renderItemSize(model))
             );
             if (!isAttachmentView) {
                 dl.append(

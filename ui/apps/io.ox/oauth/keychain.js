@@ -257,7 +257,7 @@ define.async('io.ox/oauth/keychain', [
         };
 
     // services & accounts maybe part of the rampup data
-    if (ox.rampup && ox.rampup.oauth.services) {
+    if (ox.rampup && ox.rampup.oauth && ox.rampup.oauth.services) {
         services = api.services = new ServiceCollection();
         services.add(ox.rampup.oauth.services);
         accounts.add(ox.rampup.oauth.accounts);

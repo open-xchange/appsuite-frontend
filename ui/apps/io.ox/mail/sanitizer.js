@@ -16,18 +16,21 @@ define('io.ox/mail/sanitizer', [
     'static/3rd.party/purify.min.js'
 ], function (mailSettings, DOMPurify) {
 
-    var whitelist = mailSettings.get('whitelist', []);
+    var whitelist = mailSettings.get('whitelist', {});
 
     // TODO: Backend seems to leave out a few necessary attributes
-    whitelist.allowedAttributes = ['id', 'class', 'style'].concat(whitelist.allowedAttributes);
+    whitelist.allowedAttributes = ['id', 'class', 'style'].concat(whitelist.allowedAttributes || []);
 
     // See: https://github.com/cure53/DOMPurify for all available options
     var options = {
         SAFE_FOR_JQUERY: true,
-        ALLOWED_TAGS: whitelist.allowedTags,
         ALLOWED_ATTR: whitelist.allowedAttributes,
-        WHOLE_DOCUMENT: true    // keep HTML and style tags to display mails correctly in iframes
+        // keep HTML and style tags to display mails correctly in iframes
+        WHOLE_DOCUMENT: true
     };
+
+    // strange handling of options by DOMPurify: breaks on undefined or empty array
+    if (whitelist.allowedTags && whitelist.allowedTags.length) options.ALLOWED_TAGS = whitelist.allowedTags;
 
     function isEnabled() {
         return mailSettings.get('features/sanitize', false);

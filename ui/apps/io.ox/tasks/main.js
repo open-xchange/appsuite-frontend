@@ -619,9 +619,9 @@ define('io.ox/tasks/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
-            var find = app.searchable().get('find');
+            if (!app.isFindSupported()) return;
 
-            find.on({
+            app.initFind().on({
                 'find:query': function () {
                     // hide sort options
                     app.grid.getToolbar().find('.grid-options:first').hide();

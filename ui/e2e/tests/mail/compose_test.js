@@ -29,7 +29,7 @@ Scenario('Compose plain text mail', function (I) {
     I.checkOption({ css: '[name="messageFormat"][value="html"] + i' });
 
     // 1) Switch to the mail app, select "Create mail"
-    I.click('Mail', '.launchers');
+    I.click('Mail', { css: '.launchers .launcher[data-app-name="io.ox/mail"]' });
 
     // 1.1) Mark all messages as read to identify the new message later on
     I.selectFolder('Inbox');

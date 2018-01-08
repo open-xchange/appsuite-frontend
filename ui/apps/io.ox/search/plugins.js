@@ -95,7 +95,7 @@ define('io.ox/search/plugins', ['io.ox/core/extensions'], function (ext) {
             //add icon
             if (_.contains(baton.data.flags, 'history')) {
                 this.find('.name').prepend(
-                    $('<i class="fa fa-clock-o">').css('margin-right', '6px')
+                    $('<i class="fa fa-clock-o" aria-hidden="true">').css('margin-right', '6px')
                 );
             }
         }

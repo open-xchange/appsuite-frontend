@@ -104,7 +104,7 @@ define('io.ox/core/viewer/views/types/audioview', [
             this.$el.idle().find('.viewer-displayer-audio').addClass('player-hidden');
             this.$el.find('div.viewer-displayer-notification,play-button,.player-text').remove();
             this.$el.append(
-                this.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
+                this.displayDownloadNotification(gt('Your browser does not support the audio format of this file.'))
             );
         },
 

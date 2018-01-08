@@ -15,10 +15,11 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
+    'io.ox/core/viewer/util',
     'pdfjs-dist/build/pdf',
     'pdfjs-dist/build/pdf.worker',
     'settings!io.ox/core'
-], function (PDFView, PDFJSLib, PDFJSWorker, Settings) {
+], function (PDFView, Util, PDFJSLib, PDFJSWorker, Settings) {
 
     'use strict';
 
@@ -210,6 +211,8 @@ define('io.ox/core/pdf/pdfdocument', [
             var error = true;
             // the original getPage() function
             var origGetPageFunction = document && document.transport && document.transport.getPage;
+
+            Util.logPerformanceTimer('PDFDocument:PDFJs_getDocument_then_handler'); // after first long running process
 
             // wrap around original getPage() function
             // to fix an exception which occurs when rapidly switching documents

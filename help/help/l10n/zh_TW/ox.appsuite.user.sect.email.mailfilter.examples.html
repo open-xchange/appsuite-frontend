@@ -31,62 +31,59 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">電子郵件</span></h1>
 <h2 class="sr-only">使用電子郵件過濾器</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. 電子郵件過濾器的使用情況</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>您可以通過以下方式建立條件</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>選擇一個電子郵件元素（例如「主旨」）；</p></li>
-<li class="listitem"><p>選擇一個標準（例如「完全相同」）；</p></li>
-<li class="listitem"><p>輸入一個參數（例如「議程」）。</p></li>
-</ul></div>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
+<div class="titlepage"><div><div><h3 class="title">5.6.4. 電子郵件過濾器的使用情況</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">您可以通過以下方式建立條件</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">選擇一個電子郵件元素（例如「主旨」）；</p></li>
+<li class="listitem"><p role="presentation">選擇一個標準（例如「完全相同」）；</p></li>
+<li class="listitem"><p role="presentation">輸入一個參數（例如「議程」）。</p></li>
+</ul>
 <p>在這個例子中，將會驗證電子郵件的主題是否與參數的字符 (「議程」) 完全相同。您可以控制條件是否符合此條件和字符串。將在下面的範例中說明各標準之間的差異。在這些範例中，用主題篩選電子郵件。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>條件：「包含」如果主題包含變量中的字符，則符合條件。例如: 參數為「議程」。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>主題「議程」符合條件。</p></li>
-<li class="listitem" style="list-style-type: none"><p>主題「會議議程」也符合條件。</p></li>
-</ul></div>
-<p>
+<p role="presentation">條件：「包含」如果主題包含變量中的字符，則符合條件。例如: 參數為「議程」。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「議程」符合條件。</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「會議議程」也符合條件。</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p>條件：「完全等同」如果主題與變量的字符串完成相同，則符合條件。例如: 參數為「議程」。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>主題「議程」符合條件。</p></li>
-<li class="listitem" style="list-style-type: none"><p>主題「會議議程」不符合條件。</p></li>
-</ul></div>
+<p role="presentation">條件：「完全等同」如果主題與變量的字符串完成相同，則符合條件。例如: 參數為「議程」。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「議程」符合條件。</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「會議議程」不符合條件。</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>條件：「符合」如果主旨與變量中的字符完全相同，則符合條件。字符串可以包含通配符。例如: 參數為「議程」。*" 是表示任意字符的特殊符號。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>主題「議程」符合條件。</p></li>
-<li class="listitem" style="list-style-type: none"><p>主題「會議議程」不符合條件。</p></li>
-</ul></div>
+<p role="presentation">條件：「符合」如果主旨與變量中的字符完全相同，則符合條件。字符串可以包含通配符。例如: 參數為「議程」。*" 是表示任意字符的特殊符號。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「議程」符合條件。</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「會議議程」不符合條件。</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>標準：「正則匹配」 如果主題包含變量中的正則表達式提供的字符，則符合條件。正則表達式允許複雜的請求。可在網路上的相應網站中找到更多資訊。以下非常簡單的正則表達式可以洞察主題。例如: 參數為 "organi(z|s)ation"。表達式 "(z|s)" 表示字符 "z" 或 "s"。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>主題「議程」符合條件。</p></li>
-<li class="listitem" style="list-style-type: none"><p>主題 "organisation" 也符合條件。</p></li>
-<li class="listitem" style="list-style-type: none"><p>主題 "Organic" 不符合條件。</p></li>
-</ul></div>
-<p>
+<p role="presentation">標準：「正則匹配」 如果主題包含變量中的正則表達式提供的字符，則符合條件。正則表達式允許複雜的請求。可在網路上的相應網站中找到更多資訊。以下非常簡單的正則表達式可以洞察主題。例如: 參數為 "organi(z|s)ation"。表達式 "(z|s)" 表示字符 "z" 或 "s"。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題「議程」符合條件。</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題 "organisation" 也符合條件。</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">主題 "Organic" 不符合條件。</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
-</ul></div>
+</ul>
 <p>
       </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">也請參考</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. 建立新規則">建立新規則</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. 在移動郵件時建立新規則">在移動郵件時建立新規則</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. 修改規則">修改規則</a></p>
+<p class="title">也請參考</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">建立新規則</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">在移動郵件時建立新規則</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">修改規則</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>父主題:<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. 使用電子郵件過濾器">使用電子郵件過濾器</a></p>
+<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">父主題:<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">使用電子郵件過濾器</a></p>
 </div>
           </div>
         </body>

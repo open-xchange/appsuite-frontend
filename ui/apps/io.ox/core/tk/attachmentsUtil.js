@@ -197,11 +197,11 @@ define('io.ox/core/tk/attachmentsUtil', [
 
             if (obj.group !== 'vcard') {
                 //default
-                icon = $('<i class="fa fa-paperclip">');
+                icon = $('<i class="fa fa-paperclip" aria-hidden="true">');
                 info = $('<span class="filesize">').text(size);
             } else {
                 //vcard
-                icon = $('<i class="fa fa-list-alt">');
+                icon = $('<i class="fa fa-list-alt" aria-hidden="true">');
                 info = $('<span class="filesize">').text('vCard\u00A0');
                 //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
                 name = obj.file.display_name || obj.file.email1 || '';

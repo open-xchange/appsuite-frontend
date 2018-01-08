@@ -13,6 +13,8 @@
 
 define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
 
+    /* global blankshield:true */
+
     'use strict';
 
     // export global callback; used by server response
@@ -55,7 +57,10 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         // publish utility functions for general use
         url: iframe,
         multiple: form,
-
+        // actually only for ios
+        window: function (url) {
+            blankshield.open(url, '_blank');
+        },
         // download single file
         file: function (options) {
             api.get(options).done(function (file) {

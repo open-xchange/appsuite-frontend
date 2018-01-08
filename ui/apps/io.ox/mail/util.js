@@ -236,7 +236,7 @@ define('io.ox/mail/util', [
 
             var list = data[field] || [['', '']],
                 i = 0, $i = list.length,
-                tmp = $('<div>'), obj, email, node, sender;
+                tmp = $('<div>'), obj, email, node;
 
             for (; i < $i; i++) {
 
@@ -246,21 +246,6 @@ define('io.ox/mail/util', [
                 node = util.renderPersonalName(obj);
                 if (obj.email) node.addClass('person-link person-' + field);
                 tmp.append(node);
-
-                // add 'on behalf of'?
-                if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
-                    sender = this.parseRecipients(data.headers.Sender);
-                    // only show if display names differ (otherwise it looks like a senseless duplicate)
-                    if (sender[0][0] !== data.from[0][0] && sender[0][1] !== data.from[0][1]) {
-                        tmp.append(
-                            $.txt(' '),
-                            //#. (From) email1 via email2. Appears in email detail view.
-                            gt('via'),
-                            $.txt(' '),
-                            this.serializeList({ sender: sender }, 'sender')
-                        );
-                    }
-                }
 
                 if (i < $i - 1) {
                     tmp.append(
@@ -442,8 +427,8 @@ define('io.ox/mail/util', [
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
-            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation" aria-hidden="true"></i></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
+            return $('<span class="low"><i class="fa fa-minus" aria-hidden="true"></i></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
         },
 
         getAccountName: function (data) {

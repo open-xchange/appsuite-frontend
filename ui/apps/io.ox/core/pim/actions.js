@@ -10,7 +10,6 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-/* global blankshield */
 
 define('io.ox/core/pim/actions', [
     'io.ox/core/api/attachment',
@@ -37,24 +36,19 @@ define('io.ox/core/pim/actions', [
             }
         },
 
-        // open attachment
-        open: {
-            requires: 'one',
-            action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.data, 'view');
-                blankshield.open(url);
-            }
-        },
-
         // download attachment
         download: {
             requires: function (e) {
                 // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
-                return e.collection.has('one') && _.device('!ios');
+                return e.collection.has('one');
             },
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');
-                downloadAPI.url(url);
+                if (_.device('ios >= 11') || _.device('android')) {
+                    downloadAPI.window(url);
+                } else {
+                    downloadAPI.url(url);
+                }
             }
         },
 
@@ -76,7 +70,6 @@ define('io.ox/core/pim/actions', [
 
     var labels = {
         view: gt('View'),
-        open: gt('Open in browser'),
         download: gt('Download'),
         //#. %1$s is usually "Drive" (product name; might be customized)
         save: gt('Save to %1$s', gt.pgettext('app', 'Drive'))

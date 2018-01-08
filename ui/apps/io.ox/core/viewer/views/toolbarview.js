@@ -202,7 +202,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
-                    ref: 'io.ox/files/actions/download'
+                    ref: Util.getRefByModelSource('drive')
                 },
                 'open': {
                     prio: 'lo',
@@ -228,7 +228,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;
-                        this.append('<i class="fa fa-caret-down" aria-hidden="true">');
+                        this.append('<i class="fa fa-caret-down" aria-hidden="true"></i>');
 
                         new Dropdown({
                             el: this.parent().addClass('dropdown'),
@@ -285,12 +285,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             mail: {
-                'openmailattachment': {
-                    prio: 'lo',
-                    mobile: 'lo',
-                    label: gt('Open in browser tab'),
-                    ref: 'io.ox/mail/actions/open-attachment'
-                },
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -302,7 +296,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     icon: 'fa fa-download',
                     label: gt('Download'),
-                    ref: 'io.ox/mail/actions/download-attachment'
+                    ref: Util.getRefByModelSource('mail')
                 },
                 'savemailattachmenttodrive': {
                     prio: 'lo',
@@ -313,12 +307,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             pim: {
-                'openmailattachment': {
-                    prio: 'lo',
-                    mobile: 'lo',
-                    label: gt('Open in browser tab'),
-                    ref: 'io.ox/core/tk/actions/open-attachment'
-                },
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -329,7 +317,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     prio: 'lo',
                     mobile: 'lo',
                     label: gt('Download'),
-                    ref: 'io.ox/core/tk/actions/download-attachment'
+                    ref: Util.getRefByModelSource('pim')
                 },
                 'savemailattachmenttodrive': {
                     prio: 'lo',
@@ -366,7 +354,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
-                    ref: 'oxguard/download'
+                    ref: Util.getRefByModelSource('guardDrive')
                 },
                 'open': {
                     prio: 'lo',

@@ -151,7 +151,7 @@ define('plugins/portal/twitter/util', [
             var $temp = renderTweet(tweet.retweeted_status, opt);
             $temp.find('.text').append(
                 $('<div class="io-ox-twitter-retweet-source">').append(
-                    $('<i class="fa fa-retweet">'),
+                    $('<i class="fa fa-retweet" aria-hidden="true">'),
                     ' ',
                     $('<span>').text(gt('Retweeted by %s', tweet.user.screen_name))
                 )

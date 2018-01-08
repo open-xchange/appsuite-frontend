@@ -55,6 +55,16 @@ define('io.ox/mail/api', [
             data.headers = _.extend(data.headers, model.get('headers'));
         }
 
+        // sanitize content types (we want lowercase 'text/plain' or 'text/html')
+        // split by ; because this field might contain further unwanted data
+        _([data].concat(data.attachments)).each(function (attachment) {
+            if (!attachment) return;
+            if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                // only clean-up text and html; otherwise we lose data (see bug 43727)
+                attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+            }
+        });
+
         // next clean up needs model
         if (!model) return data;
         // client-side fix for missing to/cc/bcc fields
@@ -256,7 +266,7 @@ define('io.ox/mail/api', [
 
     function allowImages(obj) {
         if (!settings.get('allowHtmlImages', false)) return false;
-        if (accountAPI.is('spam|trash', obj.folder_id || obj.folder)) return false;
+        if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
     }
 
@@ -550,11 +560,13 @@ define('io.ox/mail/api', [
     //
     // Archive all messages inside a folder which are older than 90 days
     //
-    api.archiveFolder = function (id) {
+    api.archiveFolder = function (id, options) {
+
+        options = _.extend({ action: 'archive_folder', folder: id, days: 90 }, options);
 
         return http.PUT({
             module: 'mail',
-            params: { action: 'archive_folder', folder: id, days: 90 },
+            params: options,
             appendColumns: false
         })
         .done(function () {
@@ -812,7 +824,7 @@ define('io.ox/mail/api', [
         // All elements should be from one folder, it's not possbile in App Suite UI
         // to select mails from different folders and mark them as read. So it should
         // be ok to use the first element only
-        var collectAddresses = !accountAPI.is('spam', list[0].folder_id) && !accountAPI.is('trash', list[0].folder_id);
+        var collectAddresses = !accountAPI.is('spam|confirmed_spam|trash', list[0].folder_id);
 
         _(list).each(function (obj) {
             obj.flags = obj.flags | 32;
@@ -1394,6 +1406,17 @@ define('io.ox/mail/api', [
         };
     }());
 
+    api.fetchTextPreview = function (ids) {
+        // return api.getList(ids, false, { columns: '1,20,1000' });
+        return _.wait(500).then(function () {
+            var hash = {};
+            _(ids).each(function (item) {
+                hash[_.cid(item)] = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr';
+            });
+            return hash;
+        });
+    };
+
     /**
      * save mail attachments in files app
      * @param  {array} list
@@ -1902,7 +1925,7 @@ define('io.ox/mail/api', [
         // drop seen messages (faster check first)
         if ((data.flags & 32) === 32) return false;
         // drop messages from spam and trash
-        return !accountAPI.is('spam|trash', data.folder_id);
+        return !accountAPI.is('spam|confirmed_spam|trash', data.folder_id);
     }
 
     api.allMessagesFolder = settings.get('allMessagesFolder', 'default0/virtual/all');
@@ -1978,6 +2001,10 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === api.allMessagesFolder && params.unseen === true;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
+                // inject text preview (for testing)
+                _(data).each(function (item, i) {
+                    item.text_preview = i % 2 ? null : 'This is a placeholder for the upcoming new feature "Text preview" that allows you to preview the content of the message. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat';
+                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });

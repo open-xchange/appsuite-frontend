@@ -37,7 +37,7 @@ define('io.ox/onboarding/clients/extensions', [
         addIcon: function (obj) {
             var target = $(obj.target || obj);
             util.removeIcons(obj);
-            target.after($('<i class="fa fa-check button-clicked"></i>'));
+            target.after($('<i class="fa fa-check button-clicked" aria-hidden="true">'));
         },
         disable: function (obj) {
             $(obj.target || obj).addClass('disabled');

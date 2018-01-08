@@ -136,7 +136,12 @@ define('io.ox/keychain/api', [
         if (account.attributes) {
             account = account.toJSON();
         }
-        return invokeExtension(account.accountType, 'remove', account);
+        return invokeExtension(account.accountType, 'remove', account)
+                .always(function () {
+                    require(['io.ox/core/folder/api'], function (api) {
+                        api.propagate('account:delete');
+                    });
+                });
     };
 
     api.update = function (account) {
@@ -169,6 +174,17 @@ define('io.ox/keychain/api', [
             params: {
                 action: 'migrate',
                 password: oldPassword
+            }
+        });
+    };
+
+    // clean up used to simulate an "ignore" in case
+    // password was changed, see Bug #56412
+    api.cleanUp = function () {
+        return http.GET({
+            module: 'recovery/secret',
+            params: {
+                action: 'clean_up'
             }
         });
     };

@@ -32,14 +32,18 @@ define('io.ox/files/listview', [
 
         if (shiftF10 || menuKey) {
             e.preventDefault();
-            onContextMenu.call(this, e);
+            this.onContextMenu(e);
         }
     }
 
     function onContextMenu(e) {
 
-        var view = this,
-            app = view.app;
+        var view = this;
+        var app = view.app;
+        // the link to render the context menu with it's entries.
+        var link = 'io.ox/core/file/contextmenu/default';
+        // context menu when clicked below the list.
+        // var linkOutsideList = link + '/outsideList'; Disabled for now
 
         var list = view.selection.get();
         if (!list) return;
@@ -48,9 +52,9 @@ define('io.ox/files/listview', [
         list = _(models).invoke('toJSON');
         // extract single object if length === 1
         var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view });
+        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/ });
 
-        this.contextMenu.showContextMenu(e, baton);
+        view.contextMenu.showContextMenu(e, baton);
     }
 
     //
@@ -63,12 +67,9 @@ define('io.ox/files/listview', [
 
         initialize: function () {
             ListView.prototype.initialize.apply(this, arguments);
-            this.$el.addClass('file-list-view');
+            this.contextMenu = arguments[0].contextMenu;
 
-            // no context menu on smartphone/tablets
-            if (!(_.device('smartphone') && _.device('tablet'))) {
-                _.defer(this.createContextMenu.bind(this));
-            }
+            this.$el.addClass('file-list-view');
         },
 
         getCompositeKey: function (model) {
@@ -82,11 +83,7 @@ define('io.ox/files/listview', [
             ListView.prototype.onChange.apply(this, arguments);
         },
 
-        onContextMenu: onContextMenu,
-
-        createContextMenu: function () {
-            require(['io.ox/files/contextmenu'], function (Contextmenu) { this.contextMenu = new Contextmenu({ el: this.$el }); }.bind(this));
-        }
+        onContextMenu: onContextMenu
     });
 
     // extend the onItemKeydown handler from list by additional handlers

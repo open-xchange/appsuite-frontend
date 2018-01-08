@@ -48,7 +48,8 @@ define('io.ox/core/folder/favorites', [
 
         // define virtual folder
         api.virtual.add(id, function () {
-            return api.multiple(settings.get('favorites/' + module, []), { errors: true }).then(function (response) {
+            var cache = !collection.expired && collection.fetched;
+            return api.multiple(settings.get('favorites/' + module, []), { errors: true, cache: cache }).then(function (response) {
                 // remove non-existent entries
                 var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
@@ -56,7 +57,8 @@ define('io.ox/core/folder/favorites', [
                     // ACC-0002 -> account not found (see bug 46481)
                     // FLD-1004 -> folder storage service no longer available (see bug 47089)
                     // IMAP-1002 -> mail folder "..." could not be found on mail server (see bug 47847)
-                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002' || item.code === 'FLD-1004' || item.code === 'IMAP-1002')) {
+                    // FILE_STORAGE-0004 -> The associated (infostore) account no longer exists
+                    if (item.error && /^(FLD-0008|FLD-0003|ACC-0002|FLD-1004|IMAP-1002|FILE_STORAGE-0004)$/.test(item.code)) {
                         invalid[item.id] = true;
                         return false;
                     }
@@ -103,11 +105,6 @@ define('io.ox/core/folder/favorites', [
             model.set('standard_folder', true);
         }
 
-        // respond to collection remove event to sync favorites
-        api.on('collection:remove', function (id, model) {
-            collection.remove(model);
-        });
-
         var extension = {
             id: 'favorites',
             index: 1,
@@ -145,27 +142,40 @@ define('io.ox/core/folder/favorites', [
         });
     }
 
-    //
-    // Add to contextmenu
-    //
+    function remove(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
+            collection = api.pool.getCollection(collectionId);
+        collection.remove(model);
+    }
 
-    function add(e) {
-        var id = e.data.id,
-            module = e.data.module,
-            model = api.pool.getModel(id),
-            collectionId = 'virtual/favorites/' + module,
+    function add(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
             collection = api.pool.getCollection(collectionId);
         model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
     }
 
-    function remove(e) {
-        var id = e.data.id,
-            module = e.data.module,
-            model = api.pool.getModel(id),
-            collection = api.pool.getCollection('virtual/favorites/' + module);
-        collection.remove(model);
+    //
+    // Folder API listeners
+    //
+
+    api.on('collection:remove', remove);
+
+    //
+    // Add to contextmenu
+    //
+
+    function onAdd(e) {
+        add(e.data.id);
+    }
+
+    function onRemove(e) {
+        remove(e.data.id);
     }
 
     function a(action, text) {
@@ -204,9 +214,14 @@ define('io.ox/core/folder/favorites', [
                 action: 'toggle-favorite',
                 data: { id: id, module: module },
                 enabled: true,
-                handler: isFavorite ? remove : add,
+                handler: isFavorite ? onRemove : onAdd,
                 text: isFavorite ? gt('Remove from favorites') : gt('Add to favorites')
             });
         }
     });
+
+    return {
+        add: add,
+        remove: remove
+    };
 });

@@ -23,6 +23,8 @@
 @import '../../../node_modules/bootstrap/less/utilities.less';
 @import '../../../node_modules/font-awesome/less/variables.less';
 
+@import "../components/checkboxes.less";
+
 @wallpaper-start-color: #294F83;
 @wallpaper-end-color: #162C4A;
 
@@ -258,10 +260,12 @@ html.baseline {
     color: #6cbafc;
 }
 
-#io-ox-login-store, #io-ox-forgot-password {
-    margin-top: 8px;
-    margin-bottom: 20px;
+#io-ox-login-store {
+    .checkbox.custom { margin-top: 0; }
+    margin-bottom: 16px;
 }
+.row.options { padding-top: 8px; }
+#io-ox-forgot-password { margin-top: 2px; }
 
 #io-ox-login-feedback {
     margin-bottom: 8px;
@@ -435,3 +439,5 @@ html.baseline {
 .form-control::-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: #666666;
 }
+
+

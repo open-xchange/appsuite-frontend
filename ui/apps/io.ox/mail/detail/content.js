@@ -75,6 +75,7 @@ define('io.ox/mail/detail/content', [
         },
 
         linkTarget: function (baton) {
+
             baton.source = baton.source
                 // add missing http protocol prefix
                 .replace(/<a[^>]*href=(?:"|')((?!https?:\/\/)[^'">]+)(?:"|')[^>]*>/g, addMissingProtocol)
@@ -206,7 +207,11 @@ define('io.ox/mail/detail/content', [
                     }
                 } else if (link.attr('href')) {
                     // other links
-                    link.attr('rel', 'noopener');
+                    link.attr({ 'rel': 'noopener', 'target': '_blank' });
+                } else if (!href) {
+                    // missing or broken href attribute
+                    // remove href as it points to nowhere
+                    link.removeAttr('href');
                 }
             });
         },
@@ -709,7 +714,7 @@ define('io.ox/mail/detail/content', [
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(> ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
-                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
+                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?(\.\w+)+)/g,
                 regImage = /^!\([^)]+\)$/gm,
                 defaults = { blockquotes: true, images: true, links: true };
 

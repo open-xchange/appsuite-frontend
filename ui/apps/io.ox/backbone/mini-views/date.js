@@ -61,7 +61,7 @@ define('io.ox/backbone/mini-views/date', [
         }
 
         // add empty option - do that after revert
-        empty = $('<option>', { value: name === 'year' ? '0001' : '' }).text('');
+        empty = $('<option>', { value: name === 'year' ? '1604' : '' }).text('');
         options.unshift(empty);
 
         // append
@@ -122,7 +122,7 @@ define('io.ox/backbone/mini-views/date', [
             if (_.isNumber(value)) {
                 d = moment.utc(value);
                 year = String(d.year());
-                if (year !== '1') {
+                if (year !== '1' && year !== '1604') {
                     // if the year is not our dropdown we add it
                     var yearValues = [];
                     this.$el.find('.year option').each(function () {
@@ -135,6 +135,9 @@ define('io.ox/backbone/mini-views/date', [
                         );
                     }
                 }
+                // 1604 is the new date without year see bug 56075
+                if (year === '1') year = 1604;
+
                 this.$el.find('.year').val(_.pad(year, 4));
                 this.$el.find('.month').val(d.month());
                 this.$el.find('.date').val(d.date());

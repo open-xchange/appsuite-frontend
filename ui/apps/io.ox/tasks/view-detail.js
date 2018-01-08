@@ -61,11 +61,16 @@ define('io.ox/tasks/view-detail', [
         index: 100,
         id: 'header',
         draw: function (baton) {
-            var infoPanel = $('<div>').addClass('info-panel'),
+            var infoPanel = $('<div class="info-panel">'),
                 task = baton.interpretedData,
                 title = $('<h1 class="title clear-title">').append(
                     // lock icon
-                    baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
+                    // TODO - A11y: Clean this up
+                    baton.data.private_flag ? $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr({
+                        title: gt('Private'),
+                        'data-placement': 'bottom',
+                        'data-animation': 'false'
+                    }).tooltip() : [],
                     // priority
                     $('<span class="priority">').append(
                         util.getPriority(task)
@@ -89,8 +94,11 @@ define('io.ox/tasks/view-detail', [
             var task = baton.interpretedData;
             if (api.uploadInProgress(_.ecid(baton.data))) {
                 var progressview = new attachments.progressView({ cid: _.ecid(task) });
-                this.append($('<div>').addClass('attachments-container')
-                    .append(progressview.render().$el));
+                this.append(
+                    $('<div class="attachments-container">').append(
+                        progressview.render().$el
+                    )
+                );
             } else if (task.number_of_attachments > 0) {
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
             }

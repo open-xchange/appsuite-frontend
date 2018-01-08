@@ -12,7 +12,10 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
-define('io.ox/core/viewer/main', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/core/viewer/main', [
+    'io.ox/core/extensions',
+    'io.ox/core/viewer/util'
+], function (ext, Util) {
 
     'use strict';
 
@@ -45,6 +48,8 @@ define('io.ox/core/viewer/main', ['io.ox/core/extensions'], function (ext) {
          */
         this.launch = function (data) {
 
+            Util.startPerformanceTimer();
+
             if (!data) return console.error('Core.Viewer.main.launch(): no data supplied');
             if (!_.isArray(data.files) || data.files.length === 0) return console.error('Core.Viewer.main.launch(): no files to preview.');
             var self = this,
@@ -60,6 +65,9 @@ define('io.ox/core/viewer/main', ['io.ox/core/extensions'], function (ext) {
             }).attr('aria-hidden', true);
 
             function cont() {
+
+                Util.logPerformanceTimer('launchContStart');
+
                 // resolve dependencies now for an instant response
                 require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
                     // create file collection and populate it with file models
@@ -79,6 +87,9 @@ define('io.ox/core/viewer/main', ['io.ox/core/extensions'], function (ext) {
 
             // Cleanup, remove hidden attributes
             function close() {
+
+                Util.savePerformanceTimer(data);
+
                 siblings.removeAttr('aria-hidden').each(function () {
                     var el = $(this);
                     if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));

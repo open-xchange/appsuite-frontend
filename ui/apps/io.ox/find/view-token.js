@@ -92,7 +92,7 @@ define('io.ox/find/view-token', [
                     label: function () {
                         return [
                             $('<span class="token-type">').text(value.getTokenType()),
-                            $('<i aria-hidden="true" class="fa fa-caret-down">'),
+                            $('<i class="fa fa-caret-down" aria-hidden="true">'),
                             $('<span class="token-name">').text(value.getDisplayName())
                         ];
                     }

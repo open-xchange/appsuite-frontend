@@ -68,7 +68,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             $('body').append(
                 this.$overlay.append(
                     $('<div class="abs">').on('mousewheel touchmove', false)
-                    .on('click', function (e) {
+                    .on('click contextmenu', function (e) {
                         e.stopPropagation();
                         self.resetDropdownOverlay();
                         return false;
@@ -350,7 +350,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             items
                 .find('a:not([role])')
-                .attr({ role: 'menuitem', tabIndex: '-1' });
+                .attr({ role: 'menuitem', tabindex: '-1' });
         },
 
         prepareReuse: function () {

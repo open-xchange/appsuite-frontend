@@ -63,6 +63,7 @@ define('io.ox/core/a11y', [], function () {
     $(document).on('keydown.bs.dropdown.data-api', 'ul.dropdown-menu[role="menu"]', dropdownTrapFocus);
 
     $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]:not(.classic-toolbar), ul.launchers', menubarKeydown);
+    $(document).on('keydown.toolbars', 'ul[role="toolbar"].categories', menubarKeydown);
 
     // listbox
 
@@ -300,7 +301,7 @@ define('io.ox/core/a11y', [], function () {
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
         // space on role="button" is already handled
         if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
-        var links = $(e.currentTarget).find('> li:visible > a');
+        var links = $(e.currentTarget).find('> li:visible > a, > li:visible > button');
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
     }

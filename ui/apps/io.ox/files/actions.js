@@ -15,14 +15,16 @@ define('io.ox/files/actions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/core/api/user',
+    'io.ox/files/share/api',
     'io.ox/files/util',
     'io.ox/core/api/filestorage',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
     'settings!io.ox/files',
-    'gettext!io.ox/files'
-], function (folderAPI, api, userAPI, util, filestorageApi, ext, links, capabilities, settings, gt) {
+    'gettext!io.ox/files',
+    'io.ox/core/yell'
+], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, links, capabilities, settings, gt, yell) {
 
     'use strict';
 
@@ -162,8 +164,8 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
-            // no file-system, no download
-            if (_.device('ios')) return false;
+            // no download for oldeer ios devices
+            if (_.device('ios') && _.device('ios < 11')) return false;
 
             function isValid(file) {
                 // locally added but not yet uploaded,   'description only' items
@@ -194,8 +196,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download-folder', {
         requires: function (e) {
-            // no file-system, no download
-            if (_.device('ios')) return false;
+            if (_.device('ios < 11')) return false;
             // single folders only
             if (!e.collection.has('one', 'folders')) return false;
             //disable for external storages
@@ -211,7 +212,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/downloadversion', {
         requires: function (e) {
             // no file-system, no download
-            if (_.device('ios')) return false;
+            if (_.device('ios < 11')) return false;
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
@@ -760,6 +761,67 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to switch to the folder of a shared file
+    new Action('io.ox/files/actions/show-in-folder', {
+        requires: function (e) {
+            if (_.device('smartphone')) return false;
+            if (!e.collection.has('one')) return false;
+
+            // get proper id
+            var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+            return folderAPI.pool.getModel(id).isShareable();
+        },
+        action: function (baton) {
+            var app = baton.app,
+                model = baton.models[0],
+                attr = model.attributes,
+                folder_id = model.isFile() ? attr.folder_id : attr.id,
+                listView = app.listView,
+                mysharesListView = app.mysharesListView,
+                myfavoritesListView = app.myfavoritesListView,
+                cid = app.listView.getCompositeKey(model);
+
+            function select() {
+                if (mysharesListView) {
+                    mysharesListView.off('listview:shown', select);
+                } else if (myfavoritesListView) {
+                    myfavoritesListView.off('listview:shown', select);
+                } else {
+                    listView.off('listview:shown', select);
+                }
+
+                listView.off('collection:rendered', select);
+                listView.selection.set([cid], true);
+
+                var element = app.listView.selection.getNode(cid);
+                listView.selection.selectAll(element);
+            }
+
+            if (mysharesListView && mysharesListView.$el.is(':visible')) {
+                mysharesListView.on('listview:shown', select);
+            } else if (myfavoritesListView && myfavoritesListView.$el.is(':visible')) {
+                myfavoritesListView.on('listview:shown', select);
+            } else {
+                listView.on('listview:shown', select);
+                listView.on('listview:reset', select);
+            }
+
+            app.folder.set(folder_id);
+        }
+    });
+
+    new Action('io.ox/files/share/revoke', {
+        requires: 'one',
+        action: function (baton) {
+            require(['io.ox/files/share/permissions'], function (permissions) {
+                var collection = new permissions.Permissions();
+                shareAPI.revoke(collection, baton.model ? baton.model : baton.models[0]).then(function () {
+                    yell('success', gt('Revoked access.'));
+                }).fail(yell);
+            });
+        }
+    });
+
     // 'new' dropdown
     new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,
@@ -806,15 +868,6 @@ define('io.ox/files/actions', [
 
     // INLINE (only used by mobile toolbar atm)
     var index = 100;
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'open',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'hi',
-        label: gt('Open in browser'),
-        ref: 'io.ox/files/actions/open'
-    }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'openviewer',

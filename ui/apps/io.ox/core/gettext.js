@@ -81,6 +81,7 @@ define('io.ox/core/gettext', function () {
 
         function gettext(text) {
             var str = get(text) || text;
+            str = _.url.hash('debug-i18n') ? markTranslated(str) : str;
             return printf(str, arguments, 1);
         }
 

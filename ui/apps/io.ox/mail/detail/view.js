@@ -114,7 +114,7 @@ define('io.ox/mail/detail/view', [
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row4';
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row5';
 
     ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
@@ -148,7 +148,7 @@ define('io.ox/mail/detail/view', [
             id: 'rows',
             index: INDEX_header += 100,
             draw: function (baton) {
-                for (var i = 1, node; i <= 4; i++) {
+                for (var i = 1, node; i <= 5; i++) {
                     node = $('<div class="detail-view-row row-' + i + ' clearfix">');
                     ext.point('io.ox/mail/detail/header/row' + i).invoke('draw', node, baton);
                     this.append(node);
@@ -165,13 +165,7 @@ define('io.ox/mail/detail/view', [
             // from is last one in the list for proper ellipsis effect
             id: 'from',
             index: INDEX_header += 100,
-            draw: function (baton) {
-                this.append(
-                    $('<div class="from">').append(
-                        util.serializeList(baton.data, 'from')
-                    )
-                );
-            }
+            draw: extensions.fromDetail
         },
         {
             id: 'priority',
@@ -205,6 +199,46 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row2').extend(
         {
+            id: 'sender',
+            index: 100,
+            draw: function (baton) {
+                ext.point('io.ox/mail/detail/header/sender').invoke('draw', this, baton);
+            }
+        }
+    );
+
+    ext.point('io.ox/mail/detail/header/sender').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+
+            var data = baton.data, from = data.from || [];
+
+            // add 'on behalf of'?
+            if (!('headers' in data)) return;
+            if (!('Sender' in data.headers)) return;
+
+            var sender = util.parseRecipients(data.headers.Sender);
+            if (from[0] && from[0][1] === sender[0][1]) return;
+
+            this.append(
+                $('<div class="sender">').append(
+                    $('<span class="io-ox-label">').append(
+                        //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+                        $.txt(gt('Via')),
+                        $.txt('\u00A0\u00A0')
+                    ),
+                    $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
+                )
+            );
+        }
+    });
+
+    //
+    // Row 3
+    //
+    ext.point('io.ox/mail/detail/header/row3').extend(
+        {
             id: 'recipients',
             index: 100,
             draw: function (baton) {
@@ -220,9 +254,9 @@ define('io.ox/mail/detail/view', [
     });
 
     //
-    // Row 3
+    // Row 4
     //
-    ext.point('io.ox/mail/detail/header/row3').extend(
+    ext.point('io.ox/mail/detail/header/row4').extend(
         {
             id: 'different-subject',
             index: 100,
@@ -245,26 +279,6 @@ define('io.ox/mail/detail/view', [
             }
         }
     );
-
-    // Inplace/quick reply
-
-    ext.point('io.ox/mail/detail').extend({
-        id: 'inplace-reply',
-        index: INDEX += 100,
-        draw: function (baton) {
-
-            var model = baton.model;
-
-            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
-                if (!InplaceReplyView.hasDraft(model.cid)) return;
-                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
-                // trigger click to open
-                baton.view.$('.detail-view-header').click();
-                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
-                model = null;
-            });
-        }
-    });
 
     ext.point('io.ox/mail/detail').extend({
         id: 'notifications',
@@ -349,6 +363,22 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail').extend({
+        id: 'inplace-reply-recover',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var model = baton.model;
+            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
+                if (!InplaceReplyView.hasDraft(model.cid)) return;
+                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
+                // trigger click to open
+                baton.view.$('.detail-view-header').click();
+                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
+                model = null;
+            });
+        }
+    });
+
     ext.point('io.ox/mail/detail/body').extend({
         id: 'iframe',
         index: 100,
@@ -401,17 +431,46 @@ define('io.ox/mail/detail/view', [
                 this.prepend(emojiStyles);
             }
 
-            function resizeFrame() {
+
+            var resizeLoop = 0;
+            // function to make sure there is only one resize loop
+            function startResizeLoop() {
+                resizeFrame(resizeLoop);
+            }
+
+            function resizeFrame(once) {
+                // increase the delay by 300ms until we max out at 5s
+                // we do this to reduce the load
+                if (!once) resizeLoop = Math.min(resizeLoop + 300, 5000);
+
+                // stop if mail is collapsed or removed
+                if (!baton.view.$el || !baton.view.$el.hasClass('expanded')) {
+                    if (!once) resizeLoop = 0;
+                    return;
+                }
+
                 var frame = self.find('.mail-detail-frame'),
                     contents = frame.contents(),
                     height = contents.find('.mail-detail-content').height(),
+                    prevHeight = height,
                     htmlHeight = contents.find('html').height();
 
-                if (height === 0) {
-                    // TODO: find better solution, might be an endless loop
+                // frame was removed, we can stop here
+                if (contents.length === 0) {
+                    if (!once) resizeLoop = 0;
+                    return;
+                }
+
+                if (height === 0 && !once) {
                     // height 0 should(!) never happen, the dom node seems to be not rendered yet and
                     // calculation fails. Give it another try. Actually only an issue on FF
                     _.delay(resizeFrame, 10);
+                    return;
+                }
+
+                // check if mail content is really grown or if the mail just has broken css (content size always above 100%)
+                if (!once && height === baton.model.get('iframe-height-change')) {
+                    _.delay(resizeFrame, resizeLoop);
                     return;
                 }
 
@@ -419,19 +478,32 @@ define('io.ox/mail/detail/view', [
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
+
+                // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
+                // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
+                if (prevHeight !== contents.find('.mail-detail-content').height()) {
+                    // save heightchange so we can distinguish between pictureload and broken mail css
+                    baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
+                }
+
+                // fixes overflow (see bug 55876)
+                if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
+
+                // check height again as there might be slow loading external images
+                if (!once) _.delay(resizeFrame, resizeLoop);
             }
 
-            $(node).on('resize imageload', resizeFrame); // for expanding blockquotes and inline images
+            $(node).on('resize imageload', startResizeLoop); // for expanding blockquotes and inline images
 
             baton.iframe.on('load', function () {
                 var content = baton.iframe.contents();
                 content.find('head').append('<style class="content-style">' + contentStyle + '</style>');
                 content.find('body').addClass('iframe-body').append(node);
-                resizeFrame(); // initial resize for first draw
+                startResizeLoop(); // initial resize for first draw
             });
 
-            $(window).on('orientationchange resize', _.throttle(resizeFrame, 300)); // general window resize
-            if (_.device('smartphone')) _.delay(resizeFrame, 400); // delayed resize due to page controller delay for page change
+            $(window).on('orientationchange resize', _.throttle(startResizeLoop, 300)); // general window resize
+            if (_.device('smartphone')) _.delay(startResizeLoop, 600); // delayed resize due to page controller delay for page change
 
             this.idle().append(baton.iframe);
         }
@@ -448,6 +520,7 @@ define('io.ox/mail/detail/view', [
             var url = 'api/mail?' + $.param({
                 action: 'get',
                 view: 'document',
+                forceImages: true,
                 folder: baton.data.folder_id,
                 id: baton.data.id,
                 session: ox.session
@@ -456,7 +529,12 @@ define('io.ox/mail/detail/view', [
             this.append(
                 $('<div class="max-size-warning">').append(
                     $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
-                    $('<a role="button" target="_blank">').attr('href', url).text(gt('Show entire message'))
+                    $('<a role="button" target="_blank">').attr('href', url).text(
+                        // external images shown?
+                        baton.model.get('modified') !== 1 ?
+                            gt('Show entire message') :
+                            gt('Show entire message including all external images')
+                    )
                 )
             );
         }
@@ -515,11 +593,7 @@ define('io.ox/mail/detail/view', [
         },
 
         getEmptyBodyNode: function () {
-            // get shadow DOM or body node
-            var body = this.$el.find('section.body'),
-                shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + contentStyle + '</style>'; else body.empty();
-            return $(shadowRoot || body);
+            return this.$el.find('section.body').empty();
         },
 
         onChangeSubject: function () {
@@ -620,7 +694,7 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-            if (data.security || data.security_info) this.onChangeSecurity();
+            if (data && (data.security || data.security_info)) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {
@@ -677,6 +751,9 @@ define('io.ox/mail/detail/view', [
                         );
                     }
                 }
+            } else if ($li.hasClass('expanded')) {
+                // trigger resize to restart resizeloop
+                this.$el.find('.mail-detail-frame').contents().find('.mail-detail-content').trigger('resize');
             }
 
             return this;
@@ -718,7 +795,6 @@ define('io.ox/mail/detail/view', [
         },
 
         render: function () {
-
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this });
 

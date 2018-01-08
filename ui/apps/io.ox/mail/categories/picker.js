@@ -18,22 +18,9 @@ define('io.ox/mail/categories/picker', [
     'gettext!io.ox/mail'
 ], function (api, Dropdown, actions, gt) {
 
-    function getLabel() {
-        return [$('<i class="fa fa-folder-open-o" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Move to category'))];
-    }
-
     var PickerDropdown = Dropdown.extend({
 
         tagName: 'li',
-
-        renderToggle: function (node) {
-            // replace toolbar icon
-            node.closest('li').replaceWith(this.$el);
-            // render container once
-            if (this.rendered) return;
-            this.render().$el.attr({ 'data-dropdown': 'category', role: 'presentation', tabindex: '-1' });
-            this.rendered = true;
-        },
 
         renderMenu: function (options) {
             this.$ul.empty();
@@ -64,11 +51,9 @@ define('io.ox/mail/categories/picker', [
         },
 
         onCategory: function (data, e) {
-
             var node = $(e.currentTarget),
                 category = node.attr('data-name') || '0',
                 name = node.text(),
-                dropdown = node.closest('.dropdown'),
                 source = this.props.get('category_id');
 
             api.move({
@@ -78,8 +63,6 @@ define('io.ox/mail/categories/picker', [
                 target: category,
                 targetname: name
             });
-
-            dropdown.find('[data-toggle="dropdown"]').focus();
         },
 
         onLink: function (data) {
@@ -89,11 +72,21 @@ define('io.ox/mail/categories/picker', [
         }
     });
 
-    var picker = new PickerDropdown({ label: getLabel });
+    var picker = {
+        appendDropdown: function (node, options) {
+            node.addClass('dropdown-toggle');
+            node.parent().addClass('dropdown categories');
 
-    return function (node, options) {
-        // called only once
-        picker.renderToggle(node);
-        picker.renderMenu(options);
+            new PickerDropdown({
+                el: node.parent(),
+                $toggle: node
+            }).render().renderMenu(options);
+        },
+        attach: function (node, options) {
+            this.appendDropdown(node, options);
+        }
     };
+
+    return picker;
+
 });

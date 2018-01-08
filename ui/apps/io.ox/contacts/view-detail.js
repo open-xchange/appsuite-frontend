@@ -159,7 +159,7 @@ define('io.ox/contacts/view-detail', [
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
-                    $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
+                    $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')).hide(),
                     name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
@@ -269,8 +269,8 @@ define('io.ox/contacts/view-detail', [
             _(list)
                 .chain()
                 .filter(function (member) {
-                    if (hash[member.mail]) return false;
-                    return (hash[member.mail] = true);
+                    if (hash[member.display_name + '_' + member.mail]) return false;
+                    return (hash[member.display_name + '_' + member.mail] = true);
                 })
                 .each(function (member) {
                     ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);

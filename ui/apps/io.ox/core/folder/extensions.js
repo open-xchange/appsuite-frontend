@@ -38,23 +38,17 @@ define('io.ox/core/folder/extensions', [
     if (capabilities.has('webmail')) {
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
+            var defaultFolders = mailSettings.get('defaultFolder') || {},
+                list = [];
             http.pause();
-            var list = [
-                    // inbox
-                    api.get(INBOX),
-                    // sent, drafts, spam, trash, archive
-                    // default0 is alternative for IMAP server that list standard folders below INBOX
-                    api.list('default0')
-                ],
-                defaultFolders = mailSettings.get('defaultFolder') || {};
+            // collect get requests
+            list.push(api.get(INBOX));
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
-            // sent, drafts, spam, trash, archive
-            _(account.getTypes()).each(function (type, folder) {
-                if (type === 'inbox') return;
-                if (!account.isPrimary(folder)) return;
-                // non-default and undefined folders are skipped
-                if (!defaultFolders[type]) return;
+            // ensure fixed order; rely on defaultFolders (see bug 56563)
+            ['sent', 'drafts', 'spam', 'trash', 'archive'].forEach(function (type) {
+                var folder = defaultFolders[type];
+                if (!folder) return;
                 if (type === 'archive' && !capabilities.has('archive_emails')) return;
                 list.push(api.get(folder));
             });
@@ -971,8 +965,9 @@ define('io.ox/core/folder/extensions', [
                     if (baton.data.module === 'infostore') return;
                     if (!api.is('unlocked', baton.data)) return;
 
+                    // TODO - A11y: Click handler on icon?
                     baton.view.$.buttons.append(
-                        $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
+                        $('<i class="fa folder-shared" aria-hidden="true">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
                     );
                     baton.view.addA11yDescription(gt('You share this folder with other users'));
                 }
@@ -990,6 +985,7 @@ define('io.ox/core/folder/extensions', [
                     if (api.is('shared', baton.data)) return;
                     if (!api.is('subscribed', baton.data)) return;
 
+                    // TODO - A11y: Click handler on icon?
                     baton.view.$.buttons.append(
                         $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions')).on('click', { folder: baton.data }, openSubSettings)
                     );

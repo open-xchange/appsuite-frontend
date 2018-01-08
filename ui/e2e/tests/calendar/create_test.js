@@ -29,7 +29,10 @@ Scenario('Create appointment with all fields', function* (I) {
 
     I.fillField('Subject', 'test title');
     I.fillField('Location', 'test location');
-    I.checkOption('Private');
+
+    //FIXME: checkOption does not work with custom checkboxes, working around but needs a better fix!
+    //I.checkOption('Private');
+    I.click({ css: '[data-extension-id="private_flag"] .toggle' });
 
     // // save
     var newAppointmentCID = yield I.executeAsyncScript(function (done) {

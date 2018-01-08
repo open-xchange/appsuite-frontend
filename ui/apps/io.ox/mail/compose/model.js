@@ -104,6 +104,7 @@ define.async('io.ox/mail/compose/model', [
                 }
             });
 
+            // special case #1: 'alternative'
             if (this.get('preferredEditorMode') === 'alternative') {
                 this.set('editorMode', 'html', { silent: true });
                 if (this.get('content_type') === 'text/plain') {
@@ -112,6 +113,8 @@ define.async('io.ox/mail/compose/model', [
             }
             if (!this.get('from') || this.get('from').length === 0) {
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
+                    // ensure defaultName is set (bug 56342)
+                    settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
                     // custom display names
                     if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
                         address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
@@ -262,6 +265,9 @@ define.async('io.ox/mail/compose/model', [
                     attachment.content = attachment.content.replace(/<img[^>]*src=\\?"data:[^>]*>/gi, '');
                 }
             });
+
+            // special case #1: 'alternative'
+            if (mail.preferredEditorMode === 'alternative') mail.content_type = mail.editorMode === 'html' ? 'text/html' : 'text/plain';
 
             return {
                 description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),

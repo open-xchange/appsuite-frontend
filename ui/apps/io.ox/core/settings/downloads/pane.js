@@ -53,7 +53,7 @@ define('io.ox/core/settings/downloads/pane', [
                         $('<p>').append(
                             $('<i class="fa fa-download" aria-hidden="true">'),
                             $.txt(' '),
-                            $('<a>', { href: href, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file (for Windows)'))
+                            $('<a target="_blank" class="action">', { href: href, download: '' }).text(gt('Download installation file (for Windows)'))
                         ),
                         $('<p>').text(
                             gt('When executing the downloaded file, an installation wizard will be launched. ' +
@@ -96,13 +96,13 @@ define('io.ox/core/settings/downloads/pane', [
             // fallback
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 
-            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform + '">')
+            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image">')
+                .addClass('platform')
                 .css('background-image', 'url(' + imagePath + lang + '_' + platform + '.png)');
 
-            return $('<a class="shoplink">').attr({
-                href: url,
-                target: '_blank'
-            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
+            return $('<a class="shoplink" target="_blank">').attr('href', url).append(
+                $img,
+                $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
         };
 
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
@@ -129,7 +129,7 @@ define('io.ox/core/settings/downloads/pane', [
                             $.txt(windowsClientLabel),
                             $('<br>'),
                             $('<i class="fa fa-download" aria-hidden="true">'),
-                            $('<a>', { href: windowsClientUrl, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file'))
+                            $('<a class="action" target="_blank">', { href: windowsClientUrl, download: '' }).text(gt('Download installation file'))
                         ) : [],
                         $('<div class="shop-link-container">').append(
                             //.# String will include the product name, "OX Drive for Mac OS"

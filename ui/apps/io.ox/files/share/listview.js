@@ -17,11 +17,12 @@ define('io.ox/files/share/listview', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
     'io.ox/files/common-extensions',
+    'io.ox/files/api',
     'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, BreadcrumbView, ListView, extensions, capabilities, gt) {
+], function (api, ext, BreadcrumbView, ListView, extensions, filesAPI, capabilities, gt) {
 
     'use strict';
 
@@ -38,6 +39,8 @@ define('io.ox/files/share/listview', [
             ListView.prototype.initialize.call(this, options);
 
             this.$el.addClass('myshares-list column-layout');
+
+            this.contextMenu = arguments[0].contextMenu;
 
             this.load();
 
@@ -114,6 +117,33 @@ define('io.ox/files/share/listview', [
             });
             this.collection.trigger('sort');
             this.app.props.set(this.model.attributes);
+        },
+
+        /**
+         * Function to create the context menu for the myshare viewList.
+         * @param {jQuery.Event} event
+         */
+        onContextMenu: function (event) {
+            var view = this,
+                app = view.app,
+                list = view.selection.get(),
+                // the link to render the context menu with it's entries
+                link = 'io.ox/core/file/contextmenu/myshares';
+
+            if (!list) return;
+
+            // turn cids into proper objects
+            var cids = list,
+                cidList = view.collection.get(cids),
+                modelList = cidList ? [cidList] : [],
+                models = (/^folder\./).test(cids) ? filesAPI.resolve(cids, false) : modelList;
+
+            list = _(models).invoke('toJSON');
+            // extract single object if length === 1
+            var data = list.length === 1 ? list[0] : list;
+            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link });
+
+            view.contextMenu.showContextMenu(event, baton);
         }
     });
 

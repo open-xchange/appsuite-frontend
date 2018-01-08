@@ -17,7 +17,7 @@ const expect = require('chai').expect;
 
 Feature('Sessions settings');
 
-Scenario('lists all sessions', function* (I) {
+Scenario.skip('lists all sessions', function* (I) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);
     I.waitForVisible('.io-ox-session-settings');

@@ -234,11 +234,16 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         addCheckbox: function (options) {
-            var o = _.extend({ className: 'pull-left' }, options);
+            var o = _.extend({ className: 'pull-left' }, options),
+                id = _.uniqueId('custom-');
             this.$footer.prepend(
-                $('<div class="checkbox">').append(
-                    $('<label>').text(o.label).prepend(
-                        $('<input type="checkbox">').attr('data-action', o.action).prop('checked', o.status)
+                $('<div class="checkbox custom">').append(
+                    $('<label>').attr('for', id).prepend(
+                        $('<input type="checkbox" class="sr-only">')
+                            .attr({ 'id': id, 'data-action': o.action })
+                            .prop('checked', o.status),
+                        $('<i class="toggle" aria-hidden="true">'),
+                        $.txt(o.label || '\u00a0')
                     )
                 )
                 .addClass(o.className)

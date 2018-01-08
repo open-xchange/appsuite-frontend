@@ -42,6 +42,9 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         initialize: function (options) {
+
+            Util.logPerformanceTimer('MainView:initialize');
+
             _.extend(this, options);
             // apps with 'simple window' class (Portal) scrolls behind the viewer.
             // Hide it for the moment as a workaround.
@@ -172,14 +175,16 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    if ($(event.target).hasClass('swiper-slide-active')) {
-                        handleChangeSlide('left');
-                    }
+                    // bug #55252
+                    // if ($(event.target).hasClass('swiper-slide-active')) {
+                    handleChangeSlide('left');
+                    // }
                     break;
                 case 39: // right arrow
-                    if ($(event.target).hasClass('swiper-slide-active')) {
-                        handleChangeSlide('right');
-                    }
+                    // bug #55252
+                    // if ($(event.target).hasClass('swiper-slide-active')) {
+                    handleChangeSlide('right');
+                    // }
                     break;
                 case 33: // page up
                     event.preventDefault();

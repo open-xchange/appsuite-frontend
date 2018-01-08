@@ -56,12 +56,6 @@ define('io.ox/tours/files', [
             return '.list-view li[data-cid="' + key + '"]';
         }
 
-        api.upload({ folder: standardFolder, file: blob, filename: gt('The Drive app tour.txt') }).done(function (data) {
-            file = data;
-            key = _.cid(data);
-            api.trigger('refresh.all');
-        });
-
         tour.step()
                 .title(gt('The Drive app'))
                 .content(gt('Welcome to your cloud storage app. This Guided Tour will introduce you to your new online storage solution - your one point to access online stored files from all your accounts. This is where you can upload and save your files, share them and synchronize them with different devices.  '))
@@ -260,7 +254,14 @@ define('io.ox/tours/files', [
             tour.steps.splice(10, 2);
         }
 
-        ox.launch('io.ox/files/main').done(function () {
+        $.when(
+            api.upload({ folder: standardFolder, file: blob, filename: gt('The Drive app tour.txt') }),
+            ox.launch('io.ox/files/main')
+        ).then(function (fileData) {
+            file = fileData;
+            key = _.cid(fileData);
+            api.trigger('refresh.all');
+
             var app = ox.ui.App.getCurrentApp();
             // remember current state
             current.folder = app.folder.get();

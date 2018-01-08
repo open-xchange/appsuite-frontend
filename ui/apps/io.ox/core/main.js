@@ -95,38 +95,28 @@ define('io.ox/core/main', [
         }, opt || {});
 
         $('#background-loader').fadeIn(DURATION, function () {
-
             $('#io-ox-core').hide();
-            var extensions = ext.point('io.ox/core/logout').list();
-            _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt)).then(
-                function logout() {
-                    session.logout().always(function () {
-                        // get logout locations
-                        var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
-                            fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                            logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
-                        // Substitute some variables
-                        _.url.redirect(_.url.vars(logoutLocation));
-                    });
-                },
-                function cancel() {
-                    // force ignores errors
-                    if (opt.force) {
+            var extensions = ext.point('io.ox/core/logout').list(),
+                def = _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt))
+                    .always(function () {
+                        // force ignores errors
+                        if (def.state() === 'rejected' && !opt.force) {
+                            $('#io-ox-core').show();
+                            $('#background-loader').fadeOut(DURATION);
+                            return ox.trigger('logout:failed', arguments);
+                        }
+
                         session.logout().always(function () {
                             // get logout locations
-                            var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
+                            var targetLocation = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
                                 fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                                logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                                logoutLocation = targetLocation || (fallback + (opt.autologout ? '#autologout=true' : ''));
                             // Substitute some variables
                             _.url.redirect(_.url.vars(logoutLocation));
+                            // prevent empty white pane (see bug 56170)
+                            if (/#autologout=true/.test(logoutLocation)) _.defer(location.reload.bind(location, true));
                         });
-                    } else {
-                        $('#io-ox-core').show();
-                        $('#background-loader').fadeOut(DURATION);
-                        ox.trigger('logout:failed', arguments);
-                    }
-                }
-            );
+                    });
         });
     };
 
@@ -278,7 +268,6 @@ define('io.ox/core/main', [
 
         // we don't show any launcher in top-bar on small devices
         if (_.device('smartphone') && !forceDesktopLaunchers) {
-            items.hide();
             return;
         }
 
@@ -352,13 +341,14 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle">').text(label);
             } else if (label[0].tagName === 'I') {
                 return $('<a href="#" class="apptitle" role="button">').attr('aria-label', arialabel ? _.escape(arialabel) : null).append(label);
             }
             return label;
         });
 
+        if (side === 'left' && _.device('smartphone')) node.hide();
         return node.appendTo(side === 'left' ? launchers : topbar);
     };
 
