@@ -189,19 +189,29 @@ define('io.ox/calendar/edit/main', [
                     self.model = new AppointmentModel.Model(data);
                 } else {
                     // default values from settings
-                    data.alarms = data.alarms || settings.get('defaultReminder', [{
-                        action: 'DISPLAY',
-                        description: '',
-                        trigger: { duration: '-PT15M', related: 'START' }
-                    }]);
+                    data.alarms = data.alarms || util.getDefaultAlarms(data);
 
-                    data.alarms = util.convertAlarms(data.alarms);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
                     data.transp = data.transp || (util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
                     self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
                     }
+                }
+
+                // if we restore alarms, check if they differ from the defaults
+                var isDefault = JSON.stringify(_(data.alarms).pluck('action', 'trigger')) === JSON.stringify(_(util.getDefaultAlarms(data)).pluck('action', 'trigger'));
+
+                // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
+                if (isDefault) {
+                    self.model.on('change:allDay', function () {
+                        if (!this.userChangedAlarms) {
+                            this.set('alarms', util.getDefaultAlarms(this));
+                        }
+                    });
+                    self.model.on('userChangedAlarms', function () {
+                        this.userChangedAlarms = true;
+                    });
                 }
                 loadFolder();
             },

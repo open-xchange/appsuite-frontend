@@ -70,16 +70,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
                 if (canModify) {
                     if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
-                        appointmentData.alarms = settings.get('defaultReminder', [{
-                            action: 'DISPLAY',
-                            description: '',
-                            trigger: { duration: '-PT15M' }
-                        }]);
-                        // convenience function to convert old alarms into new chronos alarms
-                        // TODO remove once migration process is implemented
-                        if (options.taskmode) {
-                            appointmentData.alarms = util.convertAlarms(appointmentData.alarms);
-                        }
+                        appointmentData.alarms = util.getDefaultAlarms(appointmentData);
                     }
                     // backbone model is fine. No need to require chronos model
                     alarmsModel = new Backbone.Model(appointmentData);

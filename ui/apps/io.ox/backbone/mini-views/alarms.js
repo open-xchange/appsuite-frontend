@@ -34,13 +34,27 @@ define('io.ox/backbone/mini-views/alarms', [
             this.options = options || {};
             this.attribute = options.attribute || 'alarms';
             this.list = $('<ul class="list-unstyled alarm-list">');
+
+            if (this.model) {
+                this.model.on('change:' + this.attribute, _(this.updateView).bind(this));
+            }
         },
         render: function () {
             var self = this;
             this.$el.empty().append(
                 $('<button class="btn btn-default" type="button">').text(gt('Add new Reminder'))
                     .on('click', function () {
-                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: '-PT15M', related: 'START' } }));
+                        var duration;
+
+                        if (self.attribute === 'alarms' && self.model) {
+                            duration = util.isAllday(self.model) ? '-PT12H' : '-PT15M';
+                        } else if (self.attribute === 'chronos/defaultAlarmDate' || self.attribute === 'birthdays/defaultAlarmDate') {
+                            duration = '-PT12H';
+                        } else {
+                            duration = '-PT15M';
+                        }
+
+                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: duration, related: 'START' } }));
                         self.updateModel();
                     }),
                 self.list
@@ -58,6 +72,9 @@ define('io.ox/backbone/mini-views/alarms', [
         updateModel: function () {
             if (!this.model) return;
             this.model.set(this.attribute, this.getAlarmsArray());
+            // trigger event, so we know the user changed the alarm
+            // used by edit view, to determine, if the default alarms should be applied on allday change
+            this.model.trigger('userChangedAlarms');
         },
         updateView: function () {
             var self = this;

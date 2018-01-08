@@ -23,6 +23,25 @@ define('io.ox/calendar/settings/pane', [
 
     'use strict';
 
+    // apply some defaults
+    if (settings.get('chronos/defaultAlarmDateTime') === undefined) {
+        settings.set('chronos/defaultAlarmDateTime', [{
+            action: 'DISPLAY',
+            description: '',
+            trigger: { duration: '-PT15M', related: 'START' }
+        }]);
+    }
+    if (settings.get('chronos/defaultAlarmDate') === undefined) {
+        settings.set('chronos/defaultAlarmDate', [{
+            action: 'DISPLAY',
+            description: '',
+            trigger: { duration: '-PT12H', related: 'START' }
+        }]);
+    }
+    if (settings.get('birthdays/defaultAlarmDate') === undefined) {
+        settings.set('birthdays/defaultAlarmDate', []);
+    }
+
     ext.point('io.ox/calendar/settings/detail').extend({
         index: 100,
         id: 'view',
@@ -111,7 +130,7 @@ define('io.ox/calendar/settings/pane', [
                             ),
                             // scale
                             $('<div class="col-md-4">').append(
-                                //#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
+                                //#. Context: Calendar settings. Default time scale in minutes for new appointments.
                                 $('<label for="settings-interval">').text(gt('Time scale')),
                                 new mini.SelectView({ id: 'settings-interval', name: 'interval', model: settings, list: this.getIntervalOptions() }).render().$el
                             )
@@ -164,7 +183,17 @@ define('io.ox/calendar/settings/pane', [
                         // same width as col-md-10 but without the strange input and hover issues
                         $('<div>').css('width', '83.33333333%').append(
                             $('<label>').text(gt('Default reminder')),
-                            new AlarmsView({ model: settings, attribute: 'defaultReminder' }).render().$el
+                            new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDateTime' }).render().$el
+                        ),
+                        // same width as col-md-10 but without the strange input and hover issues
+                        $('<div>').css('width', '83.33333333%').append(
+                            $('<label>').text(gt('Default reminder for all day appointments')),
+                            new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
+                        ),
+                        // same width as col-md-10 but without the strange input and hover issues
+                        $('<div>').css('width', '83.33333333%').append(
+                            $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
+                            new AlarmsView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
                         ),
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)

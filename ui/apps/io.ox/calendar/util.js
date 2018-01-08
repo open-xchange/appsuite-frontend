@@ -1139,8 +1139,8 @@ define('io.ox/calendar/util', [
             if (_(app).has('allDay')) return app.allDay;
 
             var time = app.startDate;
-            // there is either no time value or the time value is only 0s
-            return this.isLocal(app) && (time.value.indexOf('T') === -1 || time.value.search(/T0*$/) !== -1);
+            // there is no time value for all day appointments
+            return this.isLocal(app) && (time.value.indexOf('T') === -1);
         },
 
         // appointments may be in local time. This means they do not move when the timezone changes. Do not confuse this with UTC time
@@ -1191,8 +1191,25 @@ define('io.ox/calendar/util', [
         getMoment: function (date) {
             if (_.isObject(date)) return moment.tz(date.value, date.tzid || moment().tz());
             return moment(date);
-        }
+        },
 
+        // get the right default alarm for an event
+        // note: the defautl alarm for the birthday calendar is not considered here. Ther is no use case since you cannot edit those events atm.
+        getDefaultAlarms: function (event) {
+            // no event or not fulltime (isAllday returns false for no event)
+            if (!this.isAllday(event)) {
+                return settings.get('chronos/defaultAlarmDateTime', [{
+                    action: 'DISPLAY',
+                    description: '',
+                    trigger: { duration: '-PT15M', related: 'START' }
+                }]);
+            }
+            return settings.get('chronos/defaultAlarmDate', [{
+                action: 'DISPLAY',
+                description: '',
+                trigger: { duration: '-PT12H', related: 'START' }
+            }]);
+        }
     };
 
     return that;

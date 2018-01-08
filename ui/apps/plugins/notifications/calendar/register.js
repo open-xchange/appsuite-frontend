@@ -56,11 +56,7 @@ define('plugins/notifications/calendar/register', [
                         folderAPI.get(o.folder).done(function (folder) {
                             o.data = {
                                 // default reminder
-                                alarms: calendarSettings.get('defaultReminder', [{
-                                    action: 'DISPLAY',
-                                    description: '',
-                                    trigger: { duration: '-PT15M' }
-                                }]),
+                                alarms: util.getDefaultAlarms(appointmentData),
                                 attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
                                 id: appointmentData.id,
                                 folder: appointmentData.folder

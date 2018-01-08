@@ -21,9 +21,8 @@ define('io.ox/calendar/actions', [
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
     'io.ox/calendar/actions/change-confirmation',
-    'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
+    'io.ox/core/folder/api'
+], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI) {
 
     'use strict';
 
@@ -435,14 +434,7 @@ define('io.ox/calendar/actions', [
 
             if (accept) {
                 // default reminder
-                appointment.alarms = settings.get('defaultReminder', [{
-                    action: 'DISPLAY',
-                    description: '',
-                    trigger: { duration: '-PT15M' }
-                }]);
-                // convenience function to convert old alarms into new chronos alarms
-                // TODO remove once migration process is implemented
-                appointment.alarms = util.convertAlarms(appointment.alarms);
+                appointment.alarms = util.getDefaultAlarms(baton.data);
             }
 
             // check if only one appointment or the whole series should be accepted
