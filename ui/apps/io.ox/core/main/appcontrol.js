@@ -18,7 +18,7 @@ define('io.ox/core/main/appcontrol', [
 
     var coloredIcons = settings.get('features/appLauncher/colored', false);
     var appLauncherIcon = '<svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><g class="fill-c1" fill-rule="evenodd"><path d="M0 0h16v16H0zM25 0h16v16H25zM50 0h16v16H50zM0 25h16v16H0zM25 25h16v16H25zM50 25h16v16H50zM0 50h16v16H0zM25 50h16v16H25zM50 50h16v16H50z"/></g></svg>';
-
+    var coreApps = 'Mail Calendar Addressbook Drive Portal Tasks Text Spreadsheet Presentation'.split(' ');
     var meta = [{
         name: 'Mail',
         svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-mail"><g class="stroke-w1 stroke-c1" stroke-width="3" fill="none" fill-rule="evenodd"><path d="M8 16h48v32H8z"/><path d="M8 20l24 16 24-16"/></g></svg>'
@@ -46,7 +46,13 @@ define('io.ox/core/main/appcontrol', [
     }, {
         name: 'Presentation',
         svg: '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-presentation"><g fill="none" fill-rule="evenodd"><path d="M10 15h44v34H10z" class="stroke-c1 stroke-w1" stroke-width="3"/><g class="fill-c1"><path d="M32 23v9.004h9a9.001 9.001 0 1 1-18-.002A9.001 9.001 0 0 1 32 23z"/><path d="M34 21.014c.165-.01.332-.014.5-.014 4.694 0 8.5 3.582 8.5 8 0 .339-.022.672-.066 1H34v-8.986z" fill-opacity=".6"/></g></g></svg>'
+    }, {
+        name: 'Intranet'
+    }, {
+        name: 'Wiki'
     }];
+
+    var fallbackIcon = '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-fallback"><g fill="none" fill-rule="evenodd"><path class="stroke-c1 stroke-w1" stroke-width="3" d="M15 15h34v34H15z"/><text font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="18" font-weight="bold" class="fill-c1" text-anchor="middle" transform="translate(6 0)"><tspan x="26.501" y="38">T</tspan></text></g></svg>';
 
     var quicklaunchSettings = 'Mail,Calendar';
 
@@ -56,7 +62,7 @@ define('io.ox/core/main/appcontrol', [
     }
 
     function drawIcon(o) {
-        var $svg = $(o.svg),
+        var $svg = o.svg ? $(o.svg) : $(fallbackIcon),
             badge = $();
 
         if (coloredIcons) $svg.addClass('colored');
@@ -68,6 +74,12 @@ define('io.ox/core/main/appcontrol', [
         if (o.name === 'Mail') {
             badge = $('<div class="indicator" aria-hidden="true">');
         }
+
+        // just to get the idea
+        if (_.indexOf(coreApps, o.name) === -1) {
+            $svg.find('tspan').text(o.name.charAt(0).toUpperCase());
+        }
+
         return $('<div class="lcell">').append(
             badge,
             $('<div class="svgwrap">').append($svg),

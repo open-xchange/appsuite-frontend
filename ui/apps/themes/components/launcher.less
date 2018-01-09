@@ -15,7 +15,7 @@
 @launcher-spacing: 2px;
 
 @quicklaunch-width: @appcontrol-height;
-@quicklaunch-stroke-width: 1px;
+@quicklaunch-stroke-width: 2px;
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
@@ -61,15 +61,8 @@
         display: block;
     }
 
-    .indicator {
-        width: 4px;
-        height: 4px;
-        background-color: #c30000;
-        border-radius: 50%;
-        position: absolute;
-        top: 35px;
-        left: 41px;
-        z-index: 1;
+    .badge {
+        background-color: @notification-icon-background;
     }
 
     #io-ox-top-logo-small {
@@ -116,6 +109,17 @@
         align-self: auto;
         min-width: @quicklaunch-width;
         min-height: auto;
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #c30000;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 1;
+            top: 35px;
+            left: 41px;
+        }
 
         .svgwrap {
             padding: 16px;
@@ -212,6 +216,10 @@
     z-index: 1;
     transition: opacity .367s cubic-bezier(0.1, 0.9, 0.2, 1);
     top: @appcontrol-height;
+
+    .indicator {
+        display: none;
+    }
 
     .cflex {
         display: flex;
