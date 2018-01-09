@@ -558,7 +558,8 @@ define('io.ox/calendar/freetime/timeView', [
                 until = moment(from).add(1, this.model.get('dateRange') + 's');
             }
             return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT_DAY_ONLY), until: until.format(util.ZULU_FORMAT_DAY_ONLY) }).done(function (items) {
-                if (items.length === 0) {
+
+                if (items.length === 0 && attendees.length !== 0) {
                     // remove busy animation again
                     self.bodyNode.idle();
                     require(['io.ox/core/yell'], function (yell) {
