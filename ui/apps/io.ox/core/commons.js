@@ -738,9 +738,10 @@ define('io.ox/core/commons', [
     };
 
     // factory
-    $.createViewContainer = function (baton, api, getter) {
+    $.createViewContainer = function (baton, api, getter, options) {
 
-        var cidGetter = api.cid || _.ecid,
+        options = options || {};
+        var cidGetter = options.cidGetter || _.ecid,
             data = baton instanceof ext.Baton ? baton.data : baton,
             cid = _.cid(data),
             ecid = cidGetter(data),

@@ -267,7 +267,7 @@ define('io.ox/calendar/view-detail', [
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
             }
             try {
-                var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
+                var node = $.createViewContainer(baton.data, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
                 node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
                 baton.isCreateEvent = isCreateEvent;
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
