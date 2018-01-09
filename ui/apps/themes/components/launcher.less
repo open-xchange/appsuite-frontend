@@ -1,9 +1,9 @@
 @appcontrol-height: 64px;
 
 @launcher-fg: #666;
-@launcher-bg: #f5f5f5;
-@launcher-fg-hover: #fff;
-@launcher-bg-hover: @brand-primary;
+@launcher-bg: #fff;
+@launcher-fg-hover: #666;
+@launcher-bg-hover: #eee;
 
 @launcher-stroke-width: 2px;
 
@@ -18,6 +18,9 @@
 @quicklaunch-stroke-width: 1px;
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
+
+@top-bar-gradientLeft:      #283f73;
+@top-bar-gradientRight:     #03a9fa;
 
 // adjust positions of top-bar and screens
 #io-ox-core {
@@ -36,7 +39,9 @@
 }
 
 #io-ox-appcontrol {
-    .vertical-gradient(darken(@topbar-background, 15%), darken(@topbar-background, 12%));
+
+    background-image: linear-gradient(270deg, @top-bar-gradientLeft, @top-bar-gradientRight);
+
     position: absolute;
     left: 0;
     right: 0;
@@ -54,6 +59,17 @@
 
     & > div {
         display: block;
+    }
+
+    .indicator {
+        width: 4px;
+        height: 4px;
+        background-color: #c30000;
+        border-radius: 50%;
+        position: absolute;
+        top: 35px;
+        left: 41px;
+        z-index: 1;
     }
 
     #io-ox-top-logo-small {
@@ -88,9 +104,10 @@
     #io-ox-launcher button:focus,
     #io-ox-quicklaunch  button:hover,
     #io-ox-quicklaunch  button:focus {
-        background: white; color: @brand-primary; outline: 0;
-        svg .fill-c1 { fill: @brand-primary; }
-        svg .stroke-c1 { fill: @brand-primary; }
+        background: rgba(0, 0, 0, .3);
+        outline: 0;
+        //svg .fill-c1 { fill: @brand-primary; }
+        //svg .stroke-c1 { fill: @brand-primary; }
     }
 
     #io-ox-quicklaunch {
@@ -137,8 +154,9 @@
             }
 
             &:focus, &:hover {
-                svg .stroke-c1 { stroke: @launcher-fg-hover; }
-                svg .fill-c1   { fill: @launcher-fg-hover;   }
+                background: rgba(0, 0, 0, .3);
+                //svg .stroke-c1 { stroke: @launcher-fg-hover; }
+                //svg .fill-c1   { fill: @launcher-fg-hover;   }
             }
         }
     }
@@ -168,9 +186,10 @@
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
+                color: #fff;
 
                  &:hover, &:focus {
-                    background: white;
+                    background: rgba(0, 0, 0, .3);
                     outline: 0;
                 }
             }
@@ -291,16 +310,9 @@
 
         }
         &:focus, &:hover {
-            .colored {
-                &[class^="app-icon-"] {
-                    .stroke-c1 { stroke: @launcher-fg-hover }
-                    .fill-c1 { fill: @launcher-fg-hover }
-                }
-            }
             .stroke-c1 { stroke: @launcher-fg-hover }
             .fill-c1 { fill: @launcher-fg-hover }
             background: @launcher-bg-hover;
-            .title { color: white; }
         }
     }
 }
@@ -308,7 +320,7 @@
 #io-ox-launchgrid-overlay {
     z-index:11;
     display:none;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.01);
     position: absolute;
     bottom: 0;
     left: 0;

@@ -31,7 +31,7 @@
  * 1.1 Base colors
  */
 
-@brand-primary:                         #3c73aa;    /* Bootstrap overwrite */
+@brand-primary:                         #283f73;    /* was #3c73aa;*/    /* Bootstrap overwrite */
 @brand-success:                         #008500;    /* Bootstrap overwrite */
 // e.g. used for window-content
 @background:                            @white;
@@ -251,10 +251,10 @@
  * 3.2 Topbar
  */
 
-@topbar-background:                     @brand-primary;
+@topbar-background:                     @brand-primary; //obsolete
 @topbar-icon-color:                     @white;
-@topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
-@topbar-launcher-color-hover:           @white;
+@topbar-launcher-color:                 @white; //rgba(255, 255, 255, 0.95);
+@topbar-launcher-color-hover:           rgba(0,0,0,.4);//@white;
 @topbar-launcher-color-active:          @white;
 @topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
 @topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
