@@ -6,6 +6,7 @@
 @launcher-bg-hover: #eee;
 
 @launcher-stroke-width: 2px;
+@launcher-stroke-width-retina: 1px;
 
 @launcher-text-size: 12px;
 @launcher-badge-color: #757575; //#c30000;
@@ -314,7 +315,12 @@
             .stroke-c1 { stroke: @launcher-fg; }
             .fill-none { fill: none;   }
             .fill-c1   { fill: @launcher-fg; }
-            .stroke-w1 { stroke-width: @launcher-stroke-width; }
+            .stroke-w1 {
+                stroke-width: @launcher-stroke-width;
+                .retina & {
+                    stroke-width: @launcher-stroke-width-retina;
+                }
+            }
 
         }
         &:focus, &:hover {

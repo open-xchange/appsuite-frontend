@@ -135,6 +135,10 @@ define('io.ox/core/boot/fixes', [], function () {
         }
     }
 
+    // Retina displays
+    if (_.device('retina')) {
+        $('html').addClass('retina');
+    }
 
     //
     // Connection / Window State
