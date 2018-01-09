@@ -13,25 +13,21 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-const expect = require('chai').expect;
-
 Feature('Sessions settings');
 
-Scenario.skip('lists all sessions', function* (I) {
+Scenario('lists all sessions', function (I) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);
     I.waitForVisible('.io-ox-session-settings');
-    expect(yield I.grabTextFrom('.io-ox-session-settings > h1')).to.equal('Active clients');
+    I.see('You are currently signed in with the following devices');
 
     // web clients
-    I.seeElement('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="0"]');
-    I.seeElement('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="1"]');
-    I.seeElement('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="2"]');
-    // native clients
-    I.seeElement('.io-ox-session-settings .session-list-container:nth-child(3) li[data-id="3"]');
-    I.seeElement('.io-ox-session-settings .session-list-container:nth-child(3) li[data-id="4"]');
-    // other client
-    I.seeElement('.io-ox-session-settings .session-list-container:nth-child(4) li[data-id="5"]');
+    I.see('Exchange Active Sync(Unknown device)');
+    I.see('Chrome(Android)');
+    I.see('Mailapp(iOS)');
+    I.see('Safari(iOS)');
+    I.see('Firefox(Mac)');
+    I.see('Chrome(Mac)');
 
     I.logout();
 });

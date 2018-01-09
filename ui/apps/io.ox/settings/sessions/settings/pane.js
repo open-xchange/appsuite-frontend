@@ -52,7 +52,7 @@ define('io.ox/settings/sessions/settings/pane', [
         idAttribute: 'sessionId',
 
         initialize: function () {
-            this.browser = _.detectBrowser({ userAgent: this.get('userAgent') }) || {};
+            this.browser = this.has('userAgent') ? _.detectBrowser({ userAgent: this.get('userAgent') }) || {} : {};
             ext.point('io.ox/settings/sessions/deviceType').invoke('customize', this);
             ext.point('io.ox/settings/sessions/operatingSystem').invoke('customize', this);
             ext.point('io.ox/settings/sessions/application').invoke('customize', this);
@@ -137,20 +137,20 @@ define('io.ox/settings/sessions/settings/pane', [
         customize: function () {
             switch (this.get('client')) {
                 case 'open-xchange-mobile-api-facade':
-                    this.set('application', settings.get('productname/mailapp'));
+                    this.set('application', settings.get('productname/mailapp') || 'Mailapp');
                     break;
                 case 'OpenXchange.iosClient.OXDrive':
                 case 'OpenXchange.Android.OXDrive':
                 case 'OpenXchange.HTTPClient.OXDrive':
                 case 'OXDrive':
                 case 'OSX.OXDrive':
-                    this.set('application', settings.get('productname/oxdrive'));
+                    this.set('application', settings.get('productname/oxdrive') || 'OXDrive');
                     break;
                 case 'USM-EAS':
                     this.set('application', gt('Exchange Active Sync'));
                     break;
                 case 'USM-JSON':
-                    this.set('application', settings.get('productname/oxtender'));
+                    this.set('application', settings.get('productname/oxtender') || 'OXtender');
                     break;
                 default: // nothing
             }
@@ -193,7 +193,8 @@ define('io.ox/settings/sessions/settings/pane', [
         },
 
         render: function () {
-            var isCurrent = this.model.get('sessionId') === ox.session;
+            var isCurrent = this.model.get('sessionId') === ox.session,
+                lastActive = this.model.has('lastActive') ? moment(this.model.get('lastActive')).fromNow() : '';
             this.$el.empty().append(
                 $('<div>').append(
                     $('<div class="fa-stack client-icon">').addClass(this.model.get('deviceType')).addClass(this.model.get('os')).append(
@@ -206,7 +207,7 @@ define('io.ox/settings/sessions/settings/pane', [
                     ),
                     $('<div class="secondary">').append(
                         $('<span>').text(this.model.get('location')),
-                        isCurrent ? $('<span class="label label-success">').text(gt('Now active')) : $('<span>').text(moment(this.model.get('lastActive')).fromNow())
+                        isCurrent ? $('<span class="label label-success">').text(gt('Now active')) : $('<span>').text(lastActive)
                     )
                 ),
                 $('<div class="list-item-controls">').append(
@@ -304,7 +305,7 @@ define('io.ox/settings/sessions/settings/pane', [
     });
 
     ext.point('io.ox/settings/sessions/settings/detail/view').extend({
-        id: 'mobile-list',
+        id: 'list',
         index: 300,
         render: function (baton) {
             this.$el.append(

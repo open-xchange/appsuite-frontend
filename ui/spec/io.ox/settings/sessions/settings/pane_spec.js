@@ -18,16 +18,15 @@ define([
 
     describe('Session settings', function () {
 
-        //TODO: moved to middleware? Remove those tests here?
-        describe.skip('Model displayName', function () {
+        describe('Model displayName', function () {
 
             it('should recognize a desktop device with useragent', function () {
                 var model = new session.Model({
                     client: 'open-xchange-appsuite',
                     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
                 });
-                model.get('displayName').should.equal(gt('Chrome %1$s on %2$s', 58, 'macOS'));
-                model.get('platform').should.equal('desktop');
+                model.get('operatingSystem').should.equal(gt('Mac'));
+                model.get('application').should.equal(gt('Chrome'));
             });
 
             it('should recognize a mobile device with useragent', function () {
@@ -35,8 +34,8 @@ define([
                     client: 'open-xchange-appsuite',
                     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
                 });
-                model.get('displayName').should.equal(gt('Safari %1$s on %2$s', '9', 'iOS'));
-                model.get('platform').should.equal('smartphone');
+                model.get('operatingSystem').should.equal(gt('iOS'));
+                model.get('application').should.equal(gt('Safari'));
             });
 
             it('should recognize a mobile device of the mail app with useragent', function () {
@@ -44,16 +43,16 @@ define([
                     client: 'open-xchange-mobile-api-facade',
                     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
                 });
-                model.get('displayName').should.equal(gt('%1$s for %2$s', settings.get('productname/mailapp'), 'iOS'));
-                model.get('platform').should.equal('smartphone');
+                model.get('operatingSystem').should.equal(gt('iOS'));
+                model.get('application').should.equal(settings.get('productname/mailapp') || 'Mailapp');
             });
 
             it('should recognize a EAS device', function () {
                 var model = new session.Model({
                     client: 'USM-EAS'
                 });
-                model.get('displayName').should.equal(gt('Exchange Active Sync'));
-                model.get('platform').should.equal('other');
+                expect(model.get('operatingSystem')).to.be.undefined;
+                model.get('application').should.equal(gt('Exchange Active Sync'));
             });
 
         });
