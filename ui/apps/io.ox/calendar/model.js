@@ -206,7 +206,7 @@ define('io.ox/calendar/model', [
                 resetListUpdate = false,
                 changeAttendeesUpdate = false;
 
-            this._attendees = new AttendeeCollection(this.get('attendees'), { silent: false });
+            this._attendees = new AttendeeCollection(this.get('attendees'), { resolveGroups: true, silent: false });
 
             this._attendees.on('add remove reset', function () {
                 if (changeAttendeesUpdate) return;
