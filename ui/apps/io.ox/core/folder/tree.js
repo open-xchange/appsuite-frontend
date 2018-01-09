@@ -258,10 +258,7 @@ define('io.ox/core/folder/tree', [
                 point = this.getContextMenuId(contextmenu),
                 view = this;
             // get folder data and redraw
-            // no cache here for exportable folders, we need up to date total number of items
-            var useCache = true;
-            if (!_.device('ios || android') && (module === 'contacts' || module === 'calendar' || module === 'tasks')) useCache = false;
-            api.get(id, { cache: useCache }).done(function (data) {
+            api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
                 ext.point(point).invoke('draw', ul, baton);
                 if (_.device('smartphone')) {

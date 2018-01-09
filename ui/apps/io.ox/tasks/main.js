@@ -616,6 +616,13 @@ define('io.ox/tasks/main', [
             });
         },
 
+        // to update the context menu in the foldertree
+        'api-events': function (app) {
+            api.on('create update delete refresh.all', function () {
+                folderAPI.reload(app.folder.get());
+            });
+        },
+
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
