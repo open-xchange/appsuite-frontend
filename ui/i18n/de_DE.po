@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-11-29 12:22+0100\n"
+"PO-Revision-Date: 2017-12-22 11:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3296,6 +3296,30 @@ msgstr "Sie benötigen mindestens Android %n."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "You need to use iOS %n or higher."
 msgstr "Sie benötigen mindestens iOS %n."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr "Diese Plattform wird derzeit nicht unterstützt."
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr ""
+"Unterstützung beginnt mit Chrome %1$d, Firefox %2$d, IE %3$d und Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr "Für beste Ergebnisse empfehlen wir Google Chrome für Android."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."

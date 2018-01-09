@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-06 17:08+0100\n"
+"PO-Revision-Date: 2017-12-22 11:12+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -237,13 +237,6 @@ msgstr ""
 "Gebruik de cursortoetsen om de datum te veranderen. Druk de Ctrl-toests "
 "tegelijk in om het jaar te veranderen en Shift voor de maand. Sluit het "
 "datumselectiescherm door op Esc te drukken."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Gebruik de op en neer toetsen om de tijd te wijzigen. Sluit de selectie door "
-"de ESC toets te drukken."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -1001,6 +994,14 @@ msgstr "Locatie"
 msgid "Starts on"
 msgstr "Start op"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1570,6 +1571,15 @@ msgstr "Vorige"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Volgende"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 # Reinout: Onder voorbehoud?
 # Elma: Ik heb geen idee, geen context gevonden???
@@ -2190,8 +2200,8 @@ msgid ""
 "There are more than %n appointments in the current calendar. Some features "
 "are disabled due to performance reasons."
 msgstr ""
-"Er zijn meer dan %n afspraken in de huidige agenda. Sommige opties zijn"
-" uitgeschakeld om de prestaties te garanderen."
+"Er zijn meer dan %n afspraken in de huidige agenda. Sommige opties zijn "
+"uitgeschakeld om de prestaties te garanderen."
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -2384,6 +2394,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Selecteer"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Verwijderen"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2391,12 +2406,24 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d item geselecteerd"
 msgstr[1] "%1$d items geselecteerd"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d adres geselecteerd"
 msgstr[1] "%1$d adressen geselecteerd"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Selectie leegmaken"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3178,6 +3205,20 @@ msgstr "Contactbijlage opgeslagen"
 msgid "Saved attachment"
 msgstr "Bijlage opgeslagen"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3258,6 +3299,29 @@ msgid "You need to use iOS %n or higher."
 msgstr "U moet minimaal iOS %n of hoger gebruiken."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr "Ondersteund vanaf Chrome %1$s, Firefox %2$d, IE %3$d en Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Uw besturingssysteem wordt niet ondersteund."
 
@@ -3296,6 +3360,10 @@ msgstr "Offline modus"
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Cookies zijn uitgeschakeld voor uw webbrowser. Schakel deze alstublieft in."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3348,8 +3416,8 @@ msgstr "Sluit premium functies"
 msgid "Try now!"
 msgstr "Probeer nu!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Opnieuw proberen"
@@ -3599,6 +3667,14 @@ msgid "New folder"
 msgstr "Nieuwe map"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Folder name"
@@ -3732,8 +3808,8 @@ msgid ""
 "Could not delete folder. This can be due to insufficient permissions in your "
 "trash folder or this might be a special folder that cannot be deleted."
 msgstr ""
-"Kan de map niet verwijderen.Dit kan door een gebrek aan rechten zijn in uw"
-" Prullenbakmap of deze map is speciaal en kan niet verwijderd worden."
+"Kan de map niet verwijderen.Dit kan door een gebrek aan rechten zijn in uw "
+"Prullenbakmap of deze map is speciaal en kan niet verwijderd worden."
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
@@ -4080,11 +4156,6 @@ msgstr "Er waren geen taakgegevens om te importeren"
 msgid "There was no appointment data to import"
 msgstr "Er waren geen afspraakgegevens om te importeren"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Regel %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selecteer een bestand voor import"
@@ -4200,6 +4271,22 @@ msgstr "Automatisch afmelden"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Nu afmelden"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5400,7 +5487,8 @@ msgstr "Omschrijving toevoegen"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Grootte"
@@ -6199,6 +6287,16 @@ msgstr "Bestandsquota"
 msgid "Need more space?"
 msgstr "Meer ruimte nodig?"
 
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6391,10 +6489,6 @@ msgstr "Beheerdersrol"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Gebruiker"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Verwijderen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7853,6 +7947,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "E-mail van %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Fout tijdens het lezen van de berichtinhoud"
 
@@ -8000,8 +8098,8 @@ msgstr "doorgaan als deze voorwaarden zijn gehaald"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "doorgaan als één van deze voorwaarden is gehaald"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8119,11 +8217,6 @@ msgstr "Mailinglijst"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Grootte (bytes)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Is groter dan"
 
@@ -8158,11 +8251,6 @@ msgstr "Verzonden-Van"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Verzonden-Naar"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "Kop bestaat"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8220,6 +8308,16 @@ msgstr "Reguliere expressie"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Geen Regex"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Bestaat"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8636,12 +8734,6 @@ msgstr "Geciteerde regels kleuren"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Gebruik lettertype met vaste breedte voor tekstberichten"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Maak platte tekst e-mails mooier"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9183,6 +9275,11 @@ msgid "Install"
 msgstr "Installeren"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Premium"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Koppel uw apparaat"
 
@@ -9198,10 +9295,6 @@ msgstr "Neem %1$s met u mee! Blijf op de hoogte vanaf uw favoriete apparaat."
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "terug"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Premium"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11245,8 +11338,27 @@ msgstr "Uitnodigingen voor %s"
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Selectie leegmaken"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Gebruik de op en neer toetsen om de tijd te wijzigen. Sluit de selectie "
+#~ "door de ESC toets te drukken."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Regel %1$d: %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Grootte (bytes)"
+
+#~ msgid "Header exists"
+#~ msgstr "Kop bestaat"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Maak platte tekst e-mails mooier"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Configureer %1$s"
@@ -11289,9 +11401,6 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "Regel niet toepassen voor"
-
-#~ msgid "Exists"
-#~ msgstr "Bestaat"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Pas regel toe als aan één voorwaarde is voldaan"

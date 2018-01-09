@@ -39,7 +39,6 @@ define('io.ox/core/boot/fixes', [], function () {
         'input[type=radio]',
         'input[type=checkbox]',
         '.btn',
-        '.dropdown',
         '.fa-search',
         '.contact-grid-index',
         '.file-icon .wrap',

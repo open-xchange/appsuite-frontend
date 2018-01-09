@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-05 14:35+0200\n"
+"PO-Revision-Date: 2017-12-22 11:07+0100\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -236,13 +236,6 @@ msgstr ""
 "Brug piltasterne for at ændre datoen. Tast \"Shift\" og piltaster for at "
 "ændre måned eller \"Ctrl\" og piltaster for at ændre år.  Tast \"Esc\" for "
 "at få vist en kalender."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Brug pil-op og pil-ned for at ændre tidspunktet.  Luk valget med \"Esc\"-"
-"tasten."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -988,6 +981,14 @@ msgstr "Placering"
 msgid "Starts on"
 msgstr "Starter på"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1552,6 +1553,15 @@ msgstr "Foregående"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Næste"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2354,6 +2364,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Vælg"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Fjern"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2361,12 +2376,24 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d element valgt"
 msgstr[1] "%1$d elementer valgt"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d adresse valgt"
 msgstr[1] "%1$d adresser valgt"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Ryd markering"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3143,6 +3170,20 @@ msgstr "Gemte kontakt-vedhæftning"
 msgid "Saved attachment"
 msgstr "Gemte vedhæftning"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3223,6 +3264,31 @@ msgid "You need to use iOS %n or higher."
 msgstr "Du skal bruge iOS %n eller højere."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr ""
+"Understøttelse begynder med Chrome %1$d, Firefox %2$d, Internet Explorer "
+"%3$d og Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Dit styresystem er ikke understøttet."
 
@@ -3259,6 +3325,10 @@ msgstr "Offline mode"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "Cookies er slået fra i din browser. Slå dem venligst til."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3311,8 +3381,8 @@ msgstr "Luk præmium-funktioner"
 msgid "Try now!"
 msgstr "Prøv nu!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Prøv igen"
@@ -3559,6 +3629,14 @@ msgid "New folder"
 msgstr "Ny mappe"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Folder name"
@@ -3693,7 +3771,8 @@ msgid ""
 "trash folder or this might be a special folder that cannot be deleted."
 msgstr ""
 "Kunne ikke slette mappe.  Det kan være fordi du har begrænsede rettigheder "
-"til din skraldemappe, eller fordi det er en specialmappe der ikke kan slettes."
+"til din skraldemappe, eller fordi det er en specialmappe der ikke kan "
+"slettes."
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
@@ -4037,11 +4116,6 @@ msgstr "Der var ingen opgaveoplysninger at importere"
 msgid "There was no appointment data to import"
 msgstr "Der var ingen aftaleoplysninger at importere"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Linje %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Vælg venligst en fil at importere"
@@ -4157,6 +4231,22 @@ msgstr "Automatisk log ud"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Log ud nu"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5345,7 +5435,8 @@ msgstr "Tilføj en beskrivelse"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Størrelse"
@@ -6129,6 +6220,16 @@ msgstr "Filkvote"
 msgid "Need more space?"
 msgstr "Brug for mere plads?"
 
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6321,10 +6422,6 @@ msgstr "Administratorrolle"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Bruger"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Fjern"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7761,6 +7858,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "E-mail fra %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Fejl: Kunne ikke indlæse beskedens indhold"
 
@@ -7908,8 +8009,8 @@ msgstr "fortsæt hvis alle disse betingelser er opfyldt"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "fortsæt bare én af disse betingelser er opfyldt"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8027,11 +8128,6 @@ msgstr "E-mail-liste"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Størrelse (bytes)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Er større end"
 
@@ -8066,11 +8162,6 @@ msgstr "Gensendt fra"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Gensendt til"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "Hoved findes"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8128,6 +8219,16 @@ msgstr "Regulært udtryk"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Ikke et »regex« (regulært udtryk)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Findes"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8539,12 +8640,6 @@ msgstr "Farv citerede linjer"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Brug fast-bredde skrifttype for e-mails"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Pynt på beskeder i enkel tekst"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9079,6 +9174,11 @@ msgid "Install"
 msgstr "Installér"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Præmium"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Forbind din enhed"
 
@@ -9094,10 +9194,6 @@ msgstr "Tag %1$s med dig!  Hold dig opdateret på dine favoritenheder."
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "tilbage"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Præmium"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11134,8 +11230,27 @@ msgstr "Invitér til %s"
 msgid "Add on %s"
 msgstr "Tilføj på %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Ryd markering"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Brug pil-op og pil-ned for at ændre tidspunktet.  Luk valget med \"Esc\"-"
+#~ "tasten."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Linje %1$d: %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "fortsæt bare én af disse betingelser er opfyldt"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Størrelse (bytes)"
+
+#~ msgid "Header exists"
+#~ msgstr "Hoved findes"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Pynt på beskeder i enkel tekst"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Sæt %1$s op"
@@ -11178,9 +11293,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "Reglen gælder ikke før"
-
-#~ msgid "Exists"
-#~ msgstr "Findes"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Brug regel hvis en betingelse er opfyldt."
@@ -11469,9 +11581,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "April"
 #~ msgstr "April"
-
-#~ msgid "Are you sure?"
-#~ msgstr "Er du sikker?"
 
 #~ msgid "Ask for return receipt"
 #~ msgstr "Bed om en leveringskvittering"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-15 19:15+0300\n"
+"PO-Revision-Date: 2017-12-22 11:11+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -235,13 +235,6 @@ msgstr ""
 "Lai izmainītu datumu, izmantojiet kursora taustiņus. Lai izmainītu gadu, "
 "izmantojiet ctrl-taustiņu. Lai izmainītu mēnesi, izmantojiet shift-taustiņu. "
 "Lai aizvērtu datuma izvēles logu izmantojiet ESC taustiņu."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Lai izmainītu laiku, izmantojiet bultiņas taustiņus uz augšu un uz leju. "
-"Izvēlnes aizvēršanai piespiediet 'ESC' taustiņu."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -988,6 +981,14 @@ msgstr "Vieta"
 msgid "Starts on"
 msgstr "Sākas"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr "Sākuma laiks"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1554,6 +1555,15 @@ msgstr "Iepriekšējais"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nākošais"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2370,6 +2380,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Izvēlēties"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Noņemt"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2378,6 +2393,10 @@ msgstr[0] "Izvelēta %1$s vienība"
 msgstr[1] "Izvēlētas %1$s vienības"
 msgstr[2] "Izvēlētas %1$s vienības"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
@@ -2385,6 +2404,14 @@ msgid_plural "%1$d addresses selected"
 msgstr[0] "Izvēlēta %1$s adrese"
 msgstr[1] "Izvēlētas %1$s adreses"
 msgstr[2] "Izvēlētas %1$s adreses"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Notīrīt izvēles"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3166,6 +3193,20 @@ msgstr "Saglabāts kontakta pievienojums"
 msgid "Saved attachment"
 msgstr "Saglabāts pievienojums"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3247,6 +3288,31 @@ msgid "You need to use iOS %n or higher."
 msgstr "Jums ir jāizmanto iOS %n vai jaunāka versija."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr ""
+"Atbalstītas tiek Chrome %1$d, Firefox %2$d, IE %3$d, un Safari %4$d un "
+"jaunākas versijas."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Jūsu operētājsistēma netiek atbalstīta."
 
@@ -3286,6 +3352,10 @@ msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Jūsu pārlūkprogrammā ir atspējota sīkfailu funkcionalitāte. Lūdzu to "
 "iespējojiet."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3339,8 +3409,8 @@ msgstr "Aizvērt premiālās funkcijas"
 msgid "Try now!"
 msgstr "Izmēģineit tūlīt!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Vēlreiz"
@@ -3596,6 +3666,14 @@ msgstr "Jauna adrešu grāmata"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
 msgstr "Jauna mape"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4074,11 +4152,6 @@ msgstr "Nav importējamu uzdevumu"
 msgid "There was no appointment data to import"
 msgstr "Nav importējamu mītiņu datu"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Rinda %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Lūdzu izvēlieties importējamo failu"
@@ -4196,6 +4269,22 @@ msgstr "Automātiska atslēgšanās"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Atslēgties"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Vai esat pārliecināti?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5393,7 +5482,8 @@ msgstr "Pievienot aprakstu"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Izmērs"
@@ -6188,6 +6278,16 @@ msgstr "Failu kvota"
 msgid "Need more space?"
 msgstr "Vai ir nepieciešama papildus vieta?"
 
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6380,10 +6480,6 @@ msgstr "Administratora loma"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Lietotājs"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Noņemt"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7846,6 +7942,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "E-pasts no %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Kļūda pie ziņojuma satura ielādēšanas"
 
@@ -7993,8 +8093,8 @@ msgstr "turpināt, ja izpildās visi šie nosacījumi"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "turpināt, ja izpildās jebkurš no nosacījumiem"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8112,11 +8212,6 @@ msgstr "Adresātu saraksts"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Izmērs (baiti)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Ir lielāks par"
 
@@ -8151,11 +8246,6 @@ msgstr "Pārsūtīts-No"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Pārsūtīts-Kam"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "Galvene eksistē"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8213,6 +8303,16 @@ msgstr "Regex"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Nav Regex"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Eksistē"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8628,12 +8728,6 @@ msgstr "Krāsaini iezīmētas rindas"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Lietot fiksēta garuma fontu teksta formāta vēstulēs"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Izkrāšņot vienkārša teksta vēstules"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9169,6 +9263,11 @@ msgid "Install"
 msgstr "Uzstādīt"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Premium funkcijas"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Pieslēgt ierīci"
 
@@ -9184,10 +9283,6 @@ msgstr "Ņemiet %1$s sev līdz! Aktuālā informācija vienmēr visās jūsu ier
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "atpakaļ"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Premium funkcijas"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11232,8 +11327,27 @@ msgstr "Uzaicināt %s"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Notīrīt izvēles"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Lai izmainītu laiku, izmantojiet bultiņas taustiņus uz augšu un uz leju. "
+#~ "Izvēlnes aizvēršanai piespiediet 'ESC' taustiņu."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Rinda %1$d: %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "turpināt, ja izpildās jebkurš no nosacījumiem"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Izmērs (baiti)"
+
+#~ msgid "Header exists"
+#~ msgstr "Galvene eksistē"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Izkrāšņot vienkārša teksta vēstules"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Konfigurēt %1$s"
@@ -11276,9 +11390,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "Noteikums nav spēkā līdz"
-
-#~ msgid "Exists"
-#~ msgstr "Eksistē"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Pielietot, ja izpildās jebkurš nosacījums"
@@ -11940,9 +12051,6 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Vai tiešām vēlaties neatgriezeniski izdzēst visu e-pastu no šīs mapes? "
 #~ "Izdzēstais e-pasts būs neatgriezeniski zudis."
-
-#~ msgid "Are you sure?"
-#~ msgstr "Vai esat pārliecināti?"
 
 #~ msgid "Armenia"
 #~ msgstr "Armēnija"
@@ -16178,9 +16286,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Start the presentation"
 #~ msgstr "Sākt prezentāciju"
-
-#~ msgid "Start time"
-#~ msgstr "Sākuma laiks"
 
 #~ msgid "Start:"
 #~ msgstr "Sākums:"

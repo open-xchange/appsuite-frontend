@@ -40,6 +40,14 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('You need to use Android %n or higher.');
         //#. %n is the lowest version of iOS
         gt('You need to use iOS %n or higher.');
+        gt('Your platform is not supported!');
+        gt('This platform is currently not supported.');
+        //#. all variables are version strings of the browsers, like 52 in Chrome 52
+        gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.');
+        //#. 'Google Chrome' is a brand and should not be translated
+        gt('For best results we recommend using Google Chrome for Android.');
+        //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
+        gt('Get the latest version from the ');
         gt('Your operating system is not supported.');
         gt('Your password is expired. Please change your password to continue.');
         gt('Please update your browser.');

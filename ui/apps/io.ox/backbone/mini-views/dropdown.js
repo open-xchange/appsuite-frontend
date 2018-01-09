@@ -68,7 +68,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             $('body').append(
                 this.$overlay.append(
                     $('<div class="abs">').on('mousewheel touchmove', false)
-                    .on('click', function (e) {
+                    .on('click contextmenu', function (e) {
                         e.stopPropagation();
                         self.resetDropdownOverlay();
                         return false;

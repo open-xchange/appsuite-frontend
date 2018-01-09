@@ -30,6 +30,8 @@
         top: 7px;
         margin-left: @monthview-cw-width;
         width: auto;
+        // keep this because it shows the scrollbar on the right to make sure the days align with the cells of the tables
+        overflow-y: scroll;
 
         .footer {
             left: 0;
@@ -51,10 +53,13 @@
         right: 0;
         bottom: 0;
         left: 0;
-        padding: 0 100px;
 
         .overflow-y(scroll);
         .backface-visibility(hidden);
+
+        .month {
+            width: 100%;
+        }
 
         .week {
             padding-left: @monthview-cw-width;
@@ -82,7 +87,6 @@
             }
 
             .day-filler {
-                width: 100/7%;
                 background-color: @white;
 
                 &.bordertop   { border-top:   1px solid @monthview-border; }
@@ -90,7 +94,6 @@
             }
 
             .day {
-                width: 100/7%;
                 border-top: 1px solid @monthview-border;
                 border-right: 1px solid @monthview-border;
                 background-color: transparent;
@@ -200,13 +203,10 @@
         .scrollpane .week {
             padding-left: @adjusted-width;
 
-            .week-info { width: @adjusted-width}
-        }
-    }
-
-    @media (max-width: 768px) {
-        .scrollpane {
-            padding: 0 40px;
+            .week-info {
+                width: @adjusted-width;
+                min-width: @adjusted-width;
+            }
         }
     }
 
@@ -223,6 +223,7 @@
         .footer-container {
             top: 0;
             margin-left: 0;
+            overflow: hidden;
 
             .footer {
                 left: 0;
@@ -237,7 +238,6 @@
         .scrollpane {
             -webkit-user-select: none;
             top: 33px;
-            padding: 0;
 
             .week {
                 min-height: 40px;
@@ -288,10 +288,6 @@
 
                     &.bordertop { border: 0; }
                 }
-            }
-
-            .month {
-                width: 100%;
             }
 
             .month-name {

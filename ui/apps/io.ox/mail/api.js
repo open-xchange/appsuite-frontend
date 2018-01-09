@@ -261,7 +261,7 @@ define('io.ox/mail/api', [
 
     function allowImages(obj) {
         if (!settings.get('allowHtmlImages', false)) return false;
-        if (accountAPI.is('spam|trash', obj.folder_id || obj.folder)) return false;
+        if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
     }
 
@@ -815,7 +815,7 @@ define('io.ox/mail/api', [
         // All elements should be from one folder, it's not possbile in App Suite UI
         // to select mails from different folders and mark them as read. So it should
         // be ok to use the first element only
-        var collectAddresses = !accountAPI.is('spam', list[0].folder_id) && !accountAPI.is('trash', list[0].folder_id);
+        var collectAddresses = !accountAPI.is('spam|confirmed_spam|trash', list[0].folder_id);
 
         _(list).each(function (obj) {
             obj.flags = obj.flags | 32;
@@ -1904,7 +1904,7 @@ define('io.ox/mail/api', [
         // drop seen messages (faster check first)
         if ((data.flags & 32) === 32) return false;
         // drop messages from spam and trash
-        return !accountAPI.is('spam|trash', data.folder_id);
+        return !accountAPI.is('spam|confirmed_spam|trash', data.folder_id);
     }
 
     api.allMessagesFolder = settings.get('allMessagesFolder', 'default0/virtual/all');
