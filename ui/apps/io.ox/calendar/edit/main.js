@@ -6,9 +6,10 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
 define('io.ox/calendar/edit/main', [
@@ -288,10 +289,10 @@ define('io.ox/calendar/edit/main', [
                                 self.getWindow().idle();
 
                                 // restore times (we add a day before saving allday appointments)
-                                if (self.tempEndDate && self.tempStartDate) {
-                                    self.model.set('endDate', self.tempEndDate);
-                                    self.model.set('startDate', self.tempStartDate);
-                                    self.tempEndDate = self.tempStartDate = null;
+                                if (self.view.tempEndDate && self.view.tempStartDate) {
+                                    self.model.set('endDate', self.view.tempEndDate, { silent: true });
+                                    self.model.set('startDate', self.view.tempStartDate, { silent: true });
+                                    self.view.tempEndDate = self.view.tempStartDate = null;
                                 }
                             })
                             .on('ignore', function () {
