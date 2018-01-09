@@ -89,7 +89,7 @@ define('io.ox/core/main/appcontrol', [
             badge = $('<div class="indicator" aria-hidden="true">');
         }
 
-        return $('<div class="lcell">').attr('data-app-id', o.path).append(
+        return $('<div class="lcell">').attr('data-app-id', o.id).append(
             badge,
             $('<div class="svgwrap">').append($svg),
             $('<div class="title">').text(o.title)
@@ -100,7 +100,7 @@ define('io.ox/core/main/appcontrol', [
         return orderedApps.filter(function (o) {
             return o.quicklaunch;
         }).map(function (o) {
-            return $('<button type="button" class="btn btn-link">').attr('data-app-id', o.path).append(drawIcon(o));
+            return $('<button type="button" class="btn btn-link">').attr('data-app-id', o.id).append(drawIcon(o));
         });
     }
 
@@ -122,7 +122,7 @@ define('io.ox/core/main/appcontrol', [
                         appLauncherIcon
                     ),
                     $('<div id="io-ox-launchgrid">').on('click', '.lcell', function (e) {
-                        ox.launch($(e.currentTarget).attr('data-app-id'));
+                        ox.launch($(e.currentTarget).attr('data-app-id') + '/main');
                         toggleOverlay();
                     }).append(
                         $('<div class="cflex">').append(
@@ -132,7 +132,7 @@ define('io.ox/core/main/appcontrol', [
                     $('<div id="io-ox-launchgrid-overlay-inner">').on('click', toggleOverlay)
                 ),
                 $('<div id="io-ox-quicklaunch">').on('click', 'button', function (e) {
-                    ox.launch($(e.currentTarget).attr('data-app-id'));
+                    ox.launch($(e.currentTarget).attr('data-app-id') + '/main');
                 }).append(drawQuicklaunch()),
                 $('<div id="io-ox-topsearch" class="hidden-xs hidden-sm">').text('Search'),
                 $('<div id="io-ox-toprightbar">').append(
@@ -145,6 +145,10 @@ define('io.ox/core/main/appcontrol', [
             );
 
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
+
+            ox.ui.apps.on('launch resume', function (model) {
+                $('#io-ox-launchgrid').find('.lcell[data-app-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+            });
         }
     });
 
