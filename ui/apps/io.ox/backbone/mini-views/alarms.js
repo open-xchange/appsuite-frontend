@@ -81,6 +81,8 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm) {
+            if (!alarm || !alarm.trigger) return;
+
             var self = this,
                 row, container;
 

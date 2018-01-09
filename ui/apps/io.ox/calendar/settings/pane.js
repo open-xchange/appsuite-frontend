@@ -23,25 +23,6 @@ define('io.ox/calendar/settings/pane', [
 
     'use strict';
 
-    // apply some defaults
-    if (settings.get('chronos/defaultAlarmDateTime') === undefined) {
-        settings.set('chronos/defaultAlarmDateTime', [{
-            action: 'DISPLAY',
-            description: '',
-            trigger: { duration: '-PT15M', related: 'START' }
-        }]);
-    }
-    if (settings.get('chronos/defaultAlarmDate') === undefined) {
-        settings.set('chronos/defaultAlarmDate', [{
-            action: 'DISPLAY',
-            description: '',
-            trigger: { duration: '-PT12H', related: 'START' }
-        }]);
-    }
-    if (settings.get('birthdays/defaultAlarmDate') === undefined) {
-        settings.set('birthdays/defaultAlarmDate', []);
-    }
-
     ext.point('io.ox/calendar/settings/detail').extend({
         index: 100,
         id: 'view',
