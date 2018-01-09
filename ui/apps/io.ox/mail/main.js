@@ -1200,10 +1200,8 @@ define('io.ox/mail/main', [
                         app.listView.selection.selectEvents(app.listView.selection.getItems());
                     }
                 }
-                // don't save for list layout, doesn't make sense and breaks it for other layouts
-                if (layout !== 'list') {
-                    this.listControl.applySizeConstraints();
-                }
+
+                this.listControl.applySizeConstraints();
             };
 
             app.props.on('change:layout', function () {
