@@ -97,6 +97,11 @@ define('plugins/portal/mail/register', [
         initialize: function () {
             // reset is only triggered by garbage collection and causes wrong "empty inbox" messages under certain conditions
             this.listenTo(this.collection, 'add remove set', this.render);
+            this.listenTo(this.collection, 'expire', this.onExpire);
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         },
 
         render: function (baton) {
