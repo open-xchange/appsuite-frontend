@@ -24,7 +24,7 @@ Scenario('lists all sessions', function (I) {
     // web clients
     I.see('Exchange Active Sync(Unknown device)');
     I.see('Chrome(Android)');
-    I.see('Mailapp(iOS)');
+    I.see('OX Mail(iOS)');
     I.see('Safari(iOS)');
     I.see('Firefox(Mac)');
     I.see('Chrome(Mac)');

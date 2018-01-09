@@ -136,8 +136,9 @@ define('io.ox/settings/sessions/settings/pane', [
         index: 200,
         customize: function () {
             switch (this.get('client')) {
+                case 'open-xchange-mailapp':
                 case 'open-xchange-mobile-api-facade':
-                    this.set('application', settings.get('productname/mailapp') || 'Mailapp');
+                    this.set('application', settings.get('productname/mailapp') || 'OX Mail');
                     break;
                 case 'OpenXchange.iosClient.OXDrive':
                 case 'OpenXchange.Android.OXDrive':
@@ -249,6 +250,10 @@ define('io.ox/settings/sessions/settings/pane', [
     var SessionView = Backbone.View.extend({
 
         className: 'session-list-container',
+
+        initialize: function () {
+            this.$el.data('view', this);
+        },
 
         render: function () {
             var self = this;
