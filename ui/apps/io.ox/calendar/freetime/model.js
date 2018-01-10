@@ -33,7 +33,7 @@ define('io.ox/calendar/freetime/model', [
                 showFree: settings.get('scheduling/showFree', false),
                 showReserved: settings.get('scheduling/showReserved', true),
                 showFineGrid: settings.get('scheduling/showFineGrid', false),
-                appointments: {},
+                timeSlots: {},
                 dateRange: settings.get('scheduling/dateRange', 'week')
             });
         }

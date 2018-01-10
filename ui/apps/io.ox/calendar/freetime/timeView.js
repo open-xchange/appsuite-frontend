@@ -284,51 +284,75 @@ define('io.ox/calendar/freetime/timeView', [
             _(baton.model.get('attendees').models).each(function (attendee) {
                 var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity')).appendTo(table);
 
-                _(baton.model.get('appointments')[attendee.get('entity')]).each(function (appointment, index) {
-                    var start = moment.tz(appointment.startDate.value, appointment.startDate.tzid).valueOf(),
-                        end = moment.tz(appointment.endDate.value, appointment.endDate.tzid).valueOf();
+                _(baton.model.get('timeSlots')[attendee.get('entity')]).each(function (timeSlot, index) {
+                    var event;
+                    // analyze the timeslot to see if there is an event, and if so check the start dates
+                    if (timeSlot.event) {
+                        // we have an event that we can use
+                        event = timeSlot.event;
+                        if (util.isAllday(event)) {
+                            event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
+                            event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
+                        }
+                    } else {
+                        // we only have a timeslot. Fake some event data, so code can be reused
+                        event = {
+                            //#. used to describe a time frame that is blocked in the scheduling view, when no further information is available (appointment title etc.)
+                            summary: gt('Blocked time frame'),
+                            startDate: { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) },
+                            endDate: { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) },
+                            transp: timeSlot.fbType === 'BUSY' ? 'OPAQUE' : 'TRANSPARENT',
+                            isTimeslot: true
+                        };
+                    }
+
+                    var start = moment.tz(event.startDate.value, event.startDate.tzid).valueOf(),
+                        end = moment.tz(event.endDate.value, event.endDate.tzid).valueOf();
 
                     var left = baton.view.timeToPosition(start),
                         right = 100 - baton.view.timeToPosition(end),
-                        appointmentNode = $('<div class="appointment" draggable="false">')
-                            .addClass(availabilityClasses[appointment.transp])
+                        eventNode = $('<div class="appointment" draggable="false">')
+                            .addClass(availabilityClasses[event.transp])
                             .css({ left: left + '%', right: right + '%' });
 
                     // appointment has a width of 0 it doesn't need to be drawn (happens if appointment is in non-working-times and the option to display them is deactivated)
                     if (100 - left - right === 0) {
                         return;
                     }
-                    appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.transp]] + index + (util.isAllday(appointment) ? 0 : 2000));
+                    eventNode.css('z-index', 1 + zIndexbase[availabilityClasses[event.transp]] + index + (util.isAllday(event) ? 0 : 2000));
 
-                    if (appointment.summary) {
-                        appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(
-                            $('<div class="title">').text(appointment.summary).append(
-                                $('<span class="appointment-time">').text(util.getTimeInterval(appointment))
-                            )
-                        )
-                        .attr({
-                            title: appointment.summary + (appointment.location ? ' ' + appointment.location : ''),
-                            'aria-label': appointment.summary,
+                    if (event.summary) {
+                        if (!event.isTimeslot) {
+                            eventNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(
+                                $('<div class="title">').text(event.summary).append(
+                                    $('<span class="appointment-time">').text(util.getTimeInterval(event))
+                                )
+                            );
+                        }
+
+                        eventNode.attr({
+                            title: event.summary + (event.location ? ' ' + event.location : ''),
+                            'aria-label': event.summary,
                             'data-toggle': 'tooltip'
                         }).tooltip({ container: tooltipContainer });
                     }
-                    if (appointment.location && appointment.location !== '') {
-                        appointmentNode.addClass('has-location').append($('<div class="location">').text(appointment.location));
+                    if (event.location && event.location !== '') {
+                        eventNode.addClass('has-location').append($('<div class="location">').text(event.location));
                     }
 
-                    if (baton.view.parentView.options.isApp && (appointment.folder || settings.get('freeBusyStrict', true) === false)) {
-                        appointmentNode.addClass('has-detailview').on('click', function (e) {
+                    if (!event.isTimeslot && baton.view.parentView.options.isApp && (event.folder || settings.get('freeBusyStrict', true) === false)) {
+                        eventNode.addClass('has-detailview').on('click', function (e) {
                             //don't open if this was a lasso drag
                             if (baton.view.lassoEnd === baton.view.lassoStart) {
                                 require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail'], function (dialogs, detailView) {
                                     new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                                        if (appointment.folder_id === undefined) {
-                                            popup.append(detailView.draw(appointment));
+                                        if (event.folder_id === undefined) {
+                                            popup.append(detailView.draw(event));
                                             return;
                                         }
                                         popup.busy();
                                         var dialog = this;
-                                        api.get(appointment).then(
+                                        api.get(event).then(
                                             function (data) {
                                                 popup.idle().append(detailView.draw(data));
                                             },
@@ -344,7 +368,7 @@ define('io.ox/calendar/freetime/timeView', [
                             }
                         });
                     }
-                    attendeeTable.append(appointmentNode);
+                    attendeeTable.append(eventNode);
                 });
             });
             // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
@@ -415,7 +439,7 @@ define('io.ox/calendar/freetime/timeView', [
                 self.getAppointmentsInstant();
             });
             this.model.on('change:dateRange', self.onChangeDateRange.bind(this));
-            this.model.on('change:appointments', self.renderBody.bind(this));
+            this.model.on('change:timeSlots', self.renderBody.bind(this));
             this.model.on('change:zoom', self.updateZoom.bind(this));
             this.model.on('change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateVisibility.bind(this));
 
@@ -512,7 +536,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         renderBody: function () {
-            if (this.model.get('attendees').length !== _(this.model.get('appointments')).keys().length) {
+            if (this.model.get('attendees').length !== _(this.model.get('timeSlots')).keys().length) {
                 this.getAppointmentsInstant();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });
@@ -538,13 +562,13 @@ define('io.ox/calendar/freetime/timeView', [
                 from,
                 until,
                 attendees = attendees = this.model.get('attendees').toJSON(),
-                appointments = {};
+                timeSlots = {};
 
             if (attendees.length === 0) return $.when();
 
             // no need to get appointments for every participant all the time
             if (addOnly === true) {
-                var keys = _(self.model.get('appointments')).keys();
+                var keys = _(self.model.get('timeSlots')).keys();
                 attendees = _(attendees).filter(function (attendee) {
                     return _(keys).indexOf(String(attendee.entity)) === -1;
                 });
@@ -568,23 +592,23 @@ define('io.ox/calendar/freetime/timeView', [
                     return;
                 }
                 if (addOnly === true) {
-                    appointments = self.model.get('appointments');
+                    timeSlots = self.model.get('timeSlots');
                 }
 
                 for (var i = 0; i < attendees.length; i++) {
                     // only events for now
-                    appointments[attendees[i].entity] = _.compact(_(items[i].freeBusyTime).pluck('event'));
+                    timeSlots[attendees[i].entity] = _.compact(items[i].freeBusyTime);
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
                 // set appointments silent, force trigger to redraw correctly. (normal setting does not trigger correctly when just switching times)
-                self.model.set('appointments', appointments, { silent: true }).trigger('change:appointments');
+                self.model.set('timeSlots', timeSlots, { silent: true }).trigger('change:timeSlots');
             });
         },
 
         removeParticipant: function (model) {
             var node = this.bodyNode.find('.appointment-table[data-value="' + model.get('entity') + '"]'),
-                appointments = this.model.get('appointments');
+                timeSlots = this.model.get('timeSlots');
             if (node.length) {
                 node.remove();
                 // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
@@ -593,9 +617,9 @@ define('io.ox/calendar/freetime/timeView', [
                 // trigger scroll for lazyload
                 this.parentView.participantsSubview.bodyNode.trigger('scroll');
             }
-            delete appointments[model.get('id')];
+            delete timeSlots[model.get('id')];
             // silent or we would trigger a redraw
-            this.model.set('appointments', appointments, { silent: true });
+            this.model.set('timeSlots', timeSlots, { silent: true });
         },
 
         onSelectHour: function (e) {
