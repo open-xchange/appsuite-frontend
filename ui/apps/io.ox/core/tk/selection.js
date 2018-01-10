@@ -1145,6 +1145,7 @@ define('io.ox/core/tk/selection', [
                             // very wrong to jump back to an element without a visual indicator.
                             if (getLastSelectedItem()) {
                                 // just set 'last' to the last selected item, prev should stay in case of a multiselection
+                                // it's also important when the marker (ctrl+arrows) are used to restore a correct 'last' item
                                 last = getLastSelectedItem();
                             }
                         }
