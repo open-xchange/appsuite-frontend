@@ -501,7 +501,10 @@ define('io.ox/files/main', [
                 'change': function () {
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.hide().siblings().show();
-                        app.mysharesListView.trigger('listview:shown');
+                        if (app.mysharesListView) {
+                            // to get a notification when listView is rendered complete
+                            app.mysharesListView.trigger('listview:shown');
+                        }
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -597,7 +600,10 @@ define('io.ox/files/main', [
                     if (app.myFavoritesListViewControl) {
                         app.myFavoritesListViewControl.$el.hide().siblings().show();
                         app.myFavoriteListView.selection.clear();
-                        app.mysharesListView.trigger('listview:shown');
+                        if (app.mysharesListView) {
+                            // to get a notification when listView is rendered complete
+                            app.mysharesListView.trigger('listview:shown');
+                        }
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();

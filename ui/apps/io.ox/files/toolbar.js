@@ -168,6 +168,20 @@ define('io.ox/files/toolbar', [
             //
             // --- LO ----
             //
+            'addToFavorites': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Add to Favorites'),
+                ref: 'io.ox/files/favorites/add',
+                section: 'favorites'
+            },
+            'removeFromFavorites': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Remove from favorites'),
+                ref: 'io.ox/files/favorites/remove',
+                section: 'favorites'
+            },
             'rename': {
                 prio: 'lo',
                 mobile: 'lo',

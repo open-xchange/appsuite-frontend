@@ -217,12 +217,29 @@ define('io.ox/core/folder/selection', [], function () {
             this.selectableVirtualFolders[id] = true;
         },
 
+        /**
+         * Open folder or show in drive on tree view selection.
+         */
         triggerChange: _.debounce(function (items) {
-            var item = (items || this.getItems()).filter('.selected').first(),
+            var self = this,
+                item = (items || self.getItems()).filter('.selected').first(),
                 id = item.attr('data-id'),
+
+                // Only true for files in Drive
+                showInDrive = item.attr('data-show-in-drive'),
                 isVirtual = /^virtual/.test(id);
-            // trigger change event on view
-            this.view.trigger(isVirtual && !this.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
+            if (showInDrive) {
+                require(['io.ox/core/extensions', 'io.ox/files/api', 'io.ox/core/extPatterns/actions']).then(function (ext, api, actions) {
+                    var models = api.pool.get('detail').get(id);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({
+                        models: [models],
+                        app: self.view.app,
+                        alwaysChange: true
+                    }));
+                });
+            } else if (self.view) {
+                self.view.trigger(isVirtual && !self.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
+            }
         }, 300)
     });
 

@@ -43,7 +43,7 @@ define('io.ox/files/favorite/toolbar', [
     new actions.Action('io.ox/files/favorite/remove', {
         requires: 'one',
         action: function (baton) {
-            baton.model.collection.remove(baton.model);
+            baton.collection.remove(baton.model);
         }
     });
 

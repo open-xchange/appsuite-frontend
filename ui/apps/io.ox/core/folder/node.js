@@ -69,7 +69,7 @@ define('io.ox/core/folder/node', [
         onReset: function () {
 
             var o = this.options,
-                models = this.collection.filter(this.getFilter()),
+                models = o.tree.module === 'infostore' ? this.collection.models : this.collection.filter(this.getFilter()),
                 exists = {};
 
             // recycle existing nodes / use detach to keep events
@@ -102,8 +102,8 @@ define('io.ox/core/folder/node', [
         },
 
         onAdd: function (model) {
-            // filter first
-            if (!this.getFilter()(model)) return;
+            // filter first (only for folders)
+            if (!model.getFileType && !this.getFilter()(model)) return;
             // add
             var node = this.getTreeNode(model);
             this.$.subfolders.append(node.render().$el);
@@ -328,9 +328,16 @@ define('io.ox/core/folder/node', [
 
             // also set: folder, parent, tree
 
-            this.model = api.pool.getModel(o.model_id);
-            this.noSelect = !this.model.can('read');
-            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
+            if (o.fileType) {
+                var self = this;
+                require(['io.ox/files/api'], function (filesAPI) {
+                    self.model = filesAPI.pool.get('detail').get(o.model_id);
+                });
+            } else {
+                this.model = api.pool.getModel(o.model_id);
+                this.noSelect = !this.model.can('read');
+                this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
+            }
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.realNames = options.tree.realNames;
@@ -372,7 +379,7 @@ define('io.ox/core/folder/node', [
                 offset = 22;
             }
 
-            var dsc = !!this.model.get('isDSC');
+            var dsc = this.model && this.model.get('isDSC');
 
             // draw scaffold
             this.$el
@@ -381,12 +388,13 @@ define('io.ox/core/folder/node', [
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
+                    'data-is-file': !!this.model.getFileType,
                     'aria-label': this.getTitle()
                 })
                 .append(
                     this.$.selectable = $('<div class="folder-node" aria-hidden="true">').css('padding-left', (o.level * this.indentation) + offset).append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
+                        this.$.icon = $('<div class="folder-icon"><i class="fa ' + (o.fileType ? 'file-type-icon' : 'fa-fw') + '" aria-hidden="true"></i></div>'),
                         $('<div class="folder-label">').append(this.$.label = $('<div role="presentation">').text(this.getTitle())),
                         this.$.counter = $('<div class="folder-counter">'),
                         this.$.buttons = $('<div class="folder-buttons">')
@@ -547,11 +555,15 @@ define('io.ox/core/folder/node', [
         },
 
         renderAttributes: function () {
-            this.$el.attr({
+            var attributes = {
                 'data-id': this.folder,
                 'data-model': this.options.model_id,
                 'data-contextmenu-id': this.options.contextmenu_id
-            });
+            };
+            if (this.options.showInDrive) {
+                attributes['data-show-in-drive'] = true;
+            }
+            this.$el.attr(attributes);
         },
 
         isEmpty: function () {

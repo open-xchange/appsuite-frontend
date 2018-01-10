@@ -761,7 +761,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Action to switch to the folder of a shared file
+    // Action to switch to the folder of a file
     new Action('io.ox/files/actions/show-in-folder', {
         requires: function (e) {
             if (_.device('smartphone')) return false;
@@ -779,7 +779,10 @@ define('io.ox/files/actions', [
                 listView = app.listView,
                 mysharesListView = app.mysharesListView,
                 myfavoritesListView = app.myfavoritesListView,
-                cid = app.listView.getCompositeKey(model);
+                cid = app.listView.getCompositeKey(model),
+
+                // refresh the view and select file even if the folder is already selected
+                alwaysChange = baton.alwaysChange;
 
             function select() {
                 if (mysharesListView) {
@@ -806,7 +809,11 @@ define('io.ox/files/actions', [
                 listView.on('listview:reset', select);
             }
 
-            app.folder.set(folder_id);
+            if (alwaysChange && app.folder.get() === folder_id) {
+                select();
+            } else {
+                app.folder.set(folder_id);
+            }
         }
     });
 
@@ -818,6 +825,84 @@ define('io.ox/files/actions', [
                 shareAPI.revoke(collection, baton.model ? baton.model : baton.models[0]).then(function () {
                     yell('success', gt('Revoked access.'));
                 }).fail(yell);
+            });
+        }
+    });
+
+    // Action to add files/folders to favorites
+    new Action('io.ox/files/favorites/add', {
+        requires: function (e) {
+            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
+                if (Array.isArray(e.context)) {
+                    var result = true;
+                    _.each(e.context, function (element) {
+                        var favorites = e.baton.app.listView.favorites,
+                            isFavorite = _.find(favorites, function (elem) {
+                                if (elem.id === element.id) {
+                                    return true;
+                                }
+                            });
+                        if (isFavorite) {
+                            result = false;
+                        }
+                    });
+                    return result;
+                }
+                var id = e.context.id,
+                    favorites = e.baton.app.listView.favorites,
+                    isFavorite = _.find(favorites, function (elem) {
+                        if (elem.id === id) {
+                            return true;
+                        }
+                    });
+                if (isFavorite) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        multiple: function (list) {
+            ox.load(['io.ox/files/actions/favorites']).done(function (action) {
+                action.add(list);
+            });
+        }
+    });
+
+    // Action to remove files/folders to favorites
+    new Action('io.ox/files/favorites/remove', {
+        requires: function (e) {
+            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
+                if (Array.isArray(e.context)) {
+                    var result = false;
+                    _.each(e.context, function (element) {
+                        var favorites = e.baton.app.listView.favorites,
+                            isFavorite = _.find(favorites, function (elem) {
+                                if (elem.id === element.id) {
+                                    return true;
+                                }
+                            });
+                        if (isFavorite) {
+                            result = true;
+                        }
+                    });
+                    return result;
+                }
+                var id = e.context.id,
+                    favorites = e.baton.app.listView.favorites,
+                    isFavorite = _.find(favorites, function (elem) {
+                        if (elem.id === id) {
+                            return true;
+                        }
+                    });
+                if (isFavorite) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        multiple: function (list) {
+            ox.load(['io.ox/files/actions/favorites']).done(function (action) {
+                action.remove(list);
             });
         }
     });

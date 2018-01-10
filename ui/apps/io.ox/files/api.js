@@ -901,6 +901,19 @@ define('io.ox/files/api', [
             return this.get(_.cid(item)).toJSON();
         }
 
+        /**
+         * Retrieve a list of models or a list of FileDescriptors. Merge all files into pool.
+         *
+         * @param {FileDescriptor[]} ids
+         *  Items to retrieve
+         *
+         * Additional Parameters
+         * @param {Object} options Parameter Object
+         *  @param {Boolean} options.fullModels
+         *   Return FileDescriptor or Model List
+         *  @param {Boolean} options.cache
+         *   Use cache or nocache
+         */
         return function (ids, options) {
 
             var uncached = ids, collection = pool.get('detail');
@@ -913,6 +926,7 @@ define('io.ox/files/api', [
             if (options.cache) uncached = _(ids).reject(has, collection);
 
             // all cached?
+            if (options.fullModels && uncached.length === 0) return $.when(_(ids).map(has, collection));
             if (uncached.length === 0) return $.when(_(ids).map(getter, collection));
 
             return http.fixList(uncached, http.PUT({
@@ -924,6 +938,9 @@ define('io.ox/files/api', [
                 // add new items to the pool
                 _(array).each(mergeDetailInPool);
                 // reconstruct results
+                if (options.fullModels) {
+                    return _(ids).map(has, collection);
+                }
                 return _(ids).map(getter, collection);
             });
         };
