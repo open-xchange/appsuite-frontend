@@ -1144,7 +1144,8 @@ define('io.ox/core/tk/selection', [
                             // this line below, but since unselected focused element are not handled so far it feels
                             // very wrong to jump back to an element without a visual indicator.
                             if (getLastSelectedItem()) {
-                                last = prev = getLastSelectedItem();
+                                // just set 'last' to the last selected item, prev should stay in case of a multiselection
+                                last = getLastSelectedItem();
                             }
                         }
                     }
