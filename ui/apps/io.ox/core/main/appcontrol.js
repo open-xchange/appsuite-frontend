@@ -108,7 +108,7 @@ define('io.ox/core/main/appcontrol', [
     ext.point('io.ox/core/appcontrol').extend({
         id: 'default',
         draw: function () {
-            if (_.device('!desktop')) return;
+            //if (_.device('!desktop')) return;
 
             $('#io-ox-appcontrol').show();
 
