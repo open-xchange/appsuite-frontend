@@ -321,7 +321,7 @@ define('io.ox/core/main/topbar_right', [
 
     var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
     if (dedicatedLogoutButton) {
-        ext.point('io.ox/core/topbar/right').extend({
+        ext.point('io.ox/core/appcontrol/right').extend({
             id: 'logout-button',
             index: 2000,
             draw: function () {
