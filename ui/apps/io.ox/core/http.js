@@ -661,8 +661,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         if (response[i]) {
                             // time
                             timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
-                            // data/error
-                            if (response[i].data !== undefined) {
+                            // data/error handling
+                            if (_.isEmpty(response[i])) {
+                                // jslob case
+                                data.push({ data: response[i], timestamp: timestamp });
+                            } else if (response[i].data !== undefined) {
                                 // data
                                 var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
                                 // handling for GET requests
