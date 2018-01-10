@@ -23,7 +23,6 @@ define('io.ox/core/main', [
     'io.ox/core/a11y',
     'io.ox/core/main/logout',
     'io.ox/core/main/refresh',
-    'io.ox/core/main/topbar',
     'io.ox/core/main/topbar_right',
     'io.ox/core/main/debug',
     'settings!io.ox/core',
@@ -38,7 +37,7 @@ define('io.ox/core/main', [
     'io.ox/tours/get-started',
     'io.ox/core/main/appcontrol',
     'io.ox/core/main/stages'
-], function (desktop, ext, Stage, notifications, commons, upsell, ping, a11y, logout, refresh, tb, tbr, debug, settings, gt) {
+], function (desktop, ext, Stage, notifications, commons, upsell, ping, a11y, logout, refresh, tbr, debug, settings, gt) {
 
     'use strict';
 

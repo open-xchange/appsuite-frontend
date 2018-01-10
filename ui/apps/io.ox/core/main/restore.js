@@ -15,12 +15,11 @@ define('io.ox/core/main/restore', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
     'io.ox/core/main/debug',
-    'io.ox/core/main/topbar',
     'gettext!io.ox/core'
-], function (ext, Stage, debug, tb, gt) {
+], function (ext, Stage, debug, gt) {
     'use strict';
 
-    var topbar = tb.topbar;
+    var topbar = $('#io-ox-appcontrol');
 
     var drawDesktop = function () {
         ext.point('io.ox/core/desktop').invoke('draw', $('#io-ox-desktop'), {});

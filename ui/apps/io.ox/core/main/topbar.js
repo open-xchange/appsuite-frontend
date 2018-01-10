@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/main/topbar', [
+/*define('io.ox/core/main/topbar', [
     'io.ox/core/api/apps',
     'io.ox/core/main/logout',
     'io.ox/core/upsell',
@@ -333,8 +333,9 @@ define('io.ox/core/main/topbar', [
             $('<a href="#">').addClass(closable ? 'closable' : '').attr({
                 'data-app-name': name,
                 'data-app-guid': model.guid
-            }).text(/*#, dynamic*/gt.pgettext('app', title))
-        );
+*/
+//            }).text(/*#, dynamic*/gt.pgettext('app', title))
+/*        );
         // also store dropdown node in app model
         model.set('launcherNode', launchernode);
 
@@ -388,3 +389,4 @@ define('io.ox/core/main/topbar', [
         launcherDropdown: launcherDropdown
     };
 });
+*/

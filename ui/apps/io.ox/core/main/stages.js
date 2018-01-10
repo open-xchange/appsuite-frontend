@@ -18,14 +18,13 @@ define('io.ox/core/main/stages', [
     'io.ox/core/api/apps',
     'io.ox/core/folder/api',
     'io.ox/core/main/debug',
-    'io.ox/core/main/topbar',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/main/restore'
-], function (ext, notifications, capabilities, appAPI, folderAPI, debug, tb, settings, contactsSettings, gt) {
+], function (ext, notifications, capabilities, appAPI, folderAPI, debug, settings, contactsSettings, gt) {
 
-    var topbar = tb.topbar;
+    var topbar = $('#io-ox-appcontrol');
 
     var getAutoLaunchDetails = function (str) {
         var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
@@ -216,13 +215,11 @@ define('io.ox/core/main/stages', [
 
             debug('Stage "load" > loaded.done');
 
+            ext.point('io.ox/core/appcontrol').invoke('draw');
+
             if (_.device('smartphone')) {
-                ext.point('io.ox/core/topbar').invoke('draw');
                 ext.point('io.ox/core/mobile').invoke('draw');
                 $('#io-ox-screens').css('top', '40px');
-                $('#io-ox-core #io-ox-topbar').css('top', '0');
-            } else {
-                ext.point('io.ox/core/appcontrol').invoke('draw');
             }
 
             // help here

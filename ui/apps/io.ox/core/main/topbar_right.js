@@ -22,11 +22,10 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/main/logout',
     'io.ox/core/main/refresh',
-    'io.ox/core/main/topbar',
     'io.ox/core/main/addLauncher',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, topbar, addLauncher, settings, gt) {
+], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, addLauncher, settings, gt) {
 
     function getHelp() {
         var currentApp = ox.ui.App.getCurrentApp();
