@@ -388,7 +388,7 @@ define('io.ox/core/folder/node', [
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
-                    'data-is-file': !!this.model.getFileType,
+                    'data-is-file': this.model && this.model.getFileType,
                     'aria-label': this.getTitle()
                 })
                 .append(

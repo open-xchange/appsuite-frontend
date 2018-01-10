@@ -246,13 +246,16 @@ define('io.ox/files/api', [
         },
 
         getFileType: function () {
-            if (this.isFolder()) {
+            if (this.isFolder && this.isFolder()) {
                 return 'folder';
             }
-            var extension = this.getExtension();
-            for (var type in this.types) {
-                if (this.types[type].test(extension)) return type;
+            if (this.getExtension) {
+                var extension = this.getExtension();
+                for (var type in this.types) {
+                    if (this.types[type].test(extension)) return type;
+                }
             }
+            return false;
         },
 
         getGuardType: function () {
