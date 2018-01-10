@@ -13,6 +13,8 @@
 define(['fixture!browser_support/userAgents.json'], function (userAgents) {
     describe('_.device utilities:', function () {
         afterEach(function () {
+            // reset memoization cache
+            _.device.cache = {};
             _.device.loadUA(window.navigator);
         });
 
@@ -43,7 +45,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             _(userAgents.valid[browser]).each(function (b, version) {
                 it('should detect ' + browser + ' ' + version, function () {
                     _.device.loadUA(userAgents.valid[browser][version]);
-                    expect(_.device(browser)).to.be.true;
+                    expect(_.device(browser), '_.device called with "' + browser + '"').to.be.true;
                     expect(parseFloat(_.browser[browser])).to.be.at.least(Number(version.split(' ')[0]));
                 });
             });
