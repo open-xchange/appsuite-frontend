@@ -12,12 +12,13 @@
  */
 
 define('io.ox/core/main/appcontrol', [
+    'io.ox/core/http',
     'io.ox/core/api/apps',
     'io.ox/core/manifests',
     'io.ox/core/extensions',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (appAPI, manifests, ext, settings, gt) {
+], function (http, appAPI, manifests, ext, settings, gt) {
 
     var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
         'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
@@ -148,6 +149,8 @@ define('io.ox/core/main/appcontrol', [
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
             ext.point('io.ox/core/appcontrol/logo').invoke('draw', logo);
 
+            initRefreshAnimation();
+
             ox.ui.apps.on('launch resume', function (model) {
                 $('#io-ox-launchgrid').find('.lcell[data-app-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
             });
@@ -169,6 +172,58 @@ define('io.ox/core/main/appcontrol', [
             );
         }
     });
+
+    function initRefreshAnimation() {
+
+        var count = 0,
+            timer = null,
+            useSpinner = _.device('webkit || firefox || ie > 9'),
+            duration = useSpinner ? 500 : 1500,
+            refreshIcon = null;
+
+        function off() {
+            if (count === 0 && timer === null) {
+                $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Refresh'));
+
+                if (useSpinner) {
+                    refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                    if (refreshIcon.hasClass('fa-spin')) {
+                        refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                    }
+                } else {
+                    $('#io-ox-refresh-icon').removeClass('io-ox-progress');
+                }
+            }
+        }
+
+        http.on('start', function (e, xhr, options) {
+            if (count === 0) {
+                if (timer === null && !options.silent) {
+                    $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Currently refreshing'));
+
+                    if (useSpinner) {
+                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                        if (!refreshIcon.hasClass('fa-spin')) {
+                            refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
+                        }
+                    } else {
+                        $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                    }
+                }
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    timer = null;
+                    off();
+                }, duration);
+            }
+            count++;
+        });
+
+        http.on('stop', function () {
+            count = Math.max(0, count - 1);
+            off();
+        });
+    }
 
     return exports;
 });
