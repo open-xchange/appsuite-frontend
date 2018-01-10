@@ -415,20 +415,4 @@ define('io.ox/core/main/topbar_right', [
     });
     */
 
-    ext.point('io.ox/core/topbar/right').extend({
-        id: 'logo',
-        index: 10000,
-        draw: function () {
-            // add small logo to top bar
-            this.append(
-                $('<li id="io-ox-top-logo-small">').append(
-                    $('<img>').attr({
-                        alt: ox.serverConfig.productName,
-                        src: ox.base + '/apps/themes/' + ox.theme + '/logo-large.png'
-                    })
-                )
-            );
-        }
-    });
-
 });

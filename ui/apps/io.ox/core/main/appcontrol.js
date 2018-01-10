@@ -112,7 +112,7 @@ define('io.ox/core/main/appcontrol', [
             $('#io-ox-appcontrol').show();
 
             var banner = $('#io-ox-appcontrol');
-            var taskbar;
+            var taskbar, logo;
             banner.append(
                 $('<div id="io-ox-launcher">').append(
                     $('<button type="button" class="btn btn-link" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to:">').on('click', function () {
@@ -137,7 +137,8 @@ define('io.ox/core/main/appcontrol', [
                 $('<div id="io-ox-topsearch" class="hidden-xs hidden-sm">').text('Search'),
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')
-                )
+                ),
+                logo = $('<div id="io-ox-top-logo-small">')
             );
 
             $('#io-ox-core').append(
@@ -145,6 +146,7 @@ define('io.ox/core/main/appcontrol', [
             );
 
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
+            ext.point('io.ox/core/appcontrol/logo').invoke('draw', logo);
 
             ox.ui.apps.on('launch resume', function (model) {
                 $('#io-ox-launchgrid').find('.lcell[data-app-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
@@ -153,6 +155,20 @@ define('io.ox/core/main/appcontrol', [
     });
 
     window.exports = exports;
+
+    ext.point('io.ox/core/appcontrol/logo').extend({
+        id: 'logo',
+        index: 10000,
+        draw: function () {
+            // add small logo to top bar
+            this.append(
+                $('<img>').attr({
+                    alt: ox.serverConfig.productName,
+                    src: ox.base + '/apps/themes/' + ox.theme + '/logo-large.png'
+                })
+            );
+        }
+    });
 
     return exports;
 });
