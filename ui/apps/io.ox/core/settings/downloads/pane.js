@@ -38,10 +38,11 @@ define('io.ox/core/settings/downloads/pane', [
         });
     });
 
+    // disabled with 7.10
     /*
      * Default download: Updater
      */
-    if (capabilities.has('oxupdater') && driveClientsSettings.get('standaloneWindowsClient') !== true) {
+    /*if (capabilities.has('oxupdater') && driveClientsSettings.get('standaloneWindowsClient') !== true) {
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
             id: 'updater',
             index: 100,
@@ -77,7 +78,7 @@ define('io.ox/core/settings/downloads/pane', [
                 );
             }
         });
-    }
+    }*/
 
     // add OX Drive download links
     if (capabilities.has('drive')) {
@@ -97,7 +98,7 @@ define('io.ox/core/settings/downloads/pane', [
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 
             var $img = $('<div aria-hidden="true" class="oxdrive-shop-image">')
-                .addClass('platform')
+                .addClass(platform)
                 .css('background-image', 'url(' + imagePath + lang + '_' + platform + '.png)');
 
             return $('<a class="shoplink" target="_blank">').attr('href', url).append(
@@ -113,38 +114,35 @@ define('io.ox/core/settings/downloads/pane', [
                 // "standalone" takes care of custom branded drive clients that run without the updater
                 var standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
                     hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
-                    windowsClientUrl = standaloneClient ?
-                        ox.apiRoot + linkTo.Windows + '?session=' + ox.session :
-                        ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session,
-                    windowsClientLabel = standaloneClient ?
-                        //.# String will include the product name, "OX Drive for Windows"
-                        gt.format(gt('%s client for Windows'), productName) :
-                        //.# String will include the product name, "OX Drive for Windows"
-                        gt.format(gt('%s client for Windows (Installation via the OX Updater)'), productName);
+                    windowsClientUrl = ox.apiRoot + linkTo.Windows + '?session=' + ox.session,
+                    //.# String will include the product name, i.e. "OX Drive for Windows"
+                    windowsClientLabel = gt.format(gt('%s client for Windows'), productName);
 
                 this.append(
                     $('<section class="oxdrive">').append(
-                        $('<h2>').text(productName),
-                        hasWindowsClient ? $('<div class="shop-link-container">').append(
-                            $.txt(windowsClientLabel),
-                            $('<br>'),
-                            $('<i class="fa fa-download" aria-hidden="true">'),
-                            $('<a class="action" target="_blank">', { href: windowsClientUrl, download: '' }).text(gt('Download installation file'))
-                        ) : [],
-                        $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Mac OS"
-                            gt.format(gt('%s client for Mac OS'), productName),
-                            getShopLinkWithImage('mac_os', linkTo['Mac OS'])
-                        ),
-                        $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Mac OS"
-                            gt.format(gt('%s client for iOS'), productName),
-                            getShopLinkWithImage('iOS', linkTo.iOS)
-                        ),
-                        $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Mac OS"
-                            gt.format(gt('%s client for Android'), productName),
-                            getShopLinkWithImage('Android', linkTo.Android)
+                        $('<fieldset>').append(
+                            $('<legend class="sectiontitle">').append($('<h2>').text(productName)),
+                            hasWindowsClient ? $('<div class="shop-link-container">').append(
+                                $.txt(windowsClientLabel),
+                                $('<br>'),
+                                $('<i class="fa fa-download" aria-hidden="true">'),
+                                $('<a class="action" target="_blank">', { href: windowsClientUrl, download: '' }).text(gt('Download installation file'))
+                            ) : [],
+                            $('<div class="shop-link-container">').append(
+                                //.# String will include the product name, "OX Drive for Mac OS"
+                                gt.format(gt('%s client for Mac OS'), productName),
+                                getShopLinkWithImage('mac_os', linkTo['Mac OS'])
+                            ),
+                            $('<div class="shop-link-container">').append(
+                                //.# String will include the product name, i.e. "OX Drive for iOS"
+                                gt.format(gt('%s client for iOS'), productName),
+                                getShopLinkWithImage('iOS', linkTo.iOS)
+                            ),
+                            $('<div class="shop-link-container">').append(
+                                //.# String will include the product name, i.e. "OX Drive for Android"
+                                gt.format(gt('%s client for Android'), productName),
+                                getShopLinkWithImage('Android', linkTo.Android)
+                            )
                         )
                     )
                 );
