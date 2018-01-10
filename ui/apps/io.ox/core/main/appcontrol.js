@@ -188,7 +188,12 @@ define('io.ox/core/main/appcontrol', [
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                     if (refreshIcon.hasClass('fa-spin')) {
-                        refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                        refreshIcon.addClass('fa-spin-paused');
+                        var done = false;
+                        setTimeout(function () { done = true; }, 2546);
+                        refreshIcon.on('animationiteration', function (event) {
+                            if (done) $(event.target).removeClass('fa-spin');
+                        });
                     }
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
