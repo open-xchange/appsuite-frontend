@@ -129,6 +129,13 @@
     flex-wrap: @wrap;
 }
 
+.flex-center(@direction: column) {
+    display: flex;
+    flex-direction: @direction;
+    justify-content: center;
+    align-items: center;
+}
+
 // .fontWeight(@weight) when (@weight = 300) {
 //     // automatically inject light font-family, especially for Windows
 //     font-family: @light-font-family;
