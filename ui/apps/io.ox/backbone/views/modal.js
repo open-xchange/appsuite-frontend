@@ -180,7 +180,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         disableFormElements: function () {
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
-                if ($(this).attr('data-action') === 'cancel') return;
+                if ($(this).attr('data-action') === 'cancel' || $(this).attr('data-state') === 'manual') return;
                 $(this).toggleClass('disabled', $(this).prop('disabled')).prop('disabled', true);
             });
         },
@@ -188,6 +188,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         enableFormElements: function () {
             // enable all form elements
             this.$(':input').each(function () {
+                if ($(this).attr('data-state') === 'manual') return;
                 $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
             });
         },
