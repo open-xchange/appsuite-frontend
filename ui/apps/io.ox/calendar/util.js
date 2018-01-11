@@ -332,31 +332,31 @@ define('io.ox/calendar/util', [
             var options = {},
                 reminderListValues = [
                     // value is ical duration format
-                    { value: '-PT0M', format: 'minutes' },
-                    { value: '-PT5M', format: 'minutes' },
-                    { value: '-PT10M', format: 'minutes' },
-                    { value: '-PT15M', format: 'minutes' },
-                    { value: '-PT30M', format: 'minutes' },
-                    { value: '-PT45M', format: 'minutes' },
+                    { value: 'PT0M', format: 'minutes' },
+                    { value: 'PT5M', format: 'minutes' },
+                    { value: 'PT10M', format: 'minutes' },
+                    { value: 'PT15M', format: 'minutes' },
+                    { value: 'PT30M', format: 'minutes' },
+                    { value: 'PT45M', format: 'minutes' },
 
-                    { value: '-PT1H', format: 'hours' },
-                    { value: '-PT2H', format: 'hours' },
-                    { value: '-PT4H', format: 'hours' },
-                    { value: '-PT6H', format: 'hours' },
-                    { value: '-PT8H', format: 'hours' },
-                    { value: '-PT12H', format: 'hours' },
+                    { value: 'PT1H', format: 'hours' },
+                    { value: 'PT2H', format: 'hours' },
+                    { value: 'PT4H', format: 'hours' },
+                    { value: 'PT6H', format: 'hours' },
+                    { value: 'PT8H', format: 'hours' },
+                    { value: 'PT12H', format: 'hours' },
 
-                    { value: '-P1D', format: 'days' },
-                    { value: '-P2D', format: 'days' },
-                    { value: '-P3D', format: 'days' },
-                    { value: '-P4D', format: 'days' },
-                    { value: '-P5D', format: 'days' },
-                    { value: '-P6D', format: 'days' },
+                    { value: 'P1D', format: 'days' },
+                    { value: 'P2D', format: 'days' },
+                    { value: 'P3D', format: 'days' },
+                    { value: 'P4D', format: 'days' },
+                    { value: 'P5D', format: 'days' },
+                    { value: 'P6D', format: 'days' },
 
-                    { value: '-P1W', format: 'weeks' },
-                    { value: '-P2W', format: 'weeks' },
-                    { value: '-P3W', format: 'weeks' },
-                    { value: '-P4W', format: 'weeks' }
+                    { value: 'P1W', format: 'weeks' },
+                    { value: 'P2W', format: 'weeks' },
+                    { value: 'P3W', format: 'weeks' },
+                    { value: 'P4W', format: 'weeks' }
                 ];
 
             _(reminderListValues).each(function (item) {

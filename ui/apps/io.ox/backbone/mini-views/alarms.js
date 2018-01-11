@@ -21,14 +21,25 @@ define('io.ox/backbone/mini-views/alarms', [
 
     'use strict';
     // TODO enable when mw supports this
-    var standardTypes = ['DISPLAY', 'AUDIO'/*, 'EMAIL'*/];
+    var standardTypes = ['DISPLAY', 'AUDIO'/*, 'EMAIL'*/],
+        relatedLabels = {
+            //#. Used in a selectbox when the reminder for an appointment is before the start time
+            'START-': gt.format('before the start'),
+            //#. Used in a selectbox when the reminder for an appointment is after the start time
+            'START': gt.format('after the start'),
+            //#. Used in a selectbox when the reminder for an appointment is before the end time
+            'END-': gt.format('before the end'),
+            //#. Used in a selectbox when the reminder for an appointment is after the end time
+            'END': gt.format('after the end')
+        };
 
     var alarms = DisposableView.extend({
         className: 'alarms-view',
         events: {
             'click .alarm-remove': 'onRemove',
             'change .alarm-action': 'updateModel',
-            'change .alarm-time': 'updateModel'
+            'change .alarm-time': 'updateModel',
+            'change .alarm-relation': 'updateModel'
         },
         initialize: function (options) {
             this.options = options || {};
@@ -88,9 +99,9 @@ define('io.ox/backbone/mini-views/alarms', [
 
             container = $('<li class="alarm-list-item">').append(row = $('<div class="row">')).data('id', alarm.uid);
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="col-xs-6 alarm-action">').text(alarm.action).val(alarm.action));
+                row.append($('<div class="col-xs-3 alarm-action">').text(alarm.action).val(alarm.action));
             } else {
-                row.append($('<div class="col-xs-6">').append(
+                row.append($('<div class="col-xs-3">').append(
                     $('<select class="form-control alarm-action">').append(
                         $('<option>').text(gt('Message')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO')
@@ -101,36 +112,27 @@ define('io.ox/backbone/mini-views/alarms', [
             }
 
             if (alarm.trigger.duration) {
-                var selectbox;
-                row.append($('<div>').addClass(self.options.smallLayout ? 'col-xs-4' : 'col-xs-5').append(
+                var selectbox, relatedbox;
+                row.append($('<div>').addClass('col-xs-3').append(
                     selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
+                        return '<option value="' + val + '">' + key + '</option>';
+                    }))
+                ),
+                $('<div>').addClass(self.options.smallLayout ? 'col-xs-4' : 'col-xs-5').append(
+                    relatedbox = $('<select class="form-control alarm-related">').append(_.map(relatedLabels, function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
                 ));
 
-                if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration) === -1) {
-                    var index = 0, customLabels;
-                    if (alarm.trigger.duration.indexOf('-') !== 0) {
-                        index = index + 1;
-                    }
-                    if (alarm.trigger.related === 'END') {
-                        index = index + 2;
-                    }
-                    customLabels = [
-                        //#. %1$s is the reminder time (for example: 2 hours)
-                        gt.format('%1$s before the start time', new moment.duration(alarm.trigger.duration).humanize()),
-                        //#. %1$s is the reminder time (for example: 2 hours)
-                        gt.format('%1$s after the start time', new moment.duration(alarm.trigger.duration).humanize()),
-                        //#. %1$s is the reminder time (for example: 2 hours)
-                        gt.format('%1$s before the end time', new moment.duration(alarm.trigger.duration).humanize()),
-                        //#. %1$s is the reminder time (for example: 2 hours)
-                        gt.format('%1$s after the end time', new moment.duration(alarm.trigger.duration).humanize())
-                    ];
-                    selectbox.append($('<option>').val(alarm.trigger.duration).text(customLabels[index]).data('related', alarm.trigger.related));
+                // add custom option so we can show non standard times
+                if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration.replace('-', '')) === -1) {
+                    selectbox.append($('<option>').val(alarm.trigger.duration.replace('-', '')).text(new moment.duration(alarm.trigger.duration).humanize()));
                 }
-                selectbox.val(alarm.trigger.duration);
+
+                relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
+                selectbox.val(alarm.trigger.duration.replace('-', ''));
             } else {
-                row.append($('<div class="alarm-time">').addClass(self.options.smallLayout ? 'col-xs-4' : 'col-xs-5').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
+                row.append($('<div class="alarm-time">').addClass('col-xs-5').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(
@@ -143,9 +145,11 @@ define('io.ox/backbone/mini-views/alarms', [
             var self = this;
             return _(this.list.children()).map(function (item) {
                 var alarm = { action: $(item).find('.alarm-action').val() },
-                    time = $(item).find('.alarm-time').val();
+                    time = $(item).find('.alarm-time').val(),
+                    related = $(item).find('.alarm-related').val();
+
                 if (time.indexOf('-P') === 0 || time.indexOf('P') === 0) {
-                    alarm.trigger = { duration: time, related: $(item).find('.alarm-time option[value=' + time + ']').data('related') || 'START' };
+                    alarm.trigger = { duration:  related.replace(/\w*/g, '') + time, related: related.replace(/\W*/g, '') };
                 } else {
                     alarm.trigger = { dateTime: time };
                 }

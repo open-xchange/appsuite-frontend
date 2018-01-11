@@ -570,7 +570,7 @@ define('io.ox/calendar/edit/extensions', [
             // visibility flag only works in private folders
             var folder = this.model.get('folder');
             if (!folderAPI.pool.getModel(folder).is('private')) return;
-            var helpNode = $('<button type="button" class="visibility-helper-button btn btn-link" data-toggle="popover" trigger="click" data-placement="bottom" data-content=" " data-container="body">').append('<i class="fa fa-question-circle">')
+            var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="bottom" data-content=" " data-container="body">').append('<i class="fa fa-question-circle">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
                     '<div class="ox-popover-title">' + gt('Public') + '</div>' +
                     '<div>' + gt('The appointment is visible for non-attending users in shared folders.') + '</div>' +
@@ -579,9 +579,7 @@ define('io.ox/calendar/edit/extensions', [
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
                     '<div>' + gt('The appointment is not shown to non-attending users in shared folders at all. The appointment is only considered for conflicts and in the scheduling view, in case it blocks a resource (a room for example).') + '</div>' +
                     '</div></div>')
-            .popover().on('blur', function () {
-                helpNode.popover('hide');
-            });
+            .popover();
 
             this.$el.append(
                 $('<fieldset>').append(
