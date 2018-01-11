@@ -68,9 +68,14 @@ define('io.ox/calendar/subscribe-calendar', [
         id: 'import',
         index: 400,
         render: function (baton) {
+            if (_.device('ios || android')) return;
+
             baton.collection.add({ id: 'import', displayName: gt('From file') });
             baton.view.on('select:import', function () {
-                console.log('select import');
+                require(['io.ox/core/import/import'], function (importer) {
+                    baton.dialog.close();
+                    importer.show('calendar');
+                });
             });
         }
     });
@@ -82,7 +87,8 @@ define('io.ox/calendar/subscribe-calendar', [
             var collection = new Backbone.Collection(),
                 baton = new ext.Baton({
                     collection: collection,
-                    view: new OAuth.Views.ServicesListView({ collection: collection })
+                    view: new OAuth.Views.ServicesListView({ collection: collection }),
+                    dialog: this
                 });
 
             ext.point('io.ox/calendar/subscribe/dialog/list').invoke('render', this.$body, baton);
