@@ -57,9 +57,12 @@ define('io.ox/calendar/actions/subscribe-calendar', [
         render: function (baton) {
             if (!capabilities.has('calendar_ical')) return;
 
-            baton.collection.add({ id: 'ical', displayName: gt('iCal') });
+            baton.collection.add({ id: 'ical', displayName: gt('iCal feeds') });
             baton.view.on('select:ical', function () {
-                console.log('select ical');
+                require(['io.ox/calendar/actions/ical'], function (importICal) {
+                    baton.dialog.close();
+                    importICal();
+                });
             });
         }
     });
