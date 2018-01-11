@@ -388,7 +388,7 @@ define('io.ox/core/folder/node', [
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
-                    'data-is-file': this.model && this.model.getFileType,
+                    'data-is-file': !!(this.model && this.model.getFileType),
                     'aria-label': this.getTitle()
                 })
                 .append(
@@ -623,8 +623,10 @@ define('io.ox/core/folder/node', [
             this.renderCounter();
             this.renderIcon();
             this.onChangeSubFolders();
-            ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
-            return this;
+            if (this.model) {
+                ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+                return this;
+            }
         },
 
         destroy: function () {
