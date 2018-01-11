@@ -32,7 +32,7 @@ settings!io.ox/core
 
 ## Accessibility
 
-**features/accessibility)**
+**features/accessibility**
 > Use accessibility improvements (true/false) **Deprecated**
 
 **highcontrast**
