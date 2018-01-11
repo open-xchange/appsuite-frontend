@@ -18,11 +18,12 @@ define('io.ox/mail/listview', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/tk/list',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/core/folder/api',
     'gettext!io.ox/mail',
     'io.ox/mail/view-options',
     'less!io.ox/mail/style'
-], function (extensions, ext, util, api, account, ListView, folderAPI, gt) {
+], function (extensions, ext, util, api, account, ListView, Contextmenu, folderAPI, gt) {
 
     'use strict';
 
@@ -389,7 +390,7 @@ define('io.ox/mail/listview', [
         }
     });
 
-    var MailListView = ListView.extend({
+    var MailListView = ListView.extend(Contextmenu).extend({
 
         ref: 'io.ox/mail/listview',
 
