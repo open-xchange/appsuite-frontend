@@ -223,7 +223,7 @@ define('io.ox/core/folder/extensions', [
         e.preventDefault();
         if (capabilities.has('subscription')) {
             if (e.data.baton.module === 'calendar') {
-                require(['io.ox/calendar/subscribe-calendar'], function (openDialog) {
+                require(['io.ox/calendar/actions/subscribe-calendar'], function (openDialog) {
                     openDialog(e.data.baton);
                 });
             } else {

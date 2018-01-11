@@ -12,7 +12,7 @@
  *
  */
 
-define('io.ox/calendar/subscribe-calendar', [
+define('io.ox/calendar/actions/subscribe-calendar', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/backbone/views/modal',
