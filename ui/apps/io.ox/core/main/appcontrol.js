@@ -157,8 +157,6 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    window.exports = exports;
-
     ext.point('io.ox/core/appcontrol/logo').extend({
         id: 'logo',
         index: 10000,
