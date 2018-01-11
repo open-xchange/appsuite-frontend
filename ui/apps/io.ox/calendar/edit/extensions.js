@@ -536,46 +536,62 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'private_flag',
         index: 1000,
-        className: 'col-md-6',
+        className: 'col-md-5',
         render: function () {
 
             // visibility flag only works in private folders
             var folder = this.model.get('folder');
             if (!folderAPI.pool.getModel(folder).is('private')) return;
-            var self = this,
-                viewNode = new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
-                    { value: 'PUBLIC', label: gt('Public') },
-                    { value: 'CONFIDENTIAL', label: gt('Confidential') },
-                    { value: 'PRIVATE', label: gt('Private') }]
-                }).render().$el.addClass('visibility-select').attr({ 'data-toggle': 'tooltip', 'data-placement': 'bottom' }),
-                updateTextNode =  function () {
-                    switch (self.model.get('class')) {
-                        case 'PUBLIC':
-                            viewNode.attr('title', gt('All appointment properties are exposed to non-attending users in shared folders.'));
-                            break;
-                        case 'CONFIDENTIAL':
-                            viewNode.attr('title', gt('Only certain non-classified appointment properties are exposed to non-attending users in shared folders. The appointment appears as an anonymous block for them. The appointment is still considered for conflicts and in scheduling view'));
-                            break;
-                        case 'PRIVATE':
-                            viewNode.attr('title', gt('The appointment is not exposed to non-attending users in shared folders at all. Additionally, the appointment is only considered for conflicts and in the scheduling view, in case of a resource attendee.'));
-                            break;
-                        // no default
-                    }
-                };
 
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Type')),
-                    viewNode
+                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
+                        { value: 'PUBLIC', label: gt('Public') },
+                        { value: 'CONFIDENTIAL', label: gt('Confidential') },
+                        { value: 'PRIVATE', label: gt('Private') }]
+                    }).render().$el
                 )
             );
-
-            updateTextNode();
-            this.model.on('change:class', updateTextNode);
 
         }
     }, {
         nextTo: 'color',
+        rowClass: 'collapsed'
+    });
+
+    // visibility helper
+    point.extend({
+        id: 'visibility-helper',
+        index: 1050,
+        className: 'col-md-1',
+        render: function () {
+
+            // visibility flag only works in private folders
+            var folder = this.model.get('folder');
+            if (!folderAPI.pool.getModel(folder).is('private')) return;
+            var helpNode = $('<button type="button" class="visibility-helper-button btn btn-link" data-toggle="popover" trigger="click" data-placement="bottom" data-content=" " data-container="body">').append('<i class="fa fa-question-circle">')
+                .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
+                    '<div class="ox-popover-title">' + gt('Public') + '</div>' +
+                    '<div>' + gt('The appointment is visible for non-attending users in shared folders.') + '</div>' +
+                    '<div class="ox-popover-title">' + gt('Confidential') + '</div>' +
+                    '<div>' + gt('Only certain appointment properties are shown to non-attending users in shared folders. Like for example the appointment time. The appointment is considered for conflicts and shows up without detailed information in scheduling view') + '</div>' +
+                    '<div class="ox-popover-title">' + gt('Private') + '</div>' +
+                    '<div>' + gt('The appointment is not shown to non-attending users in shared folders at all. The appointment is only considered for conflicts and in the scheduling view, in case it blocks a resource (a room for example).') + '</div>' +
+                    '</div></div>')
+            .popover().on('blur', function () {
+                helpNode.popover('hide');
+            });
+
+            this.$el.append(
+                $('<fieldset>').append(
+                    helpNode
+                )
+            );
+
+        }
+    }, {
+        nextTo: 'private_flag',
         rowClass: 'collapsed'
     });
 
