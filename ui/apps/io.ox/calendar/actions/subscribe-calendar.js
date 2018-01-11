@@ -18,8 +18,11 @@ define('io.ox/calendar/actions/subscribe-calendar', [
     'io.ox/backbone/views/modal',
     'io.ox/core/a11y',
     'gettext!io.ox/calendar',
-    'io.ox/oauth/backbone'
-], function (ext, capabilities, ModalDialog, a11y, gt, OAuth) {
+    'io.ox/oauth/backbone',
+    'io.ox/oauth/keychain',
+    'io.ox/core/yell',
+    'io.ox/core/folder/api'
+], function (ext, capabilities, ModalDialog, a11y, gt, OAuth, oauthAPI, yell, folderAPI) {
 
     'use strict';
 
@@ -41,14 +44,43 @@ define('io.ox/calendar/actions/subscribe-calendar', [
     ext.point('io.ox/calendar/subscribe/dialog/list').extend({
         id: 'google',
         index: 200,
-        render: function (baton) {
-            if (!capabilities.has('calendar_google')) return;
+        render: (function () {
+            function createAccount(service) {
+                var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
+                    return !account.hasScopes('calendar');
+                })[0] ||
+                new OAuth.Account.Model({
+                    serviceId: service.id,
+                    displayName: oauthAPI.chooseDisplayName(service)
+                });
 
-            baton.collection.add({ id: 'google', displayName: gt('Google') });
-            baton.view.on('select:google', function () {
-                console.log('select google');
-            });
-        }
+                return account.enableScopes('calendar').save().then(function () {
+                    return folderAPI.create('1', {
+                        'module': 'event',
+                        'title': gt('My Google Calendar'),
+                        'com.openexchange.calendar.provider': 'google',
+                        'com.openexchange.calendar.config': {
+                            'oauthId': account.id
+                        }
+                    });
+                }).then(function () {
+                    yell('success', gt('Account added successfully'));
+                });
+            }
+            return function (baton) {
+                if (!capabilities.has('calendar_google')) return;
+                var googleService = oauthAPI.services.find(function (model) {
+                    return model.get('id').indexOf('google') >= 0;
+                });
+                if (!googleService) return;
+                if (googleService.get('availableScopes').indexOf('calendar') < 0) return;
+
+                baton.collection.add({ id: 'google', displayName: gt('Google') });
+                baton.view.on('select:google', function () {
+                    createAccount(googleService);
+                });
+            };
+        }())
     });
 
     ext.point('io.ox/calendar/subscribe/dialog/list').extend({
