@@ -293,6 +293,7 @@ define('io.ox/calendar/freetime/timeView', [
                         if (util.isAllday(event)) {
                             event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
                             event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
+                            event.allDay = true;
                         }
                     } else {
                         // we only have a timeslot. Fake some event data, so code can be reused
@@ -325,7 +326,7 @@ define('io.ox/calendar/freetime/timeView', [
                         if (!event.isTimeslot) {
                             eventNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(
                                 $('<div class="title">').text(event.summary).append(
-                                    $('<span class="appointment-time">').text(util.getTimeInterval(event))
+                                    $('<span class="appointment-time">').text(util.isAllday(event) ? util.getDateInterval(event) : util.getTimeInterval(event))
                                 )
                             );
                         }
