@@ -22,6 +22,9 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
     'use strict';
 
+    // disabled for IE (no Promies, no File API Constructor)
+    var disableEditPicture = _.device('IE');
+
     function getContent(file) {
         var def = $.Deferred(),
             reader = new FileReader();
@@ -41,19 +44,38 @@ define('io.ox/contacts/widgets/pictureUpload', [
             init: function () {
                 this.listenTo(this.model, 'change:image1_url', this.onChangeImageUrl);
                 this.listenTo(this.model, 'change:pictureFileEdited', this.onChangeFile);
+            },
 
-                this.$el.on('click', '.reset', this.reset.bind(this))
-                    .on('change', '.file', this.onFileSelect.bind(this))
-                    .on('focus blur', '.file', this.toggleFocus.bind(this))
-                    .on('click', '.picture-uploader, .file', this.onClick.bind(this));
+            events: {
+                'click .reset': 'reset',
+                'change .file': 'onFileSelect',
+                'focus .file': 'toggleFocus',
+                'blur .file': 'toggleFocus',
+                'click .file': 'onClick',
+                'click .picture-uploader': 'onClickContainer'
+            },
+
+
+            onClick: function (e, options) {
+                var opt = options || {};
+                e.stopPropagation();
+                if (opt.forceUpload || disableEditPicture) return;
+                e.preventDefault();
+                this.openEditDialog();
+            },
+
+            onClickContainer: function () {
+                return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
             },
 
             reset: function (e) {
                 if (e) e.stopImmediatePropagation();
                 this.model.set({
+                    'pictureFile': undefined,
                     'pictureFileEdited': '',
                     'crop': '',
-                    'image1': ''
+                    'image1': '',
+                    'image1_url': ''
                 });
                 this.fileInput.val('');
                 this.setPreview();
@@ -71,19 +93,6 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     .on('upload', this.openFilePicker.bind(this));
             },
 
-            onClick: function (e, options) {
-                var opt = options || {},
-                    redirect = !$(e.target).is('input'),
-                    hasPreview = this.$el.hasClass('preview');
-                // case a) click on image -> edit
-                if (hasPreview && !opt.forceUpload) {
-                    e.preventDefault();
-                    return this.openEditDialog();
-                }
-                // case b) click on fallback image -> open file picker dialog
-                if (redirect) this.openFilePicker();
-            },
-
             onChangeImageUrl: function () {
                 var url = this.model.get('image1_url');
                 if (url) this.setPreview(url);
@@ -92,7 +101,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
             // preview prefers edited
             onChangeFile: function () {
                 var file = this.model.get('pictureFileEdited');
-                if (!file || !file.lastModified) return;
+                if (!file || !(file.lastModified || file.lastModifiedDate)) return;
                 this.imgCon.css('background-image', 'initial').busy();
                 this.addImgText.hide();
                 // update preview
@@ -102,12 +111,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 }.bind(this));
             },
 
-
             onFileSelect: function (e) {
                 var input = e.target,
                     file = input.files[0];
                 // check for valid image type. especially, svg is not allowed (see Bug 50748)
-                if (!file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
+                if (file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
                     return notifications.yell('error', gt('This filetype is not supported as contact picture. Only image types (JPG, GIF, BMP or PNG) are supported.'));
                 }
                 // check if the picture is small enough
@@ -119,12 +127,18 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 }
                 // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
                 if (!file) return;
-                // reset cause otherwise we had to remember the original file for case (upload > crop view > cancel)
+                // reset cause otherwise we have to remember the original file for case (upload > crop view > cancel)
                 this.reset();
-                // trigger proper change event
+
+                // no-edit: trigger onChangeFile
+                if (disableEditPicture) {
+                    this.model.unset('pictureFileEdited', { silent: true });
+                    return this.model.set('pictureFileEdited', file);
+                }
+                // edit: trigger proper change event
                 this.model.unset('pictureFile', { silent: true });
                 this.model.set('pictureFile', file);
-                if (file) this.openEditDialog();
+                this.openEditDialog();
             },
 
             toggleFocus: function (e) {

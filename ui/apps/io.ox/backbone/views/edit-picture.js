@@ -14,12 +14,15 @@
 define('io.ox/backbone/views/edit-picture', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
+    'io.ox/backbone/views/capture-media',
+    'io.ox/core/media-devices',
     'settings!io.ox/core',
+    'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'static/3rd.party/croppie.min.js',
     'css!3rd.party/croppie/croppie.css',
     'less!io.ox/backbone/views/edit-picture'
-], function (ext, ModalDialog, coreSettings, gt) {
+], function (ext, ModalDialog, caputure, mediaDevices, coreSettings, api, gt) {
 
     'use strict';
 
@@ -41,12 +44,12 @@ define('io.ox/backbone/views/edit-picture', [
                 'data-toggle': 'tooltip',
                 'data-placement': 'bottom',
                 'data-animation': 'false',
+                'data-trigger': 'hover',
                 'data-container': 'body'
             })
             .tooltip()
             .append($('<i class="fa" aria-hidden="true">').addClass(opt.className));
     }
-
 
     function mapOrientation(num) {
         // 1 = 0°, 6: 90°, 3: 180°, 8: 270°
@@ -60,9 +63,9 @@ define('io.ox/backbone/views/edit-picture', [
         getDialog: function (opt) {
 
             return new ModalDialog({
-                title: gt('Edit picture'),
-                width: 560,
+                title: gt('Edit image'),
                 point: 'io.ox/backbone/crop',
+                width: 500,
                 async: true,
                 model: opt.model || new Backbone.Model(),
                 focus: 'input.cr-slider'
@@ -73,21 +76,28 @@ define('io.ox/backbone/views/edit-picture', [
                         .then(function () {
                             var file = self.model.get('pictureFile'),
                                 imageurl = self.model.get('image1_url');
-                            // server image url vs. local file
+                            // a) dataUrl (webcam photo)
+                            if (_.isString(file)) return file;
+                            // b) server image
                             if (!file || !file.lastModified) return imageurl;
+                            // c) local file
                             return getContent(file);
-                        }).then(function (imageurl) {
-                            // restore latest state
-                            var history = _.extend({}, self.model.get('crop'));
-                            //history.orientation = mapOrientation(history.orientation);
-                            self.$body.croppie('bind', _.extend(history, { url: imageurl }));
-                        });
+                        }).then(self.setImage.bind(self));
                 },
                 storeState: function (opt) {
                     var current = _.extend({}, this.model.get('crop'), this.$body.croppie('get'));
                     // degree value TO croppie's orientation ids
                     if (opt && opt.rotate) current.orientation = mapOrientation(current.orientation);
                     this.model.set('crop', current);
+                },
+                setImage: function (imageurl) {
+                    // toggle class: empty state
+                    this.$el.toggleClass('blank', !imageurl);
+                    // restore latest state
+                    var options = _.extend({ zoom: 0.0 }, this.model.get('crop'), { url: imageurl });
+                    if (!imageurl) return;
+                    this.$('.cr-boundary, .cr-slider-wrap').show();
+                    return this.$body.croppie('bind', options);
                 },
                 onApply: function () {
                     var width = coreSettings.get('properties/contactImageMaxWidth', 500);
@@ -105,6 +115,12 @@ define('io.ox/backbone/views/edit-picture', [
                             this.close();
                         }.bind(this));
                 },
+                onUserMedia: function () {
+                    caputure.getDialog().open().on('ready', function (dataURL) {
+                        this.model.set('pictureFile', dataURL);
+                        this.setImage(dataURL);
+                    }.bind(this));
+                },
                 onRotate: function () {
                     this.$body.croppie('rotate', 90);
                     this.storeState({ rotate: true });
@@ -118,7 +134,7 @@ define('io.ox/backbone/views/edit-picture', [
                     this.$el.addClass('edit-picture');
                     this.busy();
                     // reserve some more space for the stacked buttons on small devices
-                    var dimension = Math.min(window.innerWidth - 64, window.innerHeight - 64, _.device('small') ? 300 : 400);
+                    var dimension = Math.min(window.innerWidth - 64, window.innerHeight - 64, _.device('small') ? 322.25 : 466);
                     var options = {
                         viewport: { width: dimension - 100, height: dimension - 100, type: 'square' },
                         boundary: { width: dimension, height: dimension },
@@ -136,7 +152,7 @@ define('io.ox/backbone/views/edit-picture', [
                     $body.on('update', update)
                         .find('input.cr-slider')
                         .attr({ 'id': id, 'step': '0.01' })
-                        .after($('<output id="zoom">').attr('for', id));
+                        .before($('<label id="zoom" class="control-label">').attr('for', id));
                     // use percental values
                     function update() {
                         // update label
@@ -144,12 +160,21 @@ define('io.ox/backbone/views/edit-picture', [
                             min = $slider.attr('min'),
                             max = $slider.attr('max'),
                             step = $slider.attr('step'),
-                            current = $body.croppie('get').zoom;
+                            current = $body.croppie('get').zoom,
+                            zoom = ((current - min) * 100 / (max - min));
                         // remove 'blind spot' at range end (last step would exceed max)
                         $slider.attr('max', max = max - ((max - min) % step));
                         // maps absolute numbers to percental values
-                        $body.find('#zoom').text(((current - min) * 100 / (max - min)).toFixed(0) + '%');
+                        $body.find('#zoom').text(gt.format(
+                            gt.npgettext('image zoom', 'Zoom', 'Zoom: %1$d%', !zoom),
+                            zoom.toFixed(0)
+                        ));
                     }
+                },
+                'empty-state': function () {
+                    this.$body.append(
+                        $('<div class="empty-state">')
+                    );
                 },
                 'croppie-focus': function () {
                     this.$body.find('.cr-boundary').on('mousedown click', function () {
@@ -161,14 +186,33 @@ define('io.ox/backbone/views/edit-picture', [
                         $('<div class="inline-actions">').append(
                             getButton({ label: gt('Upload image'), action: 'upload', className: 'fa-upload' })
                                 .on('click', this.onUpload.bind(this)),
+                            !mediaDevices.isSupported() ? $() : getButton({ label: gt('Take photo'), action: 'usermedia', className: 'fa-camera' })
+                                .on('click', this.onUserMedia.bind(this)),
                             getButton({ label: gt('Rotate image'), action: 'rotate', className: 'fa-repeat' })
                                 .on('click', this.onRotate.bind(this))
-                        )
+                        ).on('click', 'button', function (e) {
+                            $(e.target).tooltip('hide');
+                        })
+                    );
+                    this.$('.empty-state').append(
+                        $('<div class="inline-actions">').append(
+                            getButton({ label: gt('Upload image'), action: 'upload', className: 'fa-upload' })
+                                .addClass('btn-lg')
+                                .on('click', this.onUpload.bind(this)),
+                            !mediaDevices.isSupported() ? $() : getButton({ label: gt('Take photo'), action: 'usermedia', className: 'fa-camera' })
+                                .addClass('btn-lg')
+                                .on('click', this.onUserMedia.bind(this))
+                        ).on('click', 'button', function (e) {
+                            $(e.target).tooltip('hide');
+                        })
                     );
                 }
             })
             .addCancelButton()
             .addButton({ label: gt('Ok'), action: 'apply' })
+            .on('cancel', function () {
+                this.model.unset('pictureFile');
+            })
             .on('apply', function () {
                 this.onApply();
             });
