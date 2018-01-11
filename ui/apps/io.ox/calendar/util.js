@@ -1023,9 +1023,9 @@ define('io.ox/calendar/util', [
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
-        isPrivate: function (data) {
+        isPrivate: function (data, strict) {
             if (data.attributes) data = data.attributes;
-            return data['class'] === 'CONFIDENTIAL' || data['class'] === 'PRIVATE';
+            return data['class'] === 'PRIVATE' || (!strict && data['class'] === 'CONFIDENTIAL');
         },
 
         getCurrentRangeOptions: function () {
