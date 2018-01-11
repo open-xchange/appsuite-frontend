@@ -100,6 +100,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         // loop over detail collection to find expired models
         var expired = this.get('detail').filter(function (model) {
+            if (model['index/virtual/favorites/infostore']) {
+                return false;
+            }
             return !models[model.cid];
         });
 
