@@ -1555,7 +1555,8 @@ define('io.ox/mail/main', [
 
         'textPreview': function (app) {
 
-            var support = capabilities.has('text_preview');
+            // default is true (for testing) until we have cross-stack support
+            var support = settings.get('features/textPreview', true);
 
             app.supportsTextPreview = function () {
                 return support;
