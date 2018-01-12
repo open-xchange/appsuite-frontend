@@ -1553,6 +1553,23 @@ define('io.ox/mail/main', [
             });
         },
 
+        'textPreview': function (app) {
+
+            var support = capabilities.has('text_preview');
+
+            app.supportsTextPreview = function () {
+                return support;
+            };
+
+            app.supportsTextPreviewConfiguration = function () {
+                return support && account.isPrimary(app.folder.get());
+            };
+
+            app.useTextPreview = function () {
+                return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
+            };
+        },
+
         /*
          * Respond to change of view options that require redraw
          */
@@ -1569,7 +1586,7 @@ define('io.ox/mail/main', [
             function toggleClasses() {
                 app.listView.$el
                     .toggleClass('show-contact-pictures', app.props.get('contactPictures'))
-                    .toggleClass('show-text-preview', app.props.get('textPreview'));
+                    .toggleClass('show-text-preview', app.useTextPreview());
             }
         },
 

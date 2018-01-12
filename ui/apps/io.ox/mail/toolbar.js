@@ -285,8 +285,10 @@ define('io.ox/mail/toolbar', [
             if (settings.get('selectionMode') !== 'alternative') {
                 dropdown.option('checkboxes', true, gt('Checkboxes'));
             }
+            if (baton.app.supportsTextPreview()) {
+                dropdown.option('textPreview', true, gt('Text preview'));
+            }
             dropdown
-            .option('textPreview', true, gt('Text preview'))
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))
@@ -307,6 +309,13 @@ define('io.ox/mail/toolbar', [
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
+
+            toggleTextPreview();
+            baton.app.on('folder:change', toggleTextPreview);
+
+            function toggleTextPreview() {
+                dropdown.$('[data-name="textPreview"]').toggle(baton.app.supportsTextPreviewConfiguration());
+            }
 
             updateContactPicture.call(dropdown);
         }

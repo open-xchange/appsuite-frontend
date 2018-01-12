@@ -262,7 +262,7 @@ define('io.ox/mail/listview', [
             id: 'row3',
             index: 300,
             draw: function (baton) {
-                if (!baton.app.props.get('textPreview')) return;
+                if (!baton.app.useTextPreview()) return;
                 var row = $('<div class="list-item-row">');
                 ext.point('io.ox/mail/listview/item/default/row3').invoke('draw', row, baton);
                 this.append(row);
@@ -415,7 +415,8 @@ define('io.ox/mail/listview', [
 
         fetchTextPreview: function () {
 
-            if (!this.app || !this.app.props.get('textPreview')) return;
+            if (!this.app) return;
+            if (!this.app.useTextPreview()) return;
 
             var top = this.el.scrollTop,
                 bottom = top + this.el.offsetHeight,

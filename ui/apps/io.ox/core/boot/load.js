@@ -113,7 +113,7 @@ define('io.ox/core/boot/load', [
                 params = {
                     action: action,
                     folder: folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL,662',
                     sort: sort,
                     order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
                     categoryid: 'general',
