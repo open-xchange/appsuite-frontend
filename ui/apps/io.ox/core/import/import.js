@@ -229,8 +229,8 @@ define('io.ox/core/import/import', [
                     this.onPartialFail(data);
                 }
             })
-            .addButton({ action: 'import', label: gt('Import') })
             .addCancelButton()
+            .addButton({ action: 'import', label: gt('Import') })
             .on('import', function () {
                 var self = this,
                     file = this.$fileUploadInput;

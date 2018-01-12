@@ -54,11 +54,12 @@ define('io.ox/calendar/actions/subscribe-ical', [
             title: gt('Subscribe iCal feed'),
             point: 'io.ox/calendar/subscribe/ical',
             model: new Backbone.Model(),
-            async: true
+            async: true,
+            width: 500
         })
-        .addButton({ label: 'Ok', action: 'ok' })
         .addCancelButton()
-        .on('ok', function () {
+        .addButton({ label: 'Subscribe', action: 'subscribe' })
+        .on('subscribe', function () {
             var self = this;
             iCalProbe(this.model.get('ical-url')).then(function (data) {
                 data.module = 'event';
