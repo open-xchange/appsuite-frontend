@@ -106,6 +106,11 @@ define('io.ox/core/boot/load', [
         // need to get this request out as soon as possible
         if (coreSettings.get('autoStart') === 'io.ox/mail/main' && capabilities.has('webmail')) {
 
+            if (mailSettings.get('features/textPreview', true)) {
+                http.defaultColumns.mail.unseen += ',662';
+                http.defaultColumns.mail.all += ',662';
+            }
+
             var folder = 'default0/INBOX',
                 thread = mailSettings.get('threadSupport', true) ? mailSettings.get(['viewOptions', folder, 'thread'], true) : false,
                 sort = mailSettings.get(['viewOptions', folder, 'sort'], 610),
@@ -113,7 +118,7 @@ define('io.ox/core/boot/load', [
                 params = {
                     action: action,
                     folder: folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL,662',
+                    columns: http.defaultColumns.mail.all,
                     sort: sort,
                     order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
                     categoryid: 'general',

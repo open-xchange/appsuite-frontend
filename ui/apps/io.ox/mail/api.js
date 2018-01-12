@@ -1961,7 +1961,7 @@ define('io.ox/mail/api', [
                     action: 'all',
                     folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656,662',
+                    columns: http.defaultColumns.mail.unseen,
                     sort: '610',
                     order: 'desc',
                     unseen: true,
@@ -1974,7 +1974,7 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL,662',
+                    columns: http.defaultColumns.mail.all,
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
@@ -1986,7 +1986,7 @@ define('io.ox/mail/api', [
             return {
                 action: 'all',
                 folder: params.folder,
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL,662',
+                columns: http.defaultColumns.mail.all,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
                 categoryid: params.category_id || params.categoryid,

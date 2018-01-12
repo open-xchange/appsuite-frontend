@@ -1396,6 +1396,21 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             // translation will be injected by http_error.js
             generic: 'An unknown error occurred',
             offline: 'Cannot connect to server. Please check your connection.'
+        },
+
+        // helper to unify columns for mail API and boot/load
+        defaultColumns: {
+
+            mail: (function () {
+
+                var generic = '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                    // original_id, original_folder_id
+                    unseen = generic + ',654,655',
+                    all = generic + ',X-Open-Xchange-Share-URL';
+
+                return { generic: generic, unseen: unseen, all: all };
+
+            }())
         }
     };
 
