@@ -71,9 +71,9 @@ define('io.ox/core/main/appcontrol', [
 
     var fallbackIcon = '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-fallback"><g fill="none" fill-rule="evenodd"><path class="stroke-c1 stroke-w1" stroke-width="3" d="M15 15h34v34H15z"/><text font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="18" font-weight="bold" class="fill-c1" text-anchor="middle"><tspan x="32" y="38">W</tspan></text></g></svg>';
 
-    function toggleOverlay() {
-        $('#io-ox-appcontrol').toggleClass('open');
-        $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle();
+    function toggleOverlay(force) {
+        $('#io-ox-appcontrol').toggleClass('open', force);
+        $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
 
     function drawIcon(o) {
@@ -134,6 +134,7 @@ define('io.ox/core/main/appcontrol', [
                 ),
                 $('<div id="io-ox-quicklaunch">').on('click', 'button', function (e) {
                     ox.launch($(e.currentTarget).attr('data-app-id') + '/main');
+                    toggleOverlay(false);
                 }).append(drawQuicklaunch()),
                 search = $('<div id="io-ox-topsearch">'),
                 $('<div id="io-ox-toprightbar">').append(
