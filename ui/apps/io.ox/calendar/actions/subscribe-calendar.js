@@ -132,8 +132,12 @@ define('io.ox/calendar/actions/subscribe-calendar', [
     });
 
     return function () {
-        return new ModalDialog({ width: 570, title: gt('Subscribe calendar'), point: 'io.ox/calendar/subscribe/dialog' })
-            .addCloseButton()
-            .open();
+        return new ModalDialog({
+            width: 576,
+            title: gt('Subscribe calendar'),
+            point: 'io.ox/calendar/subscribe/dialog'
+        })
+        .addCloseButton()
+        .open();
     };
 });
