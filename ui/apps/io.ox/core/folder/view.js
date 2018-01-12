@@ -86,10 +86,10 @@ define('io.ox/core/folder/view', [
             nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
-        var populateResize = _.throttle(function () {
+        var populateResize = function () {
             // trigger generic resize event so that other components can respond to it
             $(document).trigger('resize');
-        }, 50);
+        };
 
         //
         // Add API

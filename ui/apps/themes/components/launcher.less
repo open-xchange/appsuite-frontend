@@ -54,7 +54,6 @@
 
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
     align-content: center;
     align-items: center;
 
@@ -68,12 +67,10 @@
 
     #io-ox-top-logo-small {
         width: auto;
-        float: none;
         margin: 0 16px;
     }
 
     #io-ox-launcher {
-        flex: 0 1 auto;
         flex-shrink:0;
         align-self: auto;
         min-width: 0;
@@ -102,9 +99,7 @@
     }
 
     #io-ox-quicklaunch {
-        flex: 1 1 auto;
         flex-shrink:0;
-        align-self: auto;
         min-width: @quicklaunch-width;
         min-height: auto;
 
@@ -164,10 +159,21 @@
     }
 
     #io-ox-topsearch {
-        margin-left: 64px;
-        flex: 1 1 auto;
-        flex-shrink:2;
+        margin-right: auto;
+        .input-group {
+        }
+        input {
+            border-radius: 0;
+            border: 0;
+            &:focus {
+                box-shadow: none;
+                border: 0;
+            }
+            border-right: 0;
+        }
+        button { border-left:0; background: #fff }
     }
+
     #io-ox-toprightbar,
     #io-ox-toprightbar > ul,
     #io-ox-toprightbar > ul li,
@@ -179,9 +185,6 @@
     }
 
     #io-ox-toprightbar {
-        flex-shrink:0;
-        flex: 0 1 auto;
-
         .launcher {
             a {
                 padding: 16px;
