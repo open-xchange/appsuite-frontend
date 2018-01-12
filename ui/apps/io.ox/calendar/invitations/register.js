@@ -12,14 +12,16 @@
  */
 
 define('io.ox/calendar/invitations/register', [
+    'io.ox/backbone/mini-views/abstract',
     'io.ox/core/extensions',
     'io.ox/core/http',
+    'io.ox/calendar/model',
     'io.ox/calendar/util',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar/main',
     'io.ox/core/notifications',
     'less!io.ox/calendar/style'
-], function (ext, http, util, settings, gt, notifications) {
+], function (AbstractView, ext, http, models, calendarUtil, calendarSettings, gt, notifications) {
 
     'use strict';
 
@@ -72,32 +74,12 @@ define('io.ox/calendar/invitations/register', [
 
     var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
 
-    function analyzeIMIPAttachment(imip) {
-
-        if (!imip || !imip.id) return $.Deferred().reject();
-
-        return http.PUT({
-            module: 'calendar/itip',
-            params: {
-                action: 'analyze',
-                dataSource: 'com.openexchange.mail.ical',
-                descriptionFormat: 'html',
-                timezone: 'UTC'
-            },
-            data: {
-                'com.openexchange.mail.conversion.fullname': imip.mail.folder_id,
-                'com.openexchange.mail.conversion.mailid': imip.mail.id,
-                'com.openexchange.mail.conversion.sequenceid': imip.id
-            }
-        });
-    }
-
     //
-    // Abstract View
-    // expects data to be in the this.event variable and works only on the new events model
-    // if other data (external appointments, tasks) are used, overwrite according functions
+    // Basic View
+    // expects data to be in the this.model variable and works only on the new events model
+    // if other data (e.g. tasks) are used, overwrite according functions
     //
-    var AbstractView = Backbone.View.extend({
+    var BasicView = AbstractView.extend({
 
         className: 'itip-item',
 
@@ -105,6 +87,17 @@ define('io.ox/calendar/invitations/register', [
             'click .show-details': 'onShowDetails',
             'click .itip-actions button': 'onAction',
             'keydown': 'onKeydown'
+        },
+
+        initialize: function (options) {
+            this.module = options.module;
+            this.api = options.api;
+            this.util = options.util;
+            this.settings = options.settings;
+            this.AlarmsView = options.AlarmsView;
+
+            this.alarmsModel = new Backbone.Model(this.model.toJSON());
+            this.alarmsModel.set('alarms', this.alarmsModel.get('alarms') || calendarUtil.getDefaultAlarms(this.alarmsModel));
         },
 
         onKeydown: function (e) {
@@ -117,7 +110,7 @@ define('io.ox/calendar/invitations/register', [
             var self = this;
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail']).done(function (dialogs, viewDetail) {
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                    popup.append(viewDetail.draw(self.event));
+                    popup.append(viewDetail.draw(self.model));
                 });
             });
         },
@@ -184,21 +177,17 @@ define('io.ox/calendar/invitations/register', [
         },
 
         isOrganizer: function () {
-            return this.event.has('createdBy') && this.event.get('createdBy').entity === ox.user_id;
+            return this.model.has('organizer') && this.model.get('organizer').entity === ox.user_id;
         },
 
         getConfirmationStatus: function () {
-            return util.getConfirmationStatus(this.event.attributes);
-        },
-
-        getEvent: function () {
-            return this.event;
+            return this.util.getConfirmationStatus(this.model.attributes);
         },
 
         renderSummary: function () {
 
             var dateStrings = this.getDateTimeIntervalMarkup(),
-                recurrenceString = this.getRecurrenceString(),
+                recurrenceString = calendarUtil.getRecurrenceString(this.model),
                 title = this.getTitle(),
                 separator = title ? $.txt(', ') : $.txt('');
 
@@ -216,15 +205,11 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getTitle: function () {
-            this.event.get('summary');
+            this.model.get('summary');
         },
 
         getDateTimeIntervalMarkup: function () {
-            return util.getDateTimeIntervalMarkup(this.event.attributes, { output: 'strings' });
-        },
-
-        getRecurrenceString: function () {
-            util.getRecurrenceString(this.event);
+            return this.util.getDateTimeIntervalMarkup(this.model.attributes, { output: 'strings' });
         },
 
         renderAnnotations: function () {
@@ -234,6 +219,12 @@ define('io.ox/calendar/invitations/register', [
         },
 
         renderReminder: function () {
+            this.$el.find('.itip-actions').before(
+                $('<div class="itip-reminder">').append(
+                    $('<legend>').text(gt('Reminder')),
+                    new this.AlarmsView({ model: this.alarmsModel, smallLayout: true }).render().$el
+                )
+            );
         },
 
         getActions: function () {
@@ -287,12 +278,8 @@ define('io.ox/calendar/invitations/register', [
             this.$el.find('.itip-comment').append(
                 $('<input type="text" class="form-control" data-property="comment">')
                 .attr('placeholder', gt('Comment'))
-                .val(this.getConfirmationMessage())
+                .val(this.util.getConfirmationMessage(this.model.attributes))
             );
-        },
-
-        getConfirmationMessage: function () {
-            return util.getConfirmationMessage(this.event.attributes);
         },
 
         render: function () {
@@ -304,8 +291,7 @@ define('io.ox/calendar/invitations/register', [
             this.renderScaffold();
             this.renderAnnotations();
 
-            this.event = this.getEvent() || this.event;
-            if (!this.event) {
+            if (!this.model) {
                 // remove "Show appointment" link
                 this.$el.find('.show-details').remove();
                 return this;
@@ -335,57 +321,23 @@ define('io.ox/calendar/invitations/register', [
             this.renderReminder();
 
             return this;
-        },
-
-        dispose: function () {
-            this.stopListening();
-            this.model = this.options = null;
         }
+
     });
-
-    //
-    // Functions based on json object for tasks and external invitations
-    //
-
-    var jsonExtensions = {
-        getTitle: function () {
-            return this.event.title;
-        },
-
-        isOrganizer: function () {
-            return this.event.organizerId === ox.user_id;
-        },
-
-        getConfirmationStatus: (function () {
-            var confirmations = ['NEEDS-ACTION', 'ACCEPTED', 'DECLINED', 'TENTATIVE'];
-            return function () {
-                var index = this.util.getConfirmationStatus(this.event);
-                if (index >= 0 && index < confirmations.length) return confirmations[index];
-                return 'NEEDS-ACTION';
-            };
-        }()),
-
-        getConfirmationMessage: function () {
-            return this.util.getConfirmationMessage(this.event);
-        },
-
-        getDateTimeIntervalMarkup: function () {
-            return this.util.getDateTimeIntervalMarkup(this.event, { output: 'strings' });
-        }
-    };
 
     //
     // External invitations
     //
 
-    var ExternalView = AbstractView.extend(_.extend({}, jsonExtensions, {
+    var ExternalView = BasicView.extend({
 
         onAction: function (e) {
 
             e.preventDefault();
 
             var action = $(e.currentTarget).attr('data-action'), self = this,
-                doConflictCheck = action !== 'decline';
+                doConflictCheck = action !== 'decline',
+                imip = this.imip;
 
             function performConfirm() {
                 http.PUT({
@@ -397,9 +349,9 @@ define('io.ox/calendar/invitations/register', [
                         message: self.getUserComment()
                     },
                     data: {
-                        'com.openexchange.mail.conversion.fullname': self.imip.mail.folder_id,
-                        'com.openexchange.mail.conversion.mailid': self.imip.mail.id,
-                        'com.openexchange.mail.conversion.sequenceid': self.imip.id
+                        'com.openexchange.mail.conversion.fullname': imip.mail.folder_id,
+                        'com.openexchange.mail.conversion.mailid': imip.mail.id,
+                        'com.openexchange.mail.conversion.sequenceid': imip.id
                     }
                 })
                 .then(
@@ -457,143 +409,63 @@ define('io.ox/calendar/invitations/register', [
         },
 
         initialize: function (options) {
+            BasicView.prototype.initialize.call(this, options);
             this.options = _.extend({}, options);
             this.imip = options.imip;
             this.$el.hide();
         },
 
         getActions: function () {
-            return this.model.get('actions');
-        },
-
-        getAnnotations: function () {
-            return _(this.model.get('annotations'))
-                .chain()
-                .pluck('message')
-                .compact()
-                .value();
-        },
-
-        getEvent: function () {
-            // extract appointments data from changes
-            return _(this.model.get('changes'))
-                .chain()
-                .map(function (change) {
-                    return change.deletedAppointment || change.newAppointment || change.currentAppointment;
-                })
-                .compact()
-                .first()
-                .value();
+            return this.options.actions;
         },
 
         renderAnnotations: function () {
-            // ignore annotations for requests
-            // if (this.model.get('messageType') === 'request') return;
-            // -- don't know why this message type should be skipped;
-            // still helpful to get an annotataion
+            if (!this.options.introduction) return;
             var node = this.$el.find('.itip-annotations');
-            _(this.getAnnotations()).each(function (annotation) {
-                node.append(
-                    $('<div class="annotation">').html(annotation)
-                );
-            });
+            node.append(
+                $('<div class="annotation">').html(this.options.introduction)
+            );
         },
 
         renderChanges: function () {
             var node = this.$el.find('.itip-changes');
-            return _(this.model.get('changes')).each(function (change) {
-                if (!change.diffDescription) return;
-                _(change.diffDescription).each(function (description) {
-                    node.append($('<p>').html(description));
-                });
+            if (!this.options.diffDescription) return;
+            _(this.options.diffDescription).each(function (description) {
+                node.append($('<p>').html(description));
             });
         },
 
         repaint: function () {
-            var self = this;
-            analyzeIMIPAttachment(this.imip)
-                .done(function (analyses) {
-                    var data = _(analyses).findWhere({ uid: self.model.get('uid') });
-                    this.model.set(data);
+            this.options.container.analyzeIMIPAttachment(this.imip)
+                .done(function (list) {
+                    var data = list[0],
+                        change = data.changes[0],
+                        eventData = change.deletedEvent || change.newEvent || change.currentEvent;
+                    if (!eventData) return;
+                    this.model.set(eventData);
                     this.render();
                 }.bind(this));
-        },
-
-        render: function () {
-            var self = this;
-            require(['io.ox/tasks/util'], function (util) {
-                // use tasks util here, since this works on json as well (instead of the new chronos model)
-                self.util = util;
-                AbstractView.prototype.render.call(self);
-            });
-            return this;
         }
 
-    }));
+    });
 
     //
     //  Internal invitations
     //
 
-    var InternalView = AbstractView.extend({
+    var InternalView = BasicView.extend({
 
         initialize: function (options) {
-            this.options = _.extend({}, options);
+            BasicView.prototype.initialize.call(this, options);
             this.listenTo(this.model, 'change:headers', this.render);
-            this.$el.on('dispose', this.dispose.bind(this));
             this.cid = options.cid;
             this.$el.hide();
-        },
-
-        load: function () {
-            return $.when();
-        },
-
-        render: function () {
-            var self = this;
             this.$el.attr({ 'data-type': this.type, 'data-cid': this.cid });
-            this.load().then(function () {
-                AbstractView.prototype.render.call(self);
-            });
-            return this;
         }
 
     });
 
     var InternalAppointmentView = InternalView.extend({
-
-        load: function () {
-            var self = this;
-            return require([
-                'io.ox/calendar/api',
-                'io.ox/calendar/util',
-                'io.ox/backbone/mini-views/alarms'
-            ]).then(function (api, util, AlarmsView) {
-                self.api = api;
-                self.util = util;
-                self.settings = settings;
-                self.AlarmsView = AlarmsView;
-                var cid = api.cid(self.cid);
-                return api.get({ folder: 'cal://0/' + cid.folder, id: cid.id });
-            }).then(function (event) {
-                if (self.event) self.stopListening(self.event);
-                self.listenTo(event, 'change', self.render);
-                self.event = event;
-                self.previousConfirmation = _(event.get('attendees')).findWhere({ entity: ox.user_id });
-            });
-        },
-
-        renderReminder: function () {
-            // backbone model is fine. No need to require chronos model
-            this.alarmsModel = new Backbone.Model(this.event);
-
-            this.$el.find('.itip-actions').before(
-                $('<div class="itip-reminder">').append(
-                    $('<legend>').text(gt('Reminder')),
-                    new this.AlarmsView({ model: this.alarmsModel, smallLayout: true }).render().$el
-                )
-            );
-        },
 
         onAction: function (e) {
 
@@ -608,8 +480,8 @@ define('io.ox/calendar/invitations/register', [
                         partStat: hash[action],
                         comment: comment
                     }),
-                    id: self.event.get('id'),
-                    folder: self.event.get('folder'),
+                    id: self.model.get('id'),
+                    folder: self.model.get('folder'),
                     alarms: self.alarmsModel.get('alarms')
                 }, { checkConflicts: !!checkConflicts })
                 .then(function success(data) {
@@ -627,7 +499,7 @@ define('io.ox/calendar/invitations/register', [
                         return;
                     }
 
-                    if (settings.get('deleteInvitationMailAfterAction', false)) {
+                    if (calendarSettings.get('deleteInvitationMailAfterAction', false)) {
                         // remove mail
                         if (self.options.yell !== false) {
                             notifications.yell('success', successInternal[action]);
@@ -652,33 +524,34 @@ define('io.ox/calendar/invitations/register', [
 
     });
 
-    var InternalTaskView = InternalView.extend(_.extend({}, jsonExtensions, {
+    var InternalTaskView = InternalView.extend({
 
         onShowDetails: function (e) {
             e.preventDefault();
             var self = this;
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail']).done(function (dialogs, viewDetail) {
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                    popup.append(viewDetail.draw(self.event));
+                    popup.append(viewDetail.draw(self.model.toJSON()));
                 });
             });
         },
 
-        load: function () {
-            var self = this;
-            return require([
-                'io.ox/tasks/api',
-                'io.ox/tasks/util',
-                'settings!io.ox/tasks'
-            ]).then(function (api, util, taskSettings) {
-                self.api = api;
-                self.util = util;
-                self.settings = taskSettings;
-                return api.get(_.cid(self.cid));
-            }).then(function (task) {
-                self.event = task;
-            });
+        getTitle: function () {
+            return this.model.get('title');
         },
+
+        isOrganizer: function () {
+            return this.model.get('created_by') === ox.user_id;
+        },
+
+        getConfirmationStatus: (function () {
+            var confirmations = ['NEEDS-ACTION', 'ACCEPTED', 'DECLINED', 'TENTATIVE'];
+            return function () {
+                var index = this.util.getConfirmationStatus(this.model.attributes);
+                if (index >= 0 && index < confirmations.length) return confirmations[index];
+                return 'NEEDS-ACTION';
+            };
+        }()),
 
         getInfoText: function () {
             return gt('This email contains a task');
@@ -732,21 +605,25 @@ define('io.ox/calendar/invitations/register', [
             if (reminder) {
                 // don't use whole data object here, because it overwrites the confirmations with it's users attribute
                 tempdata = {
-                    id: this.event.id,
-                    folder_id: this.event.folder_id,
+                    id: this.model.get('id'),
+                    folder_id: this.model.get('folder_id'),
                     alarm: reminder
                 };
-                if (this.event.recurrence_position) {
-                    tempdata.recurrence_position = this.event.recurrence_position;
+                if (this.model.has('recurrence_position')) {
+                    tempdata.recurrence_position = this.model.get('recurrence_position');
                 }
                 //tasks use absolute timestamps
                 tempdata.alarm = _.utc() + tempdata.alarm;
-                this.api.update(tempdata, { checkConflicts: true });
+                this.api.update(tempdata);
             }
 
-            this.event = updated;
+            var user = _(this.model.get('users')).findWhere({ id: ox.user_id });
+            if (user) {
+                user.confirmation = updated;
+                this.model.trigger('update update:users', this.model);
+            }
 
-            if (settings.get('deleteInvitationMailAfterAction', false)) {
+            if (calendarSettings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
                 if (this.options.yell !== false) {
                     notifications.yell('success', successInternal[action]);
@@ -782,33 +659,30 @@ define('io.ox/calendar/invitations/register', [
             self.$el.busy(true);
 
             self.api.confirm({
-                folder: this.event.folder_id,
-                id: this.event.id,
+                folder: this.model.get('folder_id'),
+                id: this.model.get('id'),
                 data: { confirmation: confirmation, confirmmessage: comment }
             })
-            .then(self.onActionSuccess.bind(self, confirmation), self.onActionFail.bind(self, action));
+            .then(self.onActionSuccess.bind(self, action, confirmation), self.onActionFail.bind(self, action));
         }
 
-    }));
+    });
 
     //
     // Container view. Checks mail data and adds internal or external view
     //
 
-    var ItipView = Backbone.View.extend({
+    var ItipView = AbstractView.extend({
 
-        className: 'itip',
+        initialize: function () {
+            if (this.model.has('headers')) this.analyzeMail();
+            else this.listenToOnce(this.model, 'change:headers', this.analyzeMail);
+        },
 
-        initialize: function (options) {
-            this.options = _.extend({}, options);
-            // if headers are already available, call update()
-            // otherwise wait for model change
-            if (this.model.has('headers')) {
-                this.update();
-            } else {
-                this.listenToOnce(this.model, 'change:headers', this.update);
-            }
-            this.$el.on('dispose', this.dispose.bind(this));
+        analyzeMail: function () {
+            if (this.hasIMIPAttachment()) this.processIMIPAttachment();
+            else if (this.hasEvent()) this.processEvent();
+            else if (this.hasTask()) this.processTask();
         },
 
         getIMIPAttachment: function () {
@@ -825,58 +699,122 @@ define('io.ox/calendar/invitations/register', [
             });
         },
 
-        update: function () {
+        hasIMIPAttachment: function () {
+            return !!this.getIMIPAttachment();
+        },
 
-            var headers, reminder, type, cid, $el = this.$el, imip,
-                yell = this.options && this.options.yell;
+        analyzeIMIPAttachment: function (imip) {
+            if (!imip || !imip.id) return $.Deferred().reject();
 
-            // external?
-            if ((imip = this.getIMIPAttachment())) {
-                // mark this mail as "imipMail"
-                this.model.set('imipMail', true, { silent: true });
-                imip.mail = { folder_id: this.model.get('folder_id'), id: this.model.get('id') };
-                return analyzeIMIPAttachment(imip).done(function (analyses) {
-                    _(analyses).each(function (analysis) {
-                        var model = new Backbone.Model(analysis),
-                            view = new ExternalView({
-                                model: model,
-                                imip: imip,
-                                yell: yell
-                            });
-                        $el.append(view.render().$el);
-                    });
+            return http.PUT({
+                module: 'chronos/itip',
+                params: {
+                    action: 'analyze',
+                    dataSource: 'com.openexchange.mail.ical',
+                    descriptionFormat: 'html',
+                    timezone: 'UTC'
+                },
+                data: {
+                    'com.openexchange.mail.conversion.fullname': imip.mail.folder_id,
+                    'com.openexchange.mail.conversion.mailid': imip.mail.id,
+                    'com.openexchange.mail.conversion.sequenceid': imip.id
+                }
+            });
+        },
+
+        processIMIPAttachment: function () {
+            var self = this,
+                imip = this.getIMIPAttachment();
+            imip.mail = { folder_id: this.model.get('folder_id'), id: this.model.get('id') };
+            return this.analyzeIMIPAttachment(imip).done(function (list) {
+                if (list.length === 0) return;
+
+                var data = list[0],
+                    change = data.changes[0],
+                    eventData = change.deletedEvent || change.newEvent || change.currentEvent;
+                if (!eventData) return;
+                var model = new models.Model(eventData);
+                self.model.set('imipMail', true, { silent: true });
+                return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
+                    self.$el.append(
+                        new ExternalView({
+                            model: model,
+                            module: 'calendar',
+                            api: api,
+                            util: util,
+                            settings: calendarSettings,
+                            actions: data.actions,
+                            AlarmsView: AlarmsView,
+                            introduction: change.introduction,
+                            diffDescription: change.diffDescription,
+                            imip: imip,
+                            container: self
+                        }).render().$el
+                    );
                 });
-            }
+            });
+        },
 
-            // internal
-            // check if we already have all required data
-            if (!(headers = this.model.get('headers'))) return;
-            if (!(reminder = headers['X-OX-Reminder'])) return;
-            if (!(type = headers['X-Open-Xchange-Module'])) return;
-
-            // get the object id
+        getCid: function () {
+            var headers = this.model.get('headers') || {},
+                reminder = headers['X-OX-Reminder'],
+                module = headers['X-Open-Xchange-Module'];
+            if (!reminder || !module) return;
             reminder = reminder.split(/,\s*/);
-            cid = reminder[1] + '.' + reminder[0];
-
-            var View = type === 'Appointments' ? InternalAppointmentView : InternalTaskView;
-
-            this.$el.append(
-                new View({
-                    model: this.model,
-                    cid: cid,
-                    yell: yell
-                }).render().$el
-            );
+            return { module: module, folder_id: reminder[1], id: reminder[0] };
         },
 
-        render: function () {
-            return this;
+        hasEvent: function () {
+            var cid = this.getCid();
+            if (!cid) return false;
+            return cid.module === 'Appointments';
         },
 
-        dispose: function () {
-            this.stopListening();
-            this.model = this.options = null;
+        processEvent: function () {
+            var self = this,
+                cid = this.getCid();
+            return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
+                return api.resolve(cid.id, true).then(function (model) {
+                    self.$el.append(
+                        new InternalAppointmentView({
+                            model: model,
+                            module: 'calendar',
+                            api: api,
+                            util: util,
+                            settings: calendarSettings,
+                            AlarmsView: AlarmsView
+                        }).render().$el
+                    );
+                });
+            });
+        },
+
+        hasTask: function () {
+            var cid = this.getCid();
+            if (!cid) return false;
+            return cid.module === 'Tasks';
+        },
+
+        processTask: function () {
+            var self = this,
+                cid = this.getCid();
+            return require(['io.ox/tasks/api', 'io.ox/tasks/util', 'settings!io.ox/tasks']).then(function (api, util, taskSettings) {
+                return api.get({ folder: cid.folder_id, id: cid.id }).then(function (task) {
+                    var model = new Backbone.Model(task);
+                    self.$el.append(
+                        new InternalTaskView({
+                            model: model,
+                            module: 'tasks',
+                            api: api,
+                            util: util,
+                            settings:
+                            taskSettings
+                        }).render().$el
+                    );
+                });
+            });
         }
+
     });
 
     ext.point('io.ox/mail/detail/notifications').extend({

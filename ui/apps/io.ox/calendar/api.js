@@ -152,7 +152,33 @@ define('io.ox/calendar/api', [
                         folder: obj.folder
                     }
                 }).then(function (data) {
-                    if (isRecurrenceMaster(data)) return new models.Model(data);
+                    if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
+                    api.pool.propagateAdd(data);
+                    return api.pool.getModel(data);
+                });
+            },
+
+            resolve: function (id, useCache) {
+                if (useCache !== false) {
+                    var collections = api.pool.getCollections(), model;
+                    _(collections).find(function (data) {
+                        var collection = data.collection;
+                        model = collection.find(function (m) {
+                            return m.get('id') === id && !m.has('recurrenceId');
+                        });
+                        return !!model;
+                    });
+                    if (model) return $.when(model);
+                }
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'resolve',
+                        id: id
+                    }
+                }).then(function (data) {
+                    console.log(data);
+                    if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);
                     return api.pool.getModel(data);
                 });
@@ -206,7 +232,7 @@ define('io.ox/calendar/api', [
                             });
                         }
                         return list.map(function (obj) {
-                            if (isRecurrenceMaster(obj)) return new models.Model(obj);
+                            if (isRecurrenceMaster(obj)) return api.pool.get('detail').add(data);
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
                         });
@@ -264,7 +290,7 @@ define('io.ox/calendar/api', [
                         return data;
                     }
 
-                    if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return new models.Model(data);
+                    if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return api.pool.get('detail').add(data);
                     if (data.created.length > 0) return api.pool.getModel(data.created[0]);
                 });
             },
@@ -327,7 +353,7 @@ define('io.ox/calendar/api', [
 
                         var updated = data.updated ? data.updated[0] : undefined;
                         if (!updated) return api.pool.getModel(util.cid(obj));
-                        if (isRecurrenceMaster(updated)) return new models.Model(updated);
+                        if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
                         return api.pool.getModel(updated);
                     });
             },
