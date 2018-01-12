@@ -139,7 +139,7 @@ define('io.ox/core/main/appcontrol', [
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')
                 ),
-                logo = $('<div id="io-ox-top-logo-small">')
+                logo = $('<div id="io-ox-top-logo-small" class="hidden-xs">')
             );
 
             $('#io-ox-core').append(
