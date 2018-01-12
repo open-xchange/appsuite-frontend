@@ -22,8 +22,9 @@
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
-@top-bar-gradientLeft:      #283f73;
-@top-bar-gradientRight:     #03a9fa;
+@top-bar-gradientLeft: #293f72;
+@top-bar-gradientMiddle: #4d6aad;
+@top-bar-gradientRight: #293f72;
 
 // adjust positions of top-bar and screens
 #io-ox-core {
@@ -43,7 +44,7 @@
 
 #io-ox-appcontrol {
 
-    background-image: linear-gradient(270deg, @top-bar-gradientLeft, @top-bar-gradientRight);
+    background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight);
 
     position: absolute;
     left: 0;
@@ -52,7 +53,6 @@
     color: #fff;
     height: @appcontrol-height;
     padding: 0;
-
 
     display: flex;
     flex-flow: row nowrap;
