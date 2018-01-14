@@ -25,13 +25,11 @@ define('io.ox/core/main/appcontrol', [
         'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
         'io.ox/notes'];
 
-    var defaultQuicklaunch = ['io.ox/mail', 'io.ox/calendar'];
-
     var exports = {
 
-        apps: settings.get('apps/list', defaultList.join(',')),
+        quicklaunch: settings.get('quicklaunch').split(','),
 
-        quicklaunch: settings.get('apps/quicklaunch', defaultQuicklaunch.join(',')),
+        apps: settings.get('apps/list', defaultList.join(',')),
 
         icons: {
             'io.ox/mail': '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-mail"><g class="stroke-w1 stroke-c1" stroke-width="3" fill="none" fill-rule="evenodd"><path d="M8 16h48v32H8z"/><path d="M8 20l24 16 24-16"/></g></svg>',
@@ -55,7 +53,7 @@ define('io.ox/core/main/appcontrol', [
                 //dynamically translate the title
                 manifest.title = /*#, dynamic*/gt.pgettext('app', manifest.title);
                 manifest.svg = exports.icons[manifest.id];
-                manifest.quicklaunch = /^io\.ox\/(mail|calendar)$/.test(manifest.id);
+                manifest.quicklaunch = /^io\.ox\/(mail|calendar|contacts)$/.test(manifest.id);
                 return manifest;
             });
             return _.compact(apps.map(function (app) {
@@ -66,7 +64,7 @@ define('io.ox/core/main/appcontrol', [
 
     var orderedApps = exports.getOrderedApps();
 
-    var coloredIcons = settings.get('features/appLauncher/colored', false);
+    var coloredIcons = settings.get('apps/coloredIcons', false);
     var appLauncherIcon = '<svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><g class="fill-c1" fill-rule="evenodd"><path d="M0 0h16v16H0zM25 0h16v16H25zM50 0h16v16H50zM0 25h16v16H0zM25 25h16v16H25zM50 25h16v16H50zM0 50h16v16H0zM25 50h16v16H25zM50 50h16v16H50z"/></g></svg>';
 
     var fallbackIcon = '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="app-icon-fallback"><g fill="none" fill-rule="evenodd"><path class="stroke-c1 stroke-w1" stroke-width="3" d="M15 15h34v34H15z"/><text font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="18" font-weight="bold" class="fill-c1" text-anchor="middle"><tspan x="32" y="38">W</tspan></text></g></svg>';
@@ -98,8 +96,8 @@ define('io.ox/core/main/appcontrol', [
     }
 
     function drawQuicklaunch() {
-        return orderedApps.filter(function (o) {
-            return o.quicklaunch;
+        return exports.quicklaunch.map(function (o) {
+            return _.findWhere(orderedApps, { path: o });
         }).map(function (o) {
             return $('<button type="button" class="btn btn-link">').attr('data-app-id', o.id).append(drawIcon(o));
         });

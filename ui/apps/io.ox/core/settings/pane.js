@@ -20,12 +20,13 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/desktopNotifications',
+    'io.ox/core/main/appcontrol',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker'
-], function (ext, ExtensibleView, mini, util, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
+], function (ext, ExtensibleView, mini, util, appAPI, capabilities, notifications, desktopNotifications, appcontrol, userSettings, settings, settingOptions, gt, TimezonePicker) {
 
     'use strict';
 
@@ -88,6 +89,15 @@ define('io.ox/core/settings/pane', [
                                 return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
                             }),
                             [{ label: gt('None'), value: 'none' }]
+                        );
+                    },
+
+                    getAvailableApps: function () {
+                        return [].concat(
+                            _(appAPI.getFavorites()).map(function (app) {
+                                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
+                            }),
+                            [{ label: gt('None'), value: '' }]
                         );
                     },
 
@@ -335,6 +345,55 @@ define('io.ox/core/settings/pane', [
             }
         },
         //
+        // Quicklaunch apps
+        //
+        {
+            id: 'quickLaunch',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                // var default = appcontrol.quicklaunch;
+
+                var SelectView = mini.SelectView.extend({
+                    onChange: function () {
+                        var val = this.$el.val();
+                        this.model.set(this.name, this.options.integer ? parseInt(val, 10) : val);
+                        this.model.set('quicklaunch', _.uniq(_.compact([
+                            this.model.get('apps/quicklaunch0'),
+                            this.model.get('apps/quicklaunch1'),
+                            this.model.get('apps/quicklaunch2')
+                        ])).join(','));
+                    },
+                    setup: function () {
+                        var settingsStr = this.model.get('quicklaunch');
+                        if (settingsStr) {
+                            var a = settingsStr.split(',');
+                            if (this.options.pos <= a.length) {
+                                this.model.set('apps/quicklaunch' + this.options.pos, a[this.options.pos], { silent: true });
+                            }
+                        }
+                        this.listenTo(this.model, 'change:' + this.name, this.update);
+                    }
+                });
+
+                var multiSelect = function (name, label, model, list, options) {
+                    options = options || {};
+                    var id = 'settings-' + name;
+                    return $('<div class="col-md-3">').append(
+                        $('<label>').attr('for', id).text(label),
+                        new SelectView({ id: id, name: name, model: model, list: list, pos: options.pos }).render().$el
+                    );
+                };
+                baton.$el.append(
+                    $('<div class="form-group row">').append(
+                        multiSelect('apps/quicklaunch0', gt('Quicklauch 1'), this.model, this.getAvailableApps(), { pos: 0 }),
+                        multiSelect('apps/quicklaunch1', gt('Quicklauch 2'), this.model, this.getAvailableApps(), { pos: 1 }),
+                        multiSelect('apps/quicklaunch2', gt('Quicklauch 3'), this.model, this.getAvailableApps(), { pos: 2 })
+                    )
+                );
+            }
+        },
+        //
         // Auto Logout
         //
         {
@@ -426,15 +485,16 @@ define('io.ox/core/settings/pane', [
         {
             id: 'options',
             render: function (baton) {
+                var options = [
+                    util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
+                    util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
+                    util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
+                    util.checkbox('highcontrast', gt('High contrast theme'), this.model)
+                ];
 
-                baton.$el.append(
-                    $('<div class="form-group">').append(
-                        util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
-                        util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
-                        util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
-                        util.checkbox('highcontrast', gt('High contrast theme'), this.model)
-                    )
-                );
+                if (ox.debug) options.push(util.checkbox('coloredIcons', gt('Colored icons in application launcher'), this.model));
+
+                baton.$el.append($('<div class="form-group">').append(options));
             }
         }
     );
