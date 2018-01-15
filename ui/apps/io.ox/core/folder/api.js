@@ -711,13 +711,8 @@ define('io.ox/core/folder/api', [
             appendColumns: true
         })
         .then(renameDefaultCalendarFolders, function (error) {
-<<<<<<< HEAD
-            api.trigger('error error:' + error.code, error);
-            return error;
-=======
             api.trigger('error error:' + error.code, error, id);
             throw error;
->>>>>>> 1f319a84f0... Fixed: Bug 56136 - Favorite subfolders are not deleted upon account deletion
         })
         .then(function (array) {
             array = processListResponse(id, array);
