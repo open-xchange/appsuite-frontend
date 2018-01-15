@@ -525,6 +525,8 @@ define('io.ox/core/extPatterns/links', [
             // remove items with 'none' prio
             if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
             baton.$el.parent().trigger('ready');
+            // make sure the closer is at the last position
+            if (closer) baton.$el.append(closer);
             delete baton.$el;
         });
     };
