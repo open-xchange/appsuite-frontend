@@ -479,18 +479,21 @@ define('io.ox/mail/detail/view', [
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
 
-                // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
-                // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
-                if (prevHeight !== contents.find('.mail-detail-content').height()) {
-                    // save heightchange so we can distinguish between pictureload and broken mail css
-                    baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
-                }
-
                 // fixes overflow (see bug 55876)
                 if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
 
-                // check height again as there might be slow loading external images
-                if (!once) _.delay(resizeFrame, resizeLoop);
+                // delay a bit so the height change can be applied (firefox needs a bit of time here)
+                _.delay(function () {
+                    // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
+                    // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
+                    console.log(prevHeight, contents.find('.mail-detail-content').height(), contents);
+                    if (prevHeight !== contents.find('.mail-detail-content').height()) {
+                        // save heightchange so we can distinguish between pictureload and broken mail css
+                        baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
+                    }
+                    // check height again as there might be slow loading external images
+                    if (!once) _.delay(resizeFrame, resizeLoop);
+                }, 50);
             }
 
             $(node).on('resize imageload', startResizeLoop); // for expanding blockquotes and inline images
