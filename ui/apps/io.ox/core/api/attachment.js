@@ -234,7 +234,7 @@ define('io.ox/core/api/attachment', [
                     folder: data.folder,
                     module: data.module,
                     attached: data.attached,
-                    attachment: data.id
+                    attachment: data.id || data.managedId
                 },
                 data: { folder_id: target, description: descriptionText[data.module] || gt('Saved attachment') },
                 appendColumns: false
