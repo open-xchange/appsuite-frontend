@@ -1015,12 +1015,18 @@ define('io.ox/calendar/util', [
 
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series',
-                        //#. Use singular in this context
-                        gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
+                    .text(gt('Do you want to change only this occurence of the event, or this and all occurences?'))
+                    .addPrimaryButton('series', gt('All future events'), 'series')
+                    .addButton('appointment', gt('Only this event'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
+        },
+
+        isFirst: function (model) {
+            debugger;
+            var start = model.has('oldStartDate') ? model.get('oldStartDate').valueOf() : model.getTimestamp('startDate'),
+                recurrence = model.has('recurrenceId') ? moment(model.get('recurrenceId')).valueOf() : 0;
+            // TODO we need another check here but this should work for 90% for the cases and should not cause false positives
+            return start === recurrence;
         },
 
         isPrivate: function (data, strict) {

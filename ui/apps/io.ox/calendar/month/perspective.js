@@ -138,20 +138,18 @@ define('io.ox/calendar/month/perspective', [
                     .done(function (action) {
                         switch (action) {
                             case 'series':
-                                // get recurrence master object
-                                api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
-                                    // calculate new dates if old dates are available
-                                    var oldStartDate = masterModel.getMoment('startDate'),
-                                        startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
-                                        endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
-                                        format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
-                                    masterModel.set({
-                                        startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
-                                        endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
-                                    });
-                                    util.updateRecurrenceDate(masterModel, oldStartDate);
-                                    apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                                // calculate new dates if old dates are available
+                                var masterModel = model.clonse(),
+                                    oldStartDate = masterModel.getMoment('startDate'),
+                                    startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
+                                    endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
+                                    format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                                masterModel.set({
+                                    startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
+                                    endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                 });
+                                util.updateRecurrenceDate(masterModel, oldStartDate);
+                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { recurrenceRange: 'THISANDFUTURE', checkConflicts: true }));
                                 break;
                             case 'appointment':
                                 apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));

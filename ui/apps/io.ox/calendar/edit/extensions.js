@@ -134,7 +134,13 @@ define('io.ox/calendar/edit/extensions', [
 
                     baton.app.getWindow().busy();
                     if (baton.mode === 'edit') {
-                        api.update(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
+                        var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
+                            recurrenceRange: baton.model.mode === 'series' ? 'THISANDFUTURE' : undefined,
+                            attachments: attachments,
+                            checkConflicts: true,
+                            sendInternalNotifications: sendNotifications
+                        });
+                        api.update(baton.model, options).then(save, fail);
                         return;
                     }
 

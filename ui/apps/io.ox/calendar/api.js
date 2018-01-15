@@ -308,7 +308,8 @@ define('io.ox/calendar/api', [
                         timestamp: obj.timestamp,
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
-                        sendInternalNotifications: !!options.sendInternalNotifications
+                        sendInternalNotifications: !!options.sendInternalNotifications,
+                        recurrenceRange: options.recurrenceRange
                     };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
