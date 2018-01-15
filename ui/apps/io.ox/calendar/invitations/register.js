@@ -96,8 +96,10 @@ define('io.ox/calendar/invitations/register', [
             this.settings = options.settings;
             this.AlarmsView = options.AlarmsView;
 
-            this.alarmsModel = new Backbone.Model(this.model.toJSON());
-            this.alarmsModel.set('alarms', this.alarmsModel.get('alarms') || calendarUtil.getDefaultAlarms(this.alarmsModel));
+            if (this.AlarmsView) {
+                this.alarmsModel = new Backbone.Model(this.model.toJSON());
+                this.alarmsModel.set('alarms', this.alarmsModel.get('alarms') || calendarUtil.getDefaultAlarms(this.alarmsModel));
+            }
         },
 
         onKeydown: function (e) {
@@ -219,6 +221,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         renderReminder: function () {
+            if (!this.AlarmsView || !this.alarmsModel) return;
             this.$el.find('.itip-actions').before(
                 $('<div class="itip-reminder">').append(
                     $('<legend>').text(gt('Reminder')),
@@ -420,11 +423,13 @@ define('io.ox/calendar/invitations/register', [
         },
 
         renderAnnotations: function () {
-            if (!this.options.introduction) return;
             var node = this.$el.find('.itip-annotations');
-            node.append(
-                $('<div class="annotation">').html(this.options.introduction)
-            );
+            if (!this.options.annotations) return;
+            _(this.options.annotations).each(function (annotation) {
+                node.append(
+                    $('<div class="annotation">').html(annotation)
+                );
+            });
         },
 
         renderChanges: function () {
@@ -735,7 +740,7 @@ define('io.ox/calendar/invitations/register', [
                 if (!eventData) return;
                 var model = new models.Model(eventData);
                 self.model.set('imipMail', true, { silent: true });
-                return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
+                return require(['io.ox/calendar/api', 'io.ox/calendar/util']).then(function (api, util) {
                     self.$el.append(
                         new ExternalView({
                             model: model,
@@ -744,7 +749,6 @@ define('io.ox/calendar/invitations/register', [
                             util: util,
                             settings: calendarSettings,
                             actions: data.actions,
-                            AlarmsView: AlarmsView,
                             introduction: change.introduction,
                             diffDescription: change.diffDescription,
                             imip: imip,
