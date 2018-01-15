@@ -54,15 +54,28 @@ define('io.ox/calendar/settings/schedjoules/api', [
             });
         },
 
-        subscribeCalendar: function (opt) {
+        subscribeCalendar: function (obj) {
             return http.PUT({
-                module: 'chronos/accounts',
-                params: { action: 'update', id: opt.id, timestamp: _.then() },
+                module: 'folders',
+                params: { action: 'new', autorename: true, folder_id: 1, tree: 0 },
+                appendColumns: false,
                 data: {
-                    'configuration': { 'folders': opt.folders }
+                    module: 'event',
+                    subscribed: 1,
+                    title: obj.name,
+                    'com.openexchange.calendar.provider': 'schedjoules',
+                    'com.openexchange.calendar.config': {
+                        'itemId': obj.itemId,
+                        'refreshInterval': 10080
+                    },
+                    'com.openexchange.calendar.extendedProperties': {
+                        'color': { 'value': 'turquoise' }
+                    }
                 }
+
             });
         }
+
     };
 
     return api;

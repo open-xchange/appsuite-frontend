@@ -24,8 +24,9 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/notifications',
+    'io.ox/core/http',
     'less!io.ox/calendar/settings/schedjoules/style'
-], function (ext, gt, api, ModalDialog, mini, userAPI, folderAPI, BreadcrumbView, notifications) {
+], function (ext, gt, api, ModalDialog, mini, userAPI, folderAPI, BreadcrumbView, notifications, http) {
 
     'use strict';
 
@@ -58,11 +59,11 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
 
             var RequestModel = Backbone.Model.extend({}),
                 requestModel = new RequestModel({});
-
             requestModel.on('change:language', function () {
                 data.dialog.busy(true);
-                api.get({ id: _.last(data.dialog.data.pageHistory).item_id, language: requestModel.get('language'), country: requestModel.get('country') }).done(function (response) {
-                    data.data = response;
+                $.when(api.get({ id: _.last(data.dialog.data.pageHistory).item_id, language: requestModel.get('language'), country: requestModel.get('country') }), api.getCountries(requestModel.get('language'))).then(function (response, countries) {
+                    data.data = response[0];
+                    data.countries = countries;
                     ext.point('io.ox/core/folder/add-schedjoules-calendar').invoke('render', data.dialog);
                     data.dialog.idle();
                 });
@@ -113,12 +114,26 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
     function openSchedjoulesDialog(data) {
 
         data.dialog.on('subscribe', function () {
-
             var subscritions = _.values(this.data.subscriptionsModel.attributes),
-                id = _.copy(this.data.accountID);
+                currentSubscriptions = _.copy(this.data.currentSubscriptions);
             data.dialog.close();
             notifications.yell('success', gt('The integration of the subscribed calendars might take awhile.'));
-            api.subscribeCalendar({ folders: subscritions, id: id }).done(function () {
+            http.pause();
+            // subscribe
+            _.each(subscritions, function (sub) {
+                if (!currentSubscriptions[sub.itemId]) {
+                    api.subscribeCalendar(sub);
+                } else {
+                    delete currentSubscriptions[sub.itemId];
+                }
+
+            });
+            // unsubscribe
+            _.each(currentSubscriptions, function (sub) {
+                folderAPI.remove([sub.id]);
+            });
+
+            http.resume().done(function () {
                 folderAPI.refresh();
             });
 
@@ -156,6 +171,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                 }),
                 cssClass = this.model.attributes.item_class === 'page' ? 'page' : '',
                 country = this.model.attributes.item.country ? ' (' + this.model.attributes.item.country + ')' : '';
+
             this.$el.addClass(cssClass);
 
             this.$el.append(
@@ -172,7 +188,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                         customValues: {
                             'true': {
                                 itemId: this.model.attributes.item.item_id,
-                                name: this.model.attributes.item.name + country
+                                name: this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id) ? this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id).name : this.model.attributes.item.name + country
                             },
                             'false': 'false'
                         }
@@ -241,7 +257,6 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
 
                     // add plain text tail or clickable link
                     if (isLast && !this.notail) node = $('<span class="breadcrumb-tail">');
-                    // else if (!this.handler || isDisabled) node = $('<span class="breadcrumb-item">');
                     else node = $('<a href="#" role="button" class="breadcrumb-link">').attr('href', '#');
 
                     node.attr({ 'data-id': data.item_id, 'data-module': data.module }).text(
@@ -299,7 +314,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
         index: 100,
         render: function () {
             this.$body.empty();
-
+            var switchEnabled = this.data.data.item_id === this.data.pageHistory[0].item_id || _.isEmpty(this.data.pageHistory);
             this.$body.append(
                 $('<div class="row">').append(
                     $('<div class="form-group col-xs-12 col-md-6">').append(
@@ -312,7 +327,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                             className: 'form-control'
                         }).render().$el
                     ),
-                    this.data.data.item_id === this.data.pageHistory[0].item_id || _.isEmpty(this.data.pageHistory) ? $('<div class="form-group col-xs-12 col-md-6">').append(
+                    $('<div class="form-group col-xs-12 col-md-6">').append(
                         $('<label for="country">').text(gt('Country')),
                         new mini.SelectView({
                             list: _.map(this.data.countries[0], function (obj) { return { label: obj.name_translation, value: obj.iso_3166 }; }),
@@ -320,16 +335,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                             model: this.requestModel,
                             id: 'country',
                             className: 'form-control'
-                        }).render().$el
-                    ) : $('<div class="form-group col-xs-12 col-md-6">').append(
-                        $('<label for="country">').text(gt('Country')),
-                        new mini.SelectView({
-                            list: _.map(this.data.countries[0], function (obj) { return { label: obj.name_translation, value: obj.iso_3166 }; }),
-                            name: 'country',
-                            model: this.requestModel,
-                            id: 'country',
-                            className: 'form-control'
-                        }).render().$el.attr('disabled', true)
+                        }).render().$el.attr('disabled', !switchEnabled)
                     )
                 )
             );
@@ -356,21 +362,35 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
 
     function getData(dialog) {
         return $.when(api.getLanguages(), api.getCountries(), userAPI.getCurrentUser(), api.getAllAccounts()).then(function (languages, countries, user, accounts) {
-
-            var accountID = accounts[0][_.findIndex(accounts[0], { provider: 'schedjoules' })].id,
-                accountFolders = accounts[0][_.findIndex(accounts[0], { provider: 'schedjoules' })].configuration.folders,
+            var accountFolders = _.filter(folderAPI.pool.models, function (folder) { return folder.get('com.openexchange.calendar.provider') === 'schedjoules'; }),
                 SubscriptionsModel = Backbone.Model.extend({});
 
-            function collect(accountFolders) {
+            function collect(accountFolders, withId) {
                 var collection = {};
-                _.each(accountFolders, function (val) {
-                    collection[val.itemId] = val;
+                _.each(accountFolders, function (model) {
+                    collection[model.get('com.openexchange.calendar.config').itemId] = {
+                        itemId: model.get('com.openexchange.calendar.config').itemId,
+                        name: model.get('folder_name')
+                    };
+
+                    if (withId) {
+                        collection[model.get('com.openexchange.calendar.config').itemId].id = model.get('id');
+                    }
                 });
                 return collection;
             }
             var subscriptionsModel = new SubscriptionsModel(collect(accountFolders));
 
-            return { dialog: dialog, languages: languages, countries: countries, user: user, accounts: accounts, accountFolders: accountFolders, accountID: accountID, subscriptionsModel: subscriptionsModel };
+            return {
+                dialog: dialog,
+                languages: languages,
+                countries: countries,
+                user: user,
+                accounts: accounts,
+                accountFolders: accountFolders,
+                subscriptionsModel: subscriptionsModel,
+                currentSubscriptions: collect(accountFolders, true)
+            };
         });
     }
 

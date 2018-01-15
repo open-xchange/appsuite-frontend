@@ -253,7 +253,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3060': 'com.openexchange.share.extendedPermissions',
                 '3201': 'com.openexchange.calendar.extendedProperties',
                 '3203': 'com.openexchange.calendar.provider',
-                '3220': 'com.openexchange.caldav.url'
+                '3220': 'com.openexchange.caldav.url',
+                '3205': 'com.openexchange.calendar.config'
             },
             'user': {
                 '610': 'aliases',
