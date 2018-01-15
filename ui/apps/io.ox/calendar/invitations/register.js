@@ -183,7 +183,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getConfirmationStatus: function () {
-            return this.util.getConfirmationStatus(this.model.attributes);
+            return this.util.getConfirmationStatus(this.model);
         },
 
         renderSummary: function () {

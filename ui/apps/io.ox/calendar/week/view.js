@@ -1265,7 +1265,7 @@ define('io.ox/calendar/week/view', [
                 appointmentStartDate = model.getMoment('startDate');
 
                 // is declined?
-                if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
+                if (util.getConfirmationStatus(model) !== 'DECLINED' || this.showDeclined) {
                     // is fulltime?
                     if (util.isAllday(model) && this.options.showFulltime) {
                         // make sure we have full days when calculating the difference or we might get wrong results

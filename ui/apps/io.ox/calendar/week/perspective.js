@@ -51,48 +51,53 @@ define('io.ox/calendar/week/perspective', [
                 self.app.pages.changePage('detailView');
                 self.app.pages.getPage('detailView').busy();
             }
-            api.get(obj).then(
-                function success(model) {
 
-                    if (_.device('smartphone')) {
-                        var data = model.toJSON(),
-                            p = self.app.pages.getPage('detailView'),
-                            b = new ext.Baton({ data: data, model: model });
-                        // draw details to page
-                        p.idle().empty().append(detailView.draw(model));
-                        // update toolbar with new baton
-                        self.app.pages.getToolbar('detailView').setBaton(b);
-
-                    } else {
-                        self.dialog.show(e, function (popup) {
-                            popup
-                            .append(detailView.draw(model))
-                            .attr({
-                                'role': 'complementary',
-                                'aria-label': gt('Appointment Details')
-                            });
-                        });
-                    }
-                    if (self.setNewStart) {
-                        // view should change week to the start of this appointment(used by deeplinks)
-                        // one time only
-                        self.setNewStart = false;
-                        if (self.view) {
-                            //view is rendered already
-                            self.view.setStartDate(util.getMoment(model.get('startDate')), false);
-                        }
-                    }
-
-                },
-                function fail() {
-                    notifications.yell('error', gt('An error occurred. Please try again.'));
-                    $('.appointment', self.main).removeClass('opac current');
-                    if (_.device('smartphone')) {
-                        self.app.pages.getPage('detailView').idle();
-                        self.app.pages.goBack();
+            function applyDate(model) {
+                if (self.setNewStart) {
+                    // view should change week to the start of this appointment(used by deeplinks)
+                    // one time only
+                    self.setNewStart = false;
+                    if (self.view) {
+                        //view is rendered already
+                        self.view.setStartDate(util.getMoment(model.get('startDate')), false);
                     }
                 }
-            );
+            }
+
+            function failHandler() {
+                notifications.yell('error', gt('An error occurred. Please try again.'));
+                $('.appointment', self.main).removeClass('opac current');
+                if (_.device('smartphone')) {
+                    self.app.pages.getPage('detailView').idle();
+                    self.app.pages.goBack();
+                }
+            }
+
+            if (_.device('smartphone')) {
+                var p = self.app.pages.getPage('detailView');
+                api.get(obj).then(function (model) {
+                    var data = model.toJSON(),
+                        b = new ext.Baton({ data: data, model: model });
+                    p.idle().empty().append(detailView.draw(model));
+                    self.app.pages.getToolbar('detailView').setBaton(b);
+                    applyDate(model);
+                }, failHandler);
+
+            } else {
+                self.dialog.show(e, function (popup) {
+                    popup
+                    .busy()
+                    .attr({
+                        'role': 'complementary',
+                        'aria-label': gt('Appointment Details')
+                    });
+
+                    api.get(obj).then(function (model) {
+                        popup.idle().append(detailView.draw(model));
+                        applyDate(model);
+                    }, failHandler);
+                });
+            }
         },
 
         /**

@@ -44,7 +44,7 @@ define('io.ox/calendar/list/listview', [
             if (model.get('folder')) {
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 folderAPI.get(model.get('folder')).done(function (folder) {
-                    var conf = util.getConfirmationStatus(model.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                    var conf = util.getConfirmationStatus(model);
                     self.addClass(util.getConfirmationClass(conf) + (model.get('hard_conflict') ? ' hardconflict' : ''));
 
                     if (baton.app.props.get('colorScheme') !== 'custom') return;

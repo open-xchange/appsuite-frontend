@@ -136,7 +136,7 @@ define('io.ox/calendar/util', [
 
             var check = function (data) {
                 if (folderAPI.is('private', data)) {
-                    var isOrganizer = opt.app.organizer.entity === ox.user_id;
+                    var isOrganizer = that.hasFlag(opt.app, 'organizer');
                     return opt.invert ? !isOrganizer : isOrganizer;
                 }
                 return true;
@@ -743,12 +743,16 @@ define('io.ox/calendar/util', [
             return hash;
         },
 
-        getConfirmationStatus: function (obj, id, defaultStatus) {
-            var user = _(obj.attendees).findWhere({
-                entity: id || ox.user_id
-            });
-            if (!user) return (defaultStatus || 'NEEDS-ACTION');
-            return user.partStat || (defaultStatus || 'NEEDS-ACTION');
+        getConfirmationStatus: function (model) {
+            if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
+            if (model.hasFlag('accepted')) return 'ACCEPTED';
+            if (model.hasFlag('tentative')) return 'TENTATIVE';
+            if (model.hasFlag('declined')) return 'DECLINED';
+            if (model.hasFlag('needs-action')) return 'NEEDS-ACTION';
+            if (model.hasFlag('event_accepted')) return 'ACCEPTED';
+            if (model.hasFlag('event_tentative')) return 'TENTATIVE';
+            if (model.hasFlag('event_declined')) return 'DECLINED';
+            return 'NEEDS-ACTION';
         },
 
         getConfirmationMessage: function (obj, id) {
@@ -906,9 +910,7 @@ define('io.ox/calendar/util', [
         getAppointmentColor: function (folder, eventModel) {
             var folderColor = that.getFolderColor(folder),
                 eventColor = eventModel.get('color'),
-                user = folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
-                defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
-                conf = that.getConfirmationStatus(eventModel.attributes, user, defaultStatus);
+                conf = that.getConfirmationStatus(eventModel);
 
             if (_.isNumber(eventColor)) eventColor = that.colors[eventColor - 1].value;
 
@@ -979,12 +981,10 @@ define('io.ox/calendar/util', [
         canAppointmentChangeColor: function (folder, eventModel) {
             var eventColor = eventModel.get('color'),
                 privateFlag = that.isPrivate(eventModel),
-                conf = that.getConfirmationStatus(eventModel.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                conf = that.getConfirmationStatus(eventModel);
 
             // shared appointments which are needs-action or declined don't receive color classes
-            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) {
-                return false;
-            }
+            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             return !eventColor && !privateFlag;
         },
@@ -1019,13 +1019,6 @@ define('io.ox/calendar/util', [
                     .addPrimaryButton('series', gt('All future events'), 'series')
                     .addButton('appointment', gt('Only this event'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
-        },
-
-        isFirst: function (model) {
-            var start = model.has('oldStartDate') ? model.get('oldStartDate').valueOf() : model.getTimestamp('startDate'),
-                recurrence = model.has('recurrenceId') ? moment(model.get('recurrenceId')).valueOf() : 0;
-            // TODO we need another check here but this should work for 90% for the cases and should not cause false positives
-            return start === recurrence;
         },
 
         isPrivate: function (data, strict) {
@@ -1226,6 +1219,12 @@ define('io.ox/calendar/util', [
                 description: '',
                 trigger: { duration: '-PT12H', related: 'START' }
             }]);
+        },
+
+        hasFlag: function (model, flag) {
+            var data = model instanceof Backbone.Model ? model.attributes : model;
+            if (!data.flags || !data.flags.length) return false;
+            return data.flags.indexOf(flag) >= 0;
         }
     };
 

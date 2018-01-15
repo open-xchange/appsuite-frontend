@@ -53,10 +53,10 @@ define('io.ox/calendar/week/extensions', [
                 }
             }
 
-            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy') && !folderAPI.is('private', folder)) {
+            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
-                conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                conf = util.getConfirmationStatus(a);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', folder, a.attributes) ? ' modify' : '');

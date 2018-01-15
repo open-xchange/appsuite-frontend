@@ -199,6 +199,7 @@ define('io.ox/calendar/model', [
             if (this.attributes.folder && this.attributes.id) {
                 this.cid = this.attributes.cid = util.cid(this.attributes);
             }
+            this.flags = _.object(this.get('flags'), this.get('flags'));
         },
         getAttendees: function () {
             if (this._attendees) return this._attendees;
@@ -267,6 +268,9 @@ define('io.ox/calendar/model', [
         },
         getRruleMapModel: function () {
             return new RRuleMapModel({ model: this });
+        },
+        hasFlag: function (flag) {
+            return !!this.flags[flag];
         }
     });
 
@@ -320,7 +324,9 @@ define('io.ox/calendar/model', [
                     action: 'all',
                     rangeStart: moment(this.start).utc().format(util.ZULU_FORMAT),
                     rangeEnd: moment(this.end).utc().format(util.ZULU_FORMAT),
+                    fields: api.defaultFields,
                     order: 'asc',
+                    sort: 'startDate',
                     expand: true
                 };
 

@@ -291,7 +291,7 @@ define('io.ox/calendar/month/view', [
             this.collection.each(function (model) {
 
                 // is declined?
-                if (util.getConfirmationStatus(model.attributes) === 2 && !settings.get('showDeclinedAppointments', false)) return;
+                if (util.getConfirmationStatus(model) === 'DECLINED' && !settings.get('showDeclinedAppointments', false)) return;
 
                 var startMoment = model.getMoment('startDate'),
                     endMoment = model.getMoment('endDate'),
@@ -451,10 +451,10 @@ define('io.ox/calendar/month/view', [
                 }
             }
 
-            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy') && !folderAPI.is('private', folder)) {
+            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
                 classes = 'private';
             } else {
-                conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                conf = util.getConfirmationStatus(a);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', folder, a.attributes) ? ' modify' : '');

@@ -56,17 +56,17 @@ define('io.ox/calendar/month/perspective', [
          */
         showAppointment: function (e, obj) {
             // open appointment details
-            var self = this;
-            api.get(obj).done(function (model) {
-                self.dialog
-                    .show(e, function (popup) {
-                        popup
-                        .append(detailView.draw(model))
-                        .attr({
-                            'role': 'complementary',
-                            'aria-label': gt('Appointment Details')
-                        });
-                    });
+            this.dialog.show(e, function (popup) {
+                popup
+                .busy()
+                .attr({
+                    'role': 'complementary',
+                    'aria-label': gt('Appointment Details')
+                });
+
+                api.get(obj).then(function success(model) {
+                    popup.idle().append(detailView.draw(model));
+                });
             });
         },
 

@@ -53,18 +53,14 @@ define('io.ox/calendar/view-grid-template', [
 
             set: function (data, fields) {
 
-                var self = this,
-                    isPrivate = _.isUndefined(data.summary),
+                var isPrivate = _.isUndefined(data.summary),
                     summary = isPrivate ? gt('Private') : (data.summary || '\u00A0'),
                     a11yLabel = [];
 
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 if (data.folder_id) {
-                    var folder = folderAPI.get(data.folder);
-                    folder.done(function (folder) {
-                        var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                        self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
-                    });
+                    var conf = util.getConfirmationStatus(data);
+                    this.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
                 }
 
                 fields.summary.text(summary);

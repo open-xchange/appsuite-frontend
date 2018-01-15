@@ -57,7 +57,7 @@ define('io.ox/calendar/api', [
             _(response.updated).each(function (event) {
                 if (isRecurrenceMaster(event)) {
                     var events = api.pool.findRecurrenceModels(event),
-                        updates = _(event).pick('attendees', 'alarms', 'timestamp');
+                        updates = _(event).pick('flags', 'timestamp');
                     events.forEach(function (evt) {
                         evt.set(updates);
                         api.trigger('update', evt.attributes);
@@ -95,9 +95,18 @@ define('io.ox/calendar/api', [
 
             return response;
         },
+
+        defaultFields = ['class', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'transp'].join(','),
+
+        extendedFields = [defaultFields, 'deleteExceptionDates', 'changeExceptionDates'].join(','),
+
         api = {
             // convenience function
             cid: util.cid,
+
+            defaultFields: defaultFields,
+
+            extendedFields: extendedFields,
 
             request: (function () {
                 function getParams(opt, start, end) {
@@ -137,7 +146,7 @@ define('io.ox/calendar/api', [
 
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
-                    if (model) return $.when(model);
+                    if (model && model.has('attendees')) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {
@@ -149,7 +158,8 @@ define('io.ox/calendar/api', [
                         action: 'get',
                         id: obj.id,
                         recurrenceId: obj.recurrenceId,
-                        folder: obj.folder
+                        folder: obj.folder,
+                        extendedEntities: true
                     }
                 }).then(function (data) {
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
@@ -249,7 +259,8 @@ define('io.ox/calendar/api', [
                         folder: obj.folder,
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
-                        sendInternalNotifications: !!options.sendInternalNotifications
+                        sendInternalNotifications: !!options.sendInternalNotifications,
+                        fields: api.extendedFields
                     },
                     def;
 
@@ -308,7 +319,8 @@ define('io.ox/calendar/api', [
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
-                        recurrenceRange: options.recurrenceRange
+                        recurrenceRange: options.recurrenceRange,
+                        fields: api.extendedFields
                     };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
