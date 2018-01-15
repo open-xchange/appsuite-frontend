@@ -426,7 +426,7 @@ define('io.ox/mail/compose/view', [
                             id = base.last(),
                             folder = base.without(id).join(mailAPI.separator),
                             // use JSlob to save the draft ID so it can be used as a restore point.
-                            idSavePoints =  coreSettings.get('savepoints', []);
+                            idSavePoints = coreSettings.get('savepoints', []);
 
                         idSavePoints.push({
                             module: 'io.ox/mail/compose',

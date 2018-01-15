@@ -262,8 +262,8 @@ define('io.ox/calendar/toolbar', [
         setup: function (app) {
             if (_.device('smartphone')) return;
             var toolbar = $('<div class="generic-toolbar calendar bottom visual-focus">').append(
-                $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
-                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Close folder view'))
+                $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Open folder view')).append(
+                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
                 ).on('click', { state: true }, app.toggleFolderView)
             );
             app.getWindow().nodes.body.toggleClass('bottom-toolbar', app.props.get('layout') !== 'list').append(toolbar);

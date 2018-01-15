@@ -1138,13 +1138,15 @@ define('io.ox/core/tk/selection', [
                             getNode(getLastSelectedItem()).attr({ tabindex: 0 });
 
                             // 56086
-                            //TODO revisit when a focus indicator is implemented: it sets prev
+                            //TODO revisit when a focus indicator is implemented: it sets 'last'
                             // to the last selected element and doesn't leave it at the last focused element
-                            // -> I think it should jump back to the prev focused element like it happens without
+                            // -> I think it should jump back to the previous focused element like it happens without
                             // this line below, but since unselected focused element are not handled so far it feels
                             // very wrong to jump back to an element without a visual indicator.
                             if (getLastSelectedItem()) {
-                                last = prev = getLastSelectedItem();
+                                // just set 'last' to the last selected item, prev should stay in case of a multiselection
+                                // it's also important when the marker (ctrl+arrows) are used to restore a correct 'last' item
+                                last = getLastSelectedItem();
                             }
                         }
                     }

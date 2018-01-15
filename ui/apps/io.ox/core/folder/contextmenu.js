@@ -405,6 +405,9 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
+                // permissions and sharing in context menu not for files
+                if (baton.data.filename) return;
+
                 if (_.device('smartphone')) return;
                 // trash or subfolders do not support sharing or permission changes
                 if (api.is('trash', baton.data)) return;
@@ -447,6 +450,36 @@ define('io.ox/core/folder/contextmenu', [
                         text: gt('Create sharing link')
                     });
                 }
+            };
+        }()),
+
+        //
+        // Favorite "show in Drive" is only for files
+        //
+        showInDrive: (function () {
+            function handler(e) {
+                e.preventDefault();
+                require(['io.ox/files/api'], function (filesAPI) {
+                    var models = filesAPI.pool.get('detail').get(e.data.cid);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({
+                        models: models,
+                        app: this.view.app,
+                        alwaysChange: true
+                    }));
+                });
+            }
+
+            return function (baton) {
+                if (baton.data.folder_name) return;
+
+                if (_.device('smartphone')) return;
+                contextUtils.addLink(this, {
+                    action: 'showInDrive',
+                    data: { cid: baton.data.cid },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Show in Drive')
+                });
             };
         }()),
 
@@ -656,6 +689,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'toggle',
             index: 6200,
             draw: extensions.toggle
+        },
+        {
+            id: 'showInDrive',
+            index: 6200,
+            draw: extensions.showInDrive
         },
         {
             id: 'empty',

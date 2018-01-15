@@ -13,18 +13,47 @@
 
 .edit-picture {
 
-    .inline-actions {
-        display: flex;
-        justify-content: center;
-
-        .btn {
-            margin: 0 5px;
+    .modal-body.croppie-container {
+        min-height: 500px;
+        .smartphone & {
+            min-height: initial;
         }
+    }
+
+    .empty-state {
+        height: 466px;
+        width: 466px;
+        .smartphone & {
+            height: 322.25px;
+            width: 322.25px;
+        }
+        .flex-center(column);
+        background-color: @light-silver;
+        border: #ccc solid 1px;
+        margin: 0 auto;
+    }
+
+    .inline-actions {
+        .flex-center(row);
+        .btn {  margin: 0 5px; }
     }
 
     input.cr-slider:focus {
         outline: thin dotted;
         outline: 5px auto -webkit-focus-ring-color;
         outline-offset: 0;
-     }
+    }
+
+    // toggle class
+    &.blank {
+        .modal-body > .inline-actions,
+        .cr-boundary, .cr-slider-wrap {
+            display: none;
+        }
+    }
+    &:not(.blank) {
+        .empty-state { display: none; }
+    }
+
+
 }

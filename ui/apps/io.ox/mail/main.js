@@ -621,7 +621,7 @@ define('io.ox/mail/main', [
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
-                    app.listView.collection.expired = true;
+                    app.listView.collection.expire();
                 }
                 app.listView.model.set('thread', !!value);
             });
@@ -1200,10 +1200,8 @@ define('io.ox/mail/main', [
                         app.listView.selection.selectEvents(app.listView.selection.getItems());
                     }
                 }
-                // don't save for list layout, doesn't make sense and breaks it for other layouts
-                if (layout !== 'list') {
-                    this.listControl.applySizeConstraints();
-                }
+
+                this.listControl.applySizeConstraints();
             };
 
             app.props.on('change:layout', function () {
@@ -1555,6 +1553,24 @@ define('io.ox/mail/main', [
             });
         },
 
+        'textPreview': function (app) {
+
+            // default is true (for testing) until we have cross-stack support
+            var support = settings.get('features/textPreview', true);
+
+            app.supportsTextPreview = function () {
+                return support;
+            };
+
+            app.supportsTextPreviewConfiguration = function () {
+                return support && account.isPrimary(app.folder.get());
+            };
+
+            app.useTextPreview = function () {
+                return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
+            };
+        },
+
         /*
          * Respond to change of view options that require redraw
          */
@@ -1571,7 +1587,7 @@ define('io.ox/mail/main', [
             function toggleClasses() {
                 app.listView.$el
                     .toggleClass('show-contact-pictures', app.props.get('contactPictures'))
-                    .toggleClass('show-text-preview', app.props.get('textPreview'));
+                    .toggleClass('show-text-preview', app.useTextPreview());
             }
         },
 
@@ -1992,9 +2008,7 @@ define('io.ox/mail/main', [
                 folderAPI.reload(data.folder);
                 // push arrives, other folder selected
                 if (data.folder !== app.folder.get(data.folder)) {
-                    _(api.pool.getByFolder(data.folder)).each(function (collection) {
-                        collection.expired = true;
-                    });
+                    _(api.pool.getByFolder(data.folder)).invoke('expire');
                 } else {
                     app.listView.reload();
                 }

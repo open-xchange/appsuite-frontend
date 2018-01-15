@@ -119,9 +119,11 @@ define('plugins/portal/birthdays/register', [
                     if (!isDuplicate(name, birthday, hash)) {
                         $list.append(
                             $('<li class="line">').append(
-                                birthday.isSame(today, 'day') ? $('<span class="bold">').append('<i class="cake fa fa-birthday-cake">') : $(),
-                                $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(birthdayText)
+
+                                $('<div class="date">').text(birthdayText),
+                                $('<div class="name">').text(name).prepend(
+                                    birthday.isSame(today, 'day') ? $('<div class="cake">').append('<i class="fa fa-birthday-cake">') : $()
+                                )
                             )
                         );
                         markDuplicate(name, birthday, hash);

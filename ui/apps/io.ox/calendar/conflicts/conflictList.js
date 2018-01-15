@@ -23,7 +23,8 @@ define('io.ox/calendar/conflicts/conflictList', [
     'io.ox/contacts/util',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/calendar/conflicts/conflicts',
-    'settings!io.ox/calendar'
+    'settings!io.ox/calendar',
+    'less!io.ox/calendar/style'
 ], function (ext, extensions, calAPI, folderAPI, userAPI, resourceAPI, coreUtil, util, contactsUtil, ModalDialog, gt, settings) {
 
     'use strict';

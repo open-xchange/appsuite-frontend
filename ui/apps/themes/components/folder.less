@@ -180,8 +180,10 @@
             }
 
             i {
-                text-align: left;
-                &:before { content: '\f114'; } // fa-folder-o
+                &:not(.file-type-icon) {
+                    text-align: left;
+                    &:before { content: '\f114'; } // fa-folder-o
+                }
             }
 
             &.inbox { i:before { content: '\f01c'; }} // fa-inbox

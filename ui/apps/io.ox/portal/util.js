@@ -35,7 +35,7 @@ define('io.ox/portal/util', ['settings!io.ox/portal'], function (settings) {
         },
 
         setColor: function (node, color) {
-            color = color || 'black';
+            color = color || 'default';
             node.removeClass('widget-color-' + node.attr('data-color'));
             node.addClass('widget-color-' + color).attr('data-color', color);
         }

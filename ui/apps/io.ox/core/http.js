@@ -53,7 +53,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '654': 'original_id',
                 '655': 'original_folder_id',
                 '656': 'content_type',
-                '660': 'flagged'
+                '660': 'flagged',
+                // they both add the same property; never use simultaneously!
+                '662': 'text_preview',
+                '663': 'text_preview'
             },
             'contacts': {
                 '500': 'display_name',
@@ -661,8 +664,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         if (response[i]) {
                             // time
                             timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
-                            // data/error
-                            if (response[i].data !== undefined) {
+                            // data/error handling
+                            if (_.isEmpty(response[i])) {
+                                // jslob case
+                                data.push({ data: response[i], timestamp: timestamp });
+                            } else if (response[i].data !== undefined) {
                                 // data
                                 var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
                                 // handling for GET requests
@@ -1390,6 +1396,21 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             // translation will be injected by http_error.js
             generic: 'An unknown error occurred',
             offline: 'Cannot connect to server. Please check your connection.'
+        },
+
+        // helper to unify columns for mail API and boot/load
+        defaultColumns: {
+
+            mail: (function () {
+
+                var generic = '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                    // original_id, original_folder_id
+                    unseen = generic + ',654,655',
+                    all = generic + ',X-Open-Xchange-Share-URL';
+
+                return { generic: generic, unseen: unseen, all: all };
+
+            }())
         }
     };
 

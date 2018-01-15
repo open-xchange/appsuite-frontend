@@ -13,6 +13,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+@widget-color-default: @widget-color-black;
+
 @widget-color-black: #333;
 @widget-color-red: #e30000;
 @widget-color-orange: #ce3c00;
@@ -97,7 +99,7 @@
                 width: 90%;
                 display: inline-block;
                 font-size: 16px;
-                font-weight: normal;
+                font-weight: bold;
             }
         }
 
@@ -153,7 +155,7 @@
                 &.inverse .decoration { background-color: @black; }
             }
         }
-
+        &.widget-color-default    { .mixin-widget-color(@widget-color-default);    }
         &.widget-color-black      { .mixin-widget-color(@widget-color-black);      }
         &.widget-color-red        { .mixin-widget-color(@widget-color-red);        }
         &.widget-color-orange     { .mixin-widget-color(@widget-color-orange);     }
@@ -600,7 +602,7 @@
     @media all and (min-width: 560px ) { width: 100% / 2; }
     @media all and (min-width: 840px ) { width: 100% / 3 - 0.05%; /* -0.50% = floating fix */ }
     @media all and (min-width: 1120px) { width: 100% / 4 - 0.05%; /* -0.50% = floating fix */ }
-    @media all and (min-width: 1400px) { width: 100% / 5 - 0.05%; /* -0.50% = floating fix */ }
+    @media all and (min-width: 1750px) { width: 100% / 5 - 0.05%; /* -0.50% = floating fix */ }
 }
 
 /* Settings */
@@ -669,6 +671,7 @@
         }
     }
 
+    .widget-color-default    { color: @widget-color-default; }
     .widget-color-black      { color: @widget-color-black; }
     .widget-color-red        { color: @widget-color-red; }
     .widget-color-orange     { color: @widget-color-orange; }
@@ -701,6 +704,7 @@
                 border-radius: @border-radius-base;
             }
 
+            .color-default { background-color: @widget-color-default; }
             .color-black { background-color: @widget-color-black; }
             .color-red { background-color: @widget-color-red; }
             .color-orange { background-color: @widget-color-orange; }

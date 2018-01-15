@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@open-xchange/codecept-helper@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.2.tgz#083919ffbbb496661e8985df658a8f56cda5dea6"
+"@open-xchange/codecept-helper@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.3.tgz#77e6d3778326f1ebe616081628d4c7bc96a19725"
   dependencies:
     underscore "^1.8.3"
 

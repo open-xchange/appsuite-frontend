@@ -279,6 +279,10 @@ define('io.ox/core/folder/api', [
 
         addModel: function (data) {
 
+            if (data.attributes) {
+                return data;
+            }
+
             var id = data.id, model = this.models[id];
 
             if (model === undefined) {
@@ -337,8 +341,10 @@ define('io.ox/core/folder/api', [
                         // add virtual parent references
                         if (isVirtual(id)) {
                             var newParents = models[i].get('virtual_parents');
-                            newParents.push(id);
-                            models[i].set('virtual_parents', _.uniq(newParents));
+                            if (newParents) {
+                                newParents.push(id);
+                                models[i].set('virtual_parents', _.uniq(newParents));
+                            }
                         }
                     }
                 }

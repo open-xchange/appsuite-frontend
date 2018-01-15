@@ -613,11 +613,15 @@
         font-size: 13px;
         line-height: 16px;
         height: 16px * @lines;
-        display: block; /* Fallback for non-webkit */
-        display: -webkit-box;
         -webkit-line-clamp: @lines;
         -webkit-box-orient: vertical;
         white-space: normal;
+        display: none;
+    }
+
+    &.show-text-preview .text-preview {
+        display: block; /* Fallback for non-webkit */
+        display: -webkit-box;
     }
 
     @item-line-height: 20px;

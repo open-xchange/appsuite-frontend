@@ -13,7 +13,23 @@
  */
 ul.io-ox-portal-birthdays .cake {
     padding-right: 4px;
-    display: inline;
+    display: inline-block;
+    font-weight: bold
+}
+
+.io-ox-portal-birthdays {
+    li {
+        .date {
+            font-weight: 300;
+            float: right;
+            width: 25%;
+            margin-left: 10px;
+        }
+        .name {
+            font-weight: bold;
+            .ellipsis();
+        }
+    }
 }
 
 div.io-ox-portal-birthdays {
@@ -36,7 +52,6 @@ div.io-ox-portal-birthdays {
         margin-bottom: 13px;
         clear: both;
         cursor: pointer;
-
         .name { font-weight: bold; }
 
         .picture {

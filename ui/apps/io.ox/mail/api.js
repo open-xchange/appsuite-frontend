@@ -705,9 +705,7 @@ define('io.ox/mail/api', [
             var trashId = accountAPI.getFoldersByType('trash');
             _(trashId).each(function (id) {
                 folderAPI.list(id, { cache: false });
-                _(pool.getByFolder(id)).each(function (collection) {
-                    collection.expired = true;
-                });
+                _(pool.getByFolder(id)).invoke('expire');
             });
         }
     });
@@ -1122,7 +1120,8 @@ define('io.ox/mail/api', [
                 action: 'get',
                 id: obj.id,
                 folder: obj.folder || obj.folder_id,
-                view: 'html'
+                view: 'html',
+                decrypt: obj.security && obj.security.decrypted
             }, false);
         } else if ('parent' in obj) {
             // nested message!?
@@ -1131,7 +1130,8 @@ define('io.ox/mail/api', [
                 action: 'get',
                 id: obj.parent.id,
                 folder: obj.parent.folder || obj.parent.folder_id,
-                view: 'html'
+                view: 'html',
+                decrypt: obj.security && obj.security.decrypted
             }, false)
             .then(function (data) {
                 return _.chain(data.nested_msgs)
@@ -1407,11 +1407,15 @@ define('io.ox/mail/api', [
     }());
 
     api.fetchTextPreview = function (ids) {
-        // return api.getList(ids, false, { columns: '1,20,1000' });
-        return _.wait(500).then(function () {
+        return http.fixList(ids, http.PUT({
+            module: 'mail',
+            params: { action: 'list', columns: '600,601,663', timezone: 'utc' },
+            data: http.simplify(ids)
+        }))
+        .then(function (response) {
             var hash = {};
-            _(ids).each(function (item) {
-                hash[_.cid(item)] = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr';
+            _(response).each(function (item) {
+                hash[_.cid(item)] = item.text_preview || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr';
             });
             return hash;
         });
@@ -1957,7 +1961,7 @@ define('io.ox/mail/api', [
                     action: 'all',
                     folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
+                    columns: http.defaultColumns.mail.unseen,
                     sort: '610',
                     order: 'desc',
                     unseen: true,
@@ -1970,7 +1974,7 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                    columns: http.defaultColumns.mail.all,
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
@@ -1982,7 +1986,7 @@ define('io.ox/mail/api', [
             return {
                 action: 'all',
                 folder: params.folder,
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                columns: http.defaultColumns.mail.all,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
                 categoryid: params.category_id || params.categoryid,
@@ -2001,10 +2005,6 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === api.allMessagesFolder && params.unseen === true;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
-                // inject text preview (for testing)
-                _(data).each(function (item, i) {
-                    item.text_preview = i % 2 ? null : 'This is a placeholder for the upcoming new feature "Text preview" that allows you to preview the content of the message. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat';
-                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });

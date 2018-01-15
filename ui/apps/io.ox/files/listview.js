@@ -67,9 +67,15 @@ define('io.ox/files/listview', [
 
         initialize: function () {
             ListView.prototype.initialize.apply(this, arguments);
-            this.contextMenu = arguments[0].contextMenu;
+            var view = this;
+            view.contextMenu = arguments[0].contextMenu;
 
-            this.$el.addClass('file-list-view');
+            view.$el.addClass('file-list-view');
+
+            view.favorites = settings.get('favorites/infostore', []);
+            settings.on('change:favorites/infostore', function () {
+                view.favorites = settings.get('favorites/infostore', []);
+            });
         },
 
         getCompositeKey: function (model) {
@@ -94,7 +100,7 @@ define('io.ox/files/listview', [
     };
 
     // we redraw only if a relevant attribute changes (to avoid flickering)
-    FileListView.relevantAttributes = ['index', 'id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version'];
+    FileListView.relevantAttributes = ['index', 'id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version', 'index/virtual/favorites/infostore'];
 
     //
     // Extension for detail sidebar

@@ -100,6 +100,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         // loop over detail collection to find expired models
         var expired = this.get('detail').filter(function (model) {
+            if (model['index/virtual/favorites/infostore']) {
+                return false;
+            }
             return !models[model.cid];
         });
 
@@ -114,7 +117,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             // ignore detail collection and those with gc=false, e.g. all-visible
             if (id === 'detail' || entry.collection.gc === false) return;
             // mark as expired
-            entry.collection.expired = true;
+            entry.collection.expire();
         });
     }
 
@@ -147,6 +150,11 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             collection.expired = false;
             collection.complete = false;
             collection.sorted = true;
+
+            collection.expire = function () {
+                this.expired = true;
+                this.trigger('expire');
+            };
 
             // to simplify debugging
             collection.cid = cid;
@@ -290,7 +298,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         resetFolder: function (ids) {
             var list = _(this.getByFolder(ids));
-            list.each(function (collection) { collection.expired = true; });
+            list.invoke('expire');
             return list;
         },
 

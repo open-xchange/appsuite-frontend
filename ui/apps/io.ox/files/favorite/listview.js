@@ -54,14 +54,48 @@ define('io.ox/files/favorite/listview', [
                 '.list-item .list-item-content',
                 function (element) {
                     var cid = $(element.currentTarget).parent().attr('data-cid');
-                    options.app.folder.set(options.collection.get(cid).id);
+                    if ($(element.currentTarget).parent().attr('data-is-file')) {
+                        require(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).then(function (api, actions) {
+                            var models = api.pool.get('detail').get(cid);
+                            actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({
+                                models: [models],
+                                app: options.app,
+                                alwaysChange: true
+                            }));
+                        });
+                    } else {
+                        options.app.folder.set(options.collection.get(cid).id);
+                    }
                 }
             );
         },
         load: function () {
             var self = this;
-            return FolderAPI.multiple(this.folderID, { errors: true }).then(function (response) {
-                self.collection.reset(response);
+            var files = [],
+                folders = [];
+            var cache = !self.collection.expired && self.collection.fetched;
+            _.each(self.collection.models, function (model) {
+                if (model.folder_name) {
+                    folders.push(model.id);
+                } else {
+                    files.push(model);
+                }
+            });
+            require(['io.ox/files/api']).then(function (FilesAPI) {
+                return FilesAPI.getList(files, { errors: true, cache: cache, onlyAttributes: true }).then(function (favoriteFiles) {
+                    return FolderAPI.multiple(folders, { errors: true, cache: cache }).then(function (favoriteFolders) {
+
+                        // Elements to be shown in the listView
+                        var resetElements = [];
+                        _.each(favoriteFolders, function (elem) {
+                            resetElements.push(elem);
+                        });
+                        _.each(favoriteFiles, function (elem) {
+                            resetElements.push(elem);
+                        });
+                        self.collection.reset(resetElements);
+                    });
+                });
             });
         },
         sortBy: function () {
@@ -112,8 +146,12 @@ define('io.ox/files/favorite/listview', [
         {
             id: 'file-type',
             index: 10,
-            draw: function () {
-                this.closest('.list-item').addClass('file-type-folder');
+            draw: function (baton) {
+                if (baton.model.getFileType) {
+                    this.closest('.list-item').addClass('file-type-' + baton.model.getFileType()).attr('data-is-file', true);
+                } else {
+                    this.closest('.list-item').addClass('file-type-folder');
+                }
             }
         },
         {
@@ -143,7 +181,7 @@ define('io.ox/files/favorite/listview', [
                 if (_.device('smartphone')) return;
 
                 var breadcrumb = new BreadcrumbView({
-                    folder: baton.model.id,
+                    folder: baton.model.getFileType ? baton.model.attributes.folder_id : baton.model.id,
                     exclude: ['9'],
                     notail: true,
                     isLast: true

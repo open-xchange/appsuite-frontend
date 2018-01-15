@@ -211,59 +211,73 @@ define('io.ox/files/contextmenu', [
             label: gt('Download')
         },
         {
+            id: 'add-favorite',
+            index: 1200,
+            ref: 'io.ox/files/favorites/add',
+            section: '20',
+            label: gt('Add to favorites')
+        },
+        {
+            id: 'remove-favorite',
+            index: 1200,
+            ref: 'io.ox/files/favorites/remove',
+            section: '20',
+            label: gt('Remove from favorites')
+        },
+        {
             id: 'invite',
             index: 1300,
             ref: 'io.ox/files/actions/invite',
-            section: '20',
+            section: '30',
             label: gt('Invite people')
         },
         {
             id: 'getalink',
             index: 1400,
             ref: 'io.ox/files/actions/getalink',
-            section: '20',
+            section: '30',
             label: gt('Create sharing link')
         },
         {
             id: 'rename',
             index: 1500,
             ref: 'io.ox/files/actions/rename',
-            section: '30',
+            section: '40',
             label: gt('Rename')
         },
         {
             id: 'move',
             index: 1600,
             ref: 'io.ox/files/actions/move',
-            section: '30',
+            section: '40',
             label: gt('Move')
         },
         {
             id: 'copy',
             index: 1700,
             ref: 'io.ox/files/actions/copy',
-            section: '30',
+            section: '40',
             label: gt('Copy')
         },
         {
             id: 'saveaspdf',
             index: 1800,
             ref: 'io.ox/files/actions/save-as-pdf',
-            section: '40',
+            section: '50',
             label: gt('Save as PDF')
         },
         {
             id: 'send',
             index: 1700,
             ref: 'io.ox/files/actions/send',
-            section: '40',
+            section: '50',
             label: gt('Send by mail')
         },
         {
             id: 'delete',
             index: 1900,
             ref: 'io.ox/files/actions/delete',
-            section: '50',
+            section: '60',
             label: gt('Delete')
         }
     );

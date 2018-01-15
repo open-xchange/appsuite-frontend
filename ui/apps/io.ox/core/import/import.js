@@ -257,7 +257,8 @@ define('io.ox/core/import/import', [
                                     api.refresh();
                                 }
                             });
-
+                            // update folder data
+                            folderAPI.reload(id);
                         } catch (e) {
                             // if api is unknown, refresh everything
                             if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
