@@ -16,9 +16,10 @@ define('io.ox/calendar/actions/create', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/user',
     'io.ox/contacts/util',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar'
-], function (api, dialogs, userAPI, util, gt, settings) {
+], function (api, dialogs, userAPI, util, calendarUtil, gt, settings) {
 
     'use strict';
 
@@ -35,8 +36,8 @@ define('io.ox/calendar/actions/create', [
         userAPI.get({ id: folder.created_by }).done(function (user) {
 
             var fullname = util.getFullName(user);
-
-            new dialogs.ModalDialog()
+            // standard 500px is too small in some languages (e.g. german)
+            new dialogs.ModalDialog({ width: '550' })
             .header(
                 $('<h4>').text(gt('Appointments in shared calendars'))
             )
@@ -53,8 +54,8 @@ define('io.ox/calendar/actions/create', [
                 openEditDialog(params);
             })
             .on('invite', function () {
-                params.participants = [{ id: user.id, type: 1 }];
-                params.folderId = settings.get('chronos/defaultFolderId');
+                params.attendees = calendarUtil.createAttendee(user);
+                params.folder = settings.get('chronos/defaultFolderId');
                 openEditDialog(params);
             })
             .show();
