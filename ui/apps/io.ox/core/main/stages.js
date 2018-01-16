@@ -219,7 +219,7 @@ define('io.ox/core/main/stages', [
 
             if (_.device('smartphone')) {
                 ext.point('io.ox/core/mobile').invoke('draw');
-                $('#io-ox-screens').css('top', '40px');
+                //$('#io-ox-screens').css('top', '40px');
             }
 
             // help here

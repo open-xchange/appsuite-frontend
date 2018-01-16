@@ -12,29 +12,39 @@
  */
 define('io.ox/core/main/icons', [
     'io.ox/core/extensions',
-    'raw!io.ox/core/images/icons.json',
-    'settings!io.ox/core'
-], function (ext, rawIcons, settings) {
+    'raw!io.ox/core/images/icons.json'
+], function (ext, rawIcons) {
 
     'use strict';
 
-    var icons = JSON.parse(rawIcons),
-        //appList = settings.get('apps/list'),
-        iconType = settings.get('iconType', 'svg'),
-        loadIcons = settings.get('loadThemeIcons', false);
+    /**
+     * Loading the SVG icons is done here to provide a single
+     * point for customizing icons
+     */
 
+    var icons;
+    window.icons = icons;
     function exposeIcons() {
         // just some sugar
         jQuery.fn.extend({
-            appendIcon: function (app) {
-                return $(this).append(icons[app]);
+            appendIcon: function (id) {
+                return $(this).append(icons[id]);
             }
         });
 
         ox.ui.appIcons = icons;
     }
 
-    console.log(icons);
+    // just for customizing purposes
+    ext.point('io.ox/core/main/icons').extend({
+        id: 'load',
+        index: 1000,
+        run: function () {
+            icons = JSON.parse(rawIcons);
+            exposeIcons();
+        }
+    });
+    /*
     ext.point('io.ox/core/main/icons').extend({
         id: 'load',
         index: 1000,
@@ -59,7 +69,9 @@ define('io.ox/core/main/icons', [
                 ox.trigger('applauncher-icons:loaded');
             });
         }
-    });
+    });*/
 
-    ext.point('io.ox/core/appcontrol/launcherIcons').invoke('run');
+    ext.point('io.ox/core/main/icons').invoke('run');
+
+    return icons;
 });

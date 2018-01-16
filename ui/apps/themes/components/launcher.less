@@ -1,5 +1,6 @@
 @appcontrol-height: 64px;
-@appcontrol-height-smartphone: 40px;
+@appcontrol-height-smartphone: 48px;
+@appcontrol-launcher-height-smartphone: 48px;
 
 @launcher-fg: #666;
 @launcher-bg: #fff;
@@ -32,6 +33,9 @@
     #io-ox-screens { top: @appcontrol-height; }
 }
 
+.smartphone {
+    #io-ox-core #io-ox-screens { top: @appcontrol-height-smartphone; }
+}
 // less height on smaller screens; desktop-only
 // typical maximized browser window on 1280x800 should run into this, therefore 640px
 /*@media all and (max-height: 640px) {
@@ -360,15 +364,22 @@
 }
 
 .smartphone {
+
     #io-ox-launchgrid, #io-ox-launchgrid-overlay { top: @appcontrol-height-smartphone; }
     #io-ox-quicklaunch { display: none; }
     #io-ox-appcontrol {
         height: @appcontrol-height-smartphone;
         #io-ox-launcher {
-            button {
+
+            & > button {
                 height: @appcontrol-height-smartphone;
                 width: @appcontrol-height-smartphone;
                 padding: 12px;
+                &.launcher-btn {
+                    padding: 14px;
+                    width: @appcontrol-launcher-height-smartphone;
+                    height: @appcontrol-launcher-height-smartphone;
+                }
             }
         }
     }

@@ -81,6 +81,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/settings/defaults.js',
                             'apps/io.ox/core/moment.js',
                             'apps/io.ox/core/viewer/main.js',
+                            'apps/io.ox/core/main/icons.js',
                             // missing for signin
                             'apps/io.ox/core/boot/config.js',
                             'apps/io.ox/core/boot/fixes.js',
