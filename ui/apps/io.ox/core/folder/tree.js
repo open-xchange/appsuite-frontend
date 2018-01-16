@@ -229,7 +229,7 @@ define('io.ox/core/folder/tree', [
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
             if (e.type === 'keydown') {
                 var shiftF10 = (e.shiftKey && e.which === 121),
-                    menuKey = (_.device('windows') && e.which === 93);
+                    menuKey = e.which === 93;
                 if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
                     this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
 
