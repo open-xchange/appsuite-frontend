@@ -189,7 +189,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // enable all form elements
             this.$(':input').each(function () {
                 if ($(this).attr('data-state') === 'manual') return;
-                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+                $(this).prop('disabled', false).removeClass('disabled');
             });
         },
 
