@@ -1,7 +1,7 @@
 [{
     "title": "Drive",
     "company": "Open-Xchange",
-    "icon": "files.png",
+    "icon": "files",
     "category": "Productivity",
     "requires": "infostore",
     "settings": true,

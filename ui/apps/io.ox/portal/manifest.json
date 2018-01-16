@@ -1,7 +1,7 @@
 {
     "title": "Portal",
     "company": "Open-Xchange",
-    "icon": "portal.png",
+    "icon": "portal",
     "category": "Productivity",
     "settings": true,
     "requires": "portal",

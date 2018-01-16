@@ -1,7 +1,7 @@
 {
     "title": "Editor",
     "company": "Open-Xchange",
-    "icon": "default.png",
+    "icon": "default",
     "category": "Productivity",
     "settings": false,
     "requires": "infostore",

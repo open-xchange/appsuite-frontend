@@ -1,4 +1,5 @@
 {
     "namespace": "core",
-    "requires": "chat"
+    "requires": "chat",
+    "icon": "chat"
 }
