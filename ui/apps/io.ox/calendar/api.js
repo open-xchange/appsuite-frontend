@@ -177,7 +177,6 @@ define('io.ox/calendar/api', [
                         id: id
                     }
                 }).then(function (data) {
-                    console.log(data);
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);
                     return api.pool.getModel(data);

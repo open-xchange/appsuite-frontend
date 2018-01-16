@@ -344,7 +344,7 @@ define('io.ox/calendar/invitations/register', [
 
             function performConfirm() {
                 http.PUT({
-                    module: 'calendar/itip',
+                    module: 'chronos/itip',
                     params: {
                         action: action,
                         dataSource: 'com.openexchange.mail.ical',
