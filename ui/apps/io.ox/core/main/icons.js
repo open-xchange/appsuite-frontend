@@ -10,52 +10,52 @@
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
-define('io.ox/core/main/launchericons', [
+define('io.ox/core/main/icons', [
     'io.ox/core/extensions',
+    'raw!io.ox/core/images/icons.json',
     'settings!io.ox/core'
-], function (ext, settings) {
+], function (ext, rawIcons, settings) {
 
     'use strict';
 
-    var icons = {},
-        appList = settings.get('apps/list'),
-        iconType = settings.get('iconType', 'svg');
+    var icons = JSON.parse(rawIcons),
+        //appList = settings.get('apps/list'),
+        iconType = settings.get('iconType', 'svg'),
+        loadIcons = settings.get('loadThemeIcons', false);
 
-    console.log('asdf', appList);
-
-    ext.point('io.ox/core/appcontrol/launcherIcons').extend({
-        id: 'process',
-        index: 900,
-        run: function () {
-            function exposeIcons() {
-                jQuery.fn.extend({
-                    appIcon: icons
-                });
+    function exposeIcons() {
+        // just some sugar
+        jQuery.fn.extend({
+            appendIcon: function (app) {
+                return $(this).append(icons[app]);
             }
-            ox.on('applauncher-icons:loaded', exposeIcons);
-        }
-    });
+        });
 
+        ox.ui.appIcons = icons;
+    }
 
-    ext.point('io.ox/core/appcontrol/launcherIcons').extend({
+    console.log(icons);
+    ext.point('io.ox/core/main/icons').extend({
         id: 'load',
         index: 1000,
         run: function () {
+            if (!loadIcons) return;
             // load all icons and expose them for later use
-            var apps = 'calendar mail contacts files portal tasks presentation text spreadsheet'.split(' '),
+            var iconlist = 'default launcher calendar mail contacts files portal tasks presentation text spreadsheet'.split(' '),
                 defs = [];
 
-            _(apps).each(function (name) {
+            _(iconlist).each(function (name) {
                 defs.push($.ajax({
                     url: ox.base + '/apps/themes/' + ox.theme + '/applauncher/' + name + '.' + iconType,
                     dataType: 'text'
                 }).done(function (icon) {
-                    icons[name] = $(icon);
+                    icons[name] = icon;
                     window.icons = icons;
                 }));
             });
 
             $.when.apply($, defs).then(function () {
+                exposeIcons();
                 ox.trigger('applauncher-icons:loaded');
             });
         }
