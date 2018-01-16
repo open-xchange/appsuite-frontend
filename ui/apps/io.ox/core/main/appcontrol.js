@@ -27,8 +27,6 @@ define('io.ox/core/main/appcontrol', [
 
     var exports = {
 
-        quicklaunch: settings.get('quicklaunch').split(','),
-
         apps: settings.get('apps/list', defaultList.join(',')),
 
         icons: {
@@ -74,66 +72,128 @@ define('io.ox/core/main/appcontrol', [
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
 
-    function drawIcon(o) {
-        var $svg = o.svg ? $(o.svg) : $(fallbackIcon),
-            badge = $();
+    var LauncherView = Backbone.View.extend({
+        tagName: 'button',
+        className: 'btn btn-link lcell',
+        attributes: {
+            type: 'button'
+        },
+        events: {
+            'click': 'onClick'
+        },
+        onClick: function () {
+            ox.launch(this.model.get('path'));
+        },
+        drawIcon: function () {
+            var svg = this.model.get('svg'),
+                id = this.model.get('id');
 
-        if (coloredIcons) $svg.addClass('colored');
+            var $svg = svg ? $(svg) : $(fallbackIcon),
+                badge = $();
 
-        if (o.id === 'io.ox/calendar') {
-            $svg.find('tspan:first').text(moment().format('D'));
-            $svg.find('tspan:last').text(moment().format('ddd'));
+            if (coloredIcons) $svg.addClass('colored');
+
+            if (id === 'io.ox/calendar') {
+                $svg.find('tspan:first').text(moment().format('D'));
+                $svg.find('tspan:last').text(moment().format('ddd'));
+            }
+            if (id === 'io.ox/mail') {
+                badge = $('<div class="indicator" aria-hidden="true">');
+            }
+
+            return $('<div class="lcell">').append(
+                badge,
+                $('<div class="svgwrap">').append($svg),
+                $('<div class="title">').text(this.model.get('title'))
+            );
+        },
+        render: function () {
+            this.$el.attr('data-app-id', this.model.get('id')).append(this.drawIcon());
+            return this;
         }
-        if (o.id === 'io.ox/mail') {
-            badge = $('<div class="indicator" aria-hidden="true">');
+    });
+
+    var QuickLaunchersCollection = Backbone.Collection.extend({
+        initialize: function () {
+            var self = this;
+            this.reset(this.fetch());
+            settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
+        },
+        fetch: function () {
+            var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : null;
+
+            return _(quicklaunch).map(function (o) {
+                return _.findWhere(exports.getOrderedApps(), { path: o });
+            });
         }
+    });
 
-        return $('<div class="lcell">').attr('data-app-id', o.id).append(
-            badge,
-            $('<div class="svgwrap">').append($svg),
-            $('<div class="title">').text(o.title)
-        );
-    }
+    var QuickLaunchersView = Backbone.View.extend({
+        attributes: {
+            'id': 'io-ox-quicklaunch'
+        },
+        events: {
+            'click button': 'onClick'
+        },
+        initialize: function () {
+            this.collection = new QuickLaunchersCollection();
+            this.listenTo(this.collection, { 'reset': this.render });
+        },
+        onClick: function () {
+            toggleOverlay(false);
+        },
+        render: function () {
+            this.$el.empty().append(
+                this.collection.map(function (model) {
+                    return new LauncherView({ model: model }).render().$el;
+                })
+            );
+            return this;
+        }
+    });
 
-    function drawQuicklaunch() {
-        return exports.quicklaunch.map(function (o) {
-            return _.findWhere(orderedApps, { path: o });
-        }).map(function (o) {
-            return $('<button type="button" class="btn btn-link">').attr('data-app-id', o.id).append(drawIcon(o));
-        });
-    }
+    var LaunchersCollection = Backbone.Collection.extend({});
+
+    var LaunchersView = Backbone.View.extend({
+        attributes: {
+            id: 'io-ox-launcher'
+        },
+        events: {
+            'click button': 'onClick',
+            'click #io-ox-launchgrid-overlay-inner': 'onClick'
+        },
+        initialize: function () {
+            this.collection = new LaunchersCollection(orderedApps);
+        },
+        onClick: function (force) {
+            toggleOverlay(force);
+        },
+        render: function () {
+            this.$el.append(
+                $('<button type="button" class="btn btn-link" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to:">').append(appLauncherIcon),
+                $('<div id="io-ox-launchgrid">').append(
+                    $('<div class="cflex">').append(
+                        this.collection.map(function (model) {
+                            return new LauncherView({ model: model }).render().$el;
+                        })
+                    )
+                ),
+                $('<div id="io-ox-launchgrid-overlay-inner">')
+            );
+            return this;
+        }
+    });
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'default',
         draw: function () {
-            //if (_.device('!desktop')) return;
-
             $('#io-ox-appcontrol').show();
 
             var banner = $('#io-ox-appcontrol');
             var taskbar, logo, search;
             banner.append(
-                $('<div id="io-ox-launcher">').append(
-                    $('<button type="button" class="btn btn-link" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to:">').on('click', function () {
-                        $('#io-ox-appcontrol').toggleClass('open');
-                        $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle();
-                    }).append(
-                        appLauncherIcon
-                    ),
-                    $('<div id="io-ox-launchgrid">').on('click', '.lcell', function (e) {
-                        ox.launch($(e.currentTarget).attr('data-app-id') + '/main');
-                        toggleOverlay();
-                    }).append(
-                        $('<div class="cflex">').append(
-                            orderedApps.map(drawIcon)
-                        )
-                    ),
-                    $('<div id="io-ox-launchgrid-overlay-inner">').on('click', toggleOverlay)
-                ),
-                $('<div id="io-ox-quicklaunch">').on('click', 'button', function (e) {
-                    ox.launch($(e.currentTarget).attr('data-app-id') + '/main');
-                    toggleOverlay(false);
-                }).append(drawQuicklaunch()),
+                new LaunchersView().render().$el,
+                new QuickLaunchersView().render().$el,
                 search = $('<div id="io-ox-topsearch">'),
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')

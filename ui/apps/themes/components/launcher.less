@@ -77,7 +77,7 @@
         align-self: auto;
         min-width: 0;
         min-height: auto;
-        button {
+        & > button {
             position: relative;
             z-index: 2;
             height: @appcontrol-height;
@@ -87,13 +87,16 @@
             border: 0;
             svg .fill-c1 { fill: #fff; }
         }
+        button {
+            outline:0;
+        }
     }
 
-    &.open #io-ox-launcher button,
-    #io-ox-launcher button:hover,
-    #io-ox-launcher button:focus,
-    #io-ox-quicklaunch  button:hover,
-    #io-ox-quicklaunch  button:focus {
+    &.open #io-ox-launcher > button,
+    #io-ox-launcher > button:hover,
+    #io-ox-launcher > button:focus,
+    #io-ox-quicklaunch > button:hover,
+    #io-ox-quicklaunch > button:focus {
         background: rgba(0, 0, 0, .3);
         outline: 0;
         //svg .fill-c1 { fill: @brand-primary; }
