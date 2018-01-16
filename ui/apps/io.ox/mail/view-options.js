@@ -19,19 +19,19 @@ define('io.ox/mail/view-options', [
     'gettext!io.ox/mail',
     'io.ox/core/commons',
     'io.ox/core/folder/contextmenu',
-    'io.ox/backbone/views/search',
     'io.ox/core/api/collection-loader',
     'io.ox/core/http',
     'io.ox/mail/api',
     'settings!io.ox/mail'
-], function (ext, Dropdown, mini, account, gt, commons, contextmenu, SearchView, CollectionLoader, http, mailAPI, settings) {
+], function (ext, Dropdown, mini, account, gt, commons, contextmenu, CollectionLoader, http, mailAPI, settings) {
 
     'use strict';
 
     //
     // Top
     //
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    var searchPrototype = {
+
         id: 'search',
         index: 100,
         draw: function (baton) {
@@ -100,8 +100,11 @@ define('io.ox/mail/view-options', [
                 SECONDARY_PAGE_SIZE: 100
             });
 
-            this.append(
-                new SearchView({ point: 'io.ox/mail/search/dropdown' })
+            var $el = $('<div>').appendTo(this);
+
+            require(['io.ox/backbone/views/search'], function (SearchView) {
+
+                new SearchView({ $el: $el, point: 'io.ox/mail/search/dropdown' })
                 .build(function () {
                     var view = this;
                     baton.app.on('folder:change', function () {
@@ -123,10 +126,14 @@ define('io.ox/mail/view-options', [
                     listView.model.unset('criteria');
                     gridOptions.removeClass('disabled');
                 })
-                .render().$el
-            );
+                .render();
+            });
         }
-    });
+    };
+
+    if (settings.get('prototypes/search', false)) {
+        ext.point('io.ox/mail/list-view/toolbar/top').extend(searchPrototype);
+    }
 
     ext.point('io.ox/mail/search/dropdown').extend({
         id: 'default',

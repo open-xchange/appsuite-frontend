@@ -35,16 +35,21 @@
 .io-ox-mail-window .vsplit .leftside .alert {
     position: relative;
     border-radius: 0;
-    border-top: 0; border-left: 0; border-right: 0;
-    padding-left: 16px;
-    a { color: @alert-info-text; }
+    padding: 8px 16px;
+    line-height: 24px;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    height: 40px;
+    a {
+        color: @alert-info-text;
+    }
     .fa-warning {
         margin-right: 16px;
     }
     .btn-close {
         position:absolute;
         right: 2px;
-        top: 3px;
+        top: 5px;
     }
 }
 
