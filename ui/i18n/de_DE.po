@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-29 10:45+0100\n"
+"PO-Revision-Date: 2018-01-17 14:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -408,6 +408,29 @@ msgstr "Geben Sie ein gültiges Objekt ein."
 msgid "Please enter a value"
 msgstr "Bitte geben Sie einen Wert ein"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Please grant access to your webcam first."
+msgstr "Bitte gewähren Sie zuerst den Zugriff auf Ihre Webcam."
+
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Requesting device information. Please wait..."
+msgstr "Geräteinformationen werden angefordert. Bitte warten..."
+
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Currently there are no compatible webcams available on your device."
+msgstr "Derzeit sind keine kompatiblen Webcams auf Ihrem Gerät verfügbar."
+
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+#, fuzzy
+msgid "Take a photo"
+msgstr "Ein Foto machen"
+
+#. label for a list of webcam devices currently available
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+#, fuzzy
+msgid "Webcam"
+msgstr "Webcam"
+
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr ""
@@ -455,13 +478,26 @@ msgid "Go to next decade"
 msgstr "Zu nächstem Jahrzehnt gehen"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgid "Edit picture"
+msgid "Edit image"
 msgstr "Bild bearbeiten"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+msgctxt "image zoom"
+msgid "Zoom"
+msgid_plural "Zoom: %1$d%"
+msgstr[0] "Vergrößern"
+msgstr[1] ""
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/contacts/widgets/pictureUpload.js
 msgid "Upload image"
 msgstr "Bild hochladen"
+
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#, fuzzy
+msgid "Take photo"
+msgstr "Foto machen"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Rotate image"
@@ -1432,6 +1468,7 @@ msgid "Reject changes"
 msgstr "Änderungen ablehnen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Ignore"
 msgstr "Ignorieren"
 
@@ -1567,18 +1604,19 @@ msgstr "Zeitrahmen um einen Monat erweitern"
 msgid "Calendars"
 msgstr "Kalender"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/core/commons.js
-#: module:io.ox/core apps/io.ox/files/favorite/view-options.js
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Ordneransicht öffnen"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/core/commons.js
+#: module:io.ox/core apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Close folder view"
 msgstr "Ordneransicht schließen"
 
@@ -3933,6 +3971,11 @@ msgid "Create sharing link"
 msgstr "Freigabelink erstellen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/contextmenu.js
+msgid "Show in Drive"
+msgstr "In Drive anzeigen"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Zeigen"
 
@@ -4032,11 +4075,13 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Dieser Ordner enthält Veröffentlichungen und/oder Abonnements"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Remove from favorites"
 msgstr "Aus Favoriten entfernen"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/files/contextmenu.js
 msgid "Add to favorites"
 msgstr "Zu Favoriten hinzufügen"
 
@@ -4315,6 +4360,7 @@ msgid "About"
 msgstr "Über"
 
 #: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Sign out"
 msgstr "Abmelden"
 
@@ -4381,6 +4427,42 @@ msgstr ""
 "Der Ordner namens \"%1$s\" wird versteckt. Zum Zugreifen auf diesen Ordner "
 "müssen Sie die Einstellung \"Versteckte Dateien und Ordner anzeigen\" "
 "aktivieren."
+
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+msgid ""
+"There are currently no compatible media devices available on your device."
+msgstr ""
+"Es sind derzeit keine kompatiblen Mediengeräte auf Ihrem Gerät verfügbar."
+
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+#, fuzzy
+msgid ""
+"Access to your media devices is denied. Please refer your browser help pages "
+"how to reset authorization again."
+msgstr ""
+"Zugriff auf Ihre Mediengeräte wird verweigert. Entnehmen Sie bitte Ihren "
+"Browser-Hilfeseiten, wie Sie die Autorisierung wieder zurücksetzen."
+
+#. %1$s a natural number
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+msgid "Microphone %1$s"
+msgstr "Mikrofon %1$s"
+
+#. %1$s a natural number
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+msgid "Camera %1$s"
+msgstr "Kamera %1$s"
+
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+#, fuzzy
+msgid "Unknown %1$s"
+msgstr "Unbekannt %1$s"
+
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+msgid ""
+"Unfortunately your browser doesn't support listing available media devices."
+msgstr ""
+"Leider unterstützt Ihr Browser das Auflisten verfügbarer Mediengeräte nicht."
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "No notifications"
@@ -4587,7 +4669,8 @@ msgstr "Ausdruck"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
+#: apps/io.ox/core/yell.js apps/io.ox/keychain/secretRecoveryDialog.js
+#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Fehler"
@@ -4615,53 +4698,6 @@ msgid "Failed to sign in"
 msgstr "Anmelden ist fehlgeschlagen"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Updater"
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-msgid "Download installation file (for Windows)"
-msgstr "Installationsdatei herunterladen (für Windows)"
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Nach dem Ausführen der heruntergeladenen Datei wird ein "
-"Installationsassistent gestartet. Folgen Sie den Anweisungen zum "
-"Installieren des Updaters. Der Updater informiert Sie automatisch über neue "
-"Updates. Sie können die Updates aus dem Updater heraus herunterladen."
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-msgid "Connector for Microsoft Outlook®"
-msgstr "Konnektor für Microsoft Outlook®"
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-msgid ""
-"Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, "
-"Shared and System Folders to Microsoft Outlook® clients."
-msgstr ""
-"Synchronisation von E-Mails, Terminen, Kontakten und Aufgaben sowie "
-"öffentlichen, freigegebenen und System-Ordnern mit Microsoft Outlook®-"
-"Clients."
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-msgid "Notifier"
-msgstr "Notifier"
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-msgid ""
-"Informs about the current status of Emails and appointments without having "
-"to display the user interface or another Windows® client."
-msgstr ""
-"Informiert über den aktuellen Stand der E-Mails und Termine, ohne dafür die "
-"Benutzeroberfläche oder einen anderen Windows®-Client anzeigen zu müssen."
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download the %s client for %s"
 msgstr "%s-Client für %s herunterladen"
@@ -4669,10 +4705,6 @@ msgstr "%s-Client für %s herunterladen"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Windows"
 msgstr "%s-Client für Windows"
-
-#: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
-msgid "%s client for Windows (Installation via the OX Updater)"
-msgstr "%s-Client für Windows (Installation über den OX Updater)"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
@@ -4719,7 +4751,6 @@ msgid "Host"
 msgstr "Host"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr "Browser"
 
@@ -4854,10 +4885,10 @@ msgstr "Aktualisierungsintervall"
 msgid "Default app after sign in"
 msgstr "Standard-App nach dem Anmelden"
 
-#. Opens popup to decide if desktop notifications should be shown
+#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Manage permission now"
-msgstr "Berechtigung jetzt verwalten"
+msgid "Manage browser permissions now"
+msgstr "Browser-Berechtigungen jetzt verwalten"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -5681,13 +5712,12 @@ msgid "Your browser does not support the audio format of this file."
 msgstr "Ihr Browser unterstützt das Audio-Format dieser Datei nicht."
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
-#, fuzzy
 msgid ""
 "\n"
 " Please download the file using the button below."
 msgstr ""
 "\n"
-" Bitte laden Sie die Datei über den Button unten."
+" Bitte laden Sie die Datei über die Schaltfläche unten herunter."
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 #, fuzzy
@@ -5695,14 +5725,13 @@ msgid "Download%1$s"
 msgstr "%1$s herunterladen"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
-#, fuzzy
 msgid "Downlad"
 msgstr "Herunterladen"
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
 #, fuzzy
 msgid "There is no preview for this file type."
-msgstr "Für diesen Dateityp ist keine Voransicht möglich"
+msgstr "Für diesen Dateityp ist keine Voransicht möglich."
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
@@ -6155,10 +6184,6 @@ msgstr "Ordner hinzufügen"
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "Freigabe bearbeiten"
-
-#: apps/io.ox/files/contextmenu.js module:io.ox/core
-msgid "Show in Drive"
-msgstr "In Drive anzeigen"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
@@ -6645,6 +6670,10 @@ msgstr[1] "Markierte Dateien freigeben"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
 msgstr "Aktuellen Ordner freigeben"
+
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+msgid "Add to Favorites"
+msgstr "Zu Favoriten hinzufügen"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
@@ -9128,6 +9157,10 @@ msgid "Configure"
 msgstr "Konfigurieren"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgid "Text preview"
+msgstr "Textvorschau"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
 msgstr "Kontaktbilder"
 
@@ -9620,6 +9653,10 @@ msgstr "Portal-Einstellungen"
 msgid "Add widget"
 msgstr "Widget hinzufügen"
 
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Standard"
+
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -9721,7 +9758,6 @@ msgstr ""
 "verwenden."
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Delete %1$s"
 msgstr "%1$s löschen"
 
@@ -9777,50 +9813,74 @@ msgstr "%1$s %2$s"
 msgid "Active clients"
 msgstr "Aktive Clients"
 
+#. Context: Session Management. Active session on platform/os.
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mac"
+msgstr "Mac"
+
+#. Context: Session Management. Active session on platform/os.
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Windows"
+msgstr "Windows"
+
+#. Context: Session Management. Active session on platform/os.
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr "Android"
+
+#. Context: Session Management. Active session on platform/os.
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr "iOS"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Firefox"
+msgstr "Firefox"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Chrome"
+msgstr "Chrome"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Safari"
+msgstr "Safari"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Internet Explorer"
+msgstr "Internet Explorer"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Edge"
+msgstr "Edge"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Unknown device"
 msgstr "Unbekanntes Gerät"
 
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-msgid "Unkown location"
-msgstr "Unbekannter Ort"
+msgid "Now active"
+msgstr "ist jetzt aktiv"
 
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "IP: %s"
-msgstr "IP: %s"
+msgid "Do you really want to sign out from that device?"
+msgstr "Möchten Sie sich wirklich von diesem Gerät abmelden?"
 
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Last active: %1$s"
-msgstr "Zuletzt aktiv: %1$s"
+msgid "You are currently signed in with the following devices"
+msgstr "Sie sind derzeit mit folgenden Geräten angemeldet"
 
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Logged in: %1$s"
-msgstr "Angemeldet: %1$s"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Do you really want to terminate that session?"
-msgstr "Möchten Sie diese Sitzung wirklich beenden?"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-msgid "Mobile and Desktop Apps"
-msgstr "Mobile und Desktop-Apps"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Sync clients"
+msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Other clients"
-msgstr "Andere Clients"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid ""
-"Do you really want to terminate all active sessions except the current one?"
-msgstr ""
-"Möchten Sie wirklich alle aktiven Sitzungen mit Ausnahme der aktuellen "
-"beenden?"
+"Wollen Sie sich wirklich von allen Clients mit Ausnahme des aktuellen "
+"abmelden?"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
@@ -10972,10 +11032,6 @@ msgid "Download %s"
 msgstr "%s herunterladen"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
-msgid "Download %s via the OX Updater"
-msgstr "%s über den OX Updater herunterladen"
-
-#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
 msgstr "%s abrufen"
 
@@ -11184,6 +11240,22 @@ msgstr "Folge ich"
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Wollen Sie diesen Tweet wirklich löschen?"
+
+#: apps/plugins/portal/updater/register.js module:plugins/portal
+msgid "Updater"
+msgstr "Updater"
+
+#: apps/plugins/portal/updater/register.js module:plugins/portal
+msgid ""
+"When executing the downloaded file, an installation wizard will be launched. "
+"Follow the instructions and install the updater. Installs latest versions of "
+"Windows® client software. The Updater automatically informs about new "
+"updates. You can download the updates from within the Updater."
+msgstr ""
+"Nach dem Ausführen der heruntergeladenen Datei wird ein "
+"Installationsassistent gestartet. Folgen Sie den Anweisungen zum "
+"Installieren des Updaters. Der Updater informiert Sie automatisch über neue "
+"Updates. Sie können die Updates aus dem Updater heraus herunterladen."
 
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
 msgid "Upgrade your account"
@@ -11475,6 +11547,73 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid "Edit picture"
+#~ msgstr "Bild bearbeiten"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "Installationsdatei herunterladen (für Windows)"
+
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Konnektor für Microsoft Outlook®"
+
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "Synchronisation von E-Mails, Terminen, Kontakten und Aufgaben sowie "
+#~ "öffentlichen, freigegebenen und System-Ordnern mit Microsoft Outlook®-"
+#~ "Clients."
+
+#~ msgid "Notifier"
+#~ msgstr "Notifier"
+
+#~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "Informiert über den aktuellen Stand der E-Mails und Termine, ohne dafür "
+#~ "die Benutzeroberfläche oder einen anderen Windows®-Client anzeigen zu "
+#~ "müssen."
+
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr "%s-Client für Windows (Installation über den OX Updater)"
+
+#~ msgid "Manage permission now"
+#~ msgstr "Berechtigung jetzt verwalten"
+
+#, fuzzy
+#~ msgid "Unkown location"
+#~ msgstr "Unbekannter Ort"
+
+#~ msgid "IP: %s"
+#~ msgstr "IP: %s"
+
+#~ msgid "Last active: %1$s"
+#~ msgstr "Zuletzt aktiv: %1$s"
+
+#~ msgid "Logged in: %1$s"
+#~ msgstr "Angemeldet: %1$s"
+
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Möchten Sie diese Sitzung wirklich beenden?"
+
+#, fuzzy
+#~ msgid "Mobile and Desktop Apps"
+#~ msgstr "Mobile und Desktop-Apps"
+
+#~ msgid "Other clients"
+#~ msgstr "Andere Clients"
+
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr ""
+#~ "Möchten Sie wirklich alle aktiven Sitzungen mit Ausnahme der aktuellen "
+#~ "beenden?"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "%s über den OX Updater herunterladen"
+
 #~ msgid "View attachment"
 #~ msgstr "Anhang anzeigen"
 
@@ -11493,18 +11632,9 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Open in browser tab"
 #~ msgstr "In Browser-Tab öffnen"
 
-#~ msgid "Windows"
-#~ msgstr "Windows"
-
 #, fuzzy
 #~ msgid "macOS"
 #~ msgstr "MacOS"
-
-#~ msgid "Android"
-#~ msgstr "Android"
-
-#~ msgid "iOS"
-#~ msgstr "iOS"
 
 #~ msgid "Unknown Operating System"
 #~ msgstr "Unbekanntes Betriebssystem"
@@ -11541,9 +11671,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "%1$s for MacOS"
 #~ msgstr "%1$s für MacOS"
-
-#~ msgid "Exchange Active Sync"
-#~ msgstr "Exchange Active Sync"
 
 #~ msgid "Unkown client"
 #~ msgstr "Unbekannter Client"
@@ -14283,9 +14410,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Luxembourg"
 #~ msgstr "Luxemburg"
-
-#~ msgid "Mac"
-#~ msgstr "Mac"
 
 #~ msgid "Macao"
 #~ msgstr "Macao"
