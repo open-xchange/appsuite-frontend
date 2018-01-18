@@ -47,6 +47,7 @@ define('io.ox/core/notifications', [
             self.bannerHeight = 0;
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
+
             this.badgeview.$el.on('keydown', function (e) {
                 // open on space key, up and down arrow, just like a dropdown
                 // if already open, focus first item (last on arrow up)

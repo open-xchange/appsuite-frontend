@@ -134,12 +134,14 @@
             width: 100%;
             overflow: visible;
             stroke-opacity: .5;
+            fill-opacity: .5;
             .stroke-c1 { stroke: #fff; }
             .fill-none { fill: none;   }
             .fill-c1   { fill: #fff;   }
             .stroke-w1 { stroke-width: @quicklaunch-stroke-width; }
             &:hover, &:focus {
                 stroke-opacity: 1;
+                fill-opacity: 1;
             }
 
         }
@@ -265,7 +267,7 @@
             font-size: @launcher-text-size;
             text-align: center;
         }
-        &.active .title { font-weight: bold; }
+        //&.active .title { font-weight: bold; }
         .badge {
             position: absolute;
             top: 43%;
