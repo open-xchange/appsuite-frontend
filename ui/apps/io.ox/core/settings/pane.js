@@ -345,6 +345,21 @@ define('io.ox/core/settings/pane', [
             }
         },
         //
+        // Auto Logout
+        //
+        {
+            id: 'autoLogout',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                if (!settings.isConfigurable('autoLogout')) return;
+
+                baton.$el.append(
+                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
+                );
+            }
+        },
+        //
         // Quicklaunch apps
         //
         {
@@ -379,32 +394,18 @@ define('io.ox/core/settings/pane', [
                 var multiSelect = function (name, label, model, list, options) {
                     options = options || {};
                     var id = 'settings-' + name;
-                    return $('<div class="col-md-3">').append(
+                    return $('<div class="col-md-2">').append(
                         $('<label>').attr('for', id).text(label),
                         new SelectView({ id: id, name: name, model: model, list: list, pos: options.pos }).render().$el
                     );
                 };
                 baton.$el.append(
                     $('<div class="form-group row">').append(
-                        multiSelect('apps/quicklaunch0', gt('Quicklauch 1'), this.model, this.getAvailableApps(), { pos: 0 }),
-                        multiSelect('apps/quicklaunch1', gt('Quicklauch 2'), this.model, this.getAvailableApps(), { pos: 1 }),
-                        multiSelect('apps/quicklaunch2', gt('Quicklauch 3'), this.model, this.getAvailableApps(), { pos: 2 })
+                        multiSelect('apps/quicklaunch0', gt('Quick launch 1'), this.model, this.getAvailableApps(), { pos: 0 }),
+                        multiSelect('apps/quicklaunch1', gt('Quick launch 2'), this.model, this.getAvailableApps(), { pos: 1 }),
+                        multiSelect('apps/quicklaunch2', gt('Quick launch 3'), this.model, this.getAvailableApps(), { pos: 2 })
                     )
-                );
-            }
-        },
-        //
-        // Auto Logout
-        //
-        {
-            id: 'autoLogout',
-            index: INDEX += 100,
-            render: function (baton) {
 
-                if (!settings.isConfigurable('autoLogout')) return;
-
-                baton.$el.append(
-                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
                 );
             }
         }
@@ -492,7 +493,7 @@ define('io.ox/core/settings/pane', [
                     util.checkbox('highcontrast', gt('High contrast theme'), this.model)
                 ];
 
-                if (ox.debug) options.push(util.checkbox('coloredIcons', gt('Colored icons in application launcher'), this.model));
+                if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
 
                 baton.$el.append($('<div class="form-group">').append(options));
             }
