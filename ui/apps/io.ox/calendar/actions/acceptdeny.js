@@ -34,7 +34,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                 //use different api if provided (tasks use this)
                 api = options.api || calApi,
                 folder,
-                canModify,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 apiData = { folder: o.folder || o.folder_id, id: o.id },
@@ -55,20 +54,10 @@ define('io.ox/calendar/actions/acceptdeny', [
                 folder = folderData;
                 message = util.getConfirmationMessage(o, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
-                // check if user is allowed to set the reminder time
-                // tasks don't have a default reminder
-                canModify = options.taskmode ? 0 : folderAPI.bits(folder, 14);
-                // only own objects
-                if (canModify === 1) {
-                    canModify = appointmentData.organizer.entity === ox.user_id;
-                } else {
-                    canModify = canModify > 1;
-                }
-
                 var alarmsModel,
                     previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: ox.user_id });
 
-                if (canModify) {
+                if (!options.taskmode) {
                     if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
                         appointmentData.alarms = util.getDefaultAlarms(appointmentData);
                     }
@@ -76,7 +65,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     alarmsModel = new Backbone.Model(appointmentData);
                     reminderSelect = $('<fieldset>').append(
                         $('<legend>').text(gt('Reminder')),
-                        new AlarmsView({ model: alarmsModel, smallLayout: true }).render().$el
+                        new AlarmsView({ model: alarmsModel }).render().$el
                     );
                 }
 
