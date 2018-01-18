@@ -50,6 +50,12 @@ define('io.ox/backbone/mini-views/alarms', [
                 this.model.on('change:' + this.attribute, _(this.updateView).bind(this));
             }
         },
+        // if you want the alarm view to react to resizing or use the container as a width guide, call this function after appending the view and on resizing
+        reactToResize: _.throttle(function () {
+            // not attached
+            if (this.$el.parent().length === 0) return;
+            this.$el.toggleClass('uses-small-container', this.$el.parent().width() <= 992);
+        }, 200),
         render: function () {
             var self = this;
             this.$el.empty().append(
@@ -94,14 +100,13 @@ define('io.ox/backbone/mini-views/alarms', [
         createNodeFromAlarm: function (alarm) {
             if (!alarm || !alarm.trigger) return;
 
-            var self = this,
-                row, container;
+            var row, container;
 
             container = $('<li class="alarm-list-item">').append(row = $('<div class="row">')).data('id', alarm.uid);
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="col-xs-3 alarm-action">').text(alarm.action).val(alarm.action));
+                row.append($('<div class="col-md-3 alarm-action">').text(alarm.action).val(alarm.action));
             } else {
-                row.append($('<div class="col-xs-3">').append(
+                row.append($('<div class="col-xs-10 col-md-3">').append(
                     $('<select class="form-control alarm-action">').append(
                         $('<option>').text(gt('Message')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO')
@@ -113,12 +118,12 @@ define('io.ox/backbone/mini-views/alarms', [
 
             if (alarm.trigger.duration) {
                 var selectbox, relatedbox;
-                row.append($('<div>').addClass('col-xs-3').append(
+                row.append($('<div>').addClass('col-xs-5 col-md-3').append(
                     selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
                 ),
-                $('<div>').addClass(self.options.smallLayout ? 'col-xs-4' : 'col-xs-5').append(
+                $('<div>').addClass('col-xs-5 col-md-3').append(
                     relatedbox = $('<select class="form-control alarm-related">').append(_.map(relatedLabels, function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
@@ -132,11 +137,11 @@ define('io.ox/backbone/mini-views/alarms', [
                 relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
                 selectbox.val(alarm.trigger.duration.replace('-', ''));
             } else {
-                row.append($('<div class="alarm-time">').addClass('col-xs-5').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
+                row.append($('<div class="alarm-time">').addClass('col-xs-10 col-md-6').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(
-                $('<span role="button" tabindex="0" class="alarm-remove pull-right">').append($('<i class="alarm-remove fa fa-trash">'))
+                $('<span role="button" tabindex="0" class="alarm-remove">').addClass('col-md-offset-2 col-md-1 col-xs-2').append($('<i class="alarm-remove fa fa-trash">'))
             );
 
             return container;

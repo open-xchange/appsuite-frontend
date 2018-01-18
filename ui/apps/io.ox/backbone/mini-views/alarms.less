@@ -29,13 +29,11 @@
                 margin: 0;
             }
             .alarm-remove {
-                width: 40px;
-                margin: -5px 15px -5px 0;
                 text-align: center;
-                line-height: 40px;
-                 &:hover,&:focus {
+                &:hover,&:focus {
                     background-color: #cc0000;
-                    color: #fff
+                    color: #fff;
+                    background-clip: content-box;
                 }
             }
 
@@ -43,17 +41,48 @@
                 line-height: 30px;
             }
 
-            @media (max-width: 1024px) {
+            @media (max-width: 992px), (max-device-width: 992px) {
                 .alarm-remove {
-                    width: 28px;
+                    bottom: 34px;
+                    height: 64px;
+                    line-height: 64px;
                 };
-            }
 
-            @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
-                .alarm-remove {
-                    width: 20px;
-                };
+                .alarm-action {
+                    margin-bottom: 4px
+                }
+
+                .row {
+                    height: 64px;
+                    overflow: hidden;
+                }
             }
+        }
+    }
+    &.uses-small-container {
+        .col-xs-10 {
+            width: 83.33333333%;
+        }
+
+        .col-xs-5 {
+            width: 41.66666667%;
+        }
+
+        .alarm-remove {
+            width: 16.66666667%;
+            margin-left: 0;
+            bottom: 34px;
+            height: 64px;
+            line-height: 64px;
+        };
+
+        .alarm-list .alarm-list-item .alarm-action {
+            margin-bottom: 4px
+        }
+
+        .row {
+            height: 64px;
+            overflow: hidden;
         }
     }
 }

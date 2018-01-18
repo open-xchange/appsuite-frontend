@@ -498,7 +498,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'color',
         index: 900,
-        className: 'col-md-6',
+        className: 'col-xs-12 col-sm-6',
         render: function () {
 
             if (settings.get('colorScheme') !== 'custom') return;
@@ -542,7 +542,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'private_flag',
         index: 1000,
-        className: 'col-md-5',
+        className: 'col-sm-5 col-xs-10',
         render: function () {
 
             // visibility flag only works in private folders
@@ -570,7 +570,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'visibility-helper',
         index: 1050,
-        className: 'col-md-1',
+        className: 'col-sm-1 col-xs-2',
         render: function () {
 
             // visibility flag only works in private folders

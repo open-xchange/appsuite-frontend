@@ -208,18 +208,15 @@ define('io.ox/calendar/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         gt('New appointment'),
-                        // same width as col-md-10 but without the strange input and hover issues
-                        $('<div>').css('width', '83.33333333%').append(
+                        $('<div>').append(
                             $('<label>').text(gt('Default reminder')),
                             new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDateTime' }).render().$el
                         ),
-                        // same width as col-md-10 but without the strange input and hover issues
-                        $('<div>').css('width', '83.33333333%').append(
+                        $('<div>').append(
                             $('<label>').text(gt('Default reminder for all day appointments')),
                             new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
                         ),
-                        // same width as col-md-10 but without the strange input and hover issues
-                        $('<div>').css('width', '83.33333333%').append(
+                        $('<div>').append(
                             $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
                             new AlarmsView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
                         ),

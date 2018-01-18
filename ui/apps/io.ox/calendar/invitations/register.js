@@ -222,12 +222,20 @@ define('io.ox/calendar/invitations/register', [
 
         renderReminder: function () {
             if (!this.AlarmsView || !this.alarmsModel) return;
+            var alarmsViewInstance = new this.AlarmsView({ model: this.alarmsModel });
             this.$el.find('.itip-actions').before(
                 $('<div class="itip-reminder">').append(
                     $('<legend>').text(gt('Reminder')),
-                    new this.AlarmsView({ model: this.alarmsModel, smallLayout: true }).render().$el
+                    alarmsViewInstance.render().$el
                 )
             );
+            // custom event that is triggered when the view is actually appended to the dom
+            this.on('appended', alarmsViewInstance.reactToResize);
+            var callback = _(alarmsViewInstance.reactToResize).bind(alarmsViewInstance);
+            $(window).on('resize', callback);
+            alarmsViewInstance.on('dispose', function () {
+                $(window).off('resize', callback);
+            });
         },
 
         getActions: function () {
@@ -741,20 +749,23 @@ define('io.ox/calendar/invitations/register', [
                 var model = new models.Model(eventData);
                 self.model.set('imipMail', true, { silent: true });
                 return require(['io.ox/calendar/api', 'io.ox/calendar/util']).then(function (api, util) {
+                    var extView = new ExternalView({
+                        model: model,
+                        module: 'calendar',
+                        api: api,
+                        util: util,
+                        settings: calendarSettings,
+                        actions: data.actions,
+                        introduction: change.introduction,
+                        diffDescription: change.diffDescription,
+                        imip: imip,
+                        container: self
+                    });
                     self.$el.append(
-                        new ExternalView({
-                            model: model,
-                            module: 'calendar',
-                            api: api,
-                            util: util,
-                            settings: calendarSettings,
-                            actions: data.actions,
-                            introduction: change.introduction,
-                            diffDescription: change.diffDescription,
-                            imip: imip,
-                            container: self
-                        }).render().$el
+                        extView.render().$el
                     );
+                    //trigger event so width can be calculated
+                    extView.trigger('appended');
                 });
             });
         },
@@ -779,16 +790,21 @@ define('io.ox/calendar/invitations/register', [
                 cid = this.getCid();
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
                 return api.resolve(cid.id, true).then(function (model) {
+                    var intView = new InternalAppointmentView({
+                        model: model,
+                        module: 'calendar',
+                        api: api,
+                        util: util,
+                        settings: calendarSettings,
+                        AlarmsView: AlarmsView
+                    });
+
                     self.$el.append(
-                        new InternalAppointmentView({
-                            model: model,
-                            module: 'calendar',
-                            api: api,
-                            util: util,
-                            settings: calendarSettings,
-                            AlarmsView: AlarmsView
-                        }).render().$el
+                        intView.render().$el
                     );
+
+                    //trigger event so width can be calculated
+                    intView.trigger('appended');
                 });
             });
         },

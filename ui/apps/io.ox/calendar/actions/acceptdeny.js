@@ -34,6 +34,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                 //use different api if provided (tasks use this)
                 api = options.api || calApi,
                 folder,
+                alarmsView,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 apiData = { folder: o.folder || o.folder_id, id: o.id },
@@ -63,9 +64,10 @@ define('io.ox/calendar/actions/acceptdeny', [
                     }
                     // backbone model is fine. No need to require chronos model
                     alarmsModel = new Backbone.Model(appointmentData);
+                    alarmsView = new AlarmsView({ model: alarmsModel });
                     reminderSelect = $('<fieldset>').append(
                         $('<legend>').text(gt('Reminder')),
-                        new AlarmsView({ model: alarmsModel }).render().$el
+                        alarmsView.render().$el
                     );
                 }
 
@@ -183,6 +185,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                         performConfirm(checkConflicts);
                     })
                     .show(function () {
+                        if (alarmsView) {
+                            alarmsView.reactToResize();
+                        }
                         // do not focus on mobiles. No, never, please. It does simply not work!
                         if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
                     });
