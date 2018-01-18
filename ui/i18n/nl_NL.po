@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-06 17:08+0100\n"
+"PO-Revision-Date: 2018-01-18 09:45+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
@@ -8624,7 +8624,7 @@ msgid ""
 "to take effect."
 msgstr ""
 "Sommige instellingen (taal, tijdzone, thema) vereisen dat u de pagina "
-"opnieuw in laad of dat u zich opnieuw aanmeld."
+"opnieuw laadt of dat u zich opnieuw aanmeldt."
 
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
