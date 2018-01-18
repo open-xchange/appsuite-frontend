@@ -132,12 +132,14 @@
             height: 100%;
             width: 100%;
             overflow: visible;
-
+            stroke-opacity: .5;
             .stroke-c1 { stroke: #fff; }
             .fill-none { fill: none;   }
             .fill-c1   { fill: #fff;   }
             .stroke-w1 { stroke-width: @quicklaunch-stroke-width; }
-
+            &:hover, &:focus {
+                stroke-opacity: 1;
+            }
 
         }
 
