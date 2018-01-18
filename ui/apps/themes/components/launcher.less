@@ -16,6 +16,7 @@
 @launcher-size: 96px;
 @launcher-vertical-amount: 3;
 @launcher-spacing: 2px;
+@launcher-outer-spacing: 16px;
 
 @quicklaunch-width: @appcontrol-height;
 @quicklaunch-width-smartphone: @appcontrol-height-smartphone;
@@ -124,7 +125,7 @@
         }
 
         .svgwrap {
-            padding: 16px;
+            padding: 8px;
             height: @appcontrol-height;
         }
         svg {
@@ -147,7 +148,7 @@
             position: relative;
             z-index: 2;
             height: @appcontrol-height;
-            width: @appcontrol-height;
+            width: 48px;
             display: inline-block;
             padding:0;
             border: 0;
@@ -239,8 +240,8 @@
         align-items: left;
         vertical-align: top;
         flex-wrap: wrap;
-        padding: @launcher-spacing;
-        width: @launcher-vertical-amount * (@launcher-size + @launcher-spacing * 2) + @launcher-spacing * 2;
+        padding: @launcher-outer-spacing;
+        width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2;
     }
 
     .lcell {

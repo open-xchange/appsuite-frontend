@@ -138,7 +138,9 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.empty().append(
                 this.collection.map(function (model) {
+                    //return $('<div class="quicklaunch-wrap">').append(
                     return new LauncherView({ model: model }).render().$el;
+                    //);
                 })
             );
             return this;
