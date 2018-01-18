@@ -42,7 +42,6 @@ define('io.ox/core/main/appcontrol', [
                 //dynamically translate the title
                 manifest.title = /*#, dynamic*/gt.pgettext('app', manifest.title);
                 manifest.svg = exports.icons[manifest.id];
-                manifest.quicklaunch = /^io\.ox\/(mail|calendar|contacts)$/.test(manifest.id);
                 return manifest;
             });
             return _.compact(apps.map(function (app) {
@@ -52,8 +51,6 @@ define('io.ox/core/main/appcontrol', [
     };
 
     var orderedApps = exports.getOrderedApps();
-
-    var coloredIcons = settings.get('coloredIcons', false);
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
@@ -69,34 +66,42 @@ define('io.ox/core/main/appcontrol', [
         events: {
             'click': 'onClick'
         },
+        initialize: function () {
+            this.listenTo(this.model, 'change:hasBadge', this.toggleBadge);
+            this.listenTo(settings, 'change:coloredIcons', this.render);
+        },
         onClick: function () {
             ox.launch(this.model.get('path'));
         },
+        drawDate: function () {
+            this.$svg.find('tspan:first').text(moment().format('D'));
+            this.$svg.find('tspan:last').text(moment().format('ddd'));
+        },
         drawIcon: function () {
+
             var svg = this.model.get('svg'),
                 id = this.model.get('id');
 
-            var $svg = svg ? $(svg) : $(icons.fallbackIcon),
-                badge = $();
+            this.$svg = svg ? $(svg) : $(icons.fallbackIcon);
 
-            if (coloredIcons) $svg.addClass('colored');
+            if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
 
-            if (id === 'io.ox/calendar') {
-                $svg.find('tspan:first').text(moment().format('D'));
-                $svg.find('tspan:last').text(moment().format('ddd'));
-            }
-            if (id === 'io.ox/mail') {
-                badge = $('<div class="indicator" aria-hidden="true">');
-            }
+            if (id === 'io.ox/calendar') this.drawDate();
 
-            return $('<div class="lcell">').append(
-                badge,
-                $('<div class="svgwrap">').append($svg),
+            var cell = $('<div class="lcell">').append(
+                this.badge = $('<div class="indicator" aria-hidden="true">').hide(),
+                $('<div class="svgwrap">').append(this.$svg),
                 $('<div class="title">').text(this.model.get('title'))
             );
+
+            return cell;
+        },
+
+        toggleBadge: function (model) {
+            this.badge.toggle(model.get('hasBadge'));
         },
         render: function () {
-            this.$el.attr('data-app-id', this.model.get('id')).append(this.drawIcon());
+            this.$el.empty().attr('data-app-id', this.model.get('id')).append(this.icon = this.drawIcon());
             return this;
         }
     });
@@ -140,7 +145,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    var LaunchersCollection = Backbone.Collection.extend({});
+    var LaunchersCollection = window.launchercollection = Backbone.Collection.extend({});
 
     var LaunchersView = Backbone.View.extend({
         attributes: {
@@ -179,9 +184,11 @@ define('io.ox/core/main/appcontrol', [
 
             var banner = $('#io-ox-appcontrol');
             var taskbar, logo, search;
+            var launchers = window.launchers = new LaunchersView();
+            var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
             banner.append(
-                new LaunchersView().render().$el,
-                new QuickLaunchersView().render().$el,
+                launchers.render().$el,
+                quicklaunchers.render().$el,
                 search = $('<div id="io-ox-topsearch">'),
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')
