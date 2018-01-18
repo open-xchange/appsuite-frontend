@@ -145,7 +145,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    var LaunchersCollection = window.launchercollection = Backbone.Collection.extend({});
+    var LaunchersCollection = ox.ui.launchers = Backbone.Collection.extend({});
 
     var LaunchersView = Backbone.View.extend({
         attributes: {
