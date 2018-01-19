@@ -112,7 +112,7 @@ define('io.ox/calendar/edit/extensions', [
                             });
                         });
                         // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
-                        attachmentData = attachmentData.concat(baton.model.get('attachments') || []);
+                        attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
                         baton.model.set('attachments', attachmentData, { silent: true });
                     }
 
@@ -133,6 +133,8 @@ define('io.ox/calendar/edit/extensions', [
                     if (!baton.model.isValid({ isSave: true })) return;
 
                     baton.app.getWindow().busy();
+                    // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
+                    baton.app.attachmentsFormData = attachments;
                     if (baton.mode === 'edit') {
                         var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
                             recurrenceRange: baton.model.mode === 'series' ? 'THISANDFUTURE' : undefined,

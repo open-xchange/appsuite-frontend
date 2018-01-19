@@ -300,12 +300,12 @@ define('io.ox/calendar/edit/main', [
                                 if (self.view.options.mode === 'create') {
                                     api.create(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
                             });
