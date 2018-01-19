@@ -204,6 +204,24 @@ stop_review:
     - /^bug\//
     - /^poc\//
 
+deploy develop documentation:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - export VERSION=`ls doku --sort=time | cut -f1 | head -n1`
+    - rsync -aHAX --delete doku/$VERSION/ui/ /var/www/documentation/$VERSION/ui
+    - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
+    - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
+  dependencies:
+    - build documentation
+  tags:
+    - shell
+    - documentation
+  allow_failure: true
+  only:
+    - develop
+
 deploy documentation:
   stage: deploy
   variables:
@@ -219,7 +237,6 @@ deploy documentation:
     - shell
     - documentation
   only:
-    - develop
     - master
     - /^master-.*$/
 
