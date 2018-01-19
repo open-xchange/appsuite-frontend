@@ -111,9 +111,9 @@ define('io.ox/calendar/common-extensions', [
             if (!util.isPrivate(baton.data)) return;
             this.append(
                 util.isPrivate(baton.data, true) ? $('<i class="fa fa-user-circle private-flag" aria-hidden="true" data-animation="false">') : $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
-                    .attr('title', util.isPrivate(baton.data, true) ? gt('Private') : gt('Confidential'))
+                    .attr('title', util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private'))
                     .tooltip(),
-                $('<span class="sr-only">').text(util.isPrivate(baton.data, true) ? gt('Private') : gt('Confidential'))
+                $('<span class="sr-only">').text(util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private'))
             );
         },
 

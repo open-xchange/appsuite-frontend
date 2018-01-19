@@ -554,8 +554,8 @@ define('io.ox/calendar/edit/extensions', [
                     $('<legend class="simple">').text(gt('Type')),
                     new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
                         { value: 'PUBLIC', label: gt('Public') },
-                        { value: 'CONFIDENTIAL', label: gt('Confidential') },
-                        { value: 'PRIVATE', label: gt('Private') }]
+                        { value: 'CONFIDENTIAL', label: gt('Private') },
+                        { value: 'PRIVATE', label: gt('Secret') }]
                     }).render().$el
                 )
             );
@@ -580,9 +580,9 @@ define('io.ox/calendar/edit/extensions', [
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
                     '<div class="ox-popover-title">' + gt('Public') + '</div>' +
                     '<div>' + gt('The appointment is visible for non-attending users in shared folders.') + '</div>' +
-                    '<div class="ox-popover-title">' + gt('Confidential') + '</div>' +
-                    '<div>' + gt('Only certain appointment properties are shown to non-attending users in shared folders. Like for example the appointment time. The appointment is considered for conflicts and shows up without detailed information in scheduling view') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
+                    '<div>' + gt('Only certain appointment properties are shown to non-attending users in shared folders. Like for example the appointment time. The appointment is considered for conflicts and shows up without detailed information in scheduling view') + '</div>' +
+                    '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
                     '<div>' + gt('The appointment is not shown to non-attending users in shared folders at all. The appointment is only considered for conflicts and in the scheduling view, in case it blocks a resource (a room for example).') + '</div>' +
                     '</div></div>')
             .popover();
