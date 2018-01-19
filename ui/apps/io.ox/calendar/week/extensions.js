@@ -74,14 +74,26 @@ define('io.ox/calendar/week/extensions', [
                 .addClass(classes)
                 .append(
                     $('<div class="appointment-content">').append(
-                        util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
-                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
+                        $('<div>').append(
+                            util.returnIconsByType(a).type,
+                            a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : ''
+                        ),
+                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : '',
+                        $('<div class="flags">').append(util.returnIconsByType(a).property)
                     )
                 )
                 .attr({
                     'data-extension': 'default'
                 });
+
+            this.on('calendar:weekview:rendered', function () {
+                if ($(this).height() > 50) {
+                    $(this).find('.flags').show();
+                    $(this).find('.flags').addClass('bottom-right');
+                } else {
+                    $(this).find('.flags').hide();
+                }
+            });
 
             util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
                 if (!isBossy) {

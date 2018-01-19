@@ -110,7 +110,7 @@ define('io.ox/calendar/common-extensions', [
         privateFlag: function (baton) {
             if (!util.isPrivate(baton.data)) return;
             this.append(
-                $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
+                util.isPrivate(baton.data, true) ? $('<i class="fa fa-user-circle private-flag" aria-hidden="true" data-animation="false">') : $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
                     .attr('title', util.isPrivate(baton.data, true) ? gt('Private') : gt('Confidential'))
                     .tooltip(),
                 $('<span class="sr-only">').text(util.isPrivate(baton.data, true) ? gt('Private') : gt('Confidential'))

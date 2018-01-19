@@ -1034,6 +1034,18 @@ define('io.ox/calendar/util', [
             return data['class'] === 'PRIVATE' || (!strict && data['class'] === 'CONFIDENTIAL');
         },
 
+        returnIconsByType: function (data) {
+            var icons = {
+                type: [],
+                property: []
+            };
+            if (data.attributes['class'] === 'PRIVATE') icons.type.push($('<span class="private-flag">').append($('<i class="fa fa-user-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))));
+            if (data.attributes['class'] === 'CONFIDENTIAL') icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
+            if (data.attributes.recurrenceId) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-refresh" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
+            if (data.attributes.attendees.length > 1) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-users" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
+            return icons;
+        },
+
         getCurrentRangeOptions: function () {
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};

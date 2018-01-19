@@ -1457,6 +1457,7 @@ define('io.ox/calendar/week/view', [
             });
 
             this.updateHiddenIndicators();
+            $('.appointment').trigger('calendar:weekview:rendered');
 
             // global event for tracking purposes
             ox.trigger('calendar:items:render', this);
@@ -1499,6 +1500,7 @@ define('io.ox/calendar/week/view', [
                     .attr('style', el.attr('style'))
                     .css({ color: color, 'background-color': backgroundColor })
                 );
+                $('.appointment').trigger('calendar:weekview:rendered');
             }
         },
 

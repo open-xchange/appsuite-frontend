@@ -364,7 +364,7 @@
             cursor: default;
         }
 
-        .private-flag {
+        .private-flag, .confidential-flag {
             float: left;
             font-size: 15px;
             margin-right: 3px;
@@ -379,6 +379,23 @@
             .ellipsis();
 
             * { .ellipsis(); }
+
+            .flags {
+                display: block;
+                text-align: end;
+
+                span {
+                    padding-right: 5px;
+                    font-size: 15px;
+                }
+
+                &.bottom-right {
+                    position: absolute;
+                    bottom: 3px;
+                    right: 3px;
+                }
+            }
+
         }
 
     }
