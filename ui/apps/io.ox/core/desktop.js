@@ -25,9 +25,10 @@ define('io.ox/core/desktop', [
     'io.ox/core/adaptiveLoader',
     'io.ox/core/folder/api',
     'io.ox/find/main',
+    'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, windowView, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreSettings, gt) {
+], function (Events, windowView, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -70,7 +71,7 @@ define('io.ox/core/desktop', [
             };
         },
 
-        setCounter: function (text, options) {
+        /*setCounter: function (text, options) {
             if (!this.get('topbarNode')) {
                 return;
             }
@@ -96,6 +97,7 @@ define('io.ox/core/desktop', [
                 this.badge.show();
             }
         },
+        */
 
         getName: function () {
             return this.get('name');
@@ -129,13 +131,11 @@ define('io.ox/core/desktop', [
         },
 
         launch: function () {
-            var self = this, id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
+            var id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
             if (upsell.has(requires)) {
                 //resolve/reject clears busy animation
                 var def = $.Deferred();
-                return ox.launch(id, { launched: def.promise() })
-                         .then(function () { self.quit(); })
-                         .always(def.resolve);
+                return ox.launch(id, { launched: def.promise() }).always(def.resolve);
             }
             upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
             return $.when();
@@ -550,7 +550,6 @@ define('io.ox/core/desktop', [
         },
 
         launch: function (options) {
-
             var deferred = $.when(),
                 self = this,
                 name = this.getName(),
@@ -583,6 +582,7 @@ define('io.ox/core/desktop', [
                 }
                 deferred.then(
                     function success() {
+                        console.log('success', self);
                         ox.ui.apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
@@ -917,7 +917,7 @@ define('io.ox/core/desktop', [
     ox.ui.createApp = function (options) {
         options.guid = appGuid++;
         if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
-        return new ox.ui.App(options);
+        return ox.ui.apps.add(new ox.ui.App(options));
     };
 
     ox.ui.screens = (function () {
@@ -1887,6 +1887,33 @@ define('io.ox/core/desktop', [
     ox.ui.apps.on('resume', function (app) {
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
+    });
+
+    var getOrderedApps = function () {
+        var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
+            'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
+            'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
+            'io.ox/notes'];
+        var apps =  coreSettings.get('apps/list', defaultList.join(',')).split(',');
+        // Construct App Data
+        var appManifests = _(ox.manifests.apps).reject(function (manifest) {
+            return ox.manifests.isDisabled(manifest.path);
+        }).map(function (manifest) {
+            manifest.id = manifest.path.substr(0, manifest.path.length - 5);
+            //dynamically translate the title
+            manifest.title = /*#, dynamic*/gt.pgettext('app', manifest.title);
+            manifest.svg = icons[manifest.id];
+            return manifest;
+        });
+        return _.compact(apps.map(function (app) {
+            return _.where(appManifests, { id: app })[0];
+        }));
+    };
+
+    _(getOrderedApps()).each(function (obj) {
+        if (upsell.visible(obj.requires) && _.device(obj.device)) {
+            ox.ui.apps.add(new ox.ui.App(_.extend({ name: obj.id }, obj)));
+        }
     });
 
     return {};

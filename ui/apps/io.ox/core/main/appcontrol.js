@@ -13,44 +13,14 @@
 
 define('io.ox/core/main/appcontrol', [
     'io.ox/core/http',
+    'io.ox/core/upsell',
+    'io.ox/backbone/views/window',
     'io.ox/core/api/apps',
-    'io.ox/core/manifests',
     'io.ox/core/extensions',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (http, appAPI, manifests, ext, icons, settings, gt) {
-
-    var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
-        'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
-        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
-        'io.ox/notes'];
-
-    var exports = {
-
-        apps: settings.get('apps/list', defaultList.join(',')),
-
-        icons: icons,
-
-        getOrderedApps: function () {
-            var apps = exports.apps.split(',');
-            // Construct App Data
-            var appManifests = _(manifests.manager.apps).reject(function (manifest) {
-                return manifests.manager.isDisabled(manifest.path);
-            }).map(function (manifest) {
-                manifest.id = manifest.path.substr(0, manifest.path.length - 5);
-                //dynamically translate the title
-                manifest.title = /*#, dynamic*/gt.pgettext('app', manifest.title);
-                manifest.svg = exports.icons[manifest.id];
-                return manifest;
-            });
-            return _.compact(apps.map(function (app) {
-                return _.where(appManifests, { id: app })[0];
-            }));
-        }
-    };
-
-    var orderedApps = exports.getOrderedApps();
+], function (http, upsell, windowview, appAPI, ext, icons, settings, gt) {
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
@@ -66,42 +36,50 @@ define('io.ox/core/main/appcontrol', [
         events: {
             'click': 'onClick'
         },
-        initialize: function () {
+        initialize: function (options) {
+            this.quicklaunch = options.quicklaunch;
             this.listenTo(this.model, 'change:hasBadge', this.toggleBadge);
+            this.listenTo(this.model, 'change:tooltip', this.updateTooltip);
             this.listenTo(settings, 'change:coloredIcons', this.render);
         },
         onClick: function () {
-            ox.launch(this.model.get('path'));
+            ox.launch(this.model.get('path') || this.model.get('name') + '/main');
         },
         drawDate: function () {
             this.$svg.find('tspan:first').text(moment().format('D'));
             this.$svg.find('tspan:last').text(moment().format('ddd'));
         },
         drawIcon: function () {
-
             var svg = this.model.get('svg'),
                 id = this.model.get('id');
 
-            this.$svg = svg ? $(svg) : $(icons.fallbackIcon);
+            this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(this.model.get('title')[0]).end();
 
             if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
 
             if (id === 'io.ox/calendar') this.drawDate();
 
-            var cell = $('<div class="lcell">').append(
-                this.badge = $('<div class="indicator" aria-hidden="true">').hide(),
+            var cell = $('<div class="lcell" aria-hidden="true">').append(
+                this.badge = $('<div class="indicator">').toggle(this.model.get('hasBadge')),
                 $('<div class="svgwrap">').append(this.$svg),
                 $('<div class="title">').text(this.model.get('title'))
             );
 
             return cell;
         },
-
-        toggleBadge: function (model) {
-            this.badge.toggle(model.get('hasBadge'));
+        toggleBadge: function () {
+            this.badge.toggle(this.model.get('hasBadge'));
+        },
+        updateTooltip: function () {
+            var tooltipAttribute = this.quicklaunch ? 'title' : 'aria-label';
+            var tooltip = this.model.get('tooltip') ? ' (' + this.model.get('tooltip') + ')' : '';
+            this.$el.attr(tooltipAttribute, this.model.get('title') + tooltip);
         },
         render: function () {
-            this.$el.empty().attr('data-app-id', this.model.get('id')).append(this.icon = this.drawIcon());
+            this.$el.empty().attr({
+                'data-app-id': this.model.get('name')
+            }).append(this.icon = this.drawIcon());
+            this.updateTooltip();
             return this;
         }
     });
@@ -114,9 +92,8 @@ define('io.ox/core/main/appcontrol', [
         },
         fetch: function () {
             var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : null;
-
             return _(quicklaunch).map(function (o) {
-                return _.findWhere(exports.getOrderedApps(), { path: o });
+                return ox.ui.apps.findWhere({ path: o });
             });
         }
     });
@@ -138,16 +115,12 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.empty().append(
                 this.collection.map(function (model) {
-                    //return $('<div class="quicklaunch-wrap">').append(
-                    return new LauncherView({ model: model }).render().$el;
-                    //);
+                    return new LauncherView({ model: model, quicklaunch: true }).render().$el;
                 })
             );
             return this;
         }
     });
-
-    var LaunchersCollection = ox.ui.launchers = Backbone.Collection.extend({});
 
     var LaunchersView = Backbone.View.extend({
         attributes: {
@@ -156,9 +129,6 @@ define('io.ox/core/main/appcontrol', [
         events: {
             'click button': 'onClick',
             'click #io-ox-launchgrid-overlay-inner': 'onClick'
-        },
-        initialize: function () {
-            this.collection = new LaunchersCollection(orderedApps);
         },
         onClick: function (force) {
             toggleOverlay(force);
@@ -179,6 +149,10 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
+        ext.point('io.ox/core/notifications/badge').invoke('register', self, {});
+    });
+
     ext.point('io.ox/core/appcontrol').extend({
         id: 'default',
         draw: function () {
@@ -186,7 +160,7 @@ define('io.ox/core/main/appcontrol', [
 
             var banner = $('#io-ox-appcontrol');
             var taskbar, logo, search;
-            var launchers = window.launchers = new LaunchersView();
+            var launchers = window.launchers = new LaunchersView({ collection: ox.ui.apps });
             var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
             banner.append(
                 launchers.render().$el,
@@ -207,6 +181,18 @@ define('io.ox/core/main/appcontrol', [
             ext.point('io.ox/core/appcontrol/logo').invoke('draw', logo);
 
             initRefreshAnimation();
+
+            ox.ui.apps.on('add', function (model) {
+                if (model.get('title') === undefined) return;
+                if (model.get('floating')) return;
+
+                var closable = model.get('closable') && !_.device('smartphone');
+
+                if (closable) {
+                    windowview.addNonFloatingApp(model);
+                    return;
+                }
+            });
 
             ox.ui.apps.on('launch resume', function (model) {
                 $('#io-ox-launchgrid').find('.lcell[data-app-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
@@ -326,6 +312,4 @@ define('io.ox/core/main/appcontrol', [
             off();
         });
     }
-
-    return exports;
 });

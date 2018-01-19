@@ -147,12 +147,12 @@ define('plugins/notifications/mail/register', [
             api.trigger('all-unseen', count);
             lastCount = count;
         }
+        app.set('hasBadge', count > 0);
 
-        // don't let the badge grow infinite
-        if (count > 999) count = '999+';
-
-        //#. %1$d number of notifications
-        app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });
+        if (count > 0) {
+            //#. %1$d number of notifications
+            app.set('tooltip', gt.format('%1$d unread', count));
+        }
 
     }, 100);
 
