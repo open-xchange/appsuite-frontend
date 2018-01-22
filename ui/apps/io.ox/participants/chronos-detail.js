@@ -14,10 +14,12 @@
 define('io.ox/participants/chronos-detail', [
     'io.ox/calendar/util',
     'io.ox/core/extensions',
+    'io.ox/contacts/util',
+    'io.ox/mail/util',
     'io.ox/core/util',
     'gettext!io.ox/core',
     'less!io.ox/participants/style'
-], function (util, ext, coreUtil, gt) {
+], function (util, ext, contactsUtil, mailUtil, coreUtil, gt) {
 
     'use strict';
 
@@ -47,7 +49,10 @@ define('io.ox/participants/chronos-detail', [
         draw: function (baton) {
             if (baton.data.cuType === 'RESOURCE') return;
 
-            var opt = _.extend({ html: $.txt(baton.data.cn) }, baton.data);
+            var data = baton.data,
+                display_name = mailUtil.getDisplayName([data.cn, data.email], { showMailAddress: true }),
+                html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name),
+                opt = _.extend({ html: html }, data);
 
             if (!baton.options.halo) opt.$el = $('<span>');
             if (baton.data.entity) opt.user_id = baton.data.entity;
@@ -163,8 +168,13 @@ define('io.ox/participants/chronos-detail', [
                 // users
                 _(users)
                     .chain()
+                    .map(function (obj) {
+                        obj.full_name = contactsUtil.getFullName(obj.contact, true);
+                        obj.sort_name = obj.contact.last_name || obj.contact.first_name || obj.contact.display_name || '';
+                        return obj;
+                    })
                     .sortBy(function (obj) {
-                        return obj.cn;
+                        return obj.sort_name;
                     })
                     .each(function (obj) {
                         participantListNode.append(drawParticipant(obj, options));

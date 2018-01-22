@@ -295,7 +295,7 @@ define('io.ox/calendar/month/view', [
 
                 var startMoment = model.getMoment('startDate'),
                     endMoment = model.getMoment('endDate'),
-                    maxCount = 7;
+                    maxCount = 31;
 
                 // fix full-time values
                 if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
