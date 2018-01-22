@@ -67,6 +67,7 @@ define('io.ox/core/attachments/view', [
                 this.updateScrollControls();
                 // update summary
                 this.renderSummary(length);
+                if (this.openByDefault) this.toggleDetails(true);
             });
 
             // initial toggle if empty
@@ -92,7 +93,7 @@ define('io.ox/core/attachments/view', [
                 )
             );
 
-            if (this.openByDefault) this.toggleDetails();
+            if (this.openByDefault) this.toggleDetails(true);
 
             this.updateScrollControls();
 
@@ -156,8 +157,8 @@ define('io.ox/core/attachments/view', [
             return this.collection.filter(this.filter, this);
         },
 
-        toggleDetails: function () {
-            this.$el.toggleClass('open');
+        toggleDetails: function (forceOpen) {
+            this.$el.toggleClass('open', forceOpen === true || undefined);
             if (!this.isListRendered) this.renderList();
         },
 
