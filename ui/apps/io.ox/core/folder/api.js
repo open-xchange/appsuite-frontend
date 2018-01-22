@@ -349,6 +349,34 @@ define('io.ox/core/folder/api', [
             if (options.reset) collection.trigger('reset');
         },
 
+        removeCollection: function (id, options) {
+            options = options || {};
+            var collection = this.collections[id],
+                self = this,
+                models = collection ? collection.models : [];
+
+            if (!collection) return;
+
+            // delete collection before recursion to avoid loops, just in case
+            collection = null;
+            delete this.collections[id];
+
+            _(models).each(function (model) {
+                removeFromAllCollections(model.id);
+                self.removeCollection(model.id, options);
+            });
+
+            if (options.removeModels && this.models[id]) {
+                var data = this.models[id].toJSON();
+                this.models[id] = null;
+                delete this.models[id];
+                api.trigger('before:remove', data);
+                api.trigger('remove', id, data);
+                api.trigger('remove:' + id, data);
+                api.trigger('remove:' + data.module, data);
+            }
+        },
+
         getModel: function (id) {
             return this.models[id] || (this.models[id] = new FolderModel({ id: id }));
         },
@@ -592,7 +620,7 @@ define('io.ox/core/folder/api', [
                 return renameDefaultCalendarFolders(data);
             },
             function (error) {
-                api.trigger('error error:' + error.code, error);
+                api.trigger('error error:' + error.code, error, id);
                 return error;
             }
         )
@@ -683,8 +711,8 @@ define('io.ox/core/folder/api', [
             appendColumns: true
         })
         .then(renameDefaultCalendarFolders, function (error) {
-            api.trigger('error error:' + error.code, error);
-            return error;
+            api.trigger('error error:' + error.code, error, id);
+            throw error;
         })
         .then(function (array) {
             array = processListResponse(id, array);
