@@ -40,20 +40,6 @@ define('io.ox/calendar/settings/schedjoules/api', [
             });
         },
 
-        getAllAccounts: function () {
-            return http.GET({
-                module: 'chronos/accounts',
-                params: { action: 'all' }
-            });
-        },
-
-        getAccount: function (id) {
-            return http.GET({
-                module: 'chronos/accounts',
-                params: { action: 'get', id: id }
-            });
-        },
-
         subscribeCalendar: function (obj) {
             return http.PUT({
                 module: 'folders',

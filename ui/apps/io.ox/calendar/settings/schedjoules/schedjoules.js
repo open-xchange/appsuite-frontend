@@ -361,7 +361,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
     });
 
     function getData(dialog) {
-        return $.when(api.getLanguages(), api.getCountries(), userAPI.getCurrentUser(), api.getAllAccounts()).then(function (languages, countries, user, accounts) {
+        return $.when(api.getLanguages(), api.getCountries(), userAPI.getCurrentUser()).then(function (languages, countries, user) {
             var accountFolders = _.filter(folderAPI.pool.models, function (folder) { return folder.get('com.openexchange.calendar.provider') === 'schedjoules'; }),
                 SubscriptionsModel = Backbone.Model.extend({});
 
@@ -386,7 +386,6 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                 languages: languages,
                 countries: countries,
                 user: user,
-                accounts: accounts,
                 accountFolders: accountFolders,
                 subscriptionsModel: subscriptionsModel,
                 currentSubscriptions: collect(accountFolders, true)
