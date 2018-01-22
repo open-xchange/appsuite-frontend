@@ -14,11 +14,12 @@
 define('io.ox/participants/chronos-views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
+    'io.ox/contacts/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
     'less!io.ox/participants/style'
-], function (api, util, folderAPI, gt, capabilities) {
+], function (api, util, contactsUtil, folderAPI, gt, capabilities) {
 
     'use strict';
 
@@ -61,6 +62,13 @@ define('io.ox/participants/chronos-views', [
             });
         },
 
+        getDisplayName: function (model, options) {
+            options = options || {};
+            var dn = contactsUtil.getFullName(model.get('contact'), options.asHtml);
+            // 'email only' participant
+            return dn || model.get('cn');
+        },
+
         render: function () {
             this.$el.append(
                 this.nodes.$img = $('<div>'),
@@ -70,7 +78,7 @@ define('io.ox/participants/chronos-views', [
                 $('<a href="#" class="remove" role="button">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.get('cn'))
+                        $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.getDisplayName(this.model))
                     )
                 )
             ).attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
@@ -88,9 +96,9 @@ define('io.ox/participants/chronos-views', [
                 $el: this.nodes.$text
             };
             if (this.options.asHtml) {
-                options.html = $('<span>').text(this.model.get('cn'));
+                options.html = this.getDisplayName(this.model, { asHtml: true });
             } else {
-                options.name = this.model.get('cn');
+                options.name = this.getDisplayName(this.model);
             }
             util.renderPersonalName(options, this.model.toJSON());
         },
@@ -238,6 +246,7 @@ define('io.ox/participants/chronos-views', [
                 baton: this.options.baton,
                 halo: this.options.halo !== undefined ? this.options.halo : true,
                 closeButton: true,
+                asHtml: this.options.asHtml,
                 hideMail: this.options.hideMail
             });
 

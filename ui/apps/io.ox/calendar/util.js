@@ -1136,6 +1136,11 @@ define('io.ox/calendar/util', [
             // not really needed. Added just for convenience. Helps if distibution list should be created
             if (attendee.cuType === 'INDIVIDUAL') {
                 attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
+                attendee.contact = {
+                    display_name: user.display_name,
+                    first_name: user.first_name,
+                    last_name: user.last_name
+                };
             }
             // override with predefined values if given
             return _.extend(attendee, options);
