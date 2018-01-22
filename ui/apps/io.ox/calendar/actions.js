@@ -73,7 +73,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         requires: function (e) {
-            return e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (recipients) {
@@ -102,7 +102,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
         requires: function (e) {
-            return e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/invite']).done(function (action) {
@@ -114,7 +114,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         requires: function (e) {
-            return e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (distlist) {
@@ -655,7 +655,7 @@ define('io.ox/calendar/actions', [
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
     }));
 
-    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
+    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({//ghj
         index: 100,
         id: 'inline-links-participant',
         ref: 'io.ox/calendar/links/inline-participants',
