@@ -1022,7 +1022,6 @@ define('io.ox/calendar/util', [
         },
 
         isFirst: function (model) {
-            debugger;
             var start = model.has('oldStartDate') ? model.get('oldStartDate').valueOf() : model.getTimestamp('startDate'),
                 recurrence = model.has('recurrenceId') ? moment(model.get('recurrenceId')).valueOf() : 0;
             // TODO we need another check here but this should work for 90% for the cases and should not cause false positives
