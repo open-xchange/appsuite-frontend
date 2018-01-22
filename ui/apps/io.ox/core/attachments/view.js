@@ -167,7 +167,7 @@ define('io.ox/core/attachments/view', [
         },
 
         toggleDetails: function (forceOpen) {
-            this.$el.toggleClass('open', forceOpen === true);
+            this.$el.toggleClass('open', forceOpen === true || undefined);
             this.$header.find('.toggle-details').attr('aria-expanded', this.$el.hasClass('open'));
             if (!this.isListRendered) this.renderList();
         },
