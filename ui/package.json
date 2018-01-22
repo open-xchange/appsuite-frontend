@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.8.4-18",
+  "version": "7.8.4-19",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -38,7 +38,6 @@
     "grunt-karma": "^2.0.0",
     "grunt-modernizr": "~1.0.2",
     "grunt-require-check": "^0.1.1",
-    "grunt-zip": "~0.16.2",
     "karma": "^1.6.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.0.0",
@@ -56,5 +55,9 @@
   },
   "engines": {
     "node": ">=0.10"
+  },
+  "dependencies": {
+    "@open-xchange/tinymce": "4.6.3-4",
+    "tinymce": "4.6.7"
   }
 }

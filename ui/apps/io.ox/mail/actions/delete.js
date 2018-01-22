@@ -58,7 +58,7 @@ define('io.ox/mail/actions/delete', [
             var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 
-            var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
+            var showPrompt = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
 
@@ -80,17 +80,21 @@ define('io.ox/mail/actions/delete', [
             //     }
             // }
 
-            if (check) {
+            if (showPrompt) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .append(
-                            $('<h4>').text(getQuestion(list))
-                        )
-                        .addPrimaryButton('delete', gt('Delete'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .on('delete', function () {
-                            api.remove(list, all).fail(notifications.yell);
-                        }).show();
+                        .addPrimaryButton('delete', gt('Delete'))
+                        .addButton('cancel', gt('Cancel'))
+                        .text(getQuestion(list))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                api.remove(list, all).fail(notifications.yell);
+                            } else {
+                                // trigger back event, used for mobile swipe delete reset
+                                ox.trigger('delete:canceled', list);
+                            }
+                        });
                 });
             } else {
                 api.remove(list, all).fail(function (e) {

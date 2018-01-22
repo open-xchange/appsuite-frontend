@@ -43,7 +43,9 @@ define('io.ox/mail/compose/inline-images', [
                         fixPost: true
                     }).done(function (response) {
                         // used to add the keepalive timers
-                        $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
+                        if (window.tinyMCE && window.tinyMCE.activeEditor) { // check tinyMCE (56182)
+                            $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
+                        }
                     });
                 }
                 return http.FORM({
@@ -52,7 +54,9 @@ define('io.ox/mail/compose/inline-images', [
                     params: { module: 'mail', type: 'image' }
                 }).done(function (response) {
                     // used to add the keepalive timers
-                    $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
+                    if (window.tinyMCE && window.tinyMCE.activeEditor) { // check tinyMCE (56182)
+                        $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
+                    }
                 });
             } catch (e) {
                 // print error to console for debugging

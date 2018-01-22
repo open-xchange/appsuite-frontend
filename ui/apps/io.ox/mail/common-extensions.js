@@ -169,6 +169,41 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        fromDetail: function (baton) {
+
+            var $el = $('<div class="from">'),
+                data = baton.data,
+                from = data.from || [],
+                length = from.length;
+
+            // from is special as we need to consider the "sender" header
+            // plus making the mail address visible (see bug 56407)
+
+            _(from).each(function (item, i) {
+
+                var email = String(item[1] || '').toLowerCase(),
+                    name = util.getDisplayName(item);
+                if (!email) return;
+
+                $el.append(
+                    $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                        .data({ email: email, email1: email })
+                        .text(name)
+                );
+
+                if (name !== email) {
+                    $el.append($('<span class="address">').text('<' + email + '>'));
+                }
+
+                // save space on mobile by showing address only for suspicious mails
+                if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
+
+                if (i < length - 1) $el.append('<span class="delimiter">,</span>');
+            });
+
+            this.append($el);
+        },
+
         fromPipeline: {
             // field: from vs. to
             field: function (baton, opt) {

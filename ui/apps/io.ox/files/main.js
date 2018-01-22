@@ -197,6 +197,12 @@ define('io.ox/files/main', [
             app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+
+            // cleans up folders that are part of an external account that was deleted recently
+            folderAPI.on('error:FILE_STORAGE-0004', function (error, id) {
+                if (!id) return;
+                folderAPI.pool.removeCollection(id, { removeModels: true });
+            });
         },
 
         'files-quota': function (app) {
