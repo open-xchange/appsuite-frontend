@@ -152,15 +152,19 @@ define('io.ox/calendar/api', [
                 if (obj.eventId) {
                     obj.id = obj.eventId;
                 }
+
+                var params = {
+                    action: 'get',
+                    id: obj.id,
+                    folder: obj.folder,
+                    extendedEntities: true
+                };
+
+                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+
                 return http.GET({
                     module: 'chronos',
-                    params: {
-                        action: 'get',
-                        id: obj.id,
-                        recurrenceId: obj.recurrenceId,
-                        folder: obj.folder,
-                        extendedEntities: true
-                    }
+                    params: params
                 }).then(function (data) {
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
                     api.pool.propagateAdd(data);
