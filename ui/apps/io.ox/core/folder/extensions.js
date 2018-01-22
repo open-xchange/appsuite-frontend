@@ -289,6 +289,8 @@ define('io.ox/core/folder/extensions', [
 
         localFolders: function (tree) {
 
+            if (capabilities.has('guest')) return;  // Guests aren't able to create local folders
+
             var defaultId = api.altnamespace ? 'default0' : INBOX;
 
             var node = new TreeNodeView({
