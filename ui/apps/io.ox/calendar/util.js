@@ -1015,7 +1015,7 @@ define('io.ox/calendar/util', [
 
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
-                    .text(gt('Do you want to change only this occurence of the event, or this and all occurences?'))
+                    .text(gt('Do you want to change only this occurence of the event, or this and all future occurences?'))
                     .addPrimaryButton('series', gt('All future events'), 'series')
                     .addButton('appointment', gt('Only this event'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
@@ -1034,7 +1034,7 @@ define('io.ox/calendar/util', [
             if (data.attributes['class'] === 'PRIVATE') icons.type.push($('<span class="private-flag">').append($('<i class="fa fa-user-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))));
             if (data.attributes['class'] === 'CONFIDENTIAL') icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
             if (data.attributes.recurrenceId) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-refresh" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
-            if (data.attributes.attendees.length > 1) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-users" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
+            if (this.hasFlag(data, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-users" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
             return icons;
         },
 
