@@ -981,7 +981,7 @@ define('io.ox/calendar/util', [
                 conf = that.getConfirmationStatus(eventModel);
 
             // shared appointments which are needs-action or declined don't receive color classes
-            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
+            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return false;
 
             return !eventColor && !privateFlag;
         },

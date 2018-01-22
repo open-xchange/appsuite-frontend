@@ -458,38 +458,38 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             describe('resolve appointment color', function () {
                 it('with appointment without color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ flags: ['accepted'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('lightblue');
                 });
                 it('with appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
                 it('with private appointment without color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ flags: ['confidential', 'accepted'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('#616161');
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['confidential', 'accepted'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
                 it('with shared unconfirmed appointment', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } }, type: 3 },
-                        appointment = new Backbone.Model({ created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] });
+                        appointment = new models.Model({ createdBy: 377, flags: ['needs-action'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('');
                 });
                 it('with public folder', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } }, type: 2 },
-                        appointment = new Backbone.Model({ created_by: 377, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ createdBy: 377, flags: ['accepted'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('lightblue');
                 });
@@ -497,32 +497,32 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             describe('detects, if appointment is editable', function () {
                 it('with appointment without color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ flags: ['accepted'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
                 });
                 it('with appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ flags: ['accepted', 'confidential'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'confidential'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with shared unconfirmed appointment', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } }, type: 3 },
-                        appointment = new Backbone.Model({ color: '#aabbcc', created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] });
+                        appointment = new models.Model({ color: '#aabbcc', createdBy: 377, flags: ['needs-action'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
