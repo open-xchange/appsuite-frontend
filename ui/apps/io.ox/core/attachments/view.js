@@ -67,6 +67,7 @@ define('io.ox/core/attachments/view', [
                 this.updateScrollControls();
                 // update summary
                 this.renderSummary(length);
+                if (this.openByDefault) this.toggleDetails(true);
             });
 
             // initial toggle if empty
@@ -95,7 +96,7 @@ define('io.ox/core/attachments/view', [
                 )
             );
 
-            if (this.openByDefault) this.toggleDetails();
+            if (this.openByDefault) this.toggleDetails(true);
 
             this.updateScrollControls();
             this.updateAriaControls();
@@ -165,8 +166,8 @@ define('io.ox/core/attachments/view', [
             this.$header.find('.toggle-mode').attr('aria-pressed', this.$el.hasClass('show-preview'));
         },
 
-        toggleDetails: function () {
-            this.$el.toggleClass('open');
+        toggleDetails: function (forceOpen) {
+            this.$el.toggleClass('open', forceOpen === true);
             this.$header.find('.toggle-details').attr('aria-expanded', this.$el.hasClass('open'));
             if (!this.isListRendered) this.renderList();
         },
