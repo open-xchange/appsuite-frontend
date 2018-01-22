@@ -132,15 +132,18 @@ define('io.ox/calendar/month/perspective', [
                 });
             }
 
-            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
-                util.getRecurrenceEditDialog()
-                    .show()
-                    .done(function (action) {
-                        switch (action) {
-                            case 'series':
+            util.showRecurrenceDialog(model)
+                .done(function (action) {
+                    switch (action) {
+                        case 'series':
+                        case 'thisandfuture':
+                            var master;
+                            if (action === 'series') master = api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false);
+                            else master = $.when(model.clone());
+                            // get recurrence master object
+                            master.done(function (masterModel) {
                                 // calculate new dates if old dates are available
-                                var masterModel = model.clonse(),
-                                    oldStartDate = masterModel.getMoment('startDate'),
+                                var oldStartDate = masterModel.getMoment('startDate'),
                                     startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
                                     endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
                                     format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
@@ -149,19 +152,17 @@ define('io.ox/calendar/month/perspective', [
                                     endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                 });
                                 util.updateRecurrenceDate(masterModel, oldStartDate);
-                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { recurrenceRange: 'THISANDFUTURE', checkConflicts: true }));
-                                break;
-                            case 'appointment':
-                                apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
-                                break;
-                            default:
-                                reset();
-                                return;
-                        }
-                    });
-            } else {
-                apiUpdate(model, { checkConflicts: true });
-            }
+                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                            });
+                            break;
+                        case 'appointment':
+                            apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                            break;
+                        default:
+                            self.refresh();
+                            return;
+                    }
+                });
         },
 
         updateMonths: function (useCache) {

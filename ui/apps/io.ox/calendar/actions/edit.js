@@ -21,41 +21,23 @@ define('io.ox/calendar/actions/edit', [
     'use strict';
 
     return function (baton) {
-        var params = baton.data,
-            o = api.reduce(baton.data);
+        var o = api.reduce(baton.data);
 
-        if (params.recurrenceId && params.id === params.seriesId) {
-            util.getRecurrenceEditDialog()
-                .show()
-                .done(function (action) {
+        util.showRecurrenceDialog(baton.data)
+            .done(function (action) {
+                if (action === 'cancel') return;
 
-                    if (action === 'cancel') {
-                        return;
-                    }
-
-                    // disable cache with second param
-                    api.get(o, false).then(
-                        function (data) {
-                            if (m.reuse('edit', data, { action: action })) return;
-                            m.getApp().launch().done(function () {
-                                this.edit(data, { action: action });
-                            });
-                        },
-                        notifications.yell
-                    );
-                });
-
-        } else {
-            api.get(o, false).then(
-                function (data) {
-                    if (m.reuse('edit', data)) return;
-                    m.getApp().launch().done(function () {
-                        this.edit(data);
-                    });
-                },
-                notifications.yell
-            );
-        }
+                // disable cache with second param
+                api.get(o, false).then(
+                    function (data) {
+                        if (m.reuse('edit', data, { action: action })) return;
+                        m.getApp().launch().done(function () {
+                            this.edit(data, { action: action });
+                        });
+                    },
+                    notifications.yell
+                );
+            });
     };
 
 });

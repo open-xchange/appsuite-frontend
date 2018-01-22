@@ -13,6 +13,7 @@
 
 define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
@@ -22,7 +23,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/print',
     'static/3rd.party/jquery-ui.min.js',
     'io.ox/calendar/week/extensions'
-], function (ext, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
+], function (ext, api, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
 
     'use strict';
 
@@ -513,6 +514,7 @@ define('io.ox/calendar/week/view', [
 
         /**
          * handler for single- and double-click events on appointments
+         * TODO check if this code is an exact duplication of the week-views onclick appointment
          * @param  { MouseEvent } e Mouse event
          */
         onClickAppointment: function (e) {
@@ -546,7 +548,9 @@ define('io.ox/calendar/week/view', [
                     clearTimeout(self.clickTimer);
                     self.clicks = 0;
                     self.clickTimer = null;
-                    self.trigger('openEditAppointment', e, obj);
+                    api.get(obj).done(function (model) {
+                        self.trigger('openEditAppointment', e, model.attributes);
+                    });
                 }
             }
         },

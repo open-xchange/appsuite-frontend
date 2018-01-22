@@ -106,7 +106,9 @@ define('io.ox/calendar/month/view', [
                     clearTimeout(self.clickTimer);
                     self.clicks = 0;
                     self.clickTimer = null;
-                    self.trigger('openEditAppointment', e, obj);
+                    api.get(obj).done(function (model) {
+                        self.trigger('openEditAppointment', e, model.attributes);
+                    });
                 }
             }
         },

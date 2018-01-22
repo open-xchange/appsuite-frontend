@@ -1018,6 +1018,27 @@ define('io.ox/calendar/util', [
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
+        showRecurrenceDialog: function (model) {
+            if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
+            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
+                var dialog = new dialogs.ModalDialog();
+                if (model.hasFlag('first_occurrence')) {
+                    dialog.text(gt('Do you want to change only this occurence of the event, or this and all occurences?'));
+                    dialog.addPrimaryButton('series', gt('All events'), 'series');
+                } else if (model.hasFlag('last_occurrence')) {
+                    return $.when('appointment');
+                } else {
+                    dialog.text(gt('Do you want to change only this occurence of the event, or this and all future occurences?'));
+                    dialog.addPrimaryButton('series', gt('All future events'), 'thisandfuture');
+                }
+
+                return dialog.addButton('appointment', gt('Only this event'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .show();
+            }
+            return $.when('appointment');
+        },
+
         isPrivate: function (data, strict) {
             return that.hasFlag(data, 'private') || (!strict && that.hasFlag(data, 'confidential'));
         },
