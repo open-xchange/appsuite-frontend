@@ -96,7 +96,7 @@ define('io.ox/calendar/api', [
             return response;
         },
 
-        defaultFields = ['class', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'transp'].join(','),
+        defaultFields = ['color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
         extendedFields = [defaultFields, 'deleteExceptionDates', 'changeExceptionDates'].join(','),
 

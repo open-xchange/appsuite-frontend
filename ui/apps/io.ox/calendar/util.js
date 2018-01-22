@@ -492,20 +492,17 @@ define('io.ox/calendar/util', [
         },
 
         getShownAsClass: function (data) {
-            data = data instanceof Backbone.Model ? data.attributes : data;
-            if (data.transp === 'TRANSPARENT') return 'free';
+            if (that.hasFlag(data, 'transparent')) return 'free';
             return 'reserved';
         },
 
         getShownAsLabel: function (data) {
-            data = data instanceof Backbone.Model ? data.attributes : data;
-            if (data.transp === 'TRANSPARENT') return 'label-success';
+            if (that.hasFlag(data, 'transparent')) return 'free';
             return 'label-info';
         },
 
         getShownAs: function (data) {
-            data = data instanceof Backbone.Model ? data.attributes : data;
-            if (data.transp === 'TRANSPARENT') return gt('Free');
+            if (that.hasFlag(data, 'transparent')) return 'free';
             return gt('Reserved');
         },
 
@@ -1022,8 +1019,7 @@ define('io.ox/calendar/util', [
         },
 
         isPrivate: function (data, strict) {
-            if (data.attributes) data = data.attributes;
-            return data['class'] === 'PRIVATE' || (!strict && data['class'] === 'CONFIDENTIAL');
+            return that.hasFlag(data, 'private') || (!strict && that.hasFlag(data, 'confidential'));
         },
 
         returnIconsByType: function (data) {
@@ -1226,8 +1222,8 @@ define('io.ox/calendar/util', [
             }]);
         },
 
-        hasFlag: function (model, flag) {
-            var data = model instanceof Backbone.Model ? model.attributes : model;
+        hasFlag: function (data, flag) {
+            if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;
         }
