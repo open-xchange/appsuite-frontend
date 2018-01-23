@@ -1,5 +1,4 @@
 {
-    "category": "Basic",
     "requires": "webmail",
     "refreshable": true,
     "visible": false

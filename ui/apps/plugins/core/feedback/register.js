@@ -47,7 +47,7 @@ define('plugins/core/feedback/register', [
 
     function getAppOptions(useWhitelist) {
         var currentApp,
-            apps = _(appApi.getFavorites()).map(function (app) {
+            apps = _(appApi.getApps()).map(function (app) {
                 app.id = app.id.replace(/io\.ox\/(office\/portal\/|office\/)?/, '');
 
                 if (useWhitelist && !_(appWhiteList).contains(app.id)) return;

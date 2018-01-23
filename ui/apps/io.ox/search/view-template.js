@@ -14,11 +14,10 @@
 define('io.ox/search/view-template', [
     'gettext!io.ox/core',
     'io.ox/core/extensions',
-    'io.ox/core/api/apps',
     'settings!io.ox/core',
     'io.ox/search/autocomplete/view',
     'io.ox/search/facets/view'
-], function (gt, ext, appAPI, settings) {
+], function (gt, ext, settings) {
 
     'use strict';
 

@@ -51,9 +51,11 @@ define('io.ox/core/main/appcontrol', [
         },
         drawIcon: function () {
             var svg = this.model.get('svg'),
-                id = this.model.get('id');
+                id = this.model.get('id'),
+                title = this.model.get('title'),
+                firstLetter = _.isString(title) ? title[0] : '?';
 
-            this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(this.model.get('title')[0]).end();
+            this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
             if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
 
@@ -92,9 +94,9 @@ define('io.ox/core/main/appcontrol', [
         },
         fetch: function () {
             var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : null;
-            return _(quicklaunch).map(function (o) {
-                return ox.ui.apps.findWhere({ path: o });
-            });
+            return _(quicklaunch.map(function (o) {
+                return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
+            })).compact();
         }
     });
 
@@ -155,12 +157,13 @@ define('io.ox/core/main/appcontrol', [
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'default',
+        index: 100,
         draw: function () {
             $('#io-ox-appcontrol').show();
 
             var banner = $('#io-ox-appcontrol');
             var taskbar, logo, search;
-            var launchers = window.launchers = new LaunchersView({ collection: ox.ui.apps });
+            var launchers = window.launchers = new LaunchersView({ collection: ox.ui.apps.where({ hasLauncher: true }) });
             var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
             banner.append(
                 launchers.render().$el,

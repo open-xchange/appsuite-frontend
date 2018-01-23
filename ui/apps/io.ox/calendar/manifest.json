@@ -1,10 +1,10 @@
 {
     "title": "Calendar",
     "company": "Open-Xchange",
-    "icon": "calendar",
-    "category": "Productivity",
     "settings": true,
     "requires": "calendar",
     "refreshable": true,
+    "searchable": true,
+    "hasLauncher": true,
     "index": 800
 }

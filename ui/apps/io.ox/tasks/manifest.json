@@ -1,10 +1,10 @@
 {
     "title": "Tasks",
     "company": "Open-Xchange",
-    "icon": "tasks",
-    "category": "Productivity",
     "settings": true,
     "requires": "tasks",
     "refreshable": true,
+    "searchable": true,
+    "hasLauncher": true,
     "index": 900
 }

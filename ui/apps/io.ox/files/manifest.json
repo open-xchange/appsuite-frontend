@@ -1,12 +1,12 @@
 [{
     "title": "Drive",
     "company": "Open-Xchange",
-    "icon": "files",
-    "category": "Productivity",
     "requires": "infostore",
     "settings": true,
     "settingsRequires": "!guest",
     "refreshable": true,
+    "searchable": true,
+    "hasLauncher": true,
     "index": 1000
 }, {
     "namespace": "io.ox/files/filter",

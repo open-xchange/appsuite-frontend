@@ -26,9 +26,10 @@ define('io.ox/core/desktop', [
     'io.ox/core/folder/api',
     'io.ox/find/main',
     'io.ox/core/main/icons',
+    'io.ox/core/api/apps',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, windowView, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, coreSettings, gt) {
+], function (Events, windowView, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, appApi, coreSettings, gt) {
 
     'use strict';
 
@@ -71,34 +72,6 @@ define('io.ox/core/desktop', [
             };
         },
 
-        /*setCounter: function (text, options) {
-            if (!this.get('topbarNode')) {
-                return;
-            }
-            if (!this.badge && this.get('topbarNode')) {
-                this.badge = this.get('topbarNode').find('.topbar-launcherbadge');
-                if (this.badge.length === 0) {
-                    this.badge = $('<span class="badge topbar-launcherbadge">');
-                }
-                this.get('topbarNode').find('a.apptitle').append(this.badge);
-            }
-            var oldText = this.badge.text();
-
-            this.badge.text(text);
-            if (options.arialabel) {
-                this.badge.attr('aria-label', options.arialabel);
-            }
-            if (oldText !== text) {
-                ox.trigger('recalculate-topbarsize');
-            }
-            if (!text) {
-                this.badge.hide();
-            } else {
-                this.badge.show();
-            }
-        },
-        */
-
         getName: function () {
             return this.get('name');
         },
@@ -123,31 +96,7 @@ define('io.ox/core/desktop', [
         call: $.noop
     });
 
-    ox.ui.AppPlaceholder = AbstractApp.extend({
-
-        initialize: function () {
-            // call super constructor
-            AbstractApp.prototype.initialize.apply(this, arguments);
-        },
-
-        launch: function () {
-            var id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
-            if (upsell.has(requires)) {
-                //resolve/reject clears busy animation
-                var def = $.Deferred();
-                return ox.launch(id, { launched: def.promise() }).always(def.resolve);
-            }
-            upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
-            return $.when();
-        },
-
-        quit: function () {
-            // mark as not running
-            this.set('state', 'stopped');
-            // remove from list
-            ox.ui.apps.remove(this);
-        }
-    });
+    ox.ui.AppPlaceholder = AbstractApp;
 
     var apputil = {
         LIMIT: 265000,
@@ -582,7 +531,6 @@ define('io.ox/core/desktop', [
                 }
                 deferred.then(
                     function success() {
-                        console.log('success', self);
                         ox.ui.apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
@@ -915,6 +863,7 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
+        console.log('ox.ui.createApp', options);
         options.guid = appGuid++;
         if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
         return ox.ui.apps.add(new ox.ui.App(options));
@@ -1889,31 +1838,22 @@ define('io.ox/core/desktop', [
         adaptiveLoader.listen(app.get('name'));
     });
 
-    var getOrderedApps = function () {
-        var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
-            'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
-            'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
-            'io.ox/notes'];
-        var apps =  coreSettings.get('apps/list', defaultList.join(',')).split(',');
-        // Construct App Data
-        var appManifests = _(ox.manifests.apps).reject(function (manifest) {
-            return ox.manifests.isDisabled(manifest.path);
-        }).map(function (manifest) {
-            manifest.id = manifest.path.substr(0, manifest.path.length - 5);
-            //dynamically translate the title
-            manifest.title = /*#, dynamic*/gt.pgettext('app', manifest.title);
-            manifest.svg = icons[manifest.id];
-            return manifest;
-        });
-        return _.compact(apps.map(function (app) {
-            return _.where(appManifests, { id: app })[0];
-        }));
-    };
-
-    _(getOrderedApps()).each(function (obj) {
+    _(appApi.getApps()).each(function (obj) {
         if (upsell.visible(obj.requires) && _.device(obj.device)) {
             ox.ui.apps.add(new ox.ui.App(_.extend({ name: obj.id }, obj)));
         }
+    });
+
+    ox.ui.apps.on('reset', function () {
+        console.log('ox.ui.apps reset', arguments);
+    });
+
+    ox.ui.apps.on('add', function () {
+        console.log('ox.ui.apps add', arguments);
+    });
+
+    ox.ui.apps.on('change:title', function () {
+        console.log('ox.ui.apps change:title', arguments);
     });
 
     return {};

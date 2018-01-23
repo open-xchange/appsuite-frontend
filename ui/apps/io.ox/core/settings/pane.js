@@ -20,17 +20,23 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/desktopNotifications',
-    'io.ox/core/main/appcontrol',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker'
-], function (ext, ExtensibleView, mini, util, appAPI, capabilities, notifications, desktopNotifications, appcontrol, userSettings, settings, settingOptions, gt, TimezonePicker) {
+], function (ext, ExtensibleView, mini, util, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
 
     'use strict';
 
-    var INDEX = 0, MINUTES = 60000;
+    var INDEX = 0,
+        MINUTES = 60000,
+        availableApps = appAPI.getApps().map(function (o) {
+            return {
+                label: /*#, dynamic*/gt.pgettext('app', o.title),
+                value: o.path
+            };
+        }).concat([{ label: gt('None'), value: '' }]);
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -81,28 +87,6 @@ define('io.ox/core/settings/pane', [
                             { label: gt('15 minutes'), value: 15 * MINUTES },
                             { label: gt('30 minutes'), value: 30 * MINUTES }
                         ];
-                    },
-
-                    getAutoStartOptions: function () {
-                        return [].concat(
-                            _(appAPI.getFavorites()).map(function (app) {
-                                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
-                            }),
-                            [{ label: gt('None'), value: 'none' }]
-                        );
-                    },
-
-                    getAvailableApps: function () {
-                        return [].concat(
-                            _(appAPI.getFavorites()).map(function (app) {
-                                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
-                            }),
-                            [{ label: gt('None'), value: '' }]
-                        );
-                    },
-
-                    hasMoreThanOneAutoStartOption: function () {
-                        return _(appAPI.getFavorites()).size() > 1;
                     },
 
                     getAutoLogoutOptions: function () {
@@ -337,10 +321,10 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
 
                 if (!settings.isConfigurable('autoStart')) return;
-                if (!this.hasMoreThanOneAutoStartOption()) return;
+                if (availableApps <= 2) return;
 
                 baton.$el.append(
-                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, this.getAutoStartOptions())
+                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
                 );
             }
         },
@@ -366,8 +350,6 @@ define('io.ox/core/settings/pane', [
             id: 'quickLaunch',
             index: INDEX += 100,
             render: function (baton) {
-
-                // var default = appcontrol.quicklaunch;
 
                 var SelectView = mini.SelectView.extend({
                     onChange: function () {
@@ -401,11 +383,10 @@ define('io.ox/core/settings/pane', [
                 };
                 baton.$el.append(
                     $('<div class="form-group row">').append(
-                        multiSelect('apps/quicklaunch0', gt('Quick launch 1'), this.model, this.getAvailableApps(), { pos: 0 }),
-                        multiSelect('apps/quicklaunch1', gt('Quick launch 2'), this.model, this.getAvailableApps(), { pos: 1 }),
-                        multiSelect('apps/quicklaunch2', gt('Quick launch 3'), this.model, this.getAvailableApps(), { pos: 2 })
+                        multiSelect('apps/quicklaunch0', gt('Quick launch 1'), this.model, availableApps, { pos: 0 }),
+                        multiSelect('apps/quicklaunch1', gt('Quick launch 2'), this.model, availableApps, { pos: 1 }),
+                        multiSelect('apps/quicklaunch2', gt('Quick launch 3'), this.model, availableApps, { pos: 2 })
                     )
-
                 );
             }
         }

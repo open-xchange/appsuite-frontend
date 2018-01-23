@@ -1,10 +1,9 @@
 {
     "title": "Portal",
     "company": "Open-Xchange",
-    "icon": "portal",
-    "category": "Productivity",
     "settings": true,
     "requires": "portal",
     "refreshable": true,
+    "hasLauncher": true,
     "index": 100
 }

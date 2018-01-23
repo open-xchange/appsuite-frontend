@@ -1,8 +1,6 @@
 {
     "title": "Settings",
     "company": "Open-Xchange",
-    "icon": "files.png",
-    "category": "Basic",
     "refreshable": true,
     "settings": false
 }
