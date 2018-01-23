@@ -23,7 +23,6 @@ define('io.ox/core/tk/list-contextmenu', [
     'use strict';
 
     function renderItems() {
-        this.$dropdownMenu.idle();
         var models = this.selection.get().map(function (cid) {
                 return this.collection.get(cid);
             }.bind(this)),
@@ -58,16 +57,28 @@ define('io.ox/core/tk/list-contextmenu', [
                 oldSection = extension.section;
             });
             listView.trigger('contextmenu:populated', extensions);
+            return extensions;
         });
     }
 
-    function show() {
+    function populate(target, left, top) {
+        this.$dropdownMenu.empty().busy();
+        this.$dropdownMenu.removeAttr('role');
         // desktop 'burger' vs. mobile-edit-mode
         var contextmenu = this.dropdown.$toggle.attr('data-contextmenu') || this.selection.get('data-contextmenu');
         // load relevant code on demand
-        ox.manifests.loadPluginsFor(this.ref + '/contextmenu').then(renderItems.bind(this, contextmenu));
-        // a11y: The role menu should only be set if there are menuitems in it
-        this.$dropdownMenu.attr('role', 'menu');
+        return ox.manifests.loadPluginsFor(this.ref + '/contextmenu')
+        .then(renderItems.bind(this, contextmenu))
+        .then(function toggleDropdown(renderedExtensions) {
+            if (renderedExtensions.length === 0) return;
+
+            // a11y: The role menu should only be set if there are menuitems in it
+            this.$dropdownMenu.attr('role', 'menu');
+            this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' });
+            this.dropdown.$toggle = target;
+            this.$dropdownMenu.idle();
+            this.$dropdownToggle.dropdown('toggle');
+        }.bind(this));
     }
 
     var Contextmenu = {
@@ -92,22 +103,15 @@ define('io.ox/core/tk/list-contextmenu', [
             var quitEarly = _.device('smartphone') || this.dropdown && this.dropdown.$el.hasClass('open');
             if (quitEarly) return;
 
-            _.defer(function () {
-                if (!this.dropdown) this.renderContextMenu();
-                this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
-                this.dropdown.$toggle = target;
-                this.$dropdownToggle.dropdown('toggle');
-            }.bind(this));
-        },
-
-        renderContextMenuItems: function () {
+            if (!this.dropdown) this.renderContextMenu();
+            return $.when().then(populate.bind(this, target, left, top));
         },
 
         renderContextMenu: function () {
             this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options'));
             this.$dropdownMenu = $('<ul class="dropdown-menu">');
             this.dropdown = new Dropdown({
-                smart: false,
+                smart: true,
                 className: 'context-dropdown dropdown',
                 $toggle: this.$dropdownToggle,
                 $ul: this.$dropdownMenu,
@@ -116,9 +120,7 @@ define('io.ox/core/tk/list-contextmenu', [
 
             this.$el.after(
                 this.dropdown.render().$el
-                .on('show.bs.dropdown', show.bind(this))
             );
-            this.$dropdownMenu.removeAttr('role');
         }
     };
     return Contextmenu;
