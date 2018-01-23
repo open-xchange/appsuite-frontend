@@ -135,7 +135,7 @@ define('io.ox/calendar/api', [
 
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
-                    if (model && model.has('attendees')) return $.when(model);
+                    if (model && (model.has('attendees') || model.has('calendarUser'))) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {

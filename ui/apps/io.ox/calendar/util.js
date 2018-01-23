@@ -740,7 +740,7 @@ define('io.ox/calendar/util', [
             return hash;
         },
 
-        getConfirmationStatus: function (model) {
+        getConfirmationStatus: function (model, defaultStatus) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.hasFlag('accepted')) return 'ACCEPTED';
             if (model.hasFlag('tentative')) return 'TENTATIVE';
@@ -749,7 +749,7 @@ define('io.ox/calendar/util', [
             if (model.hasFlag('event_accepted')) return 'ACCEPTED';
             if (model.hasFlag('event_tentative')) return 'TENTATIVE';
             if (model.hasFlag('event_declined')) return 'DECLINED';
-            return 'NEEDS-ACTION';
+            return defaultStatus || 'NEEDS-ACTION';
         },
 
         getConfirmationMessage: function (obj, id) {
@@ -907,7 +907,8 @@ define('io.ox/calendar/util', [
         getAppointmentColor: function (folder, eventModel) {
             var folderColor = that.getFolderColor(folder),
                 eventColor = eventModel.get('color'),
-                conf = that.getConfirmationStatus(eventModel);
+                defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
+                conf = that.getConfirmationStatus(eventModel, defaultStatus);
 
             if (_.isNumber(eventColor)) eventColor = that.colors[eventColor - 1].value;
 
@@ -978,7 +979,8 @@ define('io.ox/calendar/util', [
         canAppointmentChangeColor: function (folder, eventModel) {
             var eventColor = eventModel.get('color'),
                 privateFlag = that.isPrivate(eventModel),
-                conf = that.getConfirmationStatus(eventModel);
+                defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
+                conf = that.getConfirmationStatus(eventModel, defaultStatus);
 
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return false;
