@@ -604,6 +604,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 contactInformation: {
                     folder: 123,
                     contact_id: 123456
+                },
+                contact: {
+                    display_name: 'Test, Miss',
+                    first_name: 'Miss',
+                    last_name: 'Test'
                 }
             },
             // test resource object
@@ -642,6 +647,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 contactInformation: {
                     folder: 123,
                     contact_id: 1337
+                },
+                contact: {
+                    display_name: 'Smith, Hannibal',
+                    first_name: 'Hannibal',
+                    last_name: 'Smith'
                 }
             },
             // input from addParticipants for external contacts not in your gab
@@ -698,6 +708,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 contactInformation: {
                     folder: undefined,
                     contact_id: undefined
+                },
+                contact: {
+                    display_name: 'vader',
+                    first_name: undefined,
+                    last_name: undefined
                 }
             });
         });

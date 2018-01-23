@@ -345,7 +345,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 $(items[2]).find('.alarm-time').val().should.equal('PT55M');
                 $(items[2]).find('.alarm-time option:last').text().should.equal(new moment.duration('PT55M').humanize());
 
-                $(items[3]).find('.col-xs-5').text().should.equal(new moment('20170708T220000Z').format('LLL'));
+                $(items[3]).find('.alarm-time').text().should.equal(new moment('20170708T220000Z').format('LLL'));
             });
 
             it('should create missing data but preserve the rest', function () {
