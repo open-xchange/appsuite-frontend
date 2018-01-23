@@ -13,13 +13,14 @@
 
 define('io.ox/files/listview', [
     'io.ox/core/tk/list',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'settings!io.ox/core',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ext, extensions, filesAPI, settings) {
+], function (ListView, Contextmenu, ext, extensions, filesAPI, settings) {
 
     'use strict';
 
@@ -36,32 +37,11 @@ define('io.ox/files/listview', [
         }
     }
 
-    function onContextMenu(e) {
-
-        var view = this;
-        var app = view.app;
-        // the link to render the context menu with it's entries.
-        var link = 'io.ox/core/file/contextmenu/default';
-        // context menu when clicked below the list.
-        // var linkOutsideList = link + '/outsideList'; Disabled for now
-
-        var list = view.selection.get();
-        if (!list) return;
-        // turn cids into proper objects
-        var cids = list, models = filesAPI.resolve(cids, false);
-        list = _(models).invoke('toJSON');
-        // extract single object if length === 1
-        var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/ });
-
-        view.contextMenu.showContextMenu(e, baton);
-    }
-
     //
     // Extend ListView
     //
 
-    var FileListView = ListView.extend({
+    var FileListView = ListView.extend(Contextmenu).extend({
 
         ref: LISTVIEW,
 
@@ -87,9 +67,7 @@ define('io.ox/files/listview', [
             var relevantChanges = _.intersection(_(model.changed).keys(), FileListView.relevantAttributes);
             if (!relevantChanges.length) return;
             ListView.prototype.onChange.apply(this, arguments);
-        },
-
-        onContextMenu: onContextMenu
+        }
     });
 
     // extend the onItemKeydown handler from list by additional handlers

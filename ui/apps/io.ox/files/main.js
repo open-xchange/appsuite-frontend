@@ -1522,13 +1522,6 @@ define('io.ox/files/main', [
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .then(function () {
-                return require(['io.ox/files/contextmenu']);
-            })
-            .then(function (Contextmenu) {
-                // contextmenu for all listviews
-                if (!(_.device('smartphone') && _.device('tablet'))) {
-                    contextmenu = new Contextmenu({ el: win.nodes.outer });
-                }
                 app.mediate();
                 win.show(function () {
                     // trigger grid resize
