@@ -1268,7 +1268,7 @@ define('io.ox/core/folder/api', [
     //
 
     function updateTextNode(data) {
-        this.nodeValue = data.title || data.id;
+        this.nodeValue = data.display_title || data.title || data.id;
     }
 
     function getTextNode(id) {
