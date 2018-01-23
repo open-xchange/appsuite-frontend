@@ -471,7 +471,6 @@ define('io.ox/calendar/month/perspective', [
             this.pane
                 .css('right', -util.getScrollBarWidth() + 'px')
                 .on('scroll', $.proxy(function (e) {
-                    // debugger;
                     var $current = this.currentView.$el,
                         current = $current.get(0),
                         top = current.offsetTop,
@@ -493,8 +492,6 @@ define('io.ox/calendar/month/perspective', [
                 if (ox.debug) console.log('month: change date by app', value);
                 this.gotoMonth(app.getDate());
             }.bind(this));
-
-            $(window).on('resize', this.getFirsts);
 
             if (_.device('ie <= 11')) {
                 $(window).on('resize', _(this.calculateHeights).bind(this));
@@ -565,6 +562,15 @@ define('io.ox/calendar/month/perspective', [
                 });
 
             this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
+
+            // adjust scrolltop manually on folderview change (see Bug 56691)
+            var topToHeight;
+            this.app.on('before:change:folderview', function () {
+                topToHeight = self.pane.scrollTop() / self.pane.prop('scrollHeight');
+            });
+            this.app.props.on('change:folderview', function () {
+                self.pane.scrollTop(topToHeight * self.pane.prop('scrollHeight'));
+            });
         },
 
         // called when an appointment detail-view opens the according appointment

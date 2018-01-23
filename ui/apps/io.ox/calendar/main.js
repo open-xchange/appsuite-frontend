@@ -389,6 +389,7 @@ define('io.ox/calendar/main', [
         'toggle-folder-view': function (app) {
             app.toggleFolderView = function (e) {
                 e.preventDefault();
+                app.trigger('before:change:folderview');
                 app.folderView.toggle(e.data.state);
             };
 
