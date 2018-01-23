@@ -277,7 +277,9 @@ define('io.ox/calendar/model', [
     ext.point('io.ox/chronos/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attr, err, model) {
-            if (model.getTimestamp('endDate') < model.getTimestamp('startDate')) {
+            var isLess = model.getTimestamp('endDate') < model.getTimestamp('startDate'),
+                isLequal = model.getTimestamp('endDate') <= model.getTimestamp('startDate');
+            if (isLess || (util.isAllday(model) && isLequal)) {
                 this.add('endDate', gt('The end date must be after the start date.'));
             }
         }
