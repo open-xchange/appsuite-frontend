@@ -273,11 +273,14 @@ define('io.ox/calendar/month/perspective', [
 
         updateColor: function (model) {
             if (!model) return;
-            var color = util.getFolderColor(model.attributes);
+            var color = util.getFolderColor(model.attributes),
+                container =  $('[data-folder="' + model.get('id') + '"]', this.pane);
             $('[data-folder="' + model.get('id') + '"]', this.pane).css({
                 'background-color': color,
                 'color': util.getForegroundColor(color)
             }).data('background-color', color);
+            container.removeClass('black white');
+            container.addClass(util.getForegroundColor(color));
         },
 
         onChangeColorScheme: function () {

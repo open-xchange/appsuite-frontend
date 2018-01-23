@@ -38,7 +38,7 @@ define('io.ox/calendar/week/extensions', [
                     'background-color': color,
                     'color': util.getForegroundColor(color)
                 }).data('background-color', color);
-
+                self.addClass(util.getForegroundColor(color));
                 if (util.canAppointmentChangeColor(f, a)) {
                     self.attr('data-folder', f.id);
                 }

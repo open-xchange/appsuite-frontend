@@ -253,11 +253,16 @@ define('io.ox/calendar/week/perspective', [
 
         updateColor: function (model) {
             if (!model) return;
-            var color = util.getFolderColor(model.attributes);
+            var color = util.getFolderColor(model.attributes),
+                container = $('[data-folder="' + model.get('id') + '"]', this.view.weekViewCon);
             $('[data-folder="' + model.get('id') + '"]', this.view.weekViewCon).css({
                 'background-color': color,
                 'color': util.getForegroundColor(color)
             }).data('background-color', color);
+
+            container.removeClass('black white');
+            container.addClass(util.getForegroundColor(color));
+
             $('[data-folder="' + model.get('id') + '"]', this.view.dayLabel).css({
                 'border-color': color
             });

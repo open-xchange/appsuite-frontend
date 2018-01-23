@@ -54,6 +54,8 @@ define('io.ox/calendar/list/listview', [
                     }).attr({
                         'data-folder': util.canAppointmentChangeColor(folder, model) ? folder.id : ''
                     });
+
+                    time.addClass(util.getForegroundColor(color));
                 });
             }
 

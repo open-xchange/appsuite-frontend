@@ -212,11 +212,24 @@
 
         &.free {
             @color-label-bg-light: rgba(255, 255, 255, 0.2);
-            background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-            background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-            background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-            background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-            opacity: 0.70;
+            @color-label-bg-dark: rgba(0, 0, 0, 0.2);
+
+            &.white {
+                background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                opacity: 0.70;
+            }
+
+            &.black {
+                background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+                background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+                background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+                background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+                opacity: 0.70;
+            }
+
         }
 
         border-left-color: rgba(0, 0, 0, 0.3);
