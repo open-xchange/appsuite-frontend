@@ -256,8 +256,6 @@
         height: @launcher-size;
         width: @launcher-size;
 
-        background: @launcher-bg;
-
         cursor: pointer;
 
         .title {
@@ -338,6 +336,10 @@
             }
 
         }
+
+    }
+    button.lcell {
+        background: @launcher-bg;
         &:focus, &:hover {
             .stroke-c1 { stroke: @launcher-fg-hover }
             .fill-c1 { fill: @launcher-fg-hover }
