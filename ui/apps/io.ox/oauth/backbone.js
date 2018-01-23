@@ -262,7 +262,7 @@ define('io.ox/oauth/backbone', [
 
             var service = this.collection.get($(ev.currentTarget).data('cid'));
             this.trigger('select', service);
-            this.trigger('select:' + service.id, service);
+            this.trigger('select:' + service.get('type'), service);
         }
     });
 
