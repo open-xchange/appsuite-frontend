@@ -63,17 +63,6 @@ define('io.ox/calendar/api', [
                         api.trigger('update', evt.attributes);
                         api.trigger('update:' + util.cid(evt), evt.attributes);
                     });
-                    // make sure that appointents inside deleteExceptionDates do not exist
-                    var exceptions = [].concat(event.deleteExceptionDates).concat(event.changeExceptionDates);
-                    exceptions = _(exceptions).compact();
-                    exceptions.forEach(function (recurrenceId) {
-                        var model = api.pool.getModel(util.cid({ id: event.id, folder: event.folder, recurrenceId: recurrenceId }));
-                        if (model) {
-                            model.collection.remove(model);
-                            api.trigger('delete', model.attributes);
-                            api.trigger('delete:' + util.cid(model), model.attributes);
-                        }
-                    });
                 } else {
                     // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
                     // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
@@ -371,16 +360,25 @@ define('io.ox/calendar/api', [
                     });
             },
 
-            remove: function (list) {
+            remove: function (list, options) {
                 api.trigger('beforedelete', list);
                 list = _.isArray(list) ? list : [list];
 
+                var params = {
+                    action: 'delete',
+                    timestamp: _.now(),
+                    fields: api.extendedFields
+                };
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
                 return http.PUT({
                     module: 'chronos',
-                    params: {
-                        action: 'delete',
-                        timestamp: _.now()
-                    },
+                    params: params,
                     data: _(list).map(function (obj) {
                         obj = obj instanceof Backbone.Model ? obj.attributes : obj;
                         return {

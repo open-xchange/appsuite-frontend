@@ -13,9 +13,10 @@
 
 define('io.ox/calendar/actions/delete', [
     'io.ox/calendar/api',
+    'io.ox/calendar/util',
     'io.ox/core/notifications',
     'gettext!io.ox/calendar'
-], function (api, notifications, gt) {
+], function (api, util, notifications, gt) {
 
     'use strict';
 
@@ -40,7 +41,7 @@ define('io.ox/calendar/actions/delete', [
                     return JSON.stringify(obj);
                 }).value();
 
-                api.remove(list).fail(notifications.yell);
+                api.remove(list, util.getCurrentRangeOptions()).fail(notifications.yell);
             };
 
             var hasSeries = _(list).some(function (app) {
