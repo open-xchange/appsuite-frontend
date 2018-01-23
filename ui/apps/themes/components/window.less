@@ -22,7 +22,7 @@
     top: 40px;
     overflow: hidden;
     z-index: 10;
-    .transition(bottom 0.5s);
+    //.transition(bottom 0.5s);
 
     &.powermove-window-open {
         .floating-window.cornered {
@@ -73,7 +73,7 @@
     height: 0px;
     padding: 3px 0 2px 0;
     margin: 0;
-    .transition(height 0.5s);
+    //.transition(height 0.5s);
 
     #io-ox-taskbar {
         // when the arrow controls are enabled again, set the padding to 0
@@ -97,14 +97,15 @@
             border-radius: 4px;
 
             &.active .taskbar-button,&.active button[data-action="close"] {
-                background-color: @brand-primary;
+                font-weight: bold;
+                //background-color: @brand-primary;
             }
 
             .taskbar-button {
                 border-radius: 0;
                 border: 0;
                 color: white;
-                font-weight: bold;
+                //font-weight: bold;
                 text-align: left;
                 width: 100%;
                 overflow: hidden;
@@ -152,10 +153,10 @@
     }
 }
 
-#io-ox-core.taskbar-visible {
+/*#io-ox-core.taskbar-visible {
     #io-ox-screens { bottom: 40px; }
     #io-ox-taskbar-container { height: 40px; }
-}
+}*/
 
 .touch {
     #io-ox-screens { top: 40px; }

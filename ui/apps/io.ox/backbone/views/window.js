@@ -15,6 +15,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
     'use strict';
 
+    var easing = [0.1, 0.7, 0.1, 1], // easing function for toolbar animation
+        duration = 150; // duration for taskbar show/hide
+
     var backdrop = $('<div id="floating-window-backdrop">').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -325,8 +328,14 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             .reverse()
         );
         $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindows);
-        $('#io-ox-core').toggleClass('taskbar-visible', collection.size() > collection.openWindows.length);
 
+        if (collection.size() > collection.openWindows.length) {
+            $('#io-ox-screens').velocity({ bottom: '40px' }, duration, easing);
+            $('#io-ox-taskbar-container').velocity({ height: '40px' }, duration, easing);
+        } else {
+            $('#io-ox-screens').velocity({ 'bottom': '0px' }, duration, easing);
+            $('#io-ox-taskbar-container').velocity({ 'height': '0px' }, duration, easing);
+        }
         // calculate animation origin (so window minimizes to the correct position)
         _(collection.openWindows).each(function (floatwin) {
             var node = $('#io-ox-taskbar').find('[data-cid="' + floatwin.cid + '"]');
