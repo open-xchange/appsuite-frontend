@@ -718,7 +718,7 @@ define('io.ox/mail/detail/content', [
         text2html: (function () {
 
             var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*\n?/,
-                //regNewline = /^\n+/,
+                regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(> ))[^\n]*)*\n?/,
                 regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
                 regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?(\.\w+)+)/g,
@@ -746,11 +746,11 @@ define('io.ox/mail/detail/content', [
                         continue;
                     }
 
-                    // if (match = exec(regNewline, str)) {
-                    //     str = str.substr(match.length);
-                    //     out += match.replace(/\n/g, '<div><br></div>');
-                    //     continue;
-                    // }
+                    if (match = exec(regNewline, str)) {
+                        str = str.substr(match.length);
+                        out += match.replace(/\n/g, '<div><br></div>');
+                        continue;
+                    }
 
                     if (match = exec(regText, str)) {
                         // advance
@@ -776,7 +776,12 @@ define('io.ox/mail/detail/content', [
                                 });
                         }
                         // remove \r and replace newlines
-                        out += '<div>' + match.replace(/\r/g, '').replace(/\n/g, '</div><div>') + '</div>';
+                        out += '<div>' + match
+                            .replace(/\r/g, '')
+                            .replace(/\n+/g, function (all) {
+                                return '</div>' + new Array(all.length).join('<div><br></div>') + '<div>';
+                            })
+                            + '</div>';
                         continue;
                     }
 
