@@ -149,11 +149,6 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
-            id: 'simple-linebreaks',
-            index: 990,
-            perform: extensions.applySimpleLinebreaks
-        },
-        {
             id: 'send',
             index: 1000,
             perform: function (baton) {

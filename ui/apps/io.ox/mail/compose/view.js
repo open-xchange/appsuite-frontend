@@ -972,17 +972,14 @@ define('io.ox/mail/compose/view', [
         },
 
         getParagraph: function (text, isHTML) {
-            //use div for html cause innerHTML for p tags with nested tags fail
-            var node = (/(<([^>]+)>)/ig).test(text) ? $('<div>') : $('<p>');
-            node.addClass('io-ox-signature')
-                .append(!!isHTML ? text : this.editor.ln2br(text));
+            var node = $('<div class="io-ox-signature">').append(!!isHTML ? text : this.editor.ln2br(text));
             return $('<div>').append(node).html();
         },
 
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p[^>]*class="default-style"[^>]*><br><\/p>)+/, '');
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<div[^>]*class="default-style"[^>]*><br><\/div>)+/, '');
             var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },

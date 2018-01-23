@@ -42,9 +42,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             ed.on('keydown', function (e) {
                 // pressed enter?
-                if (e.which === 13) {
-                    splitContent(ed, e);
-                }
+                if (!e.shiftKey && e.which === 13) splitContent(ed, e);
             });
 
             ext.point('3rd.party/emoji/editor_css').each(function (point) {
@@ -302,7 +300,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             font_formats: mailUtil.getFontFormats(),
             fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
-            forced_root_block: 'p',
+            forced_root_block: 'div',
             forced_root_block_attrs: { 'style': defaultStyle.string, 'class': 'default-style' },
 
             browser_spellcheck: true,
@@ -447,11 +445,11 @@ define('io.ox/core/tk/contenteditable-editor', [
                 // clean up
                 content = content
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
+                    .replace(/(<div>(<br>)?<\/div>)+$/, '');
 
                 // remove trailing white-space, line-breaks, and empty paragraphs
                 content = content.replace(
-                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+                    /(\s|&nbsp;|\0x20|<br\/?>|<div( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/div>)*$/g, ''
                 );
 
                 // remove trailing white-space
@@ -522,19 +520,19 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.appendContent = function (str) {
             var content = this.getContent();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            content = content.replace(/^(<p><br><\/p>){2,}/, '').replace(/(<p><br><\/p>)+$/, '') + '<p><br></p>' + str;
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
+            content = content.replace(/^(<div><br><\/div>){2,}/, '').replace(/(<div><br><\/div>)+$/, '') + '<div><br></div>' + str;
             if (/^<blockquote/.test(content)) {
-                content = '<p><br></p>' + content;
+                content = '<div><br></div>' + content;
             }
             this.setContent(content);
         };
 
         this.prependContent = function (str) {
             var content = this.getContent();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            content = str + '<p><br></p>' + content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
-            content = '<p><br></p>' + content;
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
+            content = str + '<div><br></div>' + content.replace(/^(<div><br><\/div>)+/, '').replace(/(<div><br><\/div>){2,}$/, '');
+            content = '<div><br></div>' + content;
             this.setContent(content);
         };
 
@@ -542,21 +540,21 @@ define('io.ox/core/tk/contenteditable-editor', [
             var content = '';
             // normalise
             data = _.isString(data) ? { content: data } : data;
-            data.content = data.content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
+            data.content = data.content.replace(/^(<div><br><\/div>)+/, '').replace(/(<div><br><\/div>){2,}$/, '');
             // concat content parts
             if (data.content) content += data.content;
-            else content += '<p><br></p>';
+            else content += '<div><br></div>';
             if (type === 'above' && data.cite) content += data.cite;
             if (data.quote) {
                 // backend appends &nbsp; to the quote which are wrapped in a paragraph by the ui. remove those.
-                data.quote = data.quote.replace(/<p><br>(&nbsp;|&#160;)<\/p>/, '');
+                data.quote = data.quote.replace(/<div><br>(&nbsp;|&#160;)<\/div>/, '');
                 content += (data.quote || '');
             }
             if (type === 'below' && data.cite) {
                 // add a blank line between the quoted text and the signature below
                 // but only, if the sigature is directly after the quoted text
                 // then, the user can always insert text between the quoted text and the signature but has no unnecessary empty lines
-                if (!/<p><br><\/p>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<p><br></p>';
+                if (!/<div><br><\/div>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<div><br></div>';
                 content += data.cite;
             }
             this.setContent(content);
@@ -567,9 +565,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             var content = this.getContent(),
                 index = content.indexOf('<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
-            if (content.substring(0, 15) === '<blockquote><p>') index = 0;
+            if (content.substring(0, 15) === '<blockquote><div>') index = 0;
             // special case: switching between signatures in such a mail
-            if (content.substring(0, 23) === '<p><br></p><blockquote>') index = 0;
+            if (content.substring(0, 23) === '<div><br></div><blockquote>') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
@@ -581,7 +579,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.insertPrevCite = function (str) {
             var data = this.getContentParts();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
             // add cite
             data.cite = str;
             this.setContentParts(data, 'above');
@@ -589,7 +587,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.insertPostCite = function (str) {
             var data = this.getContentParts();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
             // add cite
             data.cite = str;
             this.setContentParts(data, 'below');
@@ -597,7 +595,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
             // exists?
             if ((pos = content.indexOf(str)) > -1) {
                 // replace content

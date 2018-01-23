@@ -47,15 +47,6 @@ define('io.ox/mail/compose/actions/extensions', [
         return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
     };
 
-    api.applySimpleLinebreaks = function (baton) {
-        if (baton.mail.attachments[0].content_type === 'text/plain') return;
-        if (!mailSettings.get('compose/simpleLineBreaks', false)) return;
-        baton.mail.attachments[0].content = $('<div>').append($.parseHTML(baton.mail.attachments[0].content))
-            .children('p').css('margin', 0).end()
-            .find('.io-ox-signature > p').css('margin', 0).end()
-            .html();
-    };
-
     api.attachmentMissingCheck = function (baton) {
         if (baton.mail.files || baton.mail.infostore_ids || (baton.mail.attachments && baton.mail.attachments.length > 1)) return;
         var wordList = _(_([

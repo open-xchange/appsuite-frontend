@@ -293,7 +293,7 @@ define('io.ox/mail/util', [
             // styles as string
             obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
             // node
-            obj.node = $('<p>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
+            obj.node = $('<div>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
             return obj;
         },
 
