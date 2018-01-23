@@ -355,6 +355,7 @@ define('plugins/notifications/calendar/register', [
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
                     fullModel: true,
+                    smartRemove: true,
                     apiEvents: {
                         reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'

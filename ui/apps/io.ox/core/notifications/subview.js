@@ -394,6 +394,22 @@ define('io.ox/core/notifications/subview', [
             if (items.length === 0 || (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
                 return;
             }
+
+            // smartRemove removes the item without redrawing (manual remove of the nodes)
+            if (this.model.get('smartRemove')) {
+                this.collection.remove(items, { silent: true });
+                var self = this;
+
+                _(items).each(function (item) {
+                    if (item.get) item = item.attributes;
+                    self.$el.find('[data-cid="' + _.cid(item) + '"]').remove();
+                });
+
+                if (this.collection.size() === 0) {
+                    this.render(this.$el.parent());
+                }
+                this.trigger('responsive-remove');
+            }
             this.collection.remove(items, { silent: silent });
         },
         resetNotifications: function (items, silent) {
