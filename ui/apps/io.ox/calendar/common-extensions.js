@@ -214,7 +214,7 @@ define('io.ox/calendar/common-extensions', [
             if (!baton.data.folder) return;
             this.append(
                 $('<tr>').append(
-                    $('<th>').text(gt('Folder')),
+                    $('<th>').text(gt('Calendar')),
                     $('<td>').attr('data-folder', baton.data.folder).append(folderAPI.getTextNode(baton.data.folder))
                 )
             );
