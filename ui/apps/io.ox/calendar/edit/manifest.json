@@ -1,6 +1,5 @@
 {
     "title": "Edit Appointment",
-    "company": "Open-Xchange",
     "settings": false,
     "requires": "calendar",
     "visible": false

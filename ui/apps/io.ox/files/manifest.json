@@ -1,6 +1,5 @@
 [{
     "title": "Drive",
-    "company": "Open-Xchange",
     "requires": "infostore",
     "settings": true,
     "settingsRequires": "!guest",

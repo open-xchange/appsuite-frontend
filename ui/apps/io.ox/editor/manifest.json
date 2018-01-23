@@ -1,6 +1,5 @@
 {
     "title": "Editor",
-    "company": "Open-Xchange",
     "settings": false,
     "requires": "infostore",
     "visible": false,

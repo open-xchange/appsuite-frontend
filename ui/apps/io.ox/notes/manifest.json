@@ -1,6 +1,5 @@
 {
     "title": "Notes",
-    "company": "Open-Xchange",
     "settings": false,
     "requires": "notes && infostore",
     "refreshable": true,

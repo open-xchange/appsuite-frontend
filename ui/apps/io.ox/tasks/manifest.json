@@ -1,6 +1,5 @@
 {
     "title": "Tasks",
-    "company": "Open-Xchange",
     "settings": true,
     "requires": "tasks",
     "refreshable": true,

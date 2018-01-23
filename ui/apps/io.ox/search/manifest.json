@@ -1,7 +1,6 @@
 {
     "title": "Search",
     "path": "io.ox/search/main",
-    "company": "Open-Xchange",
     "requires": "search",
     "settings": false,
     "visible": false

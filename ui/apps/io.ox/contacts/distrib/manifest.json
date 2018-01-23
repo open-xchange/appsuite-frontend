@@ -1,6 +1,5 @@
 {
     "title": "Edit Distribution List",
-    "company": "Open-Xchange",
     "settings": false,
     "requires": "contacts",
     "visible": false

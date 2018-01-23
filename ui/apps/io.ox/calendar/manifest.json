@@ -1,6 +1,5 @@
 {
     "title": "Calendar",
-    "company": "Open-Xchange",
     "settings": true,
     "requires": "calendar",
     "refreshable": true,

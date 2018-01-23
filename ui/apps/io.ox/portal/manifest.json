@@ -1,6 +1,5 @@
 {
     "title": "Portal",
-    "company": "Open-Xchange",
     "settings": true,
     "requires": "portal",
     "refreshable": true,

@@ -1,6 +1,5 @@
 {
     "title": "Edit Contact",
-    "company": "Open-Xchange",
     "settings": false,
     "requires": "contacts",
     "visible": false

@@ -1,6 +1,5 @@
 {
     "title": "Edit task",
-    "company": "Open-Xchange",
     "settings": false,
     "visible": false,
     "requires": "tasks"

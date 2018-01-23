@@ -1,6 +1,5 @@
 [{
     "title": "Mail",
-    "company": "Open-Xchange",
     "settings": true,
     "requires": "webmail",
     "refreshable": true,

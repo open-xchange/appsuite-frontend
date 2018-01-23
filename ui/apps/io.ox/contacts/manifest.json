@@ -1,6 +1,5 @@
 {
     "title": "Address Book",
-    "company": "Open-Xchange",
     "settings": true,
     "requires": "contacts",
     "refreshable": true,
