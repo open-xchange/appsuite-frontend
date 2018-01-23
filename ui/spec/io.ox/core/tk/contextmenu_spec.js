@@ -47,12 +47,9 @@ define([
             afterEach(function () {
                 view.remove();
             });
-            it('should run populate method of "io.ox/test/contextmenu" extension point', function () {
-                return new Promise(function (resolve) {
-                    view.listenTo(view, 'contextmenu:populated', resolve);
-                    view.toggleContextMenu($('body'));
-                }).then(function () {
-                    expect(view.dropdown.$el.find('li'), 'menu items').to.have.length(1);
+            it('should populate dropdown with items from "io.ox/test/contextmenu" extension point', function () {
+                return view.toggleContextMenu($('body')).then(function () {
+                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(1);
                 });
             });
         });
