@@ -200,6 +200,12 @@ define('io.ox/calendar/model', [
                 this.cid = this.attributes.cid = util.cid(this.attributes);
             }
             this.flags = _.object(this.get('flags'), this.get('flags'));
+            this.on('change:startDate', function () {
+                var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
+                prevStartDate = util.getMoment(prevStartDate);
+                endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
+                this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
+            });
         },
         getAttendees: function () {
             if (this._attendees) return this._attendees;
@@ -217,17 +223,10 @@ define('io.ox/calendar/model', [
             });
 
             this.on({
-                'change:startDate': function () {
-                    var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
-                    prevStartDate = util.getMoment(prevStartDate);
-                    endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
-                    this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
-                },
-
                 'change:attendees': function () {
                     if (resetListUpdate) return;
                     changeAttendeesUpdate = true;
-                    self._attendees.reset(self.get('attendees'));
+                    self._attendees.reset(self.get('attendees') || []);
                     changeAttendeesUpdate = false;
                 }
             });
