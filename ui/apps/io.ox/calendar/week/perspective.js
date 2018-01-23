@@ -119,7 +119,7 @@ define('io.ox/calendar/week/perspective', [
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                         conflictView.dialog(data.conflicts)
                             .on('cancel', function () {
-                                self.refresh();
+                                self.view.renderAppointments();
                             })
                             .on('ignore', function () {
                                 apiUpdate(model, _.extend(options || {}, { checkConflicts: false }));

@@ -1500,10 +1500,10 @@ define('io.ox/calendar/week/view', [
                     newAppointment = this.renderAppointment(a),
                     color = newAppointment.css('color'),
                     backgroundColor = newAppointment.css('background-color');
-                el.replaceWith(newAppointment
-                    .attr('style', el.attr('style'))
+                el
                     .css({ color: color, 'background-color': backgroundColor })
-                );
+                    .empty()
+                    .append(newAppointment.children());
                 $('.appointment').trigger('calendar:weekview:rendered');
             }
         },
