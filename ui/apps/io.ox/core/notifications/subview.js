@@ -30,7 +30,8 @@ define('io.ox/core/notifications/subview', [
                 itemNode = $('<ul class="items list-unstyled">'),
                 extensionPoints = model.get('extensionPoints'),
                 desktopNotificationFor = model.get('showNotificationFor'),
-                specific = model.get('specificDesktopNotification');
+                specific = model.get('specificDesktopNotification'),
+                self = this;
 
             //make sure it's only displayed once
             model.set('showNotificationFor', null);
@@ -89,15 +90,21 @@ define('io.ox/core/notifications/subview', [
                             drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
+                    }, function () {
+                        // if list fails (insufficient permissions etc) we try again with get requests, this way we can at least show working alarms
+                        model.set('useListRequest', false);
+                        viewNode.empty();
+                        ext.point('io.ox/core/notifications/default/main').invoke('draw', self, baton);
                     });
                 } else {
                     var defs = [];
                     for (i = 0; i < max && items[i]; i++) {
-                        //mail needs unseen attribute, shouldn't bother other apis
-                        //extend with empty object to not overwrite the model
-                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i])));
+                        // mail needs unseen attribute, shouldn't bother other apis
+                        // extend with empty object to not overwrite the model
+                        // if get fails, hide the reminder
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i]), _(view.hide).bind(view, items[i])));
                     }
-                    $.when.apply($, defs).then(function () {
+                    $.when.apply($, defs).always(function () {
                         itemNode.idle();
                     });
                 }
@@ -275,7 +282,7 @@ define('io.ox/core/notifications/subview', [
                 this.collection.remove(obj);
 
                 //use a timer to unhide the model
-                if (time) {
+                if (_.isNumber(time)) {
                     setTimeout(function () {
                         self.hiddenCollection.remove(obj);
                         //don't add twice
