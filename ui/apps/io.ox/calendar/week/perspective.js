@@ -161,14 +161,17 @@ define('io.ox/calendar/week/perspective', [
                                     endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                 });
                                 util.updateRecurrenceDate(masterModel, oldStartDate);
-                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
+                                    checkConflicts: true,
+                                    recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                }));
                             });
                             break;
                         case 'appointment':
                             apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
                             break;
                         default:
-                            self.refresh();
+                            self.view.renderAppointments();
                             return;
                     }
                 });

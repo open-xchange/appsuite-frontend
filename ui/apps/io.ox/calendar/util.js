@@ -1031,7 +1031,7 @@ define('io.ox/calendar/util', [
                     return $.when('appointment');
                 } else {
                     dialog.text(gt('Do you want to change only this occurence of the event, or this and all future occurences?'));
-                    dialog.addPrimaryButton('series', gt('All future events'), 'thisandfuture');
+                    dialog.addPrimaryButton('thisandfuture', gt('All future events'), 'thisandfuture');
                 }
 
                 return dialog.addButton('appointment', gt('Only this event'), 'appointment')

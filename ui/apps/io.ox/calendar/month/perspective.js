@@ -152,7 +152,10 @@ define('io.ox/calendar/month/perspective', [
                                     endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                 });
                                 util.updateRecurrenceDate(masterModel, oldStartDate);
-                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
+                                    checkConflicts: true,
+                                    recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                }));
                             });
                             break;
                         case 'appointment':
