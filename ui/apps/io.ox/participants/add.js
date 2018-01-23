@@ -169,20 +169,37 @@ define('io.ox/participants/add', [
 
         addParticipant: function (e, data, value) {
             var list = [].concat(data),
+                distlists = [],
                 // validate is just used to check against blacklist
-                error = this.validate ? this.validate(list) : false;
+                error = this.validate ? this.validate(list) : false,
+                self = this;
             // abort when blacklisted where found
             if (error) return;
             // now really validate address
             list = this.getValidAddresses(list);
 
             if (this.options.convertToAttendee) {
+
                 list = _(list).chain().map(function (item) {
-                    return calendarUtil.createAttendee(item);
-                }).flatten().value();
+                    if (!item.attributes.mark_as_distributionlist) {
+                        return calendarUtil.createAttendee(item);
+                    }
+                    distlists.push(item);
+
+                }).flatten().compact().value();
+            }
+            if (!_.isEmpty(list)) this.collection.add(list);
+
+            if (!_.isEmpty(distlists)) {
+                _.each(distlists, function (item) {
+                    self.collection.resolveDistList(item.attributes.distribution_list).done(function (list) {
+                        _.each(list, function (item) {
+                            self.collection.add(calendarUtil.createAttendee(item));
+                        });
+                    });
+                });
             }
 
-            this.collection.add(list);
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
         },

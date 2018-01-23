@@ -19,8 +19,9 @@ define('io.ox/calendar/model', [
     'gettext!io.ox/calendar',
     'io.ox/backbone/basicModel',
     'io.ox/backbone/validation',
-    'io.ox/core/strings'
-], function (ext, util, folderAPI, gt, BasicModel, Validators, strings) {
+    'io.ox/core/strings',
+    'io.ox/participants/model'
+], function (ext, util, folderAPI, gt, BasicModel, Validators, strings, pModel) {
 
     'use strict';
 
@@ -38,6 +39,25 @@ define('io.ox/calendar/model', [
                     this.add = this.addAsync;
                 }
             },
+
+            resolveDistList: function (list) {
+                var models = [], defs = [],
+                    def = $.Deferred();
+                _([].concat(list)).each(function (data) {
+                    // check if model
+                    var mod = new pModel.Participant(data);
+                    models.push(mod);
+                    // wait for fetch, then add to collection
+                    defs.push(mod.loading);
+                });
+
+                $.when.apply($, defs).then(function () {
+                    def.resolve(_(models).sortBy(function (obj) { return obj.get('last_name'); }));
+
+                });
+                return def;
+            },
+
             // special add function that allows resolving of groups
             // is used when option resolveGroups is active (used by scheduling view)
             addAsync: function (models, options) {
