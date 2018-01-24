@@ -294,10 +294,25 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/flag', {
         requires: function (e) {
-            return settings.get('features/flag/star') && e.collection.has('some');
+            if (!settings.get('features/flag/star') || !e.collection.has('some')) return false;
+
+            return _(e.baton.array()).any(function (obj) {
+                return !util.isFlagged(obj);
+            });
         },
         action: function (baton) {
-            api.flag(baton.data);
+            api.flag(baton.data, true);
+        }
+    });
+
+    new Action('io.ox/mail/actions/unflag', {
+        requires: function (e) {
+            if (!settings.get('features/flag/star') || !e.collection.has('some')) return false;
+
+            return _(e.baton.array()).any(util.isFlagged);
+        },
+        action: function (baton) {
+            api.flag(baton.data, false);
         }
     });
 
