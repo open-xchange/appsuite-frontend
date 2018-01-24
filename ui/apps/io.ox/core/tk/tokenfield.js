@@ -502,6 +502,10 @@ define('io.ox/core/tk/tokenfield', [
             // add non-public api;
             this.hiddenapi = this.input.data('ttTypeahead');
 
+            // debug: force dropdown to stay open
+            // this.hiddenapi.dropdown.close = $.noop;
+            // this.hiddenapi.dropdown.empty = $.noop;
+
             // ignore mouse events when dropdown gets programatically scrolled (see bug 55757)
             function hasMouseMoved(e) {
                 if (!e || !e.originalEvent) return true;
