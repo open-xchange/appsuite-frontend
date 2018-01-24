@@ -35,7 +35,7 @@ define('io.ox/core/tk/list-contextmenu', [
                 app: this.app
             }),
             listView = this;
-        return actions.applyCollection(this.ref + '/contextmenu', new Collection(list), baton).then(function (items) {
+        return actions.applyCollection(this.contextMenuRef, new Collection(list), baton).then(function (items) {
             return items.filter(function (item) {
                 return item.state;
             }).map(function (item) {
@@ -67,7 +67,7 @@ define('io.ox/core/tk/list-contextmenu', [
         // desktop 'burger' vs. mobile-edit-mode
         var contextmenu = this.dropdown.$toggle.attr('data-contextmenu') || this.selection.get('data-contextmenu');
         // load relevant code on demand
-        return ox.manifests.loadPluginsFor(this.ref + '/contextmenu')
+        return ox.manifests.loadPluginsFor(this.contextMenuRef)
         .then(renderItems.bind(this, contextmenu))
         .then(function toggleDropdown(renderedExtensions) {
             if (renderedExtensions.length === 0) return;
@@ -117,6 +117,7 @@ define('io.ox/core/tk/list-contextmenu', [
                 $ul: this.$dropdownMenu,
                 margin: 24
             });
+            this.contextMenuRef = this.contextMenuRef || this.ref + '/contextmenu';
 
             this.$el.after(
                 this.dropdown.render().$el
