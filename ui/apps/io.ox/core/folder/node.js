@@ -69,7 +69,7 @@ define('io.ox/core/folder/node', [
         onReset: function () {
 
             var o = this.options,
-                models = o.tree.module === 'infostore' ? this.collection.models : this.collection.filter(this.getFilter()),
+                models = this.collection.filter(this.getFilter()),
                 exists = {};
 
             // recycle existing nodes / use detach to keep events
@@ -102,8 +102,11 @@ define('io.ox/core/folder/node', [
         },
 
         onAdd: function (model) {
-            // filter first (only for folders)
-            if (!model.getFileType && !this.getFilter()(model)) return;
+            // filter first
+            if (!this.getFilter()(model)) {
+                this.renderEmpty();
+                return;
+            }
             // add
             var node = this.getTreeNode(model);
             this.$.subfolders.append(node.render().$el);
@@ -113,7 +116,7 @@ define('io.ox/core/folder/node', [
         },
 
         onRemove: function (model) {
-            this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]').remove();
+            this.$.subfolders.children('[data-id="' + $.escape(model.attributes && model.attributes.id ? model.attributes.id : model.id) + '"]').remove();
             // we do not update models if the DOM is empty! (see bug 43754)
             this.renderEmpty();
         },
@@ -265,9 +268,10 @@ define('io.ox/core/folder/node', [
 
         // get a new TreeNode instance
         getTreeNode: function (model) {
+            var modelId = model.id || model.attributes.id;
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = { folder: model.id, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this };
+                options = { folder: modelId, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this };
             return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
@@ -328,16 +332,10 @@ define('io.ox/core/folder/node', [
 
             // also set: folder, parent, tree
 
-            if (o.fileType) {
-                var self = this;
-                require(['io.ox/files/api'], function (filesAPI) {
-                    self.model = filesAPI.pool.get('detail').get(o.model_id);
-                });
-            } else {
-                this.model = api.pool.getModel(o.model_id);
-                this.noSelect = !this.model.can('read');
-                this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
-            }
+            this.model = api.pool.getModel(o.model_id);
+            this.noSelect = !this.model.can('read');
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
+
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.realNames = options.tree.realNames;
@@ -379,7 +377,7 @@ define('io.ox/core/folder/node', [
                 offset = 22;
             }
 
-            var dsc = this.model && this.model.get('isDSC');
+            var dsc = !!this.model.get('isDSC');
 
             // draw scaffold
             this.$el
@@ -388,13 +386,12 @@ define('io.ox/core/folder/node', [
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
-                    'data-is-file': !!(this.model && this.model.getFileType),
                     'aria-label': this.getTitle()
                 })
                 .append(
                     this.$.selectable = $('<div class="folder-node" aria-hidden="true">').css('padding-left', (o.level * this.indentation) + offset).append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa ' + (o.fileType ? 'file-type-icon' : 'fa-fw') + '" aria-hidden="true"></i></div>'),
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
                         $('<div class="folder-label">').append(this.$.label = $('<div role="presentation">').text(this.getTitle())),
                         this.$.counter = $('<div class="folder-counter">'),
                         this.$.buttons = $('<div class="folder-buttons">')
@@ -555,15 +552,11 @@ define('io.ox/core/folder/node', [
         },
 
         renderAttributes: function () {
-            var attributes = {
+            this.$el.attr({
                 'data-id': this.folder,
                 'data-model': this.options.model_id,
                 'data-contextmenu-id': this.options.contextmenu_id
-            };
-            if (this.options.showInDrive) {
-                attributes['data-show-in-drive'] = true;
-            }
-            this.$el.attr(attributes);
+            });
         },
 
         isEmpty: function () {
@@ -574,6 +567,11 @@ define('io.ox/core/folder/node', [
             if (this.options.empty !== false) return;
             // only show if not empty, i.e. has subfolder
             this.$el.toggleClass('empty', this.isEmpty());
+
+            // show favorites tree node if only files exists in favorites
+            if (this.model.get('id') === 'virtual/favorites/infostore') {
+                this.$el.toggleClass('show-anyway', !!this.collection.length);
+            }
         },
 
         renderIcon: function () {
@@ -597,6 +595,9 @@ define('io.ox/core/folder/node', [
                 switch (this.folder) {
                     case 'virtual/myshares':
                         iconClass = 'visible myshares';
+                        break;
+                    case 'virtual/favorites/infostore':
+                        iconClass = 'visible myfavorites';
                         break;
                     case allAttachmentsFolder:
                         iconClass = 'visible attachments';

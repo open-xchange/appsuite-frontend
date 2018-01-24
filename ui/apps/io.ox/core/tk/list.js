@@ -152,7 +152,7 @@ define('io.ox/core/tk/list', [
 
         // support for custom keys, e.g. needed to identify threads or folders
         getCompositeKey: function (model) {
-            return model.cid;
+            return model.isFolder && model.isFolder() ? 'folder.' + model.get('id') : model.cid;
         },
 
         // called when the view model changes (not collection models)

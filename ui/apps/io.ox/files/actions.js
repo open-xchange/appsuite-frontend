@@ -530,6 +530,7 @@ define('io.ox/files/actions', [
             requires:  function (e) {
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+                if (e.baton.favorite) return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
                 // anonymous guests just have one folder so no valid target folder (see bug 42621)
                 if (capabilities.has('guest && anonymous')) return false;
@@ -766,6 +767,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (_.device('smartphone')) return false;
             if (!e.collection.has('one')) return false;
+            if (!e.baton.favorite && !e.baton.share && !e.baton.portal) return false;
 
             // get proper id
             var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;

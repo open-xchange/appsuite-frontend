@@ -152,7 +152,7 @@ define('io.ox/core/folder/tree', [
             if (result !== undefined) return result;
             // other folders
             var module = model.get('module');
-            return module === this.module || (this.module === 'mail' && (/^default\d+(\W|$)/i).test(model.id)) || (model.collection && model.collection.id === 'virtual/favorites/infostore');
+            return module === this.module || (this.module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
         },
 
         getOpenFolders: function () {
@@ -171,18 +171,6 @@ define('io.ox/core/folder/tree', [
             }
             if (options.parent.folder === 'virtual/standard') {
                 options.icons = true;
-            }
-
-            // Only for Files in Drive
-            if (model.getFileType) {
-                options.fileType = model.getFileType() || 'undefined';
-                options.iconClass = 'file-type-' + options.fileType;
-                options.level = 0;
-                options.showInDrive = true;
-                options.contextmenu_id = model.attributes.cid;
-            }
-            if (model.attributes) {
-                options.title = model.attributes.title;
             }
 
             return options;
@@ -265,79 +253,43 @@ define('io.ox/core/folder/tree', [
 
         renderContextMenuItems: function (contextmenu) {
             var id = this.selection.get('data-contextmenu-id'),
-                isFile = this.selection.get('data-is-file'),
                 app = this.app,
                 module = this.module,
                 ul = this.$dropdownMenu.empty(),
                 point = this.getContextMenuId(contextmenu),
                 view = this;
             // get folder data and redraw
-            if (isFile === 'true') {
-                require(['io.ox/files/api']).then(function (filesAPI) {
-                    var model = filesAPI.pool.get('detail').get(id);
-                    var baton = new ext.Baton({ app: app, data: model.toJSON(), view: view, module: module });
-                    ext.point(point).invoke('draw', ul, baton);
-                    if (_.device('smartphone')) {
-                        ul.append(
+            api.get(id).done(function (data) {
+                var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
+                ext.point(point).invoke('draw', ul, baton);
+                if (_.device('smartphone')) {
+                    ul.append(
+                        $('<li>').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
+                        )
+                    );
+                    if (ul.find('[role=menuitem]').length === 0) {
+                        ul.prepend(
                             $('<li>').append(
-                                $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
+                                $('<div class="custom-dropdown-label">').text(gt('No action available'))
                             )
                         );
-                        if (ul.find('[role=menuitem]').length === 0) {
-                            ul.prepend(
-                                $('<li>').append(
-                                    $('<div class="custom-dropdown-label">').text(gt('No action available'))
-                                )
-                            );
-                        }
                     }
-                    if (_.device('smartphone')) ul.find('.divider').remove();
-                    // remove unwanted dividers
-                    ul.find('.divider').each(function () {
-                        var node = $(this), next = node.next();
-                        // remove leading, subsequent, and tailing dividers
-                        if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
-                    });
-                    if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
-
-                    if (view.focus) {
-                        ul.find(view.focus).focus();
-                    }
-                    view.focus = false;
+                }
+                if (_.device('smartphone')) ul.find('.divider').remove();
+                // remove unwanted dividers
+                ul.find('.divider').each(function () {
+                    var node = $(this), next = node.next();
+                    // remove leading, subsequent, and tailing dividers
+                    if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
                 });
-            } else {
-                api.get(id).done(function (data) {
-                    var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
-                    ext.point(point).invoke('draw', ul, baton);
-                    if (_.device('smartphone')) {
-                        ul.append(
-                            $('<li>').append(
-                                $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
-                            )
-                        );
-                        if (ul.find('[role=menuitem]').length === 0) {
-                            ul.prepend(
-                                $('<li>').append(
-                                    $('<div class="custom-dropdown-label">').text(gt('No action available'))
-                                )
-                            );
-                        }
-                    }
-                    if (_.device('smartphone')) ul.find('.divider').remove();
-                    // remove unwanted dividers
-                    ul.find('.divider').each(function () {
-                        var node = $(this), next = node.next();
-                        // remove leading, subsequent, and tailing dividers
-                        if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
-                    });
-                    if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
+                if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
 
-                    if (view.focus) {
-                        ul.find(view.focus).focus();
-                    }
-                    view.focus = false;
-                });
-            }
+                if (view.focus) {
+                    ul.find(view.focus).focus();
+                }
+                view.focus = false;
+            });
         },
 
         renderContextMenu: (function () {

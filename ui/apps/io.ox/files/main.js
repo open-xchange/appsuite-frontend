@@ -549,7 +549,8 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true
+                            noPullToRefresh: true,
+                            contextMenu: contextmenu
                         });
 
                         app.myFavoritesListViewControl = new ListViewControl({
@@ -567,22 +568,36 @@ define('io.ox/files/main', [
                                 .append(toolbar.render().$el)
                         );
 
-                        app.updateMyFavoritesToolbar = _.debounce(function (list) {
-                            var baton = ext.Baton({
-                                    $el: toolbar.$list,
-                                    data: app.myFavoriteListView.collection.get(list),
-                                    collection: app.myFavoriteListView.collection,
-                                    model: app.myFavoriteListView.collection.get(app.myFavoriteListView.collection.get(list))
-                                }),
-                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
-                                .invoke('draw', toolbar.$list.empty(), baton);
+                        function updateCallback($toolbar) {
+                            toolbar.replaceToolbar($toolbar).initButtons();
+                        }
 
-                            $.when.apply($, ret.value()).then(function () {
-                                toolbar.initButtons();
-                            });
+                        app.updateMyFavoritesToolbar = _.debounce(function (cidList) {
+                            if (!cidList) return;
+                            // var folder = api.pool.getModel(_.cid(folder));
+                            toolbar.disableButtons();
+                            var // turn cids into proper objects
+                                cids = cidList,
+                                models = api.resolve(cids, false),
+                                list = _(models).invoke('toJSON'),
+                                // extract single object if length === 1
+                                data = list.length === 1 ? list[0] : list,
+                                $toolbar = toolbar.createToolbar(),
+                                baton = ext.Baton({
+                                    $el: $toolbar,
+                                    data: data,
+                                    models: models,
+                                    app: this,
+                                    allIds: [],
+                                    collection: app.myFavoriteListView.collection
+                                }),
+                                // draw toolbar
+                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
+                                .invoke('draw', $toolbar, baton);
+                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
                         }, 10);
 
-                        app.updateMyFavoritesToolbar([]);
+                        app.updateMyFavoritesToolbar();
                         // update toolbar on selection change as well as any model change
                         app.myFavoriteListView.on('selection:change change', function () {
                             app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
@@ -1425,7 +1440,7 @@ define('io.ox/files/main', [
 
                 api.get(obj).done(function (model) {
                     var models = api.resolve(model, false);
-                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({ models: models, app: app }));
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({ models: models, app: app, favorites: false, portal: true }));
                 });
             };
         },

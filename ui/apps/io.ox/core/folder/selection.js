@@ -38,19 +38,48 @@ define('io.ox/core/folder/selection', [], function () {
 
     _.extend(Selection.prototype, {
 
-        byId: function (id, items) {
+        /**
+         * Returns the node from the tree view
+         * @param {String} id
+         *  id to select
+         * @param [{jQuery}] items
+         *  nodes to check
+         * @param {Boolean} favorite
+         *  select favorites first
+         */
+        byId: function (id, items, favorite) {
             items = items || this.getItems();
             // use first, we might have duplicates
-            return items.filter('[data-id="' + $.escape(id) + '"]').first();
+            var elements = items.filter('[data-id="' + $.escape(id) + '"]');
+            var returnElement = elements.first();
+
+            if (elements.length !== 1) {
+                elements.each(function () {
+                    if (favorite && $(this).parentsUntil('.tree-container', '.folder.favorites').length) {
+                        returnElement = $(this);
+                    } else if (!favorite && !$(this).parentsUntil('.tree-container', '.folder.favorites').length) {
+                        returnElement = $(this);
+                    }
+                });
+            }
+
+            return returnElement;
         },
 
         get: function (attribute) {
             return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
         },
 
-        set: function (id) {
+        /**
+         * Select the folder in the tree view
+         * @param {String} id
+         *  node to select
+         * @param {Boolean} favorite
+         *  select favorites first
+         */
+        set: function (id, favorite) {
             var items = this.getItems(),
-                node = this.byId(id),
+                node = this.byId(id, items, favorite),
                 index = items.index(node);
             // not found?
             if (index === -1) return;

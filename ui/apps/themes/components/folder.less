@@ -54,6 +54,16 @@
 
         &.empty {
             display: none;
+            &.show-anyway {
+                display: block;
+                .folder-arrow {
+                    .fa {
+                        &:before {
+                            display: none;
+                        }
+                    }
+                }
+            }
         }
 
         &.disabled > .folder-node > .folder-label,
@@ -198,6 +208,7 @@
             &.myshares { i:before{ content: '\f0c2'; }} // fa-cloud
             &.attachments { i:before{ content: '\f0c6'; }} // fa-paperclip
             &.myfiles { i:before{ content: '\f007'; }} // fa-user
+            &.myfavorites { i:before{ content: '\f005'; }} // fa-star
         }
 
         .folder-checkbox {

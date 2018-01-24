@@ -97,13 +97,29 @@ define('io.ox/files/share/listview', [
             switch (this.model.get('sort')) {
                 case 5:
                     this.collection.comparator = function (shareA) {
-                        return desc ? -shareA.get('last_modified') : shareA.get('last_modified');
+                        var ret = shareA.get('last_modified');
+                        if (shareA.isFolder()) {
+                            ret = (desc ? '1' : '0') + ret;
+                        } else {
+                            ret = (desc ? '0' : '1') + ret;
+                        }
+                        return desc ? -ret : ret;
                     };
                     break;
                 case 702:
                     this.collection.comparator = function (shareA, shareB) {
-                        var a = (shareA.isFolder() ? '0' : '1') + shareA.getDisplayName().toLowerCase(),
-                            b = (shareB.isFolder() ? '0' : '1') + shareB.getDisplayName().toLowerCase();
+                        var a = shareA.getDisplayName().toLowerCase(),
+                            b = shareB.getDisplayName().toLowerCase();
+                        if (shareA.isFolder()) {
+                            a = (desc ? '1' : '0') + a;
+                        } else {
+                            a = (desc ? '0' : '1') + a;
+                        }
+                        if (shareB.isFolder()) {
+                            b = (desc ? '1' : '0') + b;
+                        } else {
+                            b = (desc ? '0' : '1') + b;
+                        }
                         var ret = a > b ? 1 : -1;
                         return desc ? -ret : ret;
                     };
@@ -141,7 +157,7 @@ define('io.ox/files/share/listview', [
             list = _(models).invoke('toJSON');
             // extract single object if length === 1
             var data = list.length === 1 ? list[0] : list;
-            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link });
+            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
 
             view.contextMenu.showContextMenu(event, baton);
         }

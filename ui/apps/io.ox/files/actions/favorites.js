@@ -44,6 +44,8 @@ define('io.ox/files/actions/favorites', [
 
         collectionId = 'virtual/favorites/' + module;
         collection = folderAPI.pool.getCollection(collectionId);
+        // convert folder model into file model
+        model = new api.Model(model.toJSON());
         model.set('index/' + collectionId, collection.length, { silent: false });
         collection.add(model);
         collection.sort();

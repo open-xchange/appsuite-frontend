@@ -337,10 +337,10 @@ define('io.ox/core/folder/view', [
             var ignoreChangeEvent = false;
 
             // on change via app.folder.set
-            app.on('folder:change', function (id) {
+            app.on('folder:change', function (id, data, favorite) {
                 if (ignoreChangeEvent) return;
                 // updates selection manager
-                tree.selection.set(id);
+                tree.selection.set(id, favorite);
                 tree.traversePath(id, showFolder);
             });
 

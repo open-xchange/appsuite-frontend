@@ -18,14 +18,37 @@ define('io.ox/files/favorite/listview', [
     'io.ox/files/common-extensions',
     'settings!io.ox/core',
     'io.ox/core/folder/api',
+    'io.ox/files/api',
+    'io.ox/core/extPatterns/actions',
     'less!io.ox/files/favorite/style',
     'io.ox/files/favorite/view-options'
-], function (ext, BreadcrumbView, ListView, extensions, settings, FolderAPI) {
+], function (ext, BreadcrumbView, ListView, extensions, settings, FolderAPI, FilesAPI, actions) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/favorite/myfavorites/listview', ITEM = LISTVIEW + '/item';
-    // var id = 'virtual/favorites/infostore';
+
+    function onContextMenu(e) {
+        var view = this;
+        var app = view.app;
+        // the link to render the context menu with it's entries.
+        var link = 'io.ox/core/file/contextmenu/default';
+        // context menu when clicked below the list.
+        // var linkOutsideList = link + '/outsideList'; Disabled for now
+
+        var list = view.selection.get();
+        if (!list) return;
+        // turn cids into proper objects
+        var cids = list,
+            models = FilesAPI.resolve(cids, false);
+        list = _(models).invoke('toJSON');
+        // extract single object if length === 1
+        var data = list.length === 1 ? list[0] : list;
+        var baton = new ext.Baton({ data: data, models: models, collection: app.myFavoriteListView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, favorite: true });
+
+        view.contextMenu.showContextMenu(e, baton);
+    }
+
     var MyFavoriteListView = ListView.extend({
 
         ref: LISTVIEW,
@@ -33,6 +56,8 @@ define('io.ox/files/favorite/listview', [
         initialize: function (options) {
 
             options.collection = this.collection = FolderAPI.pool.getCollection('virtual/favorites/infostore');
+
+            this.contextMenu = options.contextMenu;
 
             this.folderID = settings.get('favorites/infostore', []);
 
@@ -47,6 +72,7 @@ define('io.ox/files/favorite/listview', [
             this.sortBy();
 
             this.listenTo(this.model, 'change:sort change:order', this.sortBy);
+            this.listenTo(options.collection, 'update:collection', this.sortBy);
 
             // DoubleClick handler
             this.$el.on(
@@ -54,17 +80,14 @@ define('io.ox/files/favorite/listview', [
                 '.list-item .list-item-content',
                 function (element) {
                     var cid = $(element.currentTarget).parent().attr('data-cid');
-                    if ($(element.currentTarget).parent().attr('data-is-file')) {
-                        require(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).then(function (api, actions) {
-                            var models = api.pool.get('detail').get(cid);
-                            actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({
-                                models: [models],
-                                app: options.app,
-                                alwaysChange: true
-                            }));
-                        });
+                    if ($(element.currentTarget).parent().attr('data-is-file') !== 'false') {
+                        var app = options.app,
+                            selectedModel = _(FilesAPI.resolve([cid], false)).invoke('toJSON'),
+                            baton = ext.Baton({ data: selectedModel[0], collection: app.myFavoriteListView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
+
+                        actions.invoke('io.ox/files/actions/default', null, baton);
                     } else {
-                        options.app.folder.set(options.collection.get(cid).id);
+                        options.app.folder.set(cid.replace(/^folder./, ''), true);
                     }
                 }
             );
@@ -101,16 +124,32 @@ define('io.ox/files/favorite/listview', [
         sortBy: function () {
             var desc = this.model.get('order') === 'desc';
             switch (this.model.get('sort')) {
-                case 5:
+                case 5: // sort by date
                     this.collection.comparator = function (shareA) {
-                        return desc ? -shareA.get('last_modified') : shareA.get('last_modified');
+                        var ret = shareA.get('last_modified');
+                        if (shareA.isFolder()) {
+                            ret = (desc ? '1' : '0') + ret;
+                        } else {
+                            ret = (desc ? '0' : '1') + ret;
+                        }
+                        return desc ? -ret : ret;
                     };
                     break;
-                case 702:
+                case 702: // sort by name
                     this.collection.comparator = function (shareA, shareB) {
-                        var a = shareA.attributes.title.toLowerCase(),
-                            b = shareB.attributes.title.toLowerCase();
-                        var ret = a - b || a.localeCompare(b);
+                        var a = shareA.getDisplayName().toLowerCase(),
+                            b = shareB.getDisplayName().toLowerCase();
+                        if (shareA.isFolder()) {
+                            a = (desc ? '1' : '0') + a;
+                        } else {
+                            a = (desc ? '0' : '1') + a;
+                        }
+                        if (shareB.isFolder()) {
+                            b = (desc ? '1' : '0') + b;
+                        } else {
+                            b = (desc ? '0' : '1') + b;
+                        }
+                        var ret = a > b ? 1 : -1;
                         return desc ? -ret : ret;
                     };
                     break;
@@ -123,7 +162,8 @@ define('io.ox/files/favorite/listview', [
             });
             this.collection.trigger('sort');
             this.app.props.set(this.model.attributes);
-        }
+        },
+        onContextMenu: onContextMenu
     });
 
     //
@@ -147,12 +187,17 @@ define('io.ox/files/favorite/listview', [
             id: 'file-type',
             index: 10,
             draw: function (baton) {
-                if (baton.model.getFileType) {
-                    this.closest('.list-item').addClass('file-type-' + baton.model.getFileType()).attr('data-is-file', true);
-                } else {
-                    this.closest('.list-item').addClass('file-type-folder');
-                }
+                var filetype = baton.model.getFileType();
+                this.closest('.list-item')
+                    .addClass('file-type-' + filetype)
+                    .attr('data-is-favorite-view', true)
+                    .attr('data-is-file', filetype !== 'folder');
             }
+        },
+        {
+            id: 'locked',
+            index: 20,
+            draw: extensions.locked
         },
         {
             id: 'col1',
@@ -166,11 +211,9 @@ define('io.ox/files/favorite/listview', [
             id: 'col2',
             index: 200,
             draw: function (baton) {
-                this.append(
-                    $('<div class="list-item-column column-2">').append(
-                        $('<div class="filename">').text(baton.data.title)
-                    )
-                );
+                var column = $('<div class="list-item-column column-2">');
+                extensions.filename.call(column, baton);
+                this.append(column);
             }
         },
         {

@@ -223,7 +223,16 @@ define('io.ox/core/desktop', [
 
                     set: (function () {
 
-                        function change(id, data, app, def) {
+                        /**
+                         * Change folder if the app has changed
+                         * @param {String} id
+                         * @param {file|folder} data
+                         * @param {Application} app
+                         * @param {Deferred} def
+                         * @param {Boolean} favorite
+                         *  change to the favorite section in the tree or not
+                         */
+                        function change(id, data, app, def, favorite) {
                             //app has changed while folder was requested
                             var appchange = _.url.hash('app') !== app;
                             // remember
@@ -244,7 +253,7 @@ define('io.ox/core/desktop', [
                                 }
                                 // update hash
                                 _.url.hash('folder', folder);
-                                self.trigger('folder:change', folder, data);
+                                self.trigger('folder:change', folder, data, favorite);
                             }
                             def.resolve(data, appchange);
 
@@ -253,7 +262,7 @@ define('io.ox/core/desktop', [
                             }
                         }
 
-                        return function (id) {
+                        return function (id, favorite) {
                             var def = $.Deferred();
                             if (id !== undefined && id !== null && String(id) !== folder) {
 
@@ -262,11 +271,11 @@ define('io.ox/core/desktop', [
                                     data = model.toJSON();
 
                                 if (model.has('title')) {
-                                    change(id, data, app, def);
+                                    change(id, data, app, def, favorite);
                                 } else {
                                     api.get(id).then(
                                         function success(data) {
-                                            change(id, data, app, def);
+                                            change(id, data, app, def, favorite);
                                         },
                                         function fail() {
                                             console.warn('Failed to change folder', id);

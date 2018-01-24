@@ -29,8 +29,8 @@ define('io.ox/core/folder/favorites', [
         if (module === 'mail' && !upsell.has('webmail')) return;
         if (module !== 'mail' && !upsell.has(module)) return;
 
-        // register collection
-        var id = 'virtual/favorites/' + module,
+        var // register collection
+            id = 'virtual/favorites/' + module,
             model = api.pool.getModel(id),
             collection = api.pool.getCollection(id),
             // track folders without permission or that no longer exist
@@ -73,6 +73,8 @@ define('io.ox/core/folder/favorites', [
                     });
                 }
             });
+            // trigger to update sorting in myFavoriteListView (drive)
+            collection.trigger('update:collection');
             store(elements);
         }
 
@@ -120,7 +122,11 @@ define('io.ox/core/folder/favorites', [
                         var returnList = [];
                         _.each(folderList, function (folder) {
                             api.injectIndex.bind(api, folder);
-                            returnList.push(folder);
+                            var model = api.pool.getModel(folder.id);
+                            // convert folder model into file model
+                            model = new filesAPI.Model(model.toJSON());
+                            filesAPI.pool.add('detail', model.toJSON());
+                            returnList.push(model);
                         });
                         _.each(favoriteFiles, function (file) {
                             api.injectIndex.bind(api, file);
@@ -186,6 +192,34 @@ define('io.ox/core/folder/favorites', [
             model.set('folder_id', '9');
             model.set('own_rights', 1);
             model.set('standard_folder', true);
+
+            // Register listener for folder changes
+            api.on('rename', function (id, data) {
+                if (data.module === 'mail') return;
+                var changedModel = collection.get(_.cid(data));
+                changedModel.set('title', data.title);
+                storeCollection();
+            });
+            api.on('remove', function (id, data) {
+                if (data.module === 'mail') return;
+                collection.remove(_.cid(data));
+                storeCollection();
+            });
+
+            // Register listener for file changes
+            filesAPI.on('rename description add:version remove:version change:version', function (id) {
+                var newModel = filesAPI.pool.get('detail').get(id).toJSON();
+                var changedModel = collection.get(id);
+                changedModel.set('com.openexchange.file.sanitizedFilename', newModel.filename);
+                changedModel.set('title', newModel.filename);
+                storeCollection();
+            });
+            filesAPI.on('remove:file', function (list) {
+                _.each(list, function (model) {
+                    collection.remove(model.id);
+                });
+                storeCollection();
+            });
         }
 
         var extension = {
@@ -268,6 +302,8 @@ define('io.ox/core/folder/favorites', [
         if (!model.get('module')) return;
         var collectionId = 'virtual/favorites/' + model.get('module'),
             collection = api.pool.getCollection(collectionId);
+        // convert folder model into file model
+        model = new filesAPI.Model(model.toJSON());
         model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
@@ -336,7 +372,7 @@ define('io.ox/core/folder/favorites', [
 
             addLink(this, {
                 action: 'toggle-favorite',
-                data: { id: baton.data.filename ? baton.data.cid : id, module: module, isFile: !!baton.data.filename },
+                data: { id: id, module: module },
                 enabled: true,
                 handler: isFavorite ? onRemove : onAdd,
                 text: isFavorite ? gt('Remove from favorites') : gt('Add to favorites')

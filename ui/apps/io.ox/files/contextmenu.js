@@ -279,6 +279,13 @@ define('io.ox/files/contextmenu', [
             ref: 'io.ox/files/actions/delete',
             section: '60',
             label: gt('Delete')
+        },
+        {
+            id: 'show-in-folder',
+            index: 1100,
+            ref: 'io.ox/files/actions/show-in-folder',
+            section: '20',
+            label: gt('Show in Drive')
         }
     );
 
