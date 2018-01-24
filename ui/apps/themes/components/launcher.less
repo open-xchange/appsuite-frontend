@@ -172,20 +172,33 @@
         }
     }
 
-    #io-ox-topsearch {
+    // #io-ox-topsearch {
+    //     margin-right: auto;
+    //     .input-group {
+    //     }
+    //     input {
+    //         border-radius: 0;
+    //         border: 0;
+    //         &:focus {
+    //             box-shadow: none;
+    //             border: 0;
+    //         }
+    //         border-right: 0;
+    //     }
+    //     button { border-left:0; background: #fff }
+    // }
+
+    #io-ox-topfind {
         margin-right: auto;
-        .input-group {
+        .search-box > .form-group { margin-bottom: 0; }
+        .search-field { border-radius: 0; }
+
+        // input placeholder text
+        .tokenfield-placeholder {
+            // avoid visual changes when tokenfield get's initated
+            padding-left: @default-padding - 8;
+            &.form-control { .placeholder(#757575); }
         }
-        input {
-            border-radius: 0;
-            border: 0;
-            &:focus {
-                box-shadow: none;
-                border: 0;
-            }
-            border-right: 0;
-        }
-        button { border-left:0; background: #fff }
     }
 
     #io-ox-toprightbar,

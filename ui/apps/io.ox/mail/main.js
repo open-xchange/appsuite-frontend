@@ -1600,13 +1600,12 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-
-            app.initFind().on('collectionLoader:created', function (loader) {
-                loader.each = function (obj) {
-                    api.pool.add('detail', obj);
-                };
+            app.once('change:find', function (model, find) {
+                find.on('collectionLoader:created', function (loader) {
+                    loader.each = function (obj) {
+                        api.pool.add('detail', obj);
+                    };
+                });
             });
         },
         // respond to pull-to-refresh in mail list on mobiles

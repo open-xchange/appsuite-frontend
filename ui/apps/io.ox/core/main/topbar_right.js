@@ -90,7 +90,7 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/topbar/right').extend({
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'search-mobile',
         index: 150,
         draw: function () {

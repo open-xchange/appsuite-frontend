@@ -1210,14 +1210,6 @@ define('io.ox/files/main', [
             app.toggleFolders = toggle;
         },
 
-        'inplace-find': function (app) {
-
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-
-            app.initFind();
-        },
-
         // respond to search results
         'find': function (app) {
             if (_.device('smartphone') || !app.get('find')) return;

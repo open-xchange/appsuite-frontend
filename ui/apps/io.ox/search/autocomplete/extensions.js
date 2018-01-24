@@ -150,7 +150,7 @@ define('io.ox/search/autocomplete/extensions', [
                 var node = $('.token-input.tt-input'),
                     container = node.closest('.io-ox-search');
                 // no chars entered, no tokens
-                if (!node.val()) {
+                if ((!e || e.type === 'input') && !node.val()) {
                     container.addClass('empty');
                     $('.tokenfield > .twitter-typeahead').show();
                     ui.copyhelper.prop('disabled', false);
