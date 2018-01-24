@@ -52,8 +52,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true, app: app }),
-        contextmenu;
+        sidebarView = new Sidebarview({ closable: true, app: app });
 
     app.mediator({
 
@@ -339,7 +338,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, contextMenu: contextmenu });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -439,8 +438,7 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true,
-                            contextMenu: contextmenu
+                            noPullToRefresh: true
                         });
 
                         app.mysharesListViewControl = new ListViewControl({

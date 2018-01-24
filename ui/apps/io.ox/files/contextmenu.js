@@ -38,7 +38,7 @@ define('io.ox/files/contextmenu', [
     );
 
     // myshares file context menu definition
-    ext.point('io.ox/files/listview/contextmenu').extend(
+    ext.point('io.ox/files/share/myshares/listview/contextmenu').extend(
         {
             id: 'permissions',
             index: 1000,

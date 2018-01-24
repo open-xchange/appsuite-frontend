@@ -48,7 +48,6 @@ define('io.ox/files/listview', [
         initialize: function () {
             ListView.prototype.initialize.apply(this, arguments);
             var view = this;
-            view.contextMenu = arguments[0].contextMenu;
 
             view.$el.addClass('file-list-view');
 
