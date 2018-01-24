@@ -218,6 +218,10 @@ define('io.ox/find/view-tokenfield', [
             this.register();
             // render
             this.ui.view.render();
+            // adjust style
+            this.ui.view.hiddenapi.dropdown.$menu.css('left', '-5px');
+            this.ui.view.hiddenapi.dropdown.$menu.css('right', '-5px');
+            this.ui.view.hiddenapi.dropdown.$menu.css('top', '23px');
             //http://sliptree.github.io/bootstrap-tokenfield/#methods
             this.instance = this.ui.field.data('bs.tokenfield');
             // some shortcuts (available after render)
