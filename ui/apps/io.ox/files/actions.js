@@ -196,7 +196,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download-folder', {
         requires: function (e) {
-            if (_.device('ios < 11')) return false;
+            if (_.device('ios') && _.device('ios < 11')) return false;
             // single folders only
             if (!e.collection.has('one', 'folders')) return false;
             //disable for external storages
@@ -212,7 +212,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/downloadversion', {
         requires: function (e) {
             // no file-system, no download
-            if (_.device('ios < 11')) return false;
+            if (_.device('ios') && _.device('ios < 11')) return false;
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
