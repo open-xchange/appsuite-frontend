@@ -36,17 +36,17 @@ define('io.ox/mail/contextmenu', [
         section: 'mark',
         label: gt('No Spam')
     }, {
-        id: 'color',
-        index: INDEX += 100,
-        ref: 'io.ox/mail/actions/color',
-        section: 'mark',
-        label: gt('Set color')
-    }, {
         id: 'flag',
         index: INDEX += 100,
         ref: 'io.ox/mail/actions/flag',
         section: 'mark',
         label: gt('Flag')
+    }, {
+        id: 'unflag',
+        index: INDEX += 100,
+        ref: 'io.ox/mail/actions/unflag',
+        section: 'mark',
+        label: gt('Unflag')
     }, {
         id: 'mark-read',
         index: INDEX += 100,
