@@ -488,11 +488,13 @@ define('io.ox/calendar/invitations/register', [
                 comment = this.getUserComment();
 
             function performConfirm(checkConflicts) {
+                var attendee = _.extend({}, self.previousConfirmation, {
+                    partStat: hash[action],
+                    comment: comment
+                });
+                if (comment) attendee.comment = comment;
                 self.api.confirm({
-                    attendee: _.extend({}, self.previousConfirmation, {
-                        partStat: hash[action],
-                        comment: comment
-                    }),
+                    attendee: attendee,
                     id: self.model.get('id'),
                     folder: self.model.get('folder'),
                     alarms: self.alarmsModel.get('alarms')

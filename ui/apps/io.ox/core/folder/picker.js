@@ -134,7 +134,7 @@ define('io.ox/core/folder/picker', [
             .addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
 
         if (o.createFolderButton) {
-            dialog.addAlternativeButton({ action: 'create', label: gt('Create folder') });
+            dialog.addAlternativeButton({ action: 'create', label: o.createFolderText || gt('Create folder') });
         }
 
         if (o.alternativeButton) {

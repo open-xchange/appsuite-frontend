@@ -73,7 +73,7 @@ define('io.ox/participants/chronos-detail', [
         draw: function (baton) {
             var data = baton.data,
                 confirm = baton.data.cuType !== 'RESOURCE' ? util.getConfirmationSymbol(data.partStat) : '',
-                comment = baton.data.cuType !== 'RESOURCE' ? data.comment || '' : '',
+                comment = baton.data.cuType !== 'RESOURCE' ? data.comment : undefined,
                 statusClass = util.getConfirmationClass(data.partStat);
 
             this.children().first()

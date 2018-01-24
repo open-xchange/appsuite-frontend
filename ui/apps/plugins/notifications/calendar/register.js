@@ -65,7 +65,6 @@ define('plugins/notifications/calendar/register', [
                             // TODO remove once migration process is implemented
                             o.data.alarms = util.convertAlarms(o.data.alarms);
                             o.data.attendee.partStat = 'ACCEPTED';
-                            o.data.attendee.comment = '';
 
                             // check if user is allowed to set the reminder time
                             var modifyBits = folderAPI.bits(folder, 14);

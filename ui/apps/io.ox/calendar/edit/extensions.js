@@ -124,8 +124,7 @@ define('io.ox/calendar/edit/extensions', [
                                 cn: mailUtil.parseRecipient(inputfieldVal)[0],
                                 partStat: 'NEEDS-ACTION',
                                 email: mailUtil.parseRecipient(inputfieldVal)[1],
-                                uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1],
-                                comment: ''
+                                uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1]
                             })
                         );
                     }
@@ -208,7 +207,8 @@ define('io.ox/calendar/edit/extensions', [
                 persistent: 'folderpopup',
                 root: '1',
                 settings: settings,
-                title: gt('Select folder'),
+                title: gt('Select calendar'),
+                createFolderText: gt('Create new calendar'),
                 folder: this.model.get('folder'),
 
                 done: function (id) {

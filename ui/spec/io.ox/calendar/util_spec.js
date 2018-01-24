@@ -597,7 +597,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 cuType: 'INDIVIDUAL',
                 cn: 'Test, Miss',
                 partStat: 'NEEDS-ACTION',
-                comment: '',
                 entity: 1337,
                 email: 'miss.test@test.com',
                 uri: 'mailto:miss.test@test.com',
@@ -639,7 +638,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             },
             testContactResult = {
                 cn: 'Smith, Hannibal',
-                comment: '',
                 cuType: 'INDIVIDUAL',
                 email: 'hannibal@a.team',
                 partStat: 'NEEDS-ACTION',
@@ -700,7 +698,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
         it('should work with input fragments created by addParticipants autocomplete', function () {
             util.createAttendee(inputFragment).should.deep.equal({
                 cn: 'vader',
-                comment: '',
                 cuType: 'INDIVIDUAL',
                 email: 'vader@dark.side',
                 partStat: 'NEEDS-ACTION',

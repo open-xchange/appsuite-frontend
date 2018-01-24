@@ -397,6 +397,10 @@ define('io.ox/calendar/api', [
 
             confirm: function (obj, options) {
                 options = options || {};
+                // no empty string comments (clutters database)
+                // if comment schould be deleted, send null. Just like in settings
+                if (obj.attendee.comment === '') delete obj.attendee.comment;
+
                 var params = {
                         action: 'updateAttendee',
                         id: obj.id,

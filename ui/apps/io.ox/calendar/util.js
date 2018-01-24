@@ -725,16 +725,22 @@ define('io.ox/calendar/util', [
                 // internal users
                 _(data.users).each(function (obj) {
                     hash[String(obj.id)] = {
-                        status: obj.confirmation || 0,
-                        comment: obj.confirmmessage || ''
+                        status: obj.confirmation || 0
                     };
+                    // only add confirm message if there is one
+                    if (obj.confirmmessage) {
+                        hash[String(obj.id)].comment = obj.confirmmessage;
+                    }
                 });
                 // external users
                 _(data.confirmations).each(function (obj) {
                     hash[obj.mail] = {
-                        status: obj.status || 0,
-                        comment: obj.message || obj.confirmmessage || ''
+                        status: obj.status || 0
                     };
+                    // only add confirm message if there is one
+                    if (obj.message || obj.confirmmessage) {
+                        hash[String(obj.id)].comment = obj.message || obj.confirmmessage;
+                    }
                 });
             }
             return hash;
@@ -756,8 +762,8 @@ define('io.ox/calendar/util', [
             var user = _(obj.attendees).findWhere({
                 entity: id || ox.user_id
             });
-            if (!user) return '';
-            return user.comment || '';
+            if (!user) return;
+            return user.comment;
         },
 
         getConfirmationSummary: function (conf) {
@@ -1133,8 +1139,7 @@ define('io.ox/calendar/util', [
             var attendee = {
                 cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
                 cn: user.display_name,
-                partStat: 'NEEDS-ACTION',
-                comment: ''
+                partStat: 'NEEDS-ACTION'
             };
 
             if (attendee.cuType !== 'RESOURCE') {
@@ -1143,7 +1148,7 @@ define('io.ox/calendar/util', [
                 attendee.uri = 'mailto:' + attendee.email;
             } else {
                 attendee.partStat = 'ACCEPTED';
-                attendee.comment = user.description;
+                if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
             }
 

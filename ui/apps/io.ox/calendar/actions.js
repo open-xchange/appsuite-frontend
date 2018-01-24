@@ -428,7 +428,6 @@ define('io.ox/calendar/actions', [
             appointment.attendee = {
                 // act as folder owner in shared folder
                 entity: folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
-                comment: '',
                 partStat: accept ? 'ACCEPTED' : 'DECLINED'
             };
 
