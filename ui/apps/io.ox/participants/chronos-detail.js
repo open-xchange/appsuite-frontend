@@ -49,10 +49,14 @@ define('io.ox/participants/chronos-detail', [
         draw: function (baton) {
             if (baton.data.cuType === 'RESOURCE') return;
 
-            var data = baton.data,
-                display_name = mailUtil.getDisplayName([data.cn, data.email], { showMailAddress: true }),
-                html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name),
-                opt = _.extend({ html: html }, data);
+            var display_name, html, opt;
+            if (baton.data.contact) {
+                display_name = mailUtil.getDisplayName([baton.data.cn, baton.data.email], { showMailAddress: true });
+                html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name);
+                opt = _.extend({ html: html }, baton.data);
+            } else {
+                opt = _.extend({ html: $.txt(baton.data.cn) }, baton.data);
+            }
 
             if (!baton.options.halo) opt.$el = $('<span>');
             if (baton.data.entity) opt.user_id = baton.data.entity;
@@ -169,8 +173,12 @@ define('io.ox/participants/chronos-detail', [
                 _(users)
                     .chain()
                     .map(function (obj) {
-                        obj.full_name = contactsUtil.getFullName(obj.contact, true);
-                        obj.sort_name = obj.contact.last_name || obj.contact.first_name || obj.contact.display_name || '';
+                        if (obj.contact) {
+                            obj.full_name = contactsUtil.getFullName(obj.contact, true);
+                            obj.sort_name = obj.contact.last_name || obj.contact.first_name || obj.contact.display_name || '';
+                        } else {
+                            obj.sort_name = obj.cn;
+                        }
                         return obj;
                     })
                     .sortBy(function (obj) {
