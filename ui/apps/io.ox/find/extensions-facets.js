@@ -128,7 +128,6 @@ define('io.ox/find/extensions-facets', [
             value.set('option', option);
             // activate
             model.on('change:option', function (model, option) {
-                baton.view.userchange();
                 if (option === 'link') {
                     //model.set('option', model._previousAttributes.option);
                     return facetview.openFolderDialog();
