@@ -553,7 +553,7 @@ define('io.ox/calendar/edit/extensions', [
 
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Type')),
+                    $('<legend class="simple">').text(gt('Visibility')),
                     new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
                         { value: 'PUBLIC', label: gt('Public') },
                         { value: 'CONFIDENTIAL', label: gt('Private') },
@@ -581,11 +581,11 @@ define('io.ox/calendar/edit/extensions', [
             var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="bottom" data-content=" " data-container="body">').append('<i class="fa fa-question-circle">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
                     '<div class="ox-popover-title">' + gt('Public') + '</div>' +
-                    '<div>' + gt('The appointment is visible for non-attending users in shared folders.') + '</div>' +
+                    '<div>' + gt('The appointment is visible for all users in shared folders.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
-                    '<div>' + gt('Only certain appointment properties are shown to non-attending users in shared folders. Like for example the appointment time. The appointment is considered for conflicts and shows up without detailed information in scheduling view') + '</div>' +
+                    '<div>' + gt('The appointment appears as a simple time slot for to non-attending users in shared folders.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
-                    '<div>' + gt('The appointment is not shown to non-attending users in shared folders at all. The appointment is only considered for conflicts and in the scheduling view, in case it blocks a resource (a room for example).') + '</div>' +
+                    '<div>' + gt('The appointment is not visible to non-attending users in shared folders at all. The appointment is not considered for conflicts and does not appear in the scheduling view.') + '</div>' +
                     '</div></div>')
             .popover();
 

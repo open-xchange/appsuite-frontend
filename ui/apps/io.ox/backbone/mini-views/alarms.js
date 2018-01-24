@@ -59,7 +59,7 @@ define('io.ox/backbone/mini-views/alarms', [
         render: function () {
             var self = this;
             this.$el.empty().append(
-                $('<button class="btn btn-default" type="button">').text(gt('Add new Reminder'))
+                $('<button class="btn btn-default" type="button">').text(gt('Add new reminder'))
                     .on('click', function () {
                         var duration;
 
@@ -108,7 +108,7 @@ define('io.ox/backbone/mini-views/alarms', [
             } else {
                 row.append($('<div class="col-xs-10 col-md-3">').append(
                     $('<select class="form-control alarm-action">').append(
-                        $('<option>').text(gt('Message')).val('DISPLAY'),
+                        $('<option>').text(gt('Notification')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO')
                         // TODO enable when mw supports this
                         //$('<option>').text(gt('Mail')).val('EMAIL')
