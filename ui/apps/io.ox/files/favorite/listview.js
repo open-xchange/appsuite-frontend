@@ -15,6 +15,7 @@ define('io.ox/files/favorite/listview', [
     'io.ox/core/extensions',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/files/common-extensions',
     'settings!io.ox/core',
     'io.ox/core/folder/api',
@@ -22,42 +23,19 @@ define('io.ox/files/favorite/listview', [
     'io.ox/core/extPatterns/actions',
     'less!io.ox/files/favorite/style',
     'io.ox/files/favorite/view-options'
-], function (ext, BreadcrumbView, ListView, extensions, settings, FolderAPI, FilesAPI, actions) {
+], function (ext, BreadcrumbView, ListView, Contextmenu, extensions, settings, FolderAPI, FilesAPI, actions) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/favorite/myfavorites/listview', ITEM = LISTVIEW + '/item';
 
-    function onContextMenu(e) {
-        var view = this;
-        var app = view.app;
-        // the link to render the context menu with it's entries.
-        var link = 'io.ox/core/file/contextmenu/default';
-        // context menu when clicked below the list.
-        // var linkOutsideList = link + '/outsideList'; Disabled for now
-
-        var list = view.selection.get();
-        if (!list) return;
-        // turn cids into proper objects
-        var cids = list,
-            models = FilesAPI.resolve(cids, false);
-        list = _(models).invoke('toJSON');
-        // extract single object if length === 1
-        var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.myFavoriteListView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, favorite: true });
-
-        view.contextMenu.showContextMenu(e, baton);
-    }
-
-    var MyFavoriteListView = ListView.extend({
+    var MyFavoriteListView = ListView.extend(Contextmenu).extend({
 
         ref: LISTVIEW,
 
         initialize: function (options) {
 
             options.collection = this.collection = FolderAPI.pool.getCollection('virtual/favorites/infostore');
-
-            this.contextMenu = options.contextMenu;
 
             this.folderID = settings.get('favorites/infostore', []);
 
@@ -163,7 +141,8 @@ define('io.ox/files/favorite/listview', [
             this.collection.trigger('sort');
             this.app.props.set(this.model.attributes);
         },
-        onContextMenu: onContextMenu
+        // use default list of contextmenu entries
+        contextMenuRef: 'io.ox/files/listview/contextmenu'
     });
 
     //

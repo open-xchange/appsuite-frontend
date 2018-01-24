@@ -547,8 +547,7 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true,
-                            contextMenu: contextmenu
+                            noPullToRefresh: true
                         });
 
                         app.myFavoritesListViewControl = new ListViewControl({
