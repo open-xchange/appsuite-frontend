@@ -173,7 +173,8 @@ define('io.ox/calendar/month/perspective', [
             http.pause();
             _(this.views).each(function (view) {
                 if (view.$el.hasClass('hidden')) return;
-                var collection = view.collection;
+                var collection = api.getCollection(view.getRequestParams());
+                view.setCollection(collection);
                 if (useCache === false) collection.expired = true;
                 collection.sync();
             });
