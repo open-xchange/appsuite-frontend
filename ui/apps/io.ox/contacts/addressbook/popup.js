@@ -240,7 +240,9 @@ define('io.ox/contacts/addressbook/popup', [
                     // get a match for each address
                     addresses.forEach(function (field, i) {
                         var obj = process(item, sort_name, (item[field] || '').toLowerCase(), rank, i, field);
-                        if (obj) result.push((hash[obj.cid] = obj));
+                        if (obj) {
+                            result.push((hash[obj.cid] = obj));
+                        }
                     });
                 }
             });
@@ -282,6 +284,8 @@ define('io.ox/contacts/addressbook/popup', [
                 mail_full_name: util.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
+                // allow sorters to have special handling for sortnames and addresses
+                sort_name_without_mail: sort_name.join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title,
                 rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i
             };
@@ -361,7 +365,7 @@ define('io.ox/contacts/addressbook/popup', [
     //
     var sorter = (function () {
 
-        if (_.device('ja_JP')) return collation.sorter;
+        if (_.device('ja_JP')) return collation.sorterWithMail;
 
         return function sorter(a, b) {
             // asc with locale compare
