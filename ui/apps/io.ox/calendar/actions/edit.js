@@ -27,6 +27,13 @@ define('io.ox/calendar/actions/edit', [
             .done(function (action) {
                 if (action === 'cancel') return;
 
+                if (action === 'series') {
+                    // edit the series, discard recurrenceId and reference to seriesId if exception
+                    delete o.recurrenceId;
+                    o.id = baton.data.seriesId || baton.data.id;
+                }
+
+
                 // disable cache with second param
                 api.get(o, false).then(
                     function (data) {

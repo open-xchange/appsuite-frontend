@@ -170,6 +170,7 @@ define('io.ox/calendar/edit/main', [
                             }
 
                             if (opt.action === 'series') self.model.mode = 'series';
+                            if (opt.action === 'thisandfuture') self.model.mode = 'thisandfuture';
                         }
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);

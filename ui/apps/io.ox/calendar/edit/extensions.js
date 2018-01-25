@@ -136,7 +136,7 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.attachmentsFormData = attachments;
                     if (baton.mode === 'edit') {
                         var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
-                            recurrenceRange: baton.model.mode === 'series' ? 'THISANDFUTURE' : undefined,
+                            recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
                             attachments: attachments,
                             checkConflicts: true,
                             sendInternalNotifications: sendNotifications
