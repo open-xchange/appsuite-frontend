@@ -57,8 +57,16 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton, options) {
             var node = $('<div class="date-time-recurrence">');
             ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, _.extend({ zone: moment().tz() }, options));
+            ext.point('io.ox/calendar/detail/icons').invoke('draw', node.find('.date-time'), baton);
             this.append(node);
         }
+    });
+
+    // draw icons
+    ext.point('io.ox/calendar/detail/icons').extend({
+        index: 100,
+        id: 'additional-flags',
+        draw: extensions.additionalFlags
     });
 
     // draw date and recurrence information

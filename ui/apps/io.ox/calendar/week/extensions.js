@@ -60,13 +60,13 @@ define('io.ox/calendar/week/extensions', [
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', folder, a.attributes) ? ' modify' : '');
-                if (conf === 'TENTATIVE') {
-                    confString =
-                        //#. add confirmation status behind appointment title
-                        //#. %1$s = apppintment title
-                        //#, c-format
-                        gt('%1$s (Tentative)');
-                }
+                // if (conf === 'TENTATIVE') {
+                //     confString =
+                //         //#. add confirmation status behind appointment title
+                //         //#. %1$s = apppintment title
+                //         //#, c-format
+                //         gt('%1$s (Tentative)');
+                // }
             }
 
             this
@@ -87,11 +87,14 @@ define('io.ox/calendar/week/extensions', [
                 });
 
             this.on('calendar:weekview:rendered', function () {
-                if ($(this).height() > 50) {
-                    $(this).find('.flags').show();
-                    $(this).find('.flags').addClass('bottom-right');
-                } else {
-                    $(this).find('.flags').hide();
+                var location = $(this).find('.location'),
+                    height = 50;
+
+                $(this).find('.flags').addClass('bottom-right');
+
+                if (location.length && location.css('display') === 'inline') height = 35;
+                if ($(this).height() < height) {
+                    $(this).find('.appointment-content').css('padding-right', $(this).find('.flags').width() + 10);
                 }
             });
 

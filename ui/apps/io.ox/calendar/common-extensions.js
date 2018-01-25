@@ -117,6 +117,14 @@ define('io.ox/calendar/common-extensions', [
             );
         },
 
+        additionalFlags: function (baton) {
+            if (_.isEmpty(util.returnIconsByType(baton.data).property)) return;
+            var node = $('<div class="flags">');
+            this.append(
+                node.append(util.returnIconsByType(baton.data).property)
+            );
+        },
+
         note: function (baton) {
             if (!baton.data.description) return;
 
