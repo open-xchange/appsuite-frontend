@@ -223,6 +223,7 @@ define('io.ox/calendar/model', [
             this.on({
                 'change:startDate': function () {
                     if (this.changed.endDate) return;
+                    if (!this.has('endDate')) return;
                     var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
                     prevStartDate = util.getMoment(prevStartDate);
                     endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
