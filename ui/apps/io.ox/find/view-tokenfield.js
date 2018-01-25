@@ -219,7 +219,7 @@ define('io.ox/find/view-tokenfield', [
             // render
             this.ui.view.render();
             // adjust style
-            this.ui.view.hiddenapi.dropdown.$menu.css('left', '-5px');
+            this.ui.view.hiddenapi.dropdown.$menu.css('left', '-12px');
             this.ui.view.hiddenapi.dropdown.$menu.css('right', '-5px');
             this.ui.view.hiddenapi.dropdown.$menu.css('top', '23px');
             //http://sliptree.github.io/bootstrap-tokenfield/#methods
@@ -299,7 +299,7 @@ define('io.ox/find/view-tokenfield', [
                 // stop creation when cancel button is clicked while dropdown is open
                 'tokenfield:createtoken': preventOnCancel,
                 // show placeholder only when search box is empty
-                'tokenfield:createdtoken tokenfield:removedtoken': _.bind(this.setPlaceholder, this),
+                'tokenfield:createdtoken tokenfield:removedtoken': _.bind(this.onTokenChange, this),
                 // try to contract each time a token is removed
                 'tokenfield:removedtoken': _.bind(this.removedToken, this),
                 'aria-live-update': _.bind(this.updateAriaLive, this)
@@ -393,6 +393,12 @@ define('io.ox/find/view-tokenfield', [
 
         setFocus: function () {
             this.ui.tokeninput.focus();
+        },
+
+        onTokenChange: function () {
+            // expand field
+            this.app.view.$el.css('max-width', this.api('getTokens').length ? 'initial' : this.app.view.$el.css('min-width'));
+            this.setPlaceholder();
         },
 
         // show input placeholder only on empty tokenfield
