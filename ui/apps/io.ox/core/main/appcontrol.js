@@ -268,8 +268,8 @@ define('io.ox/core/main/appcontrol', [
                     // box
                     $('<form class="search-box">').append(
                         // group
-                        $('<div class="form-group has-feedback">').append(
-                            $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+                        $('<div class="form-group">').append(
+                            $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
                                 'id': id,
                                 'placeholder': label + '...',
                                 'aria-describedby': guid
@@ -311,6 +311,8 @@ define('io.ox/core/main/appcontrol', [
 
             ox.ui.apps.on('resume', show);
             function show(app) {
+                if (app.get('floating')) return;
+                if (!$(self).hasClass('aligned')) return;
                 self.children().css('display', 'none').end()
                     .find('[data-app="' + app.id + '"]').css('display', 'block');
             }
@@ -321,17 +323,24 @@ define('io.ox/core/main/appcontrol', [
             // TODO: width
             var resizeSearchBox = function () {
                 _.defer(function () {
-                    //debugger;
                     var launcherWidth = $('#io-ox-launcher').width();
                     var quickLaunchWidth = $('#io-ox-quicklaunch').width();
                     var sidePanelWidth = $('.window-sidepanel:visible').width();
-                    //var leftsideWidth = $('.leftside:visible').width();
+                    var leftsideWidth = $('.leftside:visible').width();
                     var leftMargin = sidePanelWidth - launcherWidth - quickLaunchWidth;
                     if (sidePanelWidth && leftMargin > 0) {
-                        $(self).css('marginLeft', leftMargin);
-                        //node.css('max-width', leftsideWidth);
+                        //leftsideWidth = leftsideWidth || 200;
+                        $(self).css('marginLeft', leftMargin)
+                            .find('.io-ox-find').css({
+                                'min-width': leftsideWidth || 200,
+                                'max-width': leftsideWidth || 200
+                            });
+                        // hacky
+                        if (leftsideWidth) {
+                            $(self).addClass('aligned');
+                            show(ox.ui.App.getCurrentApp());
+                        }
                     }
-                    //node.show();
                 });
             };
             $(document).on('resize', resizeSearchBox);

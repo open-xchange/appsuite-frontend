@@ -270,12 +270,20 @@ define('io.ox/find/view-tokenfield', [
             this.api('enable');
         },
 
+        close: function () {
+            // TODO: investigate why typenheads api 'close' doesn't work
+            this.hiddenapi.dropdown.empty();
+            this.hiddenapi.dropdown.close();
+        },
+
         // register additional handlers
         register: function () {
             var self = this;
             function preventOnCancel(e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
+            this.listenTo(this.app, 'facets:toggle', this.close);
+
             //retrigger events on view
             this.ui.field.on([
                 'tokenfield:initialize',

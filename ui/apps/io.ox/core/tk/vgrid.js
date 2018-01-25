@@ -928,6 +928,7 @@ define('io.ox/core/tk/vgrid', [
             resize();
             currentOffset = null;
             initialized = true;
+            $(document).trigger('resize');
             // load all IDs
             return loadAll();
         };
