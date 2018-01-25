@@ -1031,7 +1031,7 @@ define('io.ox/calendar/util', [
             if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 var dialog = new dialogs.ModalDialog();
                 if (model.hasFlag('first_occurrence')) {
-                    dialog.text(gt('Do you want to change only this occurence of the event, or this and all occurences?'));
+                    dialog.text(gt('Do you want to change only this occurence of the event, or all occurences?'));
                     dialog.addPrimaryButton('series', gt('All events'), 'series');
                 } else if (model.hasFlag('last_occurrence')) {
                     return $.when('appointment');

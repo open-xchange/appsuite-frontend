@@ -382,11 +382,13 @@ define('io.ox/calendar/api', [
                     params: params,
                     data: _(list).map(function (obj) {
                         obj = obj instanceof Backbone.Model ? obj.attributes : obj;
-                        return {
+                        var params = {
                             id: obj.id,
-                            recurrenceId: obj.recurrenceId,
                             folder: obj.folder
                         };
+                        if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+                        if (obj.recurrenceRange) params.recurrenceRange = obj.recurrenceRange;
+                        return params;
                     })
                 })
                 .then(processResponse)

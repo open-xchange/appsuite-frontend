@@ -15,24 +15,26 @@ define('io.ox/calendar/actions/delete', [
     'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/notifications',
-    'gettext!io.ox/calendar'
-], function (api, util, notifications, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/tk/dialogs'
+], function (api, util, notifications, gt, dialogs) {
 
     'use strict';
 
     return function (list) {
-        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+        api.getList(list).done(function (list) {
 
-            var cont = function (series) {
+            var cont = function (action) {
 
                 list = _(list).chain().map(function (obj) {
-                    obj = obj instanceof Backbone.Model ? obj.attributes() : obj;
+                    obj = obj instanceof Backbone.Model ? obj.attributes : obj;
                     var options = {
                         id: obj.id,
-                        folder: obj.folder
+                        folder: obj.folder,
+                        recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
                     };
                     // if the whole series should be deleted, don't send the recurrenceId.
-                    if (!series && obj.recurrenceId) {
+                    if (action !== 'series' && obj.recurrenceId) {
                         options.recurrenceId = obj.recurrenceId;
                     }
                     return options;
@@ -44,20 +46,34 @@ define('io.ox/calendar/actions/delete', [
                 api.remove(list, util.getCurrentRangeOptions()).fail(notifications.yell);
             };
 
-            var hasSeries = _(list).some(function (app) {
-                app = app instanceof Backbone.Model ? app.attributes : app;
-                return app.recurrenceId && app.id === app.seriesId;
+            var hasSeries = _(list).some(function (event) {
+                if (event.hasFlag('last_occurrence')) return false;
+                return event.has('recurrenceId') && event.get('id') === event.get('seriesId');
             });
             if (hasSeries) {
-                new dialogs.ModalDialog()
-                    .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series', gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
+                var hasFirstOccurence = _(list).some(function (event) {
+                        return event.hasFlag('first_occurrence');
+                    }),
+                    dialog = new dialogs.ModalDialog();
+
+                if (hasFirstOccurence) {
+                    dialog
+                    .text(gt('Do you want to delete only this occurence of the event, or all occurences?'))
+                        .addPrimaryButton('series', gt('All events'), 'series')
+                        .addButton('appointment', gt('Only this event'), 'appointment');
+                } else {
+                    dialog
+                        .text(gt('Do you want to delete only this occurence of the event, or this and all future occurences?'))
+                        .addPrimaryButton('thisandfuture', gt('All future events'), 'thisandfuture')
+                        .addButton('appointment', gt('Only this event'), 'appointment');
+                }
+
+                dialog
                     .addButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .done(function (action) {
                         if (action === 'cancel') return;
-                        cont(action === 'series');
+                        cont(action);
                     });
             } else {
                 new dialogs.ModalDialog()
@@ -67,7 +83,7 @@ define('io.ox/calendar/actions/delete', [
                     .show()
                     .done(function (action) {
                         if (action === 'cancel') return;
-                        cont();
+                        cont('appointment');
                     });
             }
         });
