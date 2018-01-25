@@ -107,12 +107,19 @@ define('io.ox/calendar/invitations/register', [
             e.stopPropagation();
         },
 
+        getFullModel: function () {
+            return this.api.get(this.model.attributes);
+        },
+
         onShowDetails: function (e) {
             e.preventDefault();
             var self = this;
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail']).done(function (dialogs, viewDetail) {
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                    popup.append(viewDetail.draw(self.model));
+                    popup.busy();
+                    self.getFullModel().done(function (fullModel) {
+                        popup.idle().append(viewDetail.draw(fullModel));
+                    });
                 });
             });
         },
@@ -239,6 +246,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getActions: function () {
+            if (this.getConfirmationStatus() === 'ACCEPTED') return [];
             return ['decline', 'tentative', 'accept'];
         },
 
@@ -297,7 +305,7 @@ define('io.ox/calendar/invitations/register', [
 
             this.$el.empty().fadeIn(300);
 
-            var actions = this.getActions(), status, accepted, buttons;
+            var actions = this.getActions(), buttons;
 
             this.renderScaffold();
             this.renderAnnotations();
@@ -310,12 +318,6 @@ define('io.ox/calendar/invitations/register', [
 
             this.renderSummary();
             this.renderChanges();
-
-            status = this.getConfirmationStatus();
-            accepted = status === 'ACCEPTED';
-
-            // don't offer standard buttons if appointment is already accepted
-            if (accepted) actions = _(actions).without('decline', 'tentative', 'accept');
 
             // get standard buttons
             buttons = this.getButtons(actions);
@@ -341,6 +343,10 @@ define('io.ox/calendar/invitations/register', [
     //
 
     var ExternalView = BasicView.extend({
+
+        getFullModel: function () {
+            return $.when(this.model);
+        },
 
         onAction: function (e) {
 

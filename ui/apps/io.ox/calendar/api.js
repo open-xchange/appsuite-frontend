@@ -174,7 +174,8 @@ define('io.ox/calendar/api', [
                     module: 'chronos',
                     params: {
                         action: 'resolve',
-                        id: id
+                        id: id,
+                        fields: api.defaultFields
                     }
                 }).then(function (data) {
                     if (isRecurrenceMaster(data)) return api.pool.get('detail').add(data);
