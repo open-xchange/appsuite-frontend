@@ -441,7 +441,7 @@ define('io.ox/calendar/invitations/register', [
             if (!this.options.annotations) return;
             _(this.options.annotations).each(function (annotation) {
                 node.append(
-                    $('<div class="annotation">').html(annotation)
+                    $('<div class="annotation">').text(annotation.message)
                 );
             });
         },
@@ -750,11 +750,10 @@ define('io.ox/calendar/invitations/register', [
             return this.analyzeIMIPAttachment(imip).done(function (list) {
                 if (list.length === 0) return;
 
-                var data = list[0],
-                    change = data.changes[0],
+                var data = list[0], model,
+                    change = data.changes ? data.changes[0] : {},
                     eventData = change.deletedEvent || change.newEvent || change.currentEvent;
-                if (!eventData) return;
-                var model = new models.Model(eventData);
+                if (eventData) model = new models.Model(eventData);
                 self.model.set('imipMail', true, { silent: true });
                 return require(['io.ox/calendar/api', 'io.ox/calendar/util']).then(function (api, util) {
                     var extView = new ExternalView({
@@ -766,6 +765,7 @@ define('io.ox/calendar/invitations/register', [
                         actions: data.actions,
                         introduction: change.introduction,
                         diffDescription: change.diffDescription,
+                        annotations: data.annotations,
                         imip: imip,
                         container: self
                     });
