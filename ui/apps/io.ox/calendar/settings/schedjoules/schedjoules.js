@@ -213,6 +213,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                     self.opt.dialogView.idle();
                     self.opt.dialogView.data.pageHistory.push(data);
                     ext.point('io.ox/core/folder/add-schedjoules-calendar').invoke('render', self.opt.dialogView);
+                    self.opt.dialogView.$body.scrollTop(0);
                 });
             }
 
@@ -350,7 +351,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             _.each(this.data.data.page_sections, function (section) {
                 self.$body.append(
                     $('<div class="item-block">').append(
-                        $('<h4>').text(section.name), //??
+                        $('<h4>').text(section.name),
                         $('<ol class="list-group">').append(
                             returnListItems(section, self)
                         )
