@@ -44,7 +44,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
         index: 100,
         render: function () {
             this.$body.append(
-                mini.getInputWithLabel('ical-url', gt('iCal url'), this.model)
+                mini.getInputWithLabel('ical-url', gt('iCal URL'), this.model)
             );
         }
     });
