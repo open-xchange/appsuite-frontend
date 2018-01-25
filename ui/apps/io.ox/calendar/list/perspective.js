@@ -32,8 +32,8 @@ define('io.ox/calendar/list/perspective', [
         updateColor: function (model) {
             if (!model) return;
             var color = util.getFolderColor(model.attributes),
-                container = $('[data-folder="' + model.get('id') + '"]', this.pane);
-            $('[data-folder="' + model.get('id') + '"]', this.pane).css({
+                container = $('[data-folder="' + model.get('id') + '"]', this.main);
+            $('[data-folder="' + model.get('id') + '"]', this.main).css({
                 'background-color': color
             });
 
@@ -43,9 +43,9 @@ define('io.ox/calendar/list/perspective', [
 
         onChangeColorScheme: function () {
             if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment .color-label', this.pane).css({ 'background-color': '', 'color':  '' });
+                $('.appointment .color-label', this.main).css({ 'background-color': '', 'color':  '' });
             } else {
-                $('.appointment', this.pane).each(function () {
+                $('.appointment', this.main).each(function () {
                     var $this = $(this),
                         cid = $this.data('cid'),
                         folder = util.cid(cid).folder,
