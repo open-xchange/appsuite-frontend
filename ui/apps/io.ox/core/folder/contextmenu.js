@@ -652,6 +652,11 @@ define('io.ox/core/folder/contextmenu', [
         },
         */
         {
+            id: 'select-only',
+            index: 6100,
+            draw: extensions.selectOnly
+        },
+        {
             id: 'toggle',
             index: 6200,
             draw: extensions.toggle
@@ -670,16 +675,6 @@ define('io.ox/core/folder/contextmenu', [
             id: 'delete',
             index: 6500,
             draw: extensions.removeFolder
-        },
-        {
-            id: 'divider-6',
-            index: 7000,
-            draw: contextUtils.divider
-        },
-        {
-            id: 'select-only',
-            index: 7100,
-            draw: extensions.selectOnly
         }
     );
 
