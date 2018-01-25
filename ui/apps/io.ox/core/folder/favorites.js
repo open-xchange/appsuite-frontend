@@ -197,8 +197,10 @@ define('io.ox/core/folder/favorites', [
             api.on('rename', function (id, data) {
                 if (data.module === 'mail') return;
                 var changedModel = collection.get(_.cid(data));
-                changedModel.set('title', data.title);
-                storeCollection();
+                if (changedModel) {
+                    changedModel.set('title', data.title);
+                    storeCollection();
+                }
             });
             api.on('remove', function (id, data) {
                 if (data.module === 'mail') return;
@@ -210,9 +212,11 @@ define('io.ox/core/folder/favorites', [
             filesAPI.on('rename description add:version remove:version change:version', function (id) {
                 var newModel = filesAPI.pool.get('detail').get(id).toJSON();
                 var changedModel = collection.get(id);
-                changedModel.set('com.openexchange.file.sanitizedFilename', newModel.filename);
-                changedModel.set('title', newModel.filename);
-                storeCollection();
+                if (changedModel) {
+                    changedModel.set('com.openexchange.file.sanitizedFilename', newModel.filename);
+                    changedModel.set('title', newModel.filename);
+                    storeCollection();
+                }
             });
             filesAPI.on('remove:file', function (list) {
                 _.each(list, function (model) {
