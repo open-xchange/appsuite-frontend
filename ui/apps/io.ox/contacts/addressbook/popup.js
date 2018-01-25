@@ -22,9 +22,8 @@ define('io.ox/contacts/addressbook/popup', [
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
-    'l10n/ja_JP/io.ox/collation',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, settings, mailSettings, collation) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, settings, mailSettings) {
 
     'use strict';
 
@@ -255,8 +254,6 @@ define('io.ox/contacts/addressbook/popup', [
                 mail_full_name: util.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
-                // allow sorters to have special handling for sortnames and addresses
-                sort_name_without_mail: sort_name.join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title
             };
         }
@@ -312,15 +309,10 @@ define('io.ox/contacts/addressbook/popup', [
     //
     // Sorter for use_count and sort_name
     //
-    var sorter = (function () {
-
-        if (_.device('ja_JP')) return collation.sorterWithMail;
-
-        return function sorter(a, b) {
-            // asc with locale compare
-            return a.sort_name.localeCompare(b.sort_name);
-        };
-    }());
+    function sorter(a, b) {
+        // asc with locale compare
+        return a.sort_name.localeCompare(b.sort_name);
+    }
 
     //
     // Match all words
