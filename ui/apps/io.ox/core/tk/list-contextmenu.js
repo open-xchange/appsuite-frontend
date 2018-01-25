@@ -15,11 +15,10 @@
 define('io.ox/core/tk/list-contextmenu', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/collection',
     'gettext!io.ox/core'
-], function (ext, Dropdown, utils, actions, Collection, gt) {
+], function (ext, Dropdown, actions, Collection, gt) {
     'use strict';
 
     function renderItems() {
@@ -36,26 +35,24 @@ define('io.ox/core/tk/list-contextmenu', [
             }),
             listView = this;
         return actions.applyCollection(this.contextMenuRef, new Collection(list), baton).then(function (items) {
-            return items.filter(function (item) {
+            var extensions = items.filter(function (item) {
                 return item.state;
             }).map(function (item) {
                 return item.link;
             });
-        }).then(function (extensions) {
-            var oldSection = extensions[0] && extensions[0].section;
-            extensions.forEach(function (extension) {
-                if (oldSection !== extension.section) {
+            extensions.reduce(function (acc, extension) {
+                if (acc.oldSection !== extension.section) {
                     listView.dropdown.divider();
                 }
 
-                utils.addLink(listView.$dropdownMenu, {
-                    action: extension.id,
-                    enabled: true,
-                    handler: function () { actions.invoke(extension.ref, null, baton); },
-                    text: extension.label
-                });
-                oldSection = extension.section;
-            });
+                listView.dropdown.link(
+                    extension.id,
+                    extension.label,
+                    actions.invoke.bind(this, extension.ref, null, baton),
+                    { data: extension }
+                );
+                return { oldSection: extension.section };
+            }, { oldSection: extensions[0] && extensions[0].section });
             listView.trigger('contextmenu:populated', extensions);
             return extensions;
         });
