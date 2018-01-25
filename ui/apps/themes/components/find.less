@@ -72,17 +72,19 @@
             }
         }
 
-        .tokenfield .twitter-typeahead .tt-dropdown-menu {
-            width: auto;
-            min-width: initial;
-            //padding: 8px 4px;
-            padding: 0;
-            .tt-suggestions {
+        .tokenfield {
+            padding-left: @default-padding - 5;
+            .twitter-typeahead .tt-dropdown-menu {
                 padding: 0;
-                .tt-suggestion {
-                    padding: 4px 8px;
-                    .autocomplete-item {
-                        padding: 0;
+                width: auto;
+                min-width: initial;
+                .tt-suggestions {
+                    padding: 0;
+                    .tt-suggestion {
+                        padding: 4px 8px;
+                        .autocomplete-item {
+                            padding: 0;
+                        }
                     }
                 }
             }
