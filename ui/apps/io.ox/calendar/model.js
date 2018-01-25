@@ -219,14 +219,20 @@ define('io.ox/calendar/model', [
             if (this.attributes.folder && this.attributes.id) {
                 this.cid = this.attributes.cid = util.cid(this.attributes);
             }
-            this.flags = _.object(this.get('flags'), this.get('flags'));
-            this.on('change:startDate', function () {
-                if (this.changed.endDate) return;
-                var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
-                prevStartDate = util.getMoment(prevStartDate);
-                endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
-                this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
+            this.onChangeFlags();
+            this.on({
+                'change:startDate': function () {
+                    if (this.changed.endDate) return;
+                    var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
+                    prevStartDate = util.getMoment(prevStartDate);
+                    endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
+                    this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
+                },
+                'change:flags': this.onChangeFlags
             });
+        },
+        onChangeFlags: function () {
+            this.flags = _.object(this.get('flags'), this.get('flags'));
         },
         getAttendees: function () {
             if (this._attendees) return this._attendees;

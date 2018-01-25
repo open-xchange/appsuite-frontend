@@ -1501,6 +1501,7 @@ define('io.ox/calendar/week/view', [
                     color = newAppointment.css('color'),
                     backgroundColor = newAppointment.css('background-color');
                 el
+                    .attr({ class: newAppointment.attr('class') })
                     .css({ color: color, 'background-color': backgroundColor })
                     .empty()
                     .append(newAppointment.children());
