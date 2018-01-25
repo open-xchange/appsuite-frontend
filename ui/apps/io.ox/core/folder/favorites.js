@@ -209,7 +209,11 @@ define('io.ox/core/folder/favorites', [
             });
 
             // Register listener for file changes
-            filesAPI.on('rename description add:version remove:version change:version', function (id) {
+            filesAPI.on('rename description add:version remove:version change:version', function (obj) {
+                var id = obj;
+                if (typeof obj === 'object') {
+                    id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
+                }
                 var newModel = filesAPI.pool.get('detail').get(id).toJSON();
                 var changedModel = collection.get(id);
                 if (changedModel) {

@@ -771,7 +771,8 @@ define('io.ox/files/actions', [
 
             // get proper id
             var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
-            return folderAPI.pool.getModel(id).isShareable();
+            var model = folderAPI.pool.getModel(id);
+            return !!model;
         },
         action: function (baton) {
             var app = baton.app,

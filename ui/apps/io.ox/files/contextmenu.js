@@ -197,6 +197,20 @@ define('io.ox/files/contextmenu', [
             label: gt('View')
         },
         {
+            id: 'show-in-folder',
+            index: 1100,
+            ref: 'io.ox/files/actions/show-in-folder',
+            section: '20',
+            label: gt('Show in Drive')
+        },
+        {
+            id: 'add-favorite',
+            index: 1200,
+            ref: 'io.ox/files/favorites/add',
+            section: '20',
+            label: gt('Add to favorites')
+        },
+        {
             id: 'download',
             index: 1100,
             ref: 'io.ox/files/actions/download',
@@ -209,13 +223,6 @@ define('io.ox/files/contextmenu', [
             ref: 'io.ox/files/actions/download-folder',
             section: '10',
             label: gt('Download')
-        },
-        {
-            id: 'add-favorite',
-            index: 1200,
-            ref: 'io.ox/files/favorites/add',
-            section: '20',
-            label: gt('Add to favorites')
         },
         {
             id: 'remove-favorite',
@@ -279,13 +286,6 @@ define('io.ox/files/contextmenu', [
             ref: 'io.ox/files/actions/delete',
             section: '60',
             label: gt('Delete')
-        },
-        {
-            id: 'show-in-folder',
-            index: 1100,
-            ref: 'io.ox/files/actions/show-in-folder',
-            section: '20',
-            label: gt('Show in Drive')
         }
     );
 
