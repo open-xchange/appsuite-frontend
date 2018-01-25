@@ -29,68 +29,69 @@ define('l10n/ja_JP/io.ox/collation', function () {
     // or http://en.wikipedia.org/wiki/Japanese_writing_system#Collation
     // and for half width kana https://en.wikipedia.org/wiki/Half-width_kana
     var tableau = [
-        // Hiragana, Hiragana small, Katakana, Katakana half-width, , Katakana small, Hiragana with dakuten, Katakana with dakuten, Hiragana with handakuten, Katakana with handakuten
-        [
-            'あ ぁ ア ｱ ァ', // a
-            'い ぃ イ ｲ ィ', // i
-            'う ぅ ウ ｳ ゥ ゔ ヴ ｳﾞ', // u, vu
-            'え ぇ エ ｴ ェ',  // e
-            'お ぉ オ ｵ ォ' // o
-        ], [
-            'か ゕ カ ｶ ヵ が ガ ｶﾞ', // ka, ga
-            'き キ ｷ ぎ ギ ｷﾞ', // ki, gi
-            'く ク ｸ ㇰ ぐ グ ㇰﾞ', // ku, gu
-            'け ゖ ケ ｹ ヶ げ ゲ ｹﾞ', // ke, ge
-            'こ コ ｺ ご ゴ ｺﾞ'      // ko, go
-        ], [
-            'さ サ ｻ ざ ザ ｻﾞ', // sa, za
-            'し シ ｼ ㇱ じ ジ ｼﾞ', // shi, ji
-            'す ス ｽ ㇲ ず ズ ｽﾞ', // su ,zu
-            'せ セ ｾ ぜ ゼ ｾﾞ', // se, ze
-            'そ ソ ｿ ぞ ゾ ｿﾞ'  // so, zo
-        ], [
-            'た タ ﾀ だ ダ ﾀﾞ', // ta, da
-            'ち チ ﾁ ぢ ヂ ﾁﾞ', // chi, ji
-            'つ っ ツ ﾂ ッ ｯ づ ヅ ﾂﾞ ｯﾞ', // tsu, zu ( note: there is a small half-width katakana character for tsu)
-            'て テ ﾃ で デ ﾃﾞ', // te, de
-            'と ト ﾄ ㇳ ど ド ﾄﾞ' // to, do
-        ], [
-            'な ナ ﾅ', // na
-            'に ニ ﾆ', // ni
-            'ぬ ヌ ﾇ ㇴ', // nu
-            'ね ネ ﾈ', // ne
-            'の ノ ﾉ' // no
-        ], [
-            'は ハ ﾊ ㇵ ば バ ﾊﾞ ぱ パ ﾊﾟ', // ha, ba, pa
-            'ひ ヒ ﾋ ㇶ び ビ ﾋﾞ ぴ ピ ﾋﾟ', // hi, bi, pi
-            'ふ フ ﾌ ㇷ ぶ ブ ﾌﾞ ぷ プ ﾌﾟ', // fu , bu, pi
-            'へ ヘ ﾍ ㇸ べ ベ ﾍﾞ ぺ ペ ﾍﾟ', // he, be, pe
-            'ほ ホ ﾎ ㇹ ぼ ボ ﾎﾞ ぽ ポ ﾎﾟ'  // ho, bo, po
-        ], [
-            'ま マ ﾏ', // ma
-            'み ミ ﾐ', // mi
-            'む ム ﾑ ㇺ', // mu
-            'め メ ﾒ', // me
-            'も モ ﾓ'   // mo
-        ], [
-            // ('yi' and 'ye' do not exist)
-            'や ゃ ヤ ﾔ ャ', // ya
-            'ゆ ゅ ユ ﾕ ュ', // yu
-            'よ ょ ヨ ﾖ ョ' // yo
-        ], [
-            'ら ラ ﾗ ㇻ', // ra
-            'り リ ﾘ ㇼ', // ri
-            'る ル ﾙ ㇽ', // ru
-            'れ レ ﾚ ㇾ', // re
-            'ろ ロ ﾛ ㇿ' // ro
-        ], [
-            // ('wi' and 'we' are nearly obsolete. 'wu' does not exist. 'n' is an additional kana)
-            'わ ゎ ワ ﾜ ヮ ヷ ﾜﾞ', // wa, va
-            'ゐ ヰ ヸ', // wi
-            'ゑ ヱ ヹ', // we
-            'を ヲ ｦ ヺ', // wo
-            'ん ン ﾝ' // n
-        ]],
+            // Hiragana, Hiragana small, Katakana, Katakana half-width, , Katakana small, Hiragana with dakuten, Katakana with dakuten, Hiragana with handakuten, Katakana with handakuten
+            [
+                'あ ぁ ア ｱ ァ', // a
+                'い ぃ イ ｲ ィ', // i
+                'う ぅ ウ ｳ ゥ ゔ ヴ ｳﾞ', // u, vu
+                'え ぇ エ ｴ ェ',  // e
+                'お ぉ オ ｵ ォ' // o
+            ], [
+                'か ゕ カ ｶ ヵ が ガ ｶﾞ', // ka, ga
+                'き キ ｷ ぎ ギ ｷﾞ', // ki, gi
+                'く ク ｸ ㇰ ぐ グ ㇰﾞ', // ku, gu
+                'け ゖ ケ ｹ ヶ げ ゲ ｹﾞ', // ke, ge
+                'こ コ ｺ ご ゴ ｺﾞ'      // ko, go
+            ], [
+                'さ サ ｻ ざ ザ ｻﾞ', // sa, za
+                'し シ ｼ ㇱ じ ジ ｼﾞ', // shi, ji
+                'す ス ｽ ㇲ ず ズ ｽﾞ', // su ,zu
+                'せ セ ｾ ぜ ゼ ｾﾞ', // se, ze
+                'そ ソ ｿ ぞ ゾ ｿﾞ'  // so, zo
+            ], [
+                'た タ ﾀ だ ダ ﾀﾞ', // ta, da
+                'ち チ ﾁ ぢ ヂ ﾁﾞ', // chi, ji
+                'つ っ ツ ﾂ ッ ｯ づ ヅ ﾂﾞ ｯﾞ', // tsu, zu ( note: there is a small half-width katakana character for tsu)
+                'て テ ﾃ で デ ﾃﾞ', // te, de
+                'と ト ﾄ ㇳ ど ド ﾄﾞ' // to, do
+            ], [
+                'な ナ ﾅ', // na
+                'に ニ ﾆ', // ni
+                'ぬ ヌ ﾇ ㇴ', // nu
+                'ね ネ ﾈ', // ne
+                'の ノ ﾉ' // no
+            ], [
+                'は ハ ﾊ ㇵ ば バ ﾊﾞ ぱ パ ﾊﾟ', // ha, ba, pa
+                'ひ ヒ ﾋ ㇶ び ビ ﾋﾞ ぴ ピ ﾋﾟ', // hi, bi, pi
+                'ふ フ ﾌ ㇷ ぶ ブ ﾌﾞ ぷ プ ﾌﾟ', // fu , bu, pi
+                'へ ヘ ﾍ ㇸ べ ベ ﾍﾞ ぺ ペ ﾍﾟ', // he, be, pe
+                'ほ ホ ﾎ ㇹ ぼ ボ ﾎﾞ ぽ ポ ﾎﾟ'  // ho, bo, po
+            ], [
+                'ま マ ﾏ', // ma
+                'み ミ ﾐ', // mi
+                'む ム ﾑ ㇺ', // mu
+                'め メ ﾒ', // me
+                'も モ ﾓ'   // mo
+            ], [
+                // ('yi' and 'ye' do not exist)
+                'や ゃ ヤ ﾔ ャ', // ya
+                'ゆ ゅ ユ ﾕ ュ', // yu
+                'よ ょ ヨ ﾖ ョ' // yo
+            ], [
+                'ら ラ ﾗ ㇻ', // ra
+                'り リ ﾘ ㇼ', // ri
+                'る ル ﾙ ㇽ', // ru
+                'れ レ ﾚ ㇾ', // re
+                'ろ ロ ﾛ ㇿ' // ro
+            ], [
+                // ('wi' and 'we' are nearly obsolete. 'wu' does not exist. 'n' is an additional kana)
+                'わ ゎ ワ ﾜ ヮ ヷ ﾜﾞ', // wa, va
+                'ゐ ヰ ヸ', // wi
+                'ゑ ヱ ヹ', // we
+                'を ヲ ｦ ヺ', // wo
+                'ん ン ﾝ' // n
+            ]
+        ],
         hash = {},
         label = {}, // first column of all rows
         position = 0,
