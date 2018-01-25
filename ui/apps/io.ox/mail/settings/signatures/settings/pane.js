@@ -202,8 +202,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         .build(function () {
             this.$el.addClass('io-ox-signature-dialog');
         })
-        .addButton({ action: 'save', label: gt('Save') })
         .addCancelButton()
+        .addButton({ action: 'save', label: gt('Save') })
         .on('save', function () {
             // cancel 'save' on validation error
             this.validateName();
@@ -226,6 +226,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
     function getSignaturePreview(str) {
         str = $.trim(str);
+        // fix very special case
+        str = str.replace(/^<pre>([\s\S]+)<\/pre>$/, '$1');
         if (looksLikeHTML(str)) {
             return str
                 // remove white-space first
