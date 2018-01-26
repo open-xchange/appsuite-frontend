@@ -265,7 +265,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="col-xs-5 col-md-5 col-md-offset-1">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-5 col-md-5 col-md-offset-1">');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -775,6 +775,10 @@ define('io.ox/mail/compose/view', [
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
+
+                if (this.app.getWindow && this.app.getWindow().floating) {
+                    this.app.getWindow().floating.toggle(true);
+                }
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach

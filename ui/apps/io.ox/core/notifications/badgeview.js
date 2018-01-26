@@ -43,7 +43,9 @@ define('io.ox/core/notifications/badgeview', [
                 a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count);
             if (count === 0) {
                 this.$el.addClass('no-notifications');
+                this.$el.hide('fast');
             } else {
+                this.$el.show('fast');
                 this.$el.removeClass('no-notifications');
             }
             //don't create a loop here
@@ -71,7 +73,7 @@ define('io.ox/core/notifications/badgeview', [
                 'aria-controls': 'io-ox-notifications-display'
             })
             .append(
-                this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
+                this.nodes.icon = $(), //$('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
                 this.nodes.badge = $('<span class="badge" aria-hidden="true">').append(
                     this.nodes.number = $('<span class="number">')
                 )

@@ -21,6 +21,16 @@
         padding-top: 6px;
     }
 }
+
+.powermove-window-open .io-ox-mail-compose-window.cornered {
+    // if the floating window is small we need more space for the labels (560px)
+    @media (max-width: 1672px) {
+        .mail-input {
+            padding-left: 25px;
+        }
+    }
+}
+
 .io-ox-mail-compose {
     // baseline adjustment
     padding-top: @default-padding;

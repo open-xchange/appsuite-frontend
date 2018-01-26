@@ -21,7 +21,8 @@ Scenario('adding a mail containing XSS code', function* (I) {
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.click('Add to portal', '.dropdown.open .dropdown-menu');
 
-    I.click('Portal', '.launchers');
+    I.click('#io-ox-launcher button.launcher-btn');
+    I.click('Portal', { css: '#io-ox-launcher' });
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
 
     let widgetId = yield I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');

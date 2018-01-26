@@ -1,11 +1,10 @@
 [{
     "title": "Mail",
-    "company": "Open-Xchange",
-    "icon": "mail.png",
-    "category": "Basic",
     "settings": true,
     "requires": "webmail",
     "refreshable": true,
+    "searchable": true,
+    "hasLauncher": true,
     "index": 200
 }, {
     "namespace": "io.ox/mail/compose/editor/text",

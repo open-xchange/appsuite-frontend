@@ -12,9 +12,8 @@
  */
 
 define('io.ox/find/view-token', [
-    'io.ox/backbone/mini-views/dropdown',
-    'io.ox/mail/compose/extensions'
-], function (Dropdown, mailextensions) {
+    'io.ox/backbone/mini-views/dropdown'
+], function (Dropdown) {
 
     'use strict';
 
@@ -42,9 +41,6 @@ define('io.ox/find/view-token', [
                 .append(
                     this.model.isPerson() ? this.getDropdown() : this.getNameNode()
                 );
-            if (this.model.isPerson()) {
-                this.addImage();
-            }
             // TODO: reset calculated width (https://github.com/sliptree/bootstrap-tokenfield/issues/155)
             this.api.update();
             return this;
@@ -68,11 +64,6 @@ define('io.ox/find/view-token', [
             // adjust position
             var left = this.$el.offset().left;
             this.ui.dropdown.$el.find('.dropdown-menu').css('left', left);
-        },
-
-        addImage: function () {
-            this.$el.find('.contact-image').remove();
-            mailextensions.tokenPicture.call(this.$el, this.model);
         },
 
         getDropdown: function () {

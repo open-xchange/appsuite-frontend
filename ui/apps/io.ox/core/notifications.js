@@ -47,6 +47,7 @@ define('io.ox/core/notifications', [
             self.bannerHeight = 0;
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
+
             this.badgeview.$el.on('keydown', function (e) {
                 // open on space key, up and down arrow, just like a dropdown
                 // if already open, focus first item (last on arrow up)
@@ -359,20 +360,6 @@ define('io.ox/core/notifications', [
             options = options || {};
             // if it's open already we're done
             if (this.isOpen()) return;
-
-            // adjust top if there is a banner
-            if (!this.bannerHeight) {
-                var bannerHeight = $('#io-ox-banner:visible').css('height'),
-                    nodeHeight = parseInt(this.nodes.main.css('top').replace('px', ''), 10);
-
-                if (bannerHeight !== undefined) {
-                    bannerHeight = parseInt(bannerHeight.replace('px', ''), 10);
-                    this.bannerHeight = bannerHeight;
-
-                    var newHeight = nodeHeight + bannerHeight;
-                    this.nodes.main.css('top', newHeight + 'px');
-                }
-            }
 
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');

@@ -33,9 +33,10 @@ define('io.ox/calendar/edit/main', [
 
         var app = ox.ui.createApp({
             name: 'io.ox/calendar/edit',
-            title: 'Edit Appointment',
+            title: gt('Edit Appointment'),
             userContent: true,
-            closable: true
+            closable: true,
+            floating: !_.device('smartphone')
         });
 
         _.extend(app, {
@@ -81,7 +82,10 @@ define('io.ox/calendar/edit/main', [
                     // create app window
                     var win = ox.ui.createWindow({
                         name: 'io.ox/calendar/edit',
-                        chromeless: true
+                        chromeless: true,
+                        floating: !_.device('smartphone'),
+                        closable: true,
+                        title: gt('Edit Appointment')
                     });
 
                     self.setWindow(win);
@@ -352,6 +356,9 @@ define('io.ox/calendar/edit/main', [
             //be gently
             if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)

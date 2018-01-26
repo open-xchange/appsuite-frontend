@@ -82,6 +82,9 @@ Scenario('adds a contact with all fields', function (I) {
     I.waitForStalenessOf('.io-ox-contacts-edit-window');
 
     // wait for detail view
+    I.click('.io-ox-contacts-window .leftside');
+    I.pressKey('End');
+    I.pressKey('Enter');
     I.waitForVisible('.io-ox-contacts-window .leftside .vgrid-cell.selected');
     // personal information
     I.see('Sir');

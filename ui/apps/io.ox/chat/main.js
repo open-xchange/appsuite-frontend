@@ -29,7 +29,7 @@ define('io.ox/chat/main', [
 
     'use strict';
 
-    var Window = WindowView.extend({
+    var Window = WindowView.WindowView.extend({
 
         events: {
             'keydown .left-navigation': 'onLeftNavigationKeydown',

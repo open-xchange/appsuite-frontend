@@ -624,21 +624,18 @@ define('io.ox/tasks/main', [
         },
 
         'inplace-find': function (app) {
-
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-
-            app.initFind().on({
-                'find:query': function () {
-                    // hide sort options
-                    app.grid.getToolbar().find('.grid-options:first').hide();
-                },
-                'find:cancel': function () {
-                    // show sort options again
-                    app.grid.getToolbar().find('.grid-options:first').show();
-                }
+            app.once('change:find', function (model, find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.grid.getToolbar().find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.grid.getToolbar().find('.grid-options:first').show();
+                    }
+                });
             });
-
         },
 
         'contextual-help': function (app) {

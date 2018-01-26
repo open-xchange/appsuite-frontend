@@ -29,7 +29,8 @@ Scenario('Compose plain text mail', function (I) {
     I.checkOption({ css: '[name="messageFormat"][value="html"] + i' });
 
     // 1) Switch to the mail app, select "Create mail"
-    I.click('Mail', { css: '.launchers .launcher[data-app-name="io.ox/mail"]' });
+    I.click('#io-ox-launcher button.launcher-btn');
+    I.click('Mail', { css: '#io-ox-launcher' });
 
     // 1.1) Mark all messages as read to identify the new message later on
     I.selectFolder('Inbox');
@@ -41,7 +42,6 @@ Scenario('Compose plain text mail', function (I) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.seeTitleEquals('App Suite. Compose');
 
     // 2) Select "Plain Text" as text format under "Options"
     I.click('Options');

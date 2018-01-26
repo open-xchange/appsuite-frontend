@@ -212,7 +212,7 @@ define('io.ox/core/tk/text-editor', [
         this.show = function () {
             function resizeEditor() {
                 var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
-                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height() - toolbarHeight)));
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - toolbarHeight)));
             }
             textarea.prop('disabled', false).show();
 

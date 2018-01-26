@@ -389,7 +389,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
                 var h = $(window).height(),
                     top = editor.offset().top,
-                    bottomMargin = (el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 104);
+                    bottomMargin = (el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 120);
 
                 editor.css('min-height', h - top - bottomMargin + 'px');
                 if (opt.css) editor.css(opt.css);

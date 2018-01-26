@@ -27,9 +27,10 @@ define('io.ox/core/a11y', [], function () {
     });
 
     // focus folder tree from top-bar on <enter>
-    $(document).on('keydown.topbar', '#io-ox-topbar .active-app a', function (e) {
+    /*$(document).on('keydown.topbar', '#io-ox-topbar .active-app a', function (e) {
         if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
     });
+    */
 
     // focus active app from foldertree on <escape> and focus listview on <enter> and <space>
     $(document).on('keydown.foldertree', '.folder-tree .folder.selected', function (e) {
@@ -37,7 +38,7 @@ define('io.ox/core/a11y', [], function () {
         if (!$(e.target).is('li')) return;
         var node = $(e.target).closest('.window-container');
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
-        if (e.which === 27) $('#io-ox-topbar .active-app a').focus();
+        // if (e.which === 27) $('#io-ox-topbar .active-app a').focus();
         if (/13|32/.test(e.which)) {
             e.preventDefault();
             node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();

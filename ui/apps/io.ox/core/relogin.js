@@ -12,15 +12,25 @@
  */
 
 define('io.ox/core/relogin', [
+    'io.ox/core/extensions',
     'io.ox/core/session',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
     'settings!io.ox/core'
-], function (session, notifications, capabilities, ModalDialog, gt, settings) {
+], function (ext, session, notifications, capabilities, ModalDialog, gt, settings) {
 
     'use strict';
+
+    ext.point('io.ox/core/relogin').extend({
+        draw: function () {
+            this.append(
+                gt('Your session is expired'), $.txt('.'), $('<br>'),
+                $('<small>').text(gt('Please sign in again to continue'))
+            );
+        }
+    });
 
     var queue = [], pending = false;
 

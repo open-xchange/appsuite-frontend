@@ -13,7 +13,7 @@
 define([
     'io.ox/core/extensions'
 ], function (ext) {
-    describe('Core: Topbar extensions', function () {
+    describe.skip('Core: Topbar extensions', function () {
         describe('right dropdown', function () {
             describe('provides an app specific help', function () {
                 var node = $('<div>');

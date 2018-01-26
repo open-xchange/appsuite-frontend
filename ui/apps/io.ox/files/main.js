@@ -1225,14 +1225,6 @@ define('io.ox/files/main', [
             app.toggleFolders = toggle;
         },
 
-        'inplace-find': function (app) {
-
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-
-            app.initFind();
-        },
-
         // respond to search results
         'find': function (app) {
             if (_.device('smartphone') || !app.get('find')) return;
@@ -1461,7 +1453,7 @@ define('io.ox/files/main', [
                 // check if it's really the folder - not the contextmenu toggle
                 if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
-                if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+                // if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
             });
         }
     });

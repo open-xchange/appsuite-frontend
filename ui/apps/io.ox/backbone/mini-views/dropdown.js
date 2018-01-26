@@ -94,7 +94,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 width = this.$toggle.outerWidth(),
                 availableWidth = $(window).width(),
                 availableHeight = $(window).height(),
-                topbar = $('#io-ox-topbar');
+                topbar = $('#io-ox-appcontrol');
 
             // hits bottom ?
             if (bounds.top + bounds.height > availableHeight - this.margin) {

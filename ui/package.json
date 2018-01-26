@@ -28,8 +28,8 @@
     "open-xchange-shared-grunt-config": "^0.15.0-pre2"
   },
   "devDependencies": {
-    "@open-xchange/codecept-helper": "^0.0.3",
-    "appserver": "^0.7.0-pre1",
+    "@open-xchange/codecept-helper": "0.0.4",
+    "appserver": "^0.7.0-pre8",
     "chai": "^4.0.2",
     "codeceptjs": "^1.0.3",
     "codeceptjs-webdriverio": "^1.1.0",

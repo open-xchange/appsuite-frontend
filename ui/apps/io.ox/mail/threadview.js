@@ -104,32 +104,6 @@ define('io.ox/mail/threadview', [
         }
     });
 
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'toggle-big-screen',
-        index: 110,
-        draw: function (baton) {
-            if (!baton.view.standalone) return;
-            this.append(
-                $('<a href="#" role="button" class="toggle-big-screen">')
-                .append('<i class="fa fa-expand" aria-hidden="true">')
-                .attr('aria-label', gt('Toggle viewport size'))
-                .tooltip({
-                    animation: false,
-                    container: 'body',
-                    placement: 'left',
-                    title: gt('Toggle viewport size')
-                })
-                .on('click', function () {
-                    // remove tooltip on click as the viewport changes
-                    var self = $(this);
-                    _.defer(function () { self.tooltip('hide'); });
-                })
-            );
-        }
-    });
-
-    // Thread view
-
     var ThreadView = Backbone.View.extend({
 
         tagName: 'div',
@@ -140,7 +114,6 @@ define('io.ox/mail/threadview', [
             'click .back-navigation .previous-mail': 'onPrevious',
             'click .back-navigation .next-mail': 'onNext',
             'click .toggle-all': 'onToggleAll',
-            'click .toggle-big-screen': 'onToggleBigscreen',
             'keydown': 'onKeydown'
         },
 
@@ -209,15 +182,6 @@ define('io.ox/mail/threadview', [
                 this.toggleMail(model.cid, state);
             }, this);
             http.resume();
-        },
-
-        onToggleBigscreen: function (e) {
-            e.preventDefault();
-            this.$el.toggleClass('big-screen');
-        },
-
-        toggleBigScreen: function (state) {
-            this.$el.toggleClass('big-screen', state);
         },
 
         toggleMail: function (cid, state) {

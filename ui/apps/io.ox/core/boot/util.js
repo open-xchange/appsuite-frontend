@@ -35,6 +35,16 @@ define('io.ox/core/boot/util', [], function () {
 
     ox.on('language', displayFeedback);
 
+    ox.on('change:document:title', function (opt) {
+        var title = [];
+        if (_.isString(opt)) title.push(opt);
+        else if (_.isArray(opt)) title = opt;
+
+        if (ox.user) title.push(ox.user);
+        title.push(ox.serverConfig.pageTitle || ox.serverConfig.productName);
+        document.title = document.customTitle = String(_.compact(_.uniq(title)).join(' - '));
+    });
+
     var exports = {
 
         DURATION: 250,
@@ -44,7 +54,8 @@ define('io.ox/core/boot/util', [], function () {
         gt: _.identity,
 
         setPageTitle: function (title) {
-            document.title = title || '';
+            ox.trigger('change:document:title', title);
+            // document.title = title || '';
             $('[name="apple-mobile-web-app-title"]').attr('content', title);
         },
 

@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 define([
-    'io.ox/settings/sessions/settings/pane',
+    'io.ox/settings/security/sessions/settings/pane',
     'gettext!io.ox/core',
     'settings!io.ox/core'
 ], function (session, gt, settings) {

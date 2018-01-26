@@ -120,18 +120,7 @@
         </div>
         <!-- Core Panel -->
         <div id="io-ox-core" class="abs unselectable" style="display: none">
-            <!-- banner -->
-            <div id="io-ox-banner">
-                <span class="banner-logo" style="display: none"></span>
-                <span class="banner-title"></span>
-                <span class="banner-content"></span>
-            </div>
-            <!-- top bar -->
-            <div id="io-ox-topbar" class="f6-target" role="banner">
-                <div role="navigation">
-                    <ul class="launchers list-unstyled"></ul>
-                </div>
-            </div>
+            <div id="io-ox-appcontrol" style="display: none"></div>
             <!-- screens -->
             <div id="io-ox-screens" class="abs">
                 <!-- window manager -->
@@ -141,8 +130,11 @@
                 <!-- empty desktop -->
                 <div id="io-ox-desktop" class="abs"></div>
             </div>
-            <!-- embedded windows -->
-            <ul id="io-ox-taskbar" class="abs"></ul>
+            <!-- container for embeded windows, used to manage flexbox overflow-->
+            <div id="io-ox-taskbar-container" class="abs">
+                <!-- embedded windows -->
+                <ul id="io-ox-taskbar"></ul>
+            </div>
         </div>
         <!-- Login screen -->
         <div id="io-ox-login-screen" class="unselectable" style="display: block">

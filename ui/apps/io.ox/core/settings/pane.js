@@ -29,7 +29,14 @@ define('io.ox/core/settings/pane', [
 
     'use strict';
 
-    var INDEX = 0, MINUTES = 60000;
+    var INDEX = 0,
+        MINUTES = 60000,
+        availableApps = appAPI.getApps().map(function (o) {
+            return {
+                label: /*#, dynamic*/gt.pgettext('app', o.title),
+                value: o.path
+            };
+        }).concat([{ label: gt('None'), value: '' }]);
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -80,19 +87,6 @@ define('io.ox/core/settings/pane', [
                             { label: gt('15 minutes'), value: 15 * MINUTES },
                             { label: gt('30 minutes'), value: 30 * MINUTES }
                         ];
-                    },
-
-                    getAutoStartOptions: function () {
-                        return [].concat(
-                            _(appAPI.getFavorites()).map(function (app) {
-                                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
-                            }),
-                            [{ label: gt('None'), value: 'none' }]
-                        );
-                    },
-
-                    hasMoreThanOneAutoStartOption: function () {
-                        return _(appAPI.getFavorites()).size() > 1;
                     },
 
                     getAutoLogoutOptions: function () {
@@ -327,10 +321,10 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
 
                 if (!settings.isConfigurable('autoStart')) return;
-                if (!this.hasMoreThanOneAutoStartOption()) return;
+                if (availableApps <= 2) return;
 
                 baton.$el.append(
-                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, this.getAutoStartOptions())
+                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
                 );
             }
         },
@@ -346,6 +340,53 @@ define('io.ox/core/settings/pane', [
 
                 baton.$el.append(
                     util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
+                );
+            }
+        },
+        //
+        // Quicklaunch apps
+        //
+        {
+            id: 'quickLaunch',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                var SelectView = mini.SelectView.extend({
+                    onChange: function () {
+                        var val = this.$el.val();
+                        this.model.set(this.name, this.options.integer ? parseInt(val, 10) : val);
+                        this.model.set('quicklaunch', _.uniq(_.compact([
+                            this.model.get('apps/quicklaunch0'),
+                            this.model.get('apps/quicklaunch1'),
+                            this.model.get('apps/quicklaunch2')
+                        ])).join(','));
+                    },
+                    setup: function () {
+                        var settingsStr = this.model.get('quicklaunch');
+                        if (settingsStr) {
+                            var a = settingsStr.split(',');
+                            if (this.options.pos <= a.length) {
+                                this.model.set('apps/quicklaunch' + this.options.pos, a[this.options.pos], { silent: true });
+                            }
+                        }
+                        this.listenTo(this.model, 'change:' + this.name, this.update);
+                    }
+                });
+
+                var multiSelect = function (name, label, model, list, options) {
+                    options = options || {};
+                    var id = 'settings-' + name;
+                    return $('<div class="col-md-2">').append(
+                        $('<label>').attr('for', id).text(label),
+                        new SelectView({ id: id, name: name, model: model, list: list, pos: options.pos }).render().$el
+                    );
+                };
+                baton.$el.append(
+                    $('<div class="form-group row">').append(
+                        multiSelect('apps/quicklaunch0', gt('Quick launch 1'), this.model, availableApps, { pos: 0 }),
+                        multiSelect('apps/quicklaunch1', gt('Quick launch 2'), this.model, availableApps, { pos: 1 }),
+                        multiSelect('apps/quicklaunch2', gt('Quick launch 3'), this.model, availableApps, { pos: 2 })
+                    )
                 );
             }
         }
@@ -426,15 +467,16 @@ define('io.ox/core/settings/pane', [
         {
             id: 'options',
             render: function (baton) {
+                var options = [
+                    util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
+                    util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
+                    util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
+                    util.checkbox('highcontrast', gt('High contrast theme'), this.model)
+                ];
 
-                baton.$el.append(
-                    $('<div class="form-group">').append(
-                        util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
-                        util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
-                        util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
-                        util.checkbox('highcontrast', gt('High contrast theme'), this.model)
-                    )
-                );
+                if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
+
+                baton.$el.append($('<div class="form-group">').append(options));
             }
         }
     );

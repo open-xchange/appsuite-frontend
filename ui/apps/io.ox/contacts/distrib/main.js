@@ -35,7 +35,8 @@ define('io.ox/contacts/distrib/main', [
             name: 'io.ox/contacts/distrib',
             title: gt('Distribution List'),
             userContent: true,
-            closable: true
+            closable: true,
+            floating: !_.device('smartphone')
         });
 
         app.getContextualHelp = function () {
@@ -85,15 +86,6 @@ define('io.ox/contacts/distrib/main', [
                 'sync:fail': function (response) {
                     require('io.ox/core/notifications').yell('error', response.error ? response.error : gt('Failed to save distribution list.'));
                     win.idle();
-                }
-            });
-
-            win.on('show', function () {
-                if (app.model.get('id')) {
-                    //set url parameters
-                    app.setState({ folder: app.model.get('folder_id'), id: app.model.get('id') });
-                } else {
-                    app.setState({ folder: app.model.get('folder_id'), id: null });
                 }
             });
 
@@ -158,9 +150,11 @@ define('io.ox/contacts/distrib/main', [
         app.setLauncher(function () {
 
             app.setWindow(win = ox.ui.createWindow({
-                title: '',
                 chromeless: true,
-                name: 'io.ox/contacts/distrib'
+                name: 'io.ox/contacts/distrib',
+                title: gt('Distribution List'),
+                floating: !_.device('smartphone'),
+                closable: true
             }));
 
             function fnToggleSave(isDirty) {
@@ -201,6 +195,9 @@ define('io.ox/contacts/distrib/main', [
                     def.resolve();
                 } else {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        if (app.getWindow().floating) {
+                            app.getWindow().floating.toggle(true);
+                        }
                         new dialogs.ModalDialog()
                             .text(gt('Do you really want to discard your changes?'))
                             //#. "Discard changes" appears in combination with "Cancel" (this action)

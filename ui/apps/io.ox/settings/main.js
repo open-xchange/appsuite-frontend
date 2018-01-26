@@ -112,21 +112,7 @@ define('io.ox/settings/main', [
         }).scrollable();
 
         // Create extensions for the apps
-        var appsInitialized = appsAPI.getInstalled().done(function (installed) {
-
-            var apps = _.filter(installed, function (item) {
-                if (!item.settings) return false;
-                if (item.device && !_.device(item.device)) return false;
-                // check for dedicated requirements for settings (usually !guest)
-                if (item.settingsRequires && !capabilities.has(item.settingsRequires)) return false;
-                // check for device requirements for settings
-                if (item.settingsDevice && !_.device(item.settingsDevice)) return false;
-                // special code for tasks because here settings depend on a capability
-                // could have been done in manifest, but I did not want to change the general structure
-                // because of one special case, that might even disappear in the future
-                if (item.id === 'io.ox/tasks') return capabilities.has('delegate_tasks');
-                return true;
-            });
+        var appsInitialized = $.when(appsAPI.getAppsWithSettings()).done(function (apps) {
 
             ext.point('io.ox/settings/pane').extend({
                 id: 'main',

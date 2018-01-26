@@ -738,10 +738,10 @@ define('io.ox/portal/main', [
             // portal apps with a fixed position toolbar
             if (_.device('smartphone')) {
                 app.getWindow().on('hide', function () {
-                    $('#io-ox-topbar').removeClass('toolbar-fixed-position');
+                    // $('#io-ox-topbar').removeClass('toolbar-fixed-position');
                     app.getWindow().nodes.outer.removeClass('content-v-shift');
                 }).on('show', function () {
-                    $('#io-ox-topbar').addClass('toolbar-fixed-position');
+                    // $('#io-ox-topbar').addClass('toolbar-fixed-position');
                     app.getWindow().nodes.outer.addClass('content-v-shift');
                 });
             }

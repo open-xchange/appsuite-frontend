@@ -37,6 +37,8 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
 
     server.autoRespond = true;
 
+    $('body').prepend('<div id="background-loader">');
+
     new Stage('io.ox/core/stages', {
         id: 'run_tests',
         index: 99999,

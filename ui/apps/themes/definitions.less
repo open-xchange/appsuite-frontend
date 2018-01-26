@@ -31,7 +31,7 @@
  * 1.1 Base colors
  */
 
-@brand-primary:                         #3c73aa;    /* Bootstrap overwrite */
+@brand-primary:                         #283f73;    /* was #3c73aa;*/    /* Bootstrap overwrite */
 @brand-success:                         #008500;    /* Bootstrap overwrite */
 // e.g. used for window-content
 @background:                            @white;
@@ -56,6 +56,20 @@
 @dark-silver:                           #aaa;
 @silver:                                #bbb;
 @light-silver:                          #ccc;
+
+/*
+ * 1.2.1 Application colors
+ */
+
+@app-color-mail:                        #0288d1;
+@app-color-addressbook:                 #43a047;
+@app-color-calendar:                    #c62828;
+@app-color-drive:                       #616161;
+@app-color-tasks:                       #f57c00;
+@app-color-portal:                      #0097a7;
+@app-color-text:                        #2c569a; //M$ word
+@app-color-spreadsheet:                 #227643; //M$ excel
+@app-color-presentation:                #d24727; //M$ PP
 
 /*
  * 1.3 High contrast colors
@@ -97,7 +111,7 @@
  * 1.6 Links
  */
 
-@link-color:                            #3c73aa;    /* Bootstrap overwrite */
+@link-color:                            #3c61aa;    /* Bootstrap overwrite */
 @link-on-dark:                          #3bf;
 @person-link-color:                     @link-color;
 @inline-link-color:                     @link-color;
@@ -237,10 +251,10 @@
  * 3.2 Topbar
  */
 
-@topbar-background:                     @brand-primary;
+@topbar-background:                     @brand-primary; //obsolete
 @topbar-icon-color:                     @white;
-@topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
-@topbar-launcher-color-hover:           @white;
+@topbar-launcher-color:                 @white; //rgba(255, 255, 255, 0.95);
+@topbar-launcher-color-hover:           rgba(0,0,0,.4);//@white;
 @topbar-launcher-color-active:          @white;
 @topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
 @topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
