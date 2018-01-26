@@ -35,15 +35,23 @@ define('io.ox/core/boot/util', [], function () {
 
     ox.on('language', displayFeedback);
 
-    ox.on('change:document:title', function (opt) {
-        var title = [];
-        if (_.isString(opt)) title.push(opt);
-        else if (_.isArray(opt)) title = opt;
+    ox.on('change:document:title', function (arg) {
 
-        if (ox.user) title.push(ox.user);
-        title.push(ox.serverConfig.pageTitle || ox.serverConfig.productName);
-        document.title = document.customTitle = String(_.compact(_.uniq(title)).join(' - '));
+        var elements = [].concat(arg),
+            change = _.lfo(changeDocumentTitle);
+
+        require(['io.ox/core/api/user', 'io.ox/contacts/util'], function (api, util) {
+            api.get(ox.user_id).done(function (data) {
+                var user = util.getMailFullName(data) || ox.user;
+                elements.push(user, ox.serverConfig.productName);
+                change(elements);
+            });
+        });
     });
+
+    function changeDocumentTitle(elements) {
+        document.title = document.customTitle = _.compact(_.uniq(elements)).join(' - ');
+    }
 
     var exports = {
 
