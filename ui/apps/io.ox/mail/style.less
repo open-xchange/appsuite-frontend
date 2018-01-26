@@ -833,10 +833,28 @@ textarea.inplace-editor {
     }
 
     .from {
-        .ellipsis();
+        display: flex;
+        align-content: flex-start;
+        & > * { margin-right: 8px; }
+
         span.person {
             color: inherit;
             .fontWeight(bold);
+        }
+
+        &.list { display: block; }
+
+        .person-link {
+            .ellipsis();
+            &.person-sender { color: #333; }
+            &.person-from {
+                .fontWeight(bold);
+                color: black;
+            }
+        }
+
+        .address {
+            color: #767676;
         }
     }
 }
@@ -1594,6 +1612,22 @@ h4.mail-attachment-preview {
             .sp {
                 margin-right: 4px;
             }
+            .from {
+                max-height: none;
+
+                .person-link.person-from { font-weight: 500; }
+                .address { display: none; }
+
+                &.show-address {
+                    flex-wrap: wrap;
+                    .address {
+                        .ellipsis();
+                        display: block;
+                        padding-bottom: 4px;
+                    }
+                }
+            }
+
         }
 
         .attachments {

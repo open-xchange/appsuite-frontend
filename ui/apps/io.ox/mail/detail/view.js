@@ -111,13 +111,7 @@ define('io.ox/mail/detail/view',
     ext.point('io.ox/mail/detail/header').extend({
         id: 'from',
         index: INDEX_header += 100,
-        draw: function (baton) {
-            this.append(
-                $('<div class="from">').append(
-                    util.serializeList(baton.data, 'from')
-                )
-            );
-        }
+        draw: extensions.fromDetail
     });
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -142,7 +136,34 @@ define('io.ox/mail/detail/view',
         id: 'recipients',
         index: INDEX_header += 100,
         draw: function (baton) {
+            ext.point('io.ox/mail/detail/header/sender').invoke('draw', this, baton);
             ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/header/sender').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+            var data = baton.data, from = data.from || [];
+
+            // add 'on behalf of'?
+            if (!('headers' in data)) return;
+            if (!('Sender' in data.headers)) return;
+
+            var sender = util.parseRecipients(data.headers.Sender);
+            if (from[0] && from[0][1] === sender[0][1]) return;
+
+            this.append(
+                $('<div class="sender">').append(
+                    $('<span class="io-ox-label">').append(
+                        //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+                        $.txt(gt('Via')),
+                        $.txt('\u00A0\u00A0')
+                    ),
+                    $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
+                )
+            );
         }
     });
 
