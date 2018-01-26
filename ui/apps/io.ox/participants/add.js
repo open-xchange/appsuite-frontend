@@ -181,7 +181,7 @@ define('io.ox/participants/add', [
             if (this.options.convertToAttendee) {
 
                 list = _(list).chain().map(function (item) {
-                    if (!item.attributes.mark_as_distributionlist) {
+                    if (!(item.attributes && item.attributes.mark_as_distributionlist)) {
                         return calendarUtil.createAttendee(item);
                     }
                     distlists.push(item);
