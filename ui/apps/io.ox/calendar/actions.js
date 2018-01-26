@@ -441,8 +441,10 @@ define('io.ox/calendar/actions', [
 
     function acceptDecline(baton, accept) {
         if ($(baton.e.target).hasClass('disabled')) return;
-        var appointment = api.reduce(baton.data);
-        changeStatus(baton.data).done(function success() {
+        var appointment = api.reduce(baton.data),
+            // no need to check for conflicts if appointment is declined
+            def = accept ? changeStatus(baton.data) : $.when();
+        def.done(function success() {
             folderAPI.get(appointment.folder).done(function (folder) {
                 appointment.data = {
                     confirmmessage: '',
