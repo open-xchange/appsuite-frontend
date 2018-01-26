@@ -712,7 +712,7 @@ define('io.ox/files/main', [
 
             if (_.device('touch')) return;
 
-            function updateSidebar() {
+            function updateSidebar(list, currentTargetCID) {
 
                 // do nothing if closed
                 if (!sidebarView.open) return;
@@ -725,7 +725,7 @@ define('io.ox/files/main', [
                     );
                 } else {
 
-                    var item = app.listView.selection.get()[0];
+                    var item = currentTargetCID || app.listView.selection.get()[0];
                     var model;
 
                     if (/^folder\./.test(item)) {
