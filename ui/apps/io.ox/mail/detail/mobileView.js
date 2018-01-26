@@ -65,7 +65,13 @@ define('io.ox/mail/detail/mobileView',
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'from',
         index: INDEX_header += 100,
-        draw: extensions.fromDetail
+        draw: function (baton) {
+            this.append(
+                $('<div class="from">').append(
+                    util.serializeList(baton.data, 'from')
+                )
+            );
+        }
     });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
