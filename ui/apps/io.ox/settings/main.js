@@ -30,7 +30,6 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
-    'io.ox/settings/sessions/settings/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
@@ -450,16 +449,26 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
+        // security group
+
         ext.point('io.ox/settings/pane').extend({
             id: 'security',
             index: 200,
-            subgroup: 'io.ox/settings/pane/security',
-            folderOptions: {
-                title: gt('Security'),
-                headless: false,
-                indent: true,
-                className: 'folder un-selectable'
-            }
+            subgroup: 'io.ox/settings/pane/security'
+        });
+
+        ext.point('io.ox/settings/pane/security').extend({
+            id: 'security-root',
+            title: gt('Security'),
+            ref: 'io.ox/settings/security',
+            index: 100
+        });
+
+        ext.point('io.ox/settings/pane/security/security-root').extend({
+            id: 'sessions',
+            title: gt('Active clients'),
+            ref: 'io.ox/settings/security/sessions',
+            index: 100
         });
 
         var submodules = _(keychainAPI.submodules).filter(function (submodule) {
@@ -487,13 +496,6 @@ define('io.ox/settings/main', [
             index: 500,
             subgroup: 'io.ox/settings/pane/external'
         });
-
-        // ext.point('io.ox/settings/pane').extend({
-        //     id: 'sessions',
-        //     index: 600,
-        //     subgroup: 'io.ox/settings/pane/sessionlist'
-        // });
-
 
         // enqueue is probably a bad name, but since it's not exposed …
         // only resolve the last object enqueed

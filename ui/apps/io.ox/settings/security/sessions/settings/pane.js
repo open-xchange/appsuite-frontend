@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/settings/sessions/settings/pane', [
+define('io.ox/settings/security/sessions/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
     'gettext!io.ox/core',
@@ -20,18 +20,10 @@ define('io.ox/settings/sessions/settings/pane', [
     'io.ox/backbone/disposable',
     'io.ox/backbone/mini-views/listutils',
     'settings!io.ox/core',
-    'less!io.ox/settings/sessions/settings/style'
+    'less!io.ox/settings/security/sessions/settings/style'
 ], function (ext, ExtensibleView, gt, http, SettingsListView, DisposableView, listUtils, settings) {
 
     'use strict';
-
-    ext.point('io.ox/settings/pane/security').extend({
-        id: 'sessions',
-        title: gt('Active clients'),
-        ref: 'io.ox/settings/sessions',
-        index: 200,
-        advancedMode: true
-    });
 
     function buildConfirmationDialog(text, confirmText) {
         var def = new $.Deferred();
@@ -271,7 +263,7 @@ define('io.ox/settings/sessions/settings/pane', [
 
     });
 
-    ext.point('io.ox/settings/sessions/settings/detail').extend({
+    ext.point('io.ox/settings/security/sessions/settings/detail').extend({
         id: 'view',
         index: 100,
         draw: function () {
