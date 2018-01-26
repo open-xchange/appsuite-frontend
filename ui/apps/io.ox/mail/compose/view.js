@@ -19,6 +19,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/contacts/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
+    'io.ox/core/tk/textproc',
     'settings!io.ox/mail',
     'settings!io.ox/core',
     'io.ox/core/notifications',
@@ -31,7 +32,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/signatures',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
+], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
 
     'use strict';
 
@@ -410,6 +411,38 @@ define('io.ox/mail/compose/view', [
             return _.pick(data, 'id', 'folder_id', 'mode', 'csid', 'content_type');
         },
 
+        markupQuotes: function (text) {
+            var lines = String(text || '').split(/<br\s?\/?>/i),
+                quoting = false,
+                regQuoted = /^&gt;( |$)/i,
+                i = 0, $i = lines.length, tmp = [], line;
+            for (text = ''; i < $i; i++) {
+                line = lines[i];
+                if (!regQuoted.test(line)) {
+                    if (!quoting) {
+                        text += line + '<br>';
+                    } else {
+                        tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
+                        text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
+                        quoting = false;
+                    }
+                } else {
+                    if (quoting) {
+                        tmp.push(line.replace(regQuoted, ''));
+                    } else {
+                        quoting = true;
+                        tmp = [line.replace(regQuoted, '')];
+                    }
+                }
+            }
+            text = text.replace(/<br>$/, '');
+            if (text === '' && tmp.length) {
+                tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
+                text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
+            }
+            return text;
+        },
+
         fetchMail: function (obj) {
 
             var attachmentMailInfo, self = this,
@@ -420,7 +453,7 @@ define('io.ox/mail/compose/view', [
                 attachmentMailInfo = obj.attachments[1] ? obj.attachments[1].mail : undefined;
             }
 
-            if (/(compose|edit)/.test(mode)) {
+            if (/(compose)/.test(mode)) {
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
                 obj = _(obj).map(function (o) {
@@ -430,18 +463,16 @@ define('io.ox/mail/compose/view', [
                 obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
             }
 
-            var content_type = this.messageFormat;
-
-            if (content_type === 'alternative') {
-                content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
-            }
-
             // use CSS sanitizing and size limit (large than detail view)
             obj.embedded = true;
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
-            return mailAPI[mode](obj, content_type).then(function (data) {
-                data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+            return mailAPI[mode](obj, this.messageFormat).then(function (data) {
+                if (mode !== 'edit') {
+                    data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                } else {
+                    data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                }
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
@@ -473,9 +504,33 @@ define('io.ox/mail/compose/view', [
                 }
 
                 self.model.set(data);
+
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
+                var content = attachmentCollection.at(0).get('content');
+                var content_type = attachmentCollection.at(0).get('content_type');
+
+                // Force text edit mode when alternative editorMode and text/plain mail
+                if (mode === 'edit' && self.editorMode === 'alternative' && content_type === 'text/plain') {
+                    self.model.set('editorMode', 'text', { silent: true });
+                    self.editorMode = 'text';
+                }
+
+                if (content_type === 'text/plain' && self.editorMode === 'html') {
+                    var hasBlockquotes = content.match(/(&gt; )+/g);
+                    if (hasBlockquotes) {
+                        $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
+                            content = self.markupQuotes(content);
+                        });
+                    }
+                    attachmentCollection.at(0).set('content_type', 'text/html');
+                }
+                if (content_type === 'text/plain' && self.editorMode === 'text' && mode === 'edit') {
+                    content = textproc.htmltotext(content);
+                }
+                attachmentCollection.at(0).set('content', content);
                 self.model.set('attachments', attachmentCollection);
+                obj = data = attachmentCollection = null;
             });
         },
 
