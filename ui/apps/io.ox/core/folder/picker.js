@@ -101,7 +101,7 @@ define('io.ox/core/folder/picker', [
             var parentview = tree.getNodeView(tree.selection.get() || tree.root);
             require(['io.ox/core/folder/actions/add'], function (add) {
                 // request and open create-folder-dialog
-                add(mapIds(parentview.folder), { module: o.module }).then(
+                add(mapIds(parentview.folder), { module: o.module === 'calendar' ? 'event' : o.module }).then(
                     function (data) {
                         // add additonal 5ms to tree nodes debounced onSort handler
                         _.delay(function () {
