@@ -43,7 +43,7 @@ define('io.ox/core/folder/view', [
         if (!open) {
             open = {};
             // open private and public by default
-            if (/^(contacts|calendar|tasks)$/.test(module)) {
+            if (/^(contacts|calendar|event|tasks)$/.test(module)) {
                 open[_.display()] = ['virtual/flat/' + module + '/private', 'virtual/flat/' + module + '/public'];
             }
         }

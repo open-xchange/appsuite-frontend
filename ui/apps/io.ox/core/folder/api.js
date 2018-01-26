@@ -57,7 +57,7 @@ define('io.ox/core/folder/api', [
 
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
+                if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
                 // any shared folder
@@ -109,7 +109,7 @@ define('io.ox/core/folder/api', [
     }
 
     function isFlat(id) {
-        return /^(contacts|calendar|tasks)$/.test(id);
+        return /^(contacts|calendar|tasks|event)$/.test(id);
     }
 
     function isNested(id) {
@@ -251,7 +251,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
 
             // sort shared and hidden folders by title
-            if (/^flat\/(contacts|calendar|tasks)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks)\/hidden$/.test(this.id)) {
+            if (/^flat\/(contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
                 this.comparator = function (model) {
                     return (model.get('display_title') || model.get('title')).toLowerCase();
                 };
@@ -1092,7 +1092,7 @@ define('io.ox/core/folder/api', [
                 title: gt('New Folder')
             }, options);
             // inherit permissions for private flat non-calendar folders
-            if (isFlat(options.module) && options.module !== 'calendar' && !(parent.id === '2' || util.is('public', parent))) {
+            if (isFlat(options.module) && options.module !== 'calendar' && options.module !== 'event' && !(parent.id === '2' || util.is('public', parent))) {
                 // empty array doesn't work; we heve to copy the admins
                 options.permissions = _(parent.permissions).filter(function (item) {
                     return !!(item.bits & 268435456);

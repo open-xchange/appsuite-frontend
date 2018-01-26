@@ -157,7 +157,7 @@ define('io.ox/core/folder/picker', [
             context: o.context,
             filter: o.filter,
             flat: !!o.flat,
-            // no links like my contact data or subscubre calendar in picker
+            // no links like my contact data or subscibre calendar in picker
             noLinks: true,
             indent: o.indent,
             module: o.module,
