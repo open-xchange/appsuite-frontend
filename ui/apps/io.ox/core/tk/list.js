@@ -602,6 +602,7 @@ define('io.ox/core/tk/list', [
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
             this.toggleComplete(false);
+            this.toggleExpired(false);
             this.listenTo(collection, {
                 // forward events
                 'all': this.forwardCollectionEvents,
@@ -639,7 +640,11 @@ define('io.ox/core/tk/list', [
         // respond to expire event (usually triggered by the GC)
         onExpire: function () {
             // revert flag since this is an active collection (see bug 54111)
-            this.collection.expired = false;
+            this.toggleExpired(false);
+        },
+
+        toggleExpired: function (flag) {
+            this.collection.expired = flag;
         },
 
         // if true current collection is regarded complete
