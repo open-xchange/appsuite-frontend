@@ -148,7 +148,37 @@ define('io.ox/mail/detail/view', [
             // from is last one in the list for proper ellipsis effect
             id: 'from',
             index: INDEX_header += 100,
-            draw: extensions.fromDetail
+            draw: function (baton) {
+
+                var $el = $('<div class="from">'),
+                    data = baton.data,
+                    from = data.from || [],
+                    length = from.length;
+
+                // from is special as we need to consider the "sender" header
+                // plus making the mail address visible (see bug 56407)
+
+                _(from).each(function (item, i) {
+
+                    var email = String(item[1] || '').toLowerCase(),
+                        name = util.getDisplayName(item);
+                    if (!email) return;
+
+                    $el.append(
+                        $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                            .data({ email: email })
+                            .text(name)
+                    );
+
+                    if (name !== email) {
+                        $el.append($('<span class="address">').text('<' + email + '>'));
+                    }
+
+                    if (i < length - 1) $el.append('<span class="delimiter">,</span>');
+                });
+
+                this.append($el);
+            }
         }
     );
 
