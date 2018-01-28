@@ -164,8 +164,8 @@
 .mail-item {
 
     .list-item {
-        padding-top: 10px;
-        padding-bottom: 9px;
+        padding-top: 11px;
+        padding-bottom: 12px;
 
         .smartphone & {
             padding-top: 16px;
@@ -582,7 +582,7 @@
     }
 
     &.show-contact-pictures.show-text-preview .contact-picture {
-        top: 6px;
+        top: 4px;
     }
 
     .selected:not(:focus) .contact-picture {
@@ -629,7 +629,7 @@
         display: -webkit-box;
     }
 
-    @item-line-height: 20px;
+    @item-line-height: 16px;
 
     .list-item-content {
         // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
@@ -640,7 +640,7 @@
             font-size: 14px;
             display: inline-block;
             float: left;
-            line-height: 20px;
+            line-height: @item-line-height;
             margin-right: (@default-padding / 2);
             &.seen-unseen-indicator {
                 padding: 2px 5px 2px 0;
@@ -726,7 +726,7 @@
         background-color: @mail-thread-size-background;
         line-height: 16px;
         padding: 0 4px;
-        margin: 2px 0 0 (@default-padding / 2);
+        margin: 0 0 0 (@default-padding / 2);
         display: inline-block;
         float: right;
         overflow: visible;
