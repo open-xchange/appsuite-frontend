@@ -302,13 +302,10 @@ define('io.ox/core/tk/list', [
                 // sort all nodes by index
                 items = this.getItems();
                 if (items.length > 1) {
-                    var prevFocus = document.activeElement;
                     detached = items.detach();
                     sorted = _.sortBy(detached, getIndex);
 
                     this.$el.append(sorted);
-                    // restore the lost focus after sorting due to detach() - e.g. in drive when adding new folders b54897
-                    if (prevFocus) { prevFocus.focus(); }
                 }
             };
         }()),
