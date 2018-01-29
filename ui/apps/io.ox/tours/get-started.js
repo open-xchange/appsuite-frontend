@@ -22,10 +22,10 @@ define('io.ox/tours/get-started', [
 
     var GetStartedView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'a',
 
         events: {
-            'click a': 'onClick',
+            'click': 'onClick',
             'start': 'onStart'
         },
 
@@ -60,8 +60,12 @@ define('io.ox/tours/get-started', [
             });
         },
 
-        hide: function () { return this.$el.toggle(false); },
-        show: function () { return this.$el.toggle(true); },
+        hide: function () {
+            if (this.$el.parent().length > 0) return this.$el.parent().toggle(false);
+        },
+        show: function () {
+            if (this.$el.parent().length > 0) return this.$el.parent().toggle(true);
+        },
 
         onAppChange: function () {
             //no tours for guests, yet. See bug 41542
@@ -91,18 +95,18 @@ define('io.ox/tours/get-started', [
         },
 
         render: function () {
-            this.$el.hide().attr('role', 'presentation').append(
-                $('<a href="#" role="menuitem" data-action="guided-tour">').text(gt('Guided tour for this app'))
-            );
+            this.$el.attr({ href: '#', role: 'menuitem', 'data-action': 'guided-tour' }).text(gt('Guided tour for this app'));
             return this;
         }
     });
 
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
         id: 'get-started',
         index: 250,
-        draw: function () {
-            this.append(new GetStartedView().render().$el);
+        extend: function () {
+            var getStartedView = new GetStartedView();
+            this.append(getStartedView.render().$el);
+            getStartedView.hide();
         }
     });
 });

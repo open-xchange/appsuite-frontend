@@ -414,7 +414,6 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         index: 240,
         extend: function () {
-            console.log('feedback, registered');
             var currentSetting = settings.get('feedback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
