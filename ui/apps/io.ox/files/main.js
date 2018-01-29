@@ -980,19 +980,49 @@ define('io.ox/files/main', [
          * Add listener to files upload to select newly uploaded files after listview reload
          */
         'select-uploaded-files': function (app) {
+            // listen
             api.on('stop:upload', function (requests) {
                 api.collectionLoader.collection.once('reload', function () {
                     $.when.apply(this, requests).done(function () {
                         var files,
-                            selection = app.listView.selection,
+                            listView = app.listView,
+                            selection = listView.selection,
+                            // selection array to select after upload
                             items;
 
                         files = _(arguments).map(_.cid);
 
                         items = selection.getItems(function () {
-                            return files.indexOf($(this).attr('data-cid')) >= 0;
+                            // add already rendered items to selection array
+                            var position = files.indexOf($(this).attr('data-cid'));
+                            if (position >= 0) {
+                                delete files[position];
+                            }
+                            return position >= 0;
                         });
 
+                        // limit selectable items to PRIMARY_PAGE_SIZE
+                        var lastPosition = api.collectionLoader.PRIMARY_PAGE_SIZE - selection.getItems().length;
+                        _.each(_.without(files, undefined).slice(0, lastPosition > 0 ? lastPosition : 0), function (cid) {
+                            var file = api.pool.get('detail').get(cid);
+                            // select only if the current folder is the upload folder
+                            if (file && app.folder.get() === file.get('folder_id')) {
+                                if (cid) {
+                                    app.listView.on('add:' + cid, function (model) {
+                                        _.each(selection.getItems(), function (item) {
+                                            if ($(item).attr('data-cid') === model.cid) {
+                                                // add items to selection array after rendering
+                                                items.push(item);
+                                            }
+                                        });
+                                        // select all items from selectiona array after rendering
+                                        selection.selectAll(items);
+                                    });
+                                }
+                            }
+                        });
+
+                        // deselect all items
                         selection.selectNone();
                         selection.selectAll(items);
                     });
