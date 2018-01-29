@@ -20,7 +20,8 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/capabilities',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/core/main/autologout'
 ], function (http, upsell, windowview, appAPI, ext, capabilities, icons, settings, gt) {
 
     function toggleOverlay(force) {
