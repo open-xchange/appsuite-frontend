@@ -95,7 +95,7 @@ define('io.ox/core/main/appcontrol', [
             settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
         },
         fetch: function () {
-            var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : null;
+            var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
             return _(quicklaunch.map(function (o) {
                 return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
             })).compact();
