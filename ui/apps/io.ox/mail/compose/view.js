@@ -633,9 +633,8 @@ define('io.ox/mail/compose/view', [
             // get mail
             var mail = this.model.getMailForDraft();
 
-            // never append vcard when saving as draft
-            // backend will append vcard for every send operation (which save as draft is)
-            delete mail.vcard;
+            // disabled for fix of bug 56704
+            //delete mail.vcard;
 
             var view = this,
                 baton = new ext.Baton({
