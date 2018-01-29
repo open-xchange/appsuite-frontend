@@ -873,7 +873,6 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
-        console.log('ox.ui.createApp', options);
         options.guid = appGuid++;
         if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
         return ox.ui.apps.add(new ox.ui.App(options));
@@ -1819,18 +1818,6 @@ define('io.ox/core/desktop', [
         if (upsell.visible(obj.requires) && _.device(obj.device)) {
             ox.ui.apps.add(new ox.ui.App(_.extend({ name: obj.id }, obj)));
         }
-    });
-
-    ox.ui.apps.on('reset', function () {
-        console.log('ox.ui.apps reset', arguments);
-    });
-
-    ox.ui.apps.on('add', function () {
-        console.log('ox.ui.apps add', arguments);
-    });
-
-    ox.ui.apps.on('change:title', function () {
-        console.log('ox.ui.apps change:title', arguments);
     });
 
     return {};

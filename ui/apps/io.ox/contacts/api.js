@@ -1163,7 +1163,6 @@ define('io.ox/contacts/api', [
     });
 
     api.on('maybeNewContact', function () {
-        if (ox.debug) console.info('Clearing autocomplete cache');
         api.autocomplete.cache = {};
     });
 
