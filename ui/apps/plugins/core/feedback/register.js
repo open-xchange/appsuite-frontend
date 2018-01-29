@@ -410,16 +410,15 @@ define('plugins/core/feedback/register', [
         }
     };
 
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
         id: 'feedback',
-        index: 250,
-        draw: function () {
+        index: 240,
+        extend: function () {
+            console.log('feedback, registered');
             var currentSetting = settings.get('feedback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
-                    $('<li role="presentation">').append(
-                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
-                    )
+                    $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
                     .on('click', function (e) {
                         e.preventDefault();
                         feedback.show();
