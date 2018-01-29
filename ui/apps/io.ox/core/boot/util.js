@@ -36,6 +36,8 @@ define('io.ox/core/boot/util', [], function () {
     ox.on('language', displayFeedback);
 
     ox.on('change:document:title', function (arg) {
+        // skip if we don't have a session (i.e. during signin) because there is no way to get anything via user api
+        if (ox.signin) return;
 
         var elements = [].concat(arg),
             change = _.lfo(changeDocumentTitle);
