@@ -290,22 +290,31 @@ define('io.ox/core/tk/list', [
                 return node && parseInt(node.getAttribute('data-index'), 10);
             }
 
-            // fix for bugs #51594 and #51596
-            // [L3] Drive opens wrong files directly after upload - wrong link in UI
-            //
             return function () {
                 // needless cause added models not drawn yet (debounced renderListItems)
                 if (this.queue.list.length) return;
 
-                var items, detached, sorted;
+                var dom, sorted, i, j, length, node, reference, index, done = {};
 
                 // sort all nodes by index
-                items = this.getItems();
-                if (items.length > 1) {
-                    detached = items.detach();
-                    sorted = _.sortBy(detached, getIndex);
+                dom = this.getItems().toArray();
+                sorted = _(dom).sortBy(getIndex);
 
-                    this.$el.append(sorted);
+                // apply sorting (step by step to keep focus)
+                // the arrays "dom" and "sorted" always have the same length
+                for (i = 0, j = 0, length = sorted.length; i < length; i++) {
+                    node = sorted[i];
+                    reference = dom[j];
+                    // mark as processed
+                    done[i] = true;
+                    // same element?
+                    if (node === reference) {
+                        // fast forward "j" if pointing at processed items
+                        do { index = getIndex(dom[++j]); } while (done[index]);
+                    } else if (reference) {
+                        // change position in dom
+                        this.el.insertBefore(node, reference);
+                    }
                 }
             };
         }()),
