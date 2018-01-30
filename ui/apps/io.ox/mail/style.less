@@ -568,17 +568,19 @@
 
 .mail-item {
 
+    @pictureSize: 32px;
+
     .contact-picture {
         position: absolute;
         left: 0;
         top: 0;
         margin: 0 @default-padding 0 0;
-        .picture(40px, 40px);
+        .picture(@pictureSize, @pictureSize);
     }
 
     &.show-contact-pictures .list-item-content {
         position: relative;
-        padding-left: 56px;
+        padding-left: @pictureSize + 16px;
     }
 
     &.show-contact-pictures.show-text-preview .contact-picture {
