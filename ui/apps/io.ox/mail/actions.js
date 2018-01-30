@@ -891,7 +891,7 @@ define('io.ox/mail/actions', [
         id: 'viewer',
         index: 600,
         mobile: 'hi',
-        label: gt('View kack'),
+        label: gt('View'),
         ref: 'io.ox/mail/actions/viewer'
     }));
 
