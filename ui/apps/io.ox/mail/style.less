@@ -211,9 +211,6 @@
 
         &.unread {
             .date { opacity: 1; .fontWeight(bold); }
-            .subject {
-                html.high-contrast & { color: @hc-link-color; }
-            }
         }
     }
 }
@@ -392,8 +389,6 @@
         position: absolute;
         top: 2px;
         left: 0;
-
-        html.high-contrast & { color: @hc-link-color; }
     }
 
     .thread-size {
@@ -435,7 +430,6 @@
     .io-ox-label {
         font-weight: bold;
         white-space: nowrap;
-        html.high-contrast & { color: @hc-gray; }
     }
 
     .recipients .person-link {
@@ -521,7 +515,6 @@
             max-height: 20px;
             .ellipsis();
             width: 100%;
-            html.high-contrast & { opacity: 1; }
         }
     }
 
@@ -749,7 +742,6 @@
 
     .thread-size {
         min-width: 24px;
-        html.high-contrast & { color: @hc-gray; }
     }
 
     .selected {

@@ -1648,12 +1648,10 @@ define('io.ox/mail/main', [
                 app.listView.restoreFocus(true);
             });
             // folder tree: focus list view on <enter>
-            // folder tree: focus top-bar on <escape>
             app.folderView.tree.$el.on('keydown', '.folder', function (e) {
                 // check if it's really the folder - not the contextmenu toggle
                 if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
-                // if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
             });
         },
 

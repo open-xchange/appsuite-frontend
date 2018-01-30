@@ -470,8 +470,7 @@ define('io.ox/core/settings/pane', [
                 var options = [
                     util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
                     util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
-                    util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
-                    util.checkbox('highcontrast', gt('High contrast theme'), this.model)
+                    util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model)
                 ];
 
                 if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
@@ -480,10 +479,4 @@ define('io.ox/core/settings/pane', [
             }
         }
     );
-
-    // register once
-    settings.on('change:highcontrast', function (value) {
-        $('html').toggleClass('high-contrast', value);
-    });
-
 });

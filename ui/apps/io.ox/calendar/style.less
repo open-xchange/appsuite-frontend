@@ -137,9 +137,6 @@
 
         .common() {
             border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-
-            html.high-contrast & .location,
-            html.high-contrast & .title { color: @black; }
         }
 
         &.reserved {
@@ -379,8 +376,6 @@
 
         .location {
             color: #767676;
-
-            html.high-contrast & { color: @black; }
         }
 
         .shown_as.label {
@@ -563,9 +558,6 @@
 
     .date-time {
         font-weight: normal;
-        html.high-contrast & {
-            color: @black;
-        }
     }
 
     .time {
@@ -577,11 +569,6 @@
             position: relative;
             top: -1px;
             background-color: #767676;
-
-            html.high-contrast & {
-                color: white;
-                background-color: @black;
-            }
         }
     }
 

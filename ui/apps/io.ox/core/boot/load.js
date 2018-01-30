@@ -32,7 +32,6 @@ define('io.ox/core/boot/load', [
 
         prefetch();
         setupSockets();
-        applyHighContrast();
         loadUserTheme();
 
         ox.once('boot:done', function () {
@@ -165,9 +164,5 @@ define('io.ox/core/boot/load', [
                 });
             }
         });
-    }
-
-    function applyHighContrast() {
-        $('html').toggleClass('high-contrast', coreSettings.get('highcontrast', false));
     }
 });

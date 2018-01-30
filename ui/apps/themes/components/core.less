@@ -12,9 +12,6 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-/* High contrast */
-html.high-contrast a:not(.btn) { color: @hc-link-color; }
-
 body {
     // add a bit of perfection
     -webkit-font-feature-settings: "liga", "kern";
@@ -340,9 +337,6 @@ html:not(.internet-explorer) {
 
 .bright-text {
     color: #767676;
-    html.high-contrast & {
-        color: @hc-gray;
-    }
 }
 
 .ellipsis { .ellipsis(); }
@@ -353,36 +347,14 @@ html:not(.internet-explorer) {
     white-space: nowrap;
 }
 
-.person-link {
-    cursor: pointer;
-}
+.person-link { cursor: pointer; }
 
 .default-content-padding { padding: 32px 32px; }
 
-.border-top {
-    border-top: 1px solid @default-border-color;
-
-    html.high-contrast & { border-top: 1px solid @hc-border-color; }
-}
-
-.border-right {
-    border-right: 1px solid @default-border-color;
-
-    html.high-contrast & { border-right: 1px solid @hc-border-color; }
-}
-
-.border-bottom {
-    border-bottom: 1px solid @default-border-color;
-
-    html.high-contrast & { border-bottom: 1px solid @hc-border-color; }
-
-}
-
-.border-left {
-    border-left: 1px solid @default-border-color;
-
-    html.high-contrast & { border-left: 1px solid @hc-border-color; }
-}
+.border-top    { border-top: 1px solid @default-border-color; }
+.border-right  { border-right: 1px solid @default-border-color; }
+.border-bottom { border-bottom: 1px solid @default-border-color; }
+.border-left   { border-left: 1px solid @default-border-color; }
 
 .touch body { font-size: @font-size-touch; }
 

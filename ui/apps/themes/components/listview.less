@@ -353,16 +353,6 @@
 
 .leftside .list-view .list-item { outline: 0; }
 
-// Deprecated: High contrast theme will be removed soon
-.list-view {
-    .list-item.selected:not(.no-checkbox) .fa-checkmark {
-        html.high-contrast & { color: @hc-link-color; }
-    }
-    &.visible-selection.has-focus .list-item.selected {
-        html.high-contrast & { background-color: @hc-link-color; }
-    }
-}
-
 /* New list view */
 .megalist {
     position: absolute;

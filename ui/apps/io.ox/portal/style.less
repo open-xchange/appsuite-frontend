@@ -132,29 +132,15 @@
         }
 
         .mixin-widget-color(@widget-color) {
-
             h2, .accent { color: @widget-color; }
-
             .action { background-color: @widget-color; }
-
             &.inverse {
                 background-color: @widget-color;
                 h2, .accent { color: @white; }
                 .decoration { background-color: @widget-color; }
             }
-
-            html.high-contrast & {
-
-                h2, .accent { color: @black; }
-
-                .action {
-                    color: white;
-                    background-color: @black;
-                }
-
-                &.inverse .decoration { background-color: @black; }
-            }
         }
+
         &.widget-color-default    { .mixin-widget-color(@widget-color-default);    }
         &.widget-color-black      { .mixin-widget-color(@widget-color-black);      }
         &.widget-color-red        { .mixin-widget-color(@widget-color-red);        }
@@ -180,12 +166,6 @@
                 &:hover, &:focus {
                     background-color: rgba(0, 0, 0, 0.40);
                 }
-            }
-
-            html.high-contrast & {
-                color: @black;
-
-                .decoration { background-color: #f5f5f5; }
             }
         }
 
@@ -229,12 +209,7 @@
             li .bold { line-height: 1em; }
 
             .italic { font-style: italic; }
-
-            .gray {
-                color: rgba(0, 0, 0, 0.6);
-
-                html.high-contrast & { color: @black; }
-            }
+            .gray { color: rgba(0, 0, 0, 0.6); }
 
             &:focus {
                 background-color: rgba(0, 0, 0, 0.10);
@@ -352,15 +327,6 @@
             color: #fff;
             background-color: rgba(0, 0, 0, 0.60);
             border-top: 1px solid rgba(0, 0, 0, 0.70);
-
-            html.high-contrast & {
-                background-color: @black;
-                color: @white;
-
-               .fa-times { color: @white; }
-
-                &:hover .fa-times { color: @hc-gray; }
-            }
 
             .disable-widget {
 

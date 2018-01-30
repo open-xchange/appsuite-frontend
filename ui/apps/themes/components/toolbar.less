@@ -33,8 +33,6 @@
         i {
             color: @toolbar-button-color;
 
-            html.high-contrast & { color: @black; }
-
             &.accent-color {
                 background-color: @toolbar-button-accent;
                 color: @white;
@@ -49,13 +47,9 @@
         &:hover {
             text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
 
-            html.high-contrast & { background-color: @black; }
-
             i {
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
-
-                html.high-contrast & { color: @white; }
 
                 &.accent-color {
                     background-color: darken(@toolbar-button-accent, 10%);
@@ -85,10 +79,6 @@
         &.disabled i {
             color: #eee;
             cursor: default;
-
-            html.high-contrast & {
-                color: @hc-gray; // HC
-            }
 
             &.accent-color {
                 background-color: #fff;
@@ -184,10 +174,6 @@
     margin: 0;
     padding: 0;
     .user-select(none);
-
-    html.high-contrast & {
-        border-color: @hc-border-color;
-    }
 
     & > li {
 
