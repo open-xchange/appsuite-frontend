@@ -160,6 +160,7 @@ define('io.ox/calendar/month/view', [
                 );
 
                 if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
+                    //#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
                     this.$el.append(dayCell.addClass('day-filler').append($('<div class="sr-only">').text(gt('Empty table cell'))));
                 } else {
                     this.$el.append(

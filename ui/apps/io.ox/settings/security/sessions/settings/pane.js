@@ -200,6 +200,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
                     ),
                     $('<div class="secondary">').append(
                         $('<span>').text(this.model.get('location')),
+                        //#. text in the settings pane to indicate session that is currently active
                         isCurrent ? $('<span class="label label-success">').text(gt('Now active')) : $('<span>').text(lastActive)
                     )
                 ),

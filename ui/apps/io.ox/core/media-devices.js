@@ -19,7 +19,7 @@ define('io.ox/core/media-devices', [
 
     var MESSAGES = {
         'unavailable': gt('There are currently no compatible media devices available on your device.'),
-        'permission-denied': gt('Access to your media devices is denied. Please refer your browser help pages how to reset authorization again.')
+        'permission-denied': gt('Access to your media devices has been denied. Please refer to your browser help pages for how to reset authorization.')
     };
 
     var isDeprecatedAPI = !navigator.mediaDevices,
@@ -38,6 +38,8 @@ define('io.ox/core/media-devices', [
         if (device.kind === 'audioinput') return gt('Microphone %1$s', typeCounter[device.kind]);
         //#. %1$s a natural number
         if (device.kind === 'videoinput') return gt('Camera %1$s', typeCounter[device.kind]);
+        //#. %1$s a natural number
+        //#. This text is used to describe an unknown device (camera / microphone etc)
         return gt('Unknown %1$s', typeCounter[device.kind]);
     }
 

@@ -161,14 +161,15 @@ define('io.ox/backbone/views/edit-picture', [
                             max = $slider.attr('max'),
                             step = $slider.attr('step'),
                             current = $body.croppie('get').zoom,
-                            zoom = ((current - min) * 100 / (max - min));
+                            zoom = ((current - min) * 100 / (max - min)),
+                            //#. image zoom, %1$d is the zoomlevel of the previewpicture in percent
+                            text = zoom ? gt.format('Zoom: %1$d%', zoom.toFixed(0)) :
+                                //#. noun. label for the zoomslider in case the zoom is undefined or 0
+                                gt('Zoom');
                         // remove 'blind spot' at range end (last step would exceed max)
                         $slider.attr('max', max = max - ((max - min) % step));
                         // maps absolute numbers to percental values
-                        $body.find('#zoom').text(gt.format(
-                            gt.npgettext('image zoom', 'Zoom', 'Zoom: %1$d%', !zoom),
-                            zoom.toFixed(0)
-                        ));
+                        $body.find('#zoom').text(text);
                     }
                 },
                 'empty-state': function () {

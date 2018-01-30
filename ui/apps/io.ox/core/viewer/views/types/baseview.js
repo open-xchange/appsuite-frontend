@@ -83,7 +83,8 @@ define('io.ox/core/viewer/views/types/baseview', [
             notificationNode.css('white-space', 'pre');
             var fileSize = Util.renderItemSize(this.model);
             fileSize = fileSize.indexOf('-') === 0 ? '' : ' (' + fileSize + ')';
-            var downloadButton = $('<button type="button" class="btn btn-primary btn-file">').text(gt('Download%1$s', fileSize)).attr('aria-label', gt('Downlad')).attr('id', 'downloadviewerfile');
+            //#. %1$s is the file size "Download 2mb" for example
+            var downloadButton = $('<button type="button" class="btn btn-primary btn-file">').text(gt('Download %1$s', fileSize)).attr('aria-label', gt('Downlad')).attr('id', 'downloadviewerfile');
             notificationNode.append(downloadButton);
             var self = this;
             downloadButton.on('mouseup keydown', function () {
