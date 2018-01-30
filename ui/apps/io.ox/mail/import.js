@@ -14,11 +14,12 @@
 define('io.ox/mail/import', [
     'io.ox/core/extensions',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
     'io.ox/core/tk/upload',
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, api, upload, dropzone, notifications, gt) {
+], function (ext, api, accountAPI, upload, dropzone, notifications, gt) {
 
     'use strict';
 
@@ -58,11 +59,15 @@ define('io.ox/mail/import', [
                     type: 'importEML'
                 })
             };
-
-            var zone = new dropzone.Inplace({
-                caption: gt('Drop EML file here for import'),
-                filter: /\.eml$/i
-            });
+            var Zone = dropzone.Inplace.extend({
+                    isSupported: function () {
+                        return !accountAPI.isUnifiedFolder(app.folder.get());
+                    }
+                }),
+                zone = new Zone({
+                    caption: gt('Drop EML file here for import'),
+                    filter: /\.eml$/i
+                });
 
             zone.on({
                 'show': function () {
