@@ -164,14 +164,13 @@ define('io.ox/core/main/appcontrol', [
             $('#io-ox-appcontrol').show();
 
             var banner = $('#io-ox-appcontrol');
-            var taskbar, logo, find; //search
+            var taskbar, logo, search;
             var launchers = window.launchers = new LaunchersView({ collection: ox.ui.apps.where({ hasLauncher: true }) });
             var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
             banner.append(
                 launchers.render().$el,
                 quicklaunchers.render().$el,
-                //search = $('<div id="io-ox-topsearch">'),
-                find = $('<div id="io-ox-topfind">'),
+                search = $('<div id="io-ox-topsearch">'),
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')
                 ),
@@ -183,8 +182,7 @@ define('io.ox/core/main/appcontrol', [
             );
 
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
-            //ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
-            ext.point('io.ox/core/appcontrol/find').invoke('draw', find);
+            ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
             ext.point('io.ox/core/appcontrol/logo').invoke('draw', logo);
 
             initRefreshAnimation();
@@ -210,49 +208,8 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    // ext.point('io.ox/core/appcontrol/search').extend({
-    //     id: 'search',
-    //     index: 10000,
-    //     draw: function () {
-    //         var self = this;
-    //         // on mobile via ext 'io.ox/core/appcontrol/right'
-    //         if (_.device('smartphone')) return;
-
-    //         var node = $('<div class="search_inner" style="display:none">').append(
-    //             $('<div class="input-group hidden-xs">').append(
-    //                 $('<input type="text" class="form-control">').attr('placeholder', gt('Search')),
-    //                 $('<span class="input-group-btn">').append(
-    //                     $('<button type="button" class="btn btn-link">').append(
-    //                         $('<i class="fa fa-search" aria-hidden="true">').attr('title', gt('Search'))
-    //                     )
-    //                 )
-    //             )
-    //         );
-
-    //         var resizeSearchBox = function () {
-    //             _.defer(function () {
-    //                 var launcherWidth = $('#io-ox-launcher').width();
-    //                 var quickLaunchWidth = $('#io-ox-quicklaunch').width();
-    //                 var sidePanelWidth = $('.window-sidepanel:visible').width();
-    //                 var leftsideWidth = $('.leftside:visible').width();
-    //                 var leftMargin = sidePanelWidth - launcherWidth - quickLaunchWidth;
-    //                 if (sidePanelWidth && leftMargin > 0) {
-    //                     $(self).css('marginLeft', leftMargin);
-    //                     node.css('max-width', leftsideWidth);
-    //                 }
-    //                 node.show();
-    //             });
-    //         };
-
-    //         this.append(node);
-
-    //         $(document).on('resize', resizeSearchBox);
-    //         $(window).on('resize', resizeSearchBox);
-    //     }
-    // });
-
-    ext.point('io.ox/core/appcontrol/find').extend({
-        id: 'find',
+    ext.point('io.ox/core/appcontrol/search').extend({
+        id: 'search',
         index: 10000,
         draw: function () {
             // on mobile via ext 'io.ox/core/appcontrol/right'
