@@ -287,11 +287,14 @@ define('io.ox/core/main/appcontrol', [
                     var leftsideWidth = $('.leftside:visible').width();
                     var leftMargin = sidePanelWidth - launcherWidth - quickLaunchWidth;
                     if (sidePanelWidth && leftMargin > 0) {
-                        //leftsideWidth = leftsideWidth || 200;
+                        // min width
+                        leftsideWidth = leftsideWidth || 200;
+                        // handle overflow (f.e. mail horizontal view)
+                        var width = self.width() < leftsideWidth ? '100%' : leftsideWidth;
                         $(self).css('marginLeft', leftMargin)
                             .find('.io-ox-find').css({
-                                'min-width': leftsideWidth || 200,
-                                'max-width': leftsideWidth || 200
+                                'min-width': width,
+                                'max-width': width
                             });
                         // hacky
                         if (leftsideWidth) {
