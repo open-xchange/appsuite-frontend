@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-01-17 14:18+0100\n"
+"PO-Revision-Date: 2018-01-30 11:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -23,7 +23,7 @@ msgid "The dialog contains invalid data"
 msgstr "Der Dialog enthält ungültige Daten"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
-#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Der Server ist nicht erreichbar"
 
@@ -270,8 +270,9 @@ msgstr "Online-Hilfe"
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
+#: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
@@ -294,12 +295,13 @@ msgstr "Löschen"
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/main.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/main.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -421,13 +423,11 @@ msgid "Currently there are no compatible webcams available on your device."
 msgstr "Derzeit sind keine kompatiblen Webcams auf Ihrem Gerät verfügbar."
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
-#, fuzzy
 msgid "Take a photo"
 msgstr "Ein Foto machen"
 
 #. label for a list of webcam devices currently available
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
-#, fuzzy
 msgid "Webcam"
 msgstr "Webcam"
 
@@ -482,11 +482,10 @@ msgid "Edit image"
 msgstr "Bild bearbeiten"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#, fuzzy
 msgctxt "image zoom"
 msgid "Zoom"
 msgid_plural "Zoom: %1$d%"
-msgstr[0] "Vergrößern"
+msgstr[0] ""
 msgstr[1] ""
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
@@ -495,7 +494,6 @@ msgid "Upload image"
 msgstr "Bild hochladen"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#, fuzzy
 msgid "Take photo"
 msgstr "Foto machen"
 
@@ -507,7 +505,7 @@ msgstr "Bild drehen"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
-#: apps/io.ox/settings/sessions/settings/pane.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
 
@@ -546,11 +544,11 @@ msgstr "Schließen"
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/import/import.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/main/restore.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/print.js apps/io.ox/core/relogin.js
-#: apps/io.ox/core/settings/user.js apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#: apps/io.ox/core/tk/filestorageUtil.js apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -705,9 +703,8 @@ msgstr "Vor"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/main/appcontrol.js apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1031,12 +1028,11 @@ msgstr "Termin erstellen"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/settings/user.js
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -1062,8 +1058,8 @@ msgstr "Anlegen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/contacts/edit/view-form.js apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
@@ -1232,6 +1228,10 @@ msgid "Find a free time"
 msgstr "Verfügbaren Zeitraum finden"
 
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+msgid "Edit Appointment"
+msgstr "Termin bearbeiten"
+
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 msgid "Description has been copied"
 msgstr "Die Beschreibung wurde kopiert"
 
@@ -1332,8 +1332,8 @@ msgid "How does this work?"
 msgstr "Wie funktioniert das?"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/help/center.js
-#: module:io.ox/help
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/help/center.js module:io.ox/help
 msgid "Help"
 msgstr "Hilfe"
 
@@ -1431,8 +1431,8 @@ msgstr "Nächster Tag"
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
 #: module:io.ox/contacts apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
@@ -1655,7 +1655,7 @@ msgstr "Heute"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1772,7 +1772,8 @@ msgstr[0] "%1$d Tag"
 msgstr[1] "%1$d Tage"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
@@ -1920,9 +1921,9 @@ msgstr "Termin löschen"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Ansicht"
 
@@ -2372,8 +2373,9 @@ msgstr "Kontakt wurde verschoben"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -2421,8 +2423,8 @@ msgstr "Zu Termin einladen"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Add to portal"
 msgstr "Zum Portal hinzufügen"
 
@@ -2606,6 +2608,14 @@ msgid "Create contact"
 msgstr "Kontakt anlegen"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/settings/pane.js apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/core/settings/pane.js
+#: apps/plugins/portal/userSettings/register.js
+msgid "My contact data"
+msgstr "Meine Kontaktdaten"
+
+#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
 msgstr "Kontakt bearbeiten"
@@ -2679,7 +2689,6 @@ msgstr ""
 "%5$s"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Alle Felder anzeigen"
 
@@ -3202,14 +3211,6 @@ msgstr "Im globalen Adressbuch starten"
 msgid "Link postal addresses with map service"
 msgstr "Postanschriften mit Kartendienst verknüpfen"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/main.js apps/io.ox/core/settings/pane.js
-#: apps/io.ox/core/settings/user.js
-#: apps/plugins/portal/userSettings/register.js
-msgid "My contact data"
-msgstr "Meine Kontaktdaten"
-
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 msgid "Invite"
 msgstr "Einladen"
@@ -3554,8 +3555,9 @@ msgstr "Premium-Funktionen schließen"
 msgid "Try now!"
 msgstr "Jetzt testen!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
-#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Erneut versuchen"
@@ -3580,36 +3582,6 @@ msgstr "Es gibt ungesicherte Änderungen."
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Applikations-Werkzeugleiste"
-
-#. Title of the browser window
-#. %1$s is the name of the page, e.g. OX App Suite
-#. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgctxt "window title"
-msgid "%1$s %2$s"
-msgstr "%1$s %2$s"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Start search"
-msgstr "Suche starten"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Cancel search"
-msgstr "Suche abbrechen"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Auf der Seite mit den Suchergebnissen werden alle aktiven Suchfilter "
-"angezeigt, um sie schnell und einfach anpassen oder entfernen zu können. "
-"Unterhalb dieser allgemeinen Suchfilter werden erweiterte Suchfilter "
-"angezeigt. Um die Suche einzugrenzen, passen Sie bitte die aktiven "
-"Suchfilter an oder fügen Sie neue hinzu."
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
@@ -3875,7 +3847,8 @@ msgstr "Ordner umbenennen"
 #: apps/io.ox/core/folder/contextmenu.js
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/actions/rename.js
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js
 msgid "Rename"
 msgstr "Umbenennen"
 
@@ -4208,69 +4181,102 @@ msgstr "Der Datenimport ist fehlgeschlagen."
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Daten nur teilweise importiert (%1$s von %2$s Einträgen)"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Unsaved documents will be lost. Do you want to sign out now?"
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Cancel search"
+msgstr "Suche abbrechen"
+
+#. search feature help text for screenreaders
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid ""
+"Search results page lists all active facets to allow them to be easly "
+"adjustable/removable. Below theses common facets additonal advanced facets "
+"are listed. To narrow down search result please adjust active facets or add "
+"new ones"
 msgstr ""
-"Ungesicherte Dokumente werden verloren gehen. Wollen Sie sich nun abmelden?"
+"Auf der Seite mit den Suchergebnissen werden alle aktiven Suchfilter "
+"angezeigt, um sie schnell und einfach anpassen oder entfernen zu können. "
+"Unterhalb dieser allgemeinen Suchfilter werden erweiterte Suchfilter "
+"angezeigt. Um die Suche einzugrenzen, passen Sie bitte die aktiven "
+"Suchfilter an oder fügen Sie neue hinzu."
 
-#. folder permissions - Is Admin? YES
-#: apps/io.ox/core/main.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
-#: module:io.ox/files
-msgid "Yes"
-msgstr "Ja"
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub
+msgid "Refresh"
+msgstr "Aktualisieren"
 
-#. folder permissions - Is Admin? NO
-#: apps/io.ox/core/main.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
-msgid "No"
-msgstr "Nein"
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Currently refreshing"
+msgstr "Es wird aktualisiert"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Offline"
-msgstr "Offline"
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+msgid "You will be automatically signed out in %1$d second"
+msgid_plural "You will be automatically signed out in %1$d seconds"
+msgstr[0] "Sie werden in %1$d Sekunde automatisch abgemeldet"
+msgstr[1] "Sie werden in %1$d Sekunden automatisch abgemeldet"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-msgstr ""
-"Programmstarter-Aufklappmenü. Durch Drücken der Eingabetaste öffnen Sie das "
-"Aufklappmenü."
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
+msgid "Automatic sign out"
+msgstr "Automatisch abmelden"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Apps"
-msgstr "Apps"
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+msgid "Sign out now"
+msgstr "Jetzt abmelden"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Sind Sie sich sicher?"
+
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr "Ein erzwungenes Abmelden kann zu Datenverlust führen."
+
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+msgid "Force sign out"
+msgstr "Abmelden erzwingen"
+
+#: apps/io.ox/core/main/autologout.js module:io.ox/core
+msgid "Logout failed."
+msgstr "Abmelden fehlgeschlagen."
+
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 #: apps/io.ox/search/view-template.js
+#: apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E-Mail"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
 msgstr "Adressbuch"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
 msgstr "Planung"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/search/view-template.js
-#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
+#: module:io.ox/tasks
 msgctxt "app"
 msgid "Tasks"
 msgstr "Aufgaben"
 
 #. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
 #: module:io.ox/settings apps/io.ox/search/view-template.js
@@ -4278,125 +4284,39 @@ msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/i18n.js module:io.ox/core
+#: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
 msgstr "Konversationen"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-msgid "Refresh"
-msgstr "Aktualisieren"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Currently refreshing"
-msgstr "Es wird aktualisiert"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "You will be automatically signed out in %1$d second"
-msgid_plural "You will be automatically signed out in %1$d seconds"
-msgstr[0] "Sie werden in %1$d Sekunde automatisch abgemeldet"
-msgstr[1] "Sie werden in %1$d Sekunden automatisch abgemeldet"
-
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/settings/pane.js
-msgid "Automatic sign out"
-msgstr "Automatisch abmelden"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Sign out now"
-msgstr "Jetzt abmelden"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Are you sure?"
-msgstr "Sind Sie sich sicher?"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Forcing logout may cause data loss."
-msgstr "Ein erzwungenes Abmelden kann zu Datenverlust führen."
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Force sign out"
-msgstr "Abmelden erzwingen"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Logout failed."
-msgstr "Abmelden fehlgeschlagen."
-
-#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Close for %1$s"
-msgstr "%1$s schließen"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "(current app)"
-msgstr "(aktuelle App)"
-
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
-msgid "Settings"
-msgstr "Einstellungen"
-
-#. starts the client onboarding wizard that helps users
-#. to configure their devices to access/sync appsuites
-#. data (f.e. install ox mail app)
-#: apps/io.ox/core/main.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
-msgid "Connect your Device"
-msgstr "Ihr Gerät verbinden"
-
-#. starts the client onboarding wizard that helps users
-#. to configure their devices to access/sync appsuites
-#. data (f.e. install ox mail app)
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Connect this Device"
-msgstr "Dieses Gerät verbinden"
-
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/settings/pane.js
-#: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
-msgstr "Passwort ändern"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "About"
-msgstr "Über"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-#: apps/io.ox/settings/sessions/settings/pane.js
-msgid "Sign out"
-msgstr "Abmelden"
-
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"You forgot to sign out last time. Always use the sign-out button when you "
-"finished your work."
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
-"Sie haben letztes Mal vergessen, sich abzumelden. Verwenden Sie immer die "
-"Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
+"Ungesicherte Dokumente werden verloren gehen. Wollen Sie sich nun abmelden?"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
-msgstr ""
-"Wussten Sie, dass Sie OX App Suite mitnehmen können? Klicken Sie einfach auf "
-"dieses Symbol und wählen Sie im Menü 'Ihr Gerät verbinden'."
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
+#: module:io.ox/files
+msgid "Yes"
+msgstr "Ja"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Signed in as:"
-msgstr "Angemeldet als:"
+#. folder permissions - Is Admin? NO
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+msgid "No"
+msgstr "Nein"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
-msgid "Your session is expired"
-msgstr "Ihre Sitzung ist abgelaufen"
+#: apps/io.ox/core/main/offline.js module:io.ox/core
+msgid "Offline"
+msgstr "Offline"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
-msgid "Please sign in again to continue"
-msgstr "Zum Fortfahren bitte erneut anmelden"
-
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main/restore.js module:io.ox/core
 msgid "Restore applications"
 msgstr "Applikationen wiederherstellen"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main/restore.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -4405,21 +4325,61 @@ msgstr ""
 "nicht wiederhergestellt werden, entfernen Sie einfach den "
 "Wiederherstellungspunkt. "
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail
+#: apps/io.ox/core/main/restore.js module:io.ox/core
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Continue"
 msgstr "Fortfahren"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main/restore.js module:io.ox/core
 msgid "Remove restore point: \"%1$s\""
 msgstr "Wiederherstellungspunkt entfernen: \"%1$s\""
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "Die gewünschte Anwendung ist im Moment nicht verfügbar."
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/upsell/register.js module:plugins/portal
+msgid "Upgrade your account"
+msgstr "Account-Upgrade"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/settings/main.js
+msgid "Settings"
+msgstr "Einstellungen"
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
+msgid "Connect your Device"
+msgstr "Ihr Gerät verbinden"
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+msgid "Connect this Device"
+msgstr "Dieses Gerät verbinden"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+msgid "About"
+msgstr "Über"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Sign out"
+msgstr "Abmelden"
+
 #. %1$s is the filename
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main/warning.js module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -4649,10 +4609,11 @@ msgstr "Anhänge wurden gespeichert"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/notes/toolbar.js module:io.ox/notes
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#: apps/plugins/portal/updater/register.js module:plugins/portal
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
+#: module:plugins/portal
 msgid "Download"
 msgstr "Download"
 
@@ -4680,6 +4641,14 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "Objekt kann nicht gedruckt werden"
 msgstr[1] "Objekte können nicht gedruckt werden"
+
+#: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Your session is expired"
+msgstr "Ihre Sitzung ist abgelaufen"
+
+#: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Please sign in again to continue"
+msgstr "Zum Fortfahren bitte erneut anmelden"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
@@ -4808,6 +4777,21 @@ msgstr "Keine langsamen Anfragen"
 msgid "No lost requests"
 msgstr "Keine verlorenen Anfragen"
 
+#. object permissions - read
+#. object permissions - edit/modify
+#. object permissions - delete
+#. Auth type. None. No authentication
+#. Connection security. None.
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
+#: module:io.ox/mail apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "None"
+msgstr "Keine"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -4837,21 +4821,6 @@ msgstr "15 Minuten"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 Minuten"
-
-#. object permissions - read
-#. object permissions - edit/modify
-#. object permissions - delete
-#. Auth type. None. No authentication
-#. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "None"
-msgstr "Keine"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
@@ -4885,6 +4854,18 @@ msgstr "Aktualisierungsintervall"
 msgid "Default app after sign in"
 msgstr "Standard-App nach dem Anmelden"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch 1"
+msgstr "Schnellstart 1"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch 2"
+msgstr "Schnellstart 2"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch 3"
+msgstr "Schnellstart 3"
+
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
@@ -4913,10 +4894,6 @@ msgstr "Eingabehilfen verwenden"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "High contrast theme"
 msgstr "Hoher Kontrast"
-
-#: apps/io.ox/core/settings/user.js module:io.ox/contacts
-msgid "Couldn't load your contact data."
-msgstr "Ihre Kontaktdaten konnten nicht geladen werden"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -5486,7 +5463,7 @@ msgstr "Beschreibungstext"
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 msgid "Edit description"
 msgstr "Beschreibung bearbeiten"
 
@@ -5671,8 +5648,9 @@ msgid "Print as PDF"
 msgstr "Als PDF drucken"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: module:io.ox/files apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Share"
 msgstr "Teilen"
 
@@ -5682,8 +5660,8 @@ msgstr "Diese Datei freigeben"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Per E-Mail versenden"
 
@@ -5729,7 +5707,6 @@ msgid "Downlad"
 msgstr "Herunterladen"
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
-#, fuzzy
 msgid "There is no preview for this file type."
 msgstr "Für diesen Dateityp ist keine Voransicht möglich."
 
@@ -6004,11 +5981,15 @@ msgstr ""
 "Jeder erhält denselben Link. Der Link ermöglicht nur das Anzeigen der Datei "
 "oder des Ordners."
 
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js
 msgid "Lock"
 msgstr "Sperren"
 
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Sperre aufheben"
 
@@ -6110,7 +6091,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 msgid "Save as PDF"
 msgstr "Als PDF speichern"
 
@@ -6194,6 +6175,30 @@ msgstr "Zugriff widerrufen"
 #: apps/io.ox/files/detail/main.js module:io.ox/files
 msgid "File Details"
 msgstr "Datei-Infos"
+
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+msgid "Share selected objects"
+msgstr "Markierte Objekte freigeben"
+
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+msgid "Share selected folder"
+msgid_plural "Share selected folders"
+msgstr[0] "Markierten Ordner freigeben"
+msgstr[1] "Markierte Ordner freigeben"
+
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+msgid "Share selected file"
+msgid_plural "Share selected files"
+msgstr[0] "Markierte Datei freigeben"
+msgstr[1] "Markierte Dateien freigeben"
+
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+msgid "Share current folder"
+msgstr "Aktuellen Ordner freigeben"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -6650,26 +6655,6 @@ msgstr "Passwort eingeben"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "New file"
 msgstr "Neue Datei"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected objects"
-msgstr "Markierte Objekte freigeben"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected folder"
-msgid_plural "Share selected folders"
-msgstr[0] "Markierten Ordner freigeben"
-msgstr[1] "Markierte Ordner freigeben"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected file"
-msgid_plural "Share selected files"
-msgstr[0] "Markierte Datei freigeben"
-msgstr[1] "Markierte Dateien freigeben"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share current folder"
-msgstr "Aktuellen Ordner freigeben"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Add to Favorites"
@@ -9106,10 +9091,6 @@ msgid "Open/close all messages"
 msgstr "Alle Nachrichten öffnen/schließen"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "Toggle viewport size"
-msgstr "Viewport-Größe umschalten"
-
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Close all messages"
 msgstr "Alle Nachrichten schließen"
 
@@ -9802,81 +9783,81 @@ msgstr ""
 "Account zugreifen können."
 
 #: apps/io.ox/settings/main.js module:io.ox/core
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Security"
 msgstr "Sicherheit"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
+msgid "Active clients"
+msgstr "Aktive Clients"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Active clients"
-msgstr "Aktive Clients"
-
 #. Context: Session Management. Active session on platform/os.
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Mac"
 msgstr "Mac"
 
 #. Context: Session Management. Active session on platform/os.
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Windows"
 msgstr "Windows"
 
 #. Context: Session Management. Active session on platform/os.
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
 
 #. Context: Session Management. Active session on platform/os.
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr "iOS"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Firefox"
 msgstr "Firefox"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Chrome"
 msgstr "Chrome"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Safari"
 msgstr "Safari"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Internet Explorer"
 msgstr "Internet Explorer"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Edge"
 msgstr "Edge"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
 msgstr "Exchange Active Sync"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Unknown device"
 msgstr "Unbekanntes Gerät"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Now active"
 msgstr "ist jetzt aktiv"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from that device?"
 msgstr "Möchten Sie sich wirklich von diesem Gerät abmelden?"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "You are currently signed in with the following devices"
 msgstr "Sie sind derzeit mit folgenden Geräten angemeldet"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Wollen Sie sich wirklich von allen Clients mit Ausnahme des aktuellen "
@@ -10763,11 +10744,6 @@ msgstr "Glockenspiel"
 msgid "New mail"
 msgstr "Neue E-Mail"
 
-#. %1$d number of notifications
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "%1$d unread mails"
-msgstr "%1$d ungelesene E-Mails"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New mails"
 msgstr "Neue E-Mails"
@@ -11257,10 +11233,6 @@ msgstr ""
 "Installieren des Updaters. Der Updater informiert Sie automatisch über neue "
 "Updates. Sie können die Updates aus dem Updater heraus herunterladen."
 
-#: apps/plugins/portal/upsell/register.js module:plugins/portal
-msgid "Upgrade your account"
-msgstr "Account-Upgrade"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Passwortstärke: zu kurz"
@@ -11546,6 +11518,53 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgctxt "window title"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgid "Start search"
+#~ msgstr "Suche starten"
+
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr ""
+#~ "Programmstarter-Aufklappmenü. Durch Drücken der Eingabetaste öffnen Sie "
+#~ "das Aufklappmenü."
+
+#~ msgid "Apps"
+#~ msgstr "Apps"
+
+#~ msgid "Close for %1$s"
+#~ msgstr "%1$s schließen"
+
+#~ msgid "(current app)"
+#~ msgstr "(aktuelle App)"
+
+#~ msgid ""
+#~ "You forgot to sign out last time. Always use the sign-out button when you "
+#~ "finished your work."
+#~ msgstr ""
+#~ "Sie haben letztes Mal vergessen, sich abzumelden. Verwenden Sie immer die "
+#~ "Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Wussten Sie, dass Sie OX App Suite mitnehmen können? Klicken Sie einfach "
+#~ "auf dieses Symbol und wählen Sie im Menü 'Ihr Gerät verbinden'."
+
+#~ msgid "Signed in as:"
+#~ msgstr "Angemeldet als:"
+
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Ihre Kontaktdaten konnten nicht geladen werden"
+
+#~ msgid "Toggle viewport size"
+#~ msgstr "Viewport-Größe umschalten"
+
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d ungelesene E-Mails"
 
 #~ msgid "Edit picture"
 #~ msgstr "Bild bearbeiten"
@@ -13354,9 +13373,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Ecuador"
 #~ msgstr "Ecuador"
-
-#~ msgid "Edit Appointment"
-#~ msgstr "Termin bearbeiten"
 
 #~ msgid "Edit Mode"
 #~ msgstr "Bearbeitungsmodus"
