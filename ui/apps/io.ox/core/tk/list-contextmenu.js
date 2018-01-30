@@ -63,15 +63,23 @@ define('io.ox/core/tk/list-contextmenu', [
         return ox.manifests.loadPluginsFor(this.contextMenuRef)
         .then(renderItems.bind(this, contextmenu))
         .then(function toggleDropdown(renderedExtensions) {
-            if (renderedExtensions.length === 0) return;
+            if (renderedExtensions.length === 0 || this.contextMenuState === 'aborted') return this.$dropdownMenu.empty();
 
             // a11y: The role menu should only be set if there are menuitems in it
             this.$dropdownMenu.attr('role', 'menu');
             this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' });
             this.dropdown.$toggle = target;
-            this.$dropdownMenu.idle();
             this.$dropdownToggle.dropdown('toggle');
+        }.bind(this))
+        .always(function () {
+            this.$dropdownMenu.idle();
+            delete this.contextMenuState;
+            this.stopListening(ox.ui.apps, 'resume add', abortContextmenu);
         }.bind(this));
+    }
+
+    function abortContextmenu() {
+        this.contextMenuState = 'aborted';
     }
 
     var Contextmenu = {
@@ -97,6 +105,8 @@ define('io.ox/core/tk/list-contextmenu', [
             if (quitEarly) return;
 
             if (!this.dropdown) this.renderContextMenu();
+            this.contextMenuState = 'loading';
+            this.listenTo(ox.ui.apps, 'resume add', abortContextmenu);
             return $.when().then(populate.bind(this, target, left, top));
         },
 

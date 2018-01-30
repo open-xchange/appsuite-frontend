@@ -169,6 +169,7 @@ define([
                 ext.point('io.ox/test/contextmenu').disable('test');
                 return view.toggleContextMenu($('body')).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
+                    ext.point('io.ox/test/contextmenu').enable('test');
                 });
             });
 
@@ -195,6 +196,48 @@ define([
                     expect(baton.collection).to.have.length(1);
                     expect(baton.collection.at(0).get('id')).to.equal('testItem');
                     expect(baton.app).to.equal(view.app);
+                });
+            });
+        });
+
+        describe('app change during contextmenu population', function () {
+            let view;
+            beforeEach(function () {
+                view = new (Listview.extend(Contextmenu))({
+                    ref: 'io.ox/test',
+                    pagination: false,
+                    collection: new Backbone.Collection([{ id: 'testItem' }])
+                });
+                view.complete = true;
+                $('body').append(view.render().$el);
+                view.selection.select(0);
+            });
+            afterEach(function () {
+                view.remove();
+                let exts = ext.point('io.ox/test/contextmenu').all();
+                while (exts.length) exts.pop();
+                ext.point('io.ox/test/actions/test').all();
+                while (exts.length) exts.pop();
+            });
+
+            it('should not render the menu on app change', function () {
+                const testactionSpy = sinon.spy();
+                new actions.Action('io.ox/test/actions/test', {
+                    requires: function () {
+                        ox.ui.apps.trigger('resume', ox.ui.apps);
+                        testactionSpy();
+                        return true;
+                    },
+                    action: _.noop
+                });
+                ext.point('io.ox/test/contextmenu').extend({
+                    id: 'test',
+                    ref: 'io.ox/test/actions/test',
+                    label: 'testing'
+                });
+                return view.toggleContextMenu($('body')).then(function () {
+                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
+                    expect(testactionSpy.calledOnce).to.be.true;
                 });
             });
         });
