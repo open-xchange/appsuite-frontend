@@ -461,6 +461,12 @@ define('io.ox/mail/detail/view', [
                     return;
                 }
 
+                // don't apply height of 0 or undefined. mail is probably not loaded at all yet, just start the resizeloop again after the delay
+                if (!height) {
+                    if (!once) _.delay(resizeFrame, resizeLoop);
+                    return;
+                }
+
                 if (height === 0 && !once) {
                     // height 0 should(!) never happen, the dom node seems to be not rendered yet and
                     // calculation fails. Give it another try. Actually only an issue on FF
