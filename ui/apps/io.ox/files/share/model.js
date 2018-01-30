@@ -175,13 +175,11 @@ define('io.ox/files/share/model', [
         },
 
         validate: function (attr, options) {
-            // special case: user toggles password checkbox after he/she emptied the password field
-            _.delay(function () {
-                if (!this.get('secured') || this.get('password')) return;
-                // missing password
-                var error = gt('Please set password');
-                this.trigger('invalid', this, error, _.extend({}, options, { validationError: error }));
-            }.bind(this), 200);
+            // special case: bug 53466
+            if (options._event === 'change') return;
+            if (attr.secured === true && _.isEmpty(attr.password)) {
+                return gt('Please set password');
+            }
         }
     });
 

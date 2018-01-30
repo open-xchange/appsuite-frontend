@@ -90,7 +90,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
-            this.model.set(this.name, value, { validate: true });
+            this.model.set(this.name, value, { validate: true, _event: 'change' });
         },
         // paste doesn't trigger a change event
         onPaste: pasteHelper,
