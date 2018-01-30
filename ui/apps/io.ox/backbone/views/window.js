@@ -316,9 +316,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                         }),
                     floatingWindow.options.closable || model.get('closable') ? $('<button type="button" class="btn btn-link pull-right" data-action="close">').append('<i class="fa fa-times">')
                     .on('click', function (e) {
-                        if (model.get('nonFloating')) {
-                            model.quit();
-                            return;
+                        try {
+                            if (model.get('nonFloating')) {
+                                model.quit();
+                                return;
+                            }
+                        } catch (ex) {
+                            // model might have been removed (56913)
                         }
                         floatingWindow.close(e);
                     }) : ''

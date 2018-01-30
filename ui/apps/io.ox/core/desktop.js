@@ -1297,6 +1297,8 @@ define('io.ox/core/desktop', [
                     // floating windows have their own hiding mechanism
                     if (this.floating) return;
 
+                    if (!this.trigger) { return this; } // might have been removed (56913)
+
                     // detach if there are no iframes
                     this.trigger('beforehide');
                     // TODO: decide on whether or not to detach nodes
@@ -1337,6 +1339,8 @@ define('io.ox/core/desktop', [
 
                     // local self
                     var self = this;
+
+                    if (!this.trigger) { return this; } // might have been removed (56913)
 
                     if (quitOnClose && this.app !== null) {
                         this.trigger('beforequit');
