@@ -62,11 +62,17 @@ define('io.ox/tours/calendar', [
                 .title(gt('Using the reminder function'))
                 .content(gt('To not miss the appointment, use the reminder function.'))
                 .spotlight('[data-extension-id="alarm"]')
+                .on('next', function () {
+                    $('.add-participant:last')[0].scrollIntoView();
+                })
                 .end()
             .step()
                 .title(gt('Inviting other participants'))
                 .content(gt('To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.'))
                 .spotlight('.add-participant')
+                .on('next', function () {
+                    $('[data-extension-id="attachments_legend"]:last')[0].scrollIntoView();
+                })
                 .end()
             .step()
                 .title(gt('Adding attachments'))

@@ -29,7 +29,7 @@ define('io.ox/tours/contacts', [
         .step()
             .title(gt('Creating a new contact'))
             .content(gt('To create a new contact, click on New > Add contact in the toolbar.'))
-            .spotlight('.classic-toolbar .io-ox-action-link:first')
+            .spotlight('.classic-toolbar [data-ref="io.ox/contacts/dropdown/new"]')
             .end()
         .step()
             .title(gt('Navigation bar'))

@@ -37,10 +37,6 @@ define('io.ox/tours/tasks', [
                     var app = edit.getApp();
                     createApp = app;
                     return $.when(app, app.launch());
-                }).then(function (app) {
-                    return app.create({
-                        folder_id: app.folder.get()
-                    });
                 });
             })
             .end()
@@ -72,11 +68,17 @@ define('io.ox/tours/tasks', [
             .title(gt('Tracking the editing status'))
             .content(gt('To track the editing status, enter the current progress.'))
             .spotlight('[data-extension-id="status"]')
+            .on('next', function () {
+                $('.add-participant.task-participant-input-field:last')[0].scrollIntoView();
+            })
             .end()
         .step()
             .title(gt('Inviting other participants'))
             .content(gt('To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task.'))
             .spotlight('.add-participant.task-participant-input-field')
+            .on('next', function () {
+                $('.expand-details-link')[0].scrollIntoView();
+            })
             .end()
         .step()
             .title(gt('Entering billing information'))

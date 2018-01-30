@@ -228,22 +228,6 @@ define('io.ox/tours/files', [
                 .hotspot('a[data-action="add-storage-account"]', { position: 'right' })
                 .on('close', cleanup)
                 .end()
-            .step()
-                .title(gt('Restart Guided Tour'))
-                .content(gt('Hint: you can always restart guided tours, any time you need them, from the system menu.'))
-                .on('before:show', function () {
-                    if ($('.topbar-settings-dropdown:visible').length === 0) {
-                        $('#io-ox-topbar-dropdown-icon').addClass('open');
-                    }
-                })
-                .on('done close', function () {
-                    $('#io-ox-topbar-dropdown-icon').removeClass('open');
-                    cleanup();
-                })
-                .spotlight('#io-ox-topbar-dropdown-icon [data-action="guided-tour"]', { position: 'left' })
-                .hotspot('#io-ox-topbar-dropdown-icon [data-action="guided-tour"]', { position: 'left' })
-
-                .end()
             .on('stop', function () {
                 if (createApp) {
                     //prevent app from asking about changed content
