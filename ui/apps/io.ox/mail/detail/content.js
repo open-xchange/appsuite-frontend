@@ -463,6 +463,13 @@ define('io.ox/mail/detail/content', [
             process: function (baton) {
                 baton.data = baton.data.replace(/^\s*(<br\s*\/?>\s*)+/g, '');
             }
+        },
+        {
+            id: 'white-space',
+            process: function (baton) {
+                // maintain spaces after opening tags as well as subsequent spaces (see bug 56851)
+                baton.data = baton.data.replace(/((>) |( ) )/g, '$1&nbsp;');
+            }
         }
     );
 
