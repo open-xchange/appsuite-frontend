@@ -22,15 +22,11 @@ define('io.ox/core/tk/list-contextmenu', [
     'use strict';
 
     function renderItems() {
-        var models = this.selection.get().map(function (cid) {
-                return this.collection.get(cid);
-            }.bind(this)),
-            list = models.map(function (m) { return m.toJSON(); }),
+        var list = this.selection.resolve(),
             baton = new ext.Baton({
                 data: list.length === 1 ? list[0] : list,
-                models: models,
                 collection: this.collection,
-                selection: list,
+                selection: this.selection.get(),
                 app: this.app
             }),
             listView = this;
