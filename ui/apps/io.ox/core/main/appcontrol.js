@@ -209,103 +209,138 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol/search').extend({
-        id: 'search',
+        id: 'default',
+        index: 100,
+        draw: function () {
+            // on mobile via ext 'io.ox/core/appcontrol/right'
+            if (!capabilities.has('search') || _.device('smartphone')) return;
+
+            // append hidden node to container node
+            ox.ui.apps.on('launch', function append(app) {
+                if (!app.isFindSupported()) return;
+
+                var label = gt('Search'),
+                    id = _.uniqueId('search-field'),
+                    guid = _.uniqueId('form-control-description-');
+
+                this.append(
+                    $('<div class="io-ox-find" role="search" style="display:none">').attr('data-app', app.id).append(
+                        $('<div class="sr-only arialive" role="status" aria-live="polite">'),
+                        // box
+                        $('<form class="search-box">').append(
+                            // group
+                            $('<div class="form-group">').append(
+                                $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
+                                    'id': id,
+                                    'placeholder': label + '...',
+                                    'aria-describedby': guid
+                                }),
+                                // search
+                                $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options">')
+                                    .attr({
+                                        'data-original-title': gt('Options'),
+                                        'aria-label': gt('Options')
+                                    }).append($('<i class="fa fa-caret-down" aria-hidden="true">'))
+                                    .tooltip(),
+                                $('<form class="dropdown" autocomplete="off">'),
+                                // cancel/reset
+                                $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                    .attr({
+                                        'data-original-title': gt('Cancel search'),
+                                        'aria-label': gt('Cancel search')
+                                    }).append($('<i class="fa fa-times" aria-hidden="true">'))
+                                    .tooltip(),
+                                // sr label
+                                $('<label class="sr-only">')
+                                    .attr('for', id)
+                                    .text(label),
+                                // sr description
+                                $('<p class="sr-only sr-description">').attr({ id: guid })
+                                    .text(
+                                        //#. search feature help text for screenreaders
+                                        gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                    )
+                            )
+                        )
+                    )
+                );
+                app.initFind();
+            }.bind(this));
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/search').extend({
+        id: 'resize',
         index: 10000,
         draw: function () {
             // on mobile via ext 'io.ox/core/appcontrol/right'
             if (!capabilities.has('search') || _.device('smartphone')) return;
-            var self = this;
+            var container = this,
+                MINWIDTH = 250,
+                MAXWIDTH = _.device('desktop') ? 750 : 550;
 
-            ox.ui.apps.on('launch', function (app) {
-                var label = gt('Search'),
-                    id =  _.uniqueId('search-field'),
-                    guid =  _.uniqueId('form-control-description-');
-
-                var node = $('<div class="io-ox-find" role="search" style="display:none">').append(
-                    $('<div class="sr-only arialive" role="status" aria-live="polite">'),
-                    // box
-                    $('<form class="search-box">').append(
-                        // group
-                        $('<div class="form-group">').append(
-                            $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
-                                'id': id,
-                                'placeholder': label + '...',
-                                'aria-describedby': guid
-                            }),
-                            // search
-                            $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options">')
-                                .attr({
-                                    'data-original-title': gt('Options'),
-                                    'aria-label': gt('Options')
-                                }).append($('<i class="fa fa-caret-down" aria-hidden="true">'))
-                                .tooltip(),
-                            $('<form class="dropdown" autocomplete="off">'),
-                            // cancel/reset
-                            $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-                                .attr({
-                                    'data-original-title': gt('Cancel search'),
-                                    'aria-label': gt('Cancel search')
-                                }).append($('<i class="fa fa-times" aria-hidden="true">'))
-                                .tooltip(),
-                            // sr label
-                            $('<label class="sr-only">')
-                                .attr('for', id)
-                                .text(label),
-                            // sr description
-                            $('<p class="sr-only sr-description">').attr({ id: guid })
-                                .text(
-                                    //#. search feature help text for screenreaders
-                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-                                )
-                        )
-                    )
-                );
-                if (app.isFindSupported()) {
-                    this.append(node.clone().attr('data-app', app.id));
-                    app.initFind();
-                }
-                show(app);
-            }.bind(this));
-
-            ox.ui.apps.on('resume', show);
-            function show(app) {
-                if (app.get('floating')) return;
-                if (!$(self).hasClass('aligned')) return;
-                self.children().css('display', 'none').end()
-                    .find('[data-app="' + app.id + '"]').css('display', 'block');
+            // hide inactive
+            function hidePaused() {
+                var app = ox.ui.App.getCurrentApp();
+                container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
             }
 
-            var win = {};
-            ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
+            function setMargin() {
+                // container left (folder tree yes/no)
+                var launcherWidth = $('#io-ox-launcher').width(),
+                    quickLaunchWidth = $('#io-ox-quicklaunch').width(),
+                    sidePanelWidth = $('.window-sidepanel:visible').width();
+                container.css('marginLeft', !!sidePanelWidth ? (sidePanelWidth - launcherWidth - quickLaunchWidth) : '8px');
+            }
 
-            // TODO: width
-            var resizeSearchBox = function () {
+            function setWidth() {
+                // search box width (list widget, active state)
+                var current = container.find('.io-ox-find[data-app="' + ox.ui.App.getCurrentApp().id + '"]'),
+                    leftsideWidth = $('.leftside:visible').width(),
+                    width = Math.max(!!$('.window-sidepanel:visible').width() && leftsideWidth && leftsideWidth < MAXWIDTH ? leftsideWidth : 0, MINWIDTH),
+                    max = Math.min(container.width(), MAXWIDTH, width);
+
+                current.css({ 'min-width': Math.max(max, MINWIDTH) });
+                // max (limit just when when no tokens are active)
+                if (!current.hasClass('has-tokens')) current.css({ 'max-width': max });
+            }
+
+            var setVisibility = _.debounce(function show() {
+                var app = ox.ui.App.getCurrentApp();
+                // TODO: ignore floating apps
+                if (app.get('floating')) return;
+                // show field for current app
+                hidePaused();
+                container.find('[data-app="' + app.id + '"]').css('display', 'block');
+            }, 300);
+
+            // immediately hide field of non active apps
+            ox.ui.apps.on('launch', hidePaused);
+            ox.ui.apps.on('resume', function () {
+                hidePaused();
+                setVisibility();
+            });
+            // resize or toggle of folder tree or list widget
+            $(window).on('resize', function () {
                 _.defer(function () {
-                    var launcherWidth = $('#io-ox-launcher').width();
-                    var quickLaunchWidth = $('#io-ox-quicklaunch').width();
-                    var sidePanelWidth = $('.window-sidepanel:visible').width();
-                    var leftsideWidth = $('.leftside:visible').width();
-                    var leftMargin = sidePanelWidth - launcherWidth - quickLaunchWidth;
-                    if (sidePanelWidth && leftMargin > 0) {
-                        // min width
-                        leftsideWidth = leftsideWidth || 200;
-                        // handle overflow (f.e. mail horizontal view)
-                        var width = self.width() < leftsideWidth ? '100%' : leftsideWidth;
-                        $(self).css('marginLeft', leftMargin)
-                            .find('.io-ox-find').css({
-                                'min-width': width,
-                                'max-width': width
-                            });
-                        // hacky
-                        if (leftsideWidth) {
-                            $(self).addClass('aligned');
-                            show(ox.ui.App.getCurrentApp());
-                        }
-                    }
+                    setMargin();
+                    setWidth();
+                    setVisibility();
                 });
-            };
-            $(document).on('resize', resizeSearchBox);
-            $(window).on('resize', resizeSearchBox);
+            });
+            // search is active (at least one token)
+            ox.ui.apps.on('change:search', function (name, app) {
+                if (!/^(running|paused)$/.test(name)) return;
+                var node = app.view.$el,
+                    isReset = name === 'paused';
+                node.css({
+                    // limit height to prevent jumping
+                    'height': isReset ? 'initial' : '30px',
+                    // expand field or restore min-width value
+                    'max-width': isReset ? node.css('min-width') : MAXWIDTH + 'px'
+                }).toggleClass('has-tokens', !isReset);
+
+            });
         }
     });
 

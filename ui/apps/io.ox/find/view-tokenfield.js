@@ -397,10 +397,10 @@ define('io.ox/find/view-tokenfield', [
         },
 
         onTokenChange: function (e) {
-            // limit height to prevent jumping
-            this.app.view.$el.css('height', e.type === 'tokenfield:createtoken' ? '30px' : 'initial');
-            // expand field
-            this.app.view.$el.css('max-width', e.type === 'tokenfield:createtoken' ? 'initial' : this.app.view.$el.css('min-width'));
+            var length = this.api('getTokens').length;
+            // launched before token get's created
+            if (e.type === 'tokenfield:createtoken') length += 1;
+            this.app.trigger('change:search', length > 0 ? 'running' : 'paused', this.app);
         },
 
         // show input placeholder only on empty tokenfield
