@@ -356,6 +356,7 @@ define('io.ox/core/folder/node', [
                 this.listenTo(this.collection, {
                     'add':     this.onAdd,
                     'remove':  this.onRemove,
+                    'change:subscribed': this.onReset,
                     'reset':   this.onReset,
                     'sort':    this.onSort
                 });

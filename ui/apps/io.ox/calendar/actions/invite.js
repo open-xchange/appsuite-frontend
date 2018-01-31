@@ -11,7 +11,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/invite', ['settings!io.ox/core'], function (settings) {
+define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (settings) {
 
     'use strict';
 
@@ -22,22 +22,20 @@ define('io.ox/calendar/actions/invite', ['settings!io.ox/core'], function (setti
 
             // include external organizer
             var data = baton.data,
-                participants = data.participants.slice();
-            if (!data.organizerId && _.isString(data.organizer)) {
-                participants.unshift({
-                    display_name: data.organizer,
-                    email1: data.organizer,
-                    mail: data.organizer,
-                    type: 5
-                });
+                attendees = data.attendees;
+            if (!data.organizer.entity && _.isString(data.organizer.cn)) {
+                data.organizer.partStat = 'NEEDS-ACTION';
+                attendees.unshift(data.organizer);
             }
             // open create dialog with same participants
+            // TODO REMOVE WHEN FOLDERS ARE SAVED CORRECTLY
             data = {
-                folder_id: settings.get('folder/calendar'),
-                participants: participants
+                folder: settings.get('chronos/defaultFolderId'),
+                attendees: attendees,
+                startDate: { value: moment().startOf('hour').format('YYYYMMDD[T]HHmmss'), tzid: moment().tz() },
+                endDate: { value: moment().startOf('hour').add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: moment().tz() }
             };
             this.create(data);
-            this.model.toSync = data;
         });
     };
 });

@@ -13,46 +13,61 @@
  */
 
 define('io.ox/core/import/import', [
+    'io.ox/backbone/mini-views/common',
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/tk/attachments',
     'io.ox/core/folder/api',
     'io.ox/core/api/import',
     'io.ox/core/notifications',
-    'gettext!io.ox/core',
-    'less!io.ox/core/import/style'
-], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
+    'gettext!io.ox/core'
+], function (mini, ext, ModalDialog, attachments, folderAPI, api, notifications, gt) {
 
     'use strict';
 
     ext.point('io.ox/core/import').extend({
-        id: 'select',
+        id: 'foldername',
         index: 100,
-        draw: function (baton) {
+        render: function (baton) {
+            baton.module = this.model.get('module');
+            if (!/^(calendar)$/.test(baton.module)) return;
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    mini.getInputWithLabel('folderName', gt('Foldername'), this.model)
+                )
+            );
+        }
+    });
 
-            var nodes = {};
-            nodes.row = $('<div class="form-group">').appendTo($(this));
+    ext.point('io.ox/core/import').extend({
+        id: 'select',
+        index: 200,
+        render: function (baton) {
+            var list = [],
+                guid = _.uniqueId('select-');
 
-            //lable and select
-            nodes.label = $('<label>').attr('for', 'import-format').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select class="form-control" name="action">')
-                .attr({ id: 'import-format', 'aria-label': gt('select format') })
-                .appendTo(nodes.row);
-            //add option
-            ext.point('io.ox/core/import/format').invoke('draw', nodes.select, baton);
-            //avoid find
-            baton.nodes.select = nodes.select;
+            ext.point('io.ox/core/import/format').invoke('customize', list, baton);
+
+            if (list.length === 0) return;
+            // default selection
+            this.model.set('format', list[0].value);
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label>').attr('for', guid).text(gt('Format')),
+                    new mini.SelectView({ id: guid, name: 'format', list: list, model: this.model })
+                        .render().$el
+                        .attr('aria-label', gt('select format'))
+                )
+            );
         }
     });
 
     ext.point('io.ox/core/import/format').extend({
         id: 'ical',
         index: 100,
-        draw: function (baton) {
+        customize: function (baton) {
             if (!/^(calendar|tasks)$/.test(baton.module)) return;
-            return this.append(
-                $('<option value="ICAL">').text(gt('iCalendar'))
-            );
+            this.push({ value: 'ICAL', label: gt('Calendar') });
         }
     });
 
@@ -60,37 +75,34 @@ define('io.ox/core/import/import', [
     ext.point('io.ox/core/import/format').extend({
         id: 'vcard',
         index: 200,
-        draw: function (baton) {
+        customize: function (baton) {
             if (!/^(contacts)$/.test(baton.module)) return;
-            return this.append(
-                $('<option value="VCARD">').text(gt('vCard'))
-            );
+            this.push({ value: 'VCARD', label: gt('vCard') });
         }
     });
 
     ext.point('io.ox/core/import/format').extend({
         id: 'csv',
         index: 300,
-        draw: function (baton) {
+        customize: function (baton) {
             if (!/^(contacts)$/.test(baton.module)) return;
-            return this.append(
-                $('<option value="CSV">').text(gt('CSV'))
-            );
+            this.push({ value: 'CSV', label: gt('CSV') });
         }
     });
 
     ext.point('io.ox/core/import').extend({
         id: 'file',
-        index: 200,
-        draw: function (baton) {
-            var label = $('<span class="filename">');
-            this.append(
-                baton.nodes.file_upload = attachments.fileUploadWidget({
+        index: 300,
+        render: function () {
+            var label = $('<span class="filename">').css('margin-left', '7px'),
+                fileUpload;
+            this.$body.append(
+                fileUpload = attachments.fileUploadWidget({
                     multi: false,
                     buttontext: gt('Upload file')
                 }).append(label)
             );
-            var $input = baton.nodes.file_upload.find('input[type="file"]');
+            var $input = this.$fileUploadInput = fileUpload.find('input[type="file"]');
             $input.on('change', function (e) {
                 e.preventDefault();
                 var buttonText = '';
@@ -104,21 +116,19 @@ define('io.ox/core/import/import', [
 
     ext.point('io.ox/core/import').extend({
         id: 'checkbox',
-        index: 200,
-        draw: function (baton) {
+        index: 400,
+        render: function (baton) {
 
             // show option only for calendar and tasks
             if (!(baton.module === 'calendar' || baton.module === 'tasks')) return;
-            var guid = _.uniqueId('form-control-label-');
-            this.append(
-                $('<div class="checkbox">').append(
-                    $('<label>').attr('for', guid).append(
-                        $('<input type="checkbox" name="ignore_uuids">').attr('id', guid),
-                        baton.module === 'calendar' ?
-                            gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
-                            gt('Ignore existing events')
-                    )
-                )
+            this.$body.append(
+                new mini.CustomCheckboxView({
+                    name: 'ignoreUuids',
+                    model: this.model,
+                    label: baton.module === 'calendar' ?
+                        gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
+                        gt('Ignore existing events')
+                }).render().$el
             );
         }
     });
@@ -152,146 +162,148 @@ define('io.ox/core/import/import', [
 
         show: function (module, id) {
 
-            id = String(id);
-
-            var baton = { id: id, module: module, format: {}, nodes: {} };
-
-            //get folder and process
-            folderAPI.get(id).done(function () {
-
-                new dialogs.ModalDialog({
-                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html'
+            new ModalDialog({
+                focus: module === 'calendar' ? 'input[name="folderName"]' : 'select[name="format"]',
+                async: true,
+                help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
+                point: 'io.ox/core/import',
+                title: gt('Import from file'),
+                model: new Backbone.Model({
+                    folderId: id,
+                    module: module
                 })
-                .build(function () {
-
-                    this.getHeader().append(
-                        $('<h4>').text(gt('Import from file'))
-                    );
-
-                    this.form = $('<form method="post" accept-charset="UTF-8" enctype="multipart/form-data">');
-                    this.getContentNode().append(this.form);
-
-                    ext.point('io.ox/core/import').invoke('draw', this.form, baton);
-
-                    this.addPrimaryButton('import', gt('Import'), 'import')
-                        .addButton('cancel', gt('Cancel'), 'cancel');
-
-                    this.getPopup().addClass('import-dialog');
-                })
-                .on('import', function () {
-
-                    var type = baton.nodes.select.val() || '',
-                        file = baton.nodes.file_upload.find('input[type=file]'),
-                        popup = this;
-
-                    function getDefautMessage(module) {
-                        switch (module) {
-                            case 'contacts':
-                                //#. Error message if contact import failed
-                                return gt('There was no contact data to import');
-                            case 'tasks':
-                                //#. Error message if task import failed
-                                return gt('There was no task data to import');
-                            default:
-                                //#. Error message if calendar import failed
-                                return gt('There was no appointment data to import');
-                        }
+            })
+            .inject({
+                createFolder: function (module, title) {
+                    var invalid = false,
+                        folder = module === 'calendar' ? '1' : folderAPI.getDefaultFolder(module);
+                    ext.point('io.ox/core/filename')
+                        .invoke('validate', null, title, 'folder')
+                        .find(function (result) {
+                            if (result !== true) {
+                                notifications.yell('warning', result);
+                                return (invalid = true);
+                            }
+                        });
+                    if (invalid) return $.Deferred().reject();
+                    return folderAPI.create(folder, { title: $.trim(title), module: module })
+                        .fail(notifications.yell);
+                },
+                getFolder: function () {
+                    if (!id) return this.createFolder(module, this.model.get('folderName'));
+                    return folderAPI.get(id);
+                },
+                getDefaultFailMessage: function () {
+                    switch (module) {
+                        case 'contacts':
+                            //#. Error message if contact import failed
+                            return gt('There was no contact data to import');
+                        case 'tasks':
+                            //#. Error message if task import failed
+                            return gt('There was no task data to import');
+                        default:
+                            //#. Error message if calendar import failed
+                            return gt('There was no appointment data to import');
+                    }
+                },
+                onPartialFail: function (data) {
+                    var message;
+                    if (_.isArray(data)) {
+                        data = _(data)
+                        .chain()
+                        .map(function (item) { return (item || {}).error; })
+                        .compact()
+                        .value();
+                        message = data.length ? data.join('\n\n') : this.getDefaultFailMessage(module);
+                    } else {
+                        // we only show "error"; sometimes "error_desc" contains a better
+                        // but untranslated hint, sometimes it contains the same
+                        message = data.error;
                     }
 
-                    function failHandler(data) {
-
-                        var message;
-
-                        if (_.isArray(data)) {
-                            data = _(data)
-                            .chain()
-                            .map(function (item) { return (item || {}).error; })
-                            .compact()
-                            .value();
-                            message = data.length ? data.join('\n\n') : getDefautMessage(module);
-                        } else {
-                            // we only show "error"; sometimes "error_desc" contains a better
-                            // but untranslated hint, sometimes it contains the same
-                            message = data.error;
-                        }
-
-                        notifications.yell({ type: 'error', message: message, duration: -1 });
-                        popup.idle();
-                    }
-
-                    if (file.val() === '') {
-                        notifications.yell('error', gt('Please select a file to import'));
-                        popup.idle();
-                        return;
-                    } else if (baton.nodes.select.val() === 'ICAL' && !(/\.(ical|ics)$/i).test(file.val())) {
-                        notifications.yell('error', gt('Please select a valid iCal File to import'));
-                        popup.idle();
-                        return;
-                    }
-
-                    api.importFile({
+                    notifications.yell({ type: 'error', message: message, duration: -1 });
+                    this.close();
+                },
+                onCompleteFail: function (data) {
+                    if (this.tempFolder && this.model.get('module') === 'calendar') folderAPI.remove(this.tempFolder.id);
+                    this.onPartialFail(data);
+                }
+            })
+            .addCancelButton()
+            .addButton({ action: 'import', label: gt('Import') })
+            .on('import', function () {
+                var self = this,
+                    file = this.$fileUploadInput;
+                if (file.val() === '') {
+                    notifications.yell('error', gt('Please select a file to import'));
+                    this.idle();
+                    return;
+                } else if (this.model.get('format') === 'ICAL' && !(/\.(ical|ics)$/i).test(file.val())) {
+                    notifications.yell('error', gt('Please select a valid iCal File to import'));
+                    this.idle();
+                    return;
+                }
+                this.getFolder().then(function (folder) {
+                    self.tempFolder = folder;
+                    return api.importFile({
                         file: file[0].files ? file[0].files[0] : [],
-                        form: this.form,
-                        type: type,
-                        ignoreUIDs: popup.getContentNode().find('input[name="ignore_uuids"]').prop('checked'),
-                        folder: id
-                    })
-                    .done(function (data) {
+                        form: self.form,
+                        type: self.model.get('format'),
+                        ignoreUIDs: self.model.get('ignoreUuids'),
+                        folder: folder.id
+                    });
+                }).then(function (data) {
+                    // get failed records
+                    var failed = _.filter(data, function (item) {
+                            return item && item.error;
+                        }),
+                        custom;
 
-                        // get failed records
-                        var failed = _.filter(data, function (item) {
-                                return item && item.error;
-                            }),
-                            custom;
-
-                        // cache
-                        try {
-                            require(['io.ox/' + baton.module + '/api'], function (api) {
-                                // todo: clean that up; fails for calendar
-                                if (api.caches.all.grepRemove) {
-                                    api.caches.all.grepRemove(id + api.DELIM).done(function () {
-                                        // use named refresh.all so apis can differenciate if they wish
-                                        api.trigger('refresh.all:import');
-                                    });
-                                } else if (api.refresh) {
-                                    api.refresh();
+                    // cache
+                    try {
+                        require(['io.ox/' + module + '/api'], function (api) {
+                            if (api.caches && api.caches.all.grepRemove) {
+                                api.caches.all.grepRemove(self.tempFolder.id + api.DELIM).done(function () {
+                                    // use named refresh.all so apis can differenciate if they wish
+                                    api.trigger('refresh.all:import');
+                                });
+                            } else if (api.refresh) {
+                                // use gc to invalidate caches if the api uses a collection-pool
+                                if (api.pool) {
+                                    api.pool.gc();
                                 }
-                            });
-                            // update folder data
-                            folderAPI.reload(id);
-                        } catch (e) {
-                            // if api is unknown, refresh everything
-                            if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
-                            ox.trigger('refresh^');
-                        }
+                                api.refresh();
+                            }
+                        });
+                        // update folder data
+                        folderAPI.reload(self.tempFolder);
+                    } catch (e) {
+                        // if api is unknown, refresh everything
+                        if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
+                        ox.trigger('refresh^');
+                    }
 
-                        // partially failed?
-                        if (failed.length === 0) {
-                            // all good; no failures
-                            notifications.yell('success', gt('Data imported successfully'));
-                        } else if (data.length === failed.length) {
-                            // failed
-                            // #. Failure message if no data (e.g. appointments) could be imported
-                            custom = { error: gt('Failed to import any data') };
-                            failHandler([].concat(custom, failed));
-                        } else {
-                            // partially failed
-                            custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
-                            failHandler([].concat(custom, failed));
-                        }
-                        baton = null;
-                        popup.close();
-                    })
-                    .fail(failHandler);
-                })
-                .on('close', function () {
-                    this.form = baton.nodes = null;
-                })
-                .show(function () {
-                    //focus
-                    this.find('select').focus();
-                });
-            });
+                    // partially failed?
+                    if (failed.length === 0) {
+                        // all good; no failures
+                        notifications.yell('success', gt('Data imported successfully'));
+                        folderAPI.refresh();
+                    } else if (data.length === failed.length) {
+                        // failed
+                        // #. Failure message if no data (e.g. appointments) could be imported
+                        custom = { error: gt('Failed to import any data') };
+                        self.onCompleteFail([].concat(custom, failed));
+                    } else {
+                        // partially failed
+                        custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
+                        self.onPartialFail([].concat(custom, failed));
+                        folderAPI.refresh();
+                    }
+                    self.close();
+                }, this.onCompleteFail.bind(this));
+            })
+            .open();
+
         }
     };
 

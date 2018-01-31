@@ -55,6 +55,20 @@ define('io.ox/calendar/print', [
         return resources;
     }
 
+    function getConfirmationListsforAttendees(internal, resources) {
+        var states = { unconfirmed: [], accepted: [], declined: [], tentative: [] },
+            map = { 'NEEDS-ACTION': 'unconfirmed', 'ACCEPTED': 'accepted', 'DECLINED': 'declined', 'TENTATIVE': 'tentative' };
+        _([].concat(internal, resources)).each(function (obj) {
+            var state = map[obj.partStat] || 'unconfirmed';
+            states[state].push(obj);
+        });
+        // sort by display_name
+        _(states).each(function (list, state) {
+            states[state] = _(list).sortBy('cn');
+        });
+        return states;
+    }
+
     function getConfirmationLists(internal, external, resources) {
         var states = { unconfirmed: [], accepted: [], declined: [], tentative: [] },
             // 0 = unconfirmed, 1 = accepted, 2 = declined, 3 = tentative
@@ -72,17 +86,51 @@ define('io.ox/calendar/print', [
 
     function getString(list) {
         return _(list).map(function (obj) {
-            return '<span class="person">' + _.escape(obj.display_name) + '</span>' +
-                (obj.comment !== '' ? ' <i class="comment">&quot;' + _.escape(obj.comment) + '&quot;</i>' : '');
+            return '<span class="person">' + _.escape(obj.display_name || obj.cn) + '</span>' +
+                (obj.comment ? ' <i class="comment">&quot;' + _.escape(obj.comment) + '&quot;</i>' : '');
         }).join('\u00A0\u00A0\u2022\u00A0 ');
     }
 
     function getContent(data) {
         // soft-break long words (like long URLs)
-        return coreUtil.breakableText($.trim(data.note));
+        return coreUtil.breakableText($.trim(data.description));
     }
 
     function unify(data, userList, groupList, resourceList, externalContacts) {
+
+        // chronos api
+        if (data.attendees) {
+            // get lists per confirmation state
+            var internal = _(data.attendees).where({ cuType: 'INDIVIDUAL' }),
+                resources = _(data.attendees).where({ cuType: 'RESOURCE' }),
+                states = getConfirmationListsforAttendees(internal, resources),
+                numParticipants = _(states).reduce(function (sum, list) { return sum + list.length; }, 0);
+            // return unified lists
+            return {
+                // lists
+                internal: internal,
+                resources: resources,
+                // states
+                unconfirmed: states.unconfirmed,
+                accepted: states.accepted,
+                declined: states.declined,
+                tentative: states.tentative,
+                // string
+                strings: {
+                    unconfirmed: getString(states.unconfirmed),
+                    accepted: getString(states.accepted),
+                    declined: getString(states.declined),
+                    tentative: getString(states.tentative)
+                },
+                // flags
+                numParticipants: numParticipants,
+                hasUnconfirmed: states.unconfirmed.length > 0,
+                hasAccepted: states.accepted.length > 0,
+                hasDeclined: states.declined.length > 0,
+                hasTentative: states.tentative.length > 0
+            };
+        }
+        // calendar or tasks api
         var usersInGroups = _.chain(groupList).pluck('members').flatten().uniq().value();
         return userAPI.getList(usersInGroups).then(function (resolvedUsers) {
             // inject confirmations
@@ -165,15 +213,14 @@ define('io.ox/calendar/print', [
     }
 
     function process(data) {
-        return load(data).then(function (unified) {
-            return _.extend(unified, {
-                original: data,
-                subject: data.title,
-                location: $.trim(data.location),
-                content: getContent(data),
-                date: getDate(data),
-                time: getTime(data)
-            });
+        data = data.get ? data.attributes : data;
+        return _.extend(unify(data), {
+            original: data,
+            subject: data.summary,
+            location: $.trim(data.location),
+            content: getContent(data),
+            date: getDate(data),
+            time: getTime(data)
         });
     }
 

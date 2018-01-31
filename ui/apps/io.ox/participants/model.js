@@ -304,7 +304,7 @@ define('io.ox/participants/model', [
                     }
                     // split groups into single users if the option is set. Note: this requires a server call
                     if (self.options.splitGroups && (participant.type === 2 || (participant.get && participant.get('type') === 2))) {
-                        var groupUsers = participant.get ? participant.get('members') : participant.members;
+                        var groupUsers = participant instanceof Backbone.Model ? participant.get('members') : participant.members;
                         // if member attribute is not present we need to fetch the group first
                         if (!groupUsers) {
                             groupAPI.get({ id: participant.id || participant.get('id') }).done(function (group) {

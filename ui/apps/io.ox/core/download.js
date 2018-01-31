@@ -21,7 +21,7 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
     window.callback_yell = yell;
 
     function map(o) {
-        return { id: o.id, folder_id: o.folder_id };
+        return { id: o.id, folder_id: o.folder || o.folder_id };
     }
 
     // simple iframe download (see bug 29276)

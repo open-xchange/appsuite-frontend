@@ -23,7 +23,8 @@ define('io.ox/calendar/common-extensions', [
     'use strict';
 
     function getTitle(baton) {
-        return _.isUndefined(baton.data.title) ? gt('Private') : (baton.data.title || '\u00A0');
+        var data = baton.data.event || baton.data;
+        return _.isUndefined(data.summary) ? gt('Private') : (data.summary || '\u00A0');
     }
 
     var extensions = {
@@ -83,10 +84,11 @@ define('io.ox/calendar/common-extensions', [
         },
 
         datetime: function (baton) {
+            var data = baton.data.event || baton.data;
             this.append(
                 $('<div class="date-time">').append(
-                    $('<span class="date">').text(util.getDateInterval(baton.data)),
-                    $('<span class="time">').text(util.getTimeInterval(baton.data))
+                    $('<span class="date">').text(util.getDateInterval(data)),
+                    $('<span class="time">').text(util.getTimeInterval(data))
                 )
             );
         },
@@ -98,7 +100,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         recurrence: function (baton) {
-            var recurrenceString = util.getRecurrenceString(baton.data);
+            var recurrenceString = util.getRecurrenceString(baton.model);
             if (recurrenceString === '') return;
             this.append(
                 $('<div class="recurrence">').text(recurrenceString)
@@ -106,17 +108,25 @@ define('io.ox/calendar/common-extensions', [
         },
 
         privateFlag: function (baton) {
-            if (!baton.data.private_flag) return;
+            if (!util.isPrivate(baton.data)) return;
             this.append(
-                $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
-                    .attr('title', gt('Private'))
+                util.isPrivate(baton.data, true) ? $('<i class="fa fa-user-circle private-flag" aria-hidden="true" data-animation="false">') : $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
+                    .attr('title', util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private'))
                     .tooltip(),
-                $('<span class="sr-only">').text(gt('Private'))
+                $('<span class="sr-only">').text(util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private'))
+            );
+        },
+
+        additionalFlags: function (baton) {
+            if (_.isEmpty(util.returnIconsByType(baton.data).property)) return;
+            var node = $('<div class="flags">');
+            this.append(
+                node.append(util.returnIconsByType(baton.data).property)
             );
         },
 
         note: function (baton) {
-            if (!baton.data.note) return;
+            if (!baton.data.description) return;
 
             this.append(
                 $('<div class="note">').html(util.getNote(baton.data))
@@ -126,8 +136,8 @@ define('io.ox/calendar/common-extensions', [
         detail: function (baton, options) {
 
             // we don't show details for private appointments in shared/public folders (see bug 37971)
-            var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder_id);
-            if (data.private_flag && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
+            var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder);
+            if (util.isPrivate(data) && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
 
             var node = $('<table class="details-table expandable-content">');
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
@@ -148,6 +158,7 @@ define('io.ox/calendar/common-extensions', [
         organizer: function (baton) {
 
             // internal or external organizer?
+            // TODO check if internal and external organizers are still different, maybe we can get rid of the 2 options here
             if (!baton.data.organizerId && !baton.data.organizer) return;
 
             this.append(
@@ -161,11 +172,31 @@ define('io.ox/calendar/common-extensions', [
                                 user_id: baton.data.organizerId
                             } : {
                                 $el: baton.organizerNode,
-                                name: baton.data.organizer,
-                                email: baton.data.organizer
+                                name: baton.data.organizer.cn,
+                                email: baton.data.organizer.email,
+                                user_id: baton.data.organizer.entity
                             },
                             baton.data
                         )
+                    )
+                )
+            );
+        },
+
+        sentBy: function (baton) {
+            if (!baton.data.organizer || !baton.data.organizer.sentBy) return;
+
+            var sentBy = baton.data.organizer.sentBy;
+            this.append(
+                $('<tr>').append(
+                    $('<th>').text(gt('Sent by')),
+                    $('<td class="detail sendby">').append(
+                        coreUtil.renderPersonalName({
+                            $el: baton.sendbyNode,
+                            name: sentBy.cn,
+                            email: sentBy.email,
+                            user_id: sentBy.entity
+                        }, baton.data)
                     )
                 )
             );
@@ -180,36 +211,36 @@ define('io.ox/calendar/common-extensions', [
                 $('<tr>').append(
                     $('<th>').text(gt('Shown as')),
                     $('<td>').append(
-                        $('<i class="fa fa-square shown_as" aria-hidden="true">').addClass(util.getShownAsClass(baton.data)),
-                        $('<span class="detail shown-as">').text('\u00A0' + util.getShownAs(baton.data))
+                        $('<i class="fa fa-square shown_as" aria-hidden="true">').addClass(util.getShownAsClass(baton.model)),
+                        $('<span class="detail shown-as">').text('\u00A0' + util.getShownAs(baton.model))
                     )
                 )
             );
         },
 
         folder: function (baton) {
-            if (!baton.data.folder_id) return;
+            if (!baton.data.folder) return;
             this.append(
                 $('<tr>').append(
-                    $('<th>').text(gt('Folder')),
-                    $('<td>').attr('data-folder', baton.data.folder_id).append(folderAPI.getTextNode(baton.data.folder_id))
+                    $('<th>').text(gt('Calendar')),
+                    $('<td>').attr('data-folder', baton.data.folder).append(folderAPI.getTextNode(baton.data.folder))
                 )
             );
         },
 
         created: function (baton) {
-            if (!baton.data.creation_date && !baton.data.created_by) return;
+            if (!baton.data.created && !baton.data.createdBy) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Created')),
                     $('<td class="created">').append(
-                        baton.data.creation_date ? [
-                            $('<span>').text(util.getDate(baton.data.creation_date)),
+                        baton.data.created ? [
+                            $('<span>').text(util.getDate(baton.data.created)),
                             $('<span>').text(' \u2013 ')
                         ] : [],
-                        baton.data.created_by ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(baton.data.created_by),
-                            user_id: baton.data.created_by
+                        baton.data.createdBy ? coreUtil.renderPersonalName({
+                            html: userAPI.getTextNode(baton.data.createdBy.entity),
+                            user_id: baton.data.createdBy.entity
                         }, baton.data) : []
                     )
                 )
@@ -217,18 +248,18 @@ define('io.ox/calendar/common-extensions', [
         },
 
         modified: function (baton) {
-            if (!baton.data.last_modified && !baton.data.modified_by) return;
+            if (!baton.data.lastModified && !baton.data.modifiedBy) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Modified')),
                     $('<td class="modified">').append(
-                        baton.data.last_modified ? [
-                            $('<span>').text(util.getDate(baton.data.last_modified)),
+                        baton.data.lastModified ? [
+                            $('<span>').text(util.getDate(baton.data.lastModified)),
                             $('<span>').text(' \u2013 ')
                         ] : [],
-                        baton.data.modified_by ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(baton.data.modified_by),
-                            user_id: baton.data.modified_by
+                        baton.data.modifiedBy ? coreUtil.renderPersonalName({
+                            html: userAPI.getTextNode(baton.data.modifiedBy.entity),
+                            user_id: baton.data.modifiedBy.entity
                         }, baton.data) : []
                     )
                 )

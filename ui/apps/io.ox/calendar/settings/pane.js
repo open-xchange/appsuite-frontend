@@ -15,10 +15,12 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/alarms',
     'io.ox/core/settings/util',
     'settings!io.ox/calendar',
-    'gettext!io.ox/calendar'
-], function (ext, ExtensibleView, mini, util, settings, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/folder/api'
+], function (ext, ExtensibleView, mini, AlarmsView, util, settings, gt, folderAPI) {
 
     'use strict';
 
@@ -42,18 +44,6 @@ define('io.ox/calendar/settings/pane', [
                             m.add(1, 'hour');
                         }
                         return array;
-                    },
-                    getReminderOptions: function () {
-                        var minInt = [15, 30, 45, 60, 120, 240, 360, 480, 720, 1440, 2880, 4320, 5760, 7200, 8640, 10080, 20160, 30240, 40320],
-                            list = [
-                                { label: gt('No reminder'), value: '-1' },
-                                { label: gt.format(gt.ngettext('%d minute', '%d minutes', 0), 0), value: '0' }
-                            ];
-                        _(minInt).each(function (m) {
-                            var dur = moment.duration(m, 'minutes');
-                            list.push({ label: dur.humanize(), value: String(dur.asMinutes()) });
-                        });
-                        return list;
                     },
                     getWeekDays: function () {
                         return _(new Array(7)).map(function (num, index) {
@@ -122,7 +112,7 @@ define('io.ox/calendar/settings/pane', [
                             ),
                             // scale
                             $('<div class="col-md-4">').append(
-                                //#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
+                                //#. Context: Calendar settings. Default time scale in minutes for new appointments.
                                 $('<label for="settings-interval">').text(gt('Time scale')),
                                 new mini.SelectView({ id: 'settings-interval', name: 'interval', model: settings, list: this.getIntervalOptions() }).render().$el
                             )
@@ -134,6 +124,52 @@ define('io.ox/calendar/settings/pane', [
                     )
                 );
             }
+        },
+        {
+            id: 'birthday',
+            index: INDEX += 100,
+            render: (function () {
+                var folderId;
+
+                function getFolder() {
+                    if (folderId) return folderAPI.get(folderId);
+                    return folderAPI.flat({ module: 'event', all: true }).then(function (data) {
+                        data = _(data).chain().values().flatten().value();
+                        var birthdayFolder = _(data).findWhere({ 'com.openexchange.calendar.provider': 'birthdays' });
+                        if (!birthdayFolder) throw new Error('Cannot find birthdays folder');
+                        folderId = birthdayFolder.id;
+                        return birthdayFolder;
+                    });
+                }
+
+                return function () {
+                    var model = new Backbone.Model({ birthday: undefined }),
+                        checkbox = util.checkbox('birthday', gt('Show birthday calendar'), model),
+                        view = checkbox.data('view'), fieldset;
+
+                    checkbox.css('visibility', 'hidden');
+
+                    getFolder().then(function (folder) {
+                        checkbox.css('visibility', '');
+                        fieldset.idle();
+                        model.set('birthday', !!folder.subscribed);
+                    }, function () {
+                        fieldset.remove();
+                    });
+
+                    view.listenTo(model, 'change:birthday', _.debounce(function (model) {
+                        if (_.isUndefined(model.previous('birthday'))) return;
+                        folderAPI.update(folderId, { subscribed: !!model.get('birthday') });
+                    }, 500));
+
+                    this.$el.append(
+                        fieldset = util.fieldset(
+                            gt('Birthday'),
+                            $('<div class="form-group">').append(checkbox)
+                        ).busy()
+                    );
+                };
+            }())
         },
         //
         // Work week
@@ -172,8 +208,18 @@ define('io.ox/calendar/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         gt('New appointment'),
-                        // reminder
-                        util.compactSelect('defaultReminder', gt('Default reminder'), settings, this.getReminderOptions(), { width: 4 }),
+                        $('<div>').append(
+                            $('<label>').text(gt('Default reminder')),
+                            new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDateTime' }).render().$el
+                        ),
+                        $('<div>').append(
+                            $('<label>').text(gt('Default reminder for all day appointments')),
+                            new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
+                        ),
+                        $('<div>').append(
+                            $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
+                            new AlarmsView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
+                        ),
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
                     )

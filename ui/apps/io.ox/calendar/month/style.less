@@ -15,21 +15,26 @@
 
     * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
+    .abs {
+        overflow: hidden;
+    }
+
     .footer-container {
         position: absolute;
         top: 7px;
         margin-left: @monthview-cw-width;
         width: auto;
-        // keep this because it shows the scrollbar on the right to make sure the days align with the cells of the tables
-        overflow-y: scroll;
 
         .footer {
             left: 0;
-            padding-top: 10px;
+            padding-top: 12px;
 
             .weekday {
                 width: 100/7%;
-                text-align: center;
+                text-align: right;
+                padding-right: 5px;
+                color: #767676;
+                font-size: 14px;
             }
         }
     }
@@ -132,10 +137,12 @@
 
         .month-name {
             text-align: center;
-            font-size: 25px;
+            font-size: 20px;
             min-height: 40px;
-            height: 120px;
-            color: #777;
+            height: 100px;
+            color: black;
+            font-weight: bold;
+
             // need one pixel here. otherwise, the bottom border of the table above will be within the view
             margin-top: 1px;
 

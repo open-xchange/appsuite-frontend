@@ -986,11 +986,11 @@ define('io.ox/contacts/api', [
 
     /**
      * is ressource (duck check)
-     * @param  {object} obj (contact)
+     * @param  {object} obj (contact) or calendar event attendee
      * @return {boolean}
      */
     api.looksLikeResource = function (obj) {
-        return 'mailaddress' in obj && 'description' in obj;
+        return ('mailaddress' in obj && 'description' in obj) || ('cuType' in obj && obj.cuType === 'RESOURCE');
     };
 
     /**

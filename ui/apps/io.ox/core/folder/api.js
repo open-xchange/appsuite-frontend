@@ -25,9 +25,10 @@ define('io.ox/core/folder/api', [
     'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'settings!io.ox/calendar',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, calSettings, filestorageApi, gt) {
 
     'use strict';
 
@@ -56,9 +57,9 @@ define('io.ox/core/folder/api', [
 
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
+                if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
-                if (item.id === String(settings.get('folder/calendar'))) return true;
+                if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
                 // any shared folder
                 return util.is('shared', item);
             }),
@@ -75,7 +76,7 @@ define('io.ox/core/folder/api', [
             var hash = _.object(ids, list);
 
             _(renameItems).each(function (item) {
-                if (item.id === String(settings.get('folder/calendar')) || item.title === gt('Calendar')) {
+                if (item.id === String(calSettings.get('chronos/defaultFolderId')) || item.title === gt('Calendar')) {
                     item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
                 } else {
                     //#. %1$s is the folder owner
@@ -103,12 +104,12 @@ define('io.ox/core/folder/api', [
 
     function isExternalFileStorage(data) {
         //
-        var type = data.get ? data.get('type') : data.type;
+        var type = data instanceof Backbone.Model ? data.get('type') : data.type;
         return type === 14;
     }
 
     function isFlat(id) {
-        return /^(contacts|calendar|tasks)$/.test(id);
+        return /^(contacts|calendar|tasks|event)$/.test(id);
     }
 
     function isNested(id) {
@@ -250,7 +251,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
 
             // sort shared and hidden folders by title
-            if (/^flat\/(contacts|calendar|tasks)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks)\/hidden$/.test(this.id)) {
+            if (/^flat\/(contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
                 this.comparator = function (model) {
                     return (model.get('display_title') || model.get('title')).toLowerCase();
                 };
@@ -447,19 +448,6 @@ define('io.ox/core/folder/api', [
     //
     // Define virtual folders
     //
-
-    pool.addModel({
-        folder_id: '1',
-        id: 'virtual/all-my-appointments',
-        module: 'calendar',
-        own_rights: 403710016, // all rights but admin
-        permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
-        standard_folder: true,
-        supported_capabilities: [],
-        title: gt('All my appointments'),
-        total: -1,
-        type: 1
-    });
 
     if (capabilities.has('webmail')) {
         // only define if the user actually has mail
@@ -825,10 +813,6 @@ define('io.ox/core/folder/api', [
         return pool.getCollection(getFlatCollectionId(module, section));
     }
 
-    function injectVirtualCalendarFolder(array) {
-        array.unshift(pool.getModel('virtual/all-my-appointments').toJSON());
-    }
-
     function getFlatViews() {
         return _(pool.collections).chain()
             .keys()
@@ -874,7 +858,8 @@ define('io.ox/core/folder/api', [
                 altNames: true,
                 content_type: module,
                 timezone: 'UTC',
-                tree: 1
+                tree: 1,
+                all: !!options.all
             }
         })
         .then(function (data) {
@@ -920,8 +905,6 @@ define('io.ox/core/folder/api', [
                     // otherwise
                     return true;
                 });
-                // inject 'All my appointments' for calender/private
-                if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -1108,8 +1091,8 @@ define('io.ox/core/folder/api', [
                 subscribed: 1,
                 title: gt('New Folder')
             }, options);
-            // don't inherit permissions for private flat folders
-            if (isFlat(options.module) && !(parent.id === '2' || util.is('public', parent))) {
+            // inherit permissions for private flat non-calendar folders
+            if (isFlat(options.module) && options.module !== 'calendar' && options.module !== 'event' && !(parent.id === '2' || util.is('public', parent))) {
                 // empty array doesn't work; we heve to copy the admins
                 options.permissions = _(parent.permissions).filter(function (item) {
                     return !!(item.bits & 268435456);
@@ -1186,6 +1169,7 @@ define('io.ox/core/folder/api', [
             model.set('unread', 0);
             // update collection (now)
             removeFromAllCollections(model);
+            delete pool.models[id];
             model.trigger('destroy');
         });
 
@@ -1284,7 +1268,7 @@ define('io.ox/core/folder/api', [
     //
 
     function updateTextNode(data) {
-        this.nodeValue = data.title || data.id;
+        this.nodeValue = data.display_title || data.title || data.id;
     }
 
     function getTextNode(id) {
@@ -1431,7 +1415,7 @@ define('io.ox/core/folder/api', [
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            defs.push(flat({ module: module, cache: false }));
+            defs.push(flat({ module: module, all: module === 'event', cache: false }));
         });
 
         // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool

@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/freetime/participantsView', [
     'io.ox/participants/add',
-    'io.ox/participants/views',
+    'io.ox/participants/chronos-views',
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'gettext!io.ox/calendar'
@@ -37,8 +37,9 @@ define('io.ox/calendar/freetime/participantsView', [
                     resources: true,
                     distributionlists: true
                 },
+                convertToAttendee: true,
                 placeholder: gt('Add participant') + ' \u2026',
-                collection: baton.model.get('participants')
+                collection: baton.model.get('attendees')
             });
             this.append(
                 typeahead.$el
@@ -53,7 +54,7 @@ define('io.ox/calendar/freetime/participantsView', [
         index: 100,
         draw: function (baton) {
             this.append(new participantsViews.UserContainer({
-                collection: baton.model.get('participants'),
+                collection: baton.model.get('attendees'),
                 baton: baton,
                 entryClass: 'col-xs-12 col-sm-12',
                 labelClass: 'sr-only',

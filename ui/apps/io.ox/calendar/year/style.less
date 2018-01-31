@@ -1,0 +1,91 @@
+.year-view {
+    @red:   #a00;
+    @toolbar-height: 45px;
+
+    overflow: hidden;
+
+    .toolbar {
+        height: @toolbar-height;
+    }
+
+    .year-view-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: @toolbar-height;
+        overflow-y: scroll;
+    }
+
+    .month-container {
+        float: left;
+        min-height: 300px;
+    }
+
+    .month {
+        margin-left: auto;
+        margin-right: auto;
+
+        th {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        td, th {
+            text-align: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        caption {
+            text-align: center;
+            color: black;
+            font-weight: bold;
+
+            h2 {
+                margin: 0
+            }
+
+            button {
+                color: black;
+                font-weight: bold;
+
+                &:hover {
+                    text-decoration: none;
+                }
+
+                &:focus {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .today {
+            background-color: @red;
+            color: white;
+            border-radius: 3px;
+        }
+
+        .cw {
+            color: #707070;
+            font-size: 10px;
+            font-weight: 300;
+        }
+
+        .weekend {
+            color: @red;
+        }
+
+        .out {
+            color: #ccc;
+        }
+    }
+
+    &.io-ox-busy {
+        .month {
+            th, td, caption, .weekend, button {
+                color: #ccc;
+            }
+        }
+    }
+}

@@ -55,6 +55,7 @@ define('io.ox/core/extPatterns/links', [
                     'draggable': options.draggable || false,
                     'role': 'menuitem',
                     'data-section': self.section || 'default',
+                    'data-section-description': self.sectionDescription,
                     'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
                     'data-ref': self.ref
                 };
@@ -358,13 +359,15 @@ define('io.ox/core/extPatterns/links', [
     function injectDividers(node) {
         // loop over all items and visually group by "section"
         var currentSection = '',
-            $li = $('<li class="divider" role="separator">');
+            $li = $('<li class="divider" role="separator">'),
+            $section = $('<li class="dropdown-header">');
         node.children('li').each(function () {
-            var node = $(this), section = node.children('a').attr('data-section');
+            var node = $(this), link = node.children('a'), section = link.attr('data-section'), description = link.attr('data-section-description');
             // add divider?
             if (section === undefined) return;
             if (currentSection !== '' && currentSection !== section) {
                 node.before($li.clone());
+                if (description) node.before($section.clone().text(description));
             }
             currentSection = section;
         });
@@ -522,6 +525,8 @@ define('io.ox/core/extPatterns/links', [
             // remove items with 'none' prio
             if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
             baton.$el.parent().trigger('ready');
+            // make sure the closer is at the last position
+            if (closer) baton.$el.append(closer);
             delete baton.$el;
         });
     };

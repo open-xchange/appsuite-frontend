@@ -14,8 +14,9 @@
 define('io.ox/core/folder/util', [
     'io.ox/core/api/account',
     'settings!io.ox/mail',
-    'settings!io.ox/core'
-], function (account, mailSettings, coreSettings) {
+    'settings!io.ox/core',
+    'settings!io.ox/calendar'
+], function (account, mailSettings, coreSettings, calSettings) {
 
     'use strict';
 
@@ -30,6 +31,7 @@ define('io.ox/core/folder/util', [
 
     function getDefaultFolder(type) {
         type = type || 'mail';
+        if (type === 'calendar') return calSettings.get('chronos/defaultFolderId');
         return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 
@@ -223,7 +225,8 @@ define('io.ox/core/folder/util', [
             isAdmin = perm(rights, 28) === 1,
             isMail = data.module === 'mail',
             // is my folder ?
-            compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0;
+            creator = obj ? _.firstOf(obj.created_by, obj.createdBy ? obj.createdBy.entity : undefined, 0) : undefined,
+            compareValue = (obj && ox.user_id !== creator) ? 1 : 0;
         // switch
         switch (action) {
             case 'read':
@@ -311,7 +314,7 @@ define('io.ox/core/folder/util', [
     // simple generic check to see if the folder supports a capability
     // supports models and objects containing folder data
     function supports(capability, data) {
-        return data.get ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
+        return data instanceof Backbone.Model ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
     }
 
     /*

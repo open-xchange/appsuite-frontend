@@ -39,15 +39,21 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.nodes = {};
             this.mobileSettings = {};
             this.mobileMode = _.device('touch');
+            this.chronos = options.chronos;
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
             this.listenTo(this.model, 'invalid:' + this.attribute, this.onError);
             this.listenTo(this.model, 'valid', this.onValid);
             this.listenTo(this.model, 'change:' + this.options.timezoneAttribute, this.updateView);
+
+            // add attribute information
+            if (this.options.attribute) {
+                this.$el.attr('data-attribute', this.options.attribute);
+            }
         },
 
         events: {
-            'click .timezone button': 'clickTimezone'
+            'click .timezone': 'clickTimezone'
         },
 
         render: function () {
@@ -81,7 +87,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.nodes.timeField = $('<input type="text" class="form-control time-field">');
 
                         // render timezone badge
-                        var timezone = moment.tz(self.model.get(self.options.timezoneAttribute)),
+                        var timezone = self.chronos ? self.model.getMoment(self.attribute) : moment.tz(self.model.get(self.options.timezoneAttribute)),
                             timezoneAbbreviation = timezone.zoneAbbr(),
                             timezoneFullname = (timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' ');
 
@@ -90,8 +96,10 @@ define('io.ox/backbone/mini-views/datepicker', [
                         } else {
                             // we need <a> tag to make firefox happy (no <button> doesn't work) and tabindex to make safari happy, otherwise they wont close on click outside of the popover
                             // see https://github.com/twbs/bootstrap/issues/14038 and Bug 51690
-                            timezoneContainer = self.nodes.timezoneField = $('<a role="button" class="timezone input-group-addon btn" data-toggle="popover">').attr('tabindex', 0).text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+                            timezoneContainer = self.nodes.timezoneField = $('<a role="button" class="timezone input-group-addon btn">').attr('tabindex', 0).text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+
                             if (self.model.has('start_date') && self.model.has('end_date')) {
+                                timezoneContainer.attr('data-toggle', 'popover');
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
                                         timezoneContainer,
@@ -99,7 +107,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                                         {
                                             placement: 'top',
                                             trigger: 'click',
-                                            closeOnScroll: self.options.closeOnScroll
+                                            closeOnScroll: self.options.closeOnScroll,
+                                            attrName: self.attribute
                                         }
                                     );
                                 });
@@ -187,14 +196,19 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         updateView: function () {
-            // clear if set to null
-            if (_.isNull(this.model.get(this.attribute))) {
-                this.nodes.dayField.val('');
-                if (this.nodes.timeField) this.nodes.timeField.val('');
+            var timestamp;
+            if (!this.chronos) {
+                // clear if set to null
+                if (_.isNull(this.model.get(this.attribute))) {
+                    this.nodes.dayField.val('');
+                    if (this.nodes.timeField) this.nodes.timeField.val('');
+                }
+                timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
+                if (_.isNaN(timestamp)) return;
+                timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
+            } else {
+                timestamp = this.model.getMoment(this.attribute);
             }
-            var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
-            if (_.isNaN(timestamp)) return;
-            timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
@@ -206,7 +220,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
         updateModel: function () {
             var time = this.getTimestamp();
-            if (_.isNull(time) || _.isNumber(time)) {
+            if (this.chronos || _.isNull(time) || _.isNumber(time)) {
                 var params = { validate: true, fulltime: this.isFullTime() };
                 this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
                 this.model.trigger('valid');
@@ -216,8 +230,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         isFullTime: function () {
-            if (!this.options.ignoreToggle && this.model.has('full_time')) {
-                return !!this.model.get('full_time');
+            if (!this.options.ignoreToggle && (this.model.has('full_time') || this.model.has('allDay'))) {
+                return !!(this.model.get('full_time') || this.model.get('allDay'));
             }
             return this.options.display === 'DATE';
         },
@@ -249,7 +263,10 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
 
             // parse string to timestamp
-            var parsedDate = moment.tz(dateStr, formatStr, this.model.get(this.options.timezoneAttribute));
+            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment().tz() : this.model.get(this.options.timezoneAttribute));
+            if (this.chronos) {
+                return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment().tz() };
+            }
             // on parse error return null
             return !parsedDate ? undefined : parsedDate.valueOf();
         },

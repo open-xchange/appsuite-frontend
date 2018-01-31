@@ -20,8 +20,10 @@ define('io.ox/mail/actions/create', [
     'io.ox/mail/util',
     'io.ox/core/yell',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (capabilities, contactAPI, userAPI, util, yell, settings, gt) {
+    'settings!io.ox/calendar',
+    'gettext!io.ox/core',
+    'io.ox/calendar/util'
+], function (capabilities, contactAPI, userAPI, util, yell, settings, calendarSettings, gt, calendarUtil) {
 
     'use strict';
 
@@ -62,8 +64,16 @@ define('io.ox/mail/actions/create', [
             });
     }
 
-    function launchCalendar(participants, title) {
-        var data = { participants: participants, title: title, folder_id: settings.get('folder/calendar') };
+    function launchCalendar(attendees, title) {
+        var refDate = moment().startOf('hour').add(1, 'hours'),
+            data = {
+                attendees: attendees,
+                title: title,
+                folder_id: calendarSettings.get('chronos/defaultFolderId'),
+                startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
+                endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
+            };
+
         ox.launch('io.ox/calendar/edit/main')
             .always(idle)
             .done(function () {
@@ -88,11 +98,17 @@ define('io.ox/mail/actions/create', [
                 // map contacts to participants and create new appointment
                 var participants = [];
                 _(arguments).each(function (contact) {
-                    participants.push(
-                        contact.internal_userid ?
-                            { type: 1, id: contact.internal_userid } :
-                            { type: 5, display_name: contact.display_name, mail: contact.email1 }
-                    );
+                    if (contact.internal_userid !== undefined) {
+                        contact.type = 1;
+                        contact.user_id = contact.internal_userid;
+                    } else {
+                        contact.type = 5;
+                        contact.display_name = contact.display_name;
+                        contact.mail = contact.email1;
+                    }
+
+                    participants.push(calendarUtil.createAttendee(contact));
+
                 });
                 launchCalendar(participants, baton.data.subject);
             });

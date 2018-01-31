@@ -25,65 +25,6 @@ define('io.ox/core/folder/contextmenu', [
 
     'use strict';
 
-    //
-    // drawing utility functions
-    //
-
-    var ColorSelectionView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'custom-colors',
-        events: {
-            'click .color-label': 'select',
-            'remove': 'onRemove'
-        },
-        initialize: function () {
-            this.listenTo(this.model, 'change:meta', this.update);
-        },
-        update: function () {
-            //toggle active class
-            $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
-        },
-        select: function (e) {
-            var meta = _.extend({},
-                this.model.get('meta'),
-                { color_label: $(e.currentTarget).data('index') }
-            );
-
-            api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
-                require(['io.ox/core/notifications'], function (notifications) {
-                    notifications.yell(error);
-                });
-            });
-
-            //prevent dialog from closing
-            e.stopPropagation();
-            e.preventDefault();
-        },
-        render: function (util) {
-            var folderColor = util.getFolderColor({ meta: this.model.get('meta') });
-
-            this.$el.append(
-                _.range(1, 11).map(function (colorNumber) {
-                    return $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
-                        .addClass('color-label-' + colorNumber)
-                        .toggleClass('active', folderColor === colorNumber)
-                        .attr({
-                            'data-index': colorNumber,
-                            'aria-checked': folderColor === colorNumber,
-                            'title': util.getColorLabel(colorNumber)
-                        })
-                        .append($('<i class="fa fa-check" aria-hidden="true">'));
-                })
-            );
-
-            return this;
-        },
-        onRemove: function () {
-            this.stopListening();
-        }
-    });
-
     var extensions = {
 
         //
@@ -370,6 +311,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (_.device('ios || android')) return;
                 if (!api.can('import', baton.data)) return;
+                if (baton.data.module === 'calendar') return;
 
                 contextUtils.addLink(this, {
                     action: 'import',
@@ -548,20 +490,29 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!/^calendar$/.test(baton.module)) return;
-                if (!api.is('private', baton.data)) return;
+                var extProps = baton.data['com.openexchange.calendar.extendedProperties'];
+                if (extProps && extProps.color && extProps.color.proected === false) return;
 
                 if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
                     var listItem, container = this.parent();
 
-                    this.append(
-                        listItem = $('<li role="presentation">')
-                    );
+                    this.append(listItem = $('<li role="presentation">'));
 
-                    require(['io.ox/calendar/util'], function (calendarUtil) {
+                    require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
                         listItem.append(
-                            new ColorSelectionView({
-                                model: api.pool.getModel(baton.data.id)
-                            }).render(calendarUtil).$el
+                            new ColorPicker({
+                                model: api.pool.getModel(baton.data.id),
+                                getValue: function () {
+                                    return calendarUtil.getFolderColor(this.model.attributes);
+                                },
+                                setValue: function (value) {
+                                    api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
+                                        require(['io.ox/core/notifications'], function (notifications) {
+                                            notifications.yell(error);
+                                        });
+                                    });
+                                }
+                            }).render().$el
                         );
                         // trigger ready to recompute bounds of smart dropdown
                         container.trigger('ready');
@@ -569,6 +520,21 @@ define('io.ox/core/folder/contextmenu', [
                 }
             };
         })(),
+
+        //
+        // Only select that calendar folder
+        //
+        selectOnly: function (baton) {
+            if (!/^calendar$/.test(baton.module)) return;
+
+            contextUtils.addLink(this, {
+                action: 'select-only',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.selectOnly,
+                text: gt('Show this calendar only')
+            });
+        },
 
         divider: contextUtils.divider
     };
@@ -685,6 +651,11 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.properties
         },
         */
+        {
+            id: 'select-only',
+            index: 6100,
+            draw: extensions.selectOnly
+        },
         {
             id: 'toggle',
             index: 6200,

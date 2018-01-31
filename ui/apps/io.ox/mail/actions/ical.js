@@ -14,9 +14,10 @@
 
 define('io.ox/mail/actions/ical', [
     'settings!io.ox/core',
+    'settings!io.ox/calendar',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (coreSettings, notifications, gt) {
+], function (coreSettings, calendarSettings, notifications, gt) {
 
     'use strict';
 
@@ -34,9 +35,9 @@ define('io.ox/mail/actions/ical', [
                     ]
                 },
                 {
-                    identifier: 'com.openexchange.ical',
+                    identifier: 'com.openexchange.chronos.ical',
                     args: [
-                        { 'com.openexchange.groupware.calendar.folder': coreSettings.get('folder/calendar') },
+                        { 'com.openexchange.groupware.calendar.folder': calendarSettings.get('chronos/defaultFolderId') },
                         { 'com.openexchange.groupware.task.folder': coreSettings.get('folder/tasks') }
                     ]
                 }

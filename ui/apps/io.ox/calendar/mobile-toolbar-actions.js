@@ -15,8 +15,9 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/calendar/api',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar'
-], function (ext, links, api, gt) {
+], function (ext, links, api, util, gt) {
 
     'use strict';
 
@@ -174,7 +175,11 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }, 10);
 
     function prepareUpdateToolbar(app) {
-        var list = app.pages.getCurrentPage().name === 'list' ? app.getGrid().selection.get() : {};
+        var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : {};
+        list = _(list).map(function (item) {
+            if (_.isString(item)) return util.cid(item);
+            return item;
+        });
         app.updateToolbar(list);
     }
 
@@ -196,7 +201,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             if (_.device('!smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change
-            app.getGrid().selection.on('change', function () {
+            app.listView.on('selection:change', function () {
                 prepareUpdateToolbar(app);
             });
             // folder change

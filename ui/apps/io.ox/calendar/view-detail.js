@@ -17,11 +17,12 @@ define('io.ox/calendar/view-detail', [
     'io.ox/calendar/util',
     'io.ox/calendar/api',
     'io.ox/core/tk/attachments',
-    'io.ox/participants/detail',
+    'io.ox/participants/chronos-detail',
     'gettext!io.ox/calendar',
+    'io.ox/calendar/model',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt) {
+], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
 
     'use strict';
 
@@ -55,9 +56,17 @@ define('io.ox/calendar/view-detail', [
         id: 'date-time',
         draw: function (baton, options) {
             var node = $('<div class="date-time-recurrence">');
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, options);
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, _.extend({ zone: moment().tz() }, options));
+            ext.point('io.ox/calendar/detail/icons').invoke('draw', node.find('.date-time'), baton);
             this.append(node);
         }
+    });
+
+    // draw icons
+    ext.point('io.ox/calendar/detail/icons').extend({
+        index: 100,
+        id: 'additional-flags',
+        draw: extensions.additionalFlags
     });
 
     // draw date and recurrence information
@@ -83,8 +92,11 @@ define('io.ox/calendar/view-detail', [
     ext.point('io.ox/calendar/detail').extend({
         index: 450,
         id: 'recurrence-warning',
-        draw: function () {
-            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).hide());
+        draw: function (baton) {
+            if (!(baton.data.recurrenceId && baton.data.id !== baton.data.seriesId)) return;
+
+            // use exact check for isCreateEvent === false here or the recurrence warning is drawn on initial drawing too
+            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).toggle(baton.isCreateEvent === false));
         }
     });
 
@@ -107,7 +119,7 @@ define('io.ox/calendar/view-detail', [
         index: 700,
         id: 'inline-actions-participantrelated',
         draw: function (baton) {
-            if (!baton.data.participants && !baton.data.participants.length <= 1) return;
+            if (!baton.model.get('attendees') || baton.model.get('attendees').length <= 1) return;
             ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, baton);
         }
     });
@@ -124,6 +136,13 @@ define('io.ox/calendar/view-detail', [
         index: 100,
         id: 'organizer',
         draw: extensions.organizer
+    });
+
+    // sentby
+    ext.point('io.ox/calendar/detail/details').extend({
+        index: 150,
+        id: 'sentby',
+        draw: extensions.sentBy
     });
 
     // show as
@@ -165,7 +184,7 @@ define('io.ox/calendar/view-detail', [
         e.preventDefault();
 
         var baton = e.data.baton,
-            folder = String(baton.data.folder_id);
+            folder = String(baton.data.folder);
 
         ox.launch('io.ox/calendar/main', { folder: folder }).done(function () {
             var app = this,
@@ -173,7 +192,7 @@ define('io.ox/calendar/view-detail', [
 
             ox.ui.Perspective.show(app, perspective).done(function (p) {
                 function cont() {
-                    if (p.selectAppointment) p.selectAppointment(baton.data);
+                    if (p.selectAppointment) p.selectAppointment(baton.model);
                 }
 
                 if (app.folder.get() === folder) {
@@ -209,12 +228,7 @@ define('io.ox/calendar/view-detail', [
                 )
             );
 
-            if (calAPI.uploadInProgress(_.ecid(baton.data))) {
-                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
-                this.append(
-                    $node.append(progressview.render().$el)
-                );
-            } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
+            if (baton.data.attachments && baton.data.attachments.length) {
                 this.append($node);
                 ext.point('io.ox/calendar/detail/attachments').invoke('draw', $node, baton);
             }
@@ -232,32 +246,39 @@ define('io.ox/calendar/view-detail', [
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
-    function showInfo(e) {
-        e.data.node.find('.recurrence-warning').show();
-    }
-
     return {
 
         draw: function (baton, options) {
+            if (baton && !(baton instanceof ext.Baton) && baton.data) {
+                baton = baton.data;
+            }
+
+            // keep event info but remove it from baton (baton sometimes is the actual event model)
+            var isCreateEvent;
+            if (baton && baton.isCreateEvent !== undefined) {
+                isCreateEvent = baton.isCreateEvent;
+                delete baton.isCreateEvent;
+            }
             // make sure we have a baton
-            baton = ext.Baton.ensure(baton);
-            options = _.extend({ minimaldata: !baton.data.folder_id }, options);
+            baton = baton instanceof Backbone.Model ? new ext.Baton({ model: baton, data: baton.toJSON() }) : ext.Baton.ensure(baton);
+
+            // if we only have one create the other
+            if (baton.data && !baton.model) {
+                baton.model = new ChronosModel.Model(baton.data);
+            }
+            if (baton.model && !baton.data) {
+                baton.data = baton.model.toJSON();
+            }
+
+            options = _.extend({ minimaldata: !baton.data.folder }, options);
             if (_.device('smartphone') && !options.deeplink) {
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
             }
             try {
-                var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(baton.data)));
-
+                var node = $.createViewContainer(baton.data, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
+                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
+                baton.isCreateEvent = isCreateEvent;
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
-
-                // check if this is an exception from a series
-                if (baton.data.recurrence_id && baton.data.recurrence_id !== baton.data.id) {
-                    calAPI.on('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), { node: node }, showInfo);
-                    node.one('remove', function () {
-                        calAPI.off('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), showInfo);
-                    });
-                }
                 return node;
 
             } catch (e) {

@@ -64,7 +64,7 @@
     }
     .freetime-time-view-header {
         &.row1 {
-            padding-top: 8px;
+            padding-top: 9px;
         }
     }
     .scheduling-app-close {
@@ -100,23 +100,29 @@
         padding: 0 0 0 16px;
     }
     .info {
-        left: auto;
-        text-align: left;
-        max-width: 30%;
-        position: absolute;
         margin-left: 16px;
-        line-height: 18px;
-        font-size: 16px;
+        line-height: 24px;
+        font-size: 20px;
         color: #333;
         text-decoration: none;
-
-        .ellipsis();
-        .fontWeight(300);
+        .fontWeight(bold);
 
         .cw {
             font-size: 14px;
             color: @hc-gray;
             margin-left: 8px;
+        }
+    }
+
+    .zoomlevel-selector {
+        width: 150px;
+        display: inline-block;
+        margin-right: 32px;
+        margin-top: -6px;
+
+        input {
+            text-align: center;
+            background-color: #fff;
         }
     }
 
@@ -165,16 +171,8 @@
     .freetime-time-view-header {
         flex: 1;
         -webkit-flex: 1;
-        &.row1 {
-            margin-top: 1px;
-        }
 
-        .controls-container {
-            display: inline-block;
-            width: auto;
-
-            a { padding: 9px; }
-        }
+        .controls-container a { padding: 9px; }
     }
     .dropdown-menu {
         // stay over dynamic appointment indexes
@@ -204,6 +202,12 @@
             }
         }
     }
+
+    &.showFineGrid.zoomlevel-1000 .freetime-time-view-header .freetime-timeline .daylabel-container,
+    &.showFineGrid.zoomlevel-1000 .freetime-time-view-header .freetime-timeline .freetime-hour {
+        border-left-color: #333;
+    }
+
     .freetime-time-view-header {
         flex: 1;
         -webkit-flex: 1;
@@ -226,33 +230,51 @@
                 &.today {
                     .daylabel-container {
                         border-left-color: @today;
+                        border-bottom: 1px solid @today;
+
+                        .day-label {
+                            color:  @today;
+                        }
                         .day-label-wrapper:first-child {
                             .day-label {
                                 background: @today;
                                 color: #fff;
+                                .number {
+                                    color: #fff;
+                                }
                             }
                         }
-                    }
-                    .day-start {
-                        border-left-color: @today;
                     }
                 }
 
                 .daylabel-container {
                     display: flex;
                     display: -webkit-flex;
-                    height: 24px;
+                    height: 28px;
                     border-left: 1px solid #888;
                     .day-label-wrapper {
                         font-weight: bold;
                         display: inline;
                         min-width: 25%;
+
                         .day-label {
-                            padding: 2px 8px 4px 8px;
                             display: inline-block;
-                        }
-                        &.weekend {
-                            color: #cf3239;
+                            padding: 0 8px;
+                            color: #767676;
+                            font-size: 14px;
+
+                            .number {
+                                font-size: 20px;
+                                font-weight: bold;
+                                color: black;
+                                margin-left: 2px;
+                            }
+                            &.weekend {
+                                color: @weekend;
+                                .number {
+                                    color: @weekend;
+                                }
+                            }
                         }
                     }
 
@@ -264,7 +286,7 @@
                 .day-hours {
                     display: flex;
                     display: -webkit-flex;
-                    height: 31px
+                    height: 27px
                 }
             }
 
@@ -292,7 +314,45 @@
         }
     }
 
-    &.zoomlevel-100  {
+    &.zoomlevel-10 {
+        // use visibility here not display none (elements should still take up space)
+        .freetime-time-view-header .freetime-timeline {
+            .freetime-hour {
+                visibility: hidden;
+                padding-left: 0px;
+            }
+             // push the hours under the table
+            .daylabel-container {
+                margin-top: 24px;
+                height: 32px;
+                border-bottom: 1px solid #ccc;
+            }
+        }
+
+    }
+
+    // only show every 4th hour
+    &.zoomlevel-25 {
+        .freetime-hour {
+            // use visibility here not display none (elements should still take up space)
+            visibility: hidden;
+            &:nth-child(4n+1) {
+                visibility: visible;
+            }
+        }
+    }
+
+    // only show every 2nd hour
+    &.zoomlevel-50 {
+        .freetime-hour {
+            // use visibility here not display none (elements should still take up space)
+            &:nth-child(even) {
+                visibility: hidden;
+            }
+        }
+    }
+
+    &.zoomlevel-10, &.zoomlevel-25, &.zoomlevel-50 , &.zoomlevel-100  {
         .freetime-timeline .timeline-day .daylabel-container .level-2{
             display: none;
         }
@@ -301,30 +361,18 @@
             min-width: 50%;
         }
 
-        &.only-workinghours .freetime-timeline .timeline-day .daylabel-container .level-1{
+        &.onlyWorkingHours .freetime-timeline .timeline-day .daylabel-container .level-1{
             display: none;
         }
-        .freetime-hour {
-            min-width: 60px;
-        }
     }
+
     &.zoomlevel-200 {
-        &.only-workinghours .freetime-timeline .timeline-day .daylabel-container .day-label-wrapper {
+        &.onlyWorkingHours .freetime-timeline .timeline-day .daylabel-container .day-label-wrapper {
             min-width: 50%;
             &.level-2{
                 display: none;
             }
         }
-        .freetime-hour {
-            min-width: 120px;
-        }
-    }
-    &.zoomlevel-400 .freetime-hour {
-        min-width: 240px;
-    }
-
-    &.zoomlevel-1000 .freetime-hour {
-        min-width: 600px;
     }
 }
 
@@ -395,23 +443,48 @@
         }
     }
 
+    &.showFineGrid .freetime-table-cell {
+        background-image: linear-gradient(90deg, #aaa 0px, transparent 1px);
+        //needed to draw the borders correctly for the day-start and today cells
+        background-origin: border-box;
+    }
+
+    // zoomlevel is too low to show a fine grid
+     &.zoomlevel-10.showFineGrid .freetime-table-cell, &.zoomlevel-25.showFineGrid .freetime-table-cell, &.zoomlevel-50.showFineGrid .freetime-table-cell {
+        background-image: none;
+    }
+
+    &.zoomlevel-1000.showFineGrid .freetime-table-cell {
+        background-image: linear-gradient(90deg, #333 0px, transparent 1px, transparent 49px, #ccc 50px, transparent 51px, transparent 99px, #ccc 100px, transparent 101px, transparent 149px);
+        background-size: 150px 1px;
+    }
+    &.zoomlevel-100.showFineGrid .freetime-table-cell {
+        background-size: 15px 1px;
+    }
+    &.zoomlevel-200.showFineGrid .freetime-table-cell {
+        background-size: 30px 1px;
+    }
+    &.zoomlevel-400.showFineGrid .freetime-table-cell {
+        background-size: 60px 1px;
+    }
+    &.zoomlevel-1000.showFineGrid .freetime-table-cell {
+        background-image: linear-gradient(90deg, #333 0px, transparent 1px, transparent 49px, #ccc 50px, transparent 51px, transparent 99px, #ccc 100px, transparent 101px, transparent 149px);
+        background-size: 150px 1px;
+    }
+    &.showFineGrid.zoomlevel-1000 .freetime-time-view-body .freetime-table .freetime-time-table .freetime-table-cell:not(.today) {
+        border-left: none;
+    }
+
     &.zoomlevel-100 .appointment{
          &.under-one-hour .title,.location{
             display: none;
         }
     }
 
-    &.zoomlevel-100 .freetime-table-cell {
-        width: 60px;
-    }
-    &.zoomlevel-200 .freetime-table-cell {
-        width: 120px;
-    }
-    &.zoomlevel-400 .freetime-table-cell {
-        width: 240px;
-    }
-    &.zoomlevel-1000 .freetime-table-cell {
-        width: 600px;
+    &.zoomlevel-10 .appointment, &.zoomlevel-25 .appointment, &.zoomlevel-50 .appointment{
+        .title,.location{
+            display: none;
+        }
     }
 
     .freetime-time-view-body {
@@ -463,10 +536,6 @@
                     &.first {
                         border-left: none;
                     }
-
-                    &.today {
-                        border-left-color: @today
-                    }
                 }
             }
             .freetime-lasso {
@@ -479,6 +548,17 @@
                 border: 1px solid #63b7ff;
                 border-width: 0 1px 0 1px;
                 // high z index to leave room for dynamic appointment z index
+                z-index: 9001;
+            }
+            .current-time {
+                // important or the lasso prevents clicks on the appointments
+                pointer-events:none;
+                background-color: @today;
+                width: 2px;
+                bottom: 0;
+                top: 0;
+                position: absolute;
+                // high z index to leave room for dynamic appointment z index
                 z-index: 9000;
             }
         }
@@ -487,10 +567,11 @@
             font-size: 12px;
 
             .appointment-table {
+                z-index: 1;
                 height: 40px;
                 position: relative;
                 &:not(:last-child) {
-                    border-bottom: #eee solid 1px;
+                    border-bottom: #ddd solid 1px;
                 }
 
                 .appointment {

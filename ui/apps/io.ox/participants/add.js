@@ -19,6 +19,7 @@ define('io.ox/participants/add', [
     'io.ox/mail/util',
     'io.ox/contacts/util',
     'io.ox/core/util',
+    'io.ox/calendar/util',
     'io.ox/core/yell',
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
@@ -26,7 +27,7 @@ define('io.ox/participants/add', [
     'io.ox/backbone/mini-views/addresspicker',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, calendarUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
 
     'use strict';
 
@@ -168,13 +169,37 @@ define('io.ox/participants/add', [
 
         addParticipant: function (e, data, value) {
             var list = [].concat(data),
+                distlists = [],
                 // validate is just used to check against blacklist
-                error = this.validate ? this.validate(list) : false;
+                error = this.validate ? this.validate(list) : false,
+                self = this;
             // abort when blacklisted where found
             if (error) return;
             // now really validate address
             list = this.getValidAddresses(list);
-            this.collection.add(list);
+
+            if (this.options.convertToAttendee) {
+
+                list = _(list).chain().map(function (item) {
+                    if (!(item.attributes && item.attributes.mark_as_distributionlist)) {
+                        return calendarUtil.createAttendee(item);
+                    }
+                    distlists.push(item);
+
+                }).flatten().compact().value();
+            }
+            if (!_.isEmpty(list)) this.collection.add(list);
+
+            if (!_.isEmpty(distlists)) {
+                _.each(distlists, function (item) {
+                    self.collection.resolveDistList(item.attributes.distribution_list).done(function (list) {
+                        _.each(list, function (item) {
+                            self.collection.add(calendarUtil.createAttendee(item));
+                        });
+                    });
+                });
+            }
+
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
         },
@@ -215,6 +240,12 @@ define('io.ox/participants/add', [
             if (this.options.usePicker) {
                 this.addresspicker = new AddressPickerView({
                     process: function (e, member) {
+                        if (self.options.convertToAttendee) {
+                            // fix type 5 that are actually type 1
+                            member.magic();
+                            self.options.collection.add(calendarUtil.createAttendee(member));
+                            return;
+                        }
                         self.options.collection.add(member);
                     }
                 });

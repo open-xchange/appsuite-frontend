@@ -21,27 +21,14 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
+    'io.ox/calendar/model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('week'),
-        // ensure cid is used in model and collection as idAttribute properly
-        // hint: please note that WeekAppointment is actually not used as Model
-        //       cause we currently still have to deal with the ModelFactory
-        WeekAppointment = Backbone.Model.extend({
-            idAttribute: 'cid',
-            initialize: function () {
-                this.cid = this.attributes.cid = _.cid(this.attributes);
-                // backward compatibility
-                this.id = this.cid;
-            }
-        }),
-        WeekAppointmentCollection = Backbone.Collection.extend({
-            model: WeekAppointment
-        });
+    var perspective = new ox.ui.Perspective('week');
 
     _.extend(perspective, {
 
@@ -55,7 +42,7 @@ define('io.ox/calendar/week/perspective', [
         /**
          * open sidepopup to show appointment
          * @param  {Event}  e   given click event
-         * @param  {Object} obj appointment object (min. id, folder_id, recurrence_position)
+         * @param  {Object} obj appointment object (min. id, folder, recurrence_position)
          */
         showAppointment: function (e, obj) {
             // open appointment details
@@ -64,76 +51,82 @@ define('io.ox/calendar/week/perspective', [
                 self.app.pages.changePage('detailView');
                 self.app.pages.getPage('detailView').busy();
             }
-            api.get(obj).then(
-                function success(data) {
 
-                    if (_.device('smartphone')) {
-                        var p = self.app.pages.getPage('detailView'),
-                            b = new ext.Baton({ data: data });
-                        // draw details to page
-                        p.idle().empty().append(detailView.draw(data));
-                        // update toolbar with new baton
-                        self.app.pages.getToolbar('detailView').setBaton(b);
-
-                    } else {
-                        self.dialog.show(e, function (popup) {
-                            popup
-                            .append(detailView.draw(data))
-                            .attr({
-                                'role': 'complementary',
-                                'aria-label': gt('Appointment Details')
-                            });
-                        });
-                    }
-                    if (self.setNewStart) {
-                        // view should change week to the start of this appointment(used by deeplinks)
-                        // one time only
-                        self.setNewStart = false;
-                        self.app.refDate = moment(data.start_date);
-                        if (self.view) {
-                            //view is rendered already
-                            self.view.setStartDate(data.start_date);
-                        }
-                    }
-
-                },
-                function fail() {
-                    notifications.yell('error', gt('An error occurred. Please try again.'));
-                    $('.appointment', self.main).removeClass('opac current');
-                    if (_.device('smartphone')) {
-                        self.app.pages.getPage('detailView').idle();
-                        self.app.pages.goBack();
+            function applyDate(model) {
+                if (self.setNewStart) {
+                    // view should change week to the start of this appointment(used by deeplinks)
+                    // one time only
+                    self.setNewStart = false;
+                    if (self.view) {
+                        //view is rendered already
+                        self.view.setStartDate(util.getMoment(model.get('startDate')), false);
                     }
                 }
-            );
+            }
+
+            function failHandler() {
+                notifications.yell('error', gt('An error occurred. Please try again.'));
+                $('.appointment', self.main).removeClass('opac current');
+                if (_.device('smartphone')) {
+                    self.app.pages.getPage('detailView').idle();
+                    self.app.pages.goBack();
+                }
+            }
+
+            if (_.device('smartphone')) {
+                var p = self.app.pages.getPage('detailView');
+                api.get(obj).then(function (model) {
+                    var data = model.toJSON(),
+                        b = new ext.Baton({ data: data, model: model });
+                    p.idle().empty().append(detailView.draw(model));
+                    self.app.pages.getToolbar('detailView').setBaton(b);
+                    applyDate(model);
+                }, failHandler);
+
+            } else {
+                self.dialog.show(e, function (popup) {
+                    popup
+                    .busy()
+                    .attr({
+                        'role': 'complementary',
+                        'aria-label': gt('Appointment Details')
+                    });
+
+                    api.get(obj).then(function (model) {
+                        popup.idle().append(detailView.draw(model));
+                        applyDate(model);
+                    }, failHandler);
+                });
+            }
         },
 
         /**
          * update appointment data
-         * @param  {Object} obj new appointment data
+         * @param  {Object} model the appointment model
          */
-        updateAppointment: function (obj) {
+        updateAppointment: function (model) {
             var self = this;
 
             /**
              * call api update function
              * @param  {Object} obj new appointment data
              */
-            var apiUpdate = function (obj) {
-                obj = clean(obj);
-                api.update(obj).fail(function (error) {
-                    if (!error.conflicts) return notifications.yell(error);
+            var apiUpdate = function (model, options) {
+                clean(model);
+                api.update(model, options).then(function success(data) {
+                    if (!data || !data.conflicts) return;
 
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                        conflictView.dialog(error.conflicts)
+                        conflictView.dialog(data.conflicts)
                             .on('cancel', function () {
-                                self.refresh();
+                                self.view.renderAppointments();
                             })
                             .on('ignore', function () {
-                                obj.ignore_conflicts = true;
-                                apiUpdate(obj);
+                                apiUpdate(model, _.extend(options || {}, { checkConflicts: false }));
                             });
                     });
+                }, function fail(error) {
+                    notifications.yell(error);
                 });
             };
 
@@ -142,50 +135,46 @@ define('io.ox/calendar/week/perspective', [
              * @param  {Object} obj new appointment data
              * @return { Object}     clean appointment data
              */
-            var clean = function (app) {
-                _.each(app, function (el, i) {
-                    if (el === null || _.indexOf(['old_start_date', 'old_end_date', 'drag_move'], i) >= 0) {
-                        delete app[i];
-                    }
-                });
-                return app;
+            var clean = function (event) {
+                event.unset('oldStartDate', { silent: true });
+                event.unset('oldEndDate', { silent: true });
+                return event;
             };
 
-            if (obj.recurrence_type > 0) {
-                var dialog;
-                if (obj.drag_move && obj.drag_move !== 0) {
-                    dialog = util.getRecurrenceChangeDialog();
-                } else {
-                    dialog = util.getRecurrenceEditDialog();
-                }
-                dialog
-                    .show()
-                    .done(function (action) {
-                        switch (action) {
-                            case 'series':
-                                // get recurrence master object
-                                if (obj.old_start_date || obj.old_end_date) {
-                                    // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                    api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
-                                        // calculate new dates if old dates are available
-                                        data.start_date += (obj.start_date - obj.old_start_date);
-                                        data.end_date += (obj.end_date - obj.old_end_date);
-                                        data = util.updateRecurrenceDate(data, obj.old_start_date);
-                                        apiUpdate(data);
-                                    });
-                                }
-                                break;
-                            case 'appointment':
-                                apiUpdate(api.removeRecurrenceInformation(obj));
-                                break;
-                            default:
-                                self.refresh();
-                                return;
-                        }
-                    });
-            } else {
-                apiUpdate(obj);
-            }
+            util.showRecurrenceDialog(model)
+                .done(function (action) {
+                    switch (action) {
+                        case 'series':
+                        case 'thisandfuture':
+                            var master;
+                            if (action === 'series') master = api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false);
+                            else master = $.when(model.clone());
+                            // get recurrence master object
+                            master.done(function (masterModel) {
+                                // calculate new dates if old dates are available
+                                var oldStartDate = masterModel.getMoment('startDate'),
+                                    startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
+                                    endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
+                                    format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                                masterModel.set({
+                                    startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
+                                    endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
+                                });
+                                util.updateRecurrenceDate(masterModel, oldStartDate);
+                                apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
+                                    checkConflicts: true,
+                                    recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                }));
+                            });
+                            break;
+                        case 'appointment':
+                            apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                            break;
+                        default:
+                            self.view.renderAppointments();
+                            return;
+                    }
+                });
         },
 
         /**
@@ -214,17 +203,41 @@ define('io.ox/calendar/week/perspective', [
          */
         getAppointments: function (useCache) {
             // fetch appointments
-            var self = this,
-                obj = self.view.getRequestParam();
-            return api.getAll(obj, useCache).done(function (list) {
-                self.view.reset(obj.start, list);
-            }).fail(function (error) {
-                // no permission to read appointments in this folder
-                if (error && error.code !== 'APP-0013') {
-                    notifications.yell('error', gt('An error occurred. Please try again.'));
-                }
-            });
+            var obj = this.view.getRequestParam(),
+                collection = api.getCollection(obj);
+
+            // // set manually to expired to trigger reload on next opening
+            if (useCache === false) {
+                api.pool.grep('view=week').forEach(function (c) {
+                    if (c !== collection) c.expired = true;
+                });
+            }
+
+            this.view.setCollection(collection);
+            collection.sync();
+            this.prefetch(-1, collection);
         },
+
+        prefetch: (function () {
+            function getNewParams(params, index) {
+                var range = moment(params.end).diff(moment(params.start), 'ms');
+                return _.extend({}, params, {
+                    start: index < 0 ? params.start - range : params.end,
+                    end: index < 0 ? params.start : params.end + range
+                });
+            }
+            return _.debounce(function (index, prevCollection) {
+                var self = this,
+                    params = this.view.getRequestParam(),
+                    newParams = getNewParams(params, index),
+                    collection = api.getCollection(newParams),
+                    cont = function () {
+                        collection.sync();
+                        if (index < 0) self.prefetch(1, collection);
+                    };
+                prevCollection.once('load reload', cont);
+            }, 0);
+        }()),
 
         /**
          * call view print function
@@ -243,9 +256,43 @@ define('io.ox/calendar/week/perspective', [
 
         updateColor: function (model) {
             if (!model) return;
-            $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
-                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + (model.get('meta') ? model.get('meta').color_label || '1' : '1'));
+            var color = util.getFolderColor(model.attributes),
+                container = $('[data-folder="' + model.get('id') + '"]', this.view.weekViewCon);
+            $('[data-folder="' + model.get('id') + '"]', this.view.weekViewCon).css({
+                'background-color': color,
+                'color': util.getForegroundColor(color)
+            }).data('background-color', color);
+
+            container.removeClass('black white');
+            container.addClass(util.getForegroundColor(color));
+
+            $('[data-folder="' + model.get('id') + '"]', this.view.dayLabel).css({
+                'border-color': color
             });
+        },
+
+        onChangeColorScheme: function () {
+            if (this.app.props.get('colorScheme') !== 'custom') {
+                $('.appointment', this.pane).css({ 'background-color': '', 'color':  '' });
+            } else {
+                $('.appointment', this.pane).each(function () {
+                    var $elem = $(this),
+                        cid = $elem.data('cid'),
+                        folder = util.cid(cid).folder,
+                        model = api.pool.getModel(cid),
+                        folderModel = folderAPI.pool.models[folder];
+                    if (!model || !folderModel) return;
+                    var color = util.getAppointmentColor(folderModel.attributes, model);
+                    if (!color) return;
+                    $elem.css({
+                        'background-color': color,
+                        'color': util.getForegroundColor(color)
+                    }).data('background-color', color);
+                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
+                        $elem.attr('data-folder', folder);
+                    }
+                });
+            }
         },
 
         /**
@@ -256,24 +303,24 @@ define('io.ox/calendar/week/perspective', [
             if ($.contains(self.view.el, document.activeElement)) {
                 self.activeElement = $(document.activeElement);
             }
-            this.app.folder.getData().done(function (data) {
+            $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (data, folders) {
                 // update view folder data
+                self.view.setFolders(folders);
                 self.view.folder(data);
                 // save folder data to view and update
-                self.getAppointments(useCache).done(function () {
-                    // refocus pane on update
-                    if (self.activeElement) {
-                        self.activeElement.focus();
-                        self.activeElement = null;
-                    }
-                });
+                self.getAppointments(useCache);
 
                 // register event to listen to color changes on current folder
-                if (self.folderModel) {
-                    self.folderModel.off('change:meta', self.updateColor);
+                if (self.folderModels) {
+                    self.folderModels.forEach(function (folderModel) {
+                        folderModel.off('change:com.openexchange.calendar.extendedProperties', self.updateColor);
+                    });
                 }
-                self.folderModel = folderAPI.pool.getModel(data.id);
-                self.folderModel.on('change:meta', self.updateColor, self);
+                self.folderModels = _(folders).map(function (folder) {
+                    var model = folderAPI.pool.getModel(folder.id);
+                    model.on('change:com.openexchange.calendar.extendedProperties', self.updateColor, self);
+                    return model;
+                });
             });
         },
         /**
@@ -304,14 +351,26 @@ define('io.ox/calendar/week/perspective', [
 
             // init views
             if (this.views[opt.perspective] === undefined) {
+
                 this.view = window.weekview = new View({
                     app: app,
-                    collection: this.collection,
                     mode: opt.perspective.split(':')[1],
-                    refDate: this.app.refDate,
+                    startDate: app.getDate(),
                     perspective: this,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
+
+                // populate date change from view to app
+                this.view.on('change:date', function (date) {
+                    app.setDate(date);
+                });
+
+                // respond to date change on app level
+                this.view.listenTo(app.props, 'change:date', _.debounce(function (model, value) {
+                    if (!this.$el.is(':visible')) return;
+                    if (ox.debug) console.log('week: change date by app', value);
+                    this.setStartDate(value);
+                }, 100, true));
 
                 this.main.attr('aria-label', {
                     'day': gt('Calendar Day View'),
@@ -335,9 +394,10 @@ define('io.ox/calendar/week/perspective', [
                 this.view.setScrollPos();
             } else {
                 this.view = this.views[opt.perspective];
-                this.view.setStartDate(app.refDate);
+                this.view.setStartDate(app.getDate());
                 this.view.$el.show();
             }
+            app.trigger('aftershow:done', this);
 
             // renew data
             this.refresh();
@@ -365,7 +425,7 @@ define('io.ox/calendar/week/perspective', [
 
                     //marker to make the view open in the correct week
                     this.setNewStart = true;
-                    this.showAppointment(e, _.cid(cid), { arrow: false });
+                    this.showAppointment(e, util.cid(cid), { arrow: false });
                 }
             }
         },
@@ -387,7 +447,6 @@ define('io.ox/calendar/week/perspective', [
                     'role': 'main',
                     'aria-label': gt('Appointment list')
                 });
-            this.collection = new WeekAppointmentCollection([]);
 
             var refresh = function () { self.refresh(true); },
                 reload = function () { self.refresh(false); };
@@ -399,25 +458,38 @@ define('io.ox/calendar/week/perspective', [
                 });
 
             // watch for api refresh
-            api.on('create update delete refresh.all', refresh)
+            api
+                .on('refresh.all', reload)
+                .on('create update delete', _.debounce(function () {
+                    var collection = self.view.collection;
+                    // set all other collections to expired to trigger a fresh load on the next opening
+                    api.pool.grep('view=week').forEach(function (c) {
+                        if (c !== collection) c.expired = true;
+                    });
+                    collection.sync();
+                    self.prefetch(-1, collection);
+                }))
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
                 })
-                .on('create update', function (e, obj) {
+                .on('create update', function (obj) {
                     var current = ox.ui.App.getCurrentApp().getName();
                     if (!/^io.ox\/calendar/.test(current)) return;
-                    if (obj.recurrence_type === 0) {
-                        // select 'All my appointments' if appointment is not in the current folder
-                        if (app.folder.get() !== String(obj.folder_id)) app.folder.set('virtual/all-my-appointments');
-                        self.view.setStartDate(obj.start_date, obj.full_time);
+                    if (!obj.seriesId || obj.seriesId !== obj.id) {
+                        if (app.folder.get() !== String(obj.folder)) app.folder.set(obj.folder);
+                        self.view.setStartDate(util.getMoment(obj.startDate).valueOf(), obj.allTime);
                     }
                 });
 
             // watch for folder change
             this.app
-                .on('folder:change', refresh)
-                .on('folder:delete', reload);
+                .on('folders:change', refresh)
+                .on('folder:change', function () {
+                    app.folder.getData().done(function (data) {
+                        self.view.folder(data);
+                    });
+                });
             this.app.getWindow()
                 .on('beforehide', $.proxy(this.save, this))
                 .on('show', $.proxy(this.restore, this))
@@ -430,13 +502,15 @@ define('io.ox/calendar/week/perspective', [
                     self.view.fnKey(e);
                 });
 
+            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
+
             this.followDeepLink();
         },
 
         // called when an appointment detail-view opens the according appointment
-        selectAppointment: function (obj) {
+        selectAppointment: function (model) {
             if (this.view) {
-                this.view.setStartDate(obj.start_date);
+                this.view.setStartDate(model.getTimestamp('startDate'));
                 this.view.trigger('onRefresh');
             }
         },

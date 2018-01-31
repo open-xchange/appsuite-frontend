@@ -111,7 +111,7 @@ define('io.ox/core/links', [
                     popup.busy();
                     // fix special id format
                     if (/^\d+\/\d+.\d+$/.test(data.id)) {
-                        data = _.cid(data.id.replace(/\//, '.'));
+                        data = api.cid(data.id.replace(/\//, '.'));
                     }
                     api.get(data).then(
                         function success(data) {

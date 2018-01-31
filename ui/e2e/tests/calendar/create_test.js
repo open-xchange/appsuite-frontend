@@ -15,7 +15,7 @@ const expect = require('chai').expect;
 
 Feature('Calendar: Create new appointment');
 
-Scenario('Create appointment with all fields', function* (I) {
+Scenario.skip('Create appointment with all fields', function* (I) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');

@@ -22,7 +22,6 @@ define('io.ox/find/main', [
     'use strict';
 
     var INVALID = $.Deferred().reject('please launch app first'),
-        FOLDERWHITELIST = { 'virtual/all-my-appointments': true },
         cid = function (app) {
             var parts = [
                 app.getName(),
@@ -243,10 +242,10 @@ define('io.ox/find/main', [
 
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
-                            module: app.getModuleParam(),
+                            module: app.getModuleParam() === 'calendar' ? 'chronos' : app.getModuleParam(),
                             mode: 'search',
-                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
-                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
+                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_SEARCH_PAGE_SIZE || defaultLoader.PRIMARY_PAGE_SIZE,
+                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_SEARCH_PAGE_SIZE || defaultLoader.SECONDARY_PAGE_SIZE,
                             isBad: $.noop,
                             fetch: function (p) {
                                 var self = this,
@@ -379,9 +378,8 @@ define('io.ox/find/main', [
         };
 
         app.updateState = function (folderid) {
-            var notWhitelisted = !FOLDERWHITELIST[folderid];
             // is folder unsupported?
-            app.trigger(folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
+            app.trigger(folderAPI.isVirtual(folderid) ? 'view:disable' : 'view:enable');
         };
 
         // parent app id

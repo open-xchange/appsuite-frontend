@@ -13,13 +13,14 @@
 
 define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/calendar/api',
+    'io.ox/backbone/mini-views/alarms',
     'io.ox/core/tk/dialogs',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/core/notifications',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (calApi, dialogs, folderAPI, util, notifications, settings, gt) {
+], function (calApi, AlarmsView, dialogs, folderAPI, util, notifications, settings, gt) {
 
     'use strict';
 
@@ -28,26 +29,24 @@ define('io.ox/calendar/actions/acceptdeny', [
         function cont(series) {
 
             var def = $.Deferred(),
-                showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
                 message,
                 appointmentData,
                 //use different api if provided (tasks use this)
                 api = options.api || calApi,
                 folder,
-                canModify,
+                alarmsView,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
-                defaultReminder = settings.get('defaultReminder', 15),
-                apiData = { folder: o.folder_id, id: o.id },
-                //appointments check for conflicts by default, tasks don't
-                checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;
+                apiData = { folder: o.folder || o.folder_id, id: o.id },
+                checkConflicts;
 
-            if (!options.taskmode && !series && o.recurrence_position) {
-                apiData.recurrence_position = o.recurrence_position;
+            if (!options.taskmode && !series && o.recurrenceId) {
+                apiData.recurrenceId = o.recurrenceId;
             }
 
             $.when(api.get(apiData), folderAPI.get(apiData.folder)).then(function (data, folderData) {
-                appointmentData = data;
+                // work on a copy for appointments (so we don't accidentally change the pool data)
+                appointmentData = options.taskmode ? data : data.toJSON();
                 // check if the response is of type [data, timestamp]
                 if (_.isArray(data) && data.length === 2 && _.isNumber(data[1])) {
                     appointmentData = data[0];
@@ -56,27 +55,19 @@ define('io.ox/calendar/actions/acceptdeny', [
                 folder = folderData;
                 message = util.getConfirmationMessage(o, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
-                // check if user is allowed to set the reminder time
-                // tasks don't have a default reminder
-                canModify = options.taskmode ? 0 : folderAPI.bits(folder, 14);
-                // only own objects
-                if (canModify === 1) {
-                    canModify = appointmentData.organizerId === ox.user_id;
-                } else {
-                    canModify = canModify > 1;
-                }
+                var alarmsModel,
+                    previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: ox.user_id });
 
-                if (showReminderSelect && canModify) {
-                    reminderSelect = $('<div class="form-group">').append(
-                        $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
-                        $('<select id="reminderSelect" class="form-control" data-property="reminder">').append(function () {
-                            var self = $(this),
-                                reminderOptions = util.getReminderOptions();
-                            _(reminderOptions).each(function (label, value) {
-                                self.append($('<option>', { value: value }).text(label));
-                            });
-                        })
-                        .val(defaultReminder)
+                if (!options.taskmode) {
+                    if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
+                        appointmentData.alarms = util.getDefaultAlarms(appointmentData);
+                    }
+                    // backbone model is fine. No need to require chronos model
+                    alarmsModel = new Backbone.Model(appointmentData);
+                    alarmsView = new AlarmsView({ model: alarmsModel });
+                    reminderSelect = $('<fieldset>').append(
+                        $('<legend>').text(gt('Reminder')),
+                        alarmsView.render().$el
                     );
                 }
 
@@ -85,8 +76,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                     help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html'
                 })
                     .build(function () {
-                        if (!series && o.recurrence_position) {
-                            data = api.removeRecurrenceInformation(appointmentData);
+
+                        if (!series && o.recurrenceId) {
+                            appointmentData = api.removeRecurrenceInformation(appointmentData);
                         }
 
                         var recurrenceString = util.getRecurrenceString(appointmentData),
@@ -96,7 +88,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                         if (!options.taskmode) {
                             var strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings' });
                             description = [
-                                $('<b>').text(appointmentData.title),
+                                $('<b>').text(appointmentData.summary),
                                 $.txt(', '),
                                 $.txt(strings.dateStr),
                                 $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''),
@@ -118,7 +110,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             ),
                             $('<div class="form-group">').css({ 'margin-top': '20px' }).append(
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')).append(
-                                    $('<span class="sr-only">').text(data.title + ' ' + gt('Please comment your confirmation status.'))
+                                    $('<span class="sr-only">').text((data.summary || data.title) + ' ' + gt('Please comment your confirmation status.'))
                                 ),
                                 $('<input type="text" class="form-control" data-property="comment">').attr('id', inputid).val(message),
                                 reminderSelect
@@ -134,11 +126,26 @@ define('io.ox/calendar/actions/acceptdeny', [
                     })
                     .on('accepted tentative declined', function (e) {
 
-                        var action = e.type, dialog = this;
+                        var action = e.type, dialog = this,
+                            message = $.trim(this.getContentNode().find('[data-property="comment"]').val()),
+                            requestData;
 
-                        function performConfirm() {
-                            api.confirm(apiData)
-                                .done(function () {
+                        function performConfirm(checkConflicts) {
+                            api.confirm(requestData, { checkConflicts: checkConflicts })
+                                .done(function (data) {
+
+                                    if (data && data.conflicts) {
+                                        ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                            conflictView.dialog(data.conflicts)
+                                                .on('cancel', function () {
+                                                    dialog.idle();
+                                                })
+                                                .on('ignore', function () {
+                                                    performConfirm(false);
+                                                });
+                                        });
+                                        return;
+                                    }
                                     dialog.close();
                                     if (options.callback) options.callback();
                                 })
@@ -148,65 +155,39 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 });
                         }
 
-                        // add confirmmessage to request body
-                        apiData.data = {
-                            confirmmessage: $.trim(this.getContentNode().find('[data-property="comment"]').val())
-                        };
-
-                        // add folderowner in shared or public folder
-                        if (folderAPI.is('shared', folder)) {
-                            apiData.data.id = folder.created_by;
-                        }
-
-                        switch (action) {
-                            case 'accepted':
-                                apiData.data.confirmation = 1;
-                                break;
-                            case 'declined':
-                                apiData.data.confirmation = 2;
-                                break;
-                            case 'tentative':
-                                apiData.data.confirmation = 3;
-                                break;
-                            default:
-                                return;
-                        }
-
-                        // set (default) reminder?
-                        if (showReminderSelect && canModify) {
-                            apiData.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
-                        }
-
-                        if (!options.taskmode && !series && o.recurrence_position) {
-                            _.extend(apiData, { occurrence: o.recurrence_position });
-                        }
-
-                        var previousConfirmation = _(appointmentData.users).findWhere({ id: ox.user_id });
-
-                        // no conflicts possible if you decline the appointment
-                        // no conflicts possible for free appointments
-                        // don't check if confirmation status did not change
-                        if (action === 'declined' || appointmentData.shown_as === 4 || (previousConfirmation && apiData.data.confirmation === previousConfirmation.confirmation)) {
+                        if (options.taskmode) {
+                            requestData = {
+                                id: appointmentData.id,
+                                folder_id: appointmentData.folder_id,
+                                data: {
+                                    confirmmessage: message,
+                                    id: ox.user_id,
+                                    confirmation: _(['', 'accepted', 'declined', 'tentative']).indexOf(action)
+                                }
+                            };
                             checkConflicts = false;
+                        } else {
+                            requestData = {
+                                attendee: previousConfirmation,
+                                id: appointmentData.id,
+                                folder: appointmentData.folder
+                            };
+                            if (alarmsModel) requestData.alarms = alarmsModel.get('alarms');
+                            requestData.attendee.partStat = action.toUpperCase();
+                            if (message) requestData.attendee.comment = message;
+                            if (!series && o.recurrenceId) requestData.recurrenceId = o.recurrenceId;
+                            // don't check if confirmation status did not change
+                            // no conflicts possible if you decline the appointment
+                            // no conflicts possible for free appointments
+                            checkConflicts = action !== 'declined' && appointmentData.transp === 'OPAQUE' && (!previousConfirmation || requestData.attendee.partStat !== previousConfirmation.partStat);
                         }
 
-                        if (!checkConflicts) return performConfirm();
-
-                        api.checkConflicts(appointmentData)
-                            .done(function (conflicts) {
-
-                                if (conflicts.length === 0) return performConfirm();
-
-                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    conflictView.dialog(conflicts)
-                                        .on('cancel', function () { dialog.idle(); })
-                                        .on('ignore', function () { performConfirm(); });
-                                });
-                            })
-                            .fail(notifications.yell)
-                            .fail(dialog.close);
+                        performConfirm(checkConflicts);
                     })
                     .show(function () {
+                        if (alarmsView) {
+                            alarmsView.reactToResize();
+                        }
                         // do not focus on mobiles. No, never, please. It does simply not work!
                         if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
                     });
@@ -215,7 +196,7 @@ define('io.ox/calendar/actions/acceptdeny', [
         }
 
         // series?
-        if (!options.taskmode && o.recurrence_type > 0 && o.recurrence_position) {
+        if (!options.taskmode && o.recurrenceId && o.id === o.seriesId) {
             return new dialogs.ModalDialog()
                 .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
                 .addPrimaryButton('series',
