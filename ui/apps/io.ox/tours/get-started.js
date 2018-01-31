@@ -98,11 +98,14 @@ define('io.ox/tours/get-started', [
         }
     });
 
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
-        id: 'get-started',
-        index: 250,
-        draw: function () {
-            this.append(new GetStartedView().render().$el);
-        }
-    });
+    //no tours on smartphone
+    if (!_.device('smartphone')) {
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'get-started',
+            index: 250,
+            draw: function () {
+                this.append(new GetStartedView().render().$el);
+            }
+        });
+    }
 });
