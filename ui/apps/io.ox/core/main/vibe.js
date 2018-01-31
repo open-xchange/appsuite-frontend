@@ -20,16 +20,17 @@ define('io.ox/core/main/vibe', ['settings!io.ox/core'], function (settings) {
 
     // update now and check time every 5 minutes
     update();
-    setInterval(update, 5 * 60 * 1000);
+    var tick = setInterval(update, 5 * 60 * 1000);
 
     // demo/debug access
     $(document).on('dblclick', '#io-ox-appcontrol', function (e) {
-        if (e.altKey) update(24 * e.pageX / $(window).width() >> 0);
+        if (!e.altKey) return;
+        clearInterval(tick);
+        update(24 * e.pageX / $(window).width() >> 0);
     });
 
     function update(hour) {
         var vibe = getVibe(arguments.length ? hour : moment().hour());
-        console.log('vibe', vibe);
         $('#io-ox-appcontrol').attr('class', vibe);
     }
 
