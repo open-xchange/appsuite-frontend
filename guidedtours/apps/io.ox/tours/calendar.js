@@ -35,15 +35,18 @@ define('io.ox/tours/calendar', [
                 .content(gt('To create a new appointment, click on New in the toolbar.'))
                 .spotlight('[data-ref="io.ox/calendar/detail/actions/create"]')
                 .on('next', function () {
-                    ox.load(['io.ox/calendar/edit/main']).then(function (edit) {
+                    ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/model']).then(function (edit, models) {
                         var app = edit.getApp();
                         createApp = app;
-                        return $.when(app, app.launch());
-                    }).then(function (app) {
-                        return app.create({
-                            folder_id: app.folder.get(),
-                            participants: []
-                        });
+                        return $.when(app, models, app.launch());
+                    }).then(function (app, models) {
+                        var refDate = moment().startOf('hour').add(1, 'hours');
+
+                        return app.create(new models.Model({
+                            folder: app.folder.get(),
+                            startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
+                            endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
+                        }));
                     });
                 })
                 .end()
@@ -61,7 +64,7 @@ define('io.ox/tours/calendar', [
             .step()
                 .title(gt('Using the reminder function'))
                 .content(gt('To not miss the appointment, use the reminder function.'))
-                .spotlight('[data-extension-id="alarm"]')
+                .spotlight('[data-extension-id="alarms"]')
                 .on('next', function () {
                     $('.add-participant:last')[0].scrollIntoView();
                 })
