@@ -1114,6 +1114,8 @@ define('io.ox/mail/main', [
         'preserve-selection': function (app) {
             app.listView.on({
                 'selection:add': function (list) {
+                    // only preserve items, if the current collection is sort by unread
+                    if (app.props.get('sort') !== 651) return;
                     _(list).each(function (cid) {
                         api.pool.preserveModel(cid, true);
                     });
