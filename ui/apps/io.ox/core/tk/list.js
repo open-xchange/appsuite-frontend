@@ -146,7 +146,8 @@ define('io.ox/core/tk/list', [
 
         // load more data (wraps paginate call)
         processPaginate: function () {
-            if (!this.options.pagination || this.isBusy || this.complete) return;
+            // Bug 54793: this.complete could be undefined
+            if (!this.options.pagination || this.isBusy || !!this.complete) return;
             this.paginate();
         },
 

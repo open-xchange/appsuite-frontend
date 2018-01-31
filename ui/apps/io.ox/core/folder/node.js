@@ -161,6 +161,9 @@ define('io.ox/core/folder/node', [
                 this.onChangeSubFolders();
             }
 
+            // Bug 54793: Trigger for breadcrumb update
+            api.trigger('update:' + model.id, model.id, model.id, model.toJSON());
+
             this.repaint();
         },
 
