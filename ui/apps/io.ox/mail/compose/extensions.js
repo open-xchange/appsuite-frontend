@@ -301,6 +301,7 @@ define('io.ox/mail/compose/extensions', [
                         extPoint: POINT,
                         isMail: true,
                         apiOptions: {
+                            users: true,
                             limit: settings.get('compose/autocompleteApiLimit', 20),
                             contacts: true,
                             distributionlists: true,
