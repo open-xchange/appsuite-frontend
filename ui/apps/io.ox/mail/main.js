@@ -1112,6 +1112,7 @@ define('io.ox/mail/main', [
         },
 
         'preserve-selection': function (app) {
+            if (_.device('smartphone')) return;
             app.listView.on({
                 'selection:add': function (list) {
                     // only preserve items, if the current collection is sort by unread
@@ -1360,11 +1361,12 @@ define('io.ox/mail/main', [
                 return a !== b;
             }
 
-            api.on('beforedelete', function (e, ids) {
+            api.on('beforedelete beforeexpunge', function (e, ids) {
                 var selection = app.listView.selection.get();
                 if (isSingleThreadMessage(ids, selection)) return;
+                // make sure to have strings
+                if (ids.length > 0 && !_.isString(ids[0])) ids = _(ids).map(_.cid);
                 // looks for intersection
-                ids = _(ids).map(_.cid);
                 if (_.intersection(ids, selection).length) {
                     app.listView.selection.dodge();
                     if (ids.length === 1) return;

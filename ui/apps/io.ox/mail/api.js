@@ -669,6 +669,20 @@ define('io.ox/mail/api', [
      */
     api.expunge = function (folder_id) {
 
+        var ids = _(pool.getByFolder(folder_id))
+            .chain()
+            .map(function (collection) {
+                return collection.filter(function (model) {
+                    return util.isDeleted(model.attributes);
+                });
+            })
+            .flatten()
+            .pluck('cid')
+            .compact()
+            .value();
+
+        api.trigger('beforeexpunge', ids);
+
         // remove deleted messages immediately
         _(pool.getByFolder(folder_id)).each(function (collection) {
             collection.set(
