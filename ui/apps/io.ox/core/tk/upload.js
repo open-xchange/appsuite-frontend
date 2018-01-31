@@ -233,8 +233,8 @@ define('io.ox/core/tk/upload', [
             this.progress().always(function (data) {
                 if (data && data.error) {
                     // only handle quota exceed or too many requests error
-                    // OX-0023 is special quota exceed error of hidrive (see Bug 51091)
-                    if (/^(FLS-0024|OX-0023)$/.test(data.code) || (data.error_params && data.error_params.length && /^429 /.test(data.error_params[0]))) {
+                    // OX-0023 and OX-0507 is special quota exceed error of hidrive (see Bug 51091)
+                    if (/^(FLS-0024|OX-0023|OX-0507)$/.test(data.code) || (data.error_params && data.error_params.length && /^429 /.test(data.error_params[0]))) {
                         self.stop();
                         return;
                     }
