@@ -37,7 +37,8 @@ define('io.ox/core/main', [
     'io.ox/tours/get-started',
     'io.ox/core/main/icons',
     'io.ox/core/main/appcontrol',
-    'io.ox/core/main/stages'
+    'io.ox/core/main/stages',
+    'io.ox/core/main/vibe'
 ], function (desktop, ext, Stage, notifications, commons, upsell, ping, a11y, logout, refresh, tbr, debug, settings, gt) {
 
     'use strict';

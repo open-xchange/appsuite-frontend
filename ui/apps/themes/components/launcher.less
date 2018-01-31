@@ -50,9 +50,13 @@
     img { height: 100%; }
 }
 
-#io-ox-appcontrol {
+/* vibe mixins */
+.vibe-night() { background-image: linear-gradient(70deg, #1a2848, #40498e, #1a2848); }
+.vibe-dawn() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
+.vibe-day() { background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight); }
+.vibe-dusk() { background-image: linear-gradient(70deg, #2a2972, #ac4dad, #292b72); }
 
-    background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight);
+#io-ox-appcontrol {
 
     position: absolute;
     left: 0;
@@ -61,6 +65,25 @@
     color: #fff;
     height: @appcontrol-height;
     padding: 0;
+
+    .vibe-day;
+
+    &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        height: @appcontrol-height;
+        opacity: 0;
+        transition: opacity 10s linear;
+    }
+
+    &.night { .vibe-night; &:before { opacity: 0; } }
+    &.dawn { .vibe-night; &:before { .vibe-dawn; opacity: 1; } }
+    &.day { .vibe-day; &:before { .vibe-dawn; opacity: 0; } }
+    &.dusk { .vibe-day; &:before { .vibe-dusk; opacity: 1; } }
+    &.late { .vibe-night; &:before { .vibe-dusk; opacity: 0; } }
 
     display: flex;
     flex-flow: row nowrap;
