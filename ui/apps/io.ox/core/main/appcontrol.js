@@ -282,7 +282,7 @@ define('io.ox/core/main/appcontrol', [
             // hide inactive
             function hidePaused() {
                 var app = ox.ui.App.getCurrentApp();
-                if (!app.id) return;
+                if (!app || !app.id) return;
                 container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
             }
 
@@ -295,7 +295,9 @@ define('io.ox/core/main/appcontrol', [
             }
 
             function setWidth() {
-                var current = container.find('.io-ox-find[data-app="' + ox.ui.App.getCurrentApp().id + '"]'),
+                var app = ox.ui.App.getCurrentApp();
+                if (!app || !app.id) return;
+                var current = container.find('.io-ox-find[data-app="' + app.id + '"]'),
                     leftsideWidth = $('.leftside:visible').width(),
                     // sidepanel AND vgrid/list AND not full width size
                     doAlign = $('.window-sidepanel:visible').width() && !!leftsideWidth && (leftsideWidth + 10 < $('.window-body:visible').width()),
@@ -322,6 +324,7 @@ define('io.ox/core/main/appcontrol', [
 
             var setVisibility = _.debounce(function show() {
                 var app = ox.ui.App.getCurrentApp();
+                if (!app || !app.id) return;
                 // TODO: ignore floating apps
                 if (app.get('floating')) return;
                 // show field for current app
