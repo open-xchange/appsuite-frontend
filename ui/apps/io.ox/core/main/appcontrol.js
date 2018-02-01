@@ -282,6 +282,7 @@ define('io.ox/core/main/appcontrol', [
             // hide inactive
             function hidePaused() {
                 var app = ox.ui.App.getCurrentApp();
+                if (!app.id) return;
                 container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
             }
 
