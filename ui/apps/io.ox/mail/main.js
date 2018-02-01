@@ -1605,13 +1605,15 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
-            app.once('change:find', function (model, find) {
+            function registerPoolAdd(model, find) {
                 find.on('collectionLoader:created', function (loader) {
                     loader.each = function (obj) {
                         api.pool.add('detail', obj);
                     };
                 });
-            });
+            }
+
+            return app.get('find') ? registerPoolAdd(app, app.get('find')) : app.once('change:find', registerPoolAdd);
         },
         // respond to pull-to-refresh in mail list on mobiles
         'on:pull-to-refresh': function (app) {

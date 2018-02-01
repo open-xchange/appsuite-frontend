@@ -675,7 +675,7 @@ define('io.ox/calendar/main', [
                 }
             });
 
-            app.once('change:find', function (model, find) {
+            function registerHandler(model, find) {
                 // additional handler: switch to list perspective (and back)
                 find.on({
                     'find:query': function () {
@@ -700,7 +700,9 @@ define('io.ox/calendar/main', [
                         lastPerspective = undefined;
                     }
                 });
-            });
+            }
+
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
         },
 
         /*

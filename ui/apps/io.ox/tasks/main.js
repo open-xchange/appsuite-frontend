@@ -624,7 +624,7 @@ define('io.ox/tasks/main', [
         },
 
         'inplace-find': function (app) {
-            app.once('change:find', function (model, find) {
+            function registerHandler(model, find) {
                 find.on({
                     'find:query': function () {
                         // hide sort options
@@ -635,7 +635,9 @@ define('io.ox/tasks/main', [
                         app.grid.getToolbar().find('.grid-options:first').show();
                     }
                 });
-            });
+            }
+
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
         },
 
         'contextual-help': function (app) {
