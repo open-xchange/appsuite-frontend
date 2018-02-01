@@ -193,7 +193,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                             'false': 'false'
                         }
                     })
-                        .render().$el.attr('title', gt('subscribe to callendar'))
+                        .render().$el.attr('title', gt('subscribe to calendar'))
                 )
             );
 
