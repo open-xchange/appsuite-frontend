@@ -253,10 +253,8 @@ define('io.ox/calendar/common-extensions', [
                 $('<tr>').append(
                     $('<th>').text(gt('Modified')),
                     $('<td class="modified">').append(
-                        baton.data.lastModified ? [
-                            $('<span>').text(util.getDate(baton.data.lastModified)),
-                            $('<span>').text(' \u2013 ')
-                        ] : [],
+                        baton.data.lastModified ? [$('<span>').text(util.getDate(baton.data.lastModified))] : [],
+                        baton.data.lastModified && baton.data.modifiedBy ? $('<span>').text(' \u2013 ') : [],
                         baton.data.modifiedBy ? coreUtil.renderPersonalName({
                             html: userAPI.getTextNode(baton.data.modifiedBy.entity),
                             user_id: baton.data.modifiedBy.entity

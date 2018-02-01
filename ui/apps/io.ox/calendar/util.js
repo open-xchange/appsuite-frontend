@@ -1063,6 +1063,7 @@ define('io.ox/calendar/util', [
             if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
             if (this.hasFlag(obj, 'series')) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-repeat" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
             if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-users" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
+            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').append($('<i class="fa fa-paperclip" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Attachments'))));
             return icons;
         },
 
