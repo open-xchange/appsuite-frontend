@@ -316,7 +316,7 @@
             // check condition
             condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return browserLC[match] || display[match] || misc[match] || 'false';
+                return browserLC[match] || display[match] || misc[match];
             });
             if (debug) {
                 console.debug(condition);
