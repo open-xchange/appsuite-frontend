@@ -90,7 +90,7 @@ define('io.ox/core/main', [
         // b) to recognize deep links
         if (location.hash === '') location.hash = '#!!';
 
-        var baton = ext.Baton({ block: $.Deferred() });
+        var baton = ext.Baton();
 
         debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);

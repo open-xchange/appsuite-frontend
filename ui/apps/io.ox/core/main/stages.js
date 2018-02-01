@@ -20,8 +20,7 @@ define('io.ox/core/main/stages', [
     'io.ox/core/main/debug',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
-    'gettext!io.ox/core',
-    'io.ox/core/main/restore'
+    'gettext!io.ox/core'
 ], function (ext, notifications, capabilities, appAPI, folderAPI, debug, settings, contactsSettings, gt) {
 
     var topbar = $('#io-ox-appcontrol');
@@ -74,6 +73,7 @@ define('io.ox/core/main/stages', [
         id: 'appcheck',
         index: 101,
         run: function (baton) {
+            debug('Stage "appcheck"');
             // checks url which app to launch, needed to handle direct links
             //
             var hash = _.url.hash(),
@@ -151,6 +151,7 @@ define('io.ox/core/main/stages', [
         id: 'autoLaunchApps',
         index: 102,
         run: function (baton) {
+            debug('Stage "autoLaunchApps"');
             baton.autoLaunchApps = _(baton.autoLaunch).chain().map(function (m) {
                 return getAutoLaunchDetails(m).app;
             }).filter(function (m) {
@@ -163,6 +164,7 @@ define('io.ox/core/main/stages', [
         id: 'startLoad',
         index: 103,
         run: function (baton) {
+            debug('Stage "startLoad"');
             function fail(type) {
                 return function (e) {
                     var message = (e && e.message) || '';
@@ -172,7 +174,6 @@ define('io.ox/core/main/stages', [
             }
 
             baton.loaded = $.when(
-                baton.block,
                 ext.loadPlugins().fail(fail('loadPlugins')),
                 require(baton.autoLaunchApps).fail(fail('autoLaunchApps')),
                 require(['io.ox/core/api/account']).then(
@@ -189,6 +190,7 @@ define('io.ox/core/main/stages', [
         id: 'secretCheck',
         index: 250,
         run: function () {
+            debug('Stage "secretCheck"');
             if (ox.online && ox.rampup && ox.rampup.oauth) {
                 var analysis = ox.rampup.oauth.secretCheck;
                 if (analysis && !analysis.secretWorks) {
@@ -199,6 +201,12 @@ define('io.ox/core/main/stages', [
                     }
                 }
             }
+        }
+    }, {
+        id: 'drawDesktop',
+        index: 500,
+        run: function () {
+            ext.point('io.ox/core/desktop').invoke('draw', $('#io-ox-desktop'), {});
         }
     }, {
         id: 'load',

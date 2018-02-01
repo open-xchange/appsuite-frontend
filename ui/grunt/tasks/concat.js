@@ -194,7 +194,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/main/offline.js',
                             'apps/io.ox/core/main/refresh.js',
                             'apps/io.ox/core/main/registry.js',
-                            'apps/io.ox/core/main/restore.js',
                             'apps/io.ox/core/main/stages.js',
                             'apps/io.ox/core/main/topbar_right.js',
                             'apps/io.ox/core/main/warning.js',

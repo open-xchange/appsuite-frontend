@@ -700,7 +700,7 @@ define('io.ox/core/desktop', [
         canRestore: function () {
             // use get instead of contains since it might exist as empty list
             return this.getSavePoints().then(function (list) {
-                return list && list.length;
+                return list && list.length > 0;
             });
         },
 
