@@ -770,6 +770,7 @@ define('io.ox/calendar/api', [
             return new models.Collection();
         },
         load: function (params) {
+            params = params || {};
             var collection = this.collection = api.getCollection(params);
             collection.originalStart = collection.originalStart || moment().startOf('day');
             collection.range = collection.range || 1;
@@ -778,7 +779,7 @@ define('io.ox/calendar/api', [
                 end: collection.originalStart.clone().add(collection.range, 'months').valueOf(),
                 folders: params.folders || []
             });
-            collection.sync().then(function (data) {
+            collection.sync({ sync: params.sync }).then(function (data) {
                 // trigger reset when data comes from cache
                 if (!data || data.length === 0) collection.trigger('reset');
             });

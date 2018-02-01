@@ -306,6 +306,8 @@ define('io.ox/core/folder/util', [
                 return supports('STORE_SEEN', data);
             case 'add:version':
                 return supports('file_versions', data);
+            case 'sync:cache':
+                return supports('cached', data);
             default:
                 return false;
         }

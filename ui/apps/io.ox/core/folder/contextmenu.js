@@ -522,6 +522,24 @@ define('io.ox/core/folder/contextmenu', [
         })(),
 
         //
+        // manual refresh calendar data from external provider
+        //
+        refreshCalendar: function (baton) {
+            // only in calendar module
+            if (!/^calendar$/.test(baton.module)) return;
+            // check if folder supports cache updates ("cached" capability is present)
+            if (!api.can('sync:cache', baton.data)) return;
+
+            contextUtils.addLink(this, {
+                action: 'refresh-calendar',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.refreshCalendar,
+                text: gt('Refresh this calendar')
+            });
+        },
+
+        //
         // Only select that calendar folder
         //
         selectOnly: function (baton) {
@@ -652,28 +670,33 @@ define('io.ox/core/folder/contextmenu', [
         },
         */
         {
-            id: 'select-only',
+            id: 'refresh-calendar',
             index: 6100,
+            draw: extensions.refreshCalendar
+        },
+        {
+            id: 'select-only',
+            index: 6200,
             draw: extensions.selectOnly
         },
         {
             id: 'toggle',
-            index: 6200,
+            index: 6300,
             draw: extensions.toggle
         },
         {
             id: 'showInDrive',
-            index: 6200,
+            index: 6400,
             draw: extensions.showInDrive
         },
         {
             id: 'empty',
-            index: 6300,
+            index: 6500,
             draw: extensions.empty
         },
         {
             id: 'delete',
-            index: 6500,
+            index: 6600,
             draw: extensions.removeFolder
         }
     );
