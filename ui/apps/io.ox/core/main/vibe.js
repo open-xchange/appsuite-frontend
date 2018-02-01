@@ -15,6 +15,9 @@ define('io.ox/core/main/vibe', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
+    // doesn't work on IE
+    if (_.device('ie <= 11')) return;
+
     // feature toggle; default: on
     if (!settings.get('features/vibe', true)) return;
 
