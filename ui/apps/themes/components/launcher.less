@@ -52,7 +52,8 @@
 
 /* vibe mixins */
 .vibe-night() { background-image: linear-gradient(70deg, #1a2848, #40498e, #1a2848); }
-.vibe-dawn() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
+.vibe-twilight() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
+.vibe-dawn { background-image: linear-gradient(70deg, #0d456d, #469490, #0e466d); }
 .vibe-day() { background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight); }
 .vibe-dusk() { background-image: linear-gradient(70deg, #2a2972, #ac4dad, #292b72); }
 
@@ -63,7 +64,8 @@
     right: 0;
     z-index: 12;
     color: #fff;
-    height: @appcontrol-height;
+    height: @appcontrol-height - 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.90);
     padding: 0;
 
     .vibe-day;
@@ -74,16 +76,18 @@
         left: 0;
         right: 0;
         z-index: -1;
-        height: @appcontrol-height;
+        height: @appcontrol-height - 1;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.90);
         opacity: 0;
-        transition: opacity 10s linear;
+        transition: opacity 5s linear;
     }
 
-    &.night { .vibe-night; &:before { opacity: 0; } }
-    &.dawn { .vibe-night; &:before { .vibe-dawn; opacity: 1; } }
-    &.day { .vibe-day; &:before { .vibe-dawn; opacity: 0; } }
-    &.dusk { .vibe-day; &:before { .vibe-dusk; opacity: 1; } }
-    &.late { .vibe-night; &:before { .vibe-dusk; opacity: 0; } }
+    &.night { .vibe-night; &:before { .vibe-night; opacity: 0; } }
+    &.twilight { .vibe-night; &:before { .vibe-twilight; opacity: 1; } }
+    &.dawn { .vibe-dawn; &:before { .vibe-twilight; opacity: 0; } }
+    &.day { .vibe-dawn; &:before { .vibe-day; opacity: 1; } }
+    &.dusk { .vibe-dusk; &:before { .vibe-day; opacity: 0; } }
+    &.late { .vibe-dusk; &:before { .vibe-night; opacity: 1; } }
 
     display: flex;
     flex-flow: row nowrap;

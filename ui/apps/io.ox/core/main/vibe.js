@@ -39,7 +39,8 @@ define('io.ox/core/main/vibe', ['settings!io.ox/core'], function (settings) {
 
     function getVibe(h) {
         if (h < 6) return 'night';
-        if (h < 10) return 'dawn';
+        if (h < 9) return 'twilight';
+        if (h < 12) return 'dawn';
         if (h < 18) return 'day';
         if (h < 22) return 'dusk';
         return 'late';
