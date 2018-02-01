@@ -54,7 +54,14 @@ define('io.ox/mail/compose/signatures', [
         if (isHTML) return html;
 
         // process plain text
-        if (sourceLooksLikeHTML) html = html.replace(/>\s*/g, '>').replace(/(\r\n\s*|\n\s*|\r)/g, '');
+        if (sourceLooksLikeHTML) {
+            html = html.replace(/(<pre>([^<]+)<\/pre>|>\s*|\r\n\s*|\n\s*|\r)/gi, function (all, match, pre) {
+                if (/^<pre>/i.test(match)) return pre;
+                if (match[0] === '>') return '>';
+                return '';
+            });
+        }
+
         return textproc.htmltotext(html);
     }
 

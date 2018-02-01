@@ -198,13 +198,11 @@ define('io.ox/core/tk/textproc', [
         },
 
         htmltotext: function (string) {
-            var reSimpleLinebreak = /margin(-bottom)?:\s?0(px)?/i;
+
             var ELEMENTS = [
                 {
                     patterns: 'p',
                     replacement: function (str, attrs, innerHTML) {
-                        // transform before inline style was applied (setting as indicator) or after (inline style)
-                        if (reSimpleLinebreak.test(str)) return innerHTML || '';
                         return innerHTML ? ('\n\n' + innerHTML + '\n') : '';
                     }
                 },
