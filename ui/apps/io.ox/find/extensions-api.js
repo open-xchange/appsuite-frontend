@@ -225,6 +225,21 @@ define('io.ox/find/extensions-api', [
                         callback: 'openFolderDialog',
                         filter: null
                     });
+                    var dynamic = _.findWhere(options, { id: 'dynamic' });
+                    if (!dynamic) {
+                        options.push({
+                            account: undefined,
+                            value: undefined,
+                            id: 'dynamic',
+                            data: {},
+                            item: {
+                                name: ''
+                            },
+                            hidden: true,
+                            type: 'current',
+                            filter: null
+                        });
+                    }
                 }
 
                 function preselect() {
