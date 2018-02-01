@@ -198,7 +198,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
         onMinimize: function (e) {
             e.preventDefault();
-            ox.trigger('change:document:title', ox.ui.App.getCurrentApp().get('title'));
+            var app = ox.ui.App.getCurrentApp();
+            if (app && app.get('title')) ox.trigger('change:document:title', app && app.get('title') ? app.get('title') : null);
             this.toggle(false);
             if (powerMoveWindow) {
                 $('#io-ox-screens').removeClass('powermove-window-open');
