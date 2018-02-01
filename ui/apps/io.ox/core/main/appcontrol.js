@@ -224,7 +224,7 @@ define('io.ox/core/main/appcontrol', [
                     guid = _.uniqueId('form-control-description-');
 
                 this.append(
-                    $('<div class="io-ox-find" role="search" style="display:none">').attr('data-app', app.id).append(
+                    $('<div class="io-ox-find initial" role="search" style="display:none">').attr('data-app', app.id).append(
                         $('<div class="sr-only arialive" role="status" aria-live="polite">'),
                         // box
                         $('<form class="search-box">').append(
@@ -294,15 +294,29 @@ define('io.ox/core/main/appcontrol', [
             }
 
             function setWidth() {
-                // search box width (list widget, active state)
                 var current = container.find('.io-ox-find[data-app="' + ox.ui.App.getCurrentApp().id + '"]'),
                     leftsideWidth = $('.leftside:visible').width(),
-                    width = Math.max(!!$('.window-sidepanel:visible').width() && leftsideWidth && leftsideWidth < MAXWIDTH ? leftsideWidth : 0, MINWIDTH),
-                    max = Math.min(container.width(), MAXWIDTH, width);
+                    // sidepanel AND vgrid/list AND not full width size
+                    doAlign = $('.window-sidepanel:visible').width() && !!leftsideWidth && (leftsideWidth + 10 < $('.window-body:visible').width()),
+                    target = doAlign ? Math.min(MAXWIDTH, leftsideWidth) : MINWIDTH;
 
-                current.css({ 'min-width': Math.max(max, MINWIDTH) });
+                // special case: list layout to a non-list layout (keep width)
+                //if ((!leftsideWidth || leftsideWidth + 10 > $('.window-body:visible').width()) && !current.hasClass('initial')) return;
+                if (!doAlign && !current.hasClass('initial')) return;
+
+                var width = Math.min(container.width(), target, MAXWIDTH);
+                current.css({ 'min-width': Math.max(width, MINWIDTH) });
                 // max (limit just when when no tokens are active)
-                if (!current.hasClass('has-tokens')) current.css({ 'max-width': max });
+                if (!current.hasClass('has-tokens')) current.css({ 'max-width': width });
+                current.removeClass('initial');
+            }
+
+            function rearrange() {
+                _.defer(function () {
+                    setMargin();
+                    setWidth();
+                    setVisibility();
+                });
             }
 
             var setVisibility = _.debounce(function show() {
@@ -320,25 +334,24 @@ define('io.ox/core/main/appcontrol', [
                 hidePaused();
                 setVisibility();
             });
-            // resize or toggle of folder tree or list widget
-            $(window).on('resize', function () {
-                _.defer(function () {
-                    setMargin();
-                    setWidth();
-                    setVisibility();
-                });
-            });
+
+            // resize/toggle of folder tree/list widget
+            // layout or page control change
+            ox.ui.apps.on('layout', rearrange);
+            $(window).on('resize', rearrange);
+
             // search is active (at least one token)
             ox.ui.apps.on('change:search', function (name, app) {
                 if (!/^(running|paused)$/.test(name)) return;
                 var node = app.view.$el,
                     isReset = name === 'paused';
-                node.css({
-                    // limit height to prevent jumping
-                    'height': isReset ? 'initial' : '30px',
-                    // expand field or restore min-width value
-                    'max-width': isReset ? node.css('min-width') : MAXWIDTH + 'px'
-                }).toggleClass('has-tokens', !isReset);
+                node.toggleClass('has-tokens', !isReset)
+                    .css({
+                        // limit height to prevent jumping
+                        'height': isReset ? 'initial' : '30px',
+                        // expand field or restore min-width value
+                        'max-width': isReset ? node.css('min-width') : MAXWIDTH + 'px'
+                    });
 
             });
         }
