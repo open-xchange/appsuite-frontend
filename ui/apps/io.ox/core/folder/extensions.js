@@ -598,14 +598,14 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.otherFolders
         },
         {
-            id: 'tree-links',
-            index: INDEX += 100,
-            draw: extensions.treeLinks
-        },
-        {
             id: 'remote-accounts',
             index: INDEX += 100,
             draw: extensions.remoteAccounts
+        },
+        {
+            id: 'tree-links',
+            index: INDEX += 100,
+            draw: extensions.treeLinks
         },
         {
             id: 'upsell-mail',
