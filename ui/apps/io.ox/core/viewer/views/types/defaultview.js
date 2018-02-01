@@ -26,7 +26,8 @@ define('io.ox/core/viewer/views/types/defaultview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *

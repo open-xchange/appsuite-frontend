@@ -581,7 +581,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 last = this.$el.find('.swiper-slide-duplicate[data-index="' + (this.collection.length - 1) + '"]');
 
             function handle(el, model) {
-                self.createDummy(el.get[0], model);
+                self.createDummy(el, model);
             }
             if (first.length > 0) handle(first, this.collection.first());
             if (last.length > 0) handle(last, this.collection.last());
@@ -641,6 +641,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 return TypesRegistry.getModelType(model).then(function success(ModelTypeView) {
                     var view = new ModelTypeView({
+                        app: self.app,
                         model: model,
                         collection: collection,
                         viewerEvents: self.viewerEvents
@@ -653,11 +654,11 @@ define('io.ox/core/viewer/views/displayerview', [
                         var active = false;
                         if (self.swiper) {
                             var additionalClasses = '';
-                            if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-active').length) {
+                            if (self.swiper.wrapper.find('*.swiper-slide[data-index=' + index + '].swiper-slide-active').length) {
                                 additionalClasses = 'swiper-slide-active';
                                 active = true;
                             }
-                            var slide = self.swiper.wrapper.find('*[data-index=' + index + ']:not(.swiper-slide-duplicate)'),
+                            var slide = self.swiper.wrapper.find('*.swiper-slide[data-index=' + index + ']:not(.swiper-slide-duplicate)'),
                                 swiperIndex = slide.data('swiper-slide-index');
                             if (slide.hasClass('swiper-slide-prev')) {
                                 additionalClasses = additionalClasses + 'swiper-slide-prev';
@@ -665,17 +666,17 @@ define('io.ox/core/viewer/views/displayerview', [
                             if (slide.hasClass('swiper-slide-next')) {
                                 additionalClasses = additionalClasses + 'swiper-slide-next';
                             }
-                            self.swiper.wrapper.find('*[data-index=' + index + ']:not(.swiper-slide-duplicate)').replaceWith(view.$el);
+                            self.swiper.wrapper.find('*.swiper-slide[data-index=' + index + ']:not(.swiper-slide-duplicate)').replaceWith(view.$el);
                             view.$el.attr('data-swiper-slide-index', swiperIndex);
                             view.$el.addClass(additionalClasses);
                             if (active) {
                                 view.$el.attr('tabindex', 0).focus();
                             }
 
-                            if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').length) {
+                            if (self.swiper.wrapper.find('*.swiper-slide[data-index=' + index + '].swiper-slide-duplicate').length) {
                                 // there is a swiper duplicate of this. let's replace this as well.
                                 var duplicateView = new ModelTypeView({
-                                    el: self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').removeClass('dummy-slide').get(0),
+                                    el: (self.swiper.wrapper.find('*.swiper-slide[data-index=' + index + '].swiper-slide-duplicate').removeClass('dummy-slide')).get(0),
                                     model: model,
                                     collection: collection,
                                     viewerEvents: self.viewerEvents
@@ -829,7 +830,7 @@ define('io.ox/core/viewer/views/displayerview', [
                                 self.swiper.updateSlidesSize();
                             }
                             if (self.delayedRemove[index]) {
-                                self.delayedRemove[index].view.unload(index).dispose();
+                                self.delayedRemove[index].view.unload().dispose();
                                 self.delayedRemove[index].node.remove();
                             } else if (view.$el.hasClass('swiper-slide-active')) {
                                 // show if active
@@ -865,17 +866,17 @@ define('io.ox/core/viewer/views/displayerview', [
                     // remove old slide
                     if (self.loadingSlides[removeIndex]) {
                         //don't remove currently loading files to prevent errors
-                        self.delayedRemove[removeIndex] = { view: self.slideViews[removeIndex], node: swiper.wrapper.find('*[data-index=' + removeIndex + ']') };
-                        swiper.wrapper.find('*[data-index=' + removeIndex + ']').detach();
+                        self.delayedRemove[removeIndex] = { view: self.slideViews[removeIndex], node: swiper.wrapper.find('*.swiper-slide[data-index=' + removeIndex + ']') };
+                        swiper.wrapper.find('*.swiper-slide[data-index=' + removeIndex + ']').detach();
                     } else {
-                        self.slideViews[removeIndex].unload(removeIndex).dispose();
-                        swiper.wrapper.find('*[data-index=' + removeIndex + ']').remove();
+                        self.slideViews[removeIndex].unload().dispose();
+                        swiper.wrapper.find('*.swiper-slide[data-index=' + removeIndex + ']').remove();
                     }
                     delete self.slideViews[removeIndex];
 
                     // add new slide at correct position
                     if (direction === 'right') {
-                        neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex - 1) + ']');
+                        neighbour = swiper.wrapper.find('*.swiper-slide[data-index=' + (insertIndex - 1) + ']');
 
                         if (neighbour.length > 0) {
                             neighbour.after(view.$el);
@@ -883,7 +884,7 @@ define('io.ox/core/viewer/views/displayerview', [
                             swiper.wrapper.prepend(view.$el);
                         }
                     } else if (direction === 'left') {
-                        neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex + 1) + ']');
+                        neighbour = swiper.wrapper.find('*.swiper-slide[data-index=' + (insertIndex + 1) + ']');
 
                         if (neighbour.length > 0) {
                             neighbour.before(view.$el);

@@ -1128,7 +1128,7 @@ define('io.ox/core/desktop', [
         // window guid
         var guid = 0,
 
-            pane = $('#io-ox-windowmanager-pane'),
+            defaultPane = $('#io-ox-windowmanager-pane'),
 
             // window class
             Window = function (options) {
@@ -1143,7 +1143,7 @@ define('io.ox/core/desktop', [
                 this.simple = false;
                 this.page = options.page;
 
-                if (this.page) pane = this.page;
+                var pane = this.page ? this.page : defaultPane;
 
                 var quitOnClose = false,
                     perspectives = {},

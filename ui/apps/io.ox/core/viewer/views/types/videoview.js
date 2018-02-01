@@ -21,7 +21,8 @@ define('io.ox/core/viewer/views/types/videoview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *

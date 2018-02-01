@@ -24,7 +24,8 @@ define('io.ox/core/viewer/views/types/imageview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *
