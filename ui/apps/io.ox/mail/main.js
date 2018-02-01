@@ -1135,6 +1135,7 @@ define('io.ox/mail/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 app.threadView.toggleNavigation(value === 'list');
+                ox.ui.apps.trigger('layout', app);
             });
 
             app.threadView.toggleNavigation(app.props.get('layout') === 'list');

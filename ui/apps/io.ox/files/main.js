@@ -872,6 +872,7 @@ define('io.ox/files/main', [
                     app.applyLayout();
                     app.listView.redraw();
                     $(document).trigger('resize');
+                    ox.ui.apps.trigger('layout', app);
                 });
             });
 
