@@ -71,6 +71,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             });
         },
 
+        resolve: function () {
+            var view = this.view;
+            return this.get().map(function (cid) {
+                return view.collection.get(cid);
+            });
+        },
+
         getItems: function (filter) {
             var items = this.view.$el.find(SELECTABLE);
             return filter ? items.filter(filter) : items;
