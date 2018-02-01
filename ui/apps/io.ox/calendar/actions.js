@@ -132,7 +132,10 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/edit', {
         requires: function (e) {
             var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
-                allowed = e.collection.has('one', 'modify');
+                allowed = e.collection.has('one', 'modify'),
+                // only organizer is allowed to make changes. Attendees are only allowed to change their personal alarms or confirmation state
+                isOrganizer = exists && util.hasFlag(e.baton.data, 'organizer');
+
             if (allowed) {
                 // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
                 if (!e.baton.data.folder) {
@@ -141,7 +144,7 @@ define('io.ox/calendar/actions', [
                 }
             }
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return allowed && exists && isBossy;
+                return allowed && exists && isBossy && isOrganizer;
             });
         },
         action: function (baton) {
@@ -154,7 +157,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return e.collection.has('delete') && isBossy;
+                return e.collection.has('delete') && isBossy && e.baton && e.baton.data && util.hasFlag(e.baton.data, 'organizer');
             });
         },
         multiple: function (list) {
