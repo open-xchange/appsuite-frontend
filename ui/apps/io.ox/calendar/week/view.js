@@ -1503,6 +1503,7 @@ define('io.ox/calendar/week/view', [
                 el
                     .attr({ class: newAppointment.attr('class') })
                     .css({ color: color, 'background-color': backgroundColor })
+                    .data('background-color', backgroundColor)
                     .empty()
                     .append(newAppointment.children());
                 $('.appointment').trigger('calendar:weekview:rendered');
