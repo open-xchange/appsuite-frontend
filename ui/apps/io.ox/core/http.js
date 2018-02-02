@@ -56,7 +56,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '660': 'flagged',
                 // they both add the same property; never use simultaneously!
                 '662': 'text_preview',
-                '663': 'text_preview'
+                '663': 'text_preview',
+                '664': 'authenticity'
             },
             'contacts': {
                 '500': 'display_name',

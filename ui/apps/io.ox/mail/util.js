@@ -544,12 +544,61 @@ define('io.ox/mail/util', [
             return data.folder_id === undefined && data.filename !== undefined;
         },
 
+        authenticity: (function () {
+
+            var map = {
+                // contact image
+                image: function (level, status) {
+                    if (level === 1) return /(fail)/.test(status);
+                    return /(fail|neutral)/.test(status);
+                },
+                // prepend in sender block (detail)
+                icon: function (level, status) {
+                    if (level === 1) return /(fail)/.test(status);
+                    if (level === 2) return /(fail|pass|trusted)/.test(status);
+                    if (level === 3) return /(fail|neutral|pass|trusted)/.test(status);
+                },
+                // info box wihtin mail detail
+                box: function (level, status) {
+                    if (level === 1) return /(fail)/.test(status);
+                    return /(fail|trusted)/.test(status);
+                },
+                // disable links, replace external images
+                block: function (level, status) {
+                    if (level === 1) return;
+                    return /(fail)/.test(status);
+                },
+                // 'via' hint for different mail server
+                via: function (level, status) {
+                    if (level === 1) return;
+                    return /(fail)/.test(status);
+                }
+            };
+
+            return function (aspect, data) {
+                var status = that.getAuthenticityStatus(data),
+                    level = parseInt(settings.get('features/authenticity-level', 2), 10);
+                // feature disabled or level 'naive'
+                if (!status || !/^(1|2|3)$/.test(level)) return;
+                var isEnabled = map[aspect] ? map[aspect].call(undefined, level, status) : false;
+                return isEnabled ? status : undefined;
+            };
+        })(),
+
+        getAuthenticityStatus: function (data) {
+            if (!settings.get('features/authenticity', false)) return;
+            if (!/^(1|2|3)$/.test(settings.get('features/authenticity-level', 2))) return;
+            if (!_.isObject(data)) return;
+            return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
+        },
+
         isMalicious: (function () {
             if (!settings.get('maliciousCheck')) return _.constant(false);
             var blacklist = settings.get('maliciousFolders');
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
+                if (that.authenticity('block', data)) return true;
                 // nested mails don't have their own folder id. So use the parent mails folder id
                 return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };

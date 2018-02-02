@@ -32,6 +32,60 @@
     }
 }
 
+.authenticity() {
+    padding: 0px 4px;
+    border-radius: 4px;
+}
+
+.authenticity-trusted,
+.authenticity-pass {
+    .authenticity();
+    color: white;
+    background-color: #87c947;
+}
+
+.authenticity-fail {
+    .authenticity();
+    color: white;
+    background-color: #c50000;
+}
+
+.authenticity-neutral {
+    .authenticity();
+    background-color: #f8e400;
+}
+
+.contact-picture.authenticity-image,
+.mail-item .contact-picture.authenticity-image,
+.mail-detail .contact-picture.authenticity-image {
+    .flex-center();
+    // fallback image main color
+    background-color: #e6e6e6;
+    color: white;
+    .fa {
+        font-size: 24px;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.authenticity-icon-trusted,
+.authenticity-icon-pass,
+.authenticity-icon-neutral,
+.authenticity-icon-fail {
+    font-size: 15px;
+}
+.authenticity-icon-trusted,
+.authenticity-icon-pass {
+    color: #87c947;
+}
+.authenticity-icon-neutral {
+    color: #888;
+}
+.authenticity-icon-fail {
+    color: #c50000;
+}
+
 .io-ox-mail-window .vsplit .leftside .alert {
     position: relative;
     border-radius: 0;
@@ -260,6 +314,11 @@
     section.attachments,
     section.notifications,
     section.error { display: none; }
+
+    section.authenticity {
+        padding: 16px 40px;
+        border-bottom: 1px solid #ddd;
+    }
 
     &.expanded section {
         &.attachments,
@@ -1085,9 +1144,23 @@ textarea.inplace-editor {
     .multi-selection-message div { color: #555; }
 }
 
-.mail-source-view {
-    width: 100%;
-    visibility: hidden;
+.mail-source-dialog {
+    .modal-body {
+        height: 400px;
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        .mail-source-view {
+            flex-grow: 2;
+            width: 100%;
+        }
+        .mail-authenticity-view {
+            flex-grow: 1
+        }
+        #mail-authenticity-headline {
+            font-size: 16px;
+        }
+    }
 }
 
 // CATEGORIES
@@ -1196,7 +1269,7 @@ body.dragging .categories-toolbar-container {
             background: white;
             button {
                 font-weight: bold;
-                &:focus {background: white; }
+                &:focus { background: white; }
             }
         }
 
@@ -1370,6 +1443,11 @@ body.dragging .categories-toolbar-container {
                     margin-right: @default-padding;
                 }
             }
+        }
+
+        section.authenticity {
+            padding: 16px;
+            border-bottom: 1px solid #ddd;
         }
     }
 

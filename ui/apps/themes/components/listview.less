@@ -246,7 +246,7 @@
         color: @grid-selected-color;
         background-color: @selected-background;
         .gray { color: @grid-selected-color; }
-        i { color: @grid-selected-checkbox-color; }
+        i:not(.color-stable) { color: @grid-selected-checkbox-color; }
         &:hover { background-color: lighten(@selected-background, 2%); }
         &:focus, &:focus:hover { background-color: @selected-focussed-background; }
     }

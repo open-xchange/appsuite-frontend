@@ -211,8 +211,21 @@ define('io.ox/mail/detail/view', [
         id: 'default',
         index: 100,
         draw: function (baton) {
+            var data = baton.data, from = data.from || [],
+                status = util.authenticity('via', data);
 
-            var data = baton.data, from = data.from || [];
+            if (status && baton.data.authenticity.from_dmain) {
+                this.append(
+                    $('<div class="sender">').append(
+                        $('<span class="io-ox-label">').append(
+                            //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+                            $.txt(gt('Via')),
+                            $.txt('\u00A0\u00A0')
+                        ),
+                        $('<span class="address">').text(baton.data.authenticity.from_dmain)
+                    )
+                );
+            }
 
             // add 'on behalf of'?
             if (!('headers' in data)) return;
@@ -332,6 +345,12 @@ define('io.ox/mail/detail/view', [
         draw: function () {
             this.append($('<section class="error">').hide());
         }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'authenticity',
+        index: INDEX += 100,
+        draw: extensions.authenticity
     });
 
     ext.point('io.ox/mail/detail').extend({
@@ -753,7 +772,7 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).pipe(
+                        api.get(_.extend(cid, { authenticity: this.model.get('authenticity') })).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );

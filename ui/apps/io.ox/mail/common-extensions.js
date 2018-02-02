@@ -40,7 +40,15 @@ define('io.ox/mail/common-extensions', [
         return !!baton.app && !!baton.app.props.get('find-result');
     }
 
-    function pictureHalo(node, data) {
+    function pictureHalo(node, data, baton) {
+        // authenticity
+        var status = util.authenticity('image', baton && baton.model.toJSON());
+        if (status) {
+            return node.addClass('authenticity-image authenticity-' + status).append(
+                $('<i class="color-stable fa">').addClass(status === 'neutral' ? 'fa-question' : 'fa-exclamation')
+            );
+        }
+
         // user should be in cache from rampup data
         // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
@@ -87,6 +95,37 @@ define('io.ox/mail/common-extensions', [
             });
         },
 
+        authenticity: function (baton) {
+            var status = util.authenticity('box', baton && baton.model.toJSON());
+            if (!status) return;
+
+            var section = $('<section class="authenticity">'),
+                data = baton.data,
+                from = data.from || [], email;
+
+            _(from).each(function (item) {
+                email = String(item[1] || '').toLowerCase();
+                if (/^(trusted|fail)$/.test(status)) {
+                    section.append(
+                        $('<div>').addClass('authenticity-' + status.toLowerCase())
+                            .text(status === 'trusted' ?
+                                gt('This message is from a trusted sender.') :
+                                gt('This might be a phising mail because we could not verify that this email is really from %1$s.', email)
+                            )
+                    );
+                }
+                if (/(neutral|pass)/.test(status)) {
+                    section.append(
+                        $('<em>').text(/(pass)/.test(status) ?
+                            gt('This mail has been sent from %1$s.', email) :
+                            gt('We could not verify that this email is really from %1$s.', email)
+                        )
+                    );
+                }
+            });
+
+            this.append(section);
+        },
         picture: function (baton) {
             // show picture of sender or first recipient
             // special cases:
@@ -101,7 +140,7 @@ define('io.ox/mail/common-extensions', [
             this.append(node);
 
             if (isSearchResult(baton) && data.picture) return pictureHalo(node, data.picture);
-            pictureHalo(node, addresses);
+            pictureHalo(node, addresses, baton);
         },
 
         senderPicture: function (baton) {
@@ -110,7 +149,7 @@ define('io.ox/mail/common-extensions', [
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
             this.append(node);
-            pictureHalo(node, addresses);
+            pictureHalo(node, addresses, baton);
         },
 
         date: function (baton, options) {
@@ -152,7 +191,8 @@ define('io.ox/mail/common-extensions', [
             var $el = $('<div class="from">'),
                 data = baton.data,
                 from = data.from || [],
-                length = from.length;
+                length = from.length,
+                status = util.authenticity('icon', data);
 
             // from is special as we need to consider the "sender" header
             // plus making the mail address visible (see bug 56407)
@@ -162,6 +202,25 @@ define('io.ox/mail/common-extensions', [
                 var email = String(item[1] || '').toLowerCase(),
                     name = util.getDisplayName(item);
                 if (!email) return;
+
+                if (status) {
+                    $el.append(
+                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').popover({
+                            trigger: 'focus hover',
+                            content: /(pass|trusted)/.test(status) ?
+                                gt('This mail has been sent from %1$s.', email) :
+                                gt('We could not verify that this email is really from %1$s.', email)
+                        })
+                        .append(
+                            $('<i class="fa">').addClass(function () {
+                                if (status === 'neutral') return 'fa-question'; //fa-question
+                                if (status === 'fail') return 'fa-exclamation';
+                                return 'fa-check';
+                            })
+                            .addClass(status ? 'authenticity-icon-' + status : '')
+                        )
+                    );
+                }
 
                 $el.append(
                     $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')

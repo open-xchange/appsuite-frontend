@@ -24,6 +24,10 @@ define('io.ox/settings/security/settings/pane', [
 
     var INDEX = 0;
 
+    function isConfigurable(id) {
+        return settings.isConfigurable(id);
+    }
+
     ext.point('io.ox/settings/security/settings/detail').extend({
         index: 100,
         id: 'view',
@@ -57,7 +61,20 @@ define('io.ox/settings/security/settings/pane', [
                 if (!(capabilities.has('webmail'))) return;
 
                 this.$el.append(
-                    gt.pgettext('app', 'Mail')
+                    util.fieldset(
+                        gt.pgettext('app', 'Mail'),
+
+                        // authenticity
+                        !settings.get('features/authenticity', false) ? $() :
+                            util.compactSelect('features/authenticity-level', gt('Show message authencitiy'), settings, [
+                                { label: gt('None'), value: 0 },
+                                { label: gt('Dangerous only'), value: 1 },
+                                { label: gt('Dangerous and trusted'), value: 2, se: true },
+                                { label: gt('All'), value: 3 }
+                            ])
+                            .prop('disabled', !isConfigurable('features/authenticity-level'))
+
+                    )
                 );
 
             }

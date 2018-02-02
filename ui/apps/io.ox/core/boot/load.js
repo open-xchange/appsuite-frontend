@@ -111,6 +111,11 @@ define('io.ox/core/boot/load', [
             http.defaultColumns.mail.all += ',662';
         }
 
+        if (mailSettings.get('features/authenticity', false)) {
+            http.defaultColumns.mail.unseen += ',664';
+            http.defaultColumns.mail.all += ',664';
+        }
+
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
 
         var folder = 'default0/INBOX',
