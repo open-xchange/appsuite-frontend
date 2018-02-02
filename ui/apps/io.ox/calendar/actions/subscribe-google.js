@@ -25,14 +25,14 @@ define('io.ox/calendar/actions/subscribe-google', [
 
     function createAccount(service) {
         var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-            return !account.hasScopes('calendar');
+            return !account.hasScopes('calendar_ro');
         })[0] ||
         new OAuth.Account.Model({
             serviceId: service.id,
             displayName: oauthAPI.chooseDisplayName(service)
         });
 
-        return account.enableScopes('calendar').save().then(function () {
+        return account.enableScopes('calendar_ro').save().then(function () {
             return folderAPI.create('1', {
                 'module': 'event',
                 'title': gt('My Google Calendar'),
@@ -52,7 +52,7 @@ define('io.ox/calendar/actions/subscribe-google', [
             return model.get('id').indexOf('google') >= 0;
         });
         if (!googleService) return console.error('No google service provider found');
-        if (googleService.get('availableScopes').indexOf('calendar') < 0) return console.error('Cannot add calendar due to missing scope "calendar" in OAuth service');
+        if (googleService.get('availableScopes').indexOf('calendar_ro') < 0) return console.error('Cannot add calendar due to missing scope "calendar" in OAuth service');
         createAccount(googleService);
     };
 
