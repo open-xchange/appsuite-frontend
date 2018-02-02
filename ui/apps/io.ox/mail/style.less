@@ -999,8 +999,9 @@
 
 .inplace-reply {
 
-    margin: 16px 0 0 0;
-    padding: 0 @default-padding;
+    margin: 0;
+    padding: @default-padding;
+    height: 100%;
 
     .form-group { margin-bottom: 0; }
 
@@ -1020,17 +1021,19 @@
     }
 }
 
+.floating-quick-reply {
+    &.cornered, &.centered { max-width: 720px; min-height: auto; }
+    &.cornered { max-height: 320px; }
+}
+
 textarea.inplace-editor {
     color: #333;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500; // for better readability
-    line-height: 16px;
+    line-height: normal;
     width: 100%;
-    height: 105px;
-    min-height: 105px;
-    max-height: 401px;
-    padding: 11px 11px (@default-padding / 2) 11px;
-    margin: 0 0 15px 0;
+    height: 100%;
+    padding: 15px;
     resize: none;
 }
 

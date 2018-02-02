@@ -38,7 +38,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         },
 
         constructor: function (options) {
-            this.options = options || {};
+
+            this.options = _.extend({
+                closable: true,
+                showMaximizeButton: true,
+                showStickybutton: false
+            }, options);
+
             this.title = this.options.title;
             // standard windowmanager windowobject. Used by apps
             this.win = this.options.win;
@@ -83,7 +89,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                     $('<i class="fa fa-window-minimize" aria-hidden="true">')
                                 ),
                                 $('<button type="button" class="btn btn-link" data-action="cornered">').append('<i class="fa fa-compress">'),
-                                $('<button type="button" class="btn btn-link" data-action="centered">').append('<i class="fa fa-expand">'),
+                                this.options.showMaximizeButton ? $('<button type="button" class="btn btn-link" data-action="centered">').append('<i class="fa fa-expand">') : '',
                                 this.options.showStickybutton ? $('<button type="button" class="btn btn-link" data-action="sticky">').append('<i class="fa fa-thumb-tack">') : '',
                                 this.options.closable ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times">') : ''
                             )

@@ -157,7 +157,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
         getApp: createInstance,
 
         reuse: function (type, data) {
-            //disable reuse if at least one app is sending (depends on type)
+            // disable reuse if at least one app is sending (depends on type)
             var unblocked = function (sendtype) {
                 return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
             };

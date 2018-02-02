@@ -382,22 +382,6 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
-        id: 'inplace-reply-recover',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var model = baton.model;
-            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
-                if (!InplaceReplyView.hasDraft(model.cid)) return;
-                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
-                // trigger click to open
-                baton.view.$('.detail-view-header').click();
-                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
-                model = null;
-            });
-        }
-    });
-
     ext.point('io.ox/mail/detail/body').extend({
         id: 'iframe',
         index: 100,
