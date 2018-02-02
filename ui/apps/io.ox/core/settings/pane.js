@@ -38,6 +38,11 @@ define('io.ox/core/settings/pane', [
             };
         }).concat([{ label: gt('None'), value: '' }]);
 
+    // Check that the app exists in available applications
+    function getAvailablePath(app) {
+        return _(availableApps).findWhere({ 'value': app }) ? app : '';
+    }
+
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
         index: 100,
@@ -366,7 +371,7 @@ define('io.ox/core/settings/pane', [
                         if (settingsStr) {
                             var a = settingsStr.split(',');
                             if (this.options.pos <= a.length) {
-                                this.model.set('apps/quicklaunch' + this.options.pos, a[this.options.pos], { silent: true });
+                                this.model.set('apps/quicklaunch' + this.options.pos, getAvailablePath(a[this.options.pos]), { silent: true });
                             }
                         }
                         this.listenTo(this.model, 'change:' + this.name, this.update);
