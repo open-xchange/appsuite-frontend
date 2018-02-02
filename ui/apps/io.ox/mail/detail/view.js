@@ -433,7 +433,8 @@ define('io.ox/mail/detail/view', [
 
             var data = content.get(baton.data),
                 node = data.content,
-                self = this;
+                self = this,
+                containsEmoji = /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML);
 
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.innerHTML, function (html, lib) {
@@ -442,14 +443,6 @@ define('io.ox/mail/detail/view', [
                     node.innerHTML = html;
                 });
             }
-
-            if (this.find('.content-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
-                var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
-                    return require('css!' + point.css).clone();
-                }).value();
-                this.prepend(emojiStyles);
-            }
-
 
             var resizeLoop = 0;
             // function to make sure there is only one resize loop
@@ -525,6 +518,10 @@ define('io.ox/mail/detail/view', [
             baton.iframe.on('load', function () {
                 var content = baton.iframe.contents();
                 content.find('head').append('<style class="content-style">' + contentStyle + '</style>');
+                // inject emoji-specific css; this is a quick fix with a more or less static URL
+                if (containsEmoji) {
+                    content.find('head').append('<link rel="stylesheet" href="' + ox.base + '/apps/3rd.party/emoji/emoji.css">');
+                }
                 content.find('body').addClass('iframe-body').append(node);
                 startResizeLoop(); // initial resize for first draw
             });
