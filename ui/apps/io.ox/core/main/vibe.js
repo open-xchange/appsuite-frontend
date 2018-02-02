@@ -42,7 +42,7 @@ define('io.ox/core/main/vibe', ['settings!io.ox/core'], function (settings) {
         if (h < 9) return 'twilight';
         if (h < 12) return 'dawn';
         if (h < 18) return 'day';
-        if (h < 22) return 'dusk';
+        if (h < 23) return 'dusk';
         return 'late';
     }
 });

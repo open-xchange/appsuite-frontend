@@ -632,11 +632,6 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
-        customize: function (baton) {
-            if (!baton.view.$('.inplace-reply').length) return;
-            // inplace reply was recovered
-            baton.view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
-        },
         mobile: 'lo',
         //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
         label: gt('Quick reply'),

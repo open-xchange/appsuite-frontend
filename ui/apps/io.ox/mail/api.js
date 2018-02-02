@@ -1430,7 +1430,7 @@ define('io.ox/mail/api', [
         .then(function (response) {
             var hash = {};
             _(response).each(function (item) {
-                hash[_.cid(item)] = item.text_preview || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr';
+                hash[_.cid(item)] = item.text_preview || '\u00a0';
             });
             return hash;
         });

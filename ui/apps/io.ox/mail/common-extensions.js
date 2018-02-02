@@ -24,6 +24,7 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/api/user',
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
@@ -31,7 +32,7 @@ define('io.ox/mail/common-extensions', [
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
@@ -41,6 +42,7 @@ define('io.ox/mail/common-extensions', [
     }
 
     function pictureHalo(node, data, baton) {
+
         // authenticity
         var status = util.authenticity('image', baton && baton.model.toJSON());
         if (status) {
@@ -48,6 +50,9 @@ define('io.ox/mail/common-extensions', [
                 $('<i class="color-stable fa">').addClass(status === 'neutral' ? 'fa-question' : 'fa-exclamation')
             );
         }
+
+        // add initials
+        node.text(getInitials(baton.data.from));
 
         // user should be in cache from rampup data
         // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
@@ -58,9 +63,15 @@ define('io.ox/mail/common-extensions', [
             contactsAPI.pictureHalo(
                 node,
                 (useUserApi ? { id: ox.user_id } : { email: address }),
-                { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+                { width: 40, height: 40, effect: 'fadeIn', fallback: false, api: (useUserApi ? 'user' : 'contact') }
             );
         });
+    }
+
+    function getInitials(from) {
+        if (!_.isArray(from) || !from.length) return '';
+        var name = util.getDisplayName(from[0]);
+        return name.replace(/^(.)\S*(\s(.))?.*$/, '$1$3').toUpperCase();
     }
 
     var extensions = {
