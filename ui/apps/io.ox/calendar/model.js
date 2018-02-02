@@ -221,16 +221,18 @@ define('io.ox/calendar/model', [
             }
             this.onChangeFlags();
             this.on({
-                'change:startDate': function () {
-                    if (this.changed.endDate) return;
-                    if (!this.has('endDate')) return;
-                    var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
-                    prevStartDate = util.getMoment(prevStartDate);
-                    endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
-                    this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
-                },
+                'change:startDate': this.onChangeStartDate,
                 'change:flags': this.onChangeFlags
             });
+        },
+        onChangeStartDate: function () {
+            if (!this.adjustEndDate) return;
+            if (this.changedAttributes().endDate) return;
+            if (!this.has('endDate')) return;
+            var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
+            prevStartDate = util.getMoment(prevStartDate);
+            endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
+            this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
         },
         onChangeFlags: function () {
             this.flags = _.object(this.get('flags'), this.get('flags'));

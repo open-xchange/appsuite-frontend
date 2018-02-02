@@ -255,6 +255,7 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 var self = this;
+                self.model.adjustEndDate = true;
                 if (self.model.get('summary')) {
                     self.getWindow().setTitle(self.model.get('summary'));
                     self.setTitle(self.model.get('summary'));
@@ -336,6 +337,7 @@ define('io.ox/calendar/edit/main', [
                         save();
                     }, fail);
                 } else {*/
+                this.model.adjustEndDate = false;
                 this.considerSaved = true;
                 self.getWindow().idle();
                 this.quit();
