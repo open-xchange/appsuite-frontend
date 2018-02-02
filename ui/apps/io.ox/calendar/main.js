@@ -303,11 +303,22 @@ define('io.ox/calendar/main', [
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
-        'multi-folder-selection': function (app) {
-            var folders, prevFolders;
+        'folder-create': function () {
+            folderAPI.on('create', function (folder) {
+                if (folder.module !== 'calendar') return;
+                app.folders.add(folder.id);
+                app.folder.set(folder.id);
+            });
+        },
+
+        'folder-remove': function (app) {
             folderAPI.on('remove', function (id) {
                 app.folders.remove(id);
             });
+        },
+
+        'multi-folder-selection': function (app) {
+            var folders, prevFolders;
             function setFolders(list) {
                 folders = _(list).unique();
                 sort();
