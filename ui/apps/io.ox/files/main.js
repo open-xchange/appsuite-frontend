@@ -33,6 +33,7 @@ define('io.ox/files/main', [
     'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/backbone/mini-views/quota',
+    'io.ox/core/notifications',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -44,7 +45,7 @@ define('io.ox/files/main', [
     'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications) {
 
     'use strict';
 
@@ -1485,6 +1486,23 @@ define('io.ox/files/main', [
                 if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
                 // if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+            });
+        },
+
+        // Bug 56943: error handling on external folder delete
+        'special-error-handling': function (app) {
+            var process = _.debounce(function (error) {
+                var model = folderAPI.pool.getModel(app.folder.get());
+                if (model) folderAPI.list(model.get('folder_id'), { cache: false });
+                app.folder.setDefault();
+                notifications.yell(error);
+            }, 1000, true);
+
+            app.listenTo(ox, 'http:error:FLD-0008', function (error, request) {
+                var folder = request.params.parent || request.data.parent;
+                if (!folder || folder !== this.folder.get()) return;
+                if (folderAPI.isBeingDeleted(folder)) return;
+                process(error);
             });
         }
     });

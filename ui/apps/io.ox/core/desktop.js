@@ -355,8 +355,7 @@ define('io.ox/core/desktop', [
 
                         return function () {
                             self.listenTo(ox, 'http:error', function (error, request) {
-                                // Bug 54793: parent for error notification
-                                var folder = request.params.folder || request.data.folder || error.folder || request.params.id || request.params.parent || request.data.parent;
+                                var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
                                 if (folder !== self.folder.get()) return;
                                 // don't show expected errors see Bug 56276
                                 if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && api.isBeingDeleted(folder)) return;
