@@ -99,48 +99,50 @@ define('io.ox/core/boot/load', [
         );
     }
 
+    // greedy prefetch for mail app
+    // we need to get the default all/threadedAll request out as soon as possible
     function prefetch() {
 
-        // greedy prefetch for mail app
-        // need to get this request out as soon as possible
-        if (coreSettings.get('autoStart') === 'io.ox/mail/main' && capabilities.has('webmail')) {
+        if (!capabilities.has('webmail')) return;
 
-            if (mailSettings.get('features/textPreview', true)) {
-                http.defaultColumns.mail.unseen += ',662';
-                http.defaultColumns.mail.all += ',662';
-            }
-
-            var folder = 'default0/INBOX',
-                thread = mailSettings.get('threadSupport', true) ? mailSettings.get(['viewOptions', folder, 'thread'], true) : false,
-                sort = mailSettings.get(['viewOptions', folder, 'sort'], 610),
-                action = thread ? 'threadedAll' : 'all',
-                params = {
-                    action: action,
-                    folder: folder,
-                    columns: http.defaultColumns.mail.all,
-                    sort: sort,
-                    order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
-                    categoryid: 'general',
-                    timezone: 'utc',
-                    limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
-                };
-
-            // mail categories (aka tabbed inbox)
-            if (_.device('smartphone') || !capabilities.has('mail_categories') || !mailSettings.get('categories/enabled')) {
-                delete params.categoryid;
-            }
-
-            // edge case: no prefetch if sorting is 'from-to' (need to many data we don't have yet)
-            if (sort === 'from-to') return;
-
-            if (thread) {
-                _.extend(params, { includeSent: true, max: 300 });
-            }
-            http.GET({ module: 'mail', params: params }).done(function (data) {
-                // the collection loader will check ox.rampup for this data
-                ox.rampup['mail/' + _.param(params)] = data;
-            });
+        // always extend columns (we can do that now and if we start with mail with need this)
+        if (mailSettings.get('features/textPreview', true)) {
+            http.defaultColumns.mail.unseen += ',662';
+            http.defaultColumns.mail.all += ',662';
         }
+
+        if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
+
+        var folder = 'default0/INBOX',
+            sort = mailSettings.get(['viewOptions', folder, 'sort'], 610);
+
+        // edge case: no prefetch if sorting is 'from-to' (need too many settings we don't have yet)
+        if (sort === 'from-to') return;
+
+        var thread = mailSettings.get('threadSupport', true) ? mailSettings.get(['viewOptions', folder, 'thread'], true) : false,
+            action = thread ? 'threadedAll' : 'all',
+            params = {
+                action: action,
+                folder: folder,
+                columns: http.defaultColumns.mail.all,
+                sort: sort,
+                order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
+                categoryid: 'general',
+                timezone: 'utc',
+                limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
+            };
+
+        // mail categories (aka tabbed inbox)
+        if (_.device('smartphone') || !capabilities.has('mail_categories') || !mailSettings.get('categories/enabled')) {
+            delete params.categoryid;
+        }
+
+        if (thread) _.extend(params, { includeSent: true, max: 300 });
+
+        http.GET({ module: 'mail', params: params }).done(function (data) {
+            // the collection loader will check ox.rampup for this data
+            ox.rampup['mail/' + _.param(params)] = data;
+        });
     }
 
     function setupSockets() {
