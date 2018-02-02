@@ -221,6 +221,8 @@ define('io.ox/calendar/edit/main', [
             considerSaved: false,
 
             create: function (data) {
+                // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
+                data['class'] = 'PUBLIC';
                 this.edit(data, { mode: 'create' });
             },
 
