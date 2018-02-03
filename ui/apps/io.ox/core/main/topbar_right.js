@@ -299,7 +299,7 @@ define('io.ox/core/main/topbar_right', [
         id: 'dropdown',
         index: 1000,
         draw: function () {
-            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">'),
+            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
                     $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
                 ),
