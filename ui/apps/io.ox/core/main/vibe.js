@@ -33,8 +33,9 @@ define('io.ox/core/main/vibe', ['settings!io.ox/core'], function (settings) {
     });
 
     function update(hour) {
-        var vibe = getVibe(arguments.length ? hour : moment().hour());
-        $('#io-ox-appcontrol').attr('class', vibe);
+        var vibe = getVibe(arguments.length ? hour : moment().hour()),
+            classes = $('html').attr('class').replace(/\s?vibe-\w+/g, '');
+        $('html').attr('class', classes + ' vibe-' + vibe);
     }
 
     function getVibe(h) {

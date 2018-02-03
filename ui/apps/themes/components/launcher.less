@@ -51,11 +51,11 @@
 }
 
 /* vibe mixins */
-.vibe-night() { background-image: linear-gradient(70deg, #1a2848, #40498e, #1a2848); }
-.vibe-twilight() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
-.vibe-dawn { background-image: linear-gradient(70deg, #0d456d, #469490, #0e466d); }
-.vibe-day() { background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight); }
-.vibe-dusk() { background-image: linear-gradient(70deg, #2a2972, #ac4dad, #292b72); }
+.mx-night() { background-image: linear-gradient(70deg, #1a2848, #40498e, #1a2848); }
+.mx-twilight() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
+.mx-dawn { background-image: linear-gradient(70deg, #0d456d, #469490, #0e466d); }
+.mx-day() { background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight); }
+.mx-dusk() { background-image: linear-gradient(70deg, #2a2972, #ac4dad, #292b72); }
 
 #io-ox-appcontrol {
 
@@ -68,7 +68,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.90);
     padding: 0;
 
-    .vibe-day;
+    .mx-day;
 
     &:before {
         content: '';
@@ -82,12 +82,12 @@
         transition: opacity 5s linear;
     }
 
-    &.night { .vibe-night; &:before { .vibe-night; opacity: 0; } }
-    &.twilight { .vibe-night; &:before { .vibe-twilight; opacity: 1; } }
-    &.dawn { .vibe-dawn; &:before { .vibe-twilight; opacity: 0; } }
-    &.day { .vibe-dawn; &:before { .vibe-day; opacity: 1; } }
-    &.dusk { .vibe-dusk; &:before { .vibe-day; opacity: 0; } }
-    &.late { .vibe-dusk; &:before { .vibe-night; opacity: 1; } }
+    html.vibe-night & { .mx-night; &:before { .mx-night; opacity: 0; } }
+    html.vibe-twilight & { .mx-night; &:before { .mx-twilight; opacity: 1; } }
+    html.vibe-dawn  { .mx-dawn; &:before { .mx-twilight; opacity: 0; } }
+    html.vibe-day & { .mx-dawn; &:before { .mx-day; opacity: 1; } }
+    html.vibe-dusk & { .mx-dusk; &:before { .mx-day; opacity: 0; } }
+    html.vibe-late & { .mx-dusk; &:before { .mx-night; opacity: 1; } }
 
     display: flex;
     flex-flow: row nowrap;
