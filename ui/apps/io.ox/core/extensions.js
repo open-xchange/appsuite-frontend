@@ -149,7 +149,9 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
          */
         this.extend = function () {
 
-            _(arguments).each(function (extension) {
+            var items = _(arguments).flatten();
+
+            _(items).each(function (extension) {
 
                 if (extension.invoke) {
                     console.error(extension);
