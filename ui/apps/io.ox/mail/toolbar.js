@@ -42,6 +42,9 @@ define('io.ox/mail/toolbar', [
             mobile: 'hi',
             label: gt('Compose'),
             title: gt('Compose new email'),
+            customize: function (baton) {
+                this.parent().toggle(!baton.app.props.get('folderview'));
+            },
             drawDisabled: true,
             ref: 'io.ox/mail/actions/compose'
         },

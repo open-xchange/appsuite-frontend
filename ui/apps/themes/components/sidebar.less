@@ -57,6 +57,30 @@
     }
 }
 
+.primary-action {
+
+    padding: 16px 16px 15px 16px;
+    border-bottom: 1px solid #ddd;
+
+    .btn.btn-primary {
+
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        line-height: 40px;
+        padding: 0 8px;
+        background-color: @brand-primary;
+        transition: background-color 5s linear;
+
+        html.vibe-night & { background-color: @brand-primary; }
+        html.vibe-twilight & { background-color: #4d7155; }
+        html.vibe-dawn & { background-color: #4965a7; }
+        html.vibe-day & { background-color: @brand-primary; }
+        html.vibe-dusk & { background-color: #753e93; }
+        html.vibe-late & { background-color: @brand-primary; }
+    }
+}
+
 //
 // Don't show on smartphones
 //
