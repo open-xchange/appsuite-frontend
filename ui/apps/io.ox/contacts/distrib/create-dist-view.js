@@ -48,7 +48,9 @@ define('io.ox/contacts/distrib/create-dist-view', [
                     $('<h1 class="sr-only">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save">').text(buttonText).on('click', function () {
-                        baton.model.save();
+                        baton.member.resolve().always(function () {
+                            baton.model.save();
+                        });
                     }),
                     // cancel button
                     $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard')).on('click', function () {

@@ -97,7 +97,8 @@ define('io.ox/participants/add', [
         tagName: 'div',
 
         events: {
-            'keydown input': 'keyDown'
+            'keydown input': 'resolve',
+            'blur input': 'resolve'
         },
 
         typeahead: null,
@@ -140,8 +141,8 @@ define('io.ox/participants/add', [
             this.collection.on('render', scrollIntoView);
         },
 
-        keyDown: function (e) {
-            if (e.which !== 13) return;
+        resolve: function (e) {
+            if (e.type === 'keydown' && e.which !== 13) return;
             var val = this.typeahead.$el.typeahead('val'),
                 list = coreUtil.getAddresses(val),
                 participants = [];
@@ -169,6 +170,7 @@ define('io.ox/participants/add', [
             if (error) return;
             // now really validate address
             list = this.getValidAddresses(list);
+            // hint: async custom wrapper
             this.collection.add(list);
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
