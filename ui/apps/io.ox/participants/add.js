@@ -98,7 +98,8 @@ define('io.ox/participants/add', [
         tagName: 'div',
 
         events: {
-            'keydown input': 'keyDown'
+            'keydown input': 'resolve',
+            'blur input': 'resolve'
         },
 
         typeahead: null,
@@ -146,8 +147,8 @@ define('io.ox/participants/add', [
             this.collection.on('render', scrollIntoView);
         },
 
-        keyDown: function (e) {
-            if (e.which !== 13) return;
+        resolve: function (e) {
+            if (e.type === 'keydown' && e.which !== 13) return;
             var val = this.typeahead.$el.typeahead('val'),
                 list = coreUtil.getAddresses(val),
                 participants = [];
@@ -188,12 +189,14 @@ define('io.ox/participants/add', [
 
                 }).flatten().compact().value();
             }
+
             if (!_.isEmpty(list)) this.collection.add(list);
 
             if (!_.isEmpty(distlists)) {
                 _.each(distlists, function (item) {
                     self.collection.resolveDistList(item.attributes.distribution_list).done(function (list) {
                         _.each(list, function (item) {
+                            // hint: async custom wrapper
                             self.collection.add(calendarUtil.createAttendee(item));
                         });
                     });
@@ -217,6 +220,7 @@ define('io.ox/participants/add', [
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 self = this;
+
             this.typeahead = new Typeahead(this.options);
             this.$el.append(
                 $('<label class="sr-only">').attr({ for: guid }).text(this.options.label),
