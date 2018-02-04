@@ -309,6 +309,11 @@ define('io.ox/participants/model', [
             // wrap add function
             this.oldAdd = this.add;
             this.add = this.addUniquely;
+            this.processing = [];
+        },
+
+        resolve: function () {
+            return $.when.apply($, this.processing);
         },
 
         addUniquely: function (list, opt) {
@@ -341,7 +346,7 @@ define('io.ox/participants/model', [
                     return models;
                 });
             });
-            return _.flatten(defs);
+            this.processing = this.processing.concat(_.flatten(defs));
         }
     });
 
