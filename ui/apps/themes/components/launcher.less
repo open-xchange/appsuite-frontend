@@ -212,7 +212,10 @@
         margin-right: auto;
         width: 100%;
         .search-box > .form-group { margin-bottom: 0; }
-        .search-field { border-radius: 0; }
+        .search-field {
+            border-radius: 0;
+            &:not(.focus) { border: 0; }
+        }
 
         // input placeholder text
         .tokenfield-placeholder {
