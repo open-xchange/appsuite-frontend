@@ -205,6 +205,15 @@ define('io.ox/mail/listview', [
             id: 'subject',
             index: 1000,
             draw: extensions.subject
+        },
+        {
+            id: 'text-preview',
+            index: 1100,
+            draw: function (baton) {
+                this.append(
+                    $('<span class="text-preview gray">').text(baton.data.text_preview || '')
+                );
+            }
         }
     );
 
@@ -359,7 +368,7 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
                 this.append(
-                    $('<div class="text-preview gray">').text(baton.data.text_preview || '')
+                    $('<div class="text-preview multiline gray">').text(baton.data.text_preview || '')
                 );
             }
         }
