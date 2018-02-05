@@ -67,8 +67,8 @@ define('io.ox/files/api', [
                 normalizedAttrs = {
                     filename: attributes.filename,
                     file_size: attributes.file_size,
-                    file_mimetype: attributes.file_mimetype,
-                    id: attributes.id,
+                    file_mimetype: attributes.file_mimetype || attributes.fmtType,
+                    id: attributes.id || attributes.managedId,
                     folder_id: attributes.folder,
                     module: attributes.module,
                     origData: attributes,
