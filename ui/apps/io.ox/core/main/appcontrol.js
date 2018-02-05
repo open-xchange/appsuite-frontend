@@ -236,7 +236,7 @@ define('io.ox/core/main/appcontrol', [
                                     'aria-describedby': guid
                                 }),
                                 // search
-                                $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options">')
+                                $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                     .attr({
                                         'data-original-title': gt('Options'),
                                         'aria-label': gt('Options')
@@ -256,10 +256,8 @@ define('io.ox/core/main/appcontrol', [
                                     .text(label),
                                 // sr description
                                 $('<p class="sr-only sr-description">').attr({ id: guid })
-                                    .text(
-                                        //#. search feature help text for screenreaders
-                                        gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-                                    )
+                                    //#. search feature help text for screenreaders
+                                    .text(gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones'))
                             )
                         )
                     )
@@ -286,12 +284,16 @@ define('io.ox/core/main/appcontrol', [
                 container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
             }
 
-            function setMargin() {
-                // container left (folder tree yes/no)
+            function getSidepanelOverlap() {
+                // sidepanel overlap of quicklaunch in pixel (positive or 0)
                 var launcherWidth = $('#io-ox-launcher').width(),
                     quickLaunchWidth = $('#io-ox-quicklaunch').width(),
                     sidePanelWidth = $('.window-sidepanel:visible').width();
-                container.css('marginLeft', !!sidePanelWidth ? (sidePanelWidth - launcherWidth - quickLaunchWidth) : '8px');
+                return !!sidePanelWidth ? Math.max((sidePanelWidth - launcherWidth - quickLaunchWidth), 0) : 0;
+            }
+
+            function setMargin() {
+                container.css('marginLeft', Math.max(getSidepanelOverlap(), 8));
             }
 
             function setWidth() {
@@ -300,7 +302,7 @@ define('io.ox/core/main/appcontrol', [
                 var current = container.find('.io-ox-find[data-app="' + app.id + '"]'),
                     leftsideWidth = $('.leftside:visible').width(),
                     // sidepanel AND vgrid/list AND not full width size
-                    doAlign = $('.window-sidepanel:visible').width() && !!leftsideWidth && (leftsideWidth + 10 < $('.window-body:visible').width()),
+                    doAlign = !!getSidepanelOverlap() && !!leftsideWidth && (leftsideWidth + 10 < $('.window-body:visible').width()),
                     target = doAlign ? Math.min(MAXWIDTH, leftsideWidth) : MINWIDTH;
 
                 // special case: list layout to a non-list layout (keep width)
@@ -322,21 +324,24 @@ define('io.ox/core/main/appcontrol', [
                 });
             }
 
-            var setVisibility = _.debounce(function show() {
+            function setVisibility() {
                 var app = ox.ui.App.getCurrentApp();
                 if (!app || !app.id) return;
-                // TODO: ignore floating apps
-                if (app.get('floating')) return;
                 // show field for current app
                 hidePaused();
                 container.find('[data-app="' + app.id + '"]').css('display', 'block');
-            }, 300);
+            }
 
-            // immediately hide field of non active apps
-            ox.ui.apps.on('launch', hidePaused);
-            ox.ui.apps.on('resume', function () {
+            var delay = 0;
+            ox.ui.windowManager.on('window.open', function () { delay = 100; });
+            ox.ui.windowManager.on('window.show', function () {
                 hidePaused();
-                setVisibility();
+                if (!delay) return setVisibility();
+                // delay on first start
+                _.delay(function () {
+                    delay = 0;
+                    setVisibility();
+                }, delay);
             });
 
             // resize/toggle of folder tree/list widget
