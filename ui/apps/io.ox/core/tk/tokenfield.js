@@ -143,7 +143,8 @@ define('io.ox/core/tk/tokenfield', [
             /*
              * extension point for a token
              */
-            ext.point(options.extPoint + '/token').extend({
+            /*
+             ext.point(options.extPoint + '/token').extend({
                 id: 'token',
                 index: 100,
                 draw: function (model, e, input) {
@@ -159,6 +160,7 @@ define('io.ox/core/tk/tokenfield', [
                     input.trigger('updateWidth');
                 }
             });
+            */
 
             ext.point(options.extPoint + '/autoCompleteItem').extend({
                 id: 'view',
