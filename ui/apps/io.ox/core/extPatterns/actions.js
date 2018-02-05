@@ -49,14 +49,14 @@ define('io.ox/core/extPatterns/actions', [
     };
 
     // check if an action can be called based on a given list of items
-    var check = function (ref, array) {
-        var collection = new Collection(array);
-        // pipe/then
+    // arg is array or baton
+    var check = function (ref, arg) {
+        var collection = new Collection(_.isArray(arg) ? arg : []);
         return collection.getProperties().pipe(function () {
-            return processActions(ref, collection, ext.Baton.ensure(array)).pipe(function () {
+            return processActions(ref, collection, ext.Baton.ensure(arg)).pipe(function () {
                 return _(arguments).any(function (bool) { return bool === true; }) ?
-                    $.Deferred().resolve() :
-                    $.Deferred().reject();
+                    $.Deferred().resolve(true) :
+                    $.Deferred().reject(false);
             });
         });
     };

@@ -1751,25 +1751,11 @@ define('io.ox/mail/main', [
 
         'primary-action': function (app) {
 
-            ext.point('io.ox/mail/sidepanel').extend({
-                id: 'primary-action',
-                index: 10,
-                draw: function () {
-                    this.append(
-                        $('<div class="primary-action">').append(
-                            $('<button class="btn btn-primary">').text(gt('Compose'))
-                            .on('click', function () {
-                                actions.invoke('io.ox/mail/actions/compose', null, ext.Baton({ app: app }));
-                            })
-                        )
-                    );
-                }
-            });
-
-            app.props.on('change:folderview', function (model, value) {
-                // bad style; look for toolbar via selector
-                // better: solve this in tolbar locally; however, it's no view yet; no listenTo
-                app.getWindow().nodes.outer.find('.classic-toolbar-container .io-ox-action-link[data-action="compose"]').parent().toggle(!value);
+            app.addPrimaryAction({
+                point: 'io.ox/mail/sidepanel',
+                label: gt('Compose'),
+                action: 'io.ox/mail/actions/compose',
+                toolbar: 'compose'
             });
         },
 

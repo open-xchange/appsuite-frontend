@@ -13,10 +13,11 @@
 
 define('io.ox/core/folder/view', [
     'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
     'io.ox/core/folder/api',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, api, settings, gt) {
+], function (ext, actions, api, settings, gt) {
 
     'use strict';
 
@@ -177,6 +178,47 @@ define('io.ox/core/folder/view', [
 
         app.folderViewIsVisible = function () {
             return visible;
+        };
+
+        app.addPrimaryAction = function (options) {
+
+            var baton = ext.Baton({ app: this });
+
+            var $button = $('<button class="btn btn-primary">')
+                .prop('disabled', true)
+                .text(options.label)
+                .on('click', { baton: baton }, onClick);
+
+            ext.point(options.point).extend({
+                id: 'primary-action',
+                index: 10,
+                draw: function () {
+
+                    this.append(
+                        $('<div class="primary-action">').append($button)
+                    );
+
+                    updateState();
+                }
+            });
+
+            function onClick(e) {
+                actions.invoke(options.action, null, e.data.baton);
+            }
+
+            function updateState() {
+                actions.check(options.action, baton).always(function (bool) {
+                    $button.prop('disabled', !bool);
+                });
+            }
+
+            this.on('folder:change', updateState);
+
+            this.listenTo(this.props, 'change:folderview', function (model, value) {
+                // bad style; look for toolbar via selector
+                // better: solve this in tolbar locally; however, it's no view yet; no listenTo
+                this.getWindow().nodes.outer.find('.classic-toolbar-container .io-ox-action-link[data-action="' + options.toolbar + '"]').parent().toggle(!value);
+            });
         };
 
         //

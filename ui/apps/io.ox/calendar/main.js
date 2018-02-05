@@ -270,7 +270,7 @@ define('io.ox/calendar/main', [
 
             ext.point('io.ox/calendar/sidepanel').extend({
                 id: 'mini-calendar',
-                index: 900,
+                index: 50,
                 draw: function () {
 
                     if (_.device('smartphone')) return;
@@ -755,6 +755,16 @@ define('io.ox/calendar/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
             };
+        },
+
+        'primary-action': function (app) {
+
+            app.addPrimaryAction({
+                point: 'io.ox/calendar/sidepanel',
+                label: gt('New appointment'),
+                action: 'io.ox/calendar/detail/actions/create',
+                toolbar: 'create'
+            });
         },
 
         'sidepanel': function (app) {

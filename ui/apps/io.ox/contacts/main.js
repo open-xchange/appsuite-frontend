@@ -859,6 +859,16 @@ define('io.ox/contacts/main', [
             };
         },
 
+        'primary-action': function (app) {
+
+            app.addPrimaryAction({
+                point: 'io.ox/contacts/sidepanel',
+                label: gt('New contact'),
+                action: 'io.ox/contacts/actions/create',
+                toolbar: 'create'
+            });
+        },
+
         'sidepanel': function (app) {
 
             ext.point('io.ox/contacts/sidepanel').extend({
