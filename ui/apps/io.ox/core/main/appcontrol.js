@@ -187,18 +187,6 @@ define('io.ox/core/main/appcontrol', [
 
             initRefreshAnimation();
 
-            ox.ui.apps.on('add', function (model) {
-                if (model.get('title') === undefined) return;
-                if (model.get('floating')) return;
-
-                var closable = model.get('closable') && !_.device('smartphone');
-
-                if (closable) {
-                    windowview.addNonFloatingApp(model);
-                    return;
-                }
-            });
-
             ox.ui.apps.on('launch resume', function (model) {
                 $('#io-ox-launchgrid').find('.lcell[data-app-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
                 _.defer(function () {

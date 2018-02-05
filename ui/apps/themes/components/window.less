@@ -73,7 +73,6 @@
     height: 0px;
     padding: 3px 0 2px 0;
     margin: 0;
-    //.transition(height 0.5s);
 
     #io-ox-taskbar {
         // when the arrow controls are enabled again, set the padding to 0
@@ -102,6 +101,8 @@
             }
 
             .taskbar-button {
+                display: flex;
+                align-items: center;
                 border-radius: 0;
                 border: 0;
                 color: white;
@@ -110,7 +111,6 @@
                 width: 100%;
                 overflow: hidden;
                 background-color: rgba(0, 0, 0, 0.7);
-                text-overflow: ellipsis;
                 padding-left: 16px;
                 &.io-ox-busy:before {
                     color: white;
@@ -118,8 +118,16 @@
                 }
 
                 .title {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                     margin-right: 8px;
-
+                }
+                .count {
+                    padding: 4px 5px;
+                    position: relative;
+                    top: -1px;
+                    margin-left:auto;
                 }
             }
             button[data-action="close"] {
@@ -632,7 +640,6 @@
         margin: 0 auto;
         bottom: 0;
         top: 0;
-        transform-origin: 100% 100%;
 
         .floating-window-content {
             top: 16px;
@@ -669,17 +676,14 @@
         }
     }
 
-    transform-origin: 100% 0;
-
     @headerHeight: 32px;
 
     .floating-header {
         height: @headerHeight;
         bottom: auto;
         background: rgba(0, 0, 0, 0.70);
-        padding: 0 16px;
+        padding: 0 8px 0 16px;
         display: flex;
-        justify-content: space-between;
 
         h1 {
             margin: 0;
@@ -693,13 +697,13 @@
             white-space: nowrap;
         }
         .count {
+            padding: 3px 7px;
+            position: relative;
+            top: -1px;
             margin-left: 8px;
         }
         .controls {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 0 8px;
+            margin-left:auto;
             flex-shrink: 0;
 
             button {
@@ -719,12 +723,6 @@
         background-color: white;
         border: 1px solid rgba(0, 0, 0, 0.3);
         border-width: 0 1px 1px 1px;
-    }
-
-    &.minimized {
-        .transition(0.5s ease-in-out);
-        bottom: -100%;
-        transform: scale(0.1);
     }
 }
 

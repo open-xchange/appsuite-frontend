@@ -22,6 +22,9 @@ define('io.ox/core/api/apps', [
 
     'use strict';
 
+    // Apps collection
+    ox.ui.apps = new Backbone.Collection();
+
     var api = {
 
         getApps: function () {

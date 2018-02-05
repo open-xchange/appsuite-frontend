@@ -29,7 +29,7 @@ define('io.ox/core/desktop', [
     'io.ox/core/api/apps',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, windowView, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, appApi, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, appApi, coreSettings, gt) {
 
     'use strict';
 
@@ -41,9 +41,6 @@ define('io.ox/core/desktop', [
     var currentWindow = null,
         appGuid = 0,
         appCache = new cache.SimpleCache('app-cache', true);
-
-    // Apps collection
-    ox.ui.apps = new Backbone.Collection();
 
     function supportsFind(name) {
         // enabled apps
@@ -391,6 +388,25 @@ define('io.ox/core/desktop', [
         setWindow: function (win) {
             this.set('window', win);
             win.app = this;
+            if (this.options.floating) {
+                var model = this.options.floatingWindowModel || new FloatingWindow.Model({
+                    title: this.options.title,
+                    closable: this.options.closable,
+                    displayStyle: this.options.displayStyle,
+                    win: win
+                });
+                win.floating = new FloatingWindow.View({
+                    el: win.nodes.outer,
+                    model: model
+                }).render();
+
+                win.floating.listenTo(model, 'quit', function () {
+                    win.app.quit().done(function () {
+                        model.trigger('close');
+                    });
+                });
+                win.app.once('quit', function () { model.trigger('close'); });
+            }
             // add app name
             if (this.has('name')) {
                 win.nodes.outer.attr('data-app-name', this.get('name'));
@@ -548,7 +564,7 @@ define('io.ox/core/desktop', [
                         self.trigger('launch', self);
                         ox.trigger('app:start', self);
                         // add cloasable apps that don't use floating windows to the taskbar
-                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) windowView.addNonFloatingApp(self);
+                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) FloatingWindow.addNonFloatingApp(self);
                     },
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
@@ -782,10 +798,12 @@ define('io.ox/core/desktop', [
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && app.options.floating) {
-                                var dummyWindow = new windowView.WindowView({ title: obj.description, closable: true, dummyCallback: function () {
-                                    dummyWindow.close();
+                                var model = new FloatingWindow.Model({ id: obj.id, title: obj.description, closable: true, lazy: true }),
+                                    win = new FloatingWindow.TaskbarElement({ model: model }).render();
+                                FloatingWindow.collection.add(model);
+                                win.listenToOnce(model, 'lazyload', function () {
                                     var oldId = obj.id;
-                                    app.launch().then(function () {
+                                    app.launch({ floatingWindowModel: model }).then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
                                         if (this.failRestore) {
@@ -798,9 +816,10 @@ define('io.ox/core/desktop', [
                                         self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                             sp.push(obj);
                                             self.setSavePoints(sp);
+                                            if (model.get('quitAfterLaunch')) model.trigger('quit');
                                         });
                                     });
-                                } });
+                                });
                                 return $.when();
                             }
                             return app.launch().then(function () {
@@ -1351,17 +1370,11 @@ define('io.ox/core/desktop', [
                                 self.state.open = false;
                                 self.state.running = false;
                                 self = null;
-                                if (self.floating) {
-                                    self.floating.close();
-                                }
                             });
                     } else {
                         this.hide();
                         this.state.open = false;
                         this.trigger('close');
-                        if (this.floating) {
-                            this.floating.close();
-                        }
                         ox.ui.windowManager.trigger('window.close', this);
                     }
                     return this;
@@ -1512,13 +1525,8 @@ define('io.ox/core/desktop', [
                 // create new window instance
                 win = new Window(opt);
 
-            if (opt.floating) {
-                win.floating = new windowView.WindowView({ title: opt.title, win: win, closable: opt.closable, displayStyle: options.displayStyle });
-            }
             // window container
-            win.nodes.outer = (opt.floating ? win.floating.$el : $('<div>'))
-                .addClass('window-container')
-                .attr({ id: opt.id, 'data-window-nr': guid });
+            win.nodes.outer = $('<div class="window-container">').attr({ id: opt.id, 'data-window-nr': guid });
 
             // create very simple window?
             if (opt.simple) {
@@ -1535,12 +1543,7 @@ define('io.ox/core/desktop', [
                 //todo footer?
 
             } else {
-
-                if (opt.floating) {
-                    win.floating.render();
-                    win.nodes.main = win.floating.$body;
-                }
-                win.nodes[opt.floating ? 'main' : 'outer'].append(
+                win.nodes.outer.append(
                     $('<div class="window-container-center">')
                     .data({ width: width + unit })
                     .css({ width: width + unit })
