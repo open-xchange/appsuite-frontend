@@ -195,7 +195,6 @@ define('io.ox/core/emoji/view', [
                 return _(settings.get('emoji/recently', {}))
                     .chain()
                     .map(function (value, key) {
-                        console.log('key', key, unescape(key), value);
                         return [unescape(key), value];
                     })
                     // sort by timestamp
