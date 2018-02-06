@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-01-30 11:13+0100\n"
+"PO-Revision-Date: 2018-02-06 13:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -26,6 +26,19 @@ msgstr "Der Dialog enthält ungültige Daten"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Der Server ist nicht erreichbar"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Add new reminder"
+msgstr "Neue Erinnerung hinzufügen"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Notification"
+msgstr "Benachrichtigung"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Audio"
+msgstr "Audio"
 
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
@@ -204,16 +217,17 @@ msgid "toggle password visibility"
 msgstr "Passwort-Sichtbarkeit umschalten"
 
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Year"
 msgstr "Jahr"
 
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Month"
 msgstr "Monat"
 
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Tag"
@@ -272,7 +286,7 @@ msgstr "Online-Hilfe"
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
@@ -450,6 +464,7 @@ msgid "Go to next month"
 msgstr "Zu nächstem Monat gehen"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "CW"
 msgstr "KW"
 
@@ -481,12 +496,10 @@ msgstr "Zu nächstem Jahrzehnt gehen"
 msgid "Edit image"
 msgstr "Bild bearbeiten"
 
+#. noun. label for the zoomslider in case the zoom is undefined or 0
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-msgctxt "image zoom"
 msgid "Zoom"
-msgid_plural "Zoom: %1$d%"
-msgstr[0] ""
-msgstr[1] ""
+msgstr "Zoom"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/contacts/widgets/pictureUpload.js
@@ -543,12 +556,11 @@ msgstr "Schließen"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/import/import.js
-#: apps/io.ox/core/main/restore.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/print.js apps/io.ox/core/relogin.js
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/tk/filestorageUtil.js apps/io.ox/core/tk/mobiscroll.js
-#: apps/io.ox/core/upsell.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
+#: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -738,8 +750,9 @@ msgstr "Kompakt"
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
 msgid "Move"
@@ -765,16 +778,14 @@ msgstr ""
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail
 msgid "Appointment"
 msgstr "Termin"
 
@@ -815,10 +826,15 @@ msgstr "Exportieren"
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Drucken"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Participant related actions"
+msgstr "Teilnehmerbezogene Aktionen"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
@@ -874,6 +890,7 @@ msgstr "Kommentieren Sie bitte Ihren Bestätigungsstatus."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/io.ox/calendar/util.js
 msgid "Tentative"
 msgstr "Vorläufig"
 
@@ -909,25 +926,76 @@ msgstr "Eigentümer einladen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
-"Do you want to delete the whole series or just one appointment within the "
-"series?"
+"Do you want to delete only this occurence of the event, or all occurences?"
 msgstr ""
-"Wollen Sie die komplette Serie oder nur einen einzelnen Termin aus der Serie "
-"löschen?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
+msgid "All events"
+msgstr "Alle Ereignisse"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
+msgid "Only this event"
+msgstr "Nur dieses Ereignis"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid ""
+"Do you want to delete only this occurence of the event, or this and all "
+"future occurences?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
+msgid "All future events"
+msgstr "Alle zukünftigen Ereignisse"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
 msgstr "Wollen Sie diesen Termin löschen?"
 
+#: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
+msgid "My Google Calendar"
+msgstr "Mein Google-Kalender"
+
+#: apps/io.ox/calendar/actions/subscribe-google.js module:io.ox/calendar
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account added successfully"
+msgstr "Account erfolgreich hinzugefügt"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+msgid "iCal URL"
+msgstr "iCal-URL"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+#, fuzzy
+msgid "Subscribe iCal feed"
+msgstr "iCal-Feed  abonnieren"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+msgid "iCal-feed has been imported successfully"
+msgstr "iCal-Feed wurde erfolgreich importiert"
+
+#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
+msgid "no color"
+msgstr "keine Farbe"
+
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/view-grid-template.js
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/calendar/week/view.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privat"
+
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Secret"
+msgstr ""
 
 #. File and folder details
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -939,24 +1007,25 @@ msgid "Details"
 msgstr "Details"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/participants/views.js module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
 msgid "Organizer"
 msgstr "Organisator"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Sent by"
+msgstr "Gesendet von"
+
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 msgid "Shown as"
 msgstr "Angezeigt als"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
-#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
-msgid "Folder"
-msgstr "Ordner"
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail
+msgid "Calendar"
+msgstr "Kalender"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 msgid "Created"
@@ -1025,6 +1094,8 @@ msgid "Create appointment"
 msgstr "Termin erstellen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -1073,11 +1144,13 @@ msgid "Select"
 msgstr "Wählen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
-#: module:io.ox/mailfilter
-msgid "Select folder"
-msgstr "Ordner wählen"
+msgid "Select calendar"
+msgstr "Kalender wählen"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+msgid "Create new calendar"
+msgstr "Neuen Kalender erstellen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
@@ -1114,15 +1187,12 @@ msgstr "Beginnt um"
 msgid "End time"
 msgstr "Endet um"
 
-#. %1$s timezone abbreviation of the appointment
-#. %2$s default user timezone
+#. %1$s timezone abbreviation of the user
+#. %2$s time interval of event
+#. %2$s duration of event
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid ""
-"The timezone of this appointment (%1$s) differs from your default timezone "
-"(%2$s)."
-msgstr ""
-"Die Zeitzone für diesen Termin (%1$s) unterscheidet sich von Ihrer "
-"Standardzeitzone (%2$s)."
+msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+msgstr "In Ihrer Zeitzone (%1$s):%2$s (Dauer:%3$s)"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -1153,28 +1223,9 @@ msgid "Collapse form"
 msgstr "Formular ausblenden"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "Reserved"
-msgstr "Gebucht"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "Temporary"
-msgstr "Mit Vorbehalt"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "Absent"
-msgstr "Abwesend"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "Free"
-msgstr "Frei"
+#, fuzzy
+msgid "Show as free"
+msgstr "Anzeigen als: Frei"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -1184,21 +1235,45 @@ msgid "Color"
 msgstr "Farbe"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "Type"
-msgstr "Typ"
+msgid "Visibility"
+msgstr "Sichtbarkeit"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Public"
+msgstr "Öffentlich"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+msgid "The appointment is visible for all users in shared folders."
+msgstr "Der Termin ist für alle Benutzer in freigegebenen Ordnern sichtbar."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid ""
+"The appointment appears as a simple time slot for to non-attending users in "
+"shared folders."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+msgid ""
+"The appointment is not visible to non-attending users in shared folders at "
+"all. The appointment is not considered for conflicts and does not appear in "
+"the scheduling view."
+msgstr ""
+"Der Termin ist für nicht teilnehmende Benutzer in freigegebenen Ordnern "
+"nicht sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und wird "
+"in der Planungsansicht nicht angezeigt."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr "Alle Teilnehmer per E-Mail benachrichtigen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/contacts/edit/view-form.js
+#: module:io.ox/contacts apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -1222,7 +1297,6 @@ msgid "Please select a time for the appointment"
 msgstr "Bitte wählen Sie eine Uhrzeit für den Termin"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Find a free time"
 msgstr "Verfügbaren Zeitraum finden"
@@ -1265,113 +1339,12 @@ msgid "End date timezone"
 msgstr "Zeitzone für Enddatum"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
-msgid ""
-"If you select different timezones, the appointment's start and end dates are "
-"saved in the timezone of the appointment's start date. A different end date "
-"timezone only allows a convenient conversion."
-msgstr ""
-"Wenn Sie unterschiedliche Zeitzonen wählen, werden Start- und Enddatum des "
-"Termins in der Zeitzone des Startdatums des Termins gespeichert. Eine "
-"unterschiedliche Zeitzone für das Enddatum erlaubt lediglich eine einfache "
-"Konvertierung."
-
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
-msgid "Convert the entered start and end dates to match the modified timezones"
-msgstr ""
-"Eingegebenes Start- und Enddatum so konvertieren, dass Sie den geänderten "
-"Zeitzonen entsprechen"
-
-#: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change timezone"
 msgstr "Zeitzone ändern"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
 msgstr "Ändern"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
-msgid "Scheduling"
-msgstr "Planung"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid "Change view"
-msgstr "Ansicht ändern"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-msgid "Workweek"
-msgstr "Arbeitswoche"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-msgid "Week"
-msgstr "Woche"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid ""
-"If you spot a free time, just select this area. To do this, move the cursor "
-"to the start time, hold the mouse button, and <b>drag the mouse</b> to the "
-"end time."
-msgstr ""
-"Wählen Sie einen freien Zeitraum. Bewegen Sie dafür den Cursor auf das "
-"Startdatum, halten Sie die linke Maustaste gedrückt und <b>ziehen Sie die "
-"Maus</b> auf das Enddatum."
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid ""
-"You will automatically return to the appointment dialog. The selected start "
-"and end time as well as the current participant list will be applied."
-msgstr ""
-"Sie kehren automatisch zum Termindialog zurück. Das gewählte Start- und "
-"Enddatum und die aktuelle Teilnehmerliste werden übernommen. "
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid "How does this work?"
-msgstr "Wie funktioniert das?"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/help/center.js module:io.ox/help
-msgid "Help"
-msgstr "Hilfe"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid "Back to appointment"
-msgstr "Zurück zum Termin"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid "Quit"
-msgstr "Verlassen"
-
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
-#: apps/io.ox/mail/actions/reminder.js
-msgid "Note"
-msgstr "Hinweis"
-
-#. Warning dialog
-#. %1$s is a folder/calendar name
-#. %2$s is the folder owner
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid ""
-"You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-"Appointments will therefore be created in your private calendar."
-msgstr ""
-"Sie haben keine Berechtigung, Termine in \"%1$s\" des Eigentümers %2$s "
-"anzulegen. Termine werden daher in Ihrem privaten Kalender erstellt."
-
-#. Warning dialog
-#. %1$s is a folder/calendar name
-#: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-msgid ""
-"You are not allowed to create appointments in \"%1$s\". Appointments will "
-"therefore be created in your private calendar."
-msgstr ""
-"Sie haben keine Berechtigung, Termine in \"%1$s\" anzulegen. Termine werden "
-"daher in Ihrem privaten Kalender erstellt."
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please select at least one participant"
@@ -1414,19 +1387,32 @@ msgstr "Die Verteilerliste wurde gespeichert."
 msgid "Please enter a name for the distribution list"
 msgstr "Bitte geben Sie einen Namen für die Verteilerliste ein"
 
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+msgid "Scheduling"
+msgstr "Planung"
+
 #: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
 msgid "Add participant"
 msgstr "Teilnehmer hinzufügen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
-msgid "Previous Day"
-msgstr "Vorheriger Tag"
+#: apps/io.ox/find/date/patterns.js module:io.ox/core
+msgid "Previous week"
+msgstr "Letzte Woche"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
-msgid "Next Day"
-msgstr "Nächster Tag"
+#: apps/io.ox/find/date/patterns.js module:io.ox/core
+msgid "Previous month"
+msgstr "Letzter Monat"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Next week"
+msgstr "Nächste Woche"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Next month"
+msgstr "Nächster Monat"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
@@ -1440,20 +1426,49 @@ msgid "Options"
 msgstr "Optionen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-msgid "Zoom"
-msgstr "Zoom"
-
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Rows"
 msgstr "Zeilen"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+msgid "Show fine grid"
+msgstr "Gitternetzlinien anzeigen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Appointment types"
 msgstr "Terminarten"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Free"
+msgstr "Frei"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
+msgid "Reserved"
+msgstr "Gebucht"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Date range"
+msgstr "Datumsbereich"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+msgid "Week"
+msgstr "Woche"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Hide non-working time"
 msgstr "Nichtarbeitszeiten ausblenden"
+
+#. used to describe a time frame that is blocked in the scheduling view, when no further information is available (appointment title etc.)
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+msgid "Blocked time frame"
+msgstr "Blockierter Zeitrahmen"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Could not get appointment information"
+msgstr "Termininformationen konnten nicht abgerufen werden"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
@@ -1509,14 +1524,6 @@ msgid "This email contains an appointment"
 msgstr "Diese E-Mail enthält einen Termin"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "This email contains a task"
-msgstr "Diese E-Mail enthält eine Aufgabe"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "Show task details"
-msgstr "Aufgabendetails anzeigen"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Sie sind der Organisator"
 
@@ -1525,24 +1532,12 @@ msgid "You have accepted this appointment"
 msgstr "Sie haben diesen Termin bestätigt"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have accepted this task"
-msgstr "Sie haben diese Aufgabe bestätigt"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "Sie haben diesen Termin abgelehnt"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You declined this task"
-msgstr "Sie haben diese Aufgabe abgelehnt"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "Sie haben diese Einladung vorläufig bestätigt"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You tentatively accepted this task"
-msgstr "Sie haben diese Aufgabe vorläufig bestätigt"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
@@ -1553,6 +1548,26 @@ msgstr ""
 "wahrscheinlich gelöscht."
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "This email contains a task"
+msgstr "Diese E-Mail enthält eine Aufgabe"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Show task details"
+msgstr "Aufgabendetails anzeigen"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have accepted this task"
+msgstr "Sie haben diese Aufgabe bestätigt"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You declined this task"
+msgstr "Sie haben diese Aufgabe abgelehnt"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You tentatively accepted this task"
+msgstr "Sie haben diese Aufgabe vorläufig bestätigt"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -1560,20 +1575,59 @@ msgstr ""
 "Der Bestätigungsstatus konnte nicht aktualisiert werden. Die Aufgabe wurde "
 "wahrscheinlich gelöscht."
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
-msgid "Couldn't load appointment data."
-msgstr "Termindaten konnten nicht geladen werden."
-
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
-msgid "No appointments found until %s"
-msgstr "Keine Termine gefunden bis %s"
-
 #. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
 #. This fragment appears within a long string for screen readers
-#: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgctxt "a11y"
 msgid "location %1$s"
 msgstr "Ort %1$s"
+
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+msgid "No appointments found until %s"
+msgstr "Keine Termine gefunden bis %s"
+
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+msgid "Error: Failed to load appointments"
+msgstr "Fehler: Termine konnten nicht geladen werden"
+
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "Retry"
+msgstr "Erneut versuchen"
+
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+msgid "Select all"
+msgstr "Alle wählen"
+
+#: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+msgid "Load appointments until %1$s"
+msgstr "Termine laden bis %1$s"
+
+#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+msgid "Could't load appointment data."
+msgstr "Termindaten konnten nicht geladen werden."
+
+#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+msgid "No appointment selected"
+msgstr "Kein Termin ausgewählt"
+
+#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#, fuzzy
+msgid "%1$s appointments selected"
+msgstr "%1$s Termine ausgewählt"
+
+#: apps/io.ox/calendar/list/view-options.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
+#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgid "Open folder view"
+msgstr "Ordneransicht öffnen"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
@@ -1593,25 +1647,9 @@ msgstr "Ordner"
 msgid "Back"
 msgstr "Zurück"
 
-#. Label for a button which shows more upcoming
-#. appointments in a listview by extending the search
-#. by one month in the future
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-msgid "Expand timeframe by one month"
-msgstr "Zeitrahmen um einen Monat erweitern"
-
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
 msgstr "Kalender"
-
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/files/favorite/view-options.js
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgid "Open folder view"
-msgstr "Ordneransicht öffnen"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/core/commons.js
 #: module:io.ox/core apps/io.ox/files/main.js module:io.ox/files
@@ -1620,12 +1658,27 @@ msgstr "Ordneransicht öffnen"
 msgid "Close folder view"
 msgstr "Ordneransicht schließen"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/plugins/portal/calendar/register.js module:plugins/portal
+msgid "Appointments"
+msgstr "Termine"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Appointment options"
+msgstr "Terminoptionen"
+
 #. search feature returns an empty result
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Keine passenden Objekte gefunden."
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js apps/io.ox/calendar/toolbar.js
+msgid "New appointment"
+msgstr "Neuer Termin"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
@@ -1695,8 +1748,8 @@ msgstr "Zurück"
 msgid "Next"
 msgstr "Weiter"
 
+#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, fuzzy
 msgid "Empty table cell"
 msgstr "Leere Tabellenzelle"
 
@@ -1708,13 +1761,13 @@ msgstr "Gewählt: %1$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Vorläufig)"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
-#: apps/io.ox/participants/detail.js module:io.ox/core
+#: apps/io.ox/calendar/util.js apps/io.ox/participants/chronos-detail.js
+#: module:io.ox/core apps/io.ox/participants/detail.js
 msgid "Participants"
 msgstr "Teilnehmer"
 
@@ -1738,29 +1791,9 @@ msgstr "Vorläufig bestätigt"
 msgid "Unconfirmed"
 msgstr "Nicht bestätigt"
 
-#: apps/io.ox/calendar/settings/model.js module:io.ox/calendar
-msgid ""
-"The setting has been saved and will become active when you enter the "
-"application the next time."
-msgstr ""
-"Die Einstellung wurde gespeichert und wird nach dem nächsten Anmeldevorgang "
-"aktiviert."
-
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "%1$d minutes"
 msgstr "%1$d Minuten"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
-msgid "No reminder"
-msgstr "Keine Erinnerung"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d Minute"
-msgstr[1] "%d Minuten"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -1793,7 +1826,7 @@ msgstr "Arbeitszeit beginnt um"
 msgid "End of working time"
 msgstr "Arbeitszeit endet um"
 
-#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
+#. Context: Calendar settings. Default time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Time scale"
 msgstr "Zeitskala"
@@ -1801,6 +1834,15 @@ msgstr "Zeitskala"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Abgelehnte Termine anzeigen"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Show birthday calendar"
+msgstr "Geburtstagskalender anzeigen"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+msgid "Birthday"
+msgstr "Geburtsdatum"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Workweek view"
@@ -1815,13 +1857,17 @@ msgid "Workweek length"
 msgstr "Arbeitswochenlänge"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
-msgid "New appointment"
-msgstr "Neuer Termin"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Standard-Erinnerung"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+msgid "Default reminder for all day appointments"
+msgstr "Standarderinnerung für Ganztagstermine"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Default reminder for appointments in birthday calendar"
+msgstr "Standarderinnerung für Termine im Geburtstagskalender"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Mark all day appointments as free"
@@ -1858,6 +1904,40 @@ msgid ""
 msgstr ""
 "Die E-Mail-Benachrichtigung nach Bestätigen oder Ablehnen des Termins "
 "automatisch löschen"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+msgid "Add calendar"
+msgstr "Kalender hinzufügen"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+msgid "Start"
+msgstr "Beginn"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+msgid "The integration of the subscribed calendars might take awhile."
+msgstr ""
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+msgid "subscribe to calendar"
+msgstr "Kalender abonnieren"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
+#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+msgid "Language"
+msgstr "Sprache"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/contacts/model.js
+#: module:io.ox/contacts
+msgid "Country"
+msgstr "Land"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -1934,6 +2014,10 @@ msgid "Layout"
 msgstr "Layout"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Workweek"
+msgstr "Arbeitswoche"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "List"
@@ -1947,6 +2031,10 @@ msgid "Folder view"
 msgstr "Ordneransicht"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Mini calendar"
+msgstr "Minikalender"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
@@ -1958,16 +2046,16 @@ msgid "Color scheme"
 msgstr "Farbschema"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Custom colors"
+msgstr "Benutzerdefinierte Farben"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Classic colors"
 msgstr "Klassische Farben"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
 msgstr "Dunkle Farben"
-
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-msgid "Custom colors"
-msgstr "Benutzerdefinierte Farben"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -2004,50 +2092,6 @@ msgstr "abgelehnt"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "tentative"
 msgstr "vorläufig"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "no color"
-msgstr "keine Farbe"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light blue"
-msgstr "Hellblau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark blue"
-msgstr "Dunkelblau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "purple"
-msgstr "Lila"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "pink"
-msgstr "Pink"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "red"
-msgstr "Rot"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "orange"
-msgstr "Orange"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "yellow"
-msgstr "Gelb"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light green"
-msgstr "Hellgrün"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark green"
-msgstr "Dunkelgrün"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "gray"
-msgstr "Grau"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -2099,6 +2143,138 @@ msgid "Saturday"
 msgstr "Samstag"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light blue"
+msgstr "Hellblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light indigo"
+msgstr "helles Indigo"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light purple"
+msgstr "helles Purpur"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light pink"
+msgstr "Hellrosa"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light red"
+msgstr "Hellrot"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light orange"
+msgstr "Hellorange"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light yellow"
+msgstr "Hellgelb"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light citreous"
+msgstr "helles Zitronengelb"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light green"
+msgstr "Hellgrün"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light turquoise"
+msgstr "Helltürkis"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light gray"
+msgstr "Hellgrau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "blue"
+msgstr "Blau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "indigo"
+msgstr "Indigo"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "purple"
+msgstr "Lila"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "pink"
+msgstr "Pink"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "red"
+msgstr "Rot"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "orange"
+msgstr "Orange"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "yellow"
+msgstr "Gelb"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "citreous"
+msgstr "Zitronengelb"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "green"
+msgstr "Grün"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "turquoise"
+msgstr "Türkis"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "gray"
+msgstr "Grau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark blue"
+msgstr "Dunkelblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark indigo"
+msgstr "dunkles Indigo"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark purple"
+msgstr "dunkles Purpur"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark pink"
+msgstr "Dunkelrosa"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark red"
+msgstr "Dunkelrot"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark orange"
+msgstr "Dunkelorange"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark yellow"
+msgstr "Dunkelgelb"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark citreous"
+msgstr "dunkles Zitronengelb"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark green"
+msgstr "Dunkelgrün"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark turquoise"
+msgstr "dunkles Türkis"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark gray"
+msgstr "Dunkelgrau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core apps/io.ox/mail/util.js
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
@@ -2115,43 +2291,50 @@ msgstr "Morgen"
 #. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
 #. %1$s is the start date
 #. %2$s is the end date
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 #, c-format
 msgid "%1$s to %2$s"
 msgstr "%1$s bis %2$s"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "Whole day"
 msgstr "Ganzer Tag"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d Tag"
 msgstr[1] "%d Tage"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
 msgstr[0] "%1$d Minute"
 msgstr[1] "%1$d Minuten"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "%1$d Hour"
 msgid_plural "%1$d Hours"
 msgstr[0] "%1$d Stunde"
 msgstr[1] "%1$d Stunden"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
 msgstr[0] "%d Tag"
 msgstr[1] "%d Tage"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "%1$d Week"
 msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d Woche"
@@ -2278,23 +2461,22 @@ msgstr "Die Serie endet nie."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
-"By changing the date of this appointment you are creating an appointment "
-"exception to the series."
+"Do you want to change only this occurence of the event, or this and all "
+"future occurences?"
 msgstr ""
-"Das Ändern des Termindatums führt zum Erstellen einer Terminausnahme für den "
-"Serientermin."
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Create exception"
-msgstr "Ausnahme erstellen"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
-"Do you want to edit the whole series or just one appointment within the "
-"series?"
+"Do you want to change only this occurence of the event, or all occurences?"
 msgstr ""
-"Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
-"bearbeiten?"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Confidential"
+msgstr "Vertraulich"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Recurrence"
+msgstr "Wiederholung"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
@@ -2346,20 +2528,50 @@ msgid "Manage favorites"
 msgstr "Favoriten verwalten"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid "Doubleclick in this row for whole day appointment"
-msgstr "Für ganztägigen Termin auf diese Zeile doppelklicken"
+msgid "Next Day"
+msgstr "Nächster Tag"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Week"
 msgstr "Nächste Woche"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Previous Day"
+msgstr "Vorheriger Tag"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Letzte Woche"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Click to merge all folders into one column"
+msgstr "Klicken Sie hier, um alle Ordner in einer Spalte zusammenzuführen"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Click to split all folders into separate columns"
+msgstr "Klicken Sie hier, um alle Ordner in separate Spalten aufzuteilen"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Merge"
+msgstr "Zusammenfügen"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#, fuzzy
+msgid "Split"
+msgstr "Teilen"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Create all-day appointment"
 msgstr "Ganztägigen Termin erstellen"
+
+#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/find/date/patterns.js module:io.ox/core
+msgid "Previous year"
+msgstr "Vorherigers Jahr"
+
+#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+msgid "Next year"
+msgstr "Nächstes Jahr"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -2374,8 +2586,8 @@ msgstr "Kontakt wurde verschoben"
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -2625,6 +2837,7 @@ msgid "Some fields contain invalid data"
 msgstr "Einige Felder enthalten ungültige Daten"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/main.js
 msgid "New contact"
 msgstr "Neuer Kontakt"
 
@@ -2768,10 +2981,6 @@ msgstr "Stadt"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "State"
 msgstr "Bundesland"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Country"
-msgstr "Land"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -3249,7 +3458,8 @@ msgstr[0] "Verteilerliste mit 1 Eintrag"
 msgstr[1] "Verteilerliste mit %1$d Einträgen"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/participants/views.js module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
 msgid "Resource"
 msgstr "Ressource"
 
@@ -3452,10 +3662,10 @@ msgstr ""
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr "Für beste Ergebnisse empfehlen wir Google Chrome für Android."
 
+#. The missing word at the end of the sentence ('Play Store') will be injected later by script
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
 msgid "Get the latest version from the "
-msgstr "Holen Sie sich die neueste Version von der"
+msgstr "Holen Sie sich die neueste Version vom "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3555,13 +3765,6 @@ msgstr "Premium-Funktionen schließen"
 msgid "Try now!"
 msgstr "Jetzt testen!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Retry"
-msgstr "Erneut versuchen"
-
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
@@ -3595,7 +3798,7 @@ msgstr ""
 msgid "Reset this list"
 msgstr "Diese Liste zurücksetzen"
 
-#: apps/io.ox/core/export.js module:io.ox/core apps/io.ox/core/import/import.js
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "iCalendar"
 msgstr "iCalendar"
 
@@ -3722,7 +3925,7 @@ msgstr ""
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Archive"
@@ -3767,6 +3970,7 @@ msgid "Empty folder"
 msgstr "Ordner leeren"
 
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#, fuzzy
 msgid "Subscribe IMAP folders"
 msgstr "IMAP-Ordner abonnieren"
 
@@ -3853,11 +4057,6 @@ msgid "Rename"
 msgstr "Umbenennen"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail
-msgid "Calendar"
-msgstr "Kalender"
-
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "Default calendar"
 msgstr "Standardkalender"
 
@@ -3866,10 +4065,6 @@ msgstr "Standardkalender"
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
-
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-msgid "All my appointments"
-msgstr "Alle meine Termine"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
@@ -3956,6 +4151,14 @@ msgstr "Zeigen"
 msgid "Hide"
 msgstr "Nicht anzeigen"
 
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+msgid "Refresh this calendar"
+msgstr "Diesen Kalender aktualisieren"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+msgid "Show this calendar only"
+msgstr "Nur diesen Kalender anzeigen"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "My shares"
@@ -3972,13 +4175,9 @@ msgstr "Speicherkonto hinzufügen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
 msgid "Subscribe address book"
 msgstr "Adressbuch abonnieren"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe calendar"
-msgstr "Kalender abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
@@ -4030,6 +4229,38 @@ msgstr "Geteilte Aufgaben"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
 msgstr "Versteckte Aufgaben"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Personal calendar"
+msgstr "Persönlicher Kalender"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+msgid "Subscribe calendar"
+msgstr "Kalender abonnieren"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "List of public calendars and events"
+msgstr "Liste der öffentlichen Kalender und Ereignisse"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Google calendar"
+msgstr "Google-Kalender"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+msgid "Subscribe via URL (iCal)"
+msgstr "über URL (iCal) abonnieren"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Import calendar"
+msgstr "Kalender importieren"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
+msgid "Upload file"
+msgstr "Datei hochladen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared by other users"
@@ -4084,6 +4315,12 @@ msgid "Actions for %1$s"
 msgstr "Aktionen für %1$s"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter
+msgid "Select folder"
+msgstr "Ordner wählen"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Ordner anlegen"
 
@@ -4092,6 +4329,7 @@ msgid "No action available"
 msgstr "Keine Aktion verfügbar"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/tk/list-contextmenu.js
 msgid "Folder options"
 msgstr "Ordneroptionen"
 
@@ -4106,12 +4344,12 @@ msgid "Cannot connect to server. Please check your connection."
 msgstr "Keine Verbindung zum Server. Bitte prüfen Sie Ihre Verbindung."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "select format"
-msgstr "Format wählen"
+msgid "Foldername"
+msgstr ""
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Upload file"
-msgstr "Datei hochladen"
+msgid "select format"
+msgstr "Format wählen"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid ""
@@ -4312,28 +4550,6 @@ msgstr "Nein"
 msgid "Offline"
 msgstr "Offline"
 
-#: apps/io.ox/core/main/restore.js module:io.ox/core
-msgid "Restore applications"
-msgstr "Applikationen wiederherstellen"
-
-#: apps/io.ox/core/main/restore.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"Die folgenden Applikationen können wiederhergestellt werden. Sollen sie "
-"nicht wiederhergestellt werden, entfernen Sie einfach den "
-"Wiederherstellungspunkt. "
-
-#: apps/io.ox/core/main/restore.js module:io.ox/core
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Continue"
-msgstr "Fortfahren"
-
-#: apps/io.ox/core/main/restore.js module:io.ox/core
-msgid "Remove restore point: \"%1$s\""
-msgstr "Wiederherstellungspunkt entfernen: \"%1$s\""
-
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "Die gewünschte Anwendung ist im Moment nicht verfügbar."
@@ -4370,6 +4586,11 @@ msgid "Change password"
 msgstr "Passwort ändern"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/help/center.js module:io.ox/help
+msgid "Help"
+msgstr "Hilfe"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
 msgstr "Über"
 
@@ -4397,11 +4618,11 @@ msgstr ""
 #: apps/io.ox/core/media-devices.js module:io.ox/core
 #, fuzzy
 msgid ""
-"Access to your media devices is denied. Please refer your browser help pages "
-"how to reset authorization again."
+"Access to your media devices has been denied. Please refer to your browser "
+"help pages for how to reset authorization."
 msgstr ""
-"Zugriff auf Ihre Mediengeräte wird verweigert. Entnehmen Sie bitte Ihren "
-"Browser-Hilfeseiten, wie Sie die Autorisierung wieder zurücksetzen."
+"Der Zugriff auf Ihre Mediengeräte wurde verweigert. Informationen zum "
+"Zurücksetzen der Autorisierung finden Sie in den Hilfeseiten Ihres Browsers."
 
 #. %1$s a natural number
 #: apps/io.ox/core/media-devices.js module:io.ox/core
@@ -4413,6 +4634,8 @@ msgstr "Mikrofon %1$s"
 msgid "Camera %1$s"
 msgstr "Kamera %1$s"
 
+#. %1$s a natural number
+#. This text is used to describe an unknown device (camera / microphone etc)
 #: apps/io.ox/core/media-devices.js module:io.ox/core
 #, fuzzy
 msgid "Unknown %1$s"
@@ -4788,7 +5011,7 @@ msgstr "Keine verlorenen Anfragen"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: module:io.ox/mailfilter apps/io.ox/settings/security/settings/pane.js
 msgid "None"
 msgstr "Keine"
 
@@ -4838,11 +5061,6 @@ msgid "Reload page"
 msgstr "Seite neu laden"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/plugins/portal/xing/register.js module:plugins/portal
-msgid "Language"
-msgstr "Sprache"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
 msgstr "Design"
 
@@ -4890,10 +5108,6 @@ msgstr "Desktop-Benachrichtigungen anzeigen"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Use accessibility improvements"
 msgstr "Eingabehilfen verwenden"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "High contrast theme"
-msgstr "Hoher Kontrast"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -5249,6 +5463,23 @@ msgstr "Erinnerung für Aufgabe %1$s."
 msgid "Reminder for appointment %1$s."
 msgstr "Erinnerung für Termin %1$s"
 
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Bell"
+msgstr "Klingel"
+
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+msgid "Marimba"
+msgstr "Marimba"
+
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+msgid "Wood"
+msgstr "Holz"
+
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+msgid "Chimes"
+msgstr "Glockenspiel"
+
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "No autocomplete entries found"
 msgstr "Keine Autovervollständigungseinträge gefunden"
@@ -5369,10 +5600,6 @@ msgstr "Mehrfachauswahl"
 msgid "Item list options"
 msgstr "Optionen für Objektliste"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Select all"
-msgstr "Alle wählen"
-
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgctxt "vgrid"
@@ -5479,6 +5706,15 @@ msgstr "Beschreibung hinzufügen"
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Größe"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
+msgid "Folder"
+msgstr "Ordner"
 
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -5697,11 +5933,12 @@ msgstr ""
 "\n"
 " Bitte laden Sie die Datei über die Schaltfläche unten herunter."
 
+#. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
-#, fuzzy
-msgid "Download%1$s"
+msgid "Download %1$s"
 msgstr "%1$s herunterladen"
 
+#. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid "Downlad"
 msgstr "Herunterladen"
@@ -5737,6 +5974,13 @@ msgstr "Diese Seite ist im Moment leider nicht verfügbar."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Für dieses Bild ist leider keine Voransicht verfügbar."
+
+#: apps/io.ox/core/viewer/views/types/spreadsheetview.js module:io.ox/core
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid "An error occurred loading the document so it cannot be displayed."
+msgstr ""
+"Beim Laden des Dokuments ist ein Fehler aufgetreten. Es kann nicht angezeigt "
+"werden."
 
 #: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
@@ -5790,6 +6034,12 @@ msgstr "Anrede"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
 msgstr "Geben Sie hier den Dokumententitel ein"
+
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
+#: apps/io.ox/mail/actions/reminder.js
+msgid "Note"
+msgstr "Hinweis"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
@@ -6028,12 +6278,6 @@ msgid "Share your folders"
 msgstr "Ihre Ordner freigeben"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account added successfully"
-msgstr "Account erfolgreich hinzugefügt"
-
-#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account could not be added"
 msgstr "Account konnte nicht hinzugefügt werden"
@@ -6082,12 +6326,6 @@ msgstr[1] ""
 #: apps/io.ox/files/actions/download.js module:io.ox/files
 msgid "Items without a file can not be downloaded."
 msgstr "Objekte ohne Datei können nicht heruntergeladen werden."
-
-#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
-msgid "An error occurred loading the document so it cannot be displayed."
-msgstr ""
-"Beim Laden des Dokuments ist ein Fehler aufgetreten. Es kann nicht angezeigt "
-"werden."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -6447,7 +6685,7 @@ msgid "Internal user"
 msgstr "Interner Benutzer"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/participants/views.js
+#: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Gruppe"
 
@@ -6763,7 +7001,8 @@ msgstr "Anpassen"
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: module:io.ox/mailfilter apps/io.ox/settings/security/settings/pane.js
+#: module:io.ox/mail
 msgid "All"
 msgstr "Alle"
 
@@ -6832,24 +7071,12 @@ msgid "Last week"
 msgstr "Letzte Woche"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
-msgid "Previous week"
-msgstr "Letzte Woche"
-
-#: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last month"
 msgstr "letzten Monat"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
-msgid "Previous month"
-msgstr "Letzter Monat"
-
-#: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last year"
 msgstr "Letztes Jahr"
-
-#: apps/io.ox/find/date/patterns.js module:io.ox/core
-msgid "Previous year"
-msgstr "Vorherigers Jahr"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 7 days"
@@ -7177,28 +7404,28 @@ msgstr "E-Mail wurde kopiert"
 msgid "Quick reply"
 msgstr "Schnellantwort"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
 #: module:plugins/portal
 msgid "Reply"
 msgstr "Antworten"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/checks.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/contextmenu.js
 msgid "Reply all"
 msgstr "Allen antworten"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Forward"
 msgstr "Weiterleiten"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Mark as spam"
 msgstr "Als Spam markieren"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Not spam"
 msgstr "Kein Spam"
@@ -7207,12 +7434,14 @@ msgstr "Kein Spam"
 msgid "Send new mail"
 msgstr "Neue E-Mail versenden"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Save as file"
 msgstr "Als Datei speichern"
 
 #. source in terms of source code
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/toolbar.js
 msgid "View source"
 msgstr "Quelldaten anzeigen"
 
@@ -7224,10 +7453,6 @@ msgstr "Filterregel erstellen"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Add to calendar"
 msgstr "Zum Kalender hinzufügen"
-
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "View kack"
-msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -7391,6 +7616,10 @@ msgid "Reminder has been created"
 msgstr "Erinnerung wurde erstellt"
 
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
+msgid "Authentication details"
+msgstr "Authentifizierungsdetails"
+
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "E-Mail-Quelldaten"
 
@@ -7499,6 +7728,25 @@ msgstr "Markiert"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "has attachments"
 msgstr "enthält Anhänge"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "This message is from a trusted sender."
+msgstr "Diese Nachricht stammt von einem vertrauenswürdigen Sender."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid ""
+"This might be a phising mail because we could not verify that this email is "
+"really from %1$s."
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "This mail has been sent from %1$s."
+msgstr "Diese E-Mail wurde von %1$s gesendet."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "We could not verify that this email is really from %1$s."
+msgstr ""
+"Wir konnten nicht verifizieren, dass diese E-Mail wirklich von %1$s stammt."
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -7757,7 +8005,8 @@ msgid "Please select a valid image File to insert"
 msgstr "Wählen Sie bitte eine gültige Bild-Datei zum Einfügen."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/main.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Verfassen"
@@ -7833,10 +8082,6 @@ msgid "delete if expired"
 msgstr "löschen, wenn abgelaufen"
 
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Notification"
-msgstr "Benachrichtigung"
-
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "wenn die Empfänger die Dateien heruntergeladen haben"
 
@@ -7905,6 +8150,10 @@ msgstr ""
 "Das Laden der vollständigen E-Mail könnte zu Performance-Problemen führen."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Continue"
+msgstr "Fortfahren"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Load full mail"
 msgstr "Komplette E-Mail laden"
 
@@ -7948,6 +8197,28 @@ msgstr "[Kopie] "
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Couldn't load editor"
 msgstr "Editor konnte nicht geladen werden"
+
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+msgid "Mark as read"
+msgstr "Als gelesen markieren"
+
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+msgid "Mark as unread"
+msgstr "Als ungelesen markieren"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+msgctxt "verb"
+msgid "Flag"
+msgstr "Markieren"
+
+#. Verb: (to) unflag messages
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+msgctxt "verb"
+msgid "Unflag"
+msgstr "Markierung aufheben"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
@@ -8021,8 +8292,8 @@ msgid "Reply to all"
 msgstr "Allen antworten"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Your reply has been sent"
-msgstr "Ihre Antwort wurde gesendet"
+msgid "Quick reply: %1$s"
+msgstr "Schnellantwort: %1$s"
 
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 msgid "Error: Failed to load messages"
@@ -8709,11 +8980,6 @@ msgid "Send vacation notice during this time only"
 msgstr "Abwesenheitsbenachrichtigung nur für diese Dauer versenden"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
-#: apps/io.ox/tasks/print.js module:io.ox/tasks
-msgid "Start"
-msgstr "Beginn"
-
-#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "End"
 msgstr "Ende"
 
@@ -8806,16 +9072,6 @@ msgstr "Antwort an alle Empfänger"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
-msgid "Mark as read"
-msgstr "Als gelesen markieren"
-
-#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
-msgid "Mark as unread"
-msgstr "Als ungelesen markieren"
-
-#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
 msgid "Edit draft"
 msgstr "Entwurf bearbeiten"
 
@@ -8900,11 +9156,6 @@ msgstr "Standard-Absender-Adresse"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Den folgenden Empfänger immer zu Blind Carbon Copy (BCC) hinzufügen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "Bell"
-msgstr "Klingel"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Could not save settings"
@@ -9105,12 +9356,6 @@ msgstr "Kopie bearbeiten"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Kategorie festlegen"
-
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgctxt "verb"
-msgid "Flag"
-msgstr "Markieren"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -9484,19 +9729,47 @@ msgstr ""
 "Kontakt mit einer ungültigen E-Mail-Adresse kann nicht hinzugefügt werden: "
 "%1$s"
 
-#: apps/io.ox/participants/detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/detail.js
 msgid "External participants"
 msgstr "Externe Teilnehmer"
 
-#: apps/io.ox/participants/detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/detail.js
 #: apps/plugins/administration/resources/register.js
 #: apps/plugins/administration/resources/settings/pane.js
 msgid "Resources"
 msgstr "Ressourcen"
 
-#: apps/io.ox/participants/detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Übersicht"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "Remove contact"
+msgstr "Kontakt entfernen"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "External contact"
+msgstr "Externer Kontakt"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "This list has no participants yet"
+msgstr "Diese Liste hat noch keine Teilnehmer"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "Members (%1$d)"
+msgstr "Mitglieder (%1$d)"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "Participants (%1$d)"
+msgstr "Teilnehmer (%1$d)"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Unknown"
@@ -9505,26 +9778,6 @@ msgstr "Unbekannt"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Resource group"
 msgstr "Ressourcengruppe"
-
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "External contact"
-msgstr "Externer Kontakt"
-
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "Remove contact"
-msgstr "Kontakt entfernen"
-
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "This list has no participants yet"
-msgstr "Diese Liste hat noch keine Teilnehmer"
-
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "Members (%1$d)"
-msgstr "Mitglieder (%1$d)"
-
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "Participants (%1$d)"
-msgstr "Teilnehmer (%1$d)"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -9588,10 +9841,10 @@ msgstr "Fügen Sie Ihren %1$s-Account hinzu"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #, fuzzy
 msgid ""
-"The widget \"%s\" was disabled as the account seems to be removed or is no "
-"longer available."
+"The widget \"%s\" was disabled as the account might have been removed or is "
+"no longer available."
 msgstr ""
-"Das Widget \"%s\" wurde deaktiviert, da das Konto anscheinend entfernt wurde "
+"Das Widget \"%s\" wurde deaktiviert, da der Account entweder entfernt wurde "
 "oder nicht mehr verfügbar ist."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -9844,10 +10097,11 @@ msgstr "Exchange Active Sync"
 msgid "Unknown device"
 msgstr "Unbekanntes Gerät"
 
+#. text in the settings pane to indicate session that is currently active
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Now active"
-msgstr "ist jetzt aktiv"
+msgstr "jetzt aktiv"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from that device?"
@@ -9862,6 +10116,20 @@ msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Wollen Sie sich wirklich von allen Clients mit Ausnahme des aktuellen "
 "abmelden?"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Show message authencitiy"
+msgstr ""
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Dangerous only"
+msgstr "Nur gefährlich"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Dangerous and trusted"
+msgstr "Gefährlich und vertrauenswürdig"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
@@ -9994,6 +10262,11 @@ msgid "Manual input"
 msgstr "Manuelle Eingabe"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "No reminder"
+msgstr "Keine Erinnerung"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Reminder date"
 msgstr "Datum für Erinnerung"
@@ -10050,6 +10323,11 @@ msgstr "Hoch"
 msgctxt "Tasks"
 msgid "Priority"
 msgstr "Priorität"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+msgid "Type"
+msgstr "Typ"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "This task has no participants yet"
@@ -10645,14 +10923,6 @@ msgstr "Die Verbindung zu %s ist leider fehlgeschlagen."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Auf %s sind keine Daten für Sie verfügbar."
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-msgid ""
-"Your default reminder could not be set for this appointment due to "
-"insufficient permissions"
-msgstr ""
-"Ihre Standarderinnerung konnte für diesen Termin aufgrund unzureichender "
-"Berechtigungen nicht eingestellt werden"
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -10660,6 +10930,10 @@ msgstr ""
 #, c-format
 msgid "Invitation for %1$s."
 msgstr "Einladung für %1$s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Open in calendar"
+msgstr "Im Kalender öffnen"
 
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
@@ -10681,6 +10955,11 @@ msgid "in %d minute"
 msgid_plural "in %d minutes"
 msgstr[0] "in %d Minute"
 msgstr[1] "in %d Minuten"
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#, fuzzy
+msgid "Acknowledge all reminders"
+msgstr "Alle Erinnerungen bestätigen."
 
 #. Reminders (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -10707,6 +10986,10 @@ msgstr "Neue Termin-Erinnerung"
 msgid "Hide all appointment reminders."
 msgstr "Alle Termin-Erinnerungen ausblenden."
 
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Appointment reminder"
+msgstr "Terminerinnerung"
+
 #. Invitations (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "Appointment invitations"
@@ -10727,18 +11010,6 @@ msgstr "Sie haben neue Termineinladungen"
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "Alle Termin-Einladungen ausblenden."
-
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "Marimba"
-msgstr "Marimba"
-
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "Wood"
-msgstr "Holz"
-
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "Chimes"
-msgstr "Glockenspiel"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New mail"
@@ -10860,10 +11131,6 @@ msgstr "Geschenk kaufen"
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "In %1$d days"
 msgstr "In %1$d Tagen"
-
-#: apps/plugins/portal/calendar/register.js module:plugins/portal
-msgid "Appointments"
-msgstr "Termine"
 
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "You don't have any appointments in the near future."
@@ -11518,6 +11785,173 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder nur einen einzelnen Termin aus der "
+#~ "Serie löschen?"
+
+#~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr ""
+#~ "Die Zeitzone für diesen Termin (%1$s) unterscheidet sich von Ihrer "
+#~ "Standardzeitzone (%2$s)."
+
+#~ msgid "Temporary"
+#~ msgstr "Mit Vorbehalt"
+
+#~ msgid "Absent"
+#~ msgstr "Abwesend"
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "Wenn Sie unterschiedliche Zeitzonen wählen, werden Start- und Enddatum "
+#~ "des Termins in der Zeitzone des Startdatums des Termins gespeichert. Eine "
+#~ "unterschiedliche Zeitzone für das Enddatum erlaubt lediglich eine "
+#~ "einfache Konvertierung."
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr ""
+#~ "Eingegebenes Start- und Enddatum so konvertieren, dass Sie den geänderten "
+#~ "Zeitzonen entsprechen"
+
+#~ msgid "Change view"
+#~ msgstr "Ansicht ändern"
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Wählen Sie einen freien Zeitraum. Bewegen Sie dafür den Cursor auf das "
+#~ "Startdatum, halten Sie die linke Maustaste gedrückt und <b>ziehen Sie die "
+#~ "Maus</b> auf das Enddatum."
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Sie kehren automatisch zum Termindialog zurück. Das gewählte Start- und "
+#~ "Enddatum und die aktuelle Teilnehmerliste werden übernommen. "
+
+#~ msgid "How does this work?"
+#~ msgstr "Wie funktioniert das?"
+
+#~ msgid "Back to appointment"
+#~ msgstr "Zurück zum Termin"
+
+#~ msgid "Quit"
+#~ msgstr "Verlassen"
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Sie haben keine Berechtigung, Termine in \"%1$s\" des Eigentümers %2$s "
+#~ "anzulegen. Termine werden daher in Ihrem privaten Kalender erstellt."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Sie haben keine Berechtigung, Termine in \"%1$s\" anzulegen. Termine "
+#~ "werden daher in Ihrem privaten Kalender erstellt."
+
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Termindaten konnten nicht geladen werden."
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Zeitrahmen um einen Monat erweitern"
+
+#~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr ""
+#~ "Die Einstellung wurde gespeichert und wird nach dem nächsten "
+#~ "Anmeldevorgang aktiviert."
+
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d Minute"
+#~ msgstr[1] "%d Minuten"
+
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr ""
+#~ "Das Ändern des Termindatums führt zum Erstellen einer Terminausnahme für "
+#~ "den Serientermin."
+
+#~ msgid "Create exception"
+#~ msgstr "Ausnahme erstellen"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+#~ "bearbeiten?"
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Für ganztägigen Termin auf diese Zeile doppelklicken"
+
+#~ msgid "All my appointments"
+#~ msgstr "Alle meine Termine"
+
+#~ msgid "Restore applications"
+#~ msgstr "Applikationen wiederherstellen"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Die folgenden Applikationen können wiederhergestellt werden. Sollen sie "
+#~ "nicht wiederhergestellt werden, entfernen Sie einfach den "
+#~ "Wiederherstellungspunkt. "
+
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Wiederherstellungspunkt entfernen: \"%1$s\""
+
+#, fuzzy
+#~ msgid ""
+#~ "Access to your media devices is denied. Please refer your browser help "
+#~ "pages how to reset authorization again."
+#~ msgstr ""
+#~ "Zugriff auf Ihre Mediengeräte wird verweigert. Entnehmen Sie bitte Ihren "
+#~ "Browser-Hilfeseiten, wie Sie die Autorisierung wieder zurücksetzen."
+
+#~ msgid "High contrast theme"
+#~ msgstr "Hoher Kontrast"
+
+#, fuzzy
+#~ msgid "Download%1$s"
+#~ msgstr "%1$s herunterladen"
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Ihre Antwort wurde gesendet"
+
+#, fuzzy
+#~ msgid ""
+#~ "The widget \"%s\" was disabled as the account seems to be removed or is "
+#~ "no longer available."
+#~ msgstr ""
+#~ "Das Widget \"%s\" wurde deaktiviert, da das Konto anscheinend entfernt "
+#~ "wurde oder nicht mehr verfügbar ist."
+
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr ""
+#~ "Ihre Standarderinnerung konnte für diesen Termin aufgrund unzureichender "
+#~ "Berechtigungen nicht eingestellt werden"
 
 #~ msgctxt "window title"
 #~ msgid "%1$s %2$s"
