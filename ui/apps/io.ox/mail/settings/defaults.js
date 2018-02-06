@@ -30,7 +30,6 @@ define('io.ox/mail/settings/defaults', [], function () {
         'autoSaveDraftsAfter': 'disabled',
         'allowHtmlMessages': true,
         'allowHtmlImages': false,
-        'displayEmoticons': false,
         'isColorQuoted': false,
         'defaultSignature': false,
         'defaultReplyForwardSignature': false,

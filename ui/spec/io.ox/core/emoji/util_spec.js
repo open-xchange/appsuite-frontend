@@ -14,15 +14,15 @@
 define([
     'io.ox/core/emoji/util',
     'io.ox/emoji/main',
-    'settings!io.ox/mail/emoji'
+    'settings!io.ox/mail'
 ], function (util, emoji, settings) {
     'use strict';
 
     describe('Emoji util', function () {
         beforeEach(function () {
-            settings.set('availableCollections', 'unified');
-            settings.set('userCollection', 'unified');
-            settings.set('forceEmojiIcons', true);
+            settings.set('emoji/availableCollections', 'unified');
+            settings.set('emoji/userCollection', 'unified');
+            settings.set('emoji/forceEmojiIcons', true);
 
             this.emoji = emoji.getInstance();
         });

@@ -14,7 +14,6 @@
 /* global tinyMCE: true */
 
 define('io.ox/core/tk/contenteditable-editor', [
-    'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
     'io.ox/core/tk/textproc',
@@ -24,7 +23,7 @@ define('io.ox/core/tk/contenteditable-editor', [
     'settings!io.ox/mail',
     'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
+], function (capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -43,22 +42,6 @@ define('io.ox/core/tk/contenteditable-editor', [
             ed.on('keydown', function (e) {
                 // pressed enter?
                 if (!e.shiftKey && e.which === 13) splitContent(ed, e);
-            });
-
-            ext.point('3rd.party/emoji/editor_css').each(function (point) {
-                var url = ed.convertURL(require.toUrl(point.css));
-                ed.contentCSS.push(url);
-            });
-        }
-    });
-
-    ext.point(POINT + '/setup').extend({
-        id: 'emoji',
-        index: INDEX += 100,
-        draw: function (ed) {
-            ext.point('3rd.party/emoji/editor_css').each(function (point) {
-                var url = ed.convertURL(require.toUrl(point.css));
-                ed.contentCSS.push(url);
             });
         }
     });
@@ -236,8 +219,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         );
 
         opt = _.extend({
-            toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
-            advanced: 'styleselect | fontselect fontsizeselect | forecolor backcolor | link image',
+            toolbar1: 'undo redo | bold italic | bullist numlist outdent indent',
+            advanced: 'styleselect | fontselect fontsizeselect | link image emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
@@ -253,14 +236,6 @@ define('io.ox/core/tk/contenteditable-editor', [
         opt.toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', opt.toolbar1);
         opt.toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', opt.toolbar2);
         opt.toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', opt.toolbar3);
-
-        // remove unsupported stuff
-        if (!capabilities.has('emoji')) {
-            opt.toolbar1 = opt.toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.toolbar2 = opt.toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.toolbar3 = opt.toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
-        }
 
         var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
 
@@ -401,11 +376,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             }, 30),
 
             set = function (str) {
-                var text = emoji.processEmoji(str, function (text, lib) {
-                    if (!lib.loaded) return;
-                    ed.setContent(text);
-                });
-                ed.setContent(text);
+
+                ed.setContent(str);
 
                 // Remove all position: absolute and white-space: nowrap inline styles
                 // This is a fix for the infamous EUROPCAR mail bugs
@@ -438,8 +410,6 @@ define('io.ox/core/tk/contenteditable-editor', [
 
                 // get raw content
                 var content = ed.getContent({ format: 'raw' });
-                // convert emojies
-                content = emoji.imageTagsToUnified(content);
                 // strip data attributes (incl. bogus attribute)
                 content = stripDataAttributes(content);
                 // clean up

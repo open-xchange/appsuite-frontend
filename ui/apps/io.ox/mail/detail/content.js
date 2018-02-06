@@ -17,13 +17,12 @@ define('io.ox/mail/detail/content', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/util',
-    'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/mail/detail/links',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, coreUtil, emoji, ext, capabilities, links, settings, gt) {
+], function (api, util, coreUtil, ext, capabilities, links, settings, gt) {
 
     'use strict';
 
@@ -51,16 +50,6 @@ define('io.ox/mail/detail/content', [
             // replace images on source level
             // look if prefix, usually '/ajax', needs do be replaced
             baton.source = util.replaceImagePrefix(baton.source);
-        },
-
-        emoji: function (baton) {
-            if (baton.isText) return;
-            if (baton.processedEmoji) return;
-            baton.processedEmoji = false;
-            baton.source = emoji.processEmoji(baton.source, function (text, lib) {
-                baton.processedEmoji = !lib.loaded;
-                baton.source = text;
-            });
         },
 
         plainTextLinks: function (baton) {
@@ -291,12 +280,6 @@ define('io.ox/mail/detail/content', [
     });
 
     ext.point('io.ox/mail/detail/source').extend({
-        id: 'emoji',
-        index: 300,
-        process: extensions.emoji
-    });
-
-    ext.point('io.ox/mail/detail/source').extend({
         id: 'plain-text-links',
         index: 300,
         process: extensions.plainTextLinks
@@ -447,12 +430,6 @@ define('io.ox/mail/detail/content', [
             }
         },
         {
-            id: 'emojis',
-            process: function (baton) {
-                baton.data = insertEmoticons(baton.data);
-            }
-        },
-        {
             id: 'text-to-html',
             process: function (baton) {
                 baton.data = this.text2html(baton.data, { blockquotes: true, images: true, links: true });
@@ -477,39 +454,6 @@ define('io.ox/mail/detail/content', [
     //
     // Helper IIFEs
     //
-
-    var insertEmoticons = (function () {
-
-        var emotes = {
-            ':-)': '&#x1F60A;',
-            ':)': '&#x1F60A;',
-            ';-)': '&#x1F609;',
-            ';)': '&#x1F609;',
-            ':-D': '&#x1F603;',
-            ':D': '&#x1F603;',
-            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
-            ':-|': '&#x1F614;',
-            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
-            ':|': '&#x1F614;',
-            ':-(': '&#x1F61E;',
-            ':(': '&#x1F61E;'
-        };
-
-        var regex = /(&quot)?([:;]-?[(|)D])(\W|$)/g;
-
-        return function (text) {
-            if (settings.get('displayEmoticons') && capabilities.has('emoji')) {
-                text = text.replace(regex, function (all, quot, match) {
-                    // if we hit &quot;-) we just return
-                    if (quot) return all;
-                    // otherwise find emote
-                    var emote = $('<div>').html(emotes[match]).text();
-                    return !emote ? match : emote;
-                });
-            }
-            return text;
-        };
-    }());
 
     var fixAbsolutePositions = (function () {
 
@@ -678,11 +622,6 @@ define('io.ox/mail/detail/content', [
                     content.className = 'mail-detail-content plain-text noI18n';
                     baton.source = that.beautifyPlainText(baton.source);
                     content.innerHTML = baton.source;
-                    // process emoji now (and don't do it again)
-                    baton.processedEmoji = true;
-                    emoji.processEmoji(baton.source, function (html) {
-                        content.innerHTML = html;
-                    });
                 }
 
                 // process content
@@ -699,7 +638,7 @@ define('io.ox/mail/detail/content', [
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
+            return { content: content, isLarge: baton.isLarge, type: baton.type };
         },
 
         beautifyPlainText: function (str) {

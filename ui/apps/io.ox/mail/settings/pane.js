@@ -108,8 +108,6 @@ define('io.ox/mail/settings/pane', [
                         util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
                         // images
                         util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
-                        // emojis
-                        util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
                         // colored quotes
                         util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
                         // fixed width

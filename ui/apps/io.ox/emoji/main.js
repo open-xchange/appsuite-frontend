@@ -11,25 +11,27 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define('io.ox/emoji/main', [
-    '3rd.party/emoji/emoji',
+    //'3rd.party/emoji/emoji',
     'io.ox/emoji/categories',
     'io.ox/emoji/conversions',
-    'io.ox/core/extensions',
-    'settings!io.ox/mail/emoji',
-    'css!3rd.party/emoji/emoji.css',
-    'less!io.ox/emoji/emoji'
-], function (emoji, categories, conversions, ext, settings) {
+    //'io.ox/core/extensions',
+    'settings!io.ox/mail'
+    //'css!3rd.party/emoji/emoji.css',
+    //'less!io.ox/emoji/emoji'
+], function (categories, conversions, settings) {
 
     'use strict';
 
-    ext.point('3rd.party/emoji/editor_css').extend({
-        id: 'unified/icons',
-        css: '3rd.party/emoji/emoji.css'
-    });
+    var emoji = {};
+
+    // ext.point('3rd.party/emoji/editor_css').extend({
+    //     id: 'unified/icons',
+    //     css: '3rd.party/emoji/emoji.css'
+    // });
 
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
-        var e = settings.get('availableCollections', '');
+        var e = settings.get('emoji/availableCollections', '');
         return _(e.split(','))
             .chain()
             .map(function (collection) {
@@ -73,8 +75,8 @@ define('io.ox/emoji/main', [
         // make settings accessible, esp. for editor plugin
         this.settings = settings;
 
-        var defaultCollection = settings.get('defaultCollection', this.collections[0]);
-        this.currentCollection = opt.collection || settings.get('userCollection', defaultCollection);
+        var defaultCollection = settings.get('emoji/defaultCollection', this.collections[0]);
+        this.currentCollection = opt.collection || settings.get('emoji/userCollection', defaultCollection);
 
         this.createCategoryMap();
     }
@@ -114,7 +116,7 @@ define('io.ox/emoji/main', [
         // add to "recently used" category
         recent: function (unicode) {
 
-            var recently = settings.get('recently', {}),
+            var recently = settings.get('emoji/recently', {}),
                 // encode unicode to avoid backend bug
                 key = escape(unicode);
 
@@ -125,7 +127,7 @@ define('io.ox/emoji/main', [
                 recently[key] = { count: 1, time: _.now() };
             }
 
-            settings.set('recently', recently).save();
+            settings.set('emoji/recently', recently).save();
         },
 
         getRecently: function () {
@@ -135,14 +137,14 @@ define('io.ox/emoji/main', [
         },
 
         resetRecents: function () {
-            settings.set('recently', {}).save();
+            settings.set('emoji/recently', {}).save();
         },
 
         iconsForCategory: function (category) {
 
             if (category === 'recently') {
 
-                var recently = settings.get('recently', {});
+                var recently = settings.get('emoji/recently', {});
 
                 return _(this.icons)
                     .chain()
@@ -202,7 +204,7 @@ define('io.ox/emoji/main', [
             if (!_(this.collections).contains(collection)) return;
 
             this.currentCollection = collection;
-            settings.set('userCollection', collection).save();
+            settings.set('emoji/userCollection', collection).save();
             this.createCategoryMap();
         },
 
@@ -298,7 +300,7 @@ define('io.ox/emoji/main', [
                     continue;
                 }
 
-                if (!settings.get('overrideUserCollection', false)) {
+                if (!settings.get('emoji/overrideUserCollection', false)) {
                     css = defaultCollection.cssFor(unicode);
                 }
                 css = css || defaultCollection.collections.map(cssFromCollection(unicode))
@@ -388,7 +390,7 @@ define('io.ox/emoji/main', [
         },
 
         sendEncoding: function () {
-            return settings.get('sendEncoding', 'unified');
+            return settings.get('emoji/sendEncoding', 'unified');
         }
     }, conversions, emoji);
 });

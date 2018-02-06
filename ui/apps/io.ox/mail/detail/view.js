@@ -20,14 +20,13 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/api/collection-pool',
     'io.ox/mail/detail/content',
     'io.ox/core/extPatterns/links',
-    'io.ox/core/emoji/util',
     'io.ox/core/a11y',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, contentStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, a11y, gt, contentStyle) {
 
     'use strict';
 
@@ -50,14 +49,11 @@ define('io.ox/mail/detail/view', [
         index: INDEX += 100,
         draw: function (baton) {
 
-            var subject = util.getSubject(baton.data),
-                node = $('<h1 class="subject">').text(subject);
+            var subject = util.getSubject(baton.data);
 
-            emoji.processEmoji(_.escape(subject), function (html) {
-                node.html(html);
-            });
-
-            this.append(node);
+            this.append(
+                $('<h1 class="subject">').text(subject)
+            );
         }
     });
 
@@ -417,16 +413,7 @@ define('io.ox/mail/detail/view', [
 
             var data = content.get(baton.data),
                 node = data.content,
-                self = this,
-                containsEmoji = /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML);
-
-            if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.innerHTML, function (html, lib) {
-                    baton.processedEmoji = !lib.loaded;
-                    if (baton.processedEmoji) return;
-                    node.innerHTML = html;
-                });
-            }
+                self = this;
 
             var resizeLoop = 0;
             // function to make sure there is only one resize loop
@@ -517,10 +504,6 @@ define('io.ox/mail/detail/view', [
             baton.iframe.on('load', function () {
                 var content = baton.iframe.contents();
                 content.find('head').append('<style class="content-style">' + contentStyle + '</style>');
-                // inject emoji-specific css; this is a quick fix with a more or less static URL
-                if (containsEmoji) {
-                    content.find('head').append('<link rel="stylesheet" href="' + ox.base + '/apps/3rd.party/emoji/emoji.css">');
-                }
                 content.find('body').addClass('iframe-body').append(node);
                 startResizeLoop(); // initial resize for first draw
             });

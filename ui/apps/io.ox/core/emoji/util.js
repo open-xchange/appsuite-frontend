@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (settings) {
+define('io.ox/core/emoji/util', ['settings!io.ox/mail'], function (settings) {
 
     'use strict';
 
@@ -23,7 +23,7 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
             });
             text = allToUnified(text);
             text = emoji.unifiedToImageTag(text, {
-                forceEmojiIcons: settings.get('forceEmojiIcons', false)
+                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
             });
             return text;
         };

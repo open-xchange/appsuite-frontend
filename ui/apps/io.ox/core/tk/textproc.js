@@ -12,10 +12,7 @@
  */
 'use strict';
 
-define('io.ox/core/tk/textproc', [
-    'io.ox/core/emoji/util',
-    'settings!io.ox/mail'
-], function (emoji, mailSettings) {
+define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings) {
 
     // simplify DOM tree
     function simplify(memo, elem) {
@@ -153,11 +150,7 @@ define('io.ox/core/tk/textproc', [
             //console.debug('pre', o.content);
             o.content = o.content
                 // remove comments
-                .replace(/<!--(.*?)-->/g, '')
-                // remove emoji images and convert them back to unicode characters
-                .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1');
-
-            o.content = emoji.processEmoji(o.content);
+                .replace(/<!--(.*?)-->/g, '');
         },
 
         paste_postprocess: function (pl, o) {

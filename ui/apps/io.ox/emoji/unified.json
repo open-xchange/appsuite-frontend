@@ -1,37 +1,36 @@
 {
   "meta": [
     {
-      "iconClass": "emoji-unified emoji1f60a",
-      "title": "People",
+      "unicode": "\ud83d\udd52",
+      "name": "Recently"
+    },
+    {
+      "unicode": "\ud83d\ude00",
       "name": "People"
     },
     {
-      "iconClass": "emoji-unified emoji1f523",
-      "title": "Symbols",
-      "name": "Symbols"
-    },
-    {
-      "iconClass": "emoji-unified emoji1f338",
-      "title": "Nature",
+      "unicode": "\ud83d\udc36",
       "name": "Nature"
     },
     {
-      "iconClass": "emoji-unified emoji1f514",
-      "title": "Objects",
+      "unicode": "\ud83c\udf70",
       "name": "Objects"
     },
     {
-      "iconClass": "emoji-unified emoji1f697",
-      "title": "Places",
+      "unicode": "\ud83c\udfe0",
       "name": "Places"
+    },
+    {
+      "unicode": "\u2049",
+      "name": "Symbols"
     }
   ],
   "People": [
+    "\ud83d\ude00",
     "\ud83d\ude04",
     "\ud83d\ude03",
-    "\ud83d\ude00",
     "\ud83d\ude0a",
-    "\u263a",
+    "\ud83d\ude42",
     "\ud83d\ude09",
     "\ud83d\ude0d",
     "\ud83d\ude18",

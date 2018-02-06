@@ -55,7 +55,6 @@
     "node": ">=0.10"
   },
   "dependencies": {
-    "@open-xchange/emoji": "0.0.1",
     "@open-xchange/hopscotch": "0.0.1",
     "@open-xchange/moment-interval": "0.0.1",
     "@open-xchange/tinymce": "4.6.3-4",

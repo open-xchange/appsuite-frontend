@@ -14,11 +14,10 @@
 define('io.ox/mail/detail/links', [
     'io.ox/mail/api',
     'io.ox/core/util',
-    'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, emoji, ext, settings, gt) {
+], function (api, util, ext, settings, gt) {
     'use strict';
 
     // fix hosts (still need a configurable list on the backend)
