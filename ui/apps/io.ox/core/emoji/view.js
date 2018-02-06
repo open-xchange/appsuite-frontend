@@ -88,8 +88,8 @@ define('io.ox/core/emoji/view', [
             );
 
             this.$el.append(node);
-            this.setCategory();
             this.drawCategories();
+            this.setCategory();
             this.isRendered = true;
             this.isOpen = true;
 
@@ -145,6 +145,8 @@ define('io.ox/core/emoji/view', [
             // always draw emojis because the collection might have changed
             this.currentCategory = category || util.getDefaultCategory();
             this.$('.emoji-category').text(util.getTitle(this.currentCategory));
+            this.$('.emoji-footer > button').removeClass('active');
+            this.$('.emoji-footer > [data-category="' + this.currentCategory + '"]').addClass('active');
             this.drawEmojis();
         },
 
