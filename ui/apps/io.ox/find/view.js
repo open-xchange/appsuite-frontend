@@ -104,7 +104,8 @@ define('io.ox/find/view', [
             return this;
         },
 
-        onToggle: function () {
+        onToggle: function (e) {
+            $(e.target).focus();
             this.ui.facets.toggle();
         },
 

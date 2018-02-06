@@ -357,7 +357,7 @@ define('io.ox/core/main/appcontrol', [
                 node.toggleClass('has-tokens', !isReset)
                     .css({
                         // limit height to prevent jumping
-                        'height': isReset ? 'initial' : '30px',
+                        'height': isReset ? 'initial' : '32px',
                         // expand field or restore min-width value
                         'max-width': isReset ? node.css('min-width') : MAXWIDTH + 'px'
                     });
