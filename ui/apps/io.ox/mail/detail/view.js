@@ -434,49 +434,53 @@ define('io.ox/mail/detail/view', [
                 resizeFrame(resizeLoop);
             }
 
-            function resizeFrame(once) {
+            function resizeFrame(once, options) {
+                options = options || {};
+
+                var frame = self.find('.mail-detail-frame'),
+                    widthChange = baton.model.get('iframePrevWidth') && frame.width() !== baton.model.get('iframePrevWidth'),
+                    scrollpos = options.scrollpos,
+                    contents = frame.contents();
+
+                // stop if mail is collapsed or removed
+                if (!baton.view.$el || !baton.view.$el.hasClass('expanded') || contents.length === 0) {
+                    if (!once) resizeLoop = 0;
+                    return;
+                }
+
+                //wait until width doesn't change anymore
+                if (widthChange && !options.forceApply) {
+                    baton.model.set('iframePrevWidth', frame.width());
+                    _.delay(resizeFrame, 300, once, { widthChanged: true });
+                    return;
+                } else if (options.widthChanged) {
+                    // if we had a width change, we need to calculate from scratch because the mail adapts and the content changes in height (smartphone slide animation, listview width change, window resize).
+                    scrollpos = _.device('smartphone') ? frame.closest('.mail-detail-pane')[0].scrollTop : frame.scrollParent().scrollTop();
+                    frame.css('height', 'auto');
+                    // firefox needs the defer or the height isnt properly applied and the calculation is wrong, causes slight flickering though
+                    if (_.device('firefox')) {
+                        _.defer(resizeFrame, once, { scrollpos: scrollpos, forceApply: true });
+                        return;
+                    }
+                    options.forceApply = true;
+                }
+
                 // increase the delay by 300ms until we max out at 5s
                 // we do this to reduce the load
                 if (!once) resizeLoop = Math.min(resizeLoop + 300, 5000);
 
-                // stop if mail is collapsed or removed
-                if (!baton.view.$el || !baton.view.$el.hasClass('expanded')) {
-                    if (!once) resizeLoop = 0;
-                    return;
-                }
-
-                var frame = self.find('.mail-detail-frame'),
-                    contents = frame.contents(),
-                    height = contents.find('.mail-detail-content').height(),
+                var height = contents.find('.mail-detail-content').height(),
                     prevHeight = height,
                     htmlHeight = contents.find('html').height();
 
-                // frame was removed, we can stop here
-                if (contents.length === 0) {
-                    if (!once) resizeLoop = 0;
-                    return;
-                }
-
                 // don't apply height of 0 or undefined. mail is probably not loaded at all yet, just start the resizeloop again after the delay
-                if (!height) {
+                // check if mail content is really grown or if the mail just has broken css (content size always above 100%)
+                if (!options.forceApply && (!height || (!once && height === baton.model.get('iframeHeightAfterChange')))) {
                     if (!once) _.delay(resizeFrame, resizeLoop);
                     return;
                 }
 
-                if (height === 0 && !once) {
-                    // height 0 should(!) never happen, the dom node seems to be not rendered yet and
-                    // calculation fails. Give it another try. Actually only an issue on FF
-                    _.delay(resizeFrame, 10);
-                    return;
-                }
-
-                // check if mail content is really grown or if the mail just has broken css (content size always above 100%)
-                if (!once && height === baton.model.get('iframe-height-change')) {
-                    _.delay(resizeFrame, resizeLoop);
-                    return;
-                }
-
-                if (height < htmlHeight) height = htmlHeight;
+                if (!options.forceApply && height < htmlHeight) height = htmlHeight;
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
@@ -484,17 +488,28 @@ define('io.ox/mail/detail/view', [
                 // fixes overflow (see bug 55876)
                 if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
 
-                // delay a bit so the height change can be applied (firefox needs a bit of time here)
-                _.delay(function () {
+                // save width so we can track if the width changed (smartphone slide animation, listview width change, window resize). If the with changed, we need to recalculate from scratch
+                baton.model.set('iframePrevWidth', frame.width());
+
+                // firefox needs the defer here for the height to be applied
+                _.defer(function () {
+                    if (scrollpos !== undefined || options.scrollpos !== undefined) {
+                        if (_.device('smartphone')) {
+                            frame.closest('.mail-detail-pane')[0].scrollTop = scrollpos || options.scrollpos;
+                        } else {
+                            frame.scrollParent().scrollTop(scrollpos || options.scrollpos);
+                        }
+                    }
+
                     // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
                     // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
                     if (prevHeight !== contents.find('.mail-detail-content').height()) {
                         // save heightchange so we can distinguish between pictureload and broken mail css
-                        baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
+                        baton.model.set('iframeHeightAfterChange', contents.find('.mail-detail-content').height());
                     }
                     // check height again as there might be slow loading external images
                     if (!once) _.delay(resizeFrame, resizeLoop);
-                }, 50);
+                });
             }
 
             $(node).on('resize imageload', startResizeLoop); // for expanding blockquotes and inline images
