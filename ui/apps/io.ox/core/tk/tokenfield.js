@@ -146,7 +146,7 @@ define('io.ox/core/tk/tokenfield', [
             ext.point(options.extPoint + '/token').extend({
                 id: 'token',
                 index: 100,
-                draw: function (model) {
+                draw: function (model, e, input) {
                     // add contact picture
                     $(this).prepend(
                         contactAPI.pictureHalo(
@@ -155,6 +155,8 @@ define('io.ox/core/tk/tokenfield', [
                             { width: 16, height: 16, scaleType: 'contain', lazyload: true }
                         )
                     );
+                    // when we append the contact picture, the token gets wider, this pushes the input to the next line. To prevent that we update the width of the input field
+                    input.trigger('updateWidth');
                 }
             });
 
@@ -406,7 +408,7 @@ define('io.ox/core/tk/tokenfield', [
                             return gt('%1$s. Press backspace to delete.', title);
                         });
                         // customize token
-                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
+                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
                     }
                 },
                 'tokenfield:edittoken': function (e) {
@@ -651,7 +653,7 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
-            this.getInput().on('focus blur', function (e) {
+            this.getInput().on('focus blur updateWidth', function (e) {
                 var tokenfield = self.$el.data('bs.tokenfield');
                 tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
                 tokenfield.update();
