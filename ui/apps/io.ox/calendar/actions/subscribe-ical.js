@@ -24,7 +24,8 @@ define('io.ox/calendar/actions/subscribe-ical', [
 
     'use strict';
 
-    function iCalProbe(uri) {
+    function iCalProbe(model) {
+        var config = model.toJSON();
         return http.PUT({
             module: 'chronos/account',
             params: {
@@ -32,9 +33,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
             },
             data: {
                 'com.openexchange.calendar.provider': 'ical',
-                'com.openexchange.calendar.config': {
-                    uri: uri
-                }
+                'com.openexchange.calendar.config': config
             }
         });
     }
@@ -44,7 +43,31 @@ define('io.ox/calendar/actions/subscribe-ical', [
         index: 100,
         render: function () {
             this.$body.append(
-                mini.getInputWithLabel('ical-url', gt('iCal URL'), this.model)
+                $('<div class="form-group">').append(
+                    mini.getInputWithLabel('uri', gt('iCal URL'), this.model)
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/subscribe/ical').extend({
+        id: 'credentials',
+        index: 200,
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$body.append(
+                $('<div class="credential-wrapper">').hide().append(
+                    $('<div class="alert alert-warning">').text(
+                        gt('Authentication failed. Please fill in login and password.')
+                    ),
+                    $('<div class="form-group">').append(
+                        mini.getInputWithLabel('login', gt('Login'), this.model)
+                    ),
+                    $('<div class="form-group">').append(
+                        $('<label>').attr('for', guid).text(gt('Password')),
+                        new mini.PasswordView({ name: 'password', model: this.model, id: guid }).render().$el
+                    )
+                )
             );
         }
     });
@@ -61,14 +84,15 @@ define('io.ox/calendar/actions/subscribe-ical', [
         .addButton({ label: 'Subscribe', action: 'subscribe' })
         .on('subscribe', function () {
             var self = this;
-            iCalProbe(this.model.get('ical-url')).then(function (data) {
+            iCalProbe(this.model).then(function (data) {
                 data.module = 'event';
                 return folderAPI.create('1', data);
             }).then(function () {
                 notifications.yell('success', gt('iCal-feed has been imported successfully'));
                 self.close();
             })['catch'](function (err) {
-                notifications.yell(err);
+                if (err.code === 'CAL-4010') self.$('.credential-wrapper').show();
+                else notifications.yell(err);
                 self.idle();
             });
         })
