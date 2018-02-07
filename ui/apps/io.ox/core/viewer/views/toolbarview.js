@@ -345,6 +345,10 @@ define('io.ox/core/viewer/views/toolbarview', [
         };
     // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
     _.each(linksMap, function (appMeta, appName) {
+
+        // see bug 55872
+        if (_.device('IE')) { delete appMeta.openmailattachment; }
+
         var index = 0,
             extId = TOOLBAR_LINKS_ID + '/' + appName,
             extPoint = Ext.point(extId),
