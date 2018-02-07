@@ -708,7 +708,6 @@ define('io.ox/contacts/api', [
         return function (node, data, options) {
 
             var params,
-                useApi = options.api || 'contact',
                 url,
                 opt = _.extend({
                     width: 48,
@@ -805,7 +804,7 @@ define('io.ox/contacts/api', [
                 }
             }
 
-            url = coreUtil.getShardingRoot((useApi === 'user' ? '/image/user/picture?' : '/halo/contact/picture?') + $.param(params));
+            url = coreUtil.getShardingRoot('/halo/contact/picture?' + $.param(params));
 
             // cached?
             if (cachedURLs[url]) {

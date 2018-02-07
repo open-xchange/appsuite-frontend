@@ -53,18 +53,13 @@ define('io.ox/mail/common-extensions', [
         // add initials
         node.text(getInitials(baton.data.from));
 
-        // user should be in cache from rampup data
-        // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
-        userAPI.get({ id: ox.user_id }).then(function (user) {
-            var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-            contactsAPI.pictureHalo(
-                node,
-                (useUserApi ? { id: ox.user_id } : { email: address }),
-                { width: 40, height: 40, effect: 'fadeIn', fallback: false, api: (useUserApi ? 'user' : 'contact') }
-            );
-        });
+
+        return contactsAPI.pictureHalo(
+            node,
+            { email: address },
+            { width: 40, height: 40, effect: 'fadeIn', fallback: false }
+        );
     }
 
     function getInitials(from) {
@@ -136,6 +131,7 @@ define('io.ox/mail/common-extensions', [
 
             this.append(section);
         },
+
         picture: function (baton) {
             // show picture of sender or first recipient
             // special cases:
@@ -147,10 +143,9 @@ define('io.ox/mail/common-extensions', [
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
-            this.append(node);
-
-            if (isSearchResult(baton) && data.picture) return pictureHalo(node, data.picture);
-            pictureHalo(node, addresses, baton);
+            this.append(
+                isSearchResult(baton) && data.picture ? pictureHalo(node, data.picture) : pictureHalo(node, addresses, baton)
+            );
         },
 
         senderPicture: function (baton) {
@@ -158,8 +153,9 @@ define('io.ox/mail/common-extensions', [
             var addresses = baton.data.from,
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
-            this.append(node);
-            pictureHalo(node, addresses, baton);
+            this.append(
+                pictureHalo(node, addresses, baton)
+            );
         },
 
         date: function (baton, options) {
