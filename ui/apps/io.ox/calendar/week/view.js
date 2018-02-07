@@ -1500,7 +1500,7 @@ define('io.ox/calendar/week/view', [
                 var el = $('[data-cid="' + a.id + '"]', this.$el),
                     newAppointment = this.renderAppointment(a),
                     color = newAppointment.css('color'),
-                    backgroundColor = newAppointment.css('background-color');
+                    backgroundColor = newAppointment.data('background-color') || '';
                 el
                     .attr({ class: newAppointment.attr('class') })
                     .css({ color: color, 'background-color': backgroundColor })
