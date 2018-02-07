@@ -308,18 +308,39 @@ define('io.ox/tasks/main', [
             grid.setListRequest(listRequest);
         },
 
+        'restore-grid-options': function (app) {
+
+            app.getGridOptions = function (folder) {
+                var options = app.settings.get(['viewOptions', folder], {});
+                return _.extend({ done: true, sort: 'urgency', order: 'asc' }, options);
+            };
+
+            function restore(folder) {
+                var data = app.getGridOptions(folder);
+                app.grid.props.set(data);
+            }
+
+            app.on('folder:change', restore);
+            restore(app.folder.get());
+        },
+
+        'store-grid-options': function (app) {
+            app.grid.props.on('change', _.debounce(function () {
+                if (app.props.get('find-result')) return;
+                var folder = app.folder.get(), data = app.grid.props.toJSON();
+                app.settings
+                    .set(['viewOptions', folder], { done: data.done, sort: data.sort, order: data.order })
+                    .save();
+            }, 500));
+        },
+
         'grid-options': function (app) {
             var grid = app.grid;
-            // add grid options
-            grid.prop('done', true);
-            grid.prop('sort', 'urgency');
-            grid.prop('order', 'asc');
-
             function updateGridOptions() {
 
                 var dropdown = grid.getToolbar().find('.grid-options'),
-                    props = grid.prop();
-                if (props.order === 'desc') {
+                    props = grid.props;
+                if (props.get('order') === 'desc') {
                     dropdown.find('.fa-arrow-down').css('opacity', 1).end()
                         .find('.fa-arrow-up').css('opacity', 0.4);
                 } else {
@@ -327,8 +348,8 @@ define('io.ox/tasks/main', [
                         .find('.fa-arrow-down').css('opacity', 0.4);
                 }
                 //update api property (used cid in api.updateAllCache, api.create)
-                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 317;
-                api.options.requests.all.order = props.order;
+                api.options.requests.all.sort = props.get('sort') !== 'urgency' ? props.get('sort') : 317;
+                api.options.requests.all.order = props.get('order');
             }
 
             grid.selection.on('change', app.removeButton);
