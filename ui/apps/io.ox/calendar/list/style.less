@@ -122,11 +122,10 @@
             }
 
             .date { display: none; }
-        }
 
-        .custom_shown_as {
-            &.reserved > .color-label  { background-color: @appointment-reserved;  }
-            &.free > .color-label      { background-color: @appointment-free;      }
+            &.reserved .custom_shown_as > .color-label { background-color: @appointment-reserved; }
+            &.free     .custom_shown_as > .color-label { background-color: @appointment-free; }
+            &.declined .custom_shown_as > .color-label { background-color: @appointment-declined; }
         }
     }
 }

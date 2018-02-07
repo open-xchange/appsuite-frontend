@@ -59,13 +59,12 @@ define('io.ox/calendar/list/listview', [
                 });
             }
 
-            this.addClass('calendar').append(
-                time.addClass(util.getShownAsClass(model))
-                    .append(
-                        $('<div class="fragment">').text(timeSplits[0]),
-                        $('<div class="fragment">').text(timeSplits[1]),
-                        colorLabel
-                    )
+            this.addClass('calendar ' + util.getShownAsClass(model)).append(
+                time.append(
+                    $('<div class="fragment">').text(timeSplits[0]),
+                    $('<div class="fragment">').text(timeSplits[1]),
+                    colorLabel
+                )
             );
         }
     });
