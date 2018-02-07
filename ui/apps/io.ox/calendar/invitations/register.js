@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/invitations/register', [
-    'io.ox/backbone/mini-views/abstract',
+    'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/calendar/model',
@@ -21,7 +21,7 @@ define('io.ox/calendar/invitations/register', [
     'gettext!io.ox/calendar/main',
     'io.ox/core/notifications',
     'less!io.ox/calendar/style'
-], function (AbstractView, ext, http, models, calendarUtil, calendarSettings, gt, notifications) {
+], function (DisposableView, ext, http, models, calendarUtil, calendarSettings, gt, notifications) {
 
     'use strict';
 
@@ -67,9 +67,9 @@ define('io.ox/calendar/invitations/register', [
     };
 
     var successInternal = {
-        1: gt('You have accepted the appointment'),
-        2: gt('You have declined the appointment'),
-        3: gt('You have tentatively accepted the appointment')
+        'accept': gt('You have accepted the appointment'),
+        'decline': gt('You have declined the appointment'),
+        'tentative': gt('You have tentatively accepted the appointment')
     };
 
     var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
@@ -79,7 +79,7 @@ define('io.ox/calendar/invitations/register', [
     // expects data to be in the this.model variable and works only on the new events model
     // if other data (e.g. tasks) are used, overwrite according functions
     //
-    var BasicView = AbstractView.extend({
+    var BasicView = DisposableView.extend({
 
         className: 'itip-item',
 
@@ -90,6 +90,9 @@ define('io.ox/calendar/invitations/register', [
         },
 
         initialize: function (options) {
+            this.options = _.extend({}, options);
+
+            this.mailModel = options.mailModel;
             this.module = options.module;
             this.api = options.api;
             this.util = options.util;
@@ -100,6 +103,8 @@ define('io.ox/calendar/invitations/register', [
                 this.alarmsModel = new Backbone.Model(this.model.toJSON());
                 this.alarmsModel.set('alarms', this.alarmsModel.get('alarms') || calendarUtil.getDefaultAlarms(this.alarmsModel));
             }
+
+            this.listenTo(this.model, 'change:flags change:participants', this.render);
         },
 
         onKeydown: function (e) {
@@ -303,7 +308,11 @@ define('io.ox/calendar/invitations/register', [
 
         render: function () {
 
-            this.$el.empty().fadeIn(300);
+            // do not render if busy
+            if (this.$el.hasClass('io-ox-busy')) return;
+
+            this.$el.empty();
+            if (this.$el.is(':hidden')) this.$el.fadeIn(300);
 
             var actions = this.getActions(), buttons;
 
@@ -385,7 +394,7 @@ define('io.ox/calendar/invitations/register', [
                         if (self.settings.get('deleteInvitationMailAfterAction', false)) {
                             // remove mail
                             require(['io.ox/mail/api'], function (api) {
-                                api.remove([self.imip.mail]);
+                                api.remove([self.mailModel.toJSON()]);
                             });
                         } else {
                             // repaint only if there is something left to repaint
@@ -526,7 +535,7 @@ define('io.ox/calendar/invitations/register', [
                             notifications.yell('success', successInternal[action]);
                         }
                         require(['io.ox/mail/api'], function (api) {
-                            api.remove([self.model.toJSON()]);
+                            api.remove([self.mailModel.toJSON()]);
                         });
                     } else {
                         // update well
@@ -650,7 +659,7 @@ define('io.ox/calendar/invitations/register', [
                     notifications.yell('success', successInternal[action]);
                 }
                 require(['io.ox/mail/api'], function (api) {
-                    api.remove([this.model.toJSON()]);
+                    api.remove([this.mailModel.toJSON()]);
                 }.bind(this));
             } else {
                 // update well
@@ -693,9 +702,10 @@ define('io.ox/calendar/invitations/register', [
     // Container view. Checks mail data and adds internal or external view
     //
 
-    var ItipView = AbstractView.extend({
+    var ItipView = DisposableView.extend({
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = _.extend({}, options);
             if (this.model.has('headers')) this.analyzeMail();
             else this.listenToOnce(this.model, 'change:headers', this.analyzeMail);
         },
@@ -745,7 +755,8 @@ define('io.ox/calendar/invitations/register', [
 
         processIMIPAttachment: function () {
             var self = this,
-                imip = this.getIMIPAttachment();
+                imip = this.getIMIPAttachment(),
+                yell = this.options && this.options.yell;
             imip.mail = { folder_id: this.model.get('folder_id'), id: this.model.get('id') };
             return this.analyzeIMIPAttachment(imip).done(function (list) {
                 if (list.length === 0) return;
@@ -767,7 +778,9 @@ define('io.ox/calendar/invitations/register', [
                         diffDescription: change.diffDescription,
                         annotations: data.annotations,
                         imip: imip,
-                        container: self
+                        container: self,
+                        yell: yell,
+                        mailModel: self.model
                     });
                     self.$el.append(
                         extView.render().$el
@@ -795,7 +808,8 @@ define('io.ox/calendar/invitations/register', [
 
         processEvent: function () {
             var self = this,
-                cid = this.getCid();
+                cid = this.getCid(),
+                yell = this.options && this.options.yell;
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
                 return api.resolve(cid.id, true).then(function (model) {
                     var intView = new InternalAppointmentView({
@@ -804,7 +818,9 @@ define('io.ox/calendar/invitations/register', [
                         api: api,
                         util: util,
                         settings: calendarSettings,
-                        AlarmsView: AlarmsView
+                        AlarmsView: AlarmsView,
+                        yell: yell,
+                        mailModel: self.model
                     });
 
                     self.$el.append(
@@ -825,7 +841,8 @@ define('io.ox/calendar/invitations/register', [
 
         processTask: function () {
             var self = this,
-                cid = this.getCid();
+                cid = this.getCid(),
+                yell = this.options && this.options.yell;
             return require(['io.ox/tasks/api', 'io.ox/tasks/util', 'settings!io.ox/tasks']).then(function (api, util, taskSettings) {
                 return api.get({ folder: cid.folder_id, id: cid.id }).then(function (task) {
                     var model = new Backbone.Model(task);
@@ -836,7 +853,9 @@ define('io.ox/calendar/invitations/register', [
                             api: api,
                             util: util,
                             settings:
-                            taskSettings
+                            taskSettings,
+                            yell: yell,
+                            mailModel: self.model
                         }).render().$el
                     );
                 });
