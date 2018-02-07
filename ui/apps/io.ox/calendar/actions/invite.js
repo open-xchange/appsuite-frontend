@@ -28,7 +28,6 @@ define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (s
                 attendees.unshift(data.organizer);
             }
             // open create dialog with same participants
-            // TODO REMOVE WHEN FOLDERS ARE SAVED CORRECTLY
             data = {
                 folder: settings.get('chronos/defaultFolderId'),
                 attendees: attendees,

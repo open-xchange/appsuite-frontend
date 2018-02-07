@@ -18,9 +18,10 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/backbone/mini-views/alarms',
     'io.ox/core/settings/util',
     'settings!io.ox/calendar',
+    'io.ox/core/capabilities',
     'gettext!io.ox/calendar',
     'io.ox/core/folder/api'
-], function (ext, ExtensibleView, mini, AlarmsView, util, settings, gt, folderAPI) {
+], function (ext, ExtensibleView, mini, AlarmsView, util, settings, capabilities, gt, folderAPI) {
 
     'use strict';
 
@@ -217,10 +218,10 @@ define('io.ox/calendar/settings/pane', [
                             $('<label>').text(gt('Default reminder for all-day appointments')),
                             new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
                         ),
-                        $('<div>').append(
+                        capabilities.has('calendar_birthdays') ? $('<div>').append(
                             $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
                             new AlarmsView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
-                        ),
+                        ) : '',
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
                     )
