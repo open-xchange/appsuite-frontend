@@ -1098,15 +1098,16 @@ define('io.ox/core/folder/api', [
                     return !!(item.bits & 268435456);
                 });
             }
+            var params = {
+                action: 'new',
+                autorename: true,
+                folder_id: id
+            };
+            if (options.module !== 'event') params.tree = tree(id);
             // go!
             return http.PUT({
                 module: 'folders',
-                params: {
-                    action: 'new',
-                    autorename: true,
-                    folder_id: id,
-                    tree: tree(id)
-                },
+                params: params,
                 data: options,
                 appendColumns: false
             })
