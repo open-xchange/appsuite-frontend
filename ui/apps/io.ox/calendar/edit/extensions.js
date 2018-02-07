@@ -583,7 +583,7 @@ define('io.ox/calendar/edit/extensions', [
                     '<div class="ox-popover-title">' + gt('Public') + '</div>' +
                     '<div>' + gt('The appointment is visible for all users in shared folders.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
-                    '<div>' + gt('The appointment appears as a simple time slot for to non-attending users in shared folders.') + '</div>' +
+                    '<div>' + gt('In shared folders, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
                     '<div>' + gt('The appointment is not visible to non-attending users in shared folders at all. The appointment is not considered for conflicts and does not appear in the scheduling view.') + '</div>' +
                     '</div></div>')

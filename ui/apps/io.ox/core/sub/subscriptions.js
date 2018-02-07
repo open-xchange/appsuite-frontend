@@ -126,8 +126,8 @@ define('io.ox/core/sub/subscriptions', [
                     }),
                     title = gt('Subscribe');
 
-                if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe address book');
-                else if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe calendar');
+                if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe to address book');
+                else if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
 
                 popup.getHeader().append($('<h4>').text(title));
 

@@ -33,7 +33,7 @@ define('io.ox/core/import/import', [
             if (!/^(calendar)$/.test(baton.module)) return;
             this.$body.append(
                 $('<div class="form-group">').append(
-                    mini.getInputWithLabel('folderName', gt('Foldername'), this.model)
+                    mini.getInputWithLabel('folderName', gt('Folder name'), this.model)
                 )
             );
         }

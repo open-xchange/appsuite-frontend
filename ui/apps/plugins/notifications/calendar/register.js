@@ -205,6 +205,7 @@ define('plugins/notifications/calendar/register', [
     ext.point('io.ox/core/notifications/calendar-reminder/footer').extend({
         draw: function (baton) {
             if (baton.view.collection.length > 1) {
+                //#. notification pane: action  to close/acknowledge all reminders (they don't show up anymore)
                 this.append($('<button class="btn btn-link">').text(gt('Acknowledge all reminders')).on('click', function () {
                     calAPI.acknowledgeAlarm(baton.view.collection.toJSON());
                     baton.view.collection.reset();

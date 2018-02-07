@@ -81,7 +81,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
             height: 300,
             module: 'mail',
             selection: false,
-            title: gt('Subscribe IMAP folders'),
+            title: gt('Subscribe to IMAP folders'),
 
             always: function () {
 

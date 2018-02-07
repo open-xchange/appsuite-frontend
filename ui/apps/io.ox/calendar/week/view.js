@@ -1007,6 +1007,7 @@ define('io.ox/calendar/week/view', [
                     this.mode === 'day' && this.app.folders.list().length > 1 ? $('<a href="#" class="merge-split">').tooltip({
                         placement: 'bottom',
                         title: settings.get('mergeview') ? gt('Click to merge all folders into one column') : gt('Click to split all folders into separate columns')
+                        //#. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
                     }).text(settings.get('mergeview') ? gt('Merge') : gt('Split')) : ''
                 ),
                 $('<div class="footer-container">').append(

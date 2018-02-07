@@ -120,7 +120,7 @@ define('io.ox/mail/common-extensions', [
                         $('<div>').addClass('authenticity-' + status.toLowerCase())
                             .text(status === 'trusted' ?
                                 gt('This message is from a trusted sender.') :
-                                gt('This might be a phising mail because we could not verify that this email is really from %1$s.', email)
+                                gt('This might be a phishing mail because we could not verify that this email is really from %1$s.', email)
                             )
                     );
                 }

@@ -117,7 +117,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             var subscritions = _.values(this.data.subscriptionsModel.attributes),
                 currentSubscriptions = _.copy(this.data.currentSubscriptions);
             data.dialog.close();
-            notifications.yell('success', gt('The integration of the subscribed calendars might take awhile.'));
+            notifications.yell('success', gt('The integration of the subscribed calendars might take a while.'));
             http.pause();
             // subscribe
             _.each(subscritions, function (sub) {

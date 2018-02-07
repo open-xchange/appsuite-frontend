@@ -109,11 +109,14 @@ define('io.ox/calendar/common-extensions', [
 
         privateFlag: function (baton) {
             if (!util.isPrivate(baton.data)) return;
+            //#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
+            var label = util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private');
             this.append(
                 util.isPrivate(baton.data, true) ? $('<i class="fa fa-user-circle private-flag" aria-hidden="true" data-animation="false">') : $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
-                    .attr('title', util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private'))
+                    //#.
+                    .attr('title', label)
                     .tooltip(),
-                $('<span class="sr-only">').text(util.isPrivate(baton.data, true) ? gt('Secret') : gt('Private'))
+                $('<span class="sr-only">').text(label)
             );
         },
 

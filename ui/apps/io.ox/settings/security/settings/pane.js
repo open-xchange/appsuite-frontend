@@ -66,7 +66,7 @@ define('io.ox/settings/security/settings/pane', [
 
                         // authenticity
                         !settings.get('features/authenticity', false) ? $() :
-                            util.compactSelect('features/authenticity-level', gt('Show message authencitiy'), settings, [
+                            util.compactSelect('features/authenticity-level', gt('Show message authenticity'), settings, [
                                 { label: gt('None'), value: 0 },
                                 { label: gt('Dangerous only'), value: 1 },
                                 { label: gt('Dangerous and trusted'), value: 2, se: true },

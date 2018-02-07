@@ -411,7 +411,7 @@ define('io.ox/core/folder/extensions', [
             require(['io.ox/core/sub/subscriptions'], function (sub) {
                 // if there is nothing configured we do not show the "subscribe" button
                 if (baton.module === 'contacts' && sub.availableServices.contacts) {
-                    title = gt('Subscribe address book');
+                    title = gt('Subscribe to address book');
                 } else {
                     return;
                 }
@@ -902,7 +902,7 @@ define('io.ox/core/folder/extensions', [
                 if (!capabilities.has('calendar_ical')) return;
 
                 this.divider();
-                this.header(gt('Subscribe calendar'));
+                this.header(gt('Subscribe to calendar'));
             }
         }, {
             id: 'schedjoules',

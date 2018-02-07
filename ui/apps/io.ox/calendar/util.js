@@ -1020,7 +1020,7 @@ define('io.ox/calendar/util', [
 
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
-                    .text(gt('Do you want to change only this occurence of the event, or this and all future occurences?'))
+                    .text(gt('Do you want to change only this occurrence of the event or all occurrences?'))
                     .addPrimaryButton('series', gt('All future events'), 'series')
                     .addButton('appointment', gt('Only this event'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
@@ -1036,7 +1036,7 @@ define('io.ox/calendar/util', [
                 } else if (model.hasFlag('last_occurrence')) {
                     return $.when('appointment');
                 } else {
-                    dialog.text(gt('Do you want to change only this occurence of the event, or this and all future occurences?'));
+                    dialog.text(gt('Do you want to change only this occurrence of the event or this and all future occurrences?'));
                     dialog.addPrimaryButton('thisandfuture', gt('All future events'), 'thisandfuture');
                 }
 

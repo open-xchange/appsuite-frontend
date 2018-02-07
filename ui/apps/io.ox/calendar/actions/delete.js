@@ -58,12 +58,12 @@ define('io.ox/calendar/actions/delete', [
 
                 if (hasFirstOccurence) {
                     dialog
-                    .text(gt('Do you want to delete only this occurence of the event, or all occurences?'))
+                    .text(gt('Do you want to delete only this occurrence of the event or all occurrences?'))
                         .addPrimaryButton('series', gt('All events'), 'series')
                         .addButton('appointment', gt('Only this event'), 'appointment');
                 } else {
                     dialog
-                        .text(gt('Do you want to delete only this occurence of the event, or this and all future occurences?'))
+                        .text(gt('Do you want to delete only this occurrence of the event or this and all future occurrences?'))
                         .addPrimaryButton('thisandfuture', gt('All future events'), 'thisandfuture')
                         .addButton('appointment', gt('Only this event'), 'appointment');
                 }

@@ -51,7 +51,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
 
     return function () {
         new ModalDialog({
-            title: gt('Subscribe iCal feed'),
+            title: gt('Subscribe to iCal feed'),
             point: 'io.ox/calendar/subscribe/ical',
             model: new Backbone.Model(),
             async: true,
