@@ -1020,9 +1020,9 @@ define('io.ox/calendar/util', [
 
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
-                    .text(gt('Do you want to change only this occurrence of the event or all occurrences?'))
-                    .addPrimaryButton('series', gt('All future events'), 'series')
-                    .addButton('appointment', gt('Only this event'), 'appointment')
+                    .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
+                    .addPrimaryButton('series', gt('Series'), 'series')
+                    .addButton('appointment', gt('Appointment'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
@@ -1031,16 +1031,16 @@ define('io.ox/calendar/util', [
             if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 var dialog = new dialogs.ModalDialog();
                 if (model.hasFlag('first_occurrence')) {
-                    dialog.text(gt('Do you want to change only this occurence of the event, or all occurences?'));
-                    dialog.addPrimaryButton('series', gt('All events'), 'series');
+                    dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
+                    dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else if (model.hasFlag('last_occurrence')) {
                     return $.when('appointment');
                 } else {
-                    dialog.text(gt('Do you want to change only this occurrence of the event or this and all future occurrences?'));
-                    dialog.addPrimaryButton('thisandfuture', gt('All future events'), 'thisandfuture');
+                    dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
+                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
                 }
 
-                return dialog.addButton('appointment', gt('Only this event'), 'appointment')
+                return dialog.addButton('appointment', gt('This appointment'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel')
                     .show();
             }
