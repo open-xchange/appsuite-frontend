@@ -515,6 +515,7 @@ define('io.ox/mail/common-extensions', [
                         el: $el,
                         mode: settings.get('attachments/layout/detail/' + _.display(), 'list')
                     });
+                view.openByDefault = settings.get('attachments/layout/detail/open', view.openByDefault);
 
                 $el.append(view.render().$el);
 
