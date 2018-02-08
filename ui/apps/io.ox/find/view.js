@@ -31,7 +31,7 @@ define('io.ox/find/view', [
     var FindView = Backbone.View.extend({
 
         events: {
-            'focusin': 'show',
+            'focusin .token-input': 'show',
             // when a user clicks the cancel button the focus is still in the search field. Without the keydown handler the search field would not expand because there is no focusin event
             'keydown': 'onKeydown',
             'focusout': 'smartCancel',
