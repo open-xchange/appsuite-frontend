@@ -844,14 +844,21 @@ define('io.ox/files/actions',
 
     var index = 100;
 
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'open',
-        index: index += 100,
-        prio: 'hi',
-        mobile: 'hi',
-        label: gt('Open'),
-        ref: 'io.ox/files/actions/open'
-    }));
+    // see bug 55872
+    if (!_.device('IE')) {
+        ext.point('io.ox/files/links/inline').extend(new links.Link({
+            id: 'open',
+            enabled: _.device('!IE'),
+            index: index += 100,
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Open'),
+            ref: 'io.ox/files/actions/open'
+        }));
+    } else {
+        // keep indexes
+        index += 100;
+    }
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'editor',
