@@ -407,18 +407,12 @@ define('io.ox/core/settings/pane', [
             id: 'data-fixes',
             index: INDEX += 100,
             render: function () {
-
                 // change old settings values to new ones
                 switch (this.model.get('autoOpenNotification')) {
                     case 'always': // falls through
                     case 'noEmail': this.model.set('autoOpenNotification', true); break;
                     case 'Never': this.model.set('autoOpenNotification', false); break;
                     // no default
-                }
-
-                var value = this.model.get('features/accessibility');
-                if (value === '' || value === undefined) {
-                    this.model.set('features/accessibility', true);
                 }
             }
         },
@@ -474,8 +468,7 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
                 var options = [
                     util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
-                    util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
-                    util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model)
+                    util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink)
                 ];
 
                 if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));

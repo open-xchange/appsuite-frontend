@@ -33,22 +33,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'io.ox
             var node = $('<ul class="classic-toolbar" role="toolbar">')
                 //#. screenreader label for main toolbar
                 .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') });
-            if (!a11y.use('toolbarTooltips')) return node;
             return node
-                .tooltip({
-                    animation: false,
-                    container: 'body',
-                    delay: 2000,
-                    placement: 'left',
-                    //#. Tooltip for main toolbar
-                    title: gt('Use cursor keys to navigate'),
-                    trigger: 'focus'
-                })
-                // make sure it always disappears
-                .on('dispose', function () { $(this).tooltip('destroy'); })
-                .on('hide.bs.dropdown', '.dropdown', function (e) {
-                    $(e.target).closest('ul.classic-toolbar').tooltip('destroy');
-                })
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
         },

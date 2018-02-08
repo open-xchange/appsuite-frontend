@@ -300,12 +300,6 @@ define('io.ox/core/a11y', [], function () {
         hotkey(e, links);
     }
 
-    function use() {
-        return require(['settings!io.ox/core'], function (settings) {
-            return !!settings.get('features/accessibility', true);
-        });
-    }
-
     function collapse(action, content, opt) {
         // https://getbootstrap.com/javascript/#collapse
         // https://www.w3.org/TR/wai-aria-practices-1.1/examples/accordion/accordion1.html
@@ -342,7 +336,6 @@ define('io.ox/core/a11y', [], function () {
         dropdownTrapFocus: dropdownTrapFocus,
         getTabbable: getTabbable,
         menubarKeydown: menubarKeydown,
-        trapFocus: trapFocus,
-        use: use
+        trapFocus: trapFocus
     };
 });
