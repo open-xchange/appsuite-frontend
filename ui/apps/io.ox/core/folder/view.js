@@ -38,7 +38,7 @@ define('io.ox/core/folder/view', [
             sidepanel = nodes.sidepanel,
             hiddenByWindowResize = false,
             forceOpen = false,
-            DEFAULT_WIDTH = 250;
+            DEFAULT_WIDTH = 280;
 
         // smart defaults for flat folders
         if (!open) {
@@ -133,7 +133,7 @@ define('io.ox/core/folder/view', [
             resize: (function () {
 
                 var maxSidePanelWidth = 0,
-                    minSidePanelWidth = 150,
+                    minSidePanelWidth = 240,
                     base, width;
 
                 function mousemove(e) {
