@@ -53,9 +53,6 @@ define('io.ox/calendar/settings/schedjoules/api', [
                     'com.openexchange.calendar.config': {
                         'itemId': obj.itemId,
                         'refreshInterval': 10080
-                    },
-                    'com.openexchange.calendar.extendedProperties': {
-                        'color': { 'value': 'turquoise' }
                     }
                 }
 
