@@ -1377,10 +1377,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 var generic = '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
                     // original_id, original_folder_id
                     unseen = generic + ',654,655',
-                    all = generic + ',X-Open-Xchange-Share-URL';
+                    all = generic + ',X-Open-Xchange-Share-URL',
+                    search = generic + ',654,655';
 
-                return { generic: generic, unseen: unseen, all: all };
-
+                return { generic: generic, unseen: unseen, all: all, search: search };
             }())
         }
     };

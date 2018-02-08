@@ -109,11 +109,13 @@ define('io.ox/core/boot/load', [
         if (mailSettings.get('features/textPreview', true)) {
             http.defaultColumns.mail.unseen += ',662';
             http.defaultColumns.mail.all += ',662';
+            http.defaultColumns.mail.search += ',662';
         }
 
         if (mailSettings.get('features/authenticity', false)) {
             http.defaultColumns.mail.unseen += ',664';
             http.defaultColumns.mail.all += ',664';
+            http.defaultColumns.mail.search += ',664';
         }
 
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
