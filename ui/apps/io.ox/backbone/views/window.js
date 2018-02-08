@@ -116,10 +116,28 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.$header.find('h1 .count').toggle(this.model.get('count') > 0).text(this.model.get('count'));
         },
 
-        onMinimize: function () {
+        minimize: function () {
             var app = ox.ui.App.getCurrentApp();
             if (app && app.get('title')) ox.trigger('change:document:title', app && app.get('title') ? app.get('title') : null);
             this.model.set('minimized', true);
+        },
+
+        onMinimize: function (e) {
+            var self = this;
+            if (!e && !e.type === 'click') this.minimize();
+
+            var taskBarEl = $('#io-ox-taskbar').find('[data-cid="' + this.model.cid + '"]');
+            var windowWidth = this.model.get('displayStyle') === 'cornered' ? this.$el.width() : $('body').width();
+            var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
+            var top = $('body').height() - this.$el.height() / 2;
+            this.$el.velocity({ translateZ: 0, left: left + 'px', top: top + 'px', scale: 0.2, opacity: 0 }, {
+                complete: function (el) {
+                    var c = $(el).data('velocity');
+                    c.transformCache = {};
+                    $(el).removeAttr('style').data('velocity', c);
+                    self.minimize();
+                }
+            });
         },
 
         toggle: function (model, minimized) {
