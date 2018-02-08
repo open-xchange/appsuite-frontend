@@ -51,7 +51,8 @@ define('io.ox/mail/common-extensions', [
         }
 
         // add initials
-        node.text(getInitials(baton.data.from));
+        var initials = getInitials(baton.data.from);
+        node.text(initials);
 
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
 
