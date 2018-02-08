@@ -715,7 +715,7 @@ define('io.ox/core/folder/api', [
         })
         .then(renameDefaultCalendarFolders, function (error) {
             api.trigger('error error:' + error.code, error, id);
-            throw error;
+            return error;
         })
         .then(function (array) {
             array = processListResponse(id, array);

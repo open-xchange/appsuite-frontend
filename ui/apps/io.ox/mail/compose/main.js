@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (mailAPI, gt) {
+define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'gettext!io.ox/mail'], function (mailAPI, settings, gt) {
 
     'use strict';
 
@@ -77,8 +77,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
-                obj = _.extend({ mode: type }, obj);
-
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
                 // Set window and toolbars invisible initially
@@ -87,6 +85,14 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle']).then(function () {
+                        if (type !== 'compose' && settings.get('features/fixContentType', false)) {
+                            // mitigate Bug#56496, force a get request to make sure content_type is correctly set
+                            // in most cases, this should return the mail from pool ('detail')
+                            return mailAPI.get(obj);
+                        }
+                        return obj;
+                    }).then(function (latestMail) {
+                        obj = _.extend({ mode: type }, latestMail);
                         return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
                     })
                     .then(function (MailComposeView, MailComposeModel) {
@@ -97,8 +103,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                     })
                     .then(function () {
                         win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                    })
-                    .then(function () {
                         return app.view.setMail();
                     })
                     .done(function () {
