@@ -274,7 +274,8 @@ define('io.ox/core/folder/node', [
             var modelId = model.id || model.attributes.id;
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = { folder: modelId, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this };
+                namespace = o.namespace || o.folder.indexOf('virtual/favorites') === 0 ? 'favorite' : '',
+                options = { folder: modelId, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this, namespace: namespace };
             return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
@@ -325,6 +326,7 @@ define('io.ox/core/folder/node', [
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
+                namespace: '',                  // used for unique ids for open/close state of favorites
                 contextmenu_id: this.folder,    // use this id for the context menu
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
@@ -349,7 +351,7 @@ define('io.ox/core/folder/node', [
             this.$el.data('view', this);
 
             // inherit "open"
-            if (_(o.tree.open).contains(this.folder)) o.open = true;
+            if (_(o.tree.open).contains((o.namespace ? o.namespace + ':' : '') + this.folder)) o.open = true;
 
             // collection changes
             if (o.subfolders) {
@@ -390,6 +392,7 @@ define('io.ox/core/folder/node', [
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
+                    'data-namespace': o.namespace,
                     'aria-label': this.getTitle()
                 })
                 .append(

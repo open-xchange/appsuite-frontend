@@ -158,7 +158,10 @@ define('io.ox/core/folder/tree', [
 
         getOpenFolders: function () {
             return _(this.$el.find('.folder.open')).chain()
-                .map(function (node) { return $(node).attr('data-id'); })
+                .map(function (node) {
+                    var namespace = $(node).attr('data-namespace') ? $(node).attr('data-namespace') + ':' : '';
+                    return namespace + $(node).attr('data-id');
+                })
                 .uniq().value().sort();
         },
 
