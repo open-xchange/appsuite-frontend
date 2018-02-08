@@ -858,6 +858,9 @@ define('io.ox/tasks/main', [
 
         app.grid = grid;
 
+        // workaround: windowmanager not visible so height calculation for grid item fails
+        if (!ox.ui.screens.current()) ox.ui.screens.one('show-windowmanager', grid.paint.bind(grid));
+
         app.getGrid = function () {
             return grid;
         };
