@@ -17,11 +17,10 @@ Scenario('adds a contact with all fields', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
-    I.waitForVisible('.classic-toolbar [data-action="create"]');
+    I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForStalenessOf('.classic-toolbar [data-action="create"].disabled');
-    I.clickToolbar('New');
-    I.click('Add contact');
+    I.waitForStalenessOf('.primary-action button.disabled');
+    I.click('New contact', '.primary-action');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
     I.checkOption('Show all fields');

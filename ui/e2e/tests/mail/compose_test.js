@@ -39,7 +39,7 @@ Scenario('Compose plain text mail', function (I) {
     I.click('.dropdown.open a[data-action="markfolderread"]');
 
     // 1.2) continue opening mail compose
-    I.clickToolbar('Compose');
+    I.click('Compose', '.primary-action');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
 
