@@ -751,7 +751,7 @@ define('io.ox/calendar/util', [
             if (model.hasFlag('accepted')) return 'ACCEPTED';
             if (model.hasFlag('tentative')) return 'TENTATIVE';
             if (model.hasFlag('declined')) return 'DECLINED';
-            if (model.hasFlag('needs-action')) return 'NEEDS-ACTION';
+            if (model.hasFlag('needs_action')) return 'NEEDS-ACTION';
             if (model.hasFlag('event_accepted')) return 'ACCEPTED';
             if (model.hasFlag('event_tentative')) return 'TENTATIVE';
             if (model.hasFlag('event_declined')) return 'DECLINED';
