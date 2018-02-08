@@ -302,7 +302,7 @@ define('io.ox/calendar/model', [
         validate: function (attr, err, model) {
             var isLess = model.getTimestamp('endDate') < model.getTimestamp('startDate'),
                 isLequal = model.getTimestamp('endDate') <= model.getTimestamp('startDate');
-            if (isLess || (util.isAllday(model) && isLequal)) {
+            if (isLess || (!util.isAllday(model) && isLequal)) {
                 this.add('endDate', gt('The end date must be after the start date.'));
             }
         }
