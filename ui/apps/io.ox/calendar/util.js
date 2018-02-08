@@ -1179,8 +1179,6 @@ define('io.ox/calendar/util', [
         isAllday: function (app) {
             if (!app) return false;
             app = app instanceof Backbone.Model ? app.attributes : app;
-            if (_(app).has('allDay')) return app.allDay;
-
             var time = app.startDate;
             // there is no time value for all day appointments
             return this.isLocal(app) && (time.value.indexOf('T') === -1);

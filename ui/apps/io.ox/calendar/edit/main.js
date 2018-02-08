@@ -105,7 +105,6 @@ define('io.ox/calendar/edit/main', [
                             // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
                             // this day will be added again on save
                             self.model.set('endDate', { value: moment(self.model.get('endDate').value).subtract('1', 'days').format('YYYYMMDD') });
-                            self.model.set('allDay', true);
                         }
                         app.view = self.view = new EditView({
                             model: self.model,
@@ -206,11 +205,12 @@ define('io.ox/calendar/edit/main', [
 
                 // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
                 if (isDefault) {
-                    self.model.on('change:allDay', function () {
+                    self.model.on('change:startDate change:endDate', _.debounce(function () {
+                        if (util.isAllday(this.previousAttributes()) === util.isAllday(this)) return;
                         if (!this.userChangedAlarms) {
                             this.set('alarms', util.getDefaultAlarms(this));
                         }
-                    });
+                    }, 0));
                     self.model.on('userChangedAlarms', function () {
                         this.userChangedAlarms = true;
                     });

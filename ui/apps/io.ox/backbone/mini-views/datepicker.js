@@ -14,8 +14,9 @@
 define('io.ox/backbone/mini-views/datepicker', [
     'settings!io.ox/calendar',
     'gettext!io.ox/core',
+    'io.ox/calendar/util',
     'less!io.ox/backbone/mini-views/datepicker'
-], function (settings, gt) {
+], function (settings, gt, util) {
 
     'use strict';
 
@@ -232,6 +233,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         isFullTime: function () {
             if (!this.options.ignoreToggle && (this.model.has('full_time') || this.model.has('allDay'))) {
                 return !!(this.model.get('full_time') || this.model.get('allDay'));
+            } else if (this.chronos) {
+                return util.isAllday(this.model);
             }
             return this.options.display === 'DATE';
         },
@@ -265,6 +268,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             // parse string to timestamp
             var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment().tz() : this.model.get(this.options.timezoneAttribute));
             if (this.chronos) {
+                if (this.isFullTime()) return { value: parsedDate.format('YYYYMMDD') };
                 return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment().tz() };
             }
             // on parse error return null

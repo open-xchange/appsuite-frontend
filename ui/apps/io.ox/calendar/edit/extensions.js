@@ -309,8 +309,8 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('Start time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
-                this.toggleTimeInput(!fulltime);
+            }).listenTo(baton.model, 'change:startDate', function (model) {
+                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -345,8 +345,8 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('End time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
-                this.toggleTimeInput(!fulltime);
+            }).listenTo(baton.model, 'change:endDate', function (model) {
+                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -403,10 +403,25 @@ define('io.ox/calendar/edit/extensions', [
         index: 600,
         className: 'col-sm-6',
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
-            this.$el.append(
-                new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: this.model }).render().$el
-            );
+            var guid = _.uniqueId('form-control-label-'),
+                originalModel = this.model,
+                model = new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
+                view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
+            view.listenTo(model, 'change:allDay', function () {
+                if (this.model.get('allDay')) {
+                    originalModel.set({
+                        startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD') },
+                        endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD') }
+                    });
+                } else {
+                    var tzid = moment().tz();
+                    originalModel.set({
+                        startDate: { value: originalModel.getMoment('startDate').format('YYYYMMDD[T]HHmmss'), tzid: tzid },
+                        endDate: { value: originalModel.getMoment('endDate').format('YYYYMMDD[T]HHmmss'), tzid: tzid }
+                    });
+                }
+            });
+            this.$el.append(view.render().$el);
         }
     });
 
