@@ -8,10 +8,6 @@
   dependencies:
     underscore "^1.8.3"
 
-"@open-xchange/emoji@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@open-xchange/emoji/-/emoji-0.0.1.tgz#c6d02690428ca9faaf6ab3c84923b6e7da3b78b2"
-
 "@open-xchange/hopscotch@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@open-xchange/hopscotch/-/hopscotch-0.0.1.tgz#33f6f97d9482540f47c58b32364af17c5a52c646"
@@ -20,9 +16,9 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@open-xchange/moment-interval/-/moment-interval-0.0.1.tgz#293778b2e4fe1605c9949692f9f8259ce11a3c33"
 
-"@open-xchange/tinymce@4.6.3-4":
-  version "4.6.3-4"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-4.tgz#fa2516decd3f5fb6aeca7ec376485c6ab7a26d94"
+"@open-xchange/tinymce@4.6.3-5":
+  version "4.6.3-5"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-5.tgz#e662882147690b42111d1d4ff5e0a8772db8760d"
   dependencies:
     tinymce "^4.6.3"
 
