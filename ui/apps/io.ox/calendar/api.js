@@ -57,7 +57,7 @@ define('io.ox/calendar/api', [
             _(response.updated).each(function (event) {
                 if (isRecurrenceMaster(event)) {
                     var events = api.pool.findRecurrenceModels(event),
-                        updates = _(event).pick('flags', 'timestamp');
+                        updates = _(event).pick('attendees', 'alarms', 'flags', 'timestamp');
                     events.forEach(function (evt) {
                         evt.set(updates);
                         api.trigger('update', evt.attributes);
