@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-06 13:35+0100\n"
+"PO-Revision-Date: 2018-02-09 11:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -896,15 +896,15 @@ msgstr "Vorläufig"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
-msgstr "Termine in geteilten Kalendern"
+msgstr "Termine in freigegebenen Kalendern"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
-"Der gewählte Kalender wurde von %1$s geteilt. Termine in geteilten Kalendern "
-"werden generell im Auftrag des Eigentümers angelegt."
+"Der gewählte Kalender wurde von %1$s freigegeben. Termine in freigegebenen "
+"Kalendern werden generell im Auftrag des Eigentümers angelegt."
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
@@ -2699,7 +2699,7 @@ msgstr "Öffentliche Adressbücher"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
-msgstr "Geteilte Adressbücher"
+msgstr "Freigegebene Adressbücher"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -4207,7 +4207,7 @@ msgstr "Öffentliche Kalender"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
-msgstr "Geteilte Kalender"
+msgstr "Freigegebene Kalender"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
@@ -4224,7 +4224,7 @@ msgstr "Öffentliche Aufgaben"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared tasks"
-msgstr "Geteilte Aufgaben"
+msgstr "Freigegebene Aufgaben"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden tasks"
@@ -4264,11 +4264,11 @@ msgstr "Datei hochladen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared by other users"
-msgstr "Von anderen Benutzern geteilt"
+msgstr "Von anderen Benutzern freigegeben"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "You share this folder with other users"
-msgstr "Sie teilen diesen Ordner mit anderen Benutzern"
+msgstr "Sie haben diesen Ordner für andere Benutzer freigegeben"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "This folder has subscriptions"
@@ -5725,12 +5725,12 @@ msgstr "Freigaben"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 msgid "This file is shared with others"
-msgstr "Diese Datei wird mit anderen geteilt"
+msgstr "Diese Datei wurde für andere freigegeben"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 msgid "This folder is shared with others"
-msgstr "Dieser Ordner wird mit anderen geteilt"
+msgstr "Dieser Ordner wurde für andere freigegeben"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -5888,7 +5888,7 @@ msgstr "Als PDF drucken"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Share"
-msgstr "Teilen"
+msgstr "Freigeben"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Share this file"
@@ -11289,7 +11289,7 @@ msgid ""
 "computers, iPhone, iPad or from within %s itself."
 msgstr ""
 "Mit dem %s-Client können Sie jederzeit und überall Ihre Fotos, Dateien, "
-"Dokumente und Videos speichern und teilen. Sie können von Ihrem Rechner, "
+"Dokumente und Videos speichern und freigeben. Sie können von Ihrem Rechner, "
 "iPhone, iPad oder von %s auf  jede beliebige in %s gespeicherte Datei "
 "zugreifen."
 
