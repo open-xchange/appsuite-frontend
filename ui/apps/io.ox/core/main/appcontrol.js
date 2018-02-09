@@ -49,7 +49,6 @@ define('io.ox/core/main/appcontrol', [
         },
         drawDate: function () {
             this.$svg.find('tspan:first').text(moment().format('D'));
-            //this.$svg.find('tspan:last').text(moment().format('ddd'));
         },
         drawIcon: function () {
             var svg = this.model.get('svg'),
@@ -174,7 +173,7 @@ define('io.ox/core/main/appcontrol', [
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')
                 ),
-                logo = $('<div id="io-ox-top-logo-small" class="hidden-xs">')
+                logo = $('<div id="io-ox-top-logo-small">')
             );
 
             $('#io-ox-core').append(
@@ -362,7 +361,7 @@ define('io.ox/core/main/appcontrol', [
             this.append(
                 $('<img>').attr({
                     alt: ox.serverConfig.productName,
-                    src: ox.base + '/apps/themes/' + ox.theme + '/logo-large.png'
+                    src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
                 })
             );
         }
