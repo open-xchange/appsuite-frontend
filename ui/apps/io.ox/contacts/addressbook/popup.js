@@ -55,7 +55,9 @@ define('io.ox/contacts/addressbook/popup', [
         useLabels = settings.get('picker/useLabels', false),
         closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true),
         useGlobalAddressBook = settings.get('picker/globalAddressBook', true),
-        useDepartments = settings.get('picker/departments', true);
+        //TODO: unify feature toggles: showDepartment is a newer backend toggle, picker/departments is frontend only
+        showDepartment = settings.get('showDepartment'),
+        useDepartments = typeof showDepartment === 'undefined' ? settings.get('picker/departments', true) : showDepartment;
 
     if (useDepartments) names.push('department');
 

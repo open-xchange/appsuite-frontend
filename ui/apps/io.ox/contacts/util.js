@@ -13,11 +13,31 @@
 
 define('io.ox/contacts/util', [
     'io.ox/core/util',
+    'io.ox/core/extensions',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (util, settings, gt) {
+], function (util, ext, settings, gt) {
 
     'use strict';
+
+    require(['settings!io.ox/contacts']).then(function (settings) {
+        if (!settings.get('showDepartment')) return;
+
+        $('html').addClass('showDepartment');
+        ext.point('io.ox/core/person').extend({
+            index: 'last',
+            id: 'department',
+            draw: function (baton) {
+                if (baton.data.folder_id === 6 &&
+                    !!baton.data.department
+                ) {
+                    this.append(
+                        $('<span class="department">').text(gt.format(' (%1$s) ', baton.data.department))
+                    );
+                }
+            }
+        });
+    });
 
     /**
      * Creates a result for get*Format functions which consists of a single

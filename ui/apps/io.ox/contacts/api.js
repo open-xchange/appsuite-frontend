@@ -1057,6 +1057,8 @@ define('io.ox/contacts/api', [
             // use these fields for local lookups
             fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
 
+        if (settings.get('showDepartment')) fields.push('department');
+
         // check for minimum length
         function hasMinLength(str) {
             return str.length >= minLength;
