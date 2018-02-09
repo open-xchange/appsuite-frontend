@@ -12,7 +12,7 @@
  */
 define('io.ox/core/main/icons', [
     'io.ox/core/extensions',
-    'raw!io.ox/core/images/icons.json'
+    'raw!io.ox/core/images/icons_rounded.json'
 ], function (ext, rawIcons) {
 
     'use strict';

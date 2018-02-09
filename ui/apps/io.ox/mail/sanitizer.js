@@ -38,9 +38,7 @@ define('io.ox/mail/sanitizer', [
 
     function sanitize(data) {
         if (data.content_type !== 'text/html') return data;
-        if (ox.debug) console.time('purify');
         data.content = DOMPurify.sanitize(data.content, options);
-        if (ox.debug) console.timeEnd('purify');
         return data;
     }
 
