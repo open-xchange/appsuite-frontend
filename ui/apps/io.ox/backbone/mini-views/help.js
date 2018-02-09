@@ -75,10 +75,12 @@ define('io.ox/backbone/mini-views/help', [
         },
 
         initialize: function (options) {
+
             this.options = _.extend({
+                base: 'help',
+                content: $('<i class="fa" aria-hidden="true">').attr('title', gt('Online help')),
                 href: 'index.html',
-                content: $('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Online help')),
-                base: 'help'
+                iconClass: 'fa-question-circle'
             }, options);
 
             if (!_.isString(this.options.content)) {
