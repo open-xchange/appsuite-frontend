@@ -224,13 +224,51 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
-                if (!/^(mail|infostore)$/.test(baton.module)) return;
+                if (!/^(mail)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (!api.can('remove:folder', baton.data)) return;
 
                 contextUtils.addLink(this, {
                     action: 'move',
                     data: { id: baton.data.id },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Move')
+                });
+            };
+        }()),
+
+        //
+        // Move - only for Drive
+        //
+        moveDrive: (function () {
+
+            function handler(e) {
+                e.preventDefault();
+                var id = e.data.id;
+                ox.load(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).done(function (filesApi, action) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+
+                    // id from the model must be a compositeKey
+                    var key = e.data.listView.getCompositeKey(model);
+                    var convertedModel = filesApi.resolve([key]);
+
+                    action.invoke('io.ox/files/actions/move', null, ext.Baton({
+                        models: convertedModel,
+                        data: convertedModel[0]
+                    }));
+                });
+            }
+
+            return function (baton) {
+
+                if (!/^(infostore)$/.test(baton.module)) return;
+                if (_.device('smartphone')) return;
+                if (!api.can('remove:folder', baton.data)) return;
+
+                contextUtils.addLink(this, {
+                    action: 'move',
+                    data: { id: baton.data.id, listView: baton.app.listView },
                     enabled: true,
                     handler: handler,
                     text: gt('Move')
@@ -576,6 +614,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'move',
             index: 1200,
             draw: extensions.move
+        },
+        {
+            id: 'moveDrive',
+            index: 1250,
+            draw: extensions.moveDrive
         },
         {
             id: 'publications',
