@@ -143,13 +143,15 @@ define('io.ox/core/tk/tokenfield', [
             /*
              * extension point for a token
              */
-            /*
-             ext.point(options.extPoint + '/token').extend({
+
+            ext.point(options.extPoint + '/token').extend({
                 id: 'token',
                 index: 100,
-                draw: function (model, e, input) {
+                draw: function (/*model, e, input*/) {
+                    // disabled contact pictures in tokens with 7.10
+                    // Keeping this point for potential customising
                     // add contact picture
-                    $(this).prepend(
+                    /*$(this).prepend(
                         contactAPI.pictureHalo(
                             $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
@@ -158,9 +160,10 @@ define('io.ox/core/tk/tokenfield', [
                     );
                     // when we append the contact picture, the token gets wider, this pushes the input to the next line. To prevent that we update the width of the input field
                     input.trigger('updateWidth');
+                    */
                 }
             });
-            */
+
 
             ext.point(options.extPoint + '/autoCompleteItem').extend({
                 id: 'view',
