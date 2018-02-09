@@ -49,7 +49,7 @@ define('io.ox/core/main/appcontrol', [
         },
         drawDate: function () {
             this.$svg.find('tspan:first').text(moment().format('D'));
-            this.$svg.find('tspan:last').text(moment().format('ddd'));
+            //this.$svg.find('tspan:last').text(moment().format('ddd'));
         },
         drawIcon: function () {
             var svg = this.model.get('svg'),
