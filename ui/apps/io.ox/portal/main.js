@@ -115,7 +115,7 @@ define('io.ox/portal/main', [
                 $('<span class="signin">').append(
                     //#. Portal. Logged in as user
                     $('<label class="unstyled">').text(gt('Signed in as')),
-                    $.txt(' '), userAPI.getTextNode(ox.user_id, { target: 'identifier' })
+                    $.txt(' '), userAPI.getTextNode(ox.user_id, { type: 'email' })
                 )
             );
 

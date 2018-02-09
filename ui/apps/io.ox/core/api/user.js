@@ -237,13 +237,15 @@ define('io.ox/core/api/user', [
      * @return { object} text node
      */
     api.getTextNode = function (id, options) {
-        var opt = _.extend({ target: 'name' }, options),
+        var opt = _.extend({ type: 'name' }, options),
             node = document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = opt.target === 'name' ?
-                    data.display_name || data.email1 :
-                    data.email1 || data.display_name;
+                var name = '';
+                if (opt.type === 'name') name = data.display_name || data.email1;
+                else if (opt.type === 'email') name = data.email1 || data.display_name;
+                else if (opt.type === 'initials') name = util.getInitials(data);
+                node.nodeValue = name;
             })
             .always(function () {
                 // use defer! otherwise we return null on cache hit

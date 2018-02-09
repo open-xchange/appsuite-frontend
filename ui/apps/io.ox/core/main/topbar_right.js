@@ -23,9 +23,11 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/core/main/logout',
     'io.ox/core/main/refresh',
     'io.ox/core/main/addLauncher',
+    'io.ox/contacts/api',
+    'io.ox/core/api/user',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, addLauncher, settings, gt) {
+], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
 
     function getHelp() {
         var currentApp = ox.ui.App.getCurrentApp();
@@ -131,7 +133,7 @@ define('io.ox/core/main/topbar_right', [
         draw: function () {
             if (_.device('smartphone')) return;
             var helpView = new HelpView({
-                iconClass: 'launcher-icon',
+                iconClass: 'fa-question launcher-icon',
                 href: getHelp
             });
             if (helpView.$el.hasClass('hidden')) return;
@@ -299,18 +301,23 @@ define('io.ox/core/main/topbar_right', [
         id: 'dropdown',
         index: 1000,
         draw: function () {
+            console.log('Soooo', ox.user_id);
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
-                    $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('title', gt('Settings')).append(
+                    contactAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden"true">')
+                        .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
+                        { internal_userid: ox.user_id },
+                        { width: 40, height: 40 }
+                    )
                 ),
-                dropdown =  new Dropdown({
+                dropdown = new Dropdown({
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',
                     className: 'launcher dropdown',
                     $ul: ul,
                     $toggle: a
                 });
-
             ext.point('io.ox/core/appcontrol/right/dropdown').invoke('extend', dropdown);
             this.append(
                 dropdown.render().$el
