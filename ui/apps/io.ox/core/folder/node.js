@@ -469,32 +469,34 @@ define('io.ox/core/folder/node', [
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
-        showStatusIcon: function (error) {
+        showStatusIcon: function (message, trigger, error) {
+
             var self = this;
 
             if (this.$.accountLink) {
-                if (error) this.$.accountLink.attr('title', error);
+                if (message) this.$.accountLink.attr('title', message);
                 return;
             }
 
-            this.$.selectable.append(
-                this.$.accountLink = $('<a href="#" class="account-link">').attr('data-dsc', this.options.model_id)
-                    .append(
-                        $('<i class="fa fa-exclamation-triangle" aria-hidden="true">')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        self.options.tree.trigger('accountlink:dsc', self.options.model_id);
-                    })
-            );
-            if (error) {
-                this.$.accountLink.attr('title', error);
+            this.$.selectable.append(this.$.accountLink = $('<a href="#" class="account-link">')
+                .attr('data-id', this.options.model_id)
+                .append('<i class="fa fa-exclamation-triangle">'));
+
+            this.$.accountLink.on('click', function (e) {
+                e.preventDefault();
+                self.options.tree.trigger(trigger ? 'accountlink:sslexamine' : 'accountlink:ssl', trigger ? error : self.options.model_id);
+            });
+            if (message) {
+                this.$.accountLink.attr('title', message);
             }
         },
 
         hideStatusIcon: function () {
-            this.$.accountLink.remove();
-            this.$.accountLink = null;
+            if (this.$.accountLink) {
+                this.$.accountLink.remove();
+                this.$.accountLink = null;
+            }
+
         },
 
         renderCounter: function () {

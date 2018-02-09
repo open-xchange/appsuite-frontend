@@ -36,6 +36,8 @@ define('io.ox/mail/main', [
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'settings!io.ox/core',
+    'io.ox/core/api/certificate',
+    'io.ox/settings/security/certificates/settings/utils',
     'io.ox/mail/actions',
     'io.ox/mail/mobile-navbar-extensions',
     'io.ox/mail/mobile-toolbar-actions',
@@ -43,7 +45,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -254,10 +256,15 @@ define('io.ox/mail/main', [
             app.treeView = tree;
         },
 
-        'folder-view-dsc-events': function (app) {
-            // open accounts page on when the user clicks on error indicator
-            app.treeView.on('accountlink:dsc', function () {
-                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' });
+        'folder-view-ssl-events': function (app) {
+            // open certificates page when the user clicks on error indicator
+            app.treeView.on('accountlink:ssl', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/certificate' });
+            });
+
+            // open examin dialig when the user clicks on error indicator
+            app.treeView.on('accountlink:sslexamine', function (error) {
+                certUtils.openExaminDialog(error);
             });
         },
 
@@ -346,28 +353,61 @@ define('io.ox/mail/main', [
 
         },
 
-        'folder-view-dsc-error': function (app) {
-            function updateStatus() {
-                if (ox.debug) console.log('refreshing DSC status');
-                accountAPI.getStatus().done(function (s) {
-                    _(s).each(function (d, id) {
-                        if (d.status !== 'ok') {
-                            accountAPI.get(id).done(function (account) {
-                                var node = app.treeView.getNodeView(account.root_folder);
-                                if (node) node.showStatusIcon(d.message);
-                            });
-                        }
+        'folder-view-account-ssl-error': function (app) {
+
+            function filterAccounts(hostname, data) {
+                var accountData = [];
+                _.each(data, function (account) {
+                    if (_(_.values(account)).contains(hostname)) accountData.push(account);
+                });
+                return accountData;
+            }
+
+            function updateStatus(hostname, modus, error) {
+
+                accountAPI.all().done(function (data) {
+                    var relevantAccounts = hostname ? filterAccounts(hostname, data) : data;
+
+                    _.each(relevantAccounts, function (accountData) {
+                        accountAPI.getStatus(accountData.id).done(function (obj) {
+                            var node = app.treeView.getNodeView(accountData.root_folder);
+
+                            if (node) {
+                                if (obj[accountData.id].status === 'invalid_ssl') {
+
+                                    node.showStatusIcon(obj[accountData.id].message, modus, error);
+
+                                } else {
+                                    node.hideStatusIcon();
+                                    node.render();
+                                }
+                            }
+
+                        });
                     });
-                });
-            }
 
-            if (settings.get('dsc/enabled')) {
-                api.on('refresh.all', function () {
-                    updateStatus();
                 });
 
-                app.updateDSCStatus = updateStatus;
             }
+
+            ox.on('http:error SSL:remove', function (error) {
+                if (/^SSL/.test(error.code)) {
+                    certificateAPI.get({ fingerprint: error.error_params[0] }).done(function (data) {
+                        if (_.isEmpty(data)) {
+                            updateStatus(data.hostname, ['accountlink:sslexamine'], error);
+                        } else {
+                            updateStatus(data.hostname);
+                        }
+
+                    });
+                }
+
+            });
+
+            accountAPI.on('refresh:ssl', function (e, hostname) {
+                updateStatus(hostname);
+            });
+
         },
 
         'mail-quota': function (app) {

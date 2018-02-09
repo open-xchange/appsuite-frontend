@@ -355,15 +355,21 @@ define.async('io.ox/mail/accounts/view-form', [
                                             .css('margin', '10px')
                                             .text(warn.error);
                                 });
+                                var dialog = new dialogs.ModalDialog();
                                 self.dialog.pause();
 
-                                new dialogs.ModalDialog()
+                                // new dialogs.ModalDialog()
+                                dialog
                                     .header(
                                         $('<h4>').text(gt('Warnings'))
                                     )
                                     .build(function () {
                                         this.getContentNode().append(messages);
-                                    })
+                                    });
+
+                                if (/SSL/.test(error.code)) dialog.addSuccessButton('inspect', gt('Inspect certificate'));
+
+                                dialog
                                     .addPrimaryButton('proceed', gt('Ignore Warnings'))
                                     .addButton('cancel', gt('Cancel'))
                                     .show()
@@ -371,6 +377,10 @@ define.async('io.ox/mail/accounts/view-form', [
                                         self.dialog.resume();
                                         if (action === 'proceed') {
                                             saveAccount();
+                                        } else if (action === 'inspect') {
+                                            require(['io.ox/settings/security/certificates/settings/utils']).done(function (certUtils) {
+                                                certUtils.openExaminDialog(error, self.dialog);
+                                            });
                                         } else {
                                             self.dialog.idle();
                                         }

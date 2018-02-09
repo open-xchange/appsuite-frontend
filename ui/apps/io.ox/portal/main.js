@@ -498,6 +498,33 @@ define('io.ox/portal/main', [
                 decoration.removeClass('pending error-occurred');
             },
             function fail(e) {
+                function getTrustOption() {
+
+                    var solutionContainer = $('<div>').append(
+                        $('<a class="solution">').text(gt('Inspect certificate')).on('click', function () {
+
+                            require(['io.ox/settings/security/certificates/settings/utils']).done(function (certUtils) {
+                                certUtils.openExaminDialog(e);
+
+                            });
+
+                        })
+                    );
+
+                    setTimeout(function () {
+                        solutionContainer.find('.solution').off('click')
+                        .empty()
+                        .append(
+                            $('<a class="solution">').text(gt('Try again.')).on('click', function () {
+                                node.find('.decoration').addClass('pending');
+                                loadAndPreview(point, node, baton);
+                            })
+                        );
+                    }, 60000);
+
+                    return solutionContainer;
+                }
+
                 // special return value?
                 if (e === 'remove') {
                     widgets.remove(baton.model);
@@ -521,11 +548,12 @@ define('io.ox/portal/main', [
                             $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
                             $('<br>'),
                             // retry
-                            e.retry !== false ?
-                                $('<a class="solution">').text(gt('Try again.')).on('click', function () {
+                            e.retry !== false ? [
+                                (!/SSL/.test(e.code)) ? $('<a class="solution">').text(gt('Try again.')).on('click', function () {
                                     node.find('.decoration').addClass('pending');
                                     loadAndPreview(point, node, baton);
-                                }) : $()
+                                }) : $(), (/SSL/.test(e.code)) ? getTrustOption() : $()] : $()
+
                         )
                     );
                     if (point.prop('stopLoadingOnError')) {
