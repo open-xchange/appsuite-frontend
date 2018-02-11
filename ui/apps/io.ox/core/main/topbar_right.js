@@ -301,7 +301,6 @@ define('io.ox/core/main/topbar_right', [
         id: 'dropdown',
         index: 1000,
         draw: function () {
-            console.log('Soooo', ox.user_id);
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('title', gt('Settings')).append(
                     contactAPI.pictureHalo(
