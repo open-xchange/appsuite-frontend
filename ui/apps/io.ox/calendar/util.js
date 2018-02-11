@@ -82,41 +82,45 @@ define('io.ox/calendar/util', [
         },
 
         colors: [
-            { label: gt('light blue'), value: '#90CAF9' },
-            { label: gt('light indigo'), value: '#9FA8DA' },
-            { label: gt('light purple'), value: '#CE93D8' },
-            { label: gt('light pink'), value: '#F48FB1' },
-            { label: gt('light red'), value: '#EF9A9A' },
-            { label: gt('light orange'), value: '#FFCC80' },
-            { label: gt('light yellow'), value: '#FFF59D' },
-            { label: gt('light citreous'), value: '#E6EE9C' },
-            { label: gt('light green'), value: '#A5D6A7' },
-            { label: gt('light turquoise'), value: '#80CBC4' },
-            { label: gt('light gray'), value: '#EEEEEE' },
-
-            { label: gt('blue'), value: '#2196F3' },
-            { label: gt('indigo'), value: '#3F51B5' },
-            { label: gt('purple'), value: '#9C27B0' },
-            { label: gt('pink'), value: '#E91E63' },
-            { label: gt('red'), value: '#F44336' },
-            { label: gt('orange'), value: '#FF9800' },
-            { label: gt('yellow'), value: '#FFEB3B' },
-            { label: gt('citreous'), value: '#CDDC39' },
-            { label: gt('green'), value: '#4CAF50' },
-            { label: gt('turquoise'), value: '#009688' },
-            { label: gt('gray'), value: '#9E9E9E' },
-
-            { label: gt('dark blue'), value: '#1565C0' },
-            { label: gt('dark indigo'), value: '#283593' },
-            { label: gt('dark purple'), value: '#6A1B9A' },
-            { label: gt('dark pink'), value: '#AD1457' },
-            { label: gt('dark red'), value: '#C62828' },
-            { label: gt('dark orange'), value: '#EF6C00' },
-            { label: gt('dark yellow'), value: '#F9A825' },
-            { label: gt('dark citreous'), value: '#9E9D24' },
-            { label: gt('dark green'), value: '#2E7D32' },
-            { label: gt('dark turquoise'), value: '#00695C' },
-            { label: gt('dark gray'), value: '#424242' }
+            // light
+            { label: gt('light red'), value: '#FFE2E2' },
+            { label: gt('light orange'), value: '#FDE2B9' },
+            { label: gt('light yellow'), value: '#FFEEB0' },
+            { label: gt('light olive'), value: '#E6EFBD' },
+            { label: gt('light green'), value: '#CAF1D0' },
+            { label: gt('light cyan'), value: '#CCF4FF' },
+            { label: gt('light blue'), value: '#C5DEFF' },
+            { label: gt('light indigo'), value: '#D1CCFF' },
+            { label: gt('light purple'), value: '#EDC8FF' },
+            { label: gt('light magenta'), value: '#FFCBF5' },
+            { label: gt('light pink'), value: '#FFCBF5' },
+            { label: gt('light gray'), value: '#EBEBEB' },
+            // medium
+            { label: gt('red'), value: '#F5AAAA' },
+            { label: gt('orange'), value: '#FFB341' },
+            { label: gt('yellow'), value: '#FFCF1A' },
+            { label: gt('olive'), value: '#C5D481' },
+            { label: gt('green'), value: '#AFDDA0' },
+            { label: gt('cyan'), value: '#A2D9E7' },
+            { label: gt('blue'), value: '#98BEEC' },
+            { label: gt('indigo'), value: '#949EEC' },
+            { label: gt('purple'), value: '#B89AE9' },
+            { label: gt('magenta'), value: '#D383D5' },
+            { label: gt('pink'), value: '#E18BB8' },
+            { label: gt('gray'), value: '#C5C5C5' },
+            // dark
+            { label: gt('dark red'), value: '#C84646' },
+            { label: gt('dark orange'), value: '#B95900' },
+            { label: gt('dark yellow'), value: '#935700' },
+            { label: gt('dark olive'), value: '#66761F' },
+            { label: gt('dark green'), value: '#376B27' },
+            { label: gt('dark cyan'), value: '#396D7B' },
+            { label: gt('dark blue'), value: '#3E71AF' },
+            { label: gt('dark indigo'), value: '#5E6AC1' },
+            { label: gt('dark purple'), value: '#734EAF' },
+            { label: gt('dark magenta'), value: '#9A369C' },
+            { label: gt('dark pink'), value: '#A4326D' },
+            { label: gt('dark gray'), value: '#6B6B6B' }
         ],
 
         PRIVATE_EVENT_COLOR: '#616161',
@@ -942,16 +946,24 @@ define('io.ox/calendar/util', [
         }),
 
         colorToHex: _.memoize(function (color) {
-            var canvas = document.createElement('canvas'), context = canvas.getContext('2d'), data;
-            canvas.width = 1;
-            canvas.height = 1;
-            context.fillStyle = 'rgba(0, 0, 0, 0)';
-            context.clearRect(0, 0, 1, 1);
-            context.fillStyle = color;
-            context.fillRect(0, 0, 1, 1);
-            data = context.getImageData(0, 0, 1, 1).data;
+            var data = that.colorToRGB(color);
             return (data[0] << 16) + (data[1] << 8) + data[2];
         }),
+
+        colorToRGB: _.memoize(function () {
+
+            var canvas = document.createElement('canvas'), context = canvas.getContext('2d');
+            canvas.width = 1;
+            canvas.height = 1;
+
+            return function (color) {
+                context.fillStyle = 'rgba(0, 0, 0, 0)';
+                context.clearRect(0, 0, 1, 1);
+                context.fillStyle = color;
+                context.fillRect(0, 0, 1, 1);
+                return context.getImageData(0, 0, 1, 1).data;
+            };
+        }()),
 
         hexToHSL: _.memoize(function (color) {
             var r = (color >> 16) / 255,
@@ -977,9 +989,21 @@ define('io.ox/calendar/util', [
             return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
         }),
 
+        // returns either "black" or "white" ensuring a color contrast higher than 1:4.52 (WCAG AA)
+        // based on algorithm as defined by https://www.w3.org/TR/WCAG20-TECHS/G18.html#G18-tests
         getForegroundColor: _.memoize(function (color) {
-            color = that.colorToHex(color);
-            return color > 0xffffff / 2 ? 'black' : 'white';
+
+            function val(x) {
+                x /= 255;
+                return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+            }
+
+            function luminance(rgb) {
+                return 0.2126 * val(rgb[0]) + 0.7152 * val(rgb[1]) + 0.0722 * val(rgb[2]);
+            }
+
+            var l = luminance(that.colorToRGB(color));
+            return l > 0.22222 ? 'black' : 'white';
         }),
 
         canAppointmentChangeColor: function (folder, eventModel) {
