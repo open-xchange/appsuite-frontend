@@ -123,6 +123,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         },
 
         onMinimize: function (e) {
+            $('html').toggleClass('taskbar-visible', true);
             var self = this;
             if (!e && !e.type === 'click') this.minimize();
 
@@ -130,6 +131,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             var windowWidth = this.model.get('displayStyle') === 'cornered' ? this.$el.width() : $('body').width();
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
+
             this.$el.velocity({ translateZ: 0, left: left + 'px', top: top + 'px', scale: 0.2, opacity: 0 }, {
                 complete: function (el) {
                     var c = $(el).data('velocity');
@@ -141,7 +143,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         },
 
         toggle: function (model, minimized) {
-            // TODO: Velocity animation here
             this.$el.toggle(!minimized);
             backdrop.toggle(collection.where({ minimized: false, floating: true }).length > 0);
         },
@@ -248,7 +249,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         el: '#io-ox-taskbar',
         initialize: function () {
             this.listenTo(collection, {
-                'add remove': this.toggle,
+                'add remove change': this.toggle,
                 'minimize': this.minimizeAll
             });
             this.listenTo(ox.ui.apps, 'launch resume', this.onLaunchResume);
@@ -257,17 +258,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             collection.forEach(function (model) { model.set('minimized', true); });
         },
         toggle: function () {
-            var show = collection.length > 0,
-                bottom = show ? '40px' : '0px',
-                height = show ? '40px' : '0px',
-                easing = [0.1, 0.7, 0.1, 1],
-                duration = 150;
+            var taskbarVisible = collection.where({ minimized: true }).length > 0,
+                hasStickyWindow = collection.where({ displayStyle: 'sticky' }).length > 0,
+                backdropVisible = collection.where({ minimized: false, floating: true }).length > 0;
 
-            $('#io-ox-screens').velocity({ bottom: bottom }, duration, easing);
-            $('#io-ox-taskbar-container').velocity({ height: height }, duration, easing);
-
-            $('#io-ox-windowmanager').toggleClass('has-sticky-window', collection.where({ displayStyle: 'sticky' }).length > 0);
-            backdrop.toggle(collection.where({ minimized: false, floating: true }).length > 0);
+            $('html').toggleClass('taskbar-visible', taskbarVisible);
+            $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindow);
+            backdrop.toggle(backdropVisible);
         },
         onLaunchResume: function (app) {
             var model = app && app.get('window') && app.get('window').floating && app.get('window').floating.model;

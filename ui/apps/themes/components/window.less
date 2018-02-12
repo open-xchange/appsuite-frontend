@@ -22,7 +22,9 @@
     top: 40px;
     overflow: hidden;
     z-index: 10;
-    //.transition(bottom 0.5s);
+    html.taskbar-visible & {
+        bottom: 40px;
+    }
 
     &.powermove-window-open {
         .floating-window.cornered {
@@ -67,12 +69,18 @@
 }
 
 #io-ox-taskbar-container {
+
     border-top: 1px solid #ccc;
     background-color: #f5f5f5;
     top: auto;
-    height: 0px;
+    height: 40px;
     padding: 3px 0 2px 0;
     margin: 0;
+    display: none;
+
+    html.taskbar-visible & {
+        display: block;
+    }
 
     #io-ox-taskbar {
         // when the arrow controls are enabled again, set the padding to 0
