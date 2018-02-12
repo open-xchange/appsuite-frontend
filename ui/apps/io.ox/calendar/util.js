@@ -953,6 +953,11 @@ define('io.ox/calendar/util', [
             return (data[0] << 16) + (data[1] << 8) + data[2];
         }),
 
+        colorToHSL: _.memoize(function (color) {
+            var hex = that.colorToHex(color);
+            return that.hexToHSL(hex);
+        }),
+
         colorToRGB: _.memoize(function () {
 
             var canvas = document.createElement('canvas'), context = canvas.getContext('2d');
@@ -1006,7 +1011,10 @@ define('io.ox/calendar/util', [
             }
 
             var l = luminance(that.colorToRGB(color));
-            return l > 0.22222 ? 'black' : 'white';
+            if (l < 0.22222) return 'white';
+
+            var hsl = that.colorToHSL(color);
+            return 'hsl(' + hsl[0] + ', 30%, ' + Math.max(20, 50 - (1 - l) * 100) + '%)';
         }),
 
         canAppointmentChangeColor: function (folder, eventModel) {
