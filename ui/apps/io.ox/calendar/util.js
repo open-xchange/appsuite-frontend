@@ -89,11 +89,12 @@ define('io.ox/calendar/util', [
             { label: gt('light olive'), value: '#E6EFBD' },
             { label: gt('light green'), value: '#CAF1D0' },
             { label: gt('light cyan'), value: '#CCF4FF' },
-            { label: gt('light blue'), value: '#C5DEFF' },
-            { label: gt('light indigo'), value: '#D1CCFF' },
-            { label: gt('light purple'), value: '#EDC8FF' },
-            { label: gt('light magenta'), value: '#FFCBF5' },
-            { label: gt('light pink'), value: '#FFCBF5' },
+            { label: gt('light azure'), value: '#CFE6FF' },
+            { label: gt('light blue'), value: '#D4E0FD' },
+            { label: gt('light indigo'), value: '#D1D6FE' },
+            { label: gt('light purple'), value: '#E2D0FF' },
+            { label: gt('light magenta'), value: '#F7CBF8' },
+            { label: gt('light pink'), value: '#F7C7E0' },
             { label: gt('light gray'), value: '#EBEBEB' },
             // medium
             { label: gt('red'), value: '#F5AAAA' },
@@ -102,7 +103,8 @@ define('io.ox/calendar/util', [
             { label: gt('olive'), value: '#C5D481' },
             { label: gt('green'), value: '#AFDDA0' },
             { label: gt('cyan'), value: '#A2D9E7' },
-            { label: gt('blue'), value: '#98BEEC' },
+            { label: gt('azure'), value: '#9BC8F7' },
+            { label: gt('blue'), value: '#B1C3EE' },
             { label: gt('indigo'), value: '#949EEC' },
             { label: gt('purple'), value: '#B89AE9' },
             { label: gt('magenta'), value: '#D383D5' },
@@ -115,7 +117,8 @@ define('io.ox/calendar/util', [
             { label: gt('dark olive'), value: '#66761F' },
             { label: gt('dark green'), value: '#376B27' },
             { label: gt('dark cyan'), value: '#396D7B' },
-            { label: gt('dark blue'), value: '#3E71AF' },
+            { label: gt('dark azure'), value: '#27609C' },
+            { label: gt('dark blue'), value: '#445F9F' },
             { label: gt('dark indigo'), value: '#5E6AC1' },
             { label: gt('dark purple'), value: '#734EAF' },
             { label: gt('dark magenta'), value: '#9A369C' },
@@ -1086,7 +1089,7 @@ define('io.ox/calendar/util', [
             if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').append($('<i class="fa fa-user-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))));
             if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
             if (this.hasFlag(obj, 'series')) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-repeat" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
-            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-users" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
+            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-user-o" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
             if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').append($('<i class="fa fa-paperclip" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Attachments'))));
             return icons;
         },
