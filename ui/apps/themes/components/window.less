@@ -84,7 +84,7 @@
 
     #io-ox-taskbar {
         // when the arrow controls are enabled again, set the padding to 0
-        padding: 0 16px;
+        padding: 0 56px;
         list-style-type: none;
         overflow: hidden;
         justify-content: flex-end;
@@ -96,12 +96,10 @@
             width:240px;
             margin-left: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             height: 32px;
             line-height: 32px;
             min-width: 90px;
-            border-radius: 4px;
 
             &.active .taskbar-button,&.active button[data-action="close"] {
                 font-weight: bold;
@@ -689,7 +687,7 @@
     .floating-header {
         height: @headerHeight;
         bottom: auto;
-        background: rgba(0, 0, 0, 0.70);
+        background: #333;
         padding: 0 8px 0 16px;
         display: flex;
 
@@ -729,8 +727,6 @@
     .floating-body {
         top: @headerHeight;
         background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        border-width: 0 1px 1px 1px;
     }
 }
 
