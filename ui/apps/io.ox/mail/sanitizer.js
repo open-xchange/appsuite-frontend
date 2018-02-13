@@ -17,6 +17,7 @@ define('io.ox/mail/sanitizer', [
 ], function (mailSettings, DOMPurify) {
 
     var whitelist = mailSettings.get('whitelist', {});
+    if (_.isEmpty(whitelist)) console.warn('No sanitizing whitelist defined. Falling back to strict sanitizing');
 
     // TODO: Backend seems to leave out a few necessary attributes
     whitelist.allowedAttributes = ['id', 'class', 'style'].concat(whitelist.allowedAttributes || []);
