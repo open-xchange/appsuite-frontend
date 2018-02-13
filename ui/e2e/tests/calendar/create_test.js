@@ -85,3 +85,61 @@ Scenario.skip('Create appointment with all fields', function* (I) {
     I.logout();
 
 });
+
+Scenario('fullday appointments', function *(I) {
+    I.login('app=io.ox/calendar');
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+
+    I.clickToolbar('View');
+    I.click('Week');
+
+    //remove previously created appointments
+    yield I.executeAsyncScript(function (done) {
+        const appointments = $('.appointment')
+            .toArray()
+            .filter((e) => $(e).text() === 'Fullday test')
+            .map(function (e) {
+                const folder = $(e).data('folder');
+                return { folder, id: $(e).data('cid').replace(folder + '.', '') };
+            });
+
+        if (appointments.length === 0) return done();
+        require(['io.ox/calendar/api']).then(function (api) {
+            return api.remove(appointments, {});
+        }).then(done);
+    });
+
+    I.click('New appointment');
+    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+    I.fillField('Subject', 'Fullday test');
+    I.click('All day', '.checkbox > label');
+
+    I.click({ css: '[data-attribute="startDate"] input' });
+    const { start, end } = yield I.executeAsyncScript(function (done) {
+        done({
+            start: `.date-picker[data-attribute="startDate"] .date[id="date_${moment().startOf('week').add('1', 'day').format('l')}"]`,
+            end: `.date-picker[data-attribute="endDate"] .date[id="date_${moment().endOf('week').subtract('1', 'day').format('l')}"]`
+        });
+    });
+    I.click(start);
+    I.click({ css: '[data-attribute="endDate"] input' });
+    I.click(end);
+
+    I.click('Create');
+
+    I.wait(0.5);
+    yield I.executeAsyncScript(function (done) {
+        $('.modal-dialog .modal-footer > .btn-primary').click();
+        done();
+    });
+    I.wait(0.5);
+
+    I.click('Fullday test', '.appointment');
+
+    I.see('5 days', '.io-ox-sidepopup .calendar-detail');
+
+    I.click('Delete', '.io-ox-sidepopup .calendar-detail');
+    I.click('Delete', '.io-ox-dialog-popup');
+
+    I.logout();
+});

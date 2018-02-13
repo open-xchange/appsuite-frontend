@@ -91,7 +91,7 @@ define('io.ox/calendar/edit/extensions', [
                         baton.app.moveAfterSave = folder;
                     }
                     // correct time for allday appointments (remove timezone and add 1 day to enddate)
-                    if (baton.model.get('allDay')) {
+                    if (calendarUtil.isAllday(baton.model)) {
                         // save unchanged dates, so they can be restored on error or when handling conflicts
                         baton.parentView.tempEndDate = baton.model.get('endDate');
                         baton.parentView.tempStartDate = baton.model.get('startDate');
