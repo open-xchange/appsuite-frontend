@@ -20,7 +20,7 @@ define('io.ox/settings/security/certificates/settings/certificate-view', [
     'io.ox/backbone/disposable',
     'io.ox/core/api/certificate',
     'io.ox/core/api/account',
-    'less!io.ox/settings/certificates/style'
+    'less!io.ox/settings/security/certificates/settings/style'
 ], function (ext, dialogs, manifests, upsell, gt, DisposableView, api, accountAPI) {
 
     'use strict';
