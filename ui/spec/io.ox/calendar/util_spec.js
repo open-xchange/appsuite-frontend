@@ -548,34 +548,31 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             expect(util.hexToHSL(0xadd8e6)).to.deep.equal([194, 53, 79]);
         });
 
-        it.skip('computes foreground color for background-color with an appropriate contrast ratio', function () {
-            // contrast computation is the same as in the chrome developer accessibility tools
-            function luminance(r, g, b) {
-                var a = [r, g, b].map(function (v) {
-                    v /= 255;
-                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-                });
-                return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-            }
+        it('computes relative luminance', function () {
+            expect(util.getRelativeLuminance(util.colorToRGB('white'))).to.equal(1);
+            expect(util.getRelativeLuminance(util.colorToRGB('black'))).to.equal(0);
+            expect(util.getRelativeLuminance(util.colorToRGB('#aaaaaa'))).to.equal(0.4019777798321958);
+            expect(util.getRelativeLuminance(util.colorToRGB('#3c61aa'))).to.equal(0.12412326645354393);
+        });
+
+        it('computes foreground color for background-color with an appropriate contrast ratio', function () {
+
             function contrast(bg, fg) {
-                var bgLuminance, fgLuminance;
-                bgLuminance = luminance(bg[0], bg[1], bg[2]);
-                if (fg === 'black') fgLuminance = luminance(0, 0, 0);
-                else if (fg === 'white') fgLuminance = luminance(255, 255, 255);
+                var bgLuminance = util.getRelativeLuminance(bg),
+                    fgLuminance = util.getRelativeLuminance(util.colorToRGB(fg));
                 return (Math.max(fgLuminance, bgLuminance) + 0.05) / (Math.min(fgLuminance, bgLuminance) + 0.05);
             }
 
             // yellow
-            expect(contrast([255, 255, 0], util.getForegroundColor('rgb(255, 255, 0)'))).to.be.above(4.54);
+            expect(contrast([255, 255, 0], util.getForegroundColor('rgb(255, 255, 0)')), 'yellow').to.be.above(4.5);
             // red
-            expect(contrast([255, 0, 0], util.getForegroundColor('rgb(255, 0, 0)'))).to.be.above(4.54);
+            expect(contrast([255, 0, 0], util.getForegroundColor('rgb(255, 0, 0)')), 'red').to.be.above(4.5);
             // blue
-            console.log(util.getForegroundColor('rgb(0, 0, 255)'));
-            expect(contrast([0, 0, 255], util.getForegroundColor('rgb(0, 0, 255)'))).to.be.above(4.54);
+            expect(contrast([0, 0, 255], util.getForegroundColor('rgb(0, 0, 255)')), 'blue').to.be.above(4.5);
             // black
-            expect(contrast([0, 0, 0], util.getForegroundColor('rgb(0, 0, 0)'))).to.be.above(4.54);
+            expect(contrast([0, 0, 0], util.getForegroundColor('rgb(0, 0, 0)')), 'black').to.be.above(4.5);
             // white
-            expect(contrast([255, 255, 255], util.getForegroundColor('rgb(255, 255, 255)'))).to.be.above(4.54);
+            expect(contrast([255, 255, 255], util.getForegroundColor('rgb(255, 255, 255)')), 'white').to.be.above(4.5);
         });
 
     });

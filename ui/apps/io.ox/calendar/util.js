@@ -997,24 +997,45 @@ define('io.ox/calendar/util', [
             return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
         }),
 
-        // returns either "black" or "white" ensuring a color contrast higher than 1:4.52 (WCAG AA)
-        // based on algorithm as defined by https://www.w3.org/TR/WCAG20-TECHS/G18.html#G18-tests
-        getForegroundColor: _.memoize(function (color) {
+        getRelativeLuminance: (function () {
 
             function val(x) {
                 x /= 255;
                 return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
             }
 
-            function luminance(rgb) {
+            return function (rgb) {
                 return 0.2126 * val(rgb[0]) + 0.7152 * val(rgb[1]) + 0.0722 * val(rgb[2]);
+            };
+        }()),
+
+        // returns color ensuring a color contrast higher than 1:4.5
+        // based on algorithm as defined by https://www.w3.org/TR/WCAG20-TECHS/G18.html#G18-tests
+        getForegroundColor: _.memoize(function (color) {
+
+            function colorContrast(foreground) {
+                var l2 = that.getRelativeLuminance(that.colorToRGB(foreground));
+                return (l1 + 0.05) / (l2 + 0.05);
             }
 
-            var l = luminance(that.colorToRGB(color));
-            if (l < 0.22222) return 'white';
+            var l1 = that.getRelativeLuminance(that.colorToRGB(color)),
+                hsl = that.colorToHSL(color),
+                hue = hsl[0],
+                sat = hsl[1] > 0 ? 40 : 0,
+                lum = 50,
+                foreground;
 
-            var hsl = that.colorToHSL(color);
-            return 'hsl(' + hsl[0] + ', 30%, ' + Math.max(20, 50 - (1 - l) * 100) + '%)';
+            if (l1 < 0.18333) return 'white';
+
+            // start with 50% luminance; then go down until color contrast exceeds 4.5
+            // whoever finds a simple way to calculate this programmatically
+            // (and which is still correct in all cased) gets a beer or two
+            do {
+                foreground = 'hsl(' + hue + ', ' + sat + '%, ' + lum + '%)';
+                lum -= 10;
+            } while (lum >= 0 && colorContrast(foreground) < 4.5);
+
+            return foreground;
         }),
 
         canAppointmentChangeColor: function (folder, eventModel) {
