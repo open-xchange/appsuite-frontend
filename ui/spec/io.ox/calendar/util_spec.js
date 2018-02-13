@@ -548,7 +548,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             expect(util.hexToHSL(0xadd8e6)).to.deep.equal([194, 53, 79]);
         });
 
-        it('computes foreground color for background-color with an appropriate contrast ratio', function () {
+        it.skip('computes foreground color for background-color with an appropriate contrast ratio', function () {
             // contrast computation is the same as in the chrome developer accessibility tools
             function luminance(r, g, b) {
                 var a = [r, g, b].map(function (v) {
