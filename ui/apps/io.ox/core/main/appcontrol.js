@@ -157,32 +157,12 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol').extend({
-        id: 'default',
+        id: 'init',
         index: 100,
         draw: function () {
-            $('#io-ox-appcontrol').show();
-
-            var banner = $('#io-ox-appcontrol');
-            var taskbar, logo, search;
-            var launchers = window.launchers = new LaunchersView({ collection: ox.ui.apps.where({ hasLauncher: true }) });
-            var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
-            banner.append(
-                launchers.render().$el,
-                quicklaunchers.render().$el,
-                search = $('<div id="io-ox-topsearch">'),
-                $('<div id="io-ox-toprightbar">').append(
-                    taskbar = $('<ul class="taskbar list-unstyled">')
-                ),
-                logo = $('<div id="io-ox-top-logo-small">')
-            );
-
             $('#io-ox-core').append(
                 $('<div id="io-ox-launchgrid-overlay">').on('click', toggleOverlay)
             );
-
-            ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
-            ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
-            ext.point('io.ox/core/appcontrol/logo').invoke('draw', logo);
 
             initRefreshAnimation();
 
@@ -192,6 +172,72 @@ define('io.ox/core/main/appcontrol', [
                     $(document).trigger('resize');
                 });
             });
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'logo',
+        index: 200,
+        draw: function () {
+            this.append(
+                $('<div id="io-ox-top-logo">').append(
+                    $('<img>').attr({
+                        alt: ox.serverConfig.productName,
+                        src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
+                    }).on('click', function (e) {
+                        e.preventDefault();
+                        ox.triger('logo-topbar:click');
+                    })
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'launcher',
+        index: 300,
+        draw: function () {
+            var launchers = window.launchers = new LaunchersView({
+                collection: ox.ui.apps.where({ hasLauncher: true })
+            });
+            this.append(launchers.render().$el);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'quicklauncher',
+        index: 400,
+        draw: function () {
+            var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
+            this.append(quicklaunchers.render().$el);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'search',
+        index: 500,
+        draw: function () {
+            var search = $('<div id="io-ox-topsearch">');
+            this.append(search);
+            ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'right',
+        index: 600,
+        draw: function () {
+            var taskbar = $('<ul class="taskbar list-unstyled">');
+            this.append($('<div id="io-ox-toprightbar">').append(taskbar));
+            ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'show',
+        index: 10000,
+        draw: function () {
+            this.show();
         }
     });
 
@@ -254,7 +300,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/search').extend({
+    /*ext.point('io.ox/core/appcontrol/search').extend({
         id: 'resize',
         index: 10000,
         draw: function () {
@@ -351,8 +397,9 @@ define('io.ox/core/main/appcontrol', [
 
             });
         }
-    });
+    });*/
 
+    /*
     ext.point('io.ox/core/appcontrol/logo').extend({
         id: 'logo',
         index: 10000,
@@ -362,10 +409,14 @@ define('io.ox/core/main/appcontrol', [
                 $('<img>').attr({
                     alt: ox.serverConfig.productName,
                     src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
+                }).on('click', function (e) {
+                    e.preventDefault();
+                    ox.triger('logo-topbar:click');
                 })
             );
         }
     });
+    */
 
     function initRefreshAnimation() {
 
@@ -423,4 +474,10 @@ define('io.ox/core/main/appcontrol', [
             off();
         });
     }
+
+    return {
+        LauncherView: LauncherView,
+        LaunchersView: LaunchersView,
+        QuickLaunchersView: QuickLaunchersView
+    };
 });

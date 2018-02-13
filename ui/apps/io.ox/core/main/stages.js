@@ -223,11 +223,10 @@ define('io.ox/core/main/stages', [
 
             debug('Stage "load" > loaded.done');
 
-            ext.point('io.ox/core/appcontrol').invoke('draw');
+            ext.point('io.ox/core/appcontrol').invoke('draw', topbar);
 
             if (_.device('smartphone')) {
                 ext.point('io.ox/core/mobile').invoke('draw');
-                //$('#io-ox-screens').css('top', '40px');
             }
 
             // help here
