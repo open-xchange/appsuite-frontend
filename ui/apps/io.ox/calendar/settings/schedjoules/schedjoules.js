@@ -391,6 +391,13 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                 subscriptionsModel: subscriptionsModel,
                 currentSubscriptions: collect(accountFolders, true)
             };
+        }, function (data) {
+            dialog.idle();
+            dialog.$body.append(
+                $('<div class="alert alert-warning">').text(data.error_desc)
+            );
+            dialog.$footer.find('button[data-action="subscribe"]').attr('disabled', 'disabled');
+
         });
     }
 
