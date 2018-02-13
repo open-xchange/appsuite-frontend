@@ -72,6 +72,12 @@ define('io.ox/settings/security/certificates/settings/utils', [
 
                     })
                 );
+            }).fail(function (data) {
+
+                self.$el.addClass('certificates').append(
+                    $('<div class="alert alert-warning">').text(data.error_desc)
+                );
+                self.dialog.$footer.find('button[data-action="trust"]').attr('disabled', 'disabled');
             });
             return this;
         },
