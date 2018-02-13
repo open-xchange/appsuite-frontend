@@ -290,6 +290,15 @@ define('io.ox/core/main/topbar_right', [
         index: 1000,
         extend: function () {
             this.divider();
+            // Group available signout calls here, including appsuite, Guard, etc
+            ext.point('io.ox/core/appcontrol/right/dropdown/signouts').invoke('extend', this);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/dropdown/signouts').extend({
+        id: 'logout',
+        index: 100,
+        extend: function () {
             this.link('logout', gt('Sign out'), function (e) {
                 e.preventDefault();
                 logout();
