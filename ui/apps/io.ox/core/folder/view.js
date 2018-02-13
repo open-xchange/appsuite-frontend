@@ -381,9 +381,18 @@ define('io.ox/core/folder/view', [
             // on change via app.folder.set
             app.on('folder:change', function (id, data, favorite) {
                 if (ignoreChangeEvent) return;
-                // updates selection manager
-                tree.selection.set(id, favorite);
                 tree.traversePath(id, showFolder);
+
+                if (tree.$el.find('[data-id="' + id + '"]').length) {
+                    // check before selection if node is inside tree
+                    tree.selection.set(id, favorite);
+                } else {
+                    // wait for node to appear inside tree before selection
+                    tree.on('appear:' + id, function () {
+                        tree.selection.set(id, favorite);
+                        tree.off('appear:' + id);
+                    });
+                }
             });
 
             // on selection change
