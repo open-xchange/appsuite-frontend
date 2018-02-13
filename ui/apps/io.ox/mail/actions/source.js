@@ -20,24 +20,20 @@ define('io.ox/mail/actions/source', [
     'use strict';
 
     function getAuthenticityBlock(data) {
-        if (!data || !(data.spf || data.dkim || data.dmacc)) return;
+        if (!data || !(data.spf || data.dkim || data.dmarc)) return;
+        var content = _.chain(['spf', 'dkim', 'dmarc'])
+                .filter(function (key) { return data[key]; })
+                .map(function (key) {
+                    if (!data[key] || !data[key].reason) return;
+                    return key.toUpperCase() + ': ' + data[key].reason;
+                })
+                .value()
+                .join('\n');
+        if (!content.trim()) return;
         return [
             $('<h2 id="mail-authenticity-headline">').text(gt('Authentication details')),
             $('<textarea class="form-control mail-authenticity-view" readonly="readonly" aria-labelledby="mail-authenticity-headline">')
-            .val(
-                _.chain(['spf', 'dkim', 'dmacc'])
-                .filter(function (key) { return data[key]; })
-                    .map(function (key) {
-                        // methode name
-                        return key + '\n' +
-                        // method result properties/values
-                        _.map(data[key], function (value, key) {
-                            return '    ' + key + ': ' + value + '\n';
-                        }).join('');
-                    })
-                .value()
-                .join('\n')
-            )
+            .val(content)
         ];
     }
 
