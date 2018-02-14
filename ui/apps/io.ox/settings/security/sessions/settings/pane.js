@@ -44,10 +44,14 @@ define('io.ox/settings/security/sessions/settings/pane', [
         idAttribute: 'sessionId',
 
         initialize: function () {
-            this.browser = this.has('userAgent') ? _.detectBrowser({ userAgent: this.get('userAgent') }) || {} : {};
             ext.point('io.ox/settings/sessions/deviceType').invoke('customize', this);
             ext.point('io.ox/settings/sessions/operatingSystem').invoke('customize', this);
             ext.point('io.ox/settings/sessions/application').invoke('customize', this);
+        },
+
+        getDeviceInfo: function (name) {
+            var device = this.get('device') || {};
+            return device[name] || {};
         }
 
     });
@@ -56,24 +60,9 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'desktop-mobile',
         index: 100,
         customize: function () {
-            switch (this.get('client')) {
-                case 'open-xchange-mailapp':
-                case 'open-xchange-mobile-api-facade':
-                case 'OpenXchange.iosClient.OXDrive':
-                case 'OpenXchange.Android.OXDrive':
-                case 'USM-EAS':
-                    this.set('deviceType', 'phone');
-                    break;
-                case 'OpenXchange.HTTPClient.OXDrive':
-                case 'OXDrive':
-                case 'OSX.OXDrive':
-                case 'USM-JSON':
-                    this.set('deviceType', 'desktop');
-                    break;
-                default:
-                    if (this.browser.android || this.browser.ios) this.set('deviceType', 'phone');
-                    else this.set('deviceType', 'desktop');
-            }
+            var os = this.getDeviceInfo('os').name || '';
+            if (os === 'ios' || os === 'android') this.set('deviceType', 'phone');
+            else this.set('deviceType', 'desktop');
         }
     });
 
@@ -81,26 +70,26 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'os',
         index: 100,
         customize: function () {
-            var browser = this.browser;
-            if (browser.macos) {
+            var os = this.getDeviceInfo('os').name || '';
+            if (os === 'os x') {
                 this.set('operatingSystem',
                     //#. Context: Session Management. Active session on platform/os.
                     gt('Mac')
                 );
                 this.set('os', 'apple');
-            } else if (browser.windows || browser.windows8) {
+            } else if (os === 'windows') {
                 this.set('operatingSystem',
                     //#. Context: Session Management. Active session on platform/os.
                     gt('Windows')
                 );
                 this.set('os', 'windows');
-            } else if (browser.android) {
+            } else if (os === 'android') {
                 this.set('operatingSystem',
                     //#. Context: Session Management. Active session on platform/os.
                     gt('Android')
                 );
                 this.set('os', 'android');
-            } else if (browser.ios) {
+            } else if (os === 'ios') {
                 this.set('operatingSystem',
                     //#. Context: Session Management. Active session on platform/os.
                     gt('iOS')
@@ -114,12 +103,13 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'browsers',
         index: 100,
         customize: function () {
-            var browser = this.browser;
-            if (browser.firefox) this.set('application', gt('Firefox'));
-            else if (browser.chrome) this.set('application', gt('Chrome'));
-            else if (browser.safari) this.set('application', gt('Safari'));
-            else if (browser.ie) this.set('application', gt('Internet Explorer'));
-            else if (browser.edge) this.set('application', gt('Edge'));
+            if (this.getDeviceInfo('client').type !== 'browser') return;
+            var clientName = (this.getDeviceInfo('client').name || '').toLowerCase();
+            if (clientName.indexOf('firefox') >= 0) this.set('application', gt('Firefox'));
+            else if (clientName.indexOf('chrome') >= 0) this.set('application', gt('Safari'));
+            else if (clientName.indexOf('safari') >= 0) this.set('application', gt('Chrome'));
+            else if (clientName.indexOf('internet explorer') >= 0) this.set('application', gt('Internet Explorer'));
+            else if (clientName.indexOf('edge') >= 0) this.set('application', gt('Edge'));
         }
     });
 
@@ -127,6 +117,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'apps',
         index: 200,
         customize: function () {
+            if (this.getDeviceInfo('client').type === 'browser') return;
             switch (this.get('client')) {
                 case 'open-xchange-mailapp':
                 case 'open-xchange-mobile-api-facade':
