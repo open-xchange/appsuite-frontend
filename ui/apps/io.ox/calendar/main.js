@@ -318,7 +318,7 @@ define('io.ox/calendar/main', [
         },
 
         'multi-folder-selection': function (app) {
-            var folders, prevFolders;
+            var folders, prevFolders, singleSelection = false;
             function setFolders(list) {
                 folders = _(list).unique();
                 sort();
@@ -345,6 +345,9 @@ define('io.ox/calendar/main', [
             if (!initalList || initalList.length === 0) initalList = [folderAPI.getDefaultFolder('calendar')];
             setFolders(initalList);
             app.folders = {
+                isSingleSelection: function () {
+                    return singleSelection;
+                },
                 getData: function () {
                     return $.when.apply($, folders.map(function (folder) {
                         return folderAPI.get(folder).then(function (folder) {
@@ -367,25 +370,29 @@ define('io.ox/calendar/main', [
                     return folders;
                 },
                 add: function (folder) {
+                    if (singleSelection) this.reset();
                     var list = [].concat(folders);
                     list.push(folder);
                     setFolders(list);
                 },
                 remove: function (folder) {
+                    if (singleSelection) this.reset();
                     var list = _(folders).without(folder);
                     setFolders(list);
                 },
                 setOnly: function (folder) {
+                    singleSelection = true;
                     if (!prevFolders) prevFolders = folders;
                     folders = [].concat([folder]);
-                    app.folderView.tree.$el.addClass('selection-only');
+                    app.folderView.tree.$el.addClass('single-selection');
                     _.defer(app.trigger.bind(app, 'folders:change', folders));
                 },
                 reset: function () {
+                    singleSelection = false;
                     if (!prevFolders) return;
                     folders = prevFolders;
                     prevFolders = undefined;
-                    app.folderView.tree.$el.removeClass('selection-only');
+                    app.folderView.tree.$el.removeClass('single-selection');
                     _.defer(app.trigger.bind(app, 'folders:change', folders));
                 }
             };
@@ -395,7 +402,8 @@ define('io.ox/calendar/main', [
                 if ($(e.target).hasClass('color-label')) return;
                 if (folderAPI.isVirtual(folder)) return;
                 app.folder.set(folder);
-                app.folders.setOnly(folder);
+                if (app.folders.isSingleSelection()) app.folders.reset();
+                else app.folders.setOnly(folder);
             });
         },
 

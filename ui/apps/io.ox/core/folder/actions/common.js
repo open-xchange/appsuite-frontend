@@ -27,7 +27,8 @@ define('io.ox/core/folder/actions/common', [
 
         selectOnly: function (e) {
             var app = ox.ui.apps.get('io.ox/calendar');
-            app.folders.setOnly(e.data.folder.id);
+            if (app.folders.isSingleSelection()) app.folders.reset();
+            else app.folders.setOnly(e.data.folder.id);
         },
 
         refreshCalendar: function (e) {

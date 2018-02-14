@@ -1031,7 +1031,7 @@ define('io.ox/core/folder/extensions', [
             var target = e.data.target,
                 app = e.data.app,
                 folder = e.data.folder;
-            if (target.closest('.selection-only').length > 0) return;
+            if (target.closest('.single-selection').length > 0) return;
             e.preventDefault();
             if (app.folders.isSelected(folder.id)) app.folders.remove(folder.id);
             else app.folders.add(folder.id);

@@ -616,13 +616,13 @@ define('io.ox/core/folder/contextmenu', [
         //
         selectOnly: function (baton) {
             if (!/^calendar$/.test(baton.module)) return;
-
+            var isOnly = baton.view.$el.hasClass('single-selection');
             contextUtils.addLink(this, {
                 action: 'select-only',
                 data: { folder: baton.data },
                 enabled: true,
                 handler: actions.selectOnly,
-                text: gt('Show this calendar only')
+                text: isOnly ? gt('Show all calendars') : gt('Show this calendar only')
             });
         },
 
