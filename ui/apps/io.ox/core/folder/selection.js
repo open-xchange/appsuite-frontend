@@ -210,8 +210,6 @@ define('io.ox/core/folder/selection', [], function () {
             this.check(node);
             this.view.$container.attr('aria-activedescendant', node.attr('id'));
             this.triggerEvent('change', items);
-            this.scrollIntoView(node.attr('data-id'));
-            this.focus(index, items);
         },
 
         resetTabIndex: function (items, skip) {
