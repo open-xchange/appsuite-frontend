@@ -448,7 +448,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
         describe('can compute folder color', function () {
             describe('resolves folder color', function () {
                 it('without color label', function () {
-                    var defaultColor = util.colors[0].value;
+                    var defaultColor = util.colors[6].value;
                     expect(util.getFolderColor({})).to.equal(defaultColor);
                 });
                 it('with color label', function () {
