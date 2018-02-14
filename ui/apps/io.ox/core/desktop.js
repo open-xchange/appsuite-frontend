@@ -49,7 +49,6 @@ define('io.ox/core/desktop', [
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
-
         return list.indexOf(name) > -1 && searchable;
     }
 

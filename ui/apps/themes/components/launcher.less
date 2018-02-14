@@ -136,7 +136,7 @@
     }
 
     #io-ox-quicklaunch {
-        flex-shrink:0;
+        flex-shrink: 0;
         min-width: @quicklaunch-width;
         min-height: auto;
 
@@ -208,15 +208,21 @@
     }
 
     #io-ox-topsearch {
+        margin-right: 16px;
+        flex-grow: 1;
+        display: flex;
 
-        margin-right: auto;
-        width: 100%;
         .search-box > .form-group { margin-bottom: 0; }
+
         .search-field {
             border-radius: 0;
             height: 32px;
             border: 1px;
-            &:not(.focus) { border-color: transparent; }
+            &:not(.focus) {
+                border-color: transparent;
+                background: rgba(255,255,255,0.15);
+                border: 1px solid rgba(255,255,255, .7);
+            }
         }
 
         .tokenfield { padding-top: 2px; }
@@ -225,10 +231,20 @@
         .tokenfield-placeholder {
             // avoid visual changes when tokenfield get's initated
             padding-left: @default-padding;
-            &.form-control { .placeholder(#757575); }
+            // overwrite placehoder in intial state
+            &.form-control { .placeholder(#fff); }
+        }
+        // overwrite placeholder after first useage of search field
+        .token-input {
+            &:not(.focus) {
+                .placeholder(#fff);
+            }
         }
         .io-ox-find {
-            transition: opacity 300ms;
+            flex: 1;
+            max-width: 350px;
+            margin-left: auto;
+            transition: opacity max-width 1080ms;
             opacity: 0.7;
             &.active {
                 opacity: 1;

@@ -300,14 +300,14 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    /*ext.point('io.ox/core/appcontrol/search').extend({
+    ext.point('io.ox/core/appcontrol/search').extend({
         id: 'resize',
         index: 10000,
         draw: function () {
             // on mobile via ext 'io.ox/core/appcontrol/right'
             if (!capabilities.has('search') || _.device('smartphone')) return;
             var container = this,
-                MINWIDTH = 250,
+                MINWIDTH = 350,
                 MAXWIDTH = _.device('desktop') ? 750 : 550;
 
             // hide inactive
@@ -315,46 +315,6 @@ define('io.ox/core/main/appcontrol', [
                 var app = ox.ui.App.getCurrentApp();
                 if (!app || !app.id) return;
                 container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
-            }
-
-            function getSidepanelOverlap() {
-                // sidepanel overlap of quicklaunch in pixel (positive or 0)
-                var launcherWidth = $('#io-ox-launcher').width(),
-                    quickLaunchWidth = $('#io-ox-quicklaunch').width(),
-                    sidePanelWidth = $('.window-sidepanel:visible').width();
-                return !!sidePanelWidth ? Math.max((sidePanelWidth - launcherWidth - quickLaunchWidth), 0) : 0;
-            }
-
-            function setMargin() {
-                container.css('marginLeft', Math.max(getSidepanelOverlap(), 8));
-            }
-
-            function setWidth() {
-                var app = ox.ui.App.getCurrentApp();
-                if (!app || !app.id) return;
-                var current = container.find('.io-ox-find[data-app="' + app.id + '"]'),
-                    leftsideWidth = $('.leftside:visible').width(),
-                    // sidepanel AND vgrid/list AND not full width size
-                    doAlign = !!getSidepanelOverlap() && !!leftsideWidth && (leftsideWidth + 10 < $('.window-body:visible').width()),
-                    target = doAlign ? Math.min(MAXWIDTH, leftsideWidth) : MINWIDTH;
-
-                // special case: list layout to a non-list layout (keep width)
-                //if ((!leftsideWidth || leftsideWidth + 10 > $('.window-body:visible').width()) && !current.hasClass('initial')) return;
-                if (!doAlign && !current.hasClass('initial')) return;
-
-                var width = Math.min(container.width(), target, MAXWIDTH);
-                current.css({ 'min-width': Math.max(width, MINWIDTH) });
-                // max (limit just when when no tokens are active)
-                if (!current.hasClass('has-tokens')) current.css({ 'max-width': width });
-                current.removeClass('initial');
-            }
-
-            function rearrange() {
-                _.defer(function () {
-                    setMargin();
-                    setWidth();
-                    setVisibility();
-                });
             }
 
             function setVisibility() {
@@ -377,46 +337,23 @@ define('io.ox/core/main/appcontrol', [
                 }, delay);
             });
 
-            // resize/toggle of folder tree/list widget
-            // layout or page control change
-            ox.ui.apps.on('layout', rearrange);
-            $(window).on('resize', rearrange);
-
             // search is active (at least one token)
             ox.ui.apps.on('change:search', function (name, app) {
                 if (!/^(running|paused)$/.test(name)) return;
                 var node = app.view.$el,
                     isReset = name === 'paused';
+
                 node.toggleClass('has-tokens', !isReset)
                     .css({
                         // limit height to prevent jumping
                         'height': isReset ? 'initial' : '32px',
                         // expand field or restore min-width value
-                        'max-width': isReset ? node.css('min-width') : MAXWIDTH + 'px'
+                        'max-width': isReset ? MINWIDTH + 'px' : MAXWIDTH + 'px'
                     });
 
             });
         }
-    });*/
-
-    /*
-    ext.point('io.ox/core/appcontrol/logo').extend({
-        id: 'logo',
-        index: 10000,
-        draw: function () {
-            // add small logo to top bar
-            this.append(
-                $('<img>').attr({
-                    alt: ox.serverConfig.productName,
-                    src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
-                }).on('click', function (e) {
-                    e.preventDefault();
-                    ox.triger('logo-topbar:click');
-                })
-            );
-        }
     });
-    */
 
     function initRefreshAnimation() {
 
