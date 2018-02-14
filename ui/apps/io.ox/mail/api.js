@@ -45,7 +45,10 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
-    var fixtoccbcc = settings.get('features/fixtoccbcc');
+    var fixtoccbcc = settings.get('features/fixtoccbcc'),
+        showDeleted = !settings.get('features/ignoreDeleted', false),
+        sanitize = sanitizer.isEnabled(),
+        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     pool.map = function (data) {
         var cid = _.cid(data), model = this.get(cid);
@@ -78,8 +81,6 @@ define('io.ox/mail/api', [
         return data;
     };
 
-    var sanitize = sanitizer.isEnabled(),
-        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     // generate basic API
     var api = apiFactory({
@@ -96,7 +97,7 @@ define('io.ox/mail/api', [
                 // received_date
                 sort: '610',
                 order: 'desc',
-                deleted: 'true',
+                deleted: showDeleted,
                 // allow DB cache
                 cache: false
             },
