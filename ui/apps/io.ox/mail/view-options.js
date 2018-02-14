@@ -206,9 +206,9 @@ define('io.ox/mail/view-options', [
         node.toggle(!app.props.get('find-result'));
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'dropdown',
-        index: 300,
+        index: 1000,
         draw: function (baton) {
 
             var app = baton.app, model = app.props;
@@ -222,7 +222,7 @@ define('io.ox/mail/view-options', [
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item margin-auto').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 
@@ -254,9 +254,9 @@ define('io.ox/mail/view-options', [
         }
     });
 
-    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'all',
-        index: 200,
+        index: 100,
         draw: function (baton) {
 
             var app = baton.app, model = app.props;
@@ -271,7 +271,7 @@ define('io.ox/mail/view-options', [
 
             ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
 
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right margin-auto').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 
@@ -295,13 +295,13 @@ define('io.ox/mail/view-options', [
 
     function onFolderViewOpen(app) {
         app.getWindow().nodes.sidepanel.show();
-        app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').hide();
+        app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
     }
 
     function onFolderViewClose(app) {
         // hide sidepanel so invisible objects are not tabbable
         app.getWindow().nodes.sidepanel.hide();
-        app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').show();
+        app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
     }
 
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
