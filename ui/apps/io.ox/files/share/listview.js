@@ -62,7 +62,9 @@ define('io.ox/files/share/listview', [
                 '.list-item .list-item-content',
                 function () {
                     // using defere for "tap"; otherwise the selection is not yet ready
-                    _.defer(function () { self.openPermissionsDialog(); });
+                    _.defer(function () {
+                        self.openPermissionsDialog();
+                    });
                 }
             );
 
@@ -88,8 +90,16 @@ define('io.ox/files/share/listview', [
 
         openPermissionsDialog: function () {
             var model = this.collection.get(this.selection.get()[0]);
-            return require(['io.ox/files/share/permissions'], function (permissions) {
-                permissions.show(model);
+            var elem = this.$el.find('.list-item.selected[data-cid="' + (model.cid ? model.cid : _.cid(model)) + '"]');
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                if (elem.length) {
+                    var shareType = elem.attr('data-share-type');
+                    if (shareType === 'invited-people') {
+                        action.invite([model]);
+                    } else if (shareType === 'public-link') {
+                        action.link([model]);
+                    }
+                }
             });
         },
 
