@@ -233,7 +233,7 @@ define('io.ox/mail/view-options', [
             toggle();
         }
     });
-
+    /*
     ext.point('io.ox/mail/all-options').extend({
         id: 'default',
         index: 100,
@@ -252,8 +252,8 @@ define('io.ox/mail/view-options', [
                 });
             });
         }
-    });
-
+    });*/
+    /*
     ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'all',
         index: 100,
@@ -269,7 +269,7 @@ define('io.ox/mail/view-options', [
                 model: model
             });
 
-            ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
+            //ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
 
             this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
                 e.stopPropagation();
@@ -282,7 +282,7 @@ define('io.ox/mail/view-options', [
             toggle();
         }
     });
-
+    */
     function toggleFolderView(e) {
         e.preventDefault();
         var state = !!e.data.state;
