@@ -269,6 +269,19 @@
      display: inline-block;
 }
 
+.notifications-icon {
+    opacity: 1;
+    transition: opacity 0.2s linear;
+    &.no-notifications {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+#io-ox-notifications-icon {
+    min-width: 64px;
+}
+
 #io-ox-notifications-popups {
     position: absolute;
     top: 48px;

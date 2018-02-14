@@ -106,7 +106,7 @@
 
     #io-ox-top-logo {
         width: auto;
-        margin: 0 16px;
+        margin: 0 24px 0 16px;
     }
 
     #io-ox-launcher {
@@ -212,8 +212,18 @@
         }
     }
 
+    .io-ox-find:not(.active) {
+        .search-field {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.30);
+        }
+        .token-input, .tokenfield-placeholder {
+            .placeholder(#fff);
+        }
+    }
+
     #io-ox-topsearch {
-        margin-right: 16px;
+        margin-right: 24px;
         flex-grow: 1;
         display: flex;
 
@@ -222,38 +232,24 @@
         .search-field {
             border-radius: 0;
             height: 32px;
-            border: 1px;
-            &:not(.focus) {
-                border-color: transparent;
-                background: rgba(255,255,255,0.15);
-                border: 1px solid rgba(255,255,255, .7);
-            }
         }
 
-        .tokenfield { padding-top: 2px; }
+        .tokenfield { padding-top: 2px; }
+
+        .twitter-typeahead .tt-input {
+            background-color: transparent;
+        }
 
         // input placeholder text
         .tokenfield-placeholder {
             // avoid visual changes when tokenfield get's initated
             padding-left: @default-padding;
-            // overwrite placehoder in intial state
-            &.form-control { .placeholder(#fff); }
         }
-        // overwrite placeholder after first useage of search field
-        .token-input {
-            &:not(.focus) {
-                .placeholder(#fff);
-            }
-        }
+
         .io-ox-find {
             flex: 1;
             max-width: 350px;
             margin-left: auto;
-            transition: opacity max-width 1080ms;
-            opacity: 0.7;
-            &.active {
-                opacity: 1;
-            }
         }
     }
 
@@ -263,6 +259,7 @@
     #io-ox-toprightbar > ul li a {
         display: inline-flex;
         align-items: center;
+        justify-content: flex-end;
         height: 100%;
         margin: 0;
     }
