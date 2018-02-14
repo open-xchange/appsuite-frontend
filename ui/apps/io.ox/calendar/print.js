@@ -58,7 +58,7 @@ define('io.ox/calendar/print', [
     function getConfirmationListsforAttendees(internal, resources) {
         var states = { unconfirmed: [], accepted: [], declined: [], tentative: [] },
             map = { 'NEEDS-ACTION': 'unconfirmed', 'ACCEPTED': 'accepted', 'DECLINED': 'declined', 'TENTATIVE': 'tentative' };
-        _([].concat(internal, resources)).each(function (obj) {
+        _([].concat(internal || [], resources || [])).each(function (obj) {
             var state = map[obj.partStat] || 'unconfirmed';
             states[state].push(obj);
         });
@@ -73,7 +73,7 @@ define('io.ox/calendar/print', [
         var states = { unconfirmed: [], accepted: [], declined: [], tentative: [] },
             // 0 = unconfirmed, 1 = accepted, 2 = declined, 3 = tentative
             map = { 0: 'unconfirmed', 1: 'accepted', 2: 'declined', 3: 'tentative' };
-        _([].concat(internal, external, resources)).each(function (obj) {
+        _([].concat(internal || [], external || [], resources || [])).each(function (obj) {
             var state = map[obj.status] || 'unconfirmed';
             states[state].push(obj);
         });
@@ -99,7 +99,7 @@ define('io.ox/calendar/print', [
     function unify(data, userList, groupList, resourceList, externalContacts) {
 
         // chronos api
-        if (data.attendees) {
+        if (data.startDate || data.endDate || data.attendees) {
             // get lists per confirmation state
             var internal = _(data.attendees).where({ cuType: 'INDIVIDUAL' }),
                 resources = _(data.attendees).where({ cuType: 'RESOURCE' }),
@@ -135,7 +135,7 @@ define('io.ox/calendar/print', [
         return userAPI.getList(usersInGroups).then(function (resolvedUsers) {
             // inject confirmations
             var confirmations = util.getConfirmations(data),
-                internal = injectInternalConfirmations([].concat(userList, resolvedUsers), confirmations),
+                internal = injectInternalConfirmations([].concat(userList || [], resolvedUsers || []), confirmations),
                 external = injectExternalConfirmations(externalContacts, confirmations),
                 resources = injectResourceConfirmations(resourceList);
             // get lists per confirmation state
