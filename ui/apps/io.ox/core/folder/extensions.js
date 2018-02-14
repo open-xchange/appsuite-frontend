@@ -964,7 +964,10 @@ define('io.ox/core/folder/extensions', [
                 var dropdown = new DropdownView({
                     tagName: 'li',
                     className: 'presentation dropdown',
-                    $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').text(gt('Add new calendar'))
+                    $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
+                        gt('Add new calendar'),
+                        $('<i class="fa fa-caret-down" aria-hidden="true">')
+                    )
                 });
                 ext.point('io.ox/core/foldertree/calendar/links/subscribe').invoke('draw', dropdown);
                 if (dropdown.$ul.children().length === 0) return;

@@ -341,7 +341,9 @@ define('io.ox/calendar/main', [
                 // Keep this for debugging purposes
                 // else console.error('Sort was impossible due to missing folders in cache. ', failed);
             }
-            setFolders(settings.get('selectedFolders', [folderAPI.getDefaultFolder('calendar')]));
+            var initalList = settings.get('selectedFolders');
+            if (!initalList || initalList.length === 0) initalList = [folderAPI.getDefaultFolder('calendar')];
+            setFolders(initalList);
             app.folders = {
                 getData: function () {
                     return $.when.apply($, folders.map(function (folder) {
