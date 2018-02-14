@@ -616,6 +616,14 @@ define('io.ox/mail/main', [
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {});
                 if (!app.settings.get('threadSupport', true)) options.thread = false;
+
+                // ignore unavailable sort options
+                var isUnavailable =
+                    (!settings.get('features/flag/color') && options.sort === 102) ||
+                    (!settings.get('features/flag/star') && options.sort === 660) ||
+                    (options.sort === 602 && !folderAPI.pool.getModel(folder).supports('ATTACHMENT_SEARCH'));
+                if (isUnavailable) delete options.sort;
+
                 return _.extend({ sort: 610, order: 'desc', thread: false }, options);
             };
         },

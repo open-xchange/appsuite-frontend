@@ -22,8 +22,9 @@ define('io.ox/mail/view-options', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/http',
     'io.ox/mail/api',
+    'io.ox/core/folder/api',
     'settings!io.ox/mail'
-], function (ext, Dropdown, mini, account, gt, commons, contextmenu, CollectionLoader, http, mailAPI, settings) {
+], function (ext, Dropdown, mini, account, gt, commons, contextmenu, CollectionLoader, http, mailAPI, folderAPI, settings) {
 
     'use strict';
 
@@ -159,22 +160,36 @@ define('io.ox/mail/view-options', [
         id: 'sort',
         index: 100,
         draw: function (baton) {
-            this.data('view').listenTo(baton.app, 'folder:change', function () {
-                var link = this.$('a[data-value="from-to"]'),
-                    textNode = link.contents().last();
-                textNode.replaceWith(account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'));
-            });
-            this.data('view')
-                .option('sort', 610, gt('Date'), { radio: true })
-                .option('sort', 'from-to', account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
+            var view = this.data('view');
+
+            view.listenTo(baton.app, 'folder:change', onFolderChange);
+
+            view.option('sort', 610, gt('Date'), { radio: true })
+                .option('sort', 'from-to', gt('From'), { radio: true })
                 .option('sort', 651, gt('Unread'), { radio: true })
                 .option('sort', 608, gt('Size'), { radio: true })
-                .option('sort', 607, gt('Subject'), { radio: true });
+                .option('sort', 607, gt('Subject'), { radio: true })
+                //#. Sort by messages that have attachments
+                .option('sort', 602, gt('Has Attachment'), { radio: true });
+
             // color flags
             if (settings.get('features/flag/color')) this.data('view').option('sort', 102, gt('Color'), { radio: true });
-            // sort by /flagged messages, internal namin is "star"
+
+            // sort by /flagged messages, internal naming is "star"
             //#. Sort by messages which are flagged, "Flag" is used in dropdown
             if (settings.get('features/flag/star')) this.data('view').option('sort', 660, gt('Flag'), { radio: true });
+
+            onFolderChange();
+            function onFolderChange() {
+                var folder = baton.app.folder.get(), link, textNode;
+                // toggle from-to label by folder type
+                link = view.$('a[data-value="from-to"]');
+                textNode = link.contents().last();
+                textNode.replaceWith(account.is('sent|drafts', folder) ? gt('To') : gt('From'));
+                // toggle visibily of 'has attachments'
+                link = view.$('a[data-value="602"]');
+                link.toggleClass('hidden', !folderAPI.pool.getModel(folder).supports('ATTACHMENT_SEARCH'));
+            }
         }
     });
 
