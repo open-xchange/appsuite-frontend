@@ -12,8 +12,9 @@
  */
 
 define('io.ox/calendar/settings/schedjoules/api', [
+    'io.ox/core/folder/api',
     'io.ox/core/http'
-], function (http) {
+], function (folderAPI, http) {
 
     var api = {
 
@@ -41,21 +42,16 @@ define('io.ox/calendar/settings/schedjoules/api', [
         },
 
         subscribeCalendar: function (obj) {
-            return http.PUT({
-                module: 'folders',
-                params: { action: 'new', autorename: true, folder_id: 1, tree: 0 },
-                appendColumns: false,
-                data: {
-                    module: 'event',
-                    subscribed: 1,
-                    title: obj.name,
-                    'com.openexchange.calendar.provider': 'schedjoules',
-                    'com.openexchange.calendar.config': {
-                        'itemId': obj.itemId,
-                        'refreshInterval': 10080
-                    }
+            // use folder api here to trigger events and have models in the pool
+            return folderAPI.create('1', {
+                module: 'event',
+                subscribed: 1,
+                title: obj.name,
+                'com.openexchange.calendar.provider': 'schedjoules',
+                'com.openexchange.calendar.config': {
+                    'itemId': obj.itemId,
+                    'refreshInterval': 10080
                 }
-
             });
         }
 

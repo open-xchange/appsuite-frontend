@@ -829,6 +829,7 @@ define('io.ox/core/folder/api', [
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
+        if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
         if (ox.debug && !options.module) {
@@ -1399,7 +1400,7 @@ define('io.ox/core/folder/api', [
         settings.set(['folder/hidden', id], true).save();
         // reload sections; we could handle this locally
         // but this is a dead-end when it comes to sorting
-
+        api.trigger('hide', id);
         flat({ module: module, cache: false });
     }
 
@@ -1410,6 +1411,7 @@ define('io.ox/core/folder/api', [
         settings.remove(['folder/hidden', id]).save();
         // reload sections; we could handle this locally
         // but this is a dead-end when it comes to sorting
+        api.trigger('show', id);
         flat({ module: module, cache: false });
     }
 

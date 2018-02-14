@@ -303,16 +303,19 @@ define('io.ox/calendar/main', [
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
-        'folder-create': function () {
+        'folder-create': function (app) {
             folderAPI.on('create', function (folder) {
                 if (folder.module !== 'calendar') return;
                 app.folders.add(folder.id);
                 app.folder.set(folder.id);
+                // repaint node to ensure the checkmark
+                var node = app.treeView.getNodeView(folder.id);
+                if (node) node.repaint();
             });
         },
 
         'folder-remove': function (app) {
-            folderAPI.on('remove', function (id) {
+            folderAPI.on('hide remove', function (id) {
                 app.folders.remove(id);
             });
         },

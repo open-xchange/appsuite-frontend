@@ -133,9 +133,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                 folderAPI.remove([sub.id]);
             });
 
-            http.resume().done(function () {
-                folderAPI.refresh();
-            });
+            http.resume();
 
         });
 
