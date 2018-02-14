@@ -255,7 +255,9 @@ define('io.ox/files/toolbar', [
     });
 
     new actions.Action('io.ox/files/dropdown/share', {
-        requires: function () { return true; },
+        requires: function (e) {
+            return (e.baton.models.length !== 1);
+        },
         action: $.noop
     });
 

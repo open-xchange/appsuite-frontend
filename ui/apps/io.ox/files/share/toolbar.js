@@ -33,7 +33,7 @@ define('io.ox/files/share/toolbar', [
                 mobile: 'lo',
                 label: gt('Edit share'),
                 drawDisabled: true,
-                ref: 'io.ox/files/share/edit'
+                ref: 'io.ox/files/actions/editShare'
             },
             'delete': {
                 prio: 'hi',

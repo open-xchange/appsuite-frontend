@@ -470,10 +470,23 @@ define('io.ox/files/main', [
                                 .append(toolbar.render().$el)
                         );
 
-                        app.updateMyshareToolbar = _.debounce(function (list) {
-                            var baton = ext.Baton({
+                        app.updateMyshareToolbar = _.debounce(function (cidList) {
+                            if (!cidList || (_.isArray(cidList) && !cidList.length)) return;
+                            var // turn cids into proper objects
+                                cids = _.uniq(cidList),
+                                modelList = [];
+                            _.each(cids, function (cid) {
+                                modelList.push(app.mysharesListView.collection.get(cid));
+                            });
+                            var models = modelList,
+                                list = models, //_(models).invoke('toJSON'),
+                                // extract single object if length === 1
+                                data = list.length === 1 ? list[0] : list,
+                                baton = ext.Baton({
                                     $el: toolbar.$list,
-                                    data: app.mysharesListView.collection.get(list),
+                                    app: app,
+                                    data: data,
+                                    models: models,
                                     collection: app.mysharesListView.collection,
                                     model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                                 }),

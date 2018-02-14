@@ -646,27 +646,56 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
+    /**
+     * Checks if the collection inside an event is shareable
+     * @param {Event} e
+     *  Event to check the collection
+     * @param {String} type
+     *  Type of the sharing to check ("invite" or "link")
+     * @returns {boolean}
+     *  Whether the elements inside the collection are shareable
+     */
     function isShareable(e, type) {
-        var id, model;
-        // not possible for multi-selection
-        if (e.collection.has('multiple')) return false;
-        // check if this is a contact not a file, happens when contact is send as vcard
-        if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
-        // get folder id
-        if (e.collection.has('one')) {
-            // use selected file or folders
-            id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
-        } else if (e.baton.app) {
-            // use current folder
-            id = e.baton.app.folder.get();
-        }
-        if (!id) return false;
-        // general capability and folder check
-        model = folderAPI.pool.getModel(id);
-        if (!model.isShareable()) return false;
-        if (model.is('trash')) return false;
-        return type === 'invite' ? model.supportsInviteGuests() : true;
+        var returnValue = true;
+        _.each(e.baton.models, function (model) {
+            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
+            var folderModel = folderAPI.pool.getModel(id);
+            if (!folderModel.isShareable()) returnValue = false;
+            if (folderModel.is('trash')) returnValue = false;
+            if (!id) returnValue = false;
+            if (type === 'invite' && !folderModel.supportsInviteGuests()) returnValue = false;
+        });
+
+        return returnValue;
     }
+
+    // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
+    new Action('io.ox/files/actions/editShare', {
+        requires: function (e) {
+            if (e.baton.models.length > 1) return false;
+            return isShareable(e, 'link') || isShareable(e, 'invite');
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                var models;
+                if (baton.models && baton.models.length === 1) models = baton.models;
+                if (models && models.length) {
+                    _.each(models, function (model) {
+                        if (!baton.app || !baton.app.mysharesListView || !baton.app.mysharesListView.$el) return false;
+                        var elem = baton.app.mysharesListView.$el.find('.list-item.selected[data-cid="' + (model.cid ? model.cid : _.cid(model)) + '"]');
+                        if (elem.length) {
+                            var shareType = elem.attr('data-share-type');
+                            if (shareType === 'invited-people') {
+                                action.invite(models);
+                            } else if (shareType === 'public-link') {
+                                action.link(models);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
 
     // folder based actions
     new Action('io.ox/files/actions/invite', {
@@ -839,14 +868,25 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to revoke the sharing of the files.
     new Action('io.ox/files/share/revoke', {
-        requires: 'one',
+        requires: function (e) {
+            return isShareable(e, 'link') || isShareable(e, 'invite');
+        },
         action: function (baton) {
             require(['io.ox/files/share/permissions'], function (permissions) {
-                var collection = new permissions.Permissions();
-                shareAPI.revoke(collection, baton.model ? baton.model : baton.models[0]).then(function () {
-                    yell('success', gt('Revoked access.'));
-                }).fail(yell);
+                if (!baton.app || !baton.app.mysharesListView) return false;
+
+                var cids = _.isArray(baton.data) ? baton.data : [baton.data],
+                    collection = new permissions.Permissions(),
+                    models = _.map(cids, function (cid) {
+                        return baton.app.mysharesListView.collection.get(cid);
+                    });
+                _.each(models, function (model) {
+                    shareAPI.revoke(collection, model).then(function () {
+                        yell('success', gt('Revoked access.'));
+                    }).fail(yell);
+                });
             });
         }
     });

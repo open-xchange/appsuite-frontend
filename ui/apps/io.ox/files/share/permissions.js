@@ -459,7 +459,14 @@ define('io.ox/files/share/permissions', [
 
                 // extended permissions are mandatory now
                 if (this.model.isExtendedPermission()) {
-                    this.collection.reset(this.model.getPermissions());
+                    var permissionsArray = [];
+                    _.each(this.model.getPermissions(), function (permission) {
+                        if (permission.type === 'anonymous') {
+                            return;
+                        }
+                        permissionsArray.push(permission);
+                    });
+                    this.collection.reset(permissionsArray);
                 } else {
                     console.error('Extended permissions are mandatory', this);
                 }

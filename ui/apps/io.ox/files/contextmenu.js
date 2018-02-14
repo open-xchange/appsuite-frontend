@@ -164,11 +164,11 @@ define('io.ox/files/contextmenu', [
     // myshares file context menu definition
     ext.point('io.ox/core/file/contextmenu/myshares/items').extend(
         {
-            id: 'permissions',
+            id: 'editShare',
             index: 1000,
-            ref: 'io.ox/files/actions/permissions',
-            section: '10',
-            label: gt('Edit share')
+            ref: 'io.ox/files/actions/editShare',
+            section: '30',
+            label: gt('Edit Share')
         },
         {
             id: 'show-in-folder',
@@ -286,6 +286,13 @@ define('io.ox/files/contextmenu', [
             ref: 'io.ox/files/actions/delete',
             section: '60',
             label: gt('Delete')
+        },
+        {
+            id: 'show-in-folder',
+            index: 1100,
+            ref: 'io.ox/files/actions/show-in-folder',
+            section: '20',
+            label: gt('Show in Drive')
         }
     );
 

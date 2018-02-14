@@ -233,6 +233,40 @@ define('io.ox/files/share/wizard', [
     });
 
     /*
+     * extension point for allowance of subfolder access
+     *
+     * see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
+     */
+    ext.point(POINT + '/options').extend({
+        id: 'includeSubfolders',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var guid, elmCheckbox;
+            this.append(
+                $('<div class="form-group">').append(
+                    $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
+                        new miniViews.CheckboxView({ id: guid, name: 'includeSubfolders', model: baton.model }).render().$el
+                        .on('click', function (/* e */) {
+                            baton.model.set('includeSubfolders', elmCheckbox.checked);
+                        })
+                    )
+                )
+            );
+            elmCheckbox = this.find('input').attr({ id: guid })[0];
+
+            baton.model.once('change', function (model/*, options*/) {
+                var isNewLink = model.get('is_new');
+
+                if (isNewLink === true) {
+                    model.set('includeSubfolders', (elmCheckbox.checked = isNewLink));
+                } else {
+                    elmCheckbox.checked = model.get('includeSubfolders');
+                }
+            });
+        }
+    });
+
+    /*
      * extension point for expires dropdown
      */
     ext.point(POINT + '/options').extend({
