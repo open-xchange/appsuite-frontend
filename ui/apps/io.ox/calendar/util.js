@@ -1021,19 +1021,19 @@ define('io.ox/calendar/util', [
             var l1 = that.getRelativeLuminance(that.colorToRGB(color)),
                 hsl = that.colorToHSL(color),
                 hue = hsl[0],
-                sat = hsl[1] > 0 ? 40 : 0,
+                sat = hsl[1] > 0 ? 30 : 0,
                 lum = 50,
                 foreground;
 
             if (l1 < 0.18333) return 'white';
 
-            // start with 50% luminance; then go down until color contrast exceeds 4.5
+            // start with 50% luminance; then go down until color contrast exceeds 5 (little higher than 4.5)
             // whoever finds a simple way to calculate this programmatically
-            // (and which is still correct in all cased) gets a beer or two
+            // (and which is still correct in all cases) gets a beer or two
             do {
                 foreground = 'hsl(' + hue + ', ' + sat + '%, ' + lum + '%)';
-                lum -= 10;
-            } while (lum >= 0 && colorContrast(foreground) < 4.5);
+                lum -= 5;
+            } while (lum >= 0 && colorContrast(foreground) < 5);
 
             return foreground;
         }),
