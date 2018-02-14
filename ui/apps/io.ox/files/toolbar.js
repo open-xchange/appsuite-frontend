@@ -244,6 +244,13 @@ define('io.ox/files/toolbar', [
                 label: gt('Unlock'),
                 ref: 'io.ox/files/actions/unlock',
                 section: 'file-op'
+            },
+            'restore': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Restore'),
+                ref: 'io.ox/files/actions/restore',
+                section: 'file-op'
             }
         };
 

@@ -265,6 +265,7 @@ define('io.ox/core/folder/util', [
                 return (bits & 4) === 4 || (bits & 64) === 64;
             case 'delete:folder':
             case 'remove:folder':
+            case 'restore:folder':
                 // must be admin; system and default folder cannot be deleted
                 return isAdmin && !isSystem && !is('defaultfolder', data);
             case 'move:folder':

@@ -1040,6 +1040,58 @@ define('io.ox/files/api', [
         });
     };
 
+    /**
+     * Restore a bunch of fileModels to their originally source.
+     *
+     * @param {api.Model[]} list
+     *  Array of fileModels
+     */
+    api.restore = function (list) {
+        // ensure array
+        if (!_.isArray(list)) list = [list];
+
+        // local copy for model data
+        var data = [];
+
+        _(list).each(function (model) {
+            data.push({ id: model.get('id'), folder: model.get('folder_id') });
+
+            // remove model from collections
+            _(api.pool.collections).invoke('remove', model);
+            model.set('unread', 0);
+        });
+
+        // restore on server
+        return http.PUT({
+            module: 'infostore',
+            params: {
+                action: 'restore',
+                folder: data[0].id === '1' || /^default\d+/.test(data[0].id) ? 0 : 1
+            },
+            data: data,
+            appendColumns: false
+        })
+        .done(function (responseArray) {
+            var folderId,
+                affectedFolders = [];
+
+            _.each(responseArray, function (response) {
+                folderId = response.path[0].id;
+
+                if (!_.contains(affectedFolders, folderId)) {
+                    affectedFolders.push(folderId);
+                }
+
+                api.trigger('reload:listview');
+            });
+        })
+        .fail(function () {
+            _(list).each(function (model) {
+                api.propagate('restore:fail', model.toJSON());
+            });
+        });
+    };
+
     //
     // Respond to folder API
     //
@@ -1070,6 +1122,9 @@ define('io.ox/files/api', [
         'before:remove before:move': function (data) {
             var collection = pool.get('detail'), cid = _.cid(data);
             collection.remove(collection.get(cid));
+        },
+        'restore': function () {
+            api.trigger('reload:listview');
         }
     });
 
@@ -1574,6 +1629,10 @@ define('io.ox/files/api', [
                     api.trigger('add:file', file);
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
+                    break;
+
+                case 'restore:fail':
+                    api.trigger('restore:fail', file);
                     break;
 
                 case 'add:version':

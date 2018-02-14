@@ -1231,6 +1231,62 @@ define('io.ox/core/folder/api', [
         });
     }
 
+    /**
+     * Restore a bunch of folderModels to their originally source.
+     *
+     * @param {api.Model[]} list
+     *  Array of folderModels
+     */
+    function restore(list) {
+        // ensure array
+        if (!_.isArray(list)) list = [list];
+
+        var ids = [];
+
+        _(list).each(function (model) {
+            var id = model.get('id');
+
+            ids.push(id);
+
+            // remove model from collections
+            _(api.pool.collections).invoke('remove', model);
+            model.set('unread', 0);
+        });
+
+        // restore on server
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'restore',
+                tree: tree(ids[0])
+            },
+            data: ids,
+            appendColumns: false
+        })
+        .done(function () {
+            _(list).each(function (model) {
+                var id = model.get('id');
+                api.get(id, { cache: false })
+                    .done(function (folderModel) {
+                        api.pool.getModel(folderModel.folder_id).set('subscr_subflds', true);
+                        api.pool.getCollection(folderModel.folder_id).add(model);
+                        api.trigger('restore', model.toJSON());
+                    })
+                    .fail(function (error) {
+                        // folder does not exist
+                        if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
+                            removeFromAllCollections(model);
+                        }
+                    });
+            });
+        })
+        .fail(function () {
+            _(list).each(function (model) {
+                api.propagate('restore:fail', model.toJSON());
+            });
+        });
+    }
+
     //
     // Clear/empty folder
     //
@@ -1515,6 +1571,7 @@ define('io.ox/core/folder/api', [
         move: move,
         create: create,
         remove: remove,
+        restore: restore,
         isBeingDeleted: isBeingDeleted,
         clear: clear,
         reload: reload,

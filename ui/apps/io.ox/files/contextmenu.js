@@ -288,11 +288,11 @@ define('io.ox/files/contextmenu', [
             label: gt('Delete')
         },
         {
-            id: 'show-in-folder',
-            index: 1100,
-            ref: 'io.ox/files/actions/show-in-folder',
-            section: '20',
-            label: gt('Show in Drive')
+            id: 'restore',
+            index: 2000,
+            ref: 'io.ox/files/actions/restore',
+            section: '60',
+            label: gt('Restore')
         }
     );
 

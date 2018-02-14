@@ -525,6 +525,49 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to restore a list of files and folders
+    new Action('io.ox/files/actions/restore', {
+        requires: function (e) {
+            if (!e.context) return false;
+
+            if (!_.isArray(e.context)) e.context = [e.context];
+
+            var result = true;
+            _.each(e.context, function (element) {
+                // folderId where the item is located
+                var folderId = element.folder_id;
+                if ((/^folder\./).test(e.context[0].cid)) {
+                    // the folderId is the id of the parent folder if the item is a folder
+                    var folderModel = folderAPI.pool.getModel(e.context[0].id);
+                    folderId = folderModel.get('folder_id');
+                }
+
+                // is an item is not located in the trash, disable the action
+                if (String(settings.get('folder/trash')) !== folderId) {
+                    result = false;
+                }
+            });
+
+            return result;
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/restore']).done(function (action) {
+                if (!_.isArray(baton.data)) baton.data = [baton.data];
+                var models = [];
+                _.each(baton.data, function (element) {
+                    var model = new api.Model(element);
+                    var key = baton.app.listView.getCompositeKey(model);
+
+                    // the file model of files and folders
+                    var convertedModel = api.resolve([key], false);
+                    if (convertedModel.length) models.push(convertedModel[0]);
+                });
+
+                action(models);
+            });
+        }
+    });
+
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             requires:  function (e) {
@@ -898,18 +941,24 @@ define('io.ox/files/actions', [
                 if (Array.isArray(e.context)) {
                     var result = true;
                     _.each(e.context, function (element) {
-                        var favorites = e.baton.app.listView.favorites,
-                            isFavorite = _.find(favorites, function (elem) {
-                                if (elem.id === element.id) {
-                                    return true;
-                                }
-                            });
-                        if (isFavorite) {
+                        if (folderAPI.is('trash', element)) {
                             result = false;
+                        }
+                        if (result) {
+                            var favorites = e.baton.app.listView.favorites,
+                                isFavorite = _.find(favorites, function (elem) {
+                                    if (elem.id === element.id) {
+                                        return true;
+                                    }
+                                });
+                            if (isFavorite) {
+                                result = false;
+                            }
                         }
                     });
                     return result;
                 }
+                if (folderAPI.is('trash', e.context)) return false;
                 var id = e.context.id,
                     favorites = e.baton.app.listView.favorites,
                     isFavorite = _.find(favorites, function (elem) {
@@ -937,14 +986,16 @@ define('io.ox/files/actions', [
                 if (Array.isArray(e.context)) {
                     var result = false;
                     _.each(e.context, function (element) {
-                        var favorites = e.baton.app.listView.favorites,
-                            isFavorite = _.find(favorites, function (elem) {
-                                if (elem.id === element.id) {
-                                    return true;
-                                }
-                            });
-                        if (isFavorite) {
-                            result = true;
+                        if (!result) {
+                            var favorites = e.baton.app.listView.favorites,
+                                isFavorite = _.find(favorites, function (elem) {
+                                    if (elem.id === element.id) {
+                                        return true;
+                                    }
+                                });
+                            if (isFavorite) {
+                                result = true;
+                            }
                         }
                     });
                     return result;

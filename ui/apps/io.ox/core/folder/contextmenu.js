@@ -20,8 +20,9 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/api/filestorage',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, fileSettings, gt) {
 
     'use strict';
 
@@ -207,6 +208,39 @@ define('io.ox/core/folder/contextmenu', [
                     enabled: true,
                     handler: handler,
                     text: gt('Delete')
+                });
+            };
+        }()),
+
+        //
+        // Restore folder
+        //
+        restoreFolder: (function () {
+
+            return function (baton) {
+
+                function handler(e) {
+                    ox.load(['io.ox/files/api', 'io.ox/files/actions/restore']).done(function (filesApi, action) {
+                        var model = new filesApi.Model(api.pool.getModel(e.data.id).toJSON());
+                        var key = e.data.listView.getCompositeKey(model);
+
+                        // the file model of files and folders
+                        var convertedModel = filesApi.resolve([key], false);
+                        action(convertedModel);
+                    });
+                }
+
+                if (!/^(infostore)$/.test(baton.module)) return;
+                if (!api.is('trash', baton.data)) return;
+                if (!api.can('restore:folder', baton.data)) return;
+                if (String(fileSettings.get('folder/trash')) !== baton.data.folder_id) return;
+
+                contextUtils.addLink(this, {
+                    action: 'restore',
+                    data: { id: baton.data.id, listView: baton.app.listView },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Restore')
                 });
             };
         }()),
@@ -741,6 +775,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'delete',
             index: 6600,
             draw: extensions.removeFolder
+        },
+        {
+            id: 'restore',
+            index: 6600,
+            draw: extensions.restoreFolder
         }
     );
 
