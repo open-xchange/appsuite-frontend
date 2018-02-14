@@ -1636,13 +1636,10 @@ define('io.ox/calendar/week/view', [
         },
 
         print: function () {
-            // TODO update print template
-            var folder = this.folder();
             print.request('io.ox/calendar/week/print', {
                 start: moment(this.startDate).valueOf(),
                 end: moment(this.startDate).add(this.columns, 'days').valueOf(),
-                folder: folder.id || folder.folder,
-                title: folder.title
+                folders: this.folders
             });
         }
     });

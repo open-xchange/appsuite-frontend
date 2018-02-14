@@ -37,8 +37,14 @@ define('io.ox/calendar/week/print', [
 
     function getIntersection(event, list) {
         var intersecting = _(list).filter(function (ev) {
-            if (util.getMoment(event.get('endDate')).valueOf() <= util.getMoment(ev.get('startDate')).valueOf()) return false;
-            if (util.getMoment(event.get('startDate')).valueOf() >= util.getMoment(ev.get('endDate')).valueOf()) return false;
+            var aStart = util.getMoment(event.get('startDate')).valueOf(),
+                // make sure an appointment lasts at least 30 minutes
+                aEnd = moment.max(moment(aStart).add(30, 'minutes'), util.getMoment(event.get('endDate'))).valueOf(),
+                bStart = util.getMoment(ev.get('startDate')).valueOf(),
+                // make sure an appointment lasts at least 30 minutes
+                bEnd = moment.max(moment(bStart).add(30, 'minutes'), util.getMoment(ev.get('endDate'))).valueOf();
+            if (aEnd <= bStart) return false;
+            if (aStart >= bEnd) return false;
             return true;
         });
         return {
@@ -53,7 +59,8 @@ define('io.ox/calendar/week/print', [
                 isAllday = util.isAllday(event),
                 intersection = getIntersection(event, list),
                 startDate = moment.max(util.getMoment(event.get('startDate')), dayStart),
-                endDate = util.getMoment(event.get('endDate')),
+                // make sure appointment lasts at least 30 minutes
+                endDate = moment.max(startDate.clone().add(30, 'minutes'), util.getMoment(event.get('endDate'))),
                 startRange = Math.max(startDate.hour(), minHour),
                 endRange = Math.max(startDate.hour() + 1, startDate.hour() + endDate.diff(startDate, 'hours') + 1);
 
@@ -70,7 +77,7 @@ define('io.ox/calendar/week/print', [
                     top: top,
                     height: Math.min((endRange - startRange) * 60, Math.max(15, endDate.diff(startDate, 'minutes') - (startRange - startDate.hour()) * 60)),
                     time: startDate.format('LT'),
-                    title: event.summary
+                    title: event.get('summary')
                 });
             });
             return parts;
@@ -86,19 +93,21 @@ define('io.ox/calendar/week/print', [
         open: function (selection, win) {
 
             print.smart({
-                selection: [selection.folder],
+                selection: [selection.folders],
 
                 get: function () {
-                    return api.getAll({
+                    var collection = api.getCollection({
                         start: selection.start,
                         end: selection.end,
-                        folder: selection.folder
-                    }).then(function (events) {
+                        folders: selection.folders,
+                        view: 'week'
+                    });
+                    return collection.sync().then(function () {
                         var weekStart = moment(selection.start),
                             weekEnd = moment(selection.end),
                             days = [],
                             minHour = Number.MAX_SAFE_INTEGER, maxHour = Number.MIN_SAFE_INTEGER;
-                        events.forEach(function (event) {
+                        collection.forEach(function (event) {
                             minHour = Math.min(Math.min(minHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
                             maxHour = Math.max(Math.max(maxHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
                         });
@@ -113,7 +122,7 @@ define('io.ox/calendar/week/print', [
                                 start: minHour,
                                 end: maxHour,
                                 date: weekStart.date(),
-                                slots: _(events)
+                                slots: collection
                                     .chain()
                                     .filter(getFilter(dayStart, dayEnd))
                                     .sortBy(sortBy)

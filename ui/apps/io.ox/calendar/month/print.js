@@ -38,7 +38,7 @@ define('io.ox/calendar/month/print', [
     function map(event) {
         return {
             time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
-            title: event.summary
+            title: event.get('summary')
         };
     }
 
@@ -47,14 +47,16 @@ define('io.ox/calendar/month/print', [
         open: function (selection, win) {
 
             print.smart({
-                selection: [selection.folder],
+                selection: [selection.folders],
 
                 get: function () {
-                    return api.getAll({
+                    var collection = api.getCollection({
                         start: selection.start,
                         end: selection.end,
-                        folder: selection.folder
-                    }).then(function (events) {
+                        folders: selection.folders,
+                        view: 'month'
+                    });
+                    return collection.sync().then(function () {
                         var currentMonth = moment(selection.current).month(),
                             weekStart = moment(selection.start),
                             end = moment(selection.end),
@@ -72,7 +74,7 @@ define('io.ox/calendar/month/print', [
                                     dayEnd = start.clone().add(1, 'day').valueOf();
                                 days.push({
                                     date: start.date(),
-                                    events: _(events)
+                                    events: collection
                                         .chain()
                                         .filter(getFilter(dayStart, dayEnd))
                                         .sortBy(sortBy)
@@ -86,7 +88,6 @@ define('io.ox/calendar/month/print', [
                                 days: days
                             });
                         }
-
                         return weeks;
                     });
                 },

@@ -403,7 +403,7 @@ define('io.ox/calendar/month/perspective', [
                 current: this.current,
                 start: moment(this.current).startOf('week').valueOf(),
                 end: moment(this.current).endOf('month').endOf('week').valueOf(),
-                folder: this.folder.id || this.folder.folder,
+                folders: _(this.folders).pluck('id'),
                 title: this.folder.title
             });
         },

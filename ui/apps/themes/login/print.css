@@ -301,6 +301,7 @@ h1.calendar-title {
 .month-view td, .month-view th{
     border-right: 1px solid #C0C0C0;
     border-bottom: 1px solid #C0C0C0;
+    overflow: hidden;
 }
 
 .month-view ul {
@@ -383,7 +384,9 @@ h1.calendar-title {
     border: 1px solid gray;
     z-index: 1;
     background-color: white;
-    padding: 2px;
+    padding: 1px;
+    font-size: 12px;
+    line-height: 14px;
 
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
