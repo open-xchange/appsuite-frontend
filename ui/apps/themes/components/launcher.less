@@ -37,6 +37,7 @@
 }
 
 .smartphone {
+    #io-ox-top-logo { display: none; }
     #io-ox-core #io-ox-screens { top: @appcontrol-height-smartphone; }
 }
 
@@ -77,6 +78,10 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.90);
         opacity: 0;
         transition: opacity 5s linear;
+        .smartphone & {
+            height:  @appcontrol-height-smartphone - 1;
+            border-bottom: 0;
+        }
     }
 
     html.vibe-night & { .mx-night; &:before { .mx-night; opacity: 0; } }
@@ -294,21 +299,18 @@
     }
 }
 
-.open #io-ox-launchgrid {
-    display: block;
-    opacity: 1;
-}
-
 #io-ox-launchgrid {
     display: none;
-    opacity: 0;
-
     position: absolute;
     background: white;
     box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
     z-index: 1;
-    transition: opacity .367s cubic-bezier(0.1, 0.9, 0.2, 1);
+
     top: @appcontrol-height;
+
+    .open & {
+        display: block;
+    }
 
     .indicator {
         display: none;
@@ -322,6 +324,9 @@
         flex-wrap: wrap;
         padding: @launcher-outer-spacing;
         width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2;
+        .smartphone & {
+            width: 100%;
+        }
     }
 
     .lcell {
@@ -333,6 +338,10 @@
         margin: @launcher-spacing;
         height: @launcher-size;
         width: @launcher-size;
+
+        .smartphone & {
+            width: 32%;
+        }
 
         cursor: pointer;
 
