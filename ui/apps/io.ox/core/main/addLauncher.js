@@ -17,7 +17,7 @@ define('io.ox/core/main/addLauncher', [], function () {
         var node = $('<li class="launcher">');
 
         if (fn) {
-            node.on('click', function (e) {
+            node.on('click', 'a', function (e) {
                 e.preventDefault();
                 var self = $(this), content,
                     focus = $(document.activeElement);
