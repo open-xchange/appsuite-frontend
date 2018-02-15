@@ -66,7 +66,7 @@ define('io.ox/files/api', [
                 // pim attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
-                    file_size: attributes.file_size,
+                    file_size: attributes.file_size || attributes.size,
                     file_mimetype: attributes.file_mimetype || attributes.fmtType,
                     id: attributes.id || attributes.managedId,
                     folder_id: attributes.folder,

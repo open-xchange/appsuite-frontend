@@ -191,20 +191,20 @@ define('io.ox/core/viewer/util', [
     };
 
     Util.renderItemSize = function (model) {
-        var size, total, sizeString;
+        var fileSize, itemCount, resultString;
 
-        if (model.isFile()) {
-            size = model.get('file_size');
-            sizeString = (_.isNumber(size)) ? _.filesize(size) : '-';
+        // for files
+        if (model.isFile() || model.isMailAttachment() || model.isPIMAttachment()) {
+            fileSize = model.get('file_size');
+            resultString = (_.isNumber(fileSize)) ? _.filesize(fileSize) : '-';
+
+        // for folders
         } else {
-            total = model.get('total');
-            sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
-            if (!_.isNumber(total) && _.isNumber(model.get('origData').size)) {
-                sizeString = _.filesize(model.get('origData').size);
-            }
+            itemCount = model.get('total');
+            resultString = (_.isNumber(itemCount)) ? gt.format(gt.ngettext('1 item', '%1$d items', itemCount), itemCount) : '-';
         }
 
-        return sizeString;
+        return resultString;
     };
 
     var ModelSourceRefMap = {
