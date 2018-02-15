@@ -362,11 +362,25 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
-            this.$el.append(_.map(this.options.list, function (option) {
-                return $('<option>').attr({ value: option.value }).text(option.label);
-            }));
+            this.$el.append(
+                this.options.groups ?
+                    this.renderOptionGroups(this.options.list) :
+                    this.renderOptions(this.options.list)
+            );
             this.update();
             return this;
+        },
+        renderOptionGroups: function (items) {
+            return _(items).map(function (item) {
+                return $('<optgroup>').attr('label', item.label).append(
+                    this.renderOptions(item.options)
+                );
+            }, this);
+        },
+        renderOptions: function (items) {
+            return _(items).map(function (item) {
+                return $('<option>').attr({ value: item.value }).text(item.label);
+            });
         }
     });
 

@@ -81,6 +81,33 @@ define('io.ox/core/settings/pane', [
                             .value();
                     },
 
+                    getDesigns: function () {
+                        return [
+                            {
+                                label: gt('Unicolor'),
+                                options: [
+                                    { label: gt('Blue'), value: 'blue' }
+                                ]
+                            },
+                            {
+                                label: gt('Multicolor'),
+                                options: [
+                                    { label: gt('Indigo'), value: 'night' },
+                                    { label: gt('Green'), value: 'twilight' },
+                                    { label: gt('Turquoise'), value: 'dawn' },
+                                    { label: gt('Blue'), value: 'day' },
+                                    { label: gt('Purple/Magenta'), value: 'dusk' }
+                                ]
+                            },
+                            {
+                                label: gt('Automatic'),
+                                options: [
+                                    { label: gt('Time-dependent'), value: 'time' }
+                                ]
+                            }
+                        ];
+                    },
+
                     hasMoreThanOneTheme: function () {
                         return _(settingOptions.get('themes')).size() > 1;
                     },
@@ -294,6 +321,23 @@ define('io.ox/core/settings/pane', [
 
                 baton.$el.append(
                     util.compactSelect('theme', gt('Theme'), this.model, this.getThemeOptions())
+                );
+            }
+        },
+        //
+        // Design
+        //
+        {
+            id: 'design',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                // don't offer for IE11 as some design don't work technically
+                if (_.device('ie <= 11')) return;
+                if (!settings.get('features/designs', true)) return;
+
+                baton.$el.append(
+                    util.compactSelect('design', gt('Design'), this.model, this.getDesigns(), { groups: true })
                 );
             }
         }

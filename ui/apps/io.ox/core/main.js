@@ -38,7 +38,7 @@ define('io.ox/core/main', [
     'io.ox/core/main/icons',
     'io.ox/core/main/appcontrol',
     'io.ox/core/main/stages',
-    'io.ox/core/main/vibe'
+    'io.ox/core/main/designs'
 ], function (desktop, ext, Stage, notifications, commons, upsell, ping, a11y, logout, refresh, tbr, debug, settings, gt) {
 
     'use strict';

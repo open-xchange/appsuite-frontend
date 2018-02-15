@@ -26,10 +26,6 @@
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
-@top-bar-gradientLeft: #293f72;
-@top-bar-gradientMiddle: #4d6aad;
-@top-bar-gradientRight: #293f72;
-
 // adjust positions of top-bar and screens
 #io-ox-core {
     #io-ox-topbar { display: none; }
@@ -48,13 +44,6 @@
     img { height: 100%; }
 }
 
-/* vibe mixins */
-.mx-night() { background-image: linear-gradient(70deg, #1a2848, #40498e, #1a2848); }
-.mx-twilight() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
-.mx-dawn { background-image: linear-gradient(70deg, #0d456d, #469490, #0e466d); }
-.mx-day() { background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight); }
-.mx-dusk() { background-image: linear-gradient(70deg, #2a2972, #ac4dad, #292b72); }
-
 #io-ox-appcontrol {
 
     position: absolute;
@@ -66,8 +55,6 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.90);
     padding: 0;
 
-    .mx-day;
-
     &:before {
         content: '';
         position: absolute;
@@ -77,19 +64,15 @@
         height: @appcontrol-height - 1;
         border-bottom: 1px solid rgba(0, 0, 0, 0.90);
         opacity: 0;
-        transition: opacity 5s linear;
         .smartphone & {
             height:  @appcontrol-height-smartphone - 1;
             border-bottom: 0;
         }
     }
 
-    html.vibe-night & { .mx-night; &:before { .mx-night; opacity: 0; } }
-    html.vibe-twilight & { .mx-night; &:before { .mx-twilight; opacity: 1; } }
-    html.vibe-dawn & { .mx-dawn; &:before { .mx-twilight; opacity: 0; } }
-    html.vibe-day & { .mx-dawn; &:before { .mx-day; opacity: 1; } }
-    html.vibe-dusk & { .mx-dusk; &:before { .mx-day; opacity: 0; } }
-    html.vibe-late & { .mx-dusk; &:before { .mx-night; opacity: 1; } }
+    html.time-dependent &:before {
+        transition: opacity 5s linear;
+    }
 
     display: flex;
     flex-flow: row nowrap;
