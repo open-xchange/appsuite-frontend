@@ -186,7 +186,7 @@ define('io.ox/core/main/appcontrol', [
                         src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
                     }).on('click', function (e) {
                         e.preventDefault();
-                        ox.triger('logo-topbar:click');
+                        ox.trigger('logo-topbar:click');
                     })
                 )
             );
