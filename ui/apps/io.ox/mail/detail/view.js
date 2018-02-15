@@ -390,6 +390,7 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
         index: 200,
@@ -515,8 +516,24 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'iframe-events',
+        index: 1100,
+        draw: function (baton) {
+            var targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
+
+            // forward deep link clicks from iframe scope to document-wide handlers
+            baton.iframe.contents().on('click', targets, function (e) {
+                e.preventDefault();
+                ox.trigger('click:deep-link-mail', e, this);
+            });
+        }
+    });
+
     ext.point('io.ox/mail/detail/body').extend({
         id: 'max-size',
+        index: 1200,
         after: 'content',
         draw: function (baton) {
 

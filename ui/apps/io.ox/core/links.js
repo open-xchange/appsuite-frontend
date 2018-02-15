@@ -37,7 +37,7 @@ define('io.ox/core/links', [
     //
     // Generic app
     //
-    $(document).on('click', '.deep-link-app', function (e) {
+    var appHandler = function (e) {
         e.preventDefault();
         var data = $(this).data(),
             // special handling for text and spreadsheet
@@ -51,12 +51,14 @@ define('io.ox/core/links', [
             // set proper folder
             else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
         });
-    });
+    };
+
+    $(document).on('click', '.deep-link-app', appHandler);
 
     //
     // Files
     //
-    $(document).on('click', '.deep-link-files', function (e) {
+    var filesHandler = function (e) {
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
@@ -74,12 +76,13 @@ define('io.ox/core/links', [
         } else {
             openFolder('io.ox/files/main', data.folder);
         }
-    });
+    };
+    $(document).on('click', '.deep-link-files', filesHandler);
 
     //
     // Address book
     //
-    $(document).on('click', '.deep-link-contacts', function (e) {
+    var contactsHandler = function (e) {
         e.preventDefault();
         var data = $(this).data();
         ox.launch('io.ox/contacts/main', { folder: data.folder }).done(function () {
@@ -92,12 +95,14 @@ define('io.ox/core/links', [
                 });
             }
         });
-    });
+    };
+
+    $(document).on('click', '.deep-link-contacts', contactsHandler);
 
     //
     // Calendar
     //
-    $(document).on('click', '.deep-link-calendar', function (e) {
+    var calendarHandler = function (e) {
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
@@ -127,12 +132,14 @@ define('io.ox/core/links', [
         } else {
             openFolder('io.ox/calendar/main', data.folder);
         }
-    });
+    };
+
+    $(document).on('click', '.deep-link-calendar', calendarHandler);
 
     //
     // Tasks
     //
-    $(document).on('click', '.deep-link-tasks', function (e) {
+    var tasksHandler = function (e) {
         e.preventDefault();
         var data = $(this).data();
         ox.launch('io.ox/tasks/main', { folder: data.folder }).done(function () {
@@ -148,41 +155,75 @@ define('io.ox/core/links', [
                 });
             }
         });
-    });
+    };
+
+    $(document).on('click', '.deep-link-tasks', tasksHandler);
 
     //
     // Mail
     //
-    if (capabilities.has('webmail')) {
-        $(document).on('click', '.mailto-link', function (e) {
-            e.preventDefault();
 
-            var node = $(this), data = node.data(), address, name, tmp, params = {};
+    var mailHandler = function (e) {
+        e.preventDefault();
 
-            // has data?
-            if (data.address) {
-                // use existing address and name
-                address = data.address;
-                name = data.name || data.address;
-            } else {
-                // parse mailto string
-                // cut off leading "mailto:" and split at "?"
-                tmp = node.attr('href').substr(7).split(/\?/, 2);
-                // address
-                address = tmp[0];
-                // use link text as display name
-                name = node.text();
-                // process additional parameters; all lower-case (see bug #31345)
-                params = _.deserialize(tmp[1]);
-                for (var key in params) params[key.toLowerCase()] = params[key];
-            }
+        var node = $(this), data = node.data(), address, name, tmp, params = {};
 
-            // go!
-            ox.registry.call('mail-compose', 'compose', {
-                to: [[name, address]],
-                subject: params.subject || '',
-                attachments: [{ content: params.body || '', disp: 'inline' }]
-            });
+        // has data?
+        if (data.address) {
+            // use existing address and name
+            address = data.address;
+            name = data.name || data.address;
+        } else {
+            // parse mailto string
+            // cut off leading "mailto:" and split at "?"
+            tmp = node.attr('href').substr(7).split(/\?/, 2);
+            // address
+            address = tmp[0];
+            // use link text as display name
+            name = node.text();
+            // process additional parameters; all lower-case (see bug #31345)
+            params = _.deserialize(tmp[1]);
+            for (var key in params) params[key.toLowerCase()] = params[key];
+        }
+
+        // go!
+        ox.registry.call('mail-compose', 'compose', {
+            to: [[name, address]],
+            subject: params.subject || '',
+            attachments: [{ content: params.body || '', disp: 'inline' }]
         });
+    };
+
+    if (capabilities.has('webmail')) {
+        $(document).on('click', '.mailto-link', mailHandler);
     }
+
+    // event hub
+    ox.on('click:deep-link-mail', function (e, scope) {
+        var type = e.currentTarget.className.split(' ');
+
+        if (type && type[1]) {
+            switch (type[1]) {
+                case 'deep-link-files':
+                    filesHandler.call(scope, e);
+                    break;
+                case 'deep-link-contacts':
+                    contactsHandler.call(scope, e);
+                    break;
+                case 'deep-link-calendar':
+                    calendarHandler.call(scope, e);
+                    break;
+                case 'deep-link-tasks':
+                    tasksHandler.call(scope, e);
+                    break;
+                case 'deep-link-app':
+                    appHandler.call(scope, e);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (type[0] === 'mailto-link') mailHandler.call(scope, e);
+    });
+
 });
