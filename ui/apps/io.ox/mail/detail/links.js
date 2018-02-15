@@ -21,15 +21,13 @@ define('io.ox/mail/detail/links', [
     'use strict';
 
     // fix hosts (still need a configurable list on the backend)
-    //ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('alex.oxoe.int', 'localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
+    //ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
 
     function isValidHost(url) {
-        /*var match = url.match(/^https?:\/\/([^\/#]+)/i);
+        var match = url.match(/^https?:\/\/([^\/#]+)/i);
         if (match === null || match.length === 0) return false;
         if (match[1] === 'test') return true;
-        return _(ox.serverConfig.hosts).indexOf(match[1]) > -1;*/
-        console.log(url);
-        return true;
+        return _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     }
 
     //
@@ -128,7 +126,6 @@ define('io.ox/mail/detail/links', [
                 link = $('<a href="#" target="_blank" class="deep-link" role="button">')
                     .attr('href', data.link)
                     .text(text);
-            console.log('parse deeplink', text, data);
             // no white-liste app?
             if (!data.className) return null;
 

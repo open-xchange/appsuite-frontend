@@ -34,8 +34,7 @@ define('io.ox/mail/sanitizer', [
     if (whitelist.allowedTags && whitelist.allowedTags.length) options.ALLOWED_TAGS = whitelist.allowedTags;
 
     function isEnabled() {
-        return false;
-        //return mailSettings.get('features/sanitize', false);
+        return mailSettings.get('features/sanitize', false);
     }
 
     function sanitize(data) {
