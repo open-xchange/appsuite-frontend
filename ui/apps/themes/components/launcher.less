@@ -212,8 +212,39 @@
         }
     }
 
+    #io-ox-topsearch {
+        margin-right: 24px;
+        flex-grow: 1;
+        display: flex;
+
+        .search-box > .form-group { margin-bottom: 0; }
+
+        .search-field {
+            border-radius: 0;
+            height: 32px;
+        }
+
+        .tokenfield { padding-top: 2px; }
+
+        .twitter-typeahead .tt-input {
+            background-color: transparent;
+        }
+
+        // input placeholder text
+        .tokenfield-placeholder {
+            // avoid visual changes when tokenfield get's initated
+            padding-left: @default-padding;
+        }
+
+        .io-ox-find {
+            flex: 1;
+            max-width: 350px;
+            margin-left: auto;
+        }
+    }
+
     .io-ox-find:not(.active) {
-        .search-field {
+        .search-field {
             background-color: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.30);
         }
@@ -230,39 +261,6 @@
             &::-webkit-input-placeholder, &:-ms-input-placeholder, &::-ms-input-placeholder {
                 color: #fff;
             }
-        }
-    }
-
-    .just-a-test-for-assemble-less {}
-
-    #io-ox-topsearch {
-        margin-right: 24px;
-        flex-grow: 1;
-        display: flex;
-
-        .search-box > .form-group { margin-bottom: 0; }
-
-        .search-field {
-            border-radius: 0;
-            height: 32px;
-        }
-
-        .tokenfield { padding-top: 2px; }
-
-        .twitter-typeahead .tt-input {
-            background-color: transparent;
-        }
-
-        // input placeholder text
-        .tokenfield-placeholder {
-            // avoid visual changes when tokenfield get's initated
-            padding-left: @default-padding;
-        }
-
-        .io-ox-find {
-            flex: 1;
-            max-width: 350px;
-            margin-left: auto;
         }
     }
 
