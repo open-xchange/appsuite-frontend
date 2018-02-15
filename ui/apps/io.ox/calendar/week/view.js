@@ -200,7 +200,7 @@ define('io.ox/calendar/week/view', [
                 self.isMergeView = _.device('!smartphone') && self.mode === 'day' && self.app.folders.list().length > 0 && settings.get('mergeview');
                 if (self.mode === 'workweek') self.columns = settings.get('numDaysWorkweek');
                 if (self.mode === 'day') self.$el.toggleClass('merge-view', self.isMergeView);
-                self.setStartDate();
+                self.setStartDate(self.startDate);
                 self.render();
                 self.renderAppointments();
                 self.perspective.refresh();
@@ -1256,8 +1256,37 @@ define('io.ox/calendar/week/view', [
             var self = this,
                 draw = {},
                 appointmentStartDate,
-                fulltimeColPos = [0],
-                numColumns = this.isMergeView ? this.app.folders.list().length : this.columns;
+                numColumns = this.isMergeView ? this.app.folders.list().length : this.columns,
+                fulltimeTable = _.range(numColumns).map(function () { return []; }),
+                maxRow = 0;
+
+            /*
+             * Simple algorithm to find free space for appointment. Works as follows:
+             * 1) Has a table with slots which are empty by default
+             * 2) Requests a certain column and width
+             * 3) Search for first row, where all these fields are empty
+             * 4) Mark these cells in the table as reserved
+             * 5) Calculate maximum number of rows as a side-effect
+             */
+            function reserveRow(table, start, width) {
+                var row, column, empty;
+                start = Math.max(0, start);
+                width = Math.min(table.length, width);
+                // check for free space
+                for (row = 0; row <= maxRow && !empty; row++) {
+                    empty = true;
+                    for (column = start; column < start + width; column++) {
+                        if (table[column][row]) {
+                            empty = false;
+                            break;
+                        }
+                    }
+                }
+                // reserve free space
+                for (column = start; column < start + width; column++) table[column][row - 1] = true;
+                maxRow = Math.max(row, maxRow);
+                return row - 1;
+            }
 
             // clear all first
             $('.appointment', this.$el).remove();
@@ -1276,22 +1305,12 @@ define('io.ox/calendar/week/view', [
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
 
-                        var node = this.renderAppointment(model), row,
+                        var node = this.renderAppointment(model),
                             fulltimePos = this.isMergeView ? this.app.folders.list().indexOf(model.get('folder')) : appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max(model.getMoment('endDate').diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos), 1);
+                            fulltimeWidth = this.isMergeView ? 1 : Math.max(model.getMoment('endDate').diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos), 1),
+                            row = reserveRow(fulltimeTable, fulltimePos, fulltimeWidth);
 
-                        // loop over all column positions
-                        for (row = 0; row < fulltimeColPos.length; row++) {
-                            if (fulltimeColPos[row] <= model.getTimestamp('startDate')) {
-                                fulltimeColPos[row] = model.getTimestamp('endDate');
-                                break;
-                            }
-                        }
-
-                        if (row === fulltimeColPos.length) {
-                            fulltimeColPos.push(moment.utc(model.get('endDate').value).valueOf());
-                        }
                         node.css({
                             height: this.fulltimeHeight,
                             lineHeight: this.fulltimeHeight + 'px',
@@ -1359,12 +1378,12 @@ define('io.ox/calendar/week/view', [
             // calculate full-time appointment container height
             var ftHeight = 1;
             if (this.options.showFulltime) {
-                ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
-                this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px' });
+                ftHeight = (maxRow <= this.fulltimeMax ? maxRow : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
+                this.fulltimePane.css({ height: maxRow * (this.fulltimeHeight + 1) + 'px' });
                 this.fulltimeCon.resizable({
                     handles: 's',
                     minHeight: this.fulltimeHeight,
-                    maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
+                    maxHeight: maxRow * (this.fulltimeHeight + 1),
                     resize: function () {
                         self.pane.css({ top: self.fulltimeCon.outerHeight() });
                     }
