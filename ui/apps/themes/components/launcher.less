@@ -217,10 +217,23 @@
             background-color: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.30);
         }
+
+        // have to write it this way, assemble-less has problems
+        // with ::placeholder
+        .token-input::placeholder {
+            color: #fff;
+        }
+        .tokenfield-placeholder::placeholder {
+            color: #fff;
+        }
         .token-input, .tokenfield-placeholder {
-            .placeholder(#fff);
+            &::-webkit-input-placeholder, &:-ms-input-placeholder, &::-ms-input-placeholder {
+                color: #fff;
+            }
         }
     }
+
+    .just-a-test-for-assemble-less {}
 
     #io-ox-topsearch {
         margin-right: 24px;
