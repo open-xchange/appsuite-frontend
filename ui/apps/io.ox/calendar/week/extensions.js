@@ -56,10 +56,11 @@ define('io.ox/calendar/week/extensions', [
             if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
+                var canModifiy = folderAPI.can('write', folder, a.attributes) && a.hasFlag('organizer');
                 conf = util.getConfirmationStatus(a);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
-                    (folderAPI.can('write', folder, a.attributes) ? ' modify' : '');
+                    (canModifiy ? ' modify' : '');
                 // if (conf === 'TENTATIVE') {
                 //     confString =
                 //         //#. add confirmation status behind appointment title
