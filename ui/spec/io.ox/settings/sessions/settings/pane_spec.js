@@ -52,7 +52,7 @@ define([
                     client: 'USM-EAS'
                 });
                 expect(model.get('operatingSystem')).to.be.undefined;
-                model.get('application').should.equal(gt('Exchange Active Sync'));
+                model.get('application').should.equal(gt('CalDav/CardDav'));
             });
 
         });

@@ -106,8 +106,8 @@ define('io.ox/settings/security/sessions/settings/pane', [
             if (this.getDeviceInfo('client').type !== 'browser') return;
             var clientName = (this.getDeviceInfo('client').name || '').toLowerCase();
             if (clientName.indexOf('firefox') >= 0) this.set('application', gt('Firefox'));
-            else if (clientName.indexOf('chrome') >= 0) this.set('application', gt('Safari'));
-            else if (clientName.indexOf('safari') >= 0) this.set('application', gt('Chrome'));
+            else if (clientName.indexOf('chrome') >= 0) this.set('application', gt('Chrome'));
+            else if (clientName.indexOf('safari') >= 0) this.set('application', gt('Safari'));
             else if (clientName.indexOf('internet explorer') >= 0) this.set('application', gt('Internet Explorer'));
             else if (clientName.indexOf('edge') >= 0) this.set('application', gt('Edge'));
         }
@@ -131,7 +131,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
                     this.set('application', settings.get('productname/oxdrive') || 'OXDrive');
                     break;
                 case 'USM-EAS':
-                    this.set('application', gt('Exchange Active Sync'));
+                    this.set('application', gt('CalDav/CardDav'));
                     break;
                 case 'USM-JSON':
                     this.set('application', settings.get('productname/oxtender') || 'OXtender');
