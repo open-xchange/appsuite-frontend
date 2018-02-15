@@ -1016,7 +1016,10 @@ define('io.ox/mail/api', [
                 action: 'autosave',
                 lineWrapAfter: 0
             };
-            if (obj.security && obj.security.decrypted) params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
+            if (obj.security && obj.security.decrypted) {
+                params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
+                if (obj.security.authentication) params.authToken = obj.security.authentication;
+            }
             return http.wait(
                 http.PUT({
                     module: 'mail',
