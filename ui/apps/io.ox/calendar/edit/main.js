@@ -76,7 +76,7 @@ define('io.ox/calendar/edit/main', [
                     data = {};
                 // work with models and objects
                 if (model) {
-                    if (model.get) {
+                    if (model instanceof Backbone.Model) {
                         data = model.toJSON();
                     } else if (_.isObject(model)) {
                         data = model;
@@ -221,8 +221,9 @@ define('io.ox/calendar/edit/main', [
             considerSaved: false,
 
             create: function (data) {
+                data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
-                data.set('class', 'PUBLIC');
+                data['class'] = 'PUBLIC';
                 this.edit(data, { mode: 'create' });
             },
 
