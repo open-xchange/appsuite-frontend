@@ -556,6 +556,12 @@ define('io.ox/calendar/invitations/register', [
 
     var InternalTaskView = InternalView.extend({
 
+        initialize: function (opt) {
+            InternalView.prototype.initialize.call(this, opt);
+            // check if the user participates
+            this.isParticipant = !!_(this.model.get('participants') || []).findWhere({ id: ox.user_id });
+        },
+
         onShowDetails: function (e) {
             e.preventDefault();
             var self = this;
@@ -604,6 +610,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         renderReminder: function () {
+            if (!this.isParticipant) return;
             var view = this;
             this.$el.find('.itip-actions').before(
                 $('<div class="itip-reminder inline">').append(
@@ -621,6 +628,16 @@ define('io.ox/calendar/invitations/register', [
                     )
                 )
             );
+        },
+
+        renderComment: function () {
+            if (!this.isParticipant) return;
+            InternalView.prototype.renderComment.call(this);
+        },
+
+        getActions: function () {
+            if (!this.isParticipant) return [];
+            return InternalView.prototype.getActions.call(this);
         },
 
         getDefaultReminder: function () {
