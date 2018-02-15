@@ -58,7 +58,7 @@ define('io.ox/settings/security/settings/pane', [
             id: 'mail',
             index: INDEX += 100,
             render: function () {
-                if (!(capabilities.has('webmail'))) return;
+                if (!(capabilities.has('webmail')) || capabilities.has('guest')) return;
 
                 this.$el.append(
                     util.fieldset(

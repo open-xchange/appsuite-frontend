@@ -154,6 +154,8 @@ define('io.ox/mail/settings/pane', [
             index: INDEX += 100,
             render: function () {
 
+                if (capabilities.has('guest')) return;
+
                 var contactCollect = !!capabilities.has('collect_email_addresses');
 
                 this.$el.append(
@@ -264,8 +266,8 @@ define('io.ox/mail/settings/pane', [
             index: 300,
             render: function () {
 
-                // we don't really need that on a smartphone (I guess)
-                if (_.device('smartphone')) return;
+                // we don't really need that on a smartphone (I guess) nor guests
+                if (_.device('smartphone') || capabilities.has('guest')) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')

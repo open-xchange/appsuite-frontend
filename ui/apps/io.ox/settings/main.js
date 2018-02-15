@@ -457,12 +457,14 @@ define('io.ox/settings/main', [
             index: 100
         });
 
-        ext.point('io.ox/settings/pane/security/security-root').extend({
-            id: 'certificates',
-            title: gt('Certificates'),
-            ref: 'io.ox/settings/security/certificates',
-            index: 150
-        });
+        if (!capabilities.has('guest')) {
+            ext.point('io.ox/settings/pane/security/security-root').extend({
+                id: 'certificates',
+                title: gt('Certificates'),
+                ref: 'io.ox/settings/security/certificates',
+                index: 150
+            });
+        }
 
         var submodules = _(keychainAPI.submodules).filter(function (submodule) {
             return !submodule.canAdd || submodule.canAdd.apply(this);
