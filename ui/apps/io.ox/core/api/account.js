@@ -722,6 +722,8 @@ define('io.ox/core/api/account', [
             }
 
             return reload().done(function (result) {
+                // add folder type full names
+                result = process(result);
                 // update call returned the new account (this is the case for mail)
                 api.cache[id] = result;
             })
