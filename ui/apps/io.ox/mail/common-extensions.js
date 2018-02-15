@@ -63,10 +63,11 @@ define('io.ox/mail/common-extensions', [
         );
     }
 
+    //
     function getInitials(from) {
         if (!_.isArray(from) || !from.length) return '';
         var name = util.getDisplayName(from[0]);
-        return name.replace(/^(.)\S*(\s(.))?.*$/, '$1$3').toUpperCase();
+        return contactsUtil.getInitials({ display_name: name });
     }
 
     var extensions = {
