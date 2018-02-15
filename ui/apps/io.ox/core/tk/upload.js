@@ -283,7 +283,23 @@ define('io.ox/core/tk/upload', [
                         return !exceedMaximum;
                     });
 
-                    // Frontend no longer makes a quota check
+                    if (quota > 0 && totalUploadSize > quota - use) {
+                        require(['io.ox/core/strings'], function (strings) {
+                            notifications.yell('error',
+                                gt.format(
+                                    //#. %1$s quota limit
+                                    gt.ngettext(
+                                        'The file cannot be uploaded because it exceeds the quota limit of %1$s',
+                                        'The files cannot be uploaded because they exceed the quota limit of %1$s',
+                                        newFiles.length
+                                    ),
+                                    strings.fileSize(quota)
+                                )
+                            );
+                        });
+
+                        return [];
+                    }
 
                     if (validFiles.length < newFiles.length) {
                         require(['io.ox/core/strings'], function (strings) {
