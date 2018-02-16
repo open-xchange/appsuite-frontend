@@ -1271,7 +1271,7 @@ define('io.ox/calendar/week/view', [
             function reserveRow(table, start, width) {
                 var row, column, empty;
                 start = Math.max(0, start);
-                width = Math.min(table.length, width);
+                width = Math.min(table.length, start + width) - start;
                 // check for free space
                 for (row = 0; row <= maxRow && !empty; row++) {
                     empty = true;
