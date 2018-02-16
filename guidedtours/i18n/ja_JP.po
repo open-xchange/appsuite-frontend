@@ -968,7 +968,7 @@ msgstr ""
 #~ msgstr "%1$s %2$s"
 
 #~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (仮の予定)"
+#~ msgstr "%1$s (仮承諾)"
 
 #~ msgid "%1$s - %2$s"
 #~ msgstr "%1$s - %2$s"
@@ -1124,7 +1124,7 @@ msgstr ""
 #~ msgstr "(古いマシン上では速度が低下する場合があります)"
 
 #~ msgid ", "
-#~ msgstr ", "
+#~ msgstr "、"
 
 #~ msgid "--"
 #~ msgstr "--"
@@ -1333,7 +1333,7 @@ msgstr ""
 #~ msgstr "承諾/辞退"
 
 #~ msgid "Accepted"
-#~ msgstr "承諾済み"
+#~ msgstr "承諾"
 
 #~ msgctxt "help"
 #~ msgid "Accessing Files with WebDAV"
@@ -1436,7 +1436,7 @@ msgstr ""
 #~ msgstr "条件を追加"
 
 #~ msgid "Add contact"
-#~ msgstr "メンバを追加する"
+#~ msgstr "連絡先を追加"
 
 #~ msgid "Add distribution list"
 #~ msgstr "配布リストを追加"
@@ -2881,7 +2881,7 @@ msgstr ""
 #~ msgstr "予定表の日ビュー"
 
 #~ msgid "Calendar month view"
-#~ msgstr "予定表月ビュー"
+#~ msgstr "予定表 月ビュー"
 
 #~ msgid "Calendar views"
 #~ msgstr "予定表ビュー"
@@ -2914,7 +2914,7 @@ msgstr ""
 #~ msgstr "検索をキャンセル"
 
 #~ msgid "Canceled"
-#~ msgstr "キャンセルされました。"
+#~ msgstr "キャンセルしました"
 
 #~ msgid "Cannot find any messages this contact sent to you."
 #~ msgstr "この連絡先があなたに送信したメッセージが見つかりません。"
@@ -3364,13 +3364,13 @@ msgstr ""
 #~ msgstr "連絡先: %1$s"
 
 #~ msgid "Contacts"
-#~ msgstr "メンバ"
+#~ msgstr "連絡先"
 
 #~ msgid "Contacts have been copied"
-#~ msgstr "連絡先をコピーしました。"
+#~ msgstr "連絡先をコピーしました"
 
 #~ msgid "Contacts have been moved"
-#~ msgstr "連絡先を移動しました。"
+#~ msgstr "連絡先を移動しました"
 
 #~ msgid "Contains"
 #~ msgstr "次の文字列を含む"
@@ -4534,7 +4534,7 @@ msgstr ""
 
 #~ msgctxt "vgrid"
 #~ msgid "Empty"
-#~ msgstr "何もありません。"
+#~ msgstr "(空)"
 
 #~ msgid "Empty folder"
 #~ msgstr "フォルダを空にする"
@@ -5296,7 +5296,7 @@ msgstr ""
 #~ msgstr "金"
 
 #~ msgid "Friday"
-#~ msgstr "金曜日"
+#~ msgstr "金曜"
 
 #~ msgid "From"
 #~ msgstr "差出人"
@@ -5792,7 +5792,7 @@ msgstr ""
 #~ msgstr "受信トレイ"
 
 #~ msgid "Include distribution lists"
-#~ msgstr "配布リストを追加"
+#~ msgstr "連絡先グループを含める"
 
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "受信済みの通知メール"
@@ -6716,7 +6716,7 @@ msgstr ""
 #~ msgstr "モナコ"
 
 #~ msgid "Monday"
-#~ msgstr "月曜日"
+#~ msgstr "月曜"
 
 #~ msgid "Mongolia"
 #~ msgstr "モンゴル"
@@ -6827,7 +6827,7 @@ msgstr ""
 #~ msgstr "ネットワーク障害"
 
 #~ msgid "Never"
-#~ msgstr "期限なし"
+#~ msgstr "無期限"
 
 #~ msgid "New Appointment"
 #~ msgstr "新規アポイント"
@@ -7865,7 +7865,7 @@ msgstr ""
 #~ msgstr "正しい数を入力してください。"
 
 #~ msgid "Please enter a date in the past"
-#~ msgstr "過去の日付を入力してください。"
+#~ msgstr "今現在より前の日付を入力してください"
 
 #~ msgid "Please enter a description"
 #~ msgstr "説明を入力してください。"
@@ -8135,7 +8135,7 @@ msgstr ""
 #~ msgstr "プレビューを読み込めませんでした。"
 
 #~ msgid "Previous"
-#~ msgstr "前"
+#~ msgstr "前へ"
 
 #~ msgid "Previous Day"
 #~ msgstr "前日"
@@ -8225,7 +8225,7 @@ msgstr ""
 #~ msgstr "プライベート:"
 
 #~ msgid "Process subsequent rules"
-#~ msgstr "次のルールも処理"
+#~ msgstr "後に続くルールを実行"
 
 #~ msgid "Profession"
 #~ msgstr "職業"
@@ -8586,7 +8586,7 @@ msgstr ""
 #~ msgstr "このリストをリセット"
 
 #~ msgid "Resource"
-#~ msgstr "設備"
+#~ msgstr "リソース"
 
 #~ msgid "Resource email"
 #~ msgstr "設備メール"
@@ -8734,10 +8734,10 @@ msgstr ""
 #~ msgstr "サントーメ‐プリンシペ"
 
 #~ msgid "Sat"
-#~ msgstr "土曜日"
+#~ msgstr "土曜"
 
 #~ msgid "Saturday"
-#~ msgstr "土曜日"
+#~ msgstr "土曜"
 
 #~ msgid "Saudi Arabia"
 #~ msgstr "サウジアラビア"
@@ -8940,7 +8940,7 @@ msgstr ""
 #~ msgstr "メールで送信"
 
 #~ msgid "Send as vCard"
-#~ msgstr "vCard を送信"
+#~ msgstr "vCard として送信"
 
 #~ msgid "Send by mail"
 #~ msgstr "メールで送信"
@@ -8994,7 +8994,7 @@ msgstr ""
 #~ msgstr "セルビア"
 
 #~ msgid "Series"
-#~ msgstr "アポイント全体"
+#~ msgstr "繰り返し"
 
 #~ msgid "Series Duration"
 #~ msgstr "定期的なアポイントの期間"
@@ -9615,16 +9615,16 @@ msgstr ""
 #~ msgstr "スーダン"
 
 #~ msgid "Suffix"
-#~ msgstr "敬称（後）"
+#~ msgstr "敬称"
 
 #~ msgid "Suffix:"
-#~ msgstr "敬称（後）:"
+#~ msgstr "敬称:"
 
 #~ msgid "Sun"
-#~ msgstr "日曜日"
+#~ msgstr "日曜"
 
 #~ msgid "Sunday"
-#~ msgstr "日曜日"
+#~ msgstr "日曜"
 
 #~ msgid "Superscript"
 #~ msgstr "上付き文字"
@@ -9888,10 +9888,10 @@ msgstr ""
 #~ msgstr "仮の予定"
 
 #~ msgid "Tentative"
-#~ msgstr "仮の予定"
+#~ msgstr "仮承諾"
 
 #~ msgid "Tentatively accepted"
-#~ msgstr "仮承諾済み"
+#~ msgstr "仮承諾"
 
 #~ msgid "Text"
 #~ msgstr "テキスト"
@@ -10525,7 +10525,7 @@ msgstr ""
 #~ msgstr "このフォルダは登録されていますが、表示や編集は許可されていません。"
 
 #~ msgid "This is a standard folder, which can't be renamed."
-#~ msgstr "これは標準フォルダです。名前を変更できません。"
+#~ msgstr "これは標準フォルダです。フォルダ名は変更できません。"
 
 #~ msgid "This is not a valid email address"
 #~ msgstr "このメール アドレスは無効です。"
@@ -10596,7 +10596,7 @@ msgstr ""
 #~ msgstr "木"
 
 #~ msgid "Thursday"
-#~ msgstr "木曜日"
+#~ msgstr "木曜"
 
 #~ msgid "Tile"
 #~ msgstr "タイル"
@@ -10636,7 +10636,7 @@ msgstr ""
 
 #~ msgctxt "salutation"
 #~ msgid "Title"
-#~ msgstr "敬称（前）"
+#~ msgstr "敬称"
 
 #~ msgctxt "title"
 #~ msgid "Title"
@@ -10808,7 +10808,7 @@ msgstr ""
 #~ msgstr "火"
 
 #~ msgid "Tuesday"
-#~ msgstr "火曜日"
+#~ msgstr "火曜"
 
 #~ msgid "Tumblr"
 #~ msgstr "Tumblr"
@@ -11289,7 +11289,7 @@ msgstr ""
 #~ msgstr "水"
 
 #~ msgid "Wednesday"
-#~ msgstr "水曜日"
+#~ msgstr "水曜"
 
 #~ msgid "Week"
 #~ msgstr "週"
@@ -11621,7 +11621,7 @@ msgstr ""
 #~ msgstr "この出席依頼を仮承諾しました"
 
 #~ msgid "You tentatively accepted this task"
-#~ msgstr "この仕事を仮承諾しました。"
+#~ msgstr "この仕事を仮承諾しました"
 
 #~ msgid "You wanted to be reminded about the following InfoItem:"
 #~ msgstr "次のインフォアイテムについて通知を受ける:"
