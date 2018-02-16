@@ -141,6 +141,24 @@ define('io.ox/settings/security/sessions/settings/pane', [
         }
     });
 
+    ext.point('io.ox/settings/sessions/application').extend({
+        id: 'dav',
+        index: 300,
+        customize: function () {
+            if (this.getDeviceInfo('client').type !== 'dav') return;
+            this.set('application', gt('CalDav/CardDav'));
+        }
+    });
+
+    ext.point('io.ox/settings/sessions/application').extend({
+        id: 'dav',
+        index: 300,
+        customize: function () {
+            if (this.getDeviceInfo('client').type !== 'eas') return;
+            this.set('application', gt('Exchange Active Sync'));
+        }
+    });
+
     var SessionCollection = Backbone.Collection.extend({
 
         model: SessionModel,
