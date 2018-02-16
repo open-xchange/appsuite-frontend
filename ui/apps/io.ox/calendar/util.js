@@ -1107,17 +1107,16 @@ define('io.ox/calendar/util', [
             return that.hasFlag(data, 'private') || (!strict && that.hasFlag(data, 'confidential'));
         },
 
-        returnIconsByType: function (data) {
+        returnIconsByType: function (obj) {
             var icons = {
-                    type: [],
-                    property: []
-                },
-                obj = data.attributes ? data.attributes : data;
+                type: [],
+                property: []
+            };
 
             if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').append($('<i class="fa fa-question-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Tentative'))));
             if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').append($('<i class="fa fa-user-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))));
             if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
-            if (this.hasFlag(obj, 'series')) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-repeat" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
+            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-repeat" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
             if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-user-o" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
             if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').append($('<i class="fa fa-paperclip" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Attachments'))));
             return icons;
