@@ -88,14 +88,18 @@ define('io.ox/calendar/week/extensions', [
                 });
 
             this.on('calendar:weekview:rendered', function () {
-                var location = $(this).find('.location'),
-                    height = 50;
 
-                $(this).find('.flags').addClass('bottom-right');
+                var contentHeight = $(this).find('.appointment-content').height(),
+                    titleHeight = $(this).find('.title').height(),
+                    noWrap = $(this).hasClass('no-wrap'),
+                    locationHeight = $(this).find('.location').length < 1 || noWrap ? 0 : $(this).find('.location').height(),
+                    flagsHeight = $(this).find('.flags').height();
 
-                if (location.length && location.css('display') === 'inline') height = 35;
-                if ($(this).height() < height) {
-                    $(this).find('.appointment-content').css('padding-right', $(this).find('.flags').width() + 10);
+                if (!flagsHeight) return;
+                if (titleHeight + locationHeight < contentHeight - flagsHeight) {
+                    $(this).find('.flags').addClass('bottom-right');
+                } else {
+                    $(this).find('.flags').hide();
                 }
             });
 
