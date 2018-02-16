@@ -73,12 +73,13 @@ define('plugins/notifications/calendar/register', [
                                 delete o.data.alarm;
                             }
 
-                            calAPI.confirm(o.data, { checkConflicts: true }).done(function (result) {
+                            var expand = util.getCurrentRangeOptions();
+                            calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
                                 if (result && result.conflicts) {
                                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                                         conflictView.dialog(result.conflicts)
                                             .on('ignore', function () {
-                                                calAPI.confirm(o.data, { checkConflicts: false });
+                                                calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
                                             });
                                     });
                                     return;

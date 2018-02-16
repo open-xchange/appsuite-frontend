@@ -462,7 +462,7 @@ define('io.ox/calendar/actions', [
                             $(baton.e.target).addClass('disabled');
                             // those links are for fast accept/decline, so don't check conflicts
                             // TODO discuss this with alex
-                            api.confirm(appointment);
+                            api.confirm(appointment, util.getCurrentRangeOptions());
                         });
                 });
                 return;
