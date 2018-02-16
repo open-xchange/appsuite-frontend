@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-09 11:26+0100\n"
+"PO-Revision-Date: 2018-02-16 14:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -389,11 +389,6 @@ msgstr "%1$s-Werkzeugleiste"
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Aktionen. Verwenden Sie die Pfeiltasten zum Navigieren."
 
-#. Tooltip for main toolbar
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-msgid "Use cursor keys to navigate"
-msgstr "Verwenden Sie die Pfeiltasten zum Navigieren"
-
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid number"
 msgstr "Bitte geben Sie eine gültige Zahl ein."
@@ -581,7 +576,9 @@ msgstr "Schließen"
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/settings/security/certificates/settings/certificate-view.js
+#: module:io.ox/settings/certificates apps/io.ox/tasks/actions/delete.js
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js
 #: apps/io.ox/tasks/edit/main.js apps/io.ox/tasks/main.js
 #: apps/plugins/administration/groups/settings/edit.js
@@ -778,14 +775,15 @@ msgstr ""
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Termin"
 
@@ -926,29 +924,28 @@ msgstr "Eigentümer einladen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
-"Do you want to delete only this occurence of the event, or all occurences?"
+"Do you want to delete the whole series or just this appointment within the "
+"series?"
 msgstr ""
+"Wollen Sie die komplette Serie oder nur diesen Termin aus der Serie löschen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
-msgid "All events"
-msgstr "Alle Ereignisse"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
-msgid "Only this event"
-msgstr "Nur dieses Ereignis"
+msgid "This appointment"
+msgstr "Dieser Termin"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
-"Do you want to delete only this occurence of the event, or this and all "
-"future occurences?"
+"Do you want to delete this and all future appointments or just this "
+"appointment within the series?"
 msgstr ""
+"Wollen Sie diesen Termin und alle zukünftigen Termine der Serie oder nur "
+"diesen Termin aus der Serie löschen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
-msgid "All future events"
-msgstr "Alle zukünftigen Ereignisse"
+msgid "All future appointments"
+msgstr "Alle zukünftigen Termine"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -971,8 +968,28 @@ msgstr "iCal-URL"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #, fuzzy
-msgid "Subscribe iCal feed"
-msgstr "iCal-Feed  abonnieren"
+msgid "Authentication failed. Please fill in login and password."
+msgstr ""
+"Authentifizierung fehlgeschlagen. Bitte geben Sie Ihren Benutzernamen und "
+"das Passwort an."
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Login"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Password"
+msgstr "Passwort"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+msgid "Subscribe to iCal feed"
+msgstr "iCal-Feed abonnieren"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "iCal-feed has been imported successfully"
@@ -982,6 +999,7 @@ msgstr "iCal-Feed wurde erfolgreich importiert"
 msgid "no color"
 msgstr "keine Farbe"
 
+#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
@@ -992,10 +1010,11 @@ msgstr "keine Farbe"
 msgid "Private"
 msgstr "Privat"
 
+#. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Secret"
-msgstr ""
+msgstr "Geheim"
 
 #. File and folder details
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1148,7 +1167,6 @@ msgid "Select calendar"
 msgstr "Kalender wählen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Create new calendar"
 msgstr "Neuen Kalender erstellen"
 
@@ -1223,9 +1241,8 @@ msgid "Collapse form"
 msgstr "Formular ausblenden"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Show as free"
-msgstr "Anzeigen als: Frei"
+msgstr "Als frei anzeigen"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
@@ -1248,10 +1265,13 @@ msgid "The appointment is visible for all users in shared folders."
 msgstr "Der Termin ist für alle Benutzer in freigegebenen Ordnern sichtbar."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
 msgid ""
-"The appointment appears as a simple time slot for to non-attending users in "
-"shared folders."
+"In shared folders, the appointment is displayed as a simple time slot for "
+"non-attending users."
 msgstr ""
+"In freigegebenen Ordnern wird der Termin als ein einfaches Zeitfenster für "
+"die nicht anwesenden Benutzer angezeigt."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
@@ -1260,9 +1280,9 @@ msgid ""
 "all. The appointment is not considered for conflicts and does not appear in "
 "the scheduling view."
 msgstr ""
-"Der Termin ist für nicht teilnehmende Benutzer in freigegebenen Ordnern "
-"nicht sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und wird "
-"in der Planungsansicht nicht angezeigt."
+"Der Termin ist nur für teilnehmende Benutzer in freigegebenen Ordnern "
+"sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und wird in der "
+"Planungsansicht nicht angezeigt."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
@@ -1416,8 +1436,7 @@ msgstr "Nächster Monat"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
-#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+#: module:io.ox/contacts apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
@@ -1616,7 +1635,6 @@ msgid "No appointment selected"
 msgstr "Kein Termin ausgewählt"
 
 #: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
-#, fuzzy
 msgid "%1$s appointments selected"
 msgstr "%1$s Termine ausgewählt"
 
@@ -1839,6 +1857,7 @@ msgstr "Abgelehnte Termine anzeigen"
 msgid "Show birthday calendar"
 msgstr "Geburtstagskalender anzeigen"
 
+#. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 msgid "Birthday"
@@ -1861,9 +1880,8 @@ msgid "Default reminder"
 msgstr "Standard-Erinnerung"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#, fuzzy
-msgid "Default reminder for all day appointments"
-msgstr "Standarderinnerung für Ganztagstermine"
+msgid "Default reminder for all-day appointments"
+msgstr "Standarderinnerung für Ganztagestermine"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Default reminder for appointments in birthday calendar"
@@ -1919,8 +1937,8 @@ msgstr "Beginn"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
-msgid "The integration of the subscribed calendars might take awhile."
-msgstr ""
+msgid "The integration of the subscribed calendars might take a while."
+msgstr "Die Integration der abonnierten Kalender kann eine Weile dauern."
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -2143,22 +2161,6 @@ msgid "Saturday"
 msgstr "Samstag"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light blue"
-msgstr "Hellblau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light indigo"
-msgstr "helles Indigo"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light purple"
-msgstr "helles Purpur"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light pink"
-msgstr "Hellrosa"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light red"
 msgstr "Hellrot"
 
@@ -2171,36 +2173,44 @@ msgid "light yellow"
 msgstr "Hellgelb"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light citreous"
-msgstr "helles Zitronengelb"
+msgid "light olive"
+msgstr "helles Olivgün"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "Hellgrün"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "light turquoise"
-msgstr "Helltürkis"
+msgid "light cyan"
+msgstr "helles Zyan"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light azure"
+msgstr "helles Azurblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light blue"
+msgstr "Hellblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light indigo"
+msgstr "helles Indigo"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light purple"
+msgstr "helles Purpur"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light magenta"
+msgstr "helles Magenta"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "light pink"
+msgstr "Hellrosa"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light gray"
 msgstr "Hellgrau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "blue"
-msgstr "Blau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "indigo"
-msgstr "Indigo"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "purple"
-msgstr "Lila"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "pink"
-msgstr "Pink"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -2215,36 +2225,44 @@ msgid "yellow"
 msgstr "Gelb"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "citreous"
-msgstr "Zitronengelb"
+msgid "olive"
+msgstr "Olivgün"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "green"
 msgstr "Grün"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "turquoise"
-msgstr "Türkis"
+msgid "cyan"
+msgstr "Zyan"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "azure"
+msgstr "Azurblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "blue"
+msgstr "Blau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "indigo"
+msgstr "Indigo"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "purple"
+msgstr "Lila"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "magenta"
+msgstr "Magenta"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "pink"
+msgstr "Pink"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "gray"
 msgstr "Grau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark blue"
-msgstr "Dunkelblau"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark indigo"
-msgstr "dunkles Indigo"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark purple"
-msgstr "dunkles Purpur"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark pink"
-msgstr "Dunkelrosa"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark red"
@@ -2259,16 +2277,40 @@ msgid "dark yellow"
 msgstr "Dunkelgelb"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark citreous"
-msgstr "dunkles Zitronengelb"
+msgid "dark olive"
+msgstr "dunkles Olivgrün"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark green"
 msgstr "Dunkelgrün"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "dark turquoise"
-msgstr "dunkles Türkis"
+msgid "dark cyan"
+msgstr "dunkles Zyan"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark azure"
+msgstr "dunkles Azurblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark blue"
+msgstr "Dunkelblau"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark indigo"
+msgstr "dunkles Indigo"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark purple"
+msgstr "dunkles Purpur"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark magenta"
+msgstr "dunkles Magenta"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "dark pink"
+msgstr "Dunkelrosa"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark gray"
@@ -2461,14 +2503,18 @@ msgstr "Die Serie endet nie."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
-"Do you want to change only this occurence of the event, or this and all "
-"future occurences?"
+"Do you want to edit the whole series or just this appointment within the "
+"series?"
 msgstr ""
+"Wollen Sie die gesamte Serie oder nur diesen Termin aus der Serie bearbeiten?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
-"Do you want to change only this occurence of the event, or all occurences?"
+"Do you want to edit this and all future appointments or just this "
+"appointment within the series?"
 msgstr ""
+"Wollen Sie diesen Termin und alle zukünftigen Termine oder nur diesen Termin "
+"aus der Serie bearbeiten?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Confidential"
@@ -2551,10 +2597,12 @@ msgstr "Klicken Sie hier, um alle Ordner in einer Spalte zusammenzuführen"
 msgid "Click to split all folders into separate columns"
 msgstr "Klicken Sie hier, um alle Ordner in separate Spalten aufzuteilen"
 
+#. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Merge"
 msgstr "Zusammenfügen"
 
+#. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
 msgid "Split"
@@ -2738,6 +2786,8 @@ msgstr "Auswählen"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/settings/security/certificates/settings/certificate-view.js
+#: module:io.ox/settings/certificates
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -3575,14 +3625,6 @@ msgstr "Benutzername"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Password"
-msgstr "Passwort"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Anmelden"
 
@@ -3794,9 +3836,45 @@ msgstr ""
 "Applikation konnte nicht gestartet werden. Vielleicht haben Sie "
 "Verbindungsprobleme. Bitte versuchen Sie es erneut."
 
-#: apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "Diese Liste zurücksetzen"
+
+#. Emoji category
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
+#: apps/io.ox/emoji/categories.js
+msgid "Recently used"
+msgstr "Kürzlich verwendet"
+
+#. Emoji category
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
+#: apps/io.ox/emoji/categories.js
+msgid "People"
+msgstr "Menschen"
+
+#. Emoji category
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
+#: apps/io.ox/emoji/categories.js
+msgid "Symbols"
+msgstr "Symbole"
+
+#. Emoji category
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
+#: apps/io.ox/emoji/categories.js
+msgid "Nature"
+msgstr "Natur"
+
+#. Emoji category
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
+#: apps/io.ox/emoji/categories.js
+msgid "Objects"
+msgstr " Objekte"
+
+#. Emoji category
+#: apps/io.ox/core/emoji/view.js module:io.ox/mail
+#: apps/io.ox/emoji/categories.js
+msgid "Places"
+msgstr "Orte"
 
 #: apps/io.ox/core/export.js module:io.ox/core
 msgid "iCalendar"
@@ -3889,8 +3967,8 @@ msgid "Address book name"
 msgstr "Name des Adressbuchs"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/import/import.js
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Folder name"
 msgstr "Ordnername"
 
@@ -3970,8 +4048,7 @@ msgid "Empty folder"
 msgstr "Ordner leeren"
 
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#, fuzzy
-msgid "Subscribe IMAP folders"
+msgid "Subscribe to IMAP folders"
 msgstr "IMAP-Ordner abonnieren"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
@@ -4109,6 +4186,12 @@ msgid "Delete all messages"
 msgstr "Alle Nachrichten löschen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: module:io.ox/files
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Download entire folder"
 msgstr "Gesamten Ordner herunterladen"
 
@@ -4175,8 +4258,7 @@ msgstr "Speicherkonto hinzufügen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#, fuzzy
-msgid "Subscribe address book"
+msgid "Subscribe to address book"
 msgstr "Adressbuch abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -4236,8 +4318,7 @@ msgstr "Persönlicher Kalender"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#, fuzzy
-msgid "Subscribe calendar"
+msgid "Subscribe to calendar"
 msgstr "Kalender abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -4342,10 +4423,6 @@ msgstr "Es trat ein unbekannter Fehler auf."
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
 msgstr "Keine Verbindung zum Server. Bitte prüfen Sie Ihre Verbindung."
-
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Foldername"
-msgstr ""
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
@@ -4616,7 +4693,6 @@ msgstr ""
 "Es sind derzeit keine kompatiblen Mediengeräte auf Ihrem Gerät verfügbar."
 
 #: apps/io.ox/core/media-devices.js module:io.ox/core
-#, fuzzy
 msgid ""
 "Access to your media devices has been denied. Please refer to your browser "
 "help pages for how to reset authorization."
@@ -4805,7 +4881,8 @@ msgid "The user has administrative rights"
 msgstr "Der Benutzer hat administrative Rechte"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/wizard.js
+#: module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Auf alle Unterordner anwenden"
 
@@ -5104,10 +5181,6 @@ msgstr "Infobereich automatisch öffnen"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Show desktop notifications"
 msgstr "Desktop-Benachrichtigungen anzeigen"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Use accessibility improvements"
-msgstr "Eingabehilfen verwenden"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -6057,28 +6130,24 @@ msgstr ""
 "ermöglichen."
 
 #. Emoji collection. Unified/standard icons. "Standard" might work for other languages.
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Unified"
 msgstr "Standard"
 
 #. Emoji collection. SoftBank-specific icons. "SoftBank" in other languages, too.
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "SoftBank"
 msgstr "SoftBank"
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Japanese Carrier"
 msgstr "Japanischer Hoster"
-
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
-msgid "Recently used"
-msgstr "Kürzlich verwendet"
 
 #. Emoji category
 #. Japanese: 顔
 #. Contains: All kinds of smilies
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Face"
 msgstr "Gesichter"
 
@@ -6087,7 +6156,7 @@ msgstr "Gesichter"
 #. Japanese: 気持ち・装飾
 #. Other languages can use simple bullet. Unicode: 2022
 #. Contains: Hearts, Gestures like thumbs up
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Feeling • Decoration"
 msgstr "Gefühle • Gesten"
 
@@ -6096,42 +6165,42 @@ msgstr "Gefühle • Gesten"
 #. Japanese: 天気・季節
 #. Other languages can use simple bullet. Unicode: 2022
 #. Contains: Sun, rain, flowers
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Weather • Season"
 msgstr "Wetter • Jahreszeit"
 
 #. Emoji category
 #. Japanese: キャラクター
 #. Contains: Cartoon characters, animals
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Character"
 msgstr "Charaktere"
 
 #. Emoji category
 #. Japanese: 食べ物
 #. Contains: Cup of coffee, cake, fruits
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Food"
 msgstr "Essen"
 
 #. Emoji category
 #. Japanese: 日常
 #. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Life"
 msgstr "Leben"
 
 #. Emoji category
 #. Japanese: ツール
 #. Contains: Phones, tv, clocks
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Tool"
 msgstr "Werkzeug"
 
 #. Emoji category
 #. Japanese: 趣味
 #. Contains: Tennis, golf, football, pool
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Hobby"
 msgstr "Hobby"
 
@@ -6140,44 +6209,19 @@ msgstr "Hobby"
 #. Japanese: 文字・記号
 #. Other languages can use simple bullet. Unicode: 2022
 #. Contains: Arrows, numbers, symbols like play and fast-forward, copyright symbol
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Letters • Symbols"
 msgstr "Buchstaben • Symbole"
 
-#. Emoji category
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
-msgid "People"
-msgstr "Menschen"
-
-#. Emoji category
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
-msgid "Symbols"
-msgstr "Symbole"
-
-#. Emoji category
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
-msgid "Nature"
-msgstr "Natur"
-
-#. Emoji category
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
-msgid "Objects"
-msgstr " Objekte"
-
-#. Emoji category
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
-msgid "Places"
-msgstr "Orte"
-
 #. Emojis that work across all Japanese carriers.
 #. Japanese: 他社共通絵文字
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Common Emoji"
 msgstr "Allgemeine Emoji-Symbole"
 
 #. Emojis of SoftBank set.
 #. Japanese: 全絵文字
-#: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
+#: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "All Emoji"
 msgstr "Alle Emoji-Symbole"
 
@@ -6327,6 +6371,26 @@ msgstr[1] ""
 msgid "Items without a file can not be downloaded."
 msgstr "Objekte ohne Datei können nicht heruntergeladen werden."
 
+#: apps/io.ox/files/actions/restore.js module:io.ox/files
+msgid ""
+"Restored into multiple folders:\n"
+"\n"
+"%s"
+msgstr ""
+"Wiederhergestellt in mehreren Ordnern:\n"
+"\n"
+"%s"
+
+#: apps/io.ox/files/actions/restore.js module:io.ox/files
+msgid ""
+"Restored into folder:\n"
+"\n"
+"%s"
+msgstr ""
+"Wiederhergestellt in Ordner:\n"
+"\n"
+"%s"
+
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
@@ -6400,8 +6464,8 @@ msgid "Add folder"
 msgstr "Ordner hinzufügen"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Edit share"
+#, fuzzy
+msgid "Edit Share"
 msgstr "Freigabe bearbeiten"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -6653,15 +6717,6 @@ msgstr "Versteckte Dateien und Ordner anzeigen"
 msgid "Internal users"
 msgstr "Interne Benutzer"
 
-#: apps/io.ox/files/share/listview.js module:io.ox/files
-msgid "External guests"
-msgstr "Externe Gäste"
-
-#: apps/io.ox/files/share/listview.js module:io.ox/files
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Public link"
-msgstr "Öffentlicher Link"
-
 #: apps/io.ox/files/share/model.js module:io.ox/core
 msgid "Please set password"
 msgstr "Bitte legen Sie ein Passwort fest"
@@ -6675,6 +6730,10 @@ msgstr "Viewer"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Reviewer"
 msgstr "Überarbeiter"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Public link"
+msgstr "Öffentlicher Link"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "The notification has been resent"
@@ -6824,6 +6883,10 @@ msgstr ""
 "Persönliche Nachricht (optional). Diese Nachricht wird an alle neu "
 "eingeladenen Personen gesendet."
 
+#: apps/io.ox/files/share/toolbar.js module:io.ox/files
+msgid "Edit share"
+msgstr "Freigabe bearbeiten"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid ""
 "You can copy and paste this link in an email, instant messenger or social "
@@ -6879,6 +6942,8 @@ msgid "Expires in"
 msgstr "Läuft ab in "
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
 msgid "Expires on"
 msgstr "Läuft ab am"
 
@@ -7148,10 +7213,6 @@ msgstr "Wiederherstellen"
 msgid "Failed to recover accounts"
 msgstr "Das Wiederherstellen der Accounts ist fehlgeschlagen."
 
-#: apps/io.ox/linkedIn/view-detail.js module:io.ox/portal
-msgid "Open on LinkedIn"
-msgstr "In LinkedIn öffnen"
-
 #: apps/io.ox/mail/accounts/keychain.js module:io.ox/keychain
 msgid "Mail account"
 msgstr "E-Mail-Account"
@@ -7278,6 +7339,11 @@ msgstr "Bitte geben Sie die folgenden Daten ein: %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Warnings"
 msgstr "Warnhinweise"
+
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/portal/main.js module:io.ox/portal
+msgid "Inspect certificate"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -7735,9 +7801,11 @@ msgstr "Diese Nachricht stammt von einem vertrauenswürdigen Sender."
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid ""
-"This might be a phising mail because we could not verify that this email is "
+"This might be a phishing mail because we could not verify that this email is "
 "really from %1$s."
 msgstr ""
+"Dies könnte eine Phishing-Mail sein, da wir nicht verifizieren konnten, dass "
+"diese E-Mail tatsächlich von %1$s stammt."
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "This mail has been sent from %1$s."
@@ -7808,7 +7876,6 @@ msgstr ""
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#, fuzzy
 msgid ""
 "see attached|see attachment|see included|is attached|attached is|are "
 "attached|attached are|attached to this email|attached to this message|I'm "
@@ -9170,10 +9237,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Laden extern verlinkter Bilder erlauben"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Display emoticons as graphics in text emails"
-msgstr "In Text-E-Mails Emoticons als Bilder darstellen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Zitierte Zeilen farbig hervorheben "
 
@@ -9550,10 +9613,6 @@ msgid "CalDAV"
 msgstr "CalDAV"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "Login"
-msgstr "Login"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV"
 msgstr "CardDAV"
 
@@ -9839,7 +9898,10 @@ msgid "Add your %1$s account"
 msgstr "Fügen Sie Ihren %1$s-Account hinzu"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
-#, fuzzy
+msgid "Try again."
+msgstr "Versuchen Sie es erneut."
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
 "no longer available."
@@ -9850,10 +9912,6 @@ msgstr ""
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "An error occurred."
 msgstr "Es trat ein Fehler auf."
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Try again."
-msgstr "Versuchen Sie es erneut."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal widgets"
@@ -10045,8 +10103,116 @@ msgid "Active clients"
 msgstr "Aktive Clients"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+msgid "Certificates"
+msgstr "Zertifikate"
+
+#: apps/io.ox/settings/main.js module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
+
+#: apps/io.ox/settings/security/certificates/settings/certificate-view.js
+#: module:io.ox/settings/certificates
+msgid "Remove certificate"
+msgstr "Zertifikat entfernen"
+
+#: apps/io.ox/settings/security/certificates/settings/certificate-view.js
+#: module:io.ox/settings/certificates
+msgid "Do you really want to remove this certificate?"
+msgstr "Wollen Sie dieses Zertifikat wirklich entfernen?"
+
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+msgid "Fingerprint"
+msgstr "Fingerabdruck"
+
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+#, fuzzy
+msgid "Untrust certificate %1$s"
+msgstr "Zertifikat %1$s nicht vertrauen"
+
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+#, fuzzy
+msgid "Untrust"
+msgstr "Nicht vertrauen"
+
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+#, fuzzy
+msgid "Trust certificate %1$s"
+msgstr "Zertifikat %1$s vertrauen"
+
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+#, fuzzy
+msgid "Trust"
+msgstr "Trauen"
+
+#: apps/io.ox/settings/security/certificates/settings/pane.js
+#: module:io.ox/settings/certificates
+msgid "Remove certificate %1$s"
+msgstr "Zertifikat %1$s entfernen"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Common name"
+msgstr "Allgemeiner Name"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Expired"
+msgstr "Abgelaufen"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+#, fuzzy
+msgid "Failure reason"
+msgstr "Fehlergrund"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Hostname"
+msgstr "Hostname"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Issued by"
+msgstr "Ausgestellt von"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Issued on"
+msgstr "Ausgestellt am"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Serial number"
+msgstr "Seriennummer"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Signature"
+msgstr "Signatur"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Trusted"
+msgstr "Vertrauenswürdig"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+msgid "Certificate details"
+msgstr "Zertifikatsdetails"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
+#, fuzzy
+msgid "Trust certificate"
+msgstr "Zertifikat trauen"
 
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
@@ -10073,19 +10239,18 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Chrome"
-msgstr "Chrome"
-
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Safari"
 msgstr "Safari"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Chrome"
+msgstr "Chrome"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Internet Explorer"
 msgstr "Internet Explorer"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
 msgid "Edge"
 msgstr "Edge"
 
@@ -10099,7 +10264,6 @@ msgstr "Unbekanntes Gerät"
 
 #. text in the settings pane to indicate session that is currently active
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
 msgid "Now active"
 msgstr "jetzt aktiv"
 
@@ -10118,16 +10282,14 @@ msgstr ""
 "abmelden?"
 
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
-msgid "Show message authencitiy"
+msgid "Show message authenticity"
 msgstr ""
 
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
-#, fuzzy
 msgid "Dangerous only"
 msgstr "Nur gefährlich"
 
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
-#, fuzzy
 msgid "Dangerous and trusted"
 msgstr "Gefährlich und vertrauenswürdig"
 
@@ -10956,10 +11118,11 @@ msgid_plural "in %d minutes"
 msgstr[0] "in %d Minute"
 msgstr[1] "in %d Minuten"
 
+#. notification pane: action  to close/acknowledge all reminders (they don't show up anymore)
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #, fuzzy
 msgid "Acknowledge all reminders"
-msgstr "Alle Erinnerungen bestätigen."
+msgstr "Alle Erinnerungen bestätigen"
 
 #. Reminders (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -11182,74 +11345,6 @@ msgstr "Flickr"
 msgid "Hello World"
 msgstr "Hallo Welt"
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "Recent activities"
-msgstr "Kürzliche Aktivitäten"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "%1$s is now connected with %2$s"
-msgstr "%1$s ist jetzt mit %2$s vernetzt."
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "%1$s is a new contact"
-msgstr "%1$s ist ein neuer Kontakt"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "LinkedIn reported an error:"
-msgstr "Fehlermeldung von LinkedIn:"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Authorize your account again"
-msgstr "Ihr Konto erneut autorisieren"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "You have reauthorized this %s account."
-msgstr "Sie haben den %s-Account neu autorisiert."
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Something went wrong reauthorizing the %s account."
-msgstr "Beim erneuten Autorisieren des %s-Account trat ein Fehler auf."
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid ""
-"Sorry, we cannot help you here. Your provider needs to obtain a key from "
-"LinkedIn with the permission to do read messages."
-msgstr ""
-"Wir können leider nichts für Sie tun. Ihr Provider muss von LinkedIn einen "
-"Key anfordern für die Berechtigung, Nachrichten zu lesen. "
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "LinkedIn"
-msgstr "LinkedIn"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "Press [enter] to jump to the linkedin stream."
-msgstr "Durch Drücken der Eingabetaste öffnen Sie den LinkedIn-Stream."
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "You have no new messages"
-msgstr "Sie haben keine neuen Nachrichten"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "There were not activities in your network"
-msgstr "Es gab keine Aktivitäten in Ihrem Netzwerk"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "LinkedIn Network Updates"
-msgstr "LinkedIn Netzwerk-Updates"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-msgid "Your messages"
-msgstr "Ihre Nachrichten"
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Add your account"
-msgstr "Fügen Sie Ihren Account hinzu"
-
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "Die Inbox enthält keine E-Mails"
@@ -11430,6 +11525,18 @@ msgid "Twitter reported the following errors:"
 msgstr "Twitter meldete folgende Fehler:"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "Authorize your account again"
+msgstr "Ihr Konto erneut autorisieren"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "You have reauthorized this %s account."
+msgstr "Sie haben den %s-Account neu autorisiert."
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "Something went wrong reauthorizing the %s account."
+msgstr "Beim erneuten Autorisieren des %s-Account trat ein Fehler auf."
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry later."
 msgstr "Versuchen Sie es später erneut."
 
@@ -11440,6 +11547,10 @@ msgstr "Twitter"
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Press [enter] to jump to the twitter feed."
 msgstr "Durch Drücken der Eingabetaste öffnen Sie den Twitter-Feed."
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "Add your account"
+msgstr "Fügen Sie Ihren Account hinzu"
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorited"
@@ -11785,6 +11896,105 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "Verwenden Sie die Pfeiltasten zum Navigieren"
+
+#~ msgid "All events"
+#~ msgstr "Alle Ereignisse"
+
+#~ msgid "Only this event"
+#~ msgstr "Nur dieses Ereignis"
+
+#~ msgid "All future events"
+#~ msgstr "Alle zukünftigen Ereignisse"
+
+#, fuzzy
+#~ msgid "Subscribe iCal feed"
+#~ msgstr "iCal-Feed  abonnieren"
+
+#, fuzzy
+#~ msgid "Default reminder for all day appointments"
+#~ msgstr "Standarderinnerung für Ganztagstermine"
+
+#~ msgid "light citreous"
+#~ msgstr "helles Zitronengelb"
+
+#~ msgid "light turquoise"
+#~ msgstr "Helltürkis"
+
+#~ msgid "citreous"
+#~ msgstr "Zitronengelb"
+
+#~ msgid "turquoise"
+#~ msgstr "Türkis"
+
+#~ msgid "dark citreous"
+#~ msgstr "dunkles Zitronengelb"
+
+#~ msgid "dark turquoise"
+#~ msgstr "dunkles Türkis"
+
+#, fuzzy
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "IMAP-Ordner abonnieren"
+
+#, fuzzy
+#~ msgid "Subscribe address book"
+#~ msgstr "Adressbuch abonnieren"
+
+#, fuzzy
+#~ msgid "Subscribe calendar"
+#~ msgstr "Kalender abonnieren"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "Eingabehilfen verwenden"
+
+#~ msgid "External guests"
+#~ msgstr "Externe Gäste"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "In LinkedIn öffnen"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "In Text-E-Mails Emoticons als Bilder darstellen"
+
+#~ msgid "Recent activities"
+#~ msgstr "Kürzliche Aktivitäten"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s ist jetzt mit %2$s vernetzt."
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s ist ein neuer Kontakt"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "Fehlermeldung von LinkedIn:"
+
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Wir können leider nichts für Sie tun. Ihr Provider muss von LinkedIn "
+#~ "einen Key anfordern für die Berechtigung, Nachrichten zu lesen. "
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "Durch Drücken der Eingabetaste öffnen Sie den LinkedIn-Stream."
+
+#~ msgid "You have no new messages"
+#~ msgstr "Sie haben keine neuen Nachrichten"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Es gab keine Aktivitäten in Ihrem Netzwerk"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "LinkedIn Netzwerk-Updates"
+
+#~ msgid "Your messages"
+#~ msgstr "Ihre Nachrichten"
 
 #~ msgid ""
 #~ "Do you want to delete the whole series or just one appointment within the "
@@ -16021,9 +16231,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Sierra Leone"
 #~ msgstr "Sierra Leone"
-
-#~ msgid "Signature"
-#~ msgstr "Signatur"
 
 #~ msgid "Signature position"
 #~ msgstr "Signatur einfügen:"
