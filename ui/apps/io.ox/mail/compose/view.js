@@ -777,6 +777,9 @@ define('io.ox/mail/compose/view', [
 
                 if (this.app.getWindow && this.app.getWindow().floating) {
                     this.app.getWindow().floating.toggle(true);
+                } else if (_.device('smartphone')) {
+                    this.app.getWindow().resume();
+                    ox.trigger('launcher:toggleOverlay', false);
                 }
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space

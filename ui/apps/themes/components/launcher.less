@@ -5,7 +5,7 @@
 @launcher-fg:       #666;
 @launcher-bg:       #fff;
 @launcher-fg-hover: #666;
-@launcher-bg-hover: #eee;
+@launcher-bg-hover: #eee; 
 
 @launcher-stroke-width: 3px;
 @launcher-stroke-width-retina: 3px;
@@ -299,6 +299,10 @@
 
     top: @appcontrol-height;
 
+    .smartphone & {
+        width: 65%;
+    }
+
     .open & {
         display: block;
     }
@@ -315,8 +319,14 @@
         flex-wrap: wrap;
         padding: @launcher-outer-spacing;
         width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2;
+
         .smartphone & {
             width: 100%;
+            padding: 8px 6px;
+            max-height: 430px; // 9 apps
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            z-index: 10; // prevent scrolling of underlying div on iOS
         }
     }
 
@@ -330,8 +340,16 @@
         height: @launcher-size;
         width: @launcher-size;
 
+        .closer {
+            font-size: 15px;
+            color: #666;
+            height: 42px;
+        }
         .smartphone & {
-            width: 32%;
+            width: 100%;
+            height: 42px;
+            flex-direction: row;
+            padding: 0;
         }
 
         cursor: pointer;
@@ -342,6 +360,11 @@
             color: @launcher-fg;
             font-size: @launcher-text-size;
             text-align: center;
+            .smartphone & {
+                top: 11px;
+                left: 48px;
+                font-size: 15px;
+            }
         }
         //&.active .title { font-weight: bold; }
         .badge {
@@ -355,6 +378,10 @@
         .svgwrap {
             width: @svg-wrap-size;
             height: 100%;
+            .smartphone & {
+                width: 40px;
+                height: 40px;
+            }
         }
         svg {
             position: relative;
@@ -362,7 +389,9 @@
             height: 100%;
             width: 100%;
             overflow: visible;
-
+            .smartphone & {
+                top: 0;
+            }
             // overwrite stroke colors if coloredicons are configured
             &.colored {
                 &.app-icon-mail {
@@ -457,9 +486,9 @@
         #io-ox-launcher {
 
             & > button {
-                height: @appcontrol-height-smartphone;
-                width: @appcontrol-height-smartphone;
-                padding: 12px;
+                height: 44px; //@appcontrol-height-smartphone;
+                width: 100%; // @appcontrol-height-smartphone;
+                padding: 0;
                 &.launcher-btn {
                     padding: 14px;
                     width: @appcontrol-launcher-height-smartphone;

@@ -22,8 +22,15 @@ define('io.ox/core/main/icons', [
      * point for customizing icons
      */
 
-    var icons;
-    window.icons = icons;
+    var icons,
+        // map some icons for double use
+        map = {
+            'io.ox/mail/compose': 'io.ox/mail',
+            'io.ox/contacts/edit': 'io.ox/contacts',
+            'io.ox/calendar/edit': 'io.ox/calendar',
+            'io.ox/tasks/edit': 'io.ox/tasks'
+        };
+
     function exposeIcons() {
         // just some sugar
         jQuery.fn.extend({
@@ -44,6 +51,20 @@ define('io.ox/core/main/icons', [
             exposeIcons();
         }
     });
+
+    // map child-apps to core apps
+    ext.point('io.ox/core/main/icons').extend({
+        id: 'mapping',
+        index: 2000,
+        run: function () {
+            var set = {};
+            _(map).each(function (value, key) {
+                set[key] = icons[value];
+            });
+            _(ox.ui.appIcons).extend(set);
+        }
+    });
+
     /*
     ext.point('io.ox/core/main/icons').extend({
         id: 'load',

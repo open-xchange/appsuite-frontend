@@ -719,8 +719,8 @@ define('io.ox/core/desktop', [
         },
 
         getSavePoints: function () {
-
-            if (!saveRestoreEnabled()) return $.when([]);
+            // disable restore on smartphone ftm
+            if (!saveRestoreEnabled() || _.device('smartphone')) return $.when([]);
 
             return appCache.get('savepoints').then(function (list) {
                 list = list || [];

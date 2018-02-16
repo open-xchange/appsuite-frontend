@@ -24,10 +24,13 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/autologout'
 ], function (http, upsell, windowview, appAPI, ext, capabilities, icons, settings, gt) {
 
+
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
+
+    ox.on('launcher:toggleOverlay', toggleOverlay);
 
     var LauncherView = Backbone.View.extend({
         tagName: 'button',
@@ -36,7 +39,8 @@ define('io.ox/core/main/appcontrol', [
             type: 'button'
         },
         events: {
-            'click': 'onClick'
+            'click': 'onClick',
+            'click .closer': 'quitApp'
         },
         initialize: function (options) {
             this.quicklaunch = options.quicklaunch;
@@ -45,7 +49,24 @@ define('io.ox/core/main/appcontrol', [
             this.listenTo(settings, 'change:coloredIcons', this.render);
         },
         onClick: function () {
+            // used on mobile
+            if (this.model.get('state') === 'running' && this.model.get('closable')) {
+                this.model.launch();
+                return;
+            }
             ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+        },
+        quitApp: function (e) {
+            // used on mobile
+            e.preventDefault();
+            e.stopPropagation();
+            this.model.quit();
+        },
+        drawCloser: function () {
+            var close = $('<button type="button" class="btn btn-link closer">').append(
+                $('<i class="fa fa-times" aria-hidden="true">'));
+            this.$el.append(close);
+            this.closer = close;
         },
         drawDate: function () {
             this.$svg.find('tspan:first').text(moment().format('D'));
@@ -56,11 +77,16 @@ define('io.ox/core/main/appcontrol', [
                 title = this.model.get('title'),
                 firstLetter = _.isString(title) ? title[0] : '?';
 
+            // check for compose apps
+            if (this.model.get('closable')) {
+                svg = ox.ui.appIcons[this.model.options.name];
+            }
+
             this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
             if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
 
-            if (id === 'io.ox/calendar') this.drawDate();
+            if (id === 'io.ox/calendar' || this.model.options.name.match(/calendar/)) this.drawDate();
 
             var cell = $('<div class="lcell" aria-hidden="true">').append(
                 this.badge = $('<div class="indicator">').toggle(this.model.get('hasBadge')),
@@ -80,9 +106,12 @@ define('io.ox/core/main/appcontrol', [
         },
         render: function () {
             this.$el.empty().attr({
-                'data-app-id': this.model.get('name')
+                'data-id': this.model.get('id'),
+                'data-app-name': this.model.get('name')
             }).append(this.icon = this.drawIcon());
             this.updateTooltip();
+            // used on mobile
+            if (this.model.get('closable')) this.drawCloser();
             return this;
         }
     });
@@ -160,14 +189,20 @@ define('io.ox/core/main/appcontrol', [
         id: 'init',
         index: 100,
         draw: function () {
+            var overlay;
             $('#io-ox-core').append(
-                $('<div id="io-ox-launchgrid-overlay">').on('click', toggleOverlay)
+                overlay = $('<div id="io-ox-launchgrid-overlay">').on('click', toggleOverlay)
             );
-
+            if (_.device('smartphone')) {
+                overlay.on('touchstart', function (e) {
+                    e.preventDefault();
+                    toggleOverlay();
+                });
+            }
             initRefreshAnimation();
 
             ox.ui.apps.on('launch resume', function (model) {
-                $('#io-ox-launchgrid').find('.lcell[data-app-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+                $('#io-ox-launchgrid').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
                 _.defer(function () {
                     $(document).trigger('resize');
                 });
@@ -230,6 +265,25 @@ define('io.ox/core/main/appcontrol', [
             var taskbar = $('<ul class="taskbar list-unstyled">');
             this.append($('<div id="io-ox-toprightbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'mobile',
+        index: 1000,
+        draw: function () {
+            var self = this;
+
+            ox.ui.apps.on('add', function (model) {
+                if (model.get('closable')) {
+                    console.log('adding app', model.attributes);
+                    self.find('.cflex').append(new LauncherView({ model: model }).render().$el);
+                }
+            });
+
+            ox.ui.apps.on('remove', function (model) {
+                self.find('[data-id="' + model.get('id') + '"]').remove();
+            });
         }
     });
 

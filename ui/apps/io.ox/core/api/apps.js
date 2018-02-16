@@ -53,7 +53,6 @@ define('io.ox/core/api/apps', [
                 return _.where(appManifests, { id: app })[0];
             }));
         },
-
         getAppsWithSettings: function () {
             return _.filter(api.getApps(), function (item) {
                 if (!item.settings) return false;
