@@ -273,7 +273,7 @@ define('io.ox/mail/inplace-reply', [
                     $footer: win.nodes.footer
                 })
                 .on('close', function () {
-                    win.close();
+                    app.quit();
                 })
                 .render().$el
             );
