@@ -188,7 +188,7 @@ define('io.ox/mail/view-options', [
                 textNode.replaceWith(account.is('sent|drafts', folder) ? gt('To') : gt('From'));
                 // toggle visibily of 'has attachments'
                 link = view.$('a[data-value="602"]');
-                link.toggleClass('hidden', !folderAPI.pool.getModel(folder).supports('ATTACHMENT_SEARCH'));
+                link.toggleClass('hidden', !folderAPI.pool.getModel(folder).supports('ATTACHMENT_MARKER'));
             }
         }
     });

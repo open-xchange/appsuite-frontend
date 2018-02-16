@@ -621,7 +621,7 @@ define('io.ox/mail/main', [
                 var isUnavailable =
                     (!settings.get('features/flag/color') && options.sort === 102) ||
                     (!settings.get('features/flag/star') && options.sort === 660) ||
-                    (options.sort === 602 && !folderAPI.pool.getModel(folder).supports('ATTACHMENT_SEARCH'));
+                    (options.sort === 602 && !folderAPI.pool.getModel(folder).supports('ATTACHMENT_MARKER'));
                 if (isUnavailable) delete options.sort;
 
                 return _.extend({ sort: 610, order: 'desc', thread: false }, options);
