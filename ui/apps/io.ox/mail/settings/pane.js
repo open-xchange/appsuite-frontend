@@ -106,8 +106,6 @@ define('io.ox/mail/settings/pane', [
                         gt.pgettext('noun', 'View'),
                         // html
                         util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
-                        // images
-                        util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
                         // colored quotes
                         util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
                         // fixed width

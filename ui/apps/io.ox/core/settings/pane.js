@@ -121,16 +121,6 @@ define('io.ox/core/settings/pane', [
                         ];
                     },
 
-                    getAutoLogoutOptions: function () {
-                        return [
-                            { label: gt('Never'), value: 0 },
-                            { label: gt('5 minutes'), value: 5 * MINUTES },
-                            { label: gt('10 minutes'), value: 10 * MINUTES },
-                            { label: gt('15 minutes'), value: 15 * MINUTES },
-                            { label: gt('30 minutes'), value: 30 * MINUTES }
-                        ];
-                    },
-
                     openUserSettings: function () {
                         require(['io.ox/core/settings/user'], function (settingsUser) {
                             settingsUser.openModalDialog();
@@ -374,21 +364,6 @@ define('io.ox/core/settings/pane', [
 
                 baton.$el.append(
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
-                );
-            }
-        },
-        //
-        // Auto Logout
-        //
-        {
-            id: 'autoLogout',
-            index: INDEX += 100,
-            render: function (baton) {
-
-                if (!settings.isConfigurable('autoLogout')) return;
-
-                baton.$el.append(
-                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
                 );
             }
         },

@@ -16,69 +16,112 @@ define('io.ox/settings/security/settings/pane', [
     'io.ox/backbone/views/extensible',
     'io.ox/core/capabilities',
     'io.ox/core/settings/util',
+    'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, ExtensibleView, capabilities, util, settings, gt) {
+], function (ext, ExtensibleView, capabilities, util, settings, mailSettings, gt) {
 
     'use strict';
 
-    var INDEX = 0;
+    var INDEX = 0,
+        MINUTES = 60000;
 
-    function isConfigurable(id) {
-        return settings.isConfigurable(id);
-    }
+    ext.point('io.ox/settings/security/settings/detail').extend(
+        {
+            index: INDEX += 100,
+            id: 'header',
+            draw: function () {
+                this.append(
+                    util.header(gt('Security'))
+                );
+            }
+        }, {
+            index: INDEX += 100,
+            id: 'general',
+            draw: function () {
+                this.append(
+                    new ExtensibleView({ point: 'io.ox/settings/security/settings/detail/general', model: settings })
+                    .build(function () {
+                        this.listenTo(this.model, 'change', this.model.saveAndYell.bind(this.model, undefined));
+                    })
+                    .inject({
+                        getAutoLogoutOptions: function () {
+                            return [
+                                { label: gt('Never'), value: 0 },
+                                { label: gt('5 minutes'), value: 5 * MINUTES },
+                                { label: gt('10 minutes'), value: 10 * MINUTES },
+                                { label: gt('15 minutes'), value: 15 * MINUTES },
+                                { label: gt('30 minutes'), value: 30 * MINUTES }
+                            ];
+                        }
+                    })
+                    .render().$el
+                );
+            }
+        }, {
+            index: INDEX += 100,
+            id: 'mail',
+            draw: function () {
 
-    ext.point('io.ox/settings/security/settings/detail').extend({
+                if (!(capabilities.has('webmail')) || capabilities.has('guest')) return;
+
+                this.append(
+                    new ExtensibleView({ point: 'io.ox/settings/security/settings/detail/mail', model: mailSettings })
+                    .build(function () {
+                        this.listenTo(this.model, 'change', this.model.saveAndYell.bind(this.model, undefined));
+                    })
+                    .render().$el
+                );
+            }
+        }
+    );
+
+    //
+    // GENERAL
+    //
+    ext.point('io.ox/settings/security/settings/detail/general').extend({
+        id: 'autoLogout',
         index: 100,
-        id: 'view',
-        draw: function () {
-            this.append(
-                new ExtensibleView({ point: 'io.ox/settings/security/settings/detail/view', model: settings })
-                .build(function () {
-                    this.listenTo(settings, 'change', function () {
-                        settings.saveAndYell();
-                    });
-                })
-                .render().$el
+        render: function () {
+
+            if (!this.model.isConfigurable('autoLogout')) return;
+
+            this.$el.append(
+                util.fieldset(
+                    //#. headline for general settings
+                    gt('General'),
+                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
+                )
             );
         }
     });
 
-    ext.point('io.ox/settings/security/settings/detail/view').extend(
-        {
-            id: 'title',
-            index: 100,
-            render: function () {
-                this.$el.append(
-                    util.header(gt('Security'))
-                );
-            }
-        },
-        {
-            id: 'mail',
-            index: INDEX += 100,
-            render: function () {
-                if (!(capabilities.has('webmail')) || capabilities.has('guest')) return;
+    //
+    // MAIL
+    //
+    ext.point('io.ox/settings/security/settings/detail/mail').extend({
+        id: 'mail',
+        index: 100,
+        render: function () {
 
-                this.$el.append(
-                    util.fieldset(
-                        gt.pgettext('app', 'Mail'),
+            this.$el.append(
+                util.fieldset(
+                    gt.pgettext('app', 'Mail'),
+                    // images
+                    util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), this.model),
+                    // authenticity
+                    !this.model.get('features/authenticity', false) ? $() :
+                        util.compactSelect('features/authenticity-level', gt('Show message authenticity'), this.model, [
+                            { label: gt('None'), value: 0 },
+                            { label: gt('Dangerous only'), value: 1 },
+                            { label: gt('Dangerous and trusted'), value: 2, se: true },
+                            { label: gt('All'), value: 3 }
+                        ])
+                        .prop('disabled', !this.model.isConfigurable('features/authenticity-level'))
+                )
+            );
 
-                        // authenticity
-                        !settings.get('features/authenticity', false) ? $() :
-                            util.compactSelect('features/authenticity-level', gt('Show message authenticity'), settings, [
-                                { label: gt('None'), value: 0 },
-                                { label: gt('Dangerous only'), value: 1 },
-                                { label: gt('Dangerous and trusted'), value: 2, se: true },
-                                { label: gt('All'), value: 3 }
-                            ])
-                            .prop('disabled', !isConfigurable('features/authenticity-level'))
-
-                    )
-                );
-
-            }
         }
-    );
+    });
 
 });
