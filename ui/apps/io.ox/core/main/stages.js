@@ -271,7 +271,20 @@ define('io.ox/core/main/stages', [
                 // split app/call
                 var launch, method, options = _(hash).pick('folder', 'id');
                 debug('Auto launch:', details.app, options);
-                launch = ox.launch(details.app, options);
+                if (/detail\/main$/.test(details.app)) {
+                    // TODO: NEEDS REFACTORING
+                    // This is a !temporary! workaround as we need to change how deeplinks and
+                    // windows are handled overall
+                    var mainApp = details.app.replace(/\/detail/, '');
+                    launch = ox.launch(mainApp, options);
+                    launch.done(function () {
+                        _.delay(function () {
+                            ox.launch(details.app, { cid: _.cid(options) });
+                        }, 1000);
+                    });
+                } else {
+                    launch = ox.launch(details.app, options);
+                }
                 method = details.method;
                 // TODO: all pretty hard-wired here; looks for better solution
                 // special case: open viewer too?
