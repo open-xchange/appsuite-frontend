@@ -123,34 +123,6 @@ define('io.ox/calendar/edit/main', [
 
                         self.considerSaved = true;
 
-                        self.model
-                            .on('change', function () {
-                                self.considerSaved = false;
-                            })
-                            //todo still needed?
-                            .on('backendError', function (error) {
-                                try {
-                                    self.getWindow().idle();
-                                } catch (e) {
-                                    if (error.code === 'UPL-0005') {
-                                        //uploadsize to big; remove busy animation
-                                        api.removeFromUploadList(_.ecid(this.attributes));
-                                    }
-                                }
-                                var message;
-                                // hmm, backend likes to send an empty object in "problematic" which makes it hard to check
-                                if (error.problematic && error.problematic.length > 0 && !_.isEmpty(error.problematic[0])) {
-                                    message = _(error.problematic).map(function (field) {
-                                        var id = http.getColumn('calendar', field.id) || field.id,
-                                            name = util.columns[id] || id;
-                                        return gt('The field "%1$s" exceeds its maximum size of %2$d characters.', name, field.max_size);
-                                    }).join(' ');
-                                } else {
-                                    message = error.error;
-                                }
-                                notifications.yell('error', message);
-                            });
-
                         self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
@@ -172,6 +144,11 @@ define('io.ox/calendar/edit/main', [
                             if (opt.action === 'thisandfuture') self.model.mode = 'thisandfuture';
                         }
 
+                        self.model.on('change', function () {
+                            self.considerSaved = false;
+                        });
+
+                        self.initialModelData = self.model.toJSON();
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         //used by guided tours so they can show the next step when everything is ready
@@ -228,11 +205,8 @@ define('io.ox/calendar/edit/main', [
             },
 
             getDirtyStatus: function () {
-                return false;
-                //TODO fix dirty status
-                /*if (this.considerSaved) return false;
-
-                return !_.isEmpty(this.model.changedSinceLoading());*/
+                if (this.considerSaved) return false;
+                return !_.isEqual(this.model.toJSON(), this.initialModelData);
             },
 
             onShowWindow: function () {
