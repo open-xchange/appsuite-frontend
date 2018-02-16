@@ -318,15 +318,19 @@ define('io.ox/calendar/main', [
             folderAPI.on('hide remove', function (id) {
                 app.folders.remove(id);
             });
+            api.on('all:fail', function (id) {
+                app.folders.remove(id, { silent: true });
+            });
         },
 
         'multi-folder-selection': function (app) {
             var folders, prevFolders, singleSelection = false;
-            function setFolders(list) {
+            function setFolders(list, opt) {
+                opt = opt || {};
                 folders = _(list).unique();
                 sort();
                 _.defer(function () {
-                    app.trigger('folders:change', folders);
+                    if (opt.silent !== true) app.trigger('folders:change', folders);
                     settings.set('selectedFolders', folders).save();
                 });
             }
@@ -372,16 +376,16 @@ define('io.ox/calendar/main', [
                 list: function () {
                     return folders;
                 },
-                add: function (folder) {
+                add: function (folder, opt) {
                     if (singleSelection) this.reset();
                     var list = [].concat(folders);
                     list.push(folder);
-                    setFolders(list);
+                    setFolders(list, opt);
                 },
-                remove: function (folder) {
+                remove: function (folder, opt) {
                     if (singleSelection) this.reset();
                     var list = _(folders).without(folder);
-                    setFolders(list);
+                    setFolders(list, opt);
                 },
                 setOnly: function (folder) {
                     singleSelection = true;
