@@ -532,6 +532,8 @@ define('io.ox/files/actions', [
 
             if (!_.isArray(e.context)) e.context = [e.context];
 
+            if (!e.context.length) return false;
+
             var result = true;
             _.each(e.context, function (element) {
                 // folderId where the item is located
