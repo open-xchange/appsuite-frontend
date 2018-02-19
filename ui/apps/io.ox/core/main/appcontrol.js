@@ -272,11 +272,11 @@ define('io.ox/core/main/appcontrol', [
         id: 'mobile',
         index: 1000,
         draw: function () {
+            if (_.device('!smartphone')) return;
             var self = this;
 
             ox.ui.apps.on('add', function (model) {
                 if (model.get('closable')) {
-                    console.log('adding app', model.attributes);
                     self.find('.cflex').append(new LauncherView({ model: model }).render().$el);
                 }
             });
