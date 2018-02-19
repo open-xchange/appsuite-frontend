@@ -499,7 +499,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         onChangeDateRange: function (model, val) {
-            this.model.set('startDate', this.model.get('startDate').startOf(val), { silent: true });
+            this.model.set('startDate', moment(this.model.get('viewStartedWith')).startOf(val), { silent: true });
             this.onChangeWorkingHours();
         },
 
