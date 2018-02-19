@@ -357,6 +357,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         prepareReuse: function () {
             if (this.$toggle) this.$toggle.remove();
             if (this.$ul) this.$ul.empty();
+            return this;
         },
 
         dispose: function () {
