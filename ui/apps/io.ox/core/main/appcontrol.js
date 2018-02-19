@@ -78,7 +78,7 @@ define('io.ox/core/main/appcontrol', [
                 firstLetter = _.isString(title) ? title[0] : '?';
 
             // check for compose apps
-            if (this.model.get('closable')) {
+            if (this.model.get('closable') && _.device('smartphone')) {
                 svg = ox.ui.appIcons[this.model.options.name];
             }
 
@@ -111,7 +111,7 @@ define('io.ox/core/main/appcontrol', [
             }).append(this.icon = this.drawIcon());
             this.updateTooltip();
             // used on mobile
-            if (this.model.get('closable')) this.drawCloser();
+            if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
             return this;
         }
     });
