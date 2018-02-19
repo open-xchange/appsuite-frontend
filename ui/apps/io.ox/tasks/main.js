@@ -667,6 +667,15 @@ define('io.ox/tasks/main', [
             };
         },
 
+        'primary-action': function (app) {
+            app.addPrimaryAction({
+                point: 'io.ox/tasks/sidepanel',
+                label: gt('New task'),
+                action: 'io.ox/tasks/actions/create',
+                toolbar: 'create'
+            });
+        },
+
         'sidepanel': function (app) {
 
             ext.point('io.ox/tasks/sidepanel').extend({
