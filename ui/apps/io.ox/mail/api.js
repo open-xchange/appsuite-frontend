@@ -1381,7 +1381,9 @@ define('io.ox/mail/api', [
             module: 'mail',
             params: {
                 action: 'new',
-                lineWrapAfter: 0
+                lineWrapAfter: 0,
+                // force the response to be json(ish) instead of plain html (fixes some error messages)
+                force_json_response: true
             },
             data: form,
             dataType: 'json',
