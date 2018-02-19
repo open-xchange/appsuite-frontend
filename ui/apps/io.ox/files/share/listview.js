@@ -216,7 +216,7 @@ define('io.ox/files/share/listview', [
                 sharedItemElementList = view.getItems().toArray();
 
             sharedItemElementList.forEach(function (elmLi/*, idx, list*/) {
-                model = collection.getByCid(elmLi.getAttribute('data-cid'));
+                model = collection.get(elmLi.getAttribute('data-cid'));
 
                 if (elmLi.getAttribute('data-share-type') === 'public-link') {
 
