@@ -1257,6 +1257,8 @@ define('io.ox/files/api', [
 
         var params = _.extend({
             action: action,
+            // force the response to be json(ish) instead of plain html (fixes some error messages)
+            force_json_response: true,
             timestamp: _.then()
         }, options.params);
 
