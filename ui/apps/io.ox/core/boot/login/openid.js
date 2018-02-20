@@ -37,7 +37,7 @@ define('io.ox/core/boot/login/openid', [
                     session: ox.session
                 })
             ].join('');
-            return def.reject();
+            return def;
         }
     });
 
@@ -69,6 +69,8 @@ define('io.ox/core/boot/login/openid', [
                 version: session.version()
             })
         ].join('');
+        // defer "forever", since we are redirecting
+        return $.Deferred();
     }
 
     return openIdConnectLogin;
