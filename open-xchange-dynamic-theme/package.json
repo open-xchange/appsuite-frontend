@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-dynamic-theme",
-  "version": "7.10.0-2",
+  "version": "7.10.0-3",
   "description": "App Suite UI Dynamic Theme",
   "scripts": {
     "debug": "grunt clean default && cp -r build ../ui/ && cd ../ui/build && rm -rf apps/io.ox/dynamic-theme/apps && node --inspect-brk ../../open-xchange-dynamic-theme/lib/update-dynamic-theme.js",
