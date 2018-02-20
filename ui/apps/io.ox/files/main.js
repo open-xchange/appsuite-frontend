@@ -243,16 +243,16 @@ define('io.ox/files/main', [
         },
 
         'long-running-jobs': function () {
-            jobsAPI.on('added:infostore', function (data) {
+            jobsAPI.on('added:infostore', function () {
                 require(['io.ox/core/yell'], function (yell) {
-                    //#. %1$s: folder name
-                    yell('info', gt(' Moving folder "%1$s" takes longer to finish', data.job.label));
+                    //#. moving folders/files
+                    yell('info', gt('Move operation takes longer to finish'));
                 });
             });
-            jobsAPI.on('finished:infostore', _.debounce(function (data) {
+            jobsAPI.on('finished:infostore', _.debounce(function () {
                 require(['io.ox/core/yell'], function (yell) {
-                    //#. %1$s: folder name
-                    yell('info', gt(' Finished moving folder "%1$s"', data.job.label));
+                    //#. %1$s: moving folders/files
+                    yell('info', gt('Finished moving'));
                 });
             }, 50));
         },

@@ -22,12 +22,13 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
+    'io.ox/core/api/jobs',
     'io.ox/core/util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -1179,7 +1180,9 @@ define('io.ox/files/api', [
                 params: {
                     action: 'move',
                     folder: targetFolderId,
-                    ignoreWarnings: ignoreWarnings
+                    ignoreWarnings: ignoreWarnings,
+                    // allow long running jobs
+                    allow_enqueue: true
                 },
                 data: items,
                 appendColumns: false
@@ -1219,22 +1222,44 @@ define('io.ox/files/api', [
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {
 
-        var fn = type === 'move' ? move : copy;
-
-        return http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (response) {
-            var errorText, i = 0, $i = response ? response.length : 0;
-            // look if anything went wrong
-            for (; i < $i; i++) {
-                // conflicts are handled separately
-                if (response[i].error && response[i].error.categories !== 'CONFLICT') {
-                    errorText = response[i].error.error;
-                    break;
+        var fn = type === 'move' ? move : copy,
+            def = $.Deferred(),
+            callback = function (response) {
+                var errorText, i = 0, $i = response ? response.length : 0;
+                // look if anything went wrong
+                for (; i < $i; i++) {
+                    // conflicts are handled separately
+                    if (response[i].error && response[i].error.categories !== 'CONFLICT') {
+                        errorText = response[i].error.error;
+                        break;
+                    }
                 }
+                // propagete move/copy event
+                api.propagate(type, list, targetFolderId);
+
+                def.resolve(errorText || response);
+            },
+            failCallback = function (error) {
+                def.reject(error);
+            };
+
+        http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (result) {
+            if (type === 'move' && result && result[0] && result[0].data && result[0].data.job) {
+                // long running job. Add to jobs list and return here
+                //#. %1$s: Folder name
+                jobsAPI.addJob({
+                    module: 'folders',
+                    action: 'update',
+                    done: false,
+                    showIn: 'infostore',
+                    id: result[0].data.job,
+                    successCallback: callback,
+                    failCallback: failCallback });
+                return;
             }
-            // propagete move/copy event
-            api.propagate(type, list, targetFolderId);
-            return errorText || response;
-        });
+            callback(result);
+        }, failCallback);
+        return def;
     }
 
     /**
