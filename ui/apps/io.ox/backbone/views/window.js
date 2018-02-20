@@ -48,7 +48,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         initialize: function (options) {
             this.options = options || {};
             this.listenTo(this, 'dispose', remove);
-            if (!this.model) this.model = new WindowModel(_.pick(options, 'title', 'minimized', 'closable', 'win', 'showStickybutton'));
+            if (!this.model) this.model = new WindowModel(_.pick(options, 'title', 'minimized', 'closable', 'win', 'showStickybutton', 'taskbarIcon'));
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'change:displayStyle': this.changeDisplayStyle,
@@ -186,6 +186,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             });
         },
         onClick: function () {
+            if (this.$el) this.$el.addClass('active').siblings().removeClass('active');
             if (!this.model.get('floating')) {
                 this.model.set('minimized', false);
                 this.model.get('win').app.launch();
@@ -196,7 +197,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.model.set('minimized', !initialState);
             ox.trigger('change:document:title', this.model.get('title'));
             this.model.trigger('lazyload');
-            if (this.$el) this.$el.addClass('active').siblings().removeClass('active');
         },
 
         onClose: function () {
@@ -228,11 +228,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         render: function () {
             this.$el.attr('data-cid', this.model.cid).append(
                 $('<button type="button" class="taskbar-button" data-action="restore">').append(
+                    this.$icon = this.model.get('taskbarIcon') ? $('<i class="fa">').addClass(this.model.get('taskbarIcon')) : $(),
                     this.$title = $('<span class="title">'),
                     this.$count = $('<span class="count label label-danger">')
 
                 )
             );
+
             if (this.model.get('closable')) {
                 this.$el.append($('<button type="button" class="btn btn-link pull-right" data-action="close">')
                     .append('<i class="fa fa-times" aria-hidden="true">')

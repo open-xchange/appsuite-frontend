@@ -392,6 +392,7 @@ define('io.ox/core/desktop', [
                     title: this.options.title,
                     closable: this.options.closable,
                     displayStyle: this.options.displayStyle,
+                    taskbarIcon: this.options.taskbarIcon,
                     win: win
                 });
                 win.floating = new FloatingWindow.View({
