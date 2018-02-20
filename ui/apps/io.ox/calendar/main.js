@@ -274,12 +274,18 @@ define('io.ox/calendar/main', [
                 draw: function () {
 
                     if (_.device('smartphone')) return;
+                    var layoutRanges = { 'week:workweek': 'week', 'week:week': 'week', 'month': 'month', 'year': 'year' };
 
                     new DatePicker({ parent: this.closest('#io-ox-core'), showTodayButton: false })
                         .on('select', function (date) {
                             app.setDate(date);
+                            this.setDate(date, true);
                         })
                         .listenTo(app.props, 'change:date', function (model, value) {
+                            // check if the layout supports ranges (week, month year). If the new date is still within that range, we don't need to change the mini calendar
+                            // those layous set it always to the first day within their specific range and would overwrite the selection of the user, see(bug 57223)
+                            if (layoutRanges[app.props.get('layout')] && moment(value).startOf(layoutRanges[app.props.get('layout')]).valueOf() === moment(this.getDate()).startOf(layoutRanges[app.props.get('layout')]).valueOf()) return;
+
                             this.setDate(value, true);
                         })
                         .listenTo(app.props, 'change:showMiniCalendar', function (model, value) {
