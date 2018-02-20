@@ -939,6 +939,7 @@ define('io.ox/files/actions', [
     // Action to add files/folders to favorites
     new Action('io.ox/files/favorites/add', {
         requires: function (e) {
+            if (capabilities.has('guest && anonymous')) return false;
             if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
                 if (Array.isArray(e.context)) {
                     var result = true;
@@ -984,6 +985,7 @@ define('io.ox/files/actions', [
     // Action to remove files/folders to favorites
     new Action('io.ox/files/favorites/remove', {
         requires: function (e) {
+            if (capabilities.has('guest && anonymous')) return false;
             if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
                 if (Array.isArray(e.context)) {
                     var result = false;
