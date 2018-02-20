@@ -311,14 +311,7 @@ define('io.ox/core/main/topbar_right', [
         index: 1000,
         draw: function () {
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('title', gt('Settings')).append(
-                    contactAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden"true">')
-                        .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
-                        { internal_userid: ox.user_id },
-                        { width: 40, height: 40 }
-                    )
-                ),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('title', gt('Settings')),
                 dropdown = new Dropdown({
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',
@@ -326,10 +319,26 @@ define('io.ox/core/main/topbar_right', [
                     $ul: ul,
                     $toggle: a
                 });
+
+            updatePicture();
             ext.point('io.ox/core/appcontrol/right/dropdown').invoke('extend', dropdown);
-            this.append(
-                dropdown.render().$el
-            );
+            this.append(dropdown.render().$el);
+
+            // via global address book
+            contactAPI.on('reset:image update:image', updatePicture);
+            // via my contact data
+            userAPI.on('reset:image:' + ox.user_id + ' update:image:' + ox.user_id, updatePicture);
+
+            function updatePicture() {
+                a.empty().append(
+                    contactAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden"true">')
+                        .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
+                        { internal_userid: ox.user_id },
+                        { width: 40, height: 40 }
+                    )
+                );
+            }
         }
     });
 

@@ -457,6 +457,12 @@ define('io.ox/contacts/api', [
                     api.trigger('update', data);
                     // trigger refresh.all, since position might have changed
                     api.trigger('refresh.all');
+                    // reset image?
+                    if (o.data.image1 === '') {
+                        // to clear picture halo's cache
+                        api.trigger('update:image', data);
+                        api.trigger('reset:image reset:image:' + _.ecid(data), data);
+                    }
                 });
             });
         });
