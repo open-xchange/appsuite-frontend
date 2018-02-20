@@ -265,10 +265,11 @@ define('plugins/notifications/calendar/register', [
                     }
                     if (!playing && audioQueue.length) {
                         playing = true;
-                        calAPI.get(audioQueue.shift()).done(function (eventModel) {
+                        var alarmToPlay = audioQueue.shift();
+                        calAPI.get(alarmToPlay).done(function (eventModel) {
                             yell('info', eventModel ? eventModel.get('summary') : gt('Appointment reminder'));
                             soundUtil.playSound();
-                            calAPI.acknowledgeAlarm(alarm);
+                            calAPI.acknowledgeAlarm(alarmToPlay);
                             setTimeout(function () {
                                 playing = false;
                                 playAlarm();
