@@ -1084,7 +1084,7 @@ define('io.ox/files/share/permissions', [
                     )
                 );
 
-                dialog.$footer.prepend(
+                dialog.$body.append(
                     // add message - not available for mail
                     $('<div class="share-options form-group">')
                     .toggle(notificationDefault)
@@ -1110,7 +1110,7 @@ define('io.ox/files/share/permissions', [
 
                 // apply polyfill for CSS resize which IE doesn't support natively
                 if (_.browser.IE) {
-                    window.resizeHandlerPolyfill(dialog.$footer.find('.message-text')[0]);
+                    window.resizeHandlerPolyfill(dialog.$body.find('.message-text')[0]);
                 }
 
                 dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {
