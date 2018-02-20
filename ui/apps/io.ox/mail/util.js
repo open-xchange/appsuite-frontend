@@ -577,7 +577,7 @@ define('io.ox/mail/util', [
 
             return function (aspect, data) {
                 var status = that.getAuthenticityStatus(data),
-                    level = parseInt(settings.get('features/authenticity-level', 2), 10);
+                    level = parseInt(settings.get('features/authenticity-level', 1), 10);
                 // feature disabled or level 'naive'
                 if (!status || !/^(1|2|3)$/.test(level)) return;
                 var isEnabled = map[aspect] ? map[aspect].call(undefined, level, status) : false;
@@ -587,7 +587,7 @@ define('io.ox/mail/util', [
 
         getAuthenticityStatus: function (data) {
             if (!settings.get('features/authenticity', false)) return;
-            if (!/^(1|2|3)$/.test(settings.get('features/authenticity-level', 2))) return;
+            if (!/^(1|2|3)$/.test(settings.get('features/authenticity-level', 1))) return;
             if (!_.isObject(data)) return;
             return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
         },
