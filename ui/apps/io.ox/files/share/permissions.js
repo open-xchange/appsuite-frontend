@@ -32,9 +32,10 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
+    'io.ox/core/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil) {
 
     'use strict';
 
@@ -1063,16 +1064,19 @@ define('io.ox/files/share/permissions', [
                             if (e.type === 'keydown' && e.which !== 13) return;
 
                             // use shown input
-                            var value = $.trim($(this).typeahead('val'));
-                            if (_.isEmpty(value)) return;
+                            var value = $.trim($(this).typeahead('val')),
+                                list = coreUtil.getAddresses(value);
 
-                            // add to collection
-                            permissionsView.collection.add(new Permission({
-                                bits: getBitsExternal(objModel),
-                                contact: { email1: value },
-                                type: 'guest',
-                                new: true
-                            }));
+                            _.each(list, function (value) {
+                                if (_.isEmpty(value)) return;
+                                // add to collection
+                                permissionsView.collection.add(new Permission({
+                                    bits: getBitsExternal(objModel),
+                                    contact: { email1: value },
+                                    type: 'guest',
+                                    new: true
+                                }));
+                            });
 
                             // clear input field
                             $(this).typeahead('val', '');
