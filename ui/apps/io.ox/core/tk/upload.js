@@ -272,34 +272,13 @@ define('io.ox/core/tk/upload', [
                 }
 
                 return deferred.then(function success(data) {
-                    var use = data.use || 0,
-                        quota = data.quota || -1,
-                        maxSize = data.maxSize || Number.MAX_VALUE,
-                        totalUploadSize = 0;
+                    var maxSize = data.maxSize || Number.MAX_VALUE;
 
                     var validFiles = _(newFiles).filter(function (f) {
-                        var exceedMaximum = maxSize > 0 && f.size > maxSize;
-                        if (!exceedMaximum) totalUploadSize += f.size;
-                        return !exceedMaximum;
+                        return !(maxSize > 0 && f.size > maxSize);
                     });
 
-                    if (quota > 0 && totalUploadSize > quota - use) {
-                        require(['io.ox/core/strings'], function (strings) {
-                            notifications.yell('error',
-                                gt.format(
-                                    //#. %1$s quota limit
-                                    gt.ngettext(
-                                        'The file cannot be uploaded because it exceeds the quota limit of %1$s',
-                                        'The files cannot be uploaded because they exceed the quota limit of %1$s',
-                                        newFiles.length
-                                    ),
-                                    strings.fileSize(quota)
-                                )
-                            );
-                        });
-
-                        return [];
-                    }
+                    // Bug-54765: Frontend no longer makes a quota check
 
                     if (validFiles.length < newFiles.length) {
                         require(['io.ox/core/strings'], function (strings) {
