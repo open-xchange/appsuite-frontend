@@ -43,7 +43,7 @@ define('io.ox/core/boot/util', [], function () {
         if (ox.signin) return change(elements);
 
         require(['io.ox/core/api/user', 'io.ox/contacts/util'], function (api, util) {
-            api.get(ox.user_id).done(function (data) {
+            api.get({ id: ox.user_id }).done(function (data) {
                 var user = util.getMailFullName(data) || ox.user;
                 elements.push(user);
                 change(elements);
