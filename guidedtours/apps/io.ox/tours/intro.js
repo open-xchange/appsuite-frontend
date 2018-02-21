@@ -37,7 +37,7 @@ define('io.ox/tours/intro', [
         .step()
             .title(gt('Launching an app'))
             .on('before:show', function () { if ($('#io-ox-launchgrid:visible').length === 0) $('#io-ox-launcher .btn').first().click(); })
-            .content(gt('To launch an app, use the quicklaunch icons on the left side of the menu bar or click on an entry inside the app launcher menu.'))
+            .content(gt('To launch an app, use the quick launch icons on the left side of the menu bar or click on an entry inside the app launcher menu.'))
             .hotspot('#io-ox-launchgrid')
             .referTo('#io-ox-launchgrid')
             .on('hide', function () { if ($('#io-ox-launchgrid:visible').length === 1) $('#io-ox-launcher .btn').first().click(); })
