@@ -31,7 +31,7 @@ define('io.ox/tours/tasks', [
         .step()
             .title(gt('Creating a new task'))
             .content(gt('To create a new task, click on New in the toolbar.'))
-            .spotlight('[data-ref="io.ox/tasks/actions/create"]')
+            .spotlight('.io-ox-tasks-window .primary-action .btn:visible, [data-ref="io.ox/tasks/actions/create"]:visible')
             .on('next', function () {
                 ox.load(['io.ox/tasks/edit/main']).then(function (edit) {
                     var app = edit.getApp();
