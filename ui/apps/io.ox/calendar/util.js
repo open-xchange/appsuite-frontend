@@ -568,13 +568,12 @@ define('io.ox/calendar/util', [
                 day_in_month = data.day_in_month;
 
             switch (data.recurrence_type) {
-                // dont use plural gettext here, causes problems without plural forms (japanese for example). Use 2 separate strings instead
 
                 // DAILY
                 case 1:
-                    //#. recurrence string 'daily'
+                    //#. recurrence string
                     //#. %1$d: numeric
-                    str = interval === 1 ? gt('Every day.') : gt('Every %1$d days.', interval);
+                    str = gt.npgettext('daily', 'Every day.', 'Every %1$d days.', interval, interval);
                     break;
 
                 // WEEKLY
@@ -583,27 +582,23 @@ define('io.ox/calendar/util', [
                     if (days === 127) {
                         //#. recurrence string
                         //#. %1$d: numeric
-                        str = interval === 1 ? gt('Every day.') : gt('Every %1$d weeks on all days.', interval);
+                        str = gt.npgettext('weekly', 'Every day.', 'Every %1$d weeks on all days.', interval, interval);
                     } else if (days === 62) { // special case: weekly on workdays
                         //#. recurrence string
                         //#. %1$d: numeric
-                        str = interval === 1 ? gt('On workdays.') : gt('Every %1$d weeks on workdays.', interval);
+                        str = gt.npgettext('weekly', 'On workdays.', 'Every %1$d weeks on workdays.', interval, interval);
                     } else if (days === 65) {
                         //#. recurrence string
                         //#. %1$d: numeric
-                        str = interval === 1 ? gt('Every weekend.') : gt('Every %1$d weeks on weekends.', interval);
+                        str = gt.npgettext('weekly', 'Every weekend.', 'Every %1$d weeks on weekends.', interval, interval);
                     } else if (days === 0) { // special case when no day is selected
                         str = gt('Never.');
                     } else {
                         //#. recurrence string
-                        //#. %1$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+                        //#. %1$d: numeric
+                        //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
                         //#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
-                        str = interval === 1 ? gt('Every %1$s.', getDayString(days, { superessive: interval > 1 })) :
-                            //#. recurrence string
-                            //#. %1$d: numeric
-                            //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                            //#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
-                            gt('Every %1$d weeks on %2$s.', interval, getDayString(days, { superessive: interval > 1 }));
+                        str = gt.npgettext('weekly', 'Every %2$s.', 'Every %1$d weeks on %2$s.', interval, interval, getDayString(days, { superessive: interval > 1 }));
                     }
 
                     break;
@@ -612,26 +607,17 @@ define('io.ox/calendar/util', [
                 case 3:
                     if (days === null) {
                         //#. recurrence string
-                        //#. %1$d: numeric, day in month
+                        //#. %1$d: numeric, interval
+                        //#. %2$d: numeric, day in month
                         //#. Example: Every 5 months on day 18
-                        str = interval === 1 ? gt('Every month on day %1$d.', day_in_month) :
-                            //#. recurrence string
-                            //#. %1$d: numeric, interval
-                            //#. %2$d: numeric, day in month
-                            //#. Example: Every 5 months on day 18
-                            gt('Every %1$d months on day %2$d.', interval, day_in_month);
+                        str = gt.npgettext('monthly', 'Every month on day %2$d.', 'Every %1$d months on day %2$d.', interval, interval, day_in_month);
                     } else {
                         //#. recurrence string
-                        //#. %1$s: count string, e.g. first, second, or last
-                        //#. %2$s: day string, e.g. Monday
+                        //#. %1$d: numeric, interval
+                        //#. %2$s: count string, e.g. first, second, or last
+                        //#. %3$s: day string, e.g. Monday
                         //#. Example Every 3 months on the second Tuesday
-                        str = interval === 1 ? gt('Every month on the %1$s %2$s.', getCountString(day_in_month), getDayString(days)) :
-                            //#. recurrence string
-                            //#. %1$d: numeric, interval
-                            //#. %2$s: count string, e.g. first, second, or last
-                            //#. %3$s: day string, e.g. Monday
-                            //#. Example Every 3 months on the second Tuesday
-                            gt('Every %1$d months on the %2$s %3$s.', interval, getCountString(day_in_month), getDayString(days));
+                        str = gt.npgettext('monthly', 'Every month on the %2$s %3$s.', 'Every %1$d months on the %2$s %3$s.', interval, interval, getCountString(day_in_month), getDayString(days));
                     }
 
                     break;

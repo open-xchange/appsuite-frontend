@@ -74,11 +74,9 @@ define('io.ox/participants/add', [
 
         yell: function (list, invalid) {
             yell('warning', gt.format(
-                // split strings to support languages wthout plural forms
-                list.length === 1 ? gt('This email address cannot be used') :
-                    //#. %1$d a list of email addresses
-                    //#, c-format
-                    gt('The following email addresses cannot be used: %1$d', list.length),
+                //#. %1$d a list of email addresses
+                //#, c-format
+                gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
                 invalid.join(', ')
             ));
         }
