@@ -43,7 +43,7 @@ define('io.ox/core/viewer/util', [
     Util.CATEGORY_ICON_MAP = {
         'file': 'fa-file-o',
         'txt': 'fa-file-text-o',
-        'doc': 'fa-file-word-o',
+        'doc': 'fa-file-text-o',
         'ppt': 'fa-file-powerpoint-o',
         'xls': 'fa-file-excel-o',
         'image': 'fa-file-image-o',
