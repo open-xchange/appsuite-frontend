@@ -114,7 +114,7 @@ define('io.ox/settings/security/settings/pane', [
                         util.compactSelect('features/authenticity-level', gt('Show message authenticity'), this.model, [
                             { label: gt('None'), value: 0 },
                             { label: gt('Dangerous only'), value: 1 },
-                            { label: gt('Dangerous and trusted'), value: 2, se: true },
+                            { label: gt('Dangerous and trusted'), value: 2 },
                             { label: gt('All'), value: 3 }
                         ])
                         .prop('disabled', !this.model.isConfigurable('features/authenticity-level'))

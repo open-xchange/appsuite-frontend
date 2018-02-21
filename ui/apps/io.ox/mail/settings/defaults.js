@@ -45,7 +45,10 @@ define('io.ox/mail/settings/defaults', [], function () {
         'playSound': true,
         'confirmReplyToMailingLists': true,
         'unseenMessagesFolder': true,
-        'showCheckboxes': true  // show checkboxes in mail list as default
+        'showCheckboxes': true,  // show checkboxes in mail list as default
+        'features': {
+            'authenticity-level': 1
+        }
     };
 
     return settingsDefaults;
