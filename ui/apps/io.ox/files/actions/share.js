@@ -28,7 +28,6 @@ define('io.ox/files/actions/share', [
         var header = '',
             count = array.length,
             first = array[0],
-            filler = (count === 1) ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
             view = new ShareWizard({ files: array });
 
         function toggleButtons(sendVisible) {
@@ -38,10 +37,15 @@ define('io.ox/files/actions/share', [
 
         // build header
         if (first.isFile()) {
-            //#. if only one item -> insert filename / on more than one item -> item count
-            header = gt.format(gt.ngettext('Sharing link created for file "%1$d"', 'Sharing link created for %1$d items', count), filler);
+            //#. %1$s is the file name
+            header = count === 1 ? gt('Sharing link created for file "%1$s"', _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' })) :
+                //#. %1$d is number of items
+                gt('Sharing link created for %1$d items', count);
         } else if (first.isFolder()) {
-            header = gt.format(gt.ngettext('Sharing link created for folder "%1$d"', 'Sharing link created for %1$d items', count), filler);
+            //#. %1$s is the folder name
+            header = count === 1 ? gt('Sharing link created for folder "%1$s"', _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' })) :
+                //#. %1$d is number of items
+                gt('Sharing link created for %1$d items', count);
         }
 
         // create dialog
