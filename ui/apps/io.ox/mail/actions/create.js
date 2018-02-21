@@ -98,7 +98,8 @@ define('io.ox/mail/actions/create', [
                 // map contacts to participants and create new appointment
                 var participants = [];
                 _(arguments).each(function (contact) {
-                    if (contact.internal_userid !== undefined) {
+                    // fuzzy check is ok here, internal_userid = 0 is reserved for external contacts
+                    if (contact.internal_userid) {
                         contact.type = 1;
                         contact.user_id = contact.internal_userid;
                     } else {
