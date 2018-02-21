@@ -120,7 +120,16 @@ define('io.ox/calendar/api', [
                 }
                 return function request(opt, method) {
                     method = method || 'GET';
-                    return http[method](opt)['catch'](function (err) {
+                    return http[method](opt).then(function (result) {
+                        if (_.isArray(result)) {
+                            result.forEach(function (r) {
+                                if (r.error) {
+                                    ox.trigger('http:error:' + r.code, r);
+                                }
+                            });
+                        }
+                        return result;
+                    }, function (err) {
                         if (err.code !== 'CAL-5072') throw err;
 
                         var start = moment(opt.params.rangeStart),
