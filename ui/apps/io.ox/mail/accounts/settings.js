@@ -227,7 +227,13 @@ define('io.ox/mail/accounts/settings', [
                             return def;
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
-                        }, notifications.yell).always(function () {
+                        }, function () {
+                            account.disableScopes('mail');
+                            if (account.get('wantedScopes').length === 0) {
+                                return account.destroy();
+                            }
+                            return account.save();
+                        }).fail(notifications.yell).always(function () {
                             baton.popup.idle();
                         });
                     });
@@ -382,6 +388,7 @@ define('io.ox/mail/accounts/settings', [
                             function saveFail(response) {
                                 popup.close();
                                 failDialog(response.error);
+                                def.reject(response);
                             }
                         );
                     } else if (options && options.onValidationError) {
