@@ -16,7 +16,9 @@
 @flag-color: #ffb300;
 @flag-icon: "\f005"; // fa-star
 @flag-icon-unset: "\f006"; // fa-star-o
-
+@a-color-neutral: #f8e400;
+@a-color-trusted: #5c7f31;
+@a-color-fail: #c50000;
 
 // preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
@@ -30,60 +32,6 @@
         .leftside  { width: 240px; }
         .rightside { left:  240px; }
     }
-}
-
-.authenticity() {
-    padding: 0px 4px;
-    border-radius: 4px;
-}
-
-.authenticity-trusted,
-.authenticity-pass {
-    .authenticity();
-    color: white;
-    background-color: #87c947;
-}
-
-.authenticity-fail {
-    .authenticity();
-    color: white;
-    background-color: #c50000;
-}
-
-.authenticity-neutral {
-    .authenticity();
-    background-color: #f8e400;
-}
-
-.contact-picture.authenticity-image,
-.mail-item .contact-picture.authenticity-image,
-.mail-detail .contact-picture.authenticity-image {
-    .flex-center();
-    // fallback image main color
-    background-color: #e6e6e6;
-    color: white;
-    .fa {
-        font-size: 24px;
-        padding: 0;
-        margin: 0;
-    }
-}
-
-.authenticity-icon-trusted,
-.authenticity-icon-pass,
-.authenticity-icon-neutral,
-.authenticity-icon-fail {
-    font-size: 15px;
-}
-.authenticity-icon-trusted,
-.authenticity-icon-pass {
-    color: #87c947;
-}
-.authenticity-icon-neutral {
-    color: #888;
-}
-.authenticity-icon-fail {
-    color: #c50000;
 }
 
 .io-ox-mail-window .vsplit .leftside .alert {
@@ -1310,6 +1258,85 @@ body.dragging .categories-toolbar-container {
             div:empty, span:empty { display: none; }
         }
     }
+}
+
+.authenticity() {
+    padding: 0px 4px;
+    border-radius: 4px;
+}
+
+.authenticity-trusted,
+.authenticity-pass {
+    .authenticity();
+    color: white;
+    background-color: @a-color-trusted;
+}
+
+.authenticity-fail {
+    .authenticity();
+    color: white;
+    background-color: @a-color-fail;
+}
+
+.authenticity-neutral {
+    .authenticity();
+    background-color: @a-color-neutral;
+}
+
+.contact-picture.authenticity-image,
+.mail-item .contact-picture.authenticity-image,
+.mail-detail .contact-picture.authenticity-image {
+    .flex-center();
+    // fallback image main color
+    background-color: #e6e6e6;
+    color: white;
+    .fa {
+        font-size: 24px;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.authenticity-icon-trusted,
+.authenticity-icon-pass,
+.authenticity-icon-neutral,
+.authenticity-icon-fail {
+    font-size: 15px;
+}
+.authenticity-icon-trusted,
+.authenticity-icon-pass {
+    color: @a-color-trusted;
+}
+.authenticity-icon-neutral {
+    color: #888;
+}
+.authenticity-icon-fail {
+    color: @a-color-fail;
+}
+
+.mail-detail .from .authenticity-sender {
+    &.fail {
+        color: @a-color-fail;
+    }
+    &.trusted, &.pass {
+        color: @a-color-trusted;
+    }
+}
+
+.mail-detail section.authenticity  {
+    padding: 0;
+    .fail, .trusted {
+        color: #fff;
+        padding: 16px 40px;
+        line-height: 16px;
+    }
+    .fail {
+        background-color: @a-color-fail;
+    }
+    .trusted {
+        background-color: @a-color-trusted;
+    }
+
 }
 
 .touch {

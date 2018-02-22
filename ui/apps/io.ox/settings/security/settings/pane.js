@@ -103,21 +103,25 @@ define('io.ox/settings/security/settings/pane', [
         id: 'mail',
         index: 100,
         render: function () {
-
             this.$el.append(
                 util.fieldset(
                     gt.pgettext('app', 'Mail'),
                     // images
                     util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), this.model),
-                    // authenticity
-                    !this.model.get('features/authenticity', false) ? $() :
-                        util.compactSelect('features/authenticity-level', gt('Show message authenticity'), this.model, [
-                            { label: gt('None'), value: 0 },
-                            { label: gt('Dangerous only'), value: 1 },
-                            { label: gt('Dangerous and trusted'), value: 2 },
-                            { label: gt('All'), value: 3 }
+                    // mail authenticity
+                    !mailSettings.get('features/authenticity', false) ? $() :
+                        util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
+                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            { label: gt('Disabled'), value: 'none' },
+                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            { label: gt('Dangerous emails only'), value: 'fail' },
+                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            { label: gt('Dangerous and trusted emails'), value: 'fail_trusted' },
+                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            { label: gt('Dangerous, trusted and valid emails'), value: 'fail_trusted_pass' },
+                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            { label: gt('All'), value: 'all' }
                         ])
-                        .prop('disabled', !this.model.isConfigurable('features/authenticity-level'))
                 )
             );
 

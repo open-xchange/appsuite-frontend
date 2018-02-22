@@ -46,8 +46,10 @@ define('io.ox/mail/settings/defaults', [], function () {
         'confirmReplyToMailingLists': true,
         'unseenMessagesFolder': true,
         'showCheckboxes': true,  // show checkboxes in mail list as default
-        'features': {
-            'authenticity-level': 1
+        'authenticity': {
+            // none, fail, fail_trusted, fail_trusted_pass, all, silly
+            level: 'fail_trusted',
+            domains: ''
         }
     };
 

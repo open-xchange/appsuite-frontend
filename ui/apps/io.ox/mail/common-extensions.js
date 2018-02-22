@@ -44,11 +44,7 @@ define('io.ox/mail/common-extensions', [
 
         // authenticity
         var status = util.authenticity('image', baton && baton.model.toJSON());
-        if (status) {
-            return node.addClass('authenticity-image authenticity-' + status).append(
-                $('<i class="color-stable fa">').addClass(status === 'neutral' ? 'fa-question' : 'fa-exclamation')
-            );
-        }
+        if (status) return node.text(status === 'neutral' ? '?' : '!');
 
         // add initials
         var initials = getInitials(baton.data.from);
@@ -112,23 +108,14 @@ define('io.ox/mail/common-extensions', [
 
             _(from).each(function (item) {
                 email = String(item[1] || '').toLowerCase();
-                if (/^(trusted|fail)$/.test(status)) {
-                    section.append(
-                        $('<div>').addClass('authenticity-' + status.toLowerCase())
-                            .text(status === 'trusted' ?
-                                gt('This message is from a trusted sender.') :
-                                gt('This might be a phishing mail because we could not verify that this email is really from %1$s.', email)
-                            )
-                    );
-                }
-                if (/(neutral|pass)/.test(status)) {
-                    section.append(
-                        $('<em>').text(/(pass)/.test(status) ?
-                            gt('This mail has been sent from %1$s.', email) :
-                            gt('We could not verify that this email is really from %1$s.', email)
+                section.append(
+                    $('<div>')
+                        .addClass(status.toLowerCase())
+                        .append(
+                            $('<b>').text(status === 'fail' ? gt('Warning:') + ' ' : gt('Note:') + ' '),
+                            $.txt(util.getAuthenticityMessage(status, email))
                         )
-                    );
-                }
+                );
             });
 
             this.append(section);
@@ -211,18 +198,32 @@ define('io.ox/mail/common-extensions', [
                     name = util.getDisplayName(item);
                 if (!email) return;
 
+                $el.append(
+                    $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                        .data({ email: email, email1: email })
+                        .text(name)
+                        .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
+
+                );
+
+                if (name !== email) {
+                    $el.append(
+                        $('<span class="address">')
+                            .text('<' + email + '>')
+                            .addClass(status ? 'authenticity-sender ' + status : '')
+                    );
+                }
+
                 if (status) {
                     $el.append(
                         $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').popover({
                             trigger: 'focus hover',
-                            content: /(pass|trusted)/.test(status) ?
-                                gt('This mail has been sent from %1$s.', email) :
-                                gt('We could not verify that this email is really from %1$s.', email)
+                            content: util.getAuthenticityMessage(status, email)
                         })
                         .append(
                             $('<i class="fa">').addClass(function () {
                                 if (status === 'neutral') return 'fa-question'; //fa-question
-                                if (status === 'fail') return 'fa-exclamation';
+                                if (status === 'fail') return '';
                                 return 'fa-check';
                             })
                             .addClass(status ? 'authenticity-icon-' + status : '')
@@ -230,15 +231,6 @@ define('io.ox/mail/common-extensions', [
                     );
                 }
 
-                $el.append(
-                    $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
-                        .data({ email: email, email1: email })
-                        .text(name)
-                );
-
-                if (name !== email) {
-                    $el.append($('<span class="address">').text('<' + email + '>'));
-                }
 
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');

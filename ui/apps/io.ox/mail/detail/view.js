@@ -317,10 +317,17 @@ define('io.ox/mail/detail/view', [
 
     var INDEX_notifications = 0;
 
+
     ext.point('io.ox/mail/detail/notifications').extend({
         id: 'phishing',
         index: INDEX_notifications += 100,
         draw: extensions.phishing
+    });
+
+    ext.point('io.ox/mail/detail/notifications').extend({
+        id: 'authenticity',
+        index: INDEX_notifications += 100,
+        draw: extensions.authenticity
     });
 
     ext.point('io.ox/mail/detail/notifications').extend({
@@ -343,11 +350,6 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
-        id: 'authenticity',
-        index: INDEX += 100,
-        draw: extensions.authenticity
-    });
 
     ext.point('io.ox/mail/detail').extend({
         id: 'body',

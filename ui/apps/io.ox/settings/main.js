@@ -437,20 +437,14 @@ define('io.ox/settings/main', [
 
         // security group
 
-        ext.point('io.ox/settings/pane').extend({
+        ext.point('io.ox/settings/pane/general').extend({
             id: 'security',
-            index: 200,
-            subgroup: 'io.ox/settings/pane/security'
-        });
-
-        ext.point('io.ox/settings/pane/security').extend({
-            id: 'security-root',
             title: gt('Security'),
             ref: 'io.ox/settings/security',
-            index: 100
+            index: 300
         });
 
-        ext.point('io.ox/settings/pane/security/security-root').extend({
+        ext.point('io.ox/settings/pane/general/security').extend({
             id: 'sessions',
             title: gt('Active clients'),
             ref: 'io.ox/settings/security/sessions',
@@ -458,7 +452,7 @@ define('io.ox/settings/main', [
         });
 
         if (!capabilities.has('guest')) {
-            ext.point('io.ox/settings/pane/security/security-root').extend({
+            ext.point('io.ox/settings/pane/general/security').extend({
                 id: 'certificates',
                 title: gt('Certificates'),
                 ref: 'io.ox/settings/security/certificates',
@@ -475,7 +469,7 @@ define('io.ox/settings/main', [
         if (!capabilities.has('guest') && (capabilities.has('webmail') || submodules.length > 0)) {
             ext.point('io.ox/settings/pane/general').extend({
                 title: gt('Accounts'),
-                index: 300,
+                index: 200,
                 id: 'io.ox/settings/accounts'
             });
         }
