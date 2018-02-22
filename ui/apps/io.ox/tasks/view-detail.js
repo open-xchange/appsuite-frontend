@@ -108,7 +108,7 @@ define('io.ox/tasks/view-detail', [
         index: 300,
         id: 'note',
         draw: function (baton) {
-            var note = calendarUtil.getNote(baton.interpretedData);
+            var note = calendarUtil.getNote(baton.interpretedData, 'note');
             note = util.checkMailLinks(note);
 
             if (note) {

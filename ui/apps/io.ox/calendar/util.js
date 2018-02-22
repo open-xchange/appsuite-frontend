@@ -718,8 +718,10 @@ define('io.ox/calendar/util', [
             return event;
         },
 
-        getNote: function (data) {
-            var text = $.trim(data.description || (data.get ? data.get('description') : ''))
+        getNote: function (data, prop) {
+            // calendar: description, tasks: note
+            prop = prop || 'description';
+            var text = $.trim(data[prop] || (data.get ? data.get(prop) : ''))
                 .replace(/\n{3,}/g, '\n\n')
                 .replace(/</g, '&lt;');
             //use br to keep linebreaks when pasting (see 38714)
