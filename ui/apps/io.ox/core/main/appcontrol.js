@@ -213,14 +213,12 @@ define('io.ox/core/main/appcontrol', [
         id: 'logo',
         index: 200,
         draw: function () {
+            // TODO wrap with button here
             this.append(
                 $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
                         alt: ox.serverConfig.productName,
                         src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
-                    }).on('click', function (e) {
-                        e.preventDefault();
-                        ox.trigger('logo-topbar:click');
                     })
                 )
             );
@@ -231,8 +229,11 @@ define('io.ox/core/main/appcontrol', [
         id: 'launcher',
         index: 300,
         draw: function () {
+            // possible setting here
+            var apps = ox.ui.apps.where({ hasLauncher: true });
+            if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
-                collection: ox.ui.apps.where({ hasLauncher: true })
+                collection: apps
             });
             this.append(launchers.render().$el);
         }
