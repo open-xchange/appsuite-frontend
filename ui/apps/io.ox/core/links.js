@@ -26,7 +26,8 @@ define('io.ox/core/links', [
                 function () {
                     ox.launch(app, { folder: id }).done(function () {
                         // set proper folder
-                        if (this.folder.get() !== id) this.folder.set(id);
+                        if (app === 'io.ox/calendar/main') this.folders.setOnly(id);
+                        else if (this.folder.get() !== id) this.folder.set(id);
                     });
                 },
                 yell
@@ -200,30 +201,14 @@ define('io.ox/core/links', [
 
     // event hub
     ox.on('click:deep-link-mail', function (e, scope) {
-        var type = e.currentTarget.className.split(' ');
+        var types = e.currentTarget.className.split(' ');
 
-        if (type && type[1]) {
-            switch (type[1]) {
-                case 'deep-link-files':
-                    filesHandler.call(scope, e);
-                    break;
-                case 'deep-link-contacts':
-                    contactsHandler.call(scope, e);
-                    break;
-                case 'deep-link-calendar':
-                    calendarHandler.call(scope, e);
-                    break;
-                case 'deep-link-tasks':
-                    tasksHandler.call(scope, e);
-                    break;
-                case 'deep-link-app':
-                    appHandler.call(scope, e);
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (type[0] === 'mailto-link') mailHandler.call(scope, e);
+        if (types.indexOf('deep-link-files') >= 0) filesHandler.call(scope, e);
+        else if (types.indexOf('deep-link-contacts') >= 0) contactsHandler.call(scope, e);
+        else if (types.indexOf('deep-link-calendar') >= 0) calendarHandler.call(scope, e);
+        else if (types.indexOf('deep-link-tasks') >= 0) tasksHandler.call(scope, e);
+        else if (types.indexOf('deep-link-app') >= 0) appHandler.call(scope, e);
+        else if (types.indexOf('mailto-link') >= 0) mailHandler.call(scope, e);
     });
 
 });
