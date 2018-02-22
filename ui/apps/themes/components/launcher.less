@@ -198,7 +198,6 @@
     #io-ox-topsearch {
         margin-right: 24px;
         flex-grow: 1;
-        display: flex;
 
         .search-box > .form-group { margin-bottom: 0; }
 
@@ -232,16 +231,14 @@
             border: 1px solid rgba(255, 255, 255, 0.30);
         }
 
-        // have to write it this way, assemble-less has problems
-        // with ::placeholder
-        .token-input::placeholder {
-            color: #fff;
-        }
-        .tokenfield-placeholder::placeholder {
-            color: #fff;
-        }
+        // NOTE: Placeholders: IE 11 first and needs !important
+        .token-input:-ms-input-placeholder { color: #fff !important; }
+        .tokenfield-placeholder:-ms-input-placeholder { color: #fff !important; }
+
+        .token-input::placeholder { color: #fff; }
+        .tokenfield-placeholder::placeholder { color: #fff; }
         .token-input, .tokenfield-placeholder {
-            &::-webkit-input-placeholder, &:-ms-input-placeholder, &::-ms-input-placeholder {
+            &::-webkit-input-placeholder, &::-ms-input-placeholder {
                 color: #fff;
             }
         }
