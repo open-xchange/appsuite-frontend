@@ -596,11 +596,11 @@ define('io.ox/calendar/edit/extensions', [
             var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="bottom" data-content=" " data-container="body">').append('<i class="fa fa-question-circle">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
                     '<div class="ox-popover-title">' + gt('Public') + '</div>' +
-                    '<div>' + gt('The appointment is visible for all users in shared folders.') + '</div>' +
+                    '<div>' + gt('The appointment is visible for all users in shared calendars.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
-                    '<div>' + gt('In shared folders, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
+                    '<div>' + gt('In shared calendars, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
-                    '<div>' + gt('The appointment is not visible to non-attending users in shared folders at all. The appointment is not considered for conflicts and does not appear in the scheduling view.') + '</div>' +
+                    '<div>' + gt('The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view.') + '</div>' +
                     '</div></div>')
             .popover();
 
