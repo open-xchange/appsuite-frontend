@@ -545,6 +545,19 @@ define('io.ox/mail/util', [
         },
 
         authenticity: (function () {
+
+            function getAuthenticityLevel() {
+                if (!settings.get('features/authenticity', false)) return 'none';
+                return settings.get('authenticity/level');
+            }
+
+            function getAuthenticityStatus(data) {
+                var level = getAuthenticityLevel();
+                if (level === 'none') return;
+                if (!_.isObject(data)) return;
+                return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
+            }
+
             function isRelevant(aspect, level, status) {
                 switch (aspect) {
                     // contact image
@@ -577,26 +590,14 @@ define('io.ox/mail/util', [
             }
 
             return function (aspect, data) {
-                var status = this.getAuthenticityStatus(data),
-                    level = this.getAuthenticityLevel();
-                // feature disabled or level 'naive'
-                if (!status) return;
+                var status = getAuthenticityStatus(data),
+                    level = getAuthenticityLevel();
+
+                if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
 
                 return isRelevant(aspect, level, status) ? status : undefined;
             };
         })(),
-
-        getAuthenticityLevel: function () {
-            if (!settings.get('features/authenticity', false)) return 'none';
-            return settings.get('authenticity/level');
-        },
-
-        getAuthenticityStatus: function (data) {
-            var level = this.getAuthenticityLevel();
-            if (level === 'none') return;
-            if (!_.isObject(data)) return;
-            return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
-        },
 
         getAuthenticityMessage: function (status, email) {
             switch (status) {
