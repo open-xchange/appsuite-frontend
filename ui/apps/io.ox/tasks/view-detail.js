@@ -151,7 +151,7 @@ define('io.ox/tasks/view-detail', [
                 if (task[key] !== undefined && task[key] !== null && task[key] !== '') {
                     $details.append($('<dt class="detail-label">').text(label));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
-                        $details.append($('<dd class="detail-value">').text(task[key]) + ' ' + task.currency);
+                        $details.append($('<dd class="detail-value">').text(task[key] + ' ' + task.currency));
                     } else {
                         $details.append($('<dd class="detail-value">').text(task[key]));
                     }
