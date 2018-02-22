@@ -746,6 +746,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
+            if (e.baton.models.length > 1) return false;
             return isShareable(e, 'invite');
         },
         action: function (baton) {
@@ -767,6 +768,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/getalink', {
         capabilities: 'share_links',
         requires: function (e) {
+            if (e.baton.models.length > 1) return false;
             return isShareable(e, 'link');
         },
         action: function (baton) {

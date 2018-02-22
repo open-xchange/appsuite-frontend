@@ -160,15 +160,12 @@ define('io.ox/files/share/listview', [
             if (!list) return;
 
             // turn cids into proper objects
-            var cids = list,
-                cidList = view.collection.get(cids),
-                modelList = cidList ? [cidList] : [],
-                models = (/^folder\./).test(cids) ? filesAPI.resolve(cids, false) : modelList;
+            var modelList = _.map(list, function (cid) { return view.collection.get(cid); });
 
-            list = _(models).invoke('toJSON');
+            var fileDescriptors = _(modelList).invoke('toJSON');
             // extract single object if length === 1
-            var data = list.length === 1 ? list[0] : list;
-            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
+            var data = fileDescriptors.length === 1 ? fileDescriptors[0] : fileDescriptors;
+            var baton = new ext.Baton({ data: data, models: modelList, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
 
             view.contextMenu.showContextMenu(event, baton);
         },
