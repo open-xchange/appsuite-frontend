@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/follow-up', function () {
+define('io.ox/calendar/actions/follow-up', [
+    'io.ox/calendar/util'
+], function (util) {
 
     'use strict';
 
@@ -19,11 +21,13 @@ define('io.ox/calendar/actions/follow-up', function () {
 
         // reduce data
         var copy = model.pick(
-            'alarms color folder allDay location description participants attendees transp summary'.split(' ')
+            'alarms color class folder location description participants attendees transp summary'.split(' ')
         );
 
         // check isBefore once for the startDate; then reuse that information for endDate (see bug 44647)
-        var isBefore = false;
+        var isBefore = false,
+            isAllday = util.isAllday(model),
+            format = isAllday ? 'YYMMMDD' : 'YYYYMMDD[T]HHmmss';
 
         // copy date/time
         ['startDate', 'endDate'].forEach(function (field) {
@@ -35,7 +39,7 @@ define('io.ox/calendar/actions/follow-up', function () {
                 d.add(1, 'w');
                 isBefore = true;
             }
-            copy[field] = { value: d.format('YYYYMMDD[T]HHmmss'), tzid: ref.tzid };
+            copy[field] = { value: d.format(format), tzid: ref.tzid };
         });
 
         // use ox.launch to have an indicator for slow connections
