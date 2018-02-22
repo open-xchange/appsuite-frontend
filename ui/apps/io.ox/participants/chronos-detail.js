@@ -32,13 +32,13 @@ define('io.ox/participants/chronos-detail', [
             var data = baton.data;
             if (data.cuType !== 'RESOURCE') return;
             if (!baton.options.halo) return this.append($.txt(data.cn));
-
+            if (data.resource) data = data.resource;
             this.append(
                 $('<a href="#" role="button" class="halo-resource-link">')
-                    .attr('title', data.cn)
+                    .attr('title', data.display_name || data.cn)
                     // 'looksLikeResource' duck check
-                    .data(_.extend(data, { email1: data.email }))
-                    .append($.txt(data.cn))
+                    .data(_.extend(data, { email1: data.mailaddress || data.email }))
+                    .append($.txt(data.display_name || data.cn))
             );
         }
     });
