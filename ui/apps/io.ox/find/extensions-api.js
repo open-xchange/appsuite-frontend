@@ -23,6 +23,10 @@ define('io.ox/find/extensions-api', [
         return /^virtual/.test(data.id);
     }
 
+    function isProtected(data) {
+        return !folderUtil.can('read', data);
+    }
+
     var extensions = {
 
         daterange: function (baton) {
@@ -94,6 +98,7 @@ define('io.ox/find/extensions-api', [
             //TODO: move to backend!!!
             var def = $.Deferred(),
                 SORT = {
+                    current: 1,
                     'default': 2,
                     standard: 3
                 };
@@ -103,6 +108,7 @@ define('io.ox/find/extensions-api', [
                     module = baton.app.getModuleParam(),
                     id,
                     list,
+                    current,
                     accountdata = {},
                     mapping = {};
 
@@ -198,14 +204,14 @@ define('io.ox/find/extensions-api', [
                         var isPrimary = account === '0';
                         _.each(item.list, function (folder) {
                             options.push({
-                                id: folder.id,
+                                id: folder.type === 'current' ? 'dynamic' : folder.id,
                                 value: folder.id,
                                 item: {
                                     name: folder.title,
                                     detail: isPrimary ? undefined : folder.accountname
                                 },
                                 hidden: folder.hidden,
-                                type: folder.type,
+                                type: folder.type === 'current' ? 'dynamic' : folder.type,
                                 account: account,
                                 data: folder.data,
                                 filter: null
@@ -248,12 +254,25 @@ define('io.ox/find/extensions-api', [
                         preselect, isMandatory, isDefault, isVirtual, forceAllFolders,
                         // possible preselected options
                         all = _.findWhere(options, { id: 'disabled' }),
+                        selected = _.findWhere(options, { value: current }),
                         standard = _.findWhere(options, { type: 'default' }),
                         // primary check
+                        isSelectedPrimary = selected.account === '0',
                         ALLFOLDERS = settings.get('search/allfolders', { mail: false });
 
                     // prefer selected before default folder
-                    preselect = standard;
+                    preselect = selected || standard;
+
+                    // preselect first valid standard folder in case invalid non-primary
+                    // folder was selected (account4711 -> account4711/INBOX)
+                    if (!isSelectedPrimary && selected && isProtected(selected.data)) {
+                        var account = selected.account;
+                        preselect = _.findWhere(options, { type: 'standard', account: account }) || preselect;
+                        // remove invalid entry from list
+                        if (preselect.id !== selected.id) {
+                            options = folder.values[0].options = _.without(options, selected);
+                        }
+                    }
 
                     // decision parameters
                     isMandatory = baton.app.isMandatory('folder');
@@ -346,6 +365,13 @@ define('io.ox/find/extensions-api', [
                 // default folder
                 id = folderAPI.getDefaultFolder(module);
                 if (id) mapping[id] = 'default';
+
+                // current folder
+                current = id = baton.app.get('parent').folder.get() || undefined;
+                // current selected folder not standard/default
+                if (id && !mapping[id]) {
+                    mapping[id] = 'current';
+                }
 
                 // add folder data to multiple
                 list = _(mapping).chain().keys().uniq().value();
