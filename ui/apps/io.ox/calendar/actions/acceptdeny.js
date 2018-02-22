@@ -44,7 +44,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                 apiData.recurrenceId = o.recurrenceId;
             }
 
-            $.when(api.get(apiData), folderAPI.get(apiData.folder)).then(function (data, folderData) {
+            $.when(api.get(apiData), options.noFolderCheck ? $.when() : folderAPI.get(apiData.folder)).always(function (data, folderData) {
                 // work on a copy for appointments (so we don't accidentally change the pool data)
                 appointmentData = options.taskmode ? data : data.toJSON();
                 // check if the response is of type [data, timestamp]
@@ -53,7 +53,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                 }
 
                 folder = folderData;
-                message = util.getConfirmationMessage(o, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                message = util.getConfirmationMessage(o, !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
                 var alarmsModel,
                     previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: ox.user_id });

@@ -21,8 +21,9 @@ define('io.ox/calendar/actions', [
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
     'io.ox/calendar/actions/change-confirmation',
-    'io.ox/core/folder/api'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI) {
+    'io.ox/core/folder/api',
+    'io.ox/core/yell'
+], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, yell) {
 
     'use strict';
 
@@ -205,7 +206,7 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (action) {
-                action(baton.data);
+                action(baton.data, { noFolderCheck: baton.noFolderCheck });
             });
         }
     });
@@ -425,12 +426,14 @@ define('io.ox/calendar/actions', [
 
     function acceptDecline(baton, accept) {
         if ($(baton.e.target).hasClass('disabled')) return;
-        var appointment = api.reduce(baton.data);
-        folderAPI.get(appointment.folder).done(function (folder) {
+        var appointment = api.reduce(baton.data),
+            def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder);
+
+        def.done(function (folder) {
 
             appointment.attendee = {
                 // act as folder owner in shared folder
-                entity: folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                entity: !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
                 partStat: accept ? 'ACCEPTED' : 'DECLINED'
             };
 
@@ -462,7 +465,10 @@ define('io.ox/calendar/actions', [
                             $(baton.e.target).addClass('disabled');
                             // those links are for fast accept/decline, so don't check conflicts
                             // TODO discuss this with alex
-                            api.confirm(appointment, util.getCurrentRangeOptions());
+                            api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
+                                yell(e);
+                                $(baton.e.target).removeClass('disabled');
+                            });
                         });
                 });
                 return;
@@ -470,7 +476,10 @@ define('io.ox/calendar/actions', [
             $(baton.e.target).addClass('disabled');
             // those links are for fast accept/decline, so don't check conflicts
             // TODO discuss this with alex
-            api.confirm(appointment);
+            api.confirm(appointment).fail(function (e) {
+                yell(e);
+                $(baton.e.target).removeClass('disabled');
+            });
         });
     }
 

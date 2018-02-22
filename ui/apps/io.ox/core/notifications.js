@@ -200,7 +200,7 @@ define('io.ox/core/notifications', [
         //opens a Sidepopup using the given renderer using the provided data
         //a renderer can be an object with a draw function or an object that contains a View constructor
         //data may be an object or a deferred object returning valid data (for example our api.get() functions)
-        openSidepopup: function (cid, renderer, data) {
+        openSidepopup: function (cid, renderer, data, options) {
             var self = this,
                 cont = function () {
                     // open dialog first to be visually responsive
@@ -220,10 +220,10 @@ define('io.ox/core/notifications', [
                                 var cont = function (data) {
                                     //work with real model view or just draw method with baton
                                     if (renderer.View) {
-                                        var view = new renderer.View({ data: data });
+                                        var view = new renderer.View({ data: data }, options);
                                         popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                                     } else {
-                                        popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
+                                        popup.idle().append(renderer.draw({ data: data }, options).addClass('no-padding'));
                                     }
 
                                     if (_.device('smartphone')) {

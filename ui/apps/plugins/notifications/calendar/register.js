@@ -45,49 +45,40 @@ define('plugins/notifications/calendar/register', [
                     // stopPropagation could be prevented by another markup structure
                     e.stopPropagation();
                     require(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
-                        acceptdeny(model.attributes);
+                        acceptdeny(model.attributes, { noFolderCheck: true });
                     });
                 },
                 onClickAccept = function (e) {
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/util'], function (folderAPI, calendarSettings, util) {
-                        folderAPI.get(o.folder).done(function (folder) {
-                            o.data = {
-                                // default reminder
-                                alarms: util.getDefaultAlarms(appointmentData),
-                                attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
-                                id: appointmentData.id,
-                                folder: appointmentData.folder
-                            };
-                            // convenience function to convert old alarms into new chronos alarms
-                            // TODO remove once migration process is implemented
-                            o.data.alarms = util.convertAlarms(o.data.alarms);
-                            o.data.attendee.partStat = 'ACCEPTED';
+                    require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (calendarSettings, util) {
+                        o.data = {
+                            // default reminder
+                            alarms: util.getDefaultAlarms(appointmentData),
+                            attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
+                            id: appointmentData.id,
+                            folder: appointmentData.folder
+                        };
+                        // convenience function to convert old alarms into new chronos alarms
+                        // TODO remove once migration process is implemented
+                        o.data.alarms = util.convertAlarms(o.data.alarms);
+                        o.data.attendee.partStat = 'ACCEPTED';
 
-                            // check if user is allowed to set the reminder time
-                            var modifyBits = folderAPI.bits(folder, 14);
-                            // only own objects if bit is 1
-                            if (modifyBits === 0 || (modifyBits === 1 && appointmentData.organizer.entity !== ox.user_id)) {
-                                delete o.data.alarm;
+                        var expand = util.getCurrentRangeOptions();
+                        calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
+                            if (result && result.conflicts) {
+                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                    conflictView.dialog(result.conflicts)
+                                        .on('ignore', function () {
+                                            calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
+                                        });
+                                });
+                                return;
                             }
-
-                            var expand = util.getCurrentRangeOptions();
-                            calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
-                                if (result && result.conflicts) {
-                                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                        conflictView.dialog(result.conflicts)
-                                            .on('ignore', function () {
-                                                calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
-                                            });
-                                    });
-                                    return;
-                                }
-                            })
-                            .fail(function (error) {
-                                yell(error);
-                            });
+                        })
+                        .fail(function (error) {
+                            yell(error);
                         });
                     });
                 };
@@ -223,6 +214,7 @@ define('plugins/notifications/calendar/register', [
                     id: 'io.ox/calendarreminder',
                     api: calAPI,
                     useListRequest: true,
+                    useApiCid: true,
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
@@ -358,6 +350,7 @@ define('plugins/notifications/calendar/register', [
                     api: calAPI,
                     fullModel: true,
                     smartRemove: true,
+                    useApiCid: true,
                     apiEvents: {
                         reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
@@ -369,6 +362,7 @@ define('plugins/notifications/calendar/register', [
                         item: 'io.ox/core/notifications/invites/item'
                     },
                     detailview: 'io.ox/calendar/view-detail',
+                    detailviewOptions: { noFolderCheck: true },
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
                         //#. Title of generic desktop notification about new invitations to appointments

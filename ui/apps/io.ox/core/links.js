@@ -107,7 +107,7 @@ define('io.ox/core/links', [
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail', 'io.ox/core/folder/api']).done(function (dialogs, api, view, folderApi) {
                 // chrome uses a shadowdom, this prevents the sidepopup from finding the correct parent to attach.
                 var sidepopup = new dialogs.SidePopup({ arrow: !_.device('chrome'), tabTrap: true });
                 if (_.device('chrome')) {
@@ -121,7 +121,11 @@ define('io.ox/core/links', [
                     }
                     api.get(data).then(
                         function success(data) {
-                            popup.idle().append(view.draw(data, { container: popup }));
+                            // some invitation mails contain links to events where the participant has no reading rights. We don't know until we check, as this data is not part of the appointment.
+                            // folder data is used to determine if the this is a shared folder and the folder owner must be used when confirming instead of the logged in user
+                            folderApi.get(data.get('folder')).always(function (result) {
+                                popup.idle().append(view.draw(data, { container: popup, noFolderCheck: result.error !== undefined }));
+                            });
                         },
                         function fail(e) {
                             sidepopup.close();

@@ -278,6 +278,7 @@ define('io.ox/calendar/view-detail', [
                 var node = $.createViewContainer(baton.data, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
                 node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
                 baton.isCreateEvent = isCreateEvent;
+                baton.noFolderCheck = options.noFolderCheck;
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
                 return node;
 
