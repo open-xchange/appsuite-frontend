@@ -326,6 +326,8 @@ define('io.ox/calendar/main', [
             });
             api.on('all:fail', function (id) {
                 app.folders.remove(id, { silent: true });
+                var node = app.treeView.getNodeView(id);
+                if (node) node.repaint();
             });
         },
 
