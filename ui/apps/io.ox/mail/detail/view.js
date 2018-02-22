@@ -768,7 +768,7 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(_.extend(cid, { authenticity: this.model.get('authenticity') })).pipe(
+                        api.get(cid).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
