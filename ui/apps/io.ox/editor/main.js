@@ -193,7 +193,13 @@ define('io.ox/editor/main', [
 
         var app, win, model = new api.Model(), view, previous = {};
 
-        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true, floating: _.device('!smartphone') });
+        app = ox.ui.createApp({
+            name: 'io.ox/editor',
+            title: 'Editor',
+            closable: true,
+            floating: _.device('!smartphone'),
+            taskbarIcon: 'fa-edit'
+        });
 
         // launcher
         app.setLauncher(function (options) {

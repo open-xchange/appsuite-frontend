@@ -296,7 +296,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             win: app.getWindow(),
             title: app.getTitle() || '',
             closable: true,
-            minimized: false
+            minimized: false,
+            taskbarIcon: app.get('userContentIcon')
         });
 
         app.on('change:title', function (app, title) { model.set('title', title); });

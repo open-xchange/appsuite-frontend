@@ -798,7 +798,7 @@ define('io.ox/core/desktop', [
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && app.options.floating) {
-                                var model = new FloatingWindow.Model({ id: obj.id, title: obj.description, closable: true, lazy: true }),
+                                var model = new FloatingWindow.Model({ id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon }),
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                 FloatingWindow.collection.add(model);
                                 win.listenToOnce(model, 'lazyload', function () {
