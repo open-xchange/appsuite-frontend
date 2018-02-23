@@ -213,15 +213,30 @@ define('io.ox/core/main/appcontrol', [
         id: 'logo',
         index: 200,
         draw: function () {
-            // TODO wrap with button here
+            var logo, action = settings.get('logoAction', false);
             this.append(
-                $('<div id="io-ox-top-logo">').append(
+                logo = $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
                         alt: ox.serverConfig.productName,
                         src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
                     })
                 )
             );
+            if ((/^https?:/).test(action)) {
+                logo.wrap(
+                    $('<a class="btn btn-link logo-btn">').attr({
+                        href: action,
+                        target: '_blank'
+                    })
+                );
+            } else if (action) {
+                logo.wrap(
+                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function (e) {
+                        e.preventDefault();
+                        ox.launch(action);
+                    })
+                );
+            }
         }
     });
 
