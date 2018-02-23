@@ -166,7 +166,7 @@ define('io.ox/calendar/settings/pane', [
                     this.$el.append(
                         fieldset = util.fieldset(
                             //#. settings: context of a birthday calendar
-                            gt('Birthday'),
+                            gt('Birthday calendar'),
                             $('<div class="form-group">').append(checkbox)
                         ).busy()
                     );
