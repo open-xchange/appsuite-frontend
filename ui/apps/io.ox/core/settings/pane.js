@@ -375,44 +375,51 @@ define('io.ox/core/settings/pane', [
             id: 'quickLaunch',
             index: INDEX += 100,
             render: function (baton) {
-
-                var SelectView = mini.SelectView.extend({
-                    onChange: function () {
-                        var val = this.$el.val();
-                        this.model.set(this.name, this.options.integer ? parseInt(val, 10) : val);
-                        this.model.set('quicklaunch', _.uniq(_.compact([
-                            this.model.get('apps/quicklaunch0'),
-                            this.model.get('apps/quicklaunch1'),
-                            this.model.get('apps/quicklaunch2')
-                        ])).join(','));
-                    },
-                    setup: function () {
-                        var settingsStr = this.model.get('quicklaunch');
-                        if (settingsStr) {
-                            var a = settingsStr.split(',');
-                            if (this.options.pos <= a.length) {
-                                this.model.set('apps/quicklaunch' + this.options.pos, getAvailablePath(a[this.options.pos]), { silent: true });
-                            }
-                        }
-                        this.listenTo(this.model, 'change:' + this.name, this.update);
+                // FIXME: wow, this is complicated. We need a separate model, because the setting is actually supposed to be
+                // _one_ string instead of just fields in an object. Since settings are no real models, we can not sync
+                // silently between the states.
+                var quickLaunchModel = new Backbone.Model(),
+                    settings = this.model,
+                    settingsStr = settings.get('quicklaunch'),
+                    // first view does all the event handling, cleans up listeners on dispose
+                    firstView = null;
+                if (settingsStr) {
+                    var a = settingsStr.split(',');
+                    for (var pos = 0; pos <= a.length; pos++) {
+                        quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
                     }
-                });
-
+                }
                 var multiSelect = function (name, label, model, list, options) {
                     options = options || {};
-                    var id = 'settings-' + name;
+                    var id = 'settings-' + name,
+                        view = new mini.SelectView({ id: id, name: name, model: model, list: list, pos: options.pos });
+
+                    if (!firstView) firstView = view;
                     return $('<div class="col-md-2">').append(
                         $('<label>').attr('for', id).text(label),
-                        new SelectView({ id: id, name: name, model: model, list: list, pos: options.pos }).render().$el
+                        view.render().$el
                     );
                 };
                 baton.$el.append(
                     $('<div class="form-group row">').append(
-                        multiSelect('apps/quicklaunch0', gt('Quick launch 1'), this.model, availableApps, { pos: 0 }),
-                        multiSelect('apps/quicklaunch1', gt('Quick launch 2'), this.model, availableApps, { pos: 1 }),
-                        multiSelect('apps/quicklaunch2', gt('Quick launch 3'), this.model, availableApps, { pos: 2 })
+                        multiSelect('apps/quicklaunch0', gt('Quick launch 1'), quickLaunchModel, availableApps, { pos: 0 }),
+                        multiSelect('apps/quicklaunch1', gt('Quick launch 2'), quickLaunchModel, availableApps, { pos: 1 }),
+                        multiSelect('apps/quicklaunch2', gt('Quick launch 3'), quickLaunchModel, availableApps, { pos: 2 })
                     )
                 );
+                firstView.listenTo(quickLaunchModel, 'change', function () {
+                    settings.set('quicklaunch', _.uniq(_.compact([
+                        quickLaunchModel.get('apps/quicklaunch0'),
+                        quickLaunchModel.get('apps/quicklaunch1'),
+                        quickLaunchModel.get('apps/quicklaunch2')
+                    ])).join(','));
+                });
+                firstView.listenTo(settings, 'change:quicklaunch', function (settingsStr) {
+                    var a = settingsStr.split(',');
+                    for (var pos = 0; pos <= a.length; pos++) {
+                        quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
+                    }
+                });
             }
         }
     );
