@@ -76,11 +76,12 @@ define('io.ox/calendar/list/perspective', [
             this.app.right.busy(true);
             var self = this,
                 lfoShow = _.lfo(function (appointmentModel) {
-                    // we need to check folder api first . list perspective is used for search results to which can contain appointments where the user has no right to see the folder
+                    // we need to check folder api first when list perspective is used for search results. Those can contain appointments where the user has no right to see the folder
                     // this affects the shared folder check of the accept decline actions
                     // if the appointment data itself can tell the UI if it's a shared folder or not we can drop this check. tbd
-                    folderAPI.get(appointmentModel.get('folder')).always(function (result) {
-                        self.drawAppointment(appointmentModel, { noFolderCheck: result.error !== undefined });
+                    var def = self.app.props.get('find-result') ? folderAPI.get(appointmentModel.get('folder')) : $.when();
+                    def.always(function (result) {
+                        self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
                     });
                 });
 
