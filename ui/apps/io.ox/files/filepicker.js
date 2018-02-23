@@ -532,9 +532,8 @@ define('io.ox/files/filepicker', [
                             notifications.yell('error', gt.ngettext(
                                 'The uploaded file does not match the requested file type.',
                                 'None of the uploaded files matches the requested file type.', list.length));
+                            dialog.idle();
                         }
-
-                        dialog.idle();
                     }, notifications.yell);
                 }
             });
