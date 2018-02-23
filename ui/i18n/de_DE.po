@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-16 14:08+0100\n"
+"PO-Revision-Date: 2018-02-23 13:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -79,6 +79,7 @@ msgstr "Marineblau"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 msgid "Indigo"
 msgstr "Indigo"
 
@@ -104,7 +105,8 @@ msgid "Olive"
 msgstr "Olivgün"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/flag-picker.js
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -116,7 +118,8 @@ msgid "Teal"
 msgstr "Blaugrün"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/flag-picker.js
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -156,6 +159,7 @@ msgid "Sea green"
 msgstr "Meergrün"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 msgid "Turquoise"
 msgstr "Türkis"
 
@@ -650,8 +654,8 @@ msgstr "Intervall"
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
 msgstr "Nie"
 
@@ -971,7 +975,7 @@ msgstr "iCal-URL"
 msgid "Authentication failed. Please fill in login and password."
 msgstr ""
 "Authentifizierung fehlgeschlagen. Bitte geben Sie Ihren Benutzernamen und "
-"das Passwort an."
+"das Passwort ein."
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -1260,27 +1264,24 @@ msgid "Public"
 msgstr "Öffentlich"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "The appointment is visible for all users in shared folders."
-msgstr "Der Termin ist für alle Benutzer in freigegebenen Ordnern sichtbar."
+msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid ""
 "In shared folders, the appointment is displayed as a simple time slot for "
 "non-attending users."
 msgstr ""
-"In freigegebenen Ordnern wird der Termin als ein einfaches Zeitfenster für "
-"die nicht anwesenden Benutzer angezeigt."
+"Für nicht teilnehmende Benutzer wird der Termin in freigegebenen Ordnern als "
+"einfaches Zeitfenster angezeigt."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid ""
 "The appointment is not visible to non-attending users in shared folders at "
 "all. The appointment is not considered for conflicts and does not appear in "
 "the scheduling view."
 msgstr ""
-"Der Termin ist nur für teilnehmende Benutzer in freigegebenen Ordnern "
+"Der Termin ist in freigegebenen Ordnern nur für teilnehmende Benutzer "
 "sichtbar. Der Termin wird für Konflikte nicht berücksichtigt und wird in der "
 "Planungsansicht nicht angezeigt."
 
@@ -1328,10 +1329,6 @@ msgstr "Termin bearbeiten"
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 msgid "Description has been copied"
 msgstr "Die Beschreibung wurde kopiert"
-
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-msgstr "Das Feld \"%1$s\" überschreitet seine maximale Größe von %2$d Zeichen."
 
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -1449,9 +1446,8 @@ msgid "Rows"
 msgstr "Zeilen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
 msgid "Show fine grid"
-msgstr "Gitternetzlinien anzeigen"
+msgstr "Feinraster anzeigen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Appointment types"
@@ -1481,7 +1477,6 @@ msgstr "Nichtarbeitszeiten ausblenden"
 
 #. used to describe a time frame that is blocked in the scheduling view, when no further information is available (appointment title etc.)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
 msgid "Blocked time frame"
 msgstr "Blockierter Zeitrahmen"
 
@@ -1861,7 +1856,7 @@ msgstr "Geburtstagskalender anzeigen"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 msgid "Birthday"
-msgstr "Geburtsdatum"
+msgstr "Geburtstage"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Workweek view"
@@ -2606,7 +2601,7 @@ msgstr "Zusammenfügen"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
 msgid "Split"
-msgstr "Teilen"
+msgstr "Trennen"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Create all-day appointment"
@@ -3598,16 +3593,6 @@ msgstr "Kontakt-Anhang wurde gespeichert"
 msgid "Saved attachment"
 msgstr "Anhang wurde gespeichert"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr "\"%1$s\" wird verschoben"
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr "Ordner wird verschoben"
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
 msgstr "Vorschau umschalten"
@@ -4239,6 +4224,10 @@ msgid "Refresh this calendar"
 msgstr "Diesen Kalender aktualisieren"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+msgid "Show all calendars"
+msgstr "Alle Kalender anzeigen"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show this calendar only"
 msgstr "Nur diesen Kalender anzeigen"
 
@@ -4330,9 +4319,8 @@ msgid "Google calendar"
 msgstr "Google-Kalender"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#, fuzzy
 msgid "Subscribe via URL (iCal)"
-msgstr "über URL (iCal) abonnieren"
+msgstr "Abonnieren über URL (iCal)"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Import calendar"
@@ -4531,7 +4519,7 @@ msgstr[0] "Sie werden in %1$d Sekunde automatisch abgemeldet"
 msgstr[1] "Sie werden in %1$d Sekunden automatisch abgemeldet"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Automatic sign out"
 msgstr "Automatisch abmelden"
 
@@ -4699,6 +4687,11 @@ msgid ""
 msgstr ""
 "Der Zugriff auf Ihre Mediengeräte wurde verweigert. Informationen zum "
 "Zurücksetzen der Autorisierung finden Sie in den Hilfeseiten Ihres Browsers."
+
+#: apps/io.ox/core/media-devices.js module:io.ox/core
+#, fuzzy
+msgid "This feature isn't available for non-secure connections."
+msgstr "Diese Funktion steht nicht für unsichere Verbindungen zur Verfügung."
 
 #. %1$s a natural number
 #: apps/io.ox/core/media-devices.js module:io.ox/core
@@ -5105,20 +5098,44 @@ msgid "Default Theme"
 msgstr "Standard-Design"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Unicolor"
+msgstr "Einfarbig"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Multicolor"
+msgstr "Mehrfarbig"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Purple/Magenta"
+msgstr "Purpur/Magenta"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Automatic"
+msgstr "Automatisch"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Time-dependent"
+msgstr "Zeitabhängig"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 Minuten"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 Minuten"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 Minuten"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 Minuten"
 
@@ -5139,6 +5156,10 @@ msgstr "Seite neu laden"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
+msgstr "Design"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Design"
 msgstr "Design"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -6637,15 +6658,15 @@ msgstr "Datei-Speicherplatz"
 msgid "Need more space?"
 msgstr "Sie brauchen mehr Speicher?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr " Verschieben des Ordners \"%1$s\" benötigt länger"
+msgid "Move operation takes longer to finish"
+msgstr "Verschiebevorgang dauert länger"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr " Verschieben des Ordners \"%1$s\" beendet"
+msgid "Finished moving"
+msgstr "Verschieben abgeschlossen"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7343,7 +7364,7 @@ msgstr "Warnhinweise"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Inspect certificate"
-msgstr ""
+msgstr "Zertifikat prüfen"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Incoming server"
@@ -9233,10 +9254,6 @@ msgid "Allow html formatted emails"
 msgstr "HTML-formatierte Nachrichten zulassen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Allow pre-loading of externally linked images"
-msgstr "Laden extern verlinkter Bilder erlauben"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Zitierte Zeilen farbig hervorheben "
 
@@ -9508,6 +9525,11 @@ msgstr "Enthält Wörter"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Has attachments"
 msgstr "Enthält Anhänge"
+
+#. Sort by messages that have attachments
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+msgid "Has Attachment"
+msgstr "Enthält Anhang"
 
 #. Sort by messages which are flagged, "Flag" is used in dropdown
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -10130,27 +10152,23 @@ msgstr "Fingerabdruck"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, fuzzy
 msgid "Untrust certificate %1$s"
 msgstr "Zertifikat %1$s nicht vertrauen"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, fuzzy
 msgid "Untrust"
 msgstr "Nicht vertrauen"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, fuzzy
 msgid "Trust certificate %1$s"
 msgstr "Zertifikat %1$s vertrauen"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, fuzzy
 msgid "Trust"
-msgstr "Trauen"
+msgstr "Vertrauen"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
@@ -10169,9 +10187,8 @@ msgstr "Abgelaufen"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
-#, fuzzy
 msgid "Failure reason"
-msgstr "Fehlergrund"
+msgstr "Fehlerursache"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
@@ -10239,12 +10256,12 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Safari"
-msgstr "Safari"
-
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Chrome"
 msgstr "Chrome"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Safari"
+msgstr "Safari"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Internet Explorer"
@@ -10253,6 +10270,10 @@ msgstr "Internet Explorer"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Edge"
 msgstr "Edge"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "CalDav/CardDav"
+msgstr "CalDav/CardDav"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -10281,9 +10302,21 @@ msgstr ""
 "Wollen Sie sich wirklich von allen Clients mit Ausnahme des aktuellen "
 "abmelden?"
 
+#. headline for general settings
+#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "General"
+msgstr "Allgemein"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Allow pre-loading of externally linked images"
+msgstr "Laden extern verlinkter Bilder erlauben"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+#, fuzzy
 msgid "Show message authenticity"
-msgstr ""
+msgstr "Authentizität der Nachricht anzeigen"
 
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Dangerous only"
@@ -10390,15 +10423,15 @@ msgstr "Aufgaben-Details"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
-msgid "Edit task"
-msgstr "Aufgabe bearbeiten"
-
-#: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js
 msgid "Create task"
 msgstr "Aufgabe erstellen"
+
+#: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
+msgid "Edit task"
+msgstr "Aufgabe bearbeiten"
 
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Minus"
@@ -10538,6 +10571,10 @@ msgstr "Firmen"
 msgid "Couldn't load that task."
 msgstr "Die Aufgabe konnte nicht geladen werden."
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+msgid "New task"
+msgstr "Neue Aufgabe"
+
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Tasks toolbar"
 msgstr "Aufgaben-Werkzeugleiste"
@@ -10639,10 +10676,6 @@ msgid ""
 msgstr ""
 "Benachrichtigung als Aufgabenteilnehmer, wenn andere Teilnehmer zusagen oder "
 "ablehnen"
-
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
-msgid "New task"
-msgstr "Neue Aufgabe"
 
 #. Task: Undone like in "Mark as undone"
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
@@ -10919,11 +10952,6 @@ msgstr "Ist super"
 msgid "%1$d of 5 stars"
 msgstr "%1$d von 5 Sternen"
 
-#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "General"
-msgstr "Allgemein"
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Not likely at all"
 msgstr "Sehr unwahrscheinlich"
@@ -11122,7 +11150,7 @@ msgstr[1] "in %d Minuten"
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #, fuzzy
 msgid "Acknowledge all reminders"
-msgstr "Alle Erinnerungen bestätigen"
+msgstr "Alle Erinnerungen schließen"
 
 #. Reminders (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -11896,6 +11924,22 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Moving \"%1$s\""
+#~ msgstr "\"%1$s\" wird verschoben"
+
+#~ msgid "Moving folder"
+#~ msgstr "Ordner wird verschoben"
+
+#~ msgid " Moving folder \"%1$s\" takes longer to finish"
+#~ msgstr " Verschieben des Ordners \"%1$s\" benötigt länger"
+
+#~ msgid " Finished moving folder \"%1$s\""
+#~ msgstr " Verschieben des Ordners \"%1$s\" beendet"
+
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr ""
+#~ "Das Feld \"%1$s\" überschreitet seine maximale Größe von %2$d Zeichen."
 
 #~ msgid "Use cursor keys to navigate"
 #~ msgstr "Verwenden Sie die Pfeiltasten zum Navigieren"
