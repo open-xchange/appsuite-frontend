@@ -84,6 +84,11 @@ define('io.ox/calendar/freetime/main', [
                 }
                 self.participantsSubview.bodyNode[0].scrollTop = this.scrollTop;
             });
+            // allow scrolling in the participants area without a scrollbar
+            this.participantsSubview.bodyNode.on('wheel', function (e) {
+                // firefox needs a multiplicator here or it's too slow
+                self.timeSubview.bodyNode[0].scrollTop = self.timeSubview.bodyNode[0].scrollTop + e.originalEvent.deltaY * (_.device('firefox') ? 4 : 1);
+            });
 
             this.header = $('<div class="freetime-view freetime-view-header">').addClass('zoomlevel-' + this.model.get('zoom'));
             this.body = $('<div class="freetime-view freetime-view-body">').addClass('zoomlevel-' + this.model.get('zoom'));

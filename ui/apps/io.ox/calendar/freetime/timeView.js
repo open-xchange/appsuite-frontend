@@ -176,8 +176,10 @@ define('io.ox/calendar/freetime/timeView', [
 
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
-                    var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p');
-                    sections.push($('<span class="freetime-hour">').css('width', BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px')
+                    var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p'),
+                        caluculatedWidth = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px';
+                    // edge needs the min-width or the cells are crushed together
+                    sections.push($('<span class="freetime-hour">').css({ 'width': caluculatedWidth, 'min-width': caluculatedWidth })
                         .text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                         .addClass(i === start ? 'day-start' : '')
                         .addClass(i === start && counter === 0 ? 'first' : '')
