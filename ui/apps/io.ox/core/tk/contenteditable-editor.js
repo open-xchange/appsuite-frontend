@@ -319,12 +319,14 @@ define('io.ox/core/tk/contenteditable-editor', [
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
-                    // toolbar is rendere immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
+                    // toolbar is rendered immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
                     _.defer(function () {
                         // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                         toolbar.find('span.mce-txt').attr('tabindex', -1);
+                        toolbar.find('.mce-menubtn').closest('.mce-flow-layout-item').addClass('hidden-cornered');
                     });
                 });
+
             }
         };
 
@@ -345,35 +347,37 @@ define('io.ox/core/tk/contenteditable-editor', [
             });
         };
 
-        var resizeEditor = _.debounce(function () {
-                if (el === null) return;
+        function resizeEditor() {
 
-                var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
+            if (el === null) return;
 
-                if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
-                    var containerHeight = el.parent().parent().height();
-                    editor.css('min-height', containerHeight - composeFieldsHeight - 32);
-                    return;
-                } else if (_.device('smartphone')) {
+            var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
 
-                    editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
-                    return;
-                }
-
-                var h = $(window).height(),
-                    top = editor.offset().top,
-                    bottomMargin = (el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 120);
-
-                editor.css('min-height', h - top - bottomMargin + 'px');
-                if (opt.css) editor.css(opt.css);
-
-                var t = $(fixed_toolbar + ' > div'),
-                    w = $(fixed_toolbar).next().outerWidth();
-
-                if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
-                if (w) $(fixed_toolbar).css('width', w);
+            if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
+                var containerHeight = el.parent().parent().height();
+                editor.css('min-height', containerHeight - composeFieldsHeight - 32);
                 return;
-            }, 30),
+            } else if (_.device('smartphone')) {
+
+                editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
+                return;
+            }
+
+            var h = $(window).height(),
+                top = editor.offset().top,
+                bottomMargin = el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 120;
+
+            editor.css('min-height', h - top - bottomMargin + 'px');
+            if (opt.css) editor.css(opt.css);
+
+            var t = $(fixed_toolbar + ' > div'),
+                w = $(fixed_toolbar).next().outerWidth();
+
+            if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
+            if (w) $(fixed_toolbar).css('width', w);
+        }
+
+        var resizeEditorDebounced = _.debounce(resizeEditor, 30),
 
             set = function (str) {
 
@@ -635,16 +639,15 @@ define('io.ox/core/tk/contenteditable-editor', [
             el.show();
             // set display to empty sting because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
-            resizeEditor();
-            $(window).on('resize.tinymce', resizeEditor);
-            $(window).on('orientationchange.tinymce', function () {
-                _.delay(resizeEditor, 50);
-            });
+            window.toolbar = $(fixed_toolbar);
+            $(window).on('resize.tinymce xorientationchange.tinymce', resizeEditorDebounced);
+            $(window).on('changefloatingstyle.tinymce', resizeEditor);
+            resizeEditorDebounced();
         };
 
         this.hide = function () {
             el.hide();
-            $(window).off('resize.tinymce orientationchange.tinymce');
+            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce');
         };
 
         (function () {

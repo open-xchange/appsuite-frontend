@@ -34,7 +34,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             title: '',
             showStickybutton: false,
             showInTaskbar: true,
-            size: 'width-md height-md' // -lg, -md, -sm, -xs
+            size: 'width-md' // -xs, -sm, -md, -lg
         }
     });
 
@@ -50,7 +50,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         initialize: function (options) {
             this.options = options || {};
             this.listenTo(this, 'dispose', remove);
-            if (!this.model) this.model = new WindowModel(_.pick(options, 'title', 'minimized', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar'));
+            if (!this.model) {
+                this.model = new WindowModel(
+                    _(options).pick('title', 'minimized', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
+                );
+            }
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'change:displayStyle': this.changeDisplayStyle,
@@ -95,6 +99,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // sticky windows push the rest of appsuite to the left. So an indicator class is needed
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(style);
+            $(window).trigger('changefloatingstyle');
             _.defer(function () { $(window).trigger('resize'); });
         },
 

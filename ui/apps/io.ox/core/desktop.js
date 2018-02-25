@@ -388,17 +388,10 @@ define('io.ox/core/desktop', [
             this.set('window', win);
             win.app = this;
             if (this.options.floating) {
-                var model = this.options.floatingWindowModel || new FloatingWindow.Model({
-                    title: this.options.title,
-                    closable: this.options.closable,
-                    displayStyle: this.options.displayStyle,
-                    taskbarIcon: this.options.taskbarIcon,
-                    win: win
-                });
-                win.floating = new FloatingWindow.View({
-                    el: win.nodes.outer,
-                    model: model
-                }).render();
+                var model = this.options.floatingWindowModel || new FloatingWindow.Model(
+                    _.extend(_(this.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'), { win: win })
+                );
+                win.floating = new FloatingWindow.View({ el: win.nodes.outer, model: model }).render();
 
                 win.floating.listenTo(model, 'quit', function () {
                     win.app.quit().done(function () {
@@ -803,6 +796,8 @@ define('io.ox/core/desktop', [
                                 FloatingWindow.collection.add(model);
                                 win.listenToOnce(model, 'lazyload', function () {
                                     var oldId = obj.id;
+                                    // copy app options over to window model
+                                    model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
                                     app.launch({ floatingWindowModel: model }).then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
@@ -1193,24 +1188,6 @@ define('io.ox/core/desktop', [
                     }
                 });
 
-                ext.point(name + '/window-toolbar').extend({
-                    id: 'default',
-                    draw: function () {
-                        return $('<ul class="window-toolbar" class="f6-target" attr="toolbar">')
-                            .attr('aria-label', gt('Application Toolbar'));
-                    }
-                });
-
-                ext.point(name + '/window-head').extend({
-                    id: 'default',
-                    draw: function () {
-                        return this.head.append(
-                            this.toolbar = ext.point(name + '/window-toolbar')
-                                .invoke('draw', this).first().value() || $()
-                        );
-                    }
-                });
-
                 ext.point(name + '/window-body').extend({
                     id: 'default',
                     draw: function () {
@@ -1494,11 +1471,9 @@ define('io.ox/core/desktop', [
                 this.setChromeless = function (mode) {
                     if (mode) {
                         this.nodes.outer.addClass('chromeless-window');
-                        this.nodes.head.hide();
                         this.nodes.body.css('left', '0px');
                     } else {
                         this.nodes.outer.removeClass('chromeless-window');
-                        this.nodes.head.show();
                         this.nodes.body.css('left', '');
                     }
                 };
@@ -1555,9 +1530,6 @@ define('io.ox/core/desktop', [
                             $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
-                        // window HEAD
-                        // @deprecated
-                        win.nodes.head = $('<div class="window-head">'),
                         // window HEADER
                         win.nodes.header = $('<div class="window-header">'),
                         // window SIDEPANEL
@@ -1581,8 +1553,6 @@ define('io.ox/core/desktop', [
                     win.nodes.outer.addClass(opt.name.replace(/[./]/g, '-') + '-window');
                 }
 
-                // draw window head
-                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
                 ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             }
 

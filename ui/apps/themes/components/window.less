@@ -420,21 +420,6 @@
     .progress .progress-bar { border-radius: 2px; }
 }
 
-.window-head {
-    font-size: @window-head-font-size;
-    background-color: @window-head-color;
-    position: absolute;
-    top: 0;
-    width: @window-head-width;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
-    .user-select(none);
-    filter: none;
-
-    &.css-table { table-layout: fixed; }
-}
-
 .window-sidepanel {
     position: absolute;
     top: 0;
@@ -528,9 +513,9 @@
 .window-body {
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
-    left: @window-head-width;
+    left: 0;
+    right: 0;
     white-space: normal;
     z-index: 1;
     .user-select(text);
@@ -592,14 +577,13 @@
         box-shadow: -20px 0 100px 0 rgba(0, 0, 0, 0.5);
     }
 
-    .container {
+    .window-body, .container {
         width: 100%;
-        // needed or tiny-mce toolbar has resize issues
-        min-width: 930px;
     }
 
     &.cornered {
-        width: 960px;
+
+        width: 920px;
         height: 65%;
         min-height: 640px;
         right: 56px;
@@ -607,13 +591,11 @@
         top: auto;
         left: auto;
 
-        @media (max-width: 1992px) {
-            width: 900px;
-
-            .container {
-                min-width: 870px;
-            }
-        }
+        /* width */
+        &.width-xs { width: 640px; }
+        &.width-sm { width: 720px; }
+        &.width-md { width: 800px; }
+        &.width-lg { width: 920px; }
 
         @media (max-width: 1016px) {
             margin: 0 auto;
@@ -624,18 +606,23 @@
         @media (max-width: 932px) {
             width: auto;
             min-width: auto;
-            .container {
-                min-width: auto;
-            }
         }
 
-         @media (max-height: 800px) {
+        @media (max-height: 800px) {
             height: calc(~"100% - 32px");
             min-height: auto;
         }
+
+        .container {
+            width: 100% !important;
+            min-width: auto;
+        }
+
         .floating-header .controls button[data-action="cornered"] {
             display: none;
         }
+
+        .hidden-cornered { display: none; }
     }
 
     &.centered {
@@ -758,26 +745,6 @@
 
 // TINY SCREENS
 @media (max-width: 540px) {
-    .window-head {
-        top: auto;
-        right: 0;
-        width: auto;
-        height: 40px;
-        background-color: #f5f5f5;
-        border-top: 1px solid #ddd;
-        border-right: 0 none;
-
-        .toolbar-button {
-
-            line-height: 44px;
-            float: left;
-            margin: 0;
-
-            & > a {
-                height: 40px;
-            }
-        }
-    }
 
     .window-body {
         bottom: 40px;
@@ -842,13 +809,6 @@
         .rightside-navbar,
         .rightside { display:none; }
     }
-}
-
-// landscape fullscreen on iPhone
-// iOS will go fullscreen and show an overaly with own buttons
-// we need to position our buttons around them
-@media (height: 320px) and (orientation:landscape) {
-    .window-head { padding-right: 40px; }
 }
 
 // small screens (mobile)
