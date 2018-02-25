@@ -120,7 +120,7 @@ define('plugins/portal/birthdays/register', [
                         $list.append(
                             $('<li class="line">').append(
 
-                                $('<div class="date">').text(birthdayText),
+                                $('<div class="date accent">').text(birthdayText),
                                 $('<div class="name">').text(name).prepend(
                                     birthday.isSame(today, 'day') ? $('<div class="cake">').append('<i class="fa fa-birthday-cake">') : $()
                                 )

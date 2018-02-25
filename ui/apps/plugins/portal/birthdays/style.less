@@ -11,19 +11,23 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
+
 ul.io-ox-portal-birthdays .cake {
     padding-right: 4px;
     display: inline-block;
-    font-weight: bold
+    font-weight: bold;
 }
 
 .io-ox-portal-birthdays {
     li {
+        &:nth-child(2n+1) {
+            background-color: #f8f8f8;
+        }
         .date {
-            font-weight: 300;
             float: right;
-            width: 25%;
-            margin-left: 10px;
+            text-align: right;
+            margin-left: 8px;
+            color: @gray;
         }
         .name {
             font-weight: bold;

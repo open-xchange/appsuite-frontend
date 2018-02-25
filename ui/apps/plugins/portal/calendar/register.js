@@ -34,8 +34,7 @@ define('plugins/portal/calendar/register', [
         },
 
         render: function () {
-            var self = this,
-                numOfItems = _.device('smartphone') ? 5 : 10;
+            var numOfItems = _.device('smartphone') ? 5 : 10;
             this.$el.empty();
             this.collection
                 .chain()
@@ -47,8 +46,7 @@ define('plugins/portal/calendar/register', [
                     var declined = util.getConfirmationStatus(model) === 'DECLINED';
                     if (settings.get('showDeclinedAppointments', false) || !declined) {
                         var timespan = util.getSmartDate(model, true);
-
-                        self.$el.append(
+                        this.$el.append(
                             $('<li class="item" tabindex="0">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', model)
@@ -59,7 +57,7 @@ define('plugins/portal/calendar/register', [
                             )
                         );
                     }
-                })
+                }, this)
                 .value();
 
             return this;

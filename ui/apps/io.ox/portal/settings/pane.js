@@ -93,7 +93,8 @@ define('io.ox/portal/settings/pane', [
 
     function drawAddButton() {
         var $ul = $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget),
-            $toggle = $('<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">').append(
+            $toggle = $('<button type="button" class="btn btn-primary dropdown-toggle add-widget" data-toggle="dropdown" aria-haspopup="true">').append(
+                $('<i class="fa fa-plus">'),
                 $('<span>').text(gt('Add widget') + ' '),
                 $('<i class="fa fa-caret-down" aria-hidden="true">')
             );
