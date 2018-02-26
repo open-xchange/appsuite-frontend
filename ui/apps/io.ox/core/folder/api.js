@@ -1015,6 +1015,7 @@ define('io.ox/core/folder/api', [
                         action: 'update',
                         done: false,
                         showIn: model.get('module'),
+                        id: result.job || result.data.job,
                         successCallback: successCallback,
                         failCallback: failCallback });
                     return result;
