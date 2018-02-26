@@ -32,7 +32,8 @@ define('io.ox/core/api/apps', [
                 'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
                 'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
                 'io.ox/notes'];
-            var apps =  settings.get('apps/list', defaultList.join(',')).split(',');
+            var apps =  settings.get('apps/order', defaultList.join(',')).split(',');
+            var blacklist = settings.get('apps/blacklist', '').split(',');
             // Construct App Data
             var appManifests = _(ox.manifests.apps).reject(function (o) {
                 return ox.manifests.isDisabled(o.path);
@@ -51,7 +52,12 @@ define('io.ox/core/api/apps', [
                 return o.hasLauncher;
             });
             return _.compact(apps.map(function (app) {
+                // return manifests in the order they have been specified in `io.ox/core//apps/list`
                 return _.where(appManifests, { id: app })[0];
+            })).concat.apply(appManifests.filter(function (app) {
+                // add all other apps specified via manifests - allow admins to blacklist specific ones
+                // (use `io.ox/core//apps/blacklist`)
+                return !apps.indexOf(app.id) >= 0 || blacklist.indexOf(app.id) >= 0;
             }));
         },
         getAppsWithSettings: function () {
