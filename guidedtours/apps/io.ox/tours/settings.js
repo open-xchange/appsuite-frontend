@@ -28,16 +28,19 @@ define('io.ox/tours/settings', [
         new Tour()
         .step()
             .title(gt('Opening the settings'))
-            .content(gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings.'))
-            .hotspot('#topbar-settings-dropdown a[data-action="settings"]')
-            .spotlight('#topbar-settings-dropdown a[data-action="settings"]')
+            .content(gt('To open the settings, click the user image on the upper right side of the menu bar. Select Settings.'))
+            .hotspot('#topbar-settings-dropdown a[data-name="io.ox/settings"]')
+            .spotlight('#topbar-settings-dropdown a[data-name="io.ox/settings"]')
             .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a[data-action="settings"]')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
+            .waitFor('.smart-dropdown-container #topbar-settings-dropdown a[data-name="io.ox/settings"]')
+            .on('before:show', function () {
+                // without smart-dropdowns onClick handler may cause hiding
+                _.defer(function () {
+                    $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
+                });
             })
             .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
+                $('#topbar-settings-dropdown:visible').dropdown('toggle');
             })
             .end()
         .step()
@@ -54,30 +57,30 @@ define('io.ox/tours/settings', [
             .end()
         .step()
             .title(gt('Opening the help'))
-            .content(gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
+            .content(gt('To open the help, click the user image on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
             .hotspot('#topbar-settings-dropdown a.io-ox-context-help')
             .spotlight('#topbar-settings-dropdown a.io-ox-context-help')
             .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a.io-ox-context-help')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
+            .waitFor('.smart-dropdown-container #topbar-settings-dropdown a.io-ox-context-help')
+            .on('before:show', function () {
+                $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
             })
             .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
+                $('#topbar-settings-dropdown:visible').dropdown('toggle');
             })
             .end()
         .step()
             .title(gt('Signing out'))
             .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
-            .hotspot('#topbar-settings-dropdown a[data-action="logout"]')
-            .spotlight('#topbar-settings-dropdown a[data-action="logout"]')
+            .hotspot('#topbar-settings-dropdown a[data-name="logout"]')
+            .spotlight('#topbar-settings-dropdown a[data-name="logout"]')
             .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a[data-action="logout"]')
+            .waitFor('#topbar-settings-dropdown a[data-name="logout"]')
             .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
+                $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
             })
             .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
+                $('#topbar-settings-dropdown:visible').dropdown('toggle');
             })
             .end()
         .start();
