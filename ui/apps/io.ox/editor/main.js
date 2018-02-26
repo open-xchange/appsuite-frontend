@@ -197,8 +197,7 @@ define('io.ox/editor/main', [
             name: 'io.ox/editor',
             title: 'Editor',
             closable: true,
-            floating: _.device('!smartphone'),
-            taskbarIcon: 'fa-edit'
+            floating: _.device('!smartphone')
         });
 
         // launcher

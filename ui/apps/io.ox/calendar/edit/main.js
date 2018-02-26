@@ -38,8 +38,7 @@ define('io.ox/calendar/edit/main', [
             userContent: true,
             closable: true,
             floating: !_.device('smartphone'),
-            sendInternalNotifications: true,
-            taskbarIcon: 'fa-calendar-o'
+            sendInternalNotifications: true
         });
 
         _.extend(app, {

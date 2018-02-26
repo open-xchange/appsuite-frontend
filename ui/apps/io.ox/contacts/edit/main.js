@@ -43,8 +43,7 @@ define('io.ox/contacts/edit/main', [
             title: gt('Edit Contact'),
             userContent: true,
             closable: true,
-            floating: !_.device('smartphone'),
-            taskbarIcon: 'fa-address-book-o'
+            floating: !_.device('smartphone')
         });
 
         app.setLauncher(function () {

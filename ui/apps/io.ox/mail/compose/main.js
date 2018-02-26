@@ -33,8 +33,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 title: gt('Compose'),
                 userContent: true,
                 closable: true,
-                floating: !_.device('smartphone'),
-                taskbarIcon: 'fa-envelope'
+                floating: !_.device('smartphone')
             }),
             win;
 

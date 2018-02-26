@@ -30,8 +30,7 @@ define('io.ox/tasks/edit/main', [
                 title: gt('Create task'),
                 userContent: true,
                 closable: true,
-                floating: !_.device('smartphone'),
-                taskbarIcon: 'fa-check-square-o'
+                floating: !_.device('smartphone')
             }),
             // app window
             win,
