@@ -309,6 +309,7 @@ define('io.ox/files/share/permissions', [
 
             render: function () {
                 this.getEntityDetails();
+                if (this.model.get('type') === 'anonymous') return false;
                 this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
@@ -460,14 +461,7 @@ define('io.ox/files/share/permissions', [
 
                 // extended permissions are mandatory now
                 if (this.model.isExtendedPermission()) {
-                    var permissionsArray = [];
-                    _.each(this.model.getPermissions(), function (permission) {
-                        if (permission.type === 'anonymous') {
-                            return;
-                        }
-                        permissionsArray.push(permission);
-                    });
-                    this.collection.reset(permissionsArray);
+                    this.collection.reset(this.model.getPermissions());
                 } else {
                     console.error('Extended permissions are mandatory', this);
                 }

@@ -59,18 +59,6 @@ define('io.ox/files/share/toolbar', [
         }
     });
 
-    new actions.Action('io.ox/files/share/revoke', {
-        requires: 'one',
-        action: function (baton) {
-            require(['io.ox/files/share/permissions'], function (permissions) {
-                var collection = new permissions.Permissions();
-                api.revoke(collection, baton.model).then(function () {
-                    yell('success', gt('Revoked access.'));
-                }).fail(yell);
-            });
-        }
-    });
-
     new actions.Action('io.ox/files/share/back', {
         requires: 'none',
         action: function () {

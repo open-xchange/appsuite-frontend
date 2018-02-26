@@ -786,6 +786,88 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to revoke the sharing of the files.
+    new Action('io.ox/files/share/revoke', {
+        requires: function (e) {
+            console.log(e);
+            return isShareable(e, 'link') || isShareable(e, 'invite');
+        },
+        action: function (baton) {
+            require(['io.ox/files/share/permissions', 'io.ox/files/share/api'], function (permissions, shareApi) {
+                var models;
+                if (baton.models && baton.models.length === 1) models = baton.models;
+                if (models && models.length) {
+                    _.each(models, function (model) {
+                        if (!baton.app || !baton.app.mysharesListView || !baton.app.mysharesListView.$el) return false;
+                        var elem = baton.app.mysharesListView.$el.find('.list-item.selected[data-cid="' + (model.cid ? model.cid : _.cid(model)) + '"]');
+                        if (elem.length) {
+                            var shareType = elem.attr('data-share-type'),
+                                folderId = model.get('folder_id') || model.get('id'),
+                                object = { module: 'infostore', folder: folderId };
+                            if (model.isFile()) {
+                                object.elem = model.get('id');
+                            }
+
+
+                            var shareModel = new shareApi.Model(model.isFile() ? model.pick('id', 'folder_id') : model.pick('id'));
+                            shareModel.loadExtendedPermissions().done(function () {
+                                var ids = [];
+                                var permissionsToKeep = shareModel.getPermissions().filter(function (item) {
+                                    if (shareType === 'invited-people') {
+                                        if (item.type === 'anonymous' || ox.user_id === item.entity) {
+                                            ids.push(item.entity);
+                                            return true;
+                                        }
+                                    } else if (item.type !== 'anonymous') {
+                                        ids.push(item.entity);
+                                        return true;
+                                    }
+                                    return false;
+                                });
+
+                                shareModel.setPermissions(permissionsToKeep);
+
+                                if (model.isFolder()) {
+                                    folderAPI.get(model.get('id')).done(function (folderDesc) {
+                                        var folderModel = new folderAPI.FolderModel(folderDesc);
+                                        var newPermissionList = folderModel.get('permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        folderAPI
+                                            .update(folderModel.get('id'), { permissions: newPermissionList })
+                                            .done(yell('success', gt('Revoked access.')))
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
+                                } else {
+                                    api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
+                                        var fileModel = new api.Model(fileDesc);
+                                        var newPermissionList = fileModel.get('object_permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        var newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        api
+                                            .update(fileDesc, { object_permissions: newPermissionList, 'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList })
+                                            .done(function () {
+                                                fileModel.destroy.bind(fileModel);
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
@@ -912,29 +994,6 @@ define('io.ox/files/actions', [
             } else {
                 app.folder.set(folder_id);
             }
-        }
-    });
-
-    // Action to revoke the sharing of the files.
-    new Action('io.ox/files/share/revoke', {
-        requires: function (e) {
-            return isShareable(e, 'link') || isShareable(e, 'invite');
-        },
-        action: function (baton) {
-            require(['io.ox/files/share/permissions'], function (permissions) {
-                if (!baton.app || !baton.app.mysharesListView) return false;
-
-                var cids = _.isArray(baton.data) ? baton.data : [baton.data],
-                    collection = new permissions.Permissions(),
-                    models = _.map(cids, function (cid) {
-                        return baton.app.mysharesListView.collection.get(cid);
-                    });
-                _.each(models, function (model) {
-                    shareAPI.revoke(collection, model).then(function () {
-                        yell('success', gt('Revoked access.'));
-                    }).fail(yell);
-                });
-            });
         }
     });
 

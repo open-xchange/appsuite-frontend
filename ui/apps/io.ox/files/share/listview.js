@@ -433,18 +433,24 @@ define('io.ox/files/share/listview', [
 
                 if (capabilities.has('!gab || alone') && !hasUser(baton)) return;
 
-                var iconClass = 'fa-link';
-                if (hasGuests(baton)) {
+                var iconClass = 'fa-link',
+                    iconTitle = gt('Public link');
+                if (hasGuests(baton) && hasUser(baton)) {
                     iconClass = 'fa-user-plus';
+                    iconTitle = gt('Internal & external users');
+                } else if (hasGuests(baton)) {
+                    iconClass = 'fa-user-plus';
+                    iconTitle = gt('External users');
                 } else if (hasUser(baton)) {
                     iconClass = 'fa-user';
+                    iconTitle = gt('Internal users');
                 }
 
                 this.append(
                     $('<div class="list-item-column type">').append(
                         $('<i class="fa">')
                             .addClass(iconClass)
-                            .attr('title', gt('Internal users'))
+                            .attr('title', iconTitle)
                     )
                 );
             }
