@@ -909,7 +909,7 @@ define('io.ox/core/folder/extensions', [
             index: 300,
             draw: function () {
                 if (!capabilities.has('calendar_schedjoules')) return;
-                this.link('schedjoules', gt('List of public calendars and events'), function () {
+                this.link('schedjoules', gt('Browse calendars of interest'), function () {
                     require(['io.ox/calendar/settings/schedjoules/schedjoules'], function (schedjoules) {
                         schedjoules.open();
                     });
