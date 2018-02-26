@@ -66,9 +66,12 @@ define('plugins/portal/calendar/register', [
     });
 
     function getRequestParams() {
+        var initialList = settings.get('selectedFolders');
+        if (!initialList || initialList.length === 0) initialList = [folderAPI.getDefaultFolder('calendar')];
         return {
             start: moment().startOf('day').valueOf(),
-            end: moment().startOf('day').add(1, 'month').valueOf()
+            end: moment().startOf('day').add(1, 'month').valueOf(),
+            folders: initialList
         };
     }
 

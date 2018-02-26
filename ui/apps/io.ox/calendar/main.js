@@ -356,9 +356,9 @@ define('io.ox/calendar/main', [
                 // Keep this for debugging purposes
                 // else console.error('Sort was impossible due to missing folders in cache. ', failed);
             }
-            var initalList = settings.get('selectedFolders');
-            if (!initalList || initalList.length === 0) initalList = [folderAPI.getDefaultFolder('calendar')];
-            setFolders(initalList);
+            var initialList = settings.get('selectedFolders');
+            if (!initialList || initialList.length === 0) initialList = [folderAPI.getDefaultFolder('calendar')];
+            setFolders(initialList);
             app.folders = {
                 isSingleSelection: function () {
                     return singleSelection;
