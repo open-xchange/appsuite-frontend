@@ -81,7 +81,7 @@ define('plugins/portal/birthdays/register', [
             var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button">').attr('aria-label', gt('Press [enter] to jump to complete list of Birthdays.')),
                 hash = {},
                 contacts = baton.data,
-                numOfItems = _.device('smartphone') ? 5 : 15;
+                numOfItems = _.device('smartphone') ? 5 : 8;
 
             // ignore broken birthdays
             contacts = _(contacts).filter(function (contact) {
@@ -118,12 +118,16 @@ define('plugins/portal/birthdays/register', [
 
                     if (!isDuplicate(name, birthday, hash)) {
                         $list.append(
-                            $('<li class="line">').append(
-
-                                $('<div class="date accent">').text(birthdayText),
-                                $('<div class="name">').text(name).prepend(
+                            $('<li class="item">').append(
+                                api.pictureHalo(
+                                    $('<div class="picture">').text(util.getInitials(contact)),
+                                    contact,
+                                    { width: 32, height: 32, fallback: false }
+                                ),
+                                $('<div class="bold ellipsis">').text(name).prepend(
                                     birthday.isSame(today, 'day') ? $('<div class="cake">').append('<i class="fa fa-birthday-cake">') : $()
-                                )
+                                ),
+                                $('<div class="accent">').text(birthdayText)
                             )
                         );
                         markDuplicate(name, birthday, hash);

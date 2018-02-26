@@ -73,7 +73,7 @@ define('plugins/portal/mail/register', [
                                 return $('<i class="fa fa-circle new-item accent">');
                             }
                         })(),
-                        $('<div class="date gray">').text(_.noI18n(received)),
+                        $('<div class="date accent">').text(_.noI18n(received)),
                         $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
                     ),
                     $('<div class="row2">').append(

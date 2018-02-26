@@ -44,19 +44,30 @@ define('plugins/portal/calendar/register', [
                 .first(numOfItems)
                 .each(function (model) {
                     var declined = util.getConfirmationStatus(model) === 'DECLINED';
-                    if (settings.get('showDeclinedAppointments', false) || !declined) {
-                        var timespan = util.getSmartDate(model, true);
-                        this.$el.append(
-                            $('<li class="item" tabindex="0">')
-                            .css('text-decoration', declined ? 'line-through' : 'none')
-                            .data('item', model)
-                            .append(
-                                $('<span class="normal accent">').text(timespan), $.txt('\u00A0'),
-                                $('<span class="bold">').text(model.get('summary') || ''), $.txt('\u00A0'),
-                                $('<span class="gray">').text(model.get('location') || '')
+                    if (declined && !settings.get('showDeclinedAppointments', false)) return;
+                    var start = model.getMoment('startDate'),
+                        end = model.getMoment('endDate'),
+                        date = start.calendar(null, { sameDay: '[' + gt('Today') + ']', nextDay: '[' + gt('Tomorrow') + ']', nextWeek: 'dddd', sameElse: 'L' }),
+                        startTime = start.format('LT'),
+                        endTime = end.format('LT'),
+                        isAllday = util.isAllday(model);
+                    this.$el.append(
+                        $('<li class="item" tabindex="0">')
+                        .css('text-decoration', declined ? 'line-through' : 'none')
+                        .data('item', model)
+                        .append(
+                            $('<div class="clearfix">').append(
+                                $('<div class="pull-right">').text(date),
+                                $('<div class="bold ellipsis">').text(model.get('summary') || '')
+                            ),
+                            $('<div class="clearfix">').append(
+                                $('<div class="accent pull-right">').text(
+                                    isAllday ? gt('All day') : startTime + ' - ' + endTime
+                                ),
+                                $('<div class="gray ellipsis">').text(model.get('location') || '')
                             )
-                        );
-                    }
+                        )
+                    );
                 }, this)
                 .value();
 

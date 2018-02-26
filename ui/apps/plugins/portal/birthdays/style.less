@@ -20,18 +20,17 @@ ul.io-ox-portal-birthdays .cake {
 
 .io-ox-portal-birthdays {
     li {
-        &:nth-child(2n+1) {
-            background-color: #f8f8f8;
-        }
-        .date {
-            float: right;
-            text-align: right;
-            margin-left: 8px;
-            color: @gray;
-        }
-        .name {
+        position: relative;
+        padding-left: 48px;
+        .picture {
+            position: absolute;
+            left: 0;
+            .picture(32px, 32px);
+            .flex-center;
+            color: rgba(0, 0, 0, 0.70);
+            background-color: #eee;
             font-weight: bold;
-            .ellipsis();
+            font-size: 12px;
         }
     }
 }

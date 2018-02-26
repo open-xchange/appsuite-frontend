@@ -103,7 +103,8 @@ define('plugins/portal/recentfiles/register', [
                 content.append(
                     _(data).map(function (file) {
                         var filename = String(file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title || ''),
-                            size = strings.fileSize(file.file_size, 1);
+                            size = strings.fileSize(file.file_size, 1),
+                            ago = moment.duration(file.last_modified - _.utc()).humanize(true);
                         // create nice filename for long names
                         if (filename.length > 25) {
                             // remove leading & tailing date stufff
@@ -121,7 +122,7 @@ define('plugins/portal/recentfiles/register', [
                                         type === 'recentfiles' ? file.modified_by.display_name : size
                                     ),
                                     // show WHEN it was changed
-                                    $('<span class="pull-right gray">').text(moment.utc(file.last_modified).format('l LT'))
+                                    $('<span class="pull-right accent">').text(ago)
                                 )
                             );
                     })
