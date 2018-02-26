@@ -428,7 +428,7 @@ define('io.ox/mail/detail/view', [
                 options = options || {};
 
                 var frame = self.find('.mail-detail-frame'),
-                    widthChange = baton.model.get('iframePrevWidth') && frame.width() !== baton.model.get('iframePrevWidth'),
+                    widthChange = baton.view.iframePrevWidth && frame.width() !== baton.view.iframePrevWidth,
                     scrollpos = options.scrollpos,
                     contents = frame.contents();
 
@@ -440,7 +440,7 @@ define('io.ox/mail/detail/view', [
 
                 //wait until width doesn't change anymore
                 if (widthChange && !options.forceApply) {
-                    baton.model.set('iframePrevWidth', frame.width());
+                    baton.view.iframePrevWidth = frame.width();
                     _.delay(resizeFrame, 300, once, { widthChanged: true });
                     return;
                 } else if (options.widthChanged) {
@@ -479,7 +479,7 @@ define('io.ox/mail/detail/view', [
                 if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
 
                 // save width so we can track if the width changed (smartphone slide animation, listview width change, window resize). If the with changed, we need to recalculate from scratch
-                baton.model.set('iframePrevWidth', frame.width());
+                baton.view.iframePrevWidth = frame.width();
 
                 // firefox needs the defer here for the height to be applied
                 _.defer(function () {
