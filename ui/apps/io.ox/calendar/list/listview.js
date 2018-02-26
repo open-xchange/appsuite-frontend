@@ -27,8 +27,9 @@ define('io.ox/calendar/list/listview', [
     ext.point('io.ox/chronos/listview/item').extend({
         id: 'appointment-class',
         index: 100,
-        draw: function () {
-            this.closest('li').addClass('appointment');
+        draw: function (baton) {
+            // also add flags attribute, which is needed by some toolbar extensions (edit needs the isOrganizer flag for example)
+            this.closest('li').addClass('appointment').attr('data-flags', baton.model.get('flags'));
         }
     });
     ext.point('io.ox/chronos/listview/item').extend({

@@ -224,7 +224,11 @@ define('io.ox/calendar/toolbar', [
             app.updateToolbar = _.debounce(function (list) {
                 if (!list) return;
                 // extract single object if length === 1
-                list = list.length === 1 ? list[0] : list;
+                if (list.length === 1) {
+                    list = list[0];
+                    // add flags to draw items correctly
+                    list.flags = this.listView.selection.getNode(this.listView.selection.get()).attr('data-flags') || '';
+                }
                 // disable visible buttons
                 toolbarView.disableButtons();
                 // draw toolbar
