@@ -48,11 +48,12 @@ define('io.ox/backbone/mini-views/common', [
     var InputView = AbstractView.extend({
         el: '<input type="text" class="form-control">',
         // firefox does not trigger a change event if you drop text.
-        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
+        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop', 'paste': 'onPaste' } : { 'change': 'onChange', 'paste': 'onPaste' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
         onDrop: firefoxDropHelper,
+        onPaste: pasteHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },

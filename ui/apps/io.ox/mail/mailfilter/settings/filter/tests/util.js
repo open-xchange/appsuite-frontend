@@ -29,7 +29,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     });
 
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
             var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
@@ -57,7 +57,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             } else {
                 this.model.set(this.name, this.$el.val());
             }
-
+            // force validation
+            this.onKeyup();
         },
         onKeyup: function () {
             var state;
