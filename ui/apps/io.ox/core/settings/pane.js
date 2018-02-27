@@ -389,12 +389,25 @@ define('io.ox/core/settings/pane', [
                         quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
                     }
                 }
-                var multiSelect = function (name, label, model, list, options) {
+                function appsForPos(pos) {
+                    return [0, 1, 2]
+                        .filter(function (i) { return i !== pos; })
+                        .map(function (i) { return quickLaunchModel.get('apps/quicklaunch' + i); })
+                        .reduce(function (acc, app) {
+                            return acc.filter(function (a) { return a.value !== app || app === ''; });
+                        }, availableApps);
+                }
+                var multiSelect = function (name, label, options) {
                     options = options || {};
                     var id = 'settings-' + name,
-                        view = new mini.SelectView({ id: id, name: name, model: model, list: list, pos: options.pos });
+                        view = new mini.SelectView({ id: id, name: name, model: quickLaunchModel, list: appsForPos(options.pos), pos: options.pos });
 
                     if (!firstView) firstView = view;
+                    view.listenTo(quickLaunchModel, 'change', function () {
+                        this.options.list = appsForPos(this.options.pos);
+                        this.$el.empty();
+                        this.render();
+                    });
                     return $('<div class="col-md-6">').append(
 
                         $('<label>').attr('for', id).text(label),
@@ -402,17 +415,17 @@ define('io.ox/core/settings/pane', [
                     );
                 };
                 baton.$el.append(
-                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch0', gt('Quick launch 1'), quickLaunchModel, availableApps, { pos: 0 })),
-                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch1', gt('Quick launch 2'), quickLaunchModel, availableApps, { pos: 1 })),
-                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch2', gt('Quick launch 3'), quickLaunchModel, availableApps, { pos: 2 }))
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch0', gt('Quick launch 1'), { pos: 0 })),
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch1', gt('Quick launch 2'), { pos: 1 })),
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch2', gt('Quick launch 3'), { pos: 2 }))
                 );
 
                 firstView.listenTo(quickLaunchModel, 'change', function () {
-                    settings.set('quicklaunch', _.uniq(_.compact([
+                    settings.set('quicklaunch', [
                         quickLaunchModel.get('apps/quicklaunch0'),
                         quickLaunchModel.get('apps/quicklaunch1'),
                         quickLaunchModel.get('apps/quicklaunch2')
-                    ])).join(','));
+                    ].join(','));
                 });
                 firstView.listenTo(settings, 'change:quicklaunch', function (settingsStr) {
                     var a = settingsStr.split(',');
