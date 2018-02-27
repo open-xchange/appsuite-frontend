@@ -160,6 +160,21 @@ define('io.ox/core/import/import', [
         }
     });
 
+    ext.point('io.ox/core/import').extend({
+        id: 'calendar-import-hint',
+        index: 600,
+        render: function (baton) {
+
+            if (baton.module !== 'event') return;
+
+            this.$body.append(
+                $('<div class="help-block">').append(
+                    gt('Please note that other participants are removed on calendar import.')
+                )
+            );
+        }
+    });
+
     return {
 
         show: function (module, id) {
