@@ -1006,7 +1006,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.$el
                 .on('click', SELECTABLE, $.proxy(this.onClick, this))
                 .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-                .on('focus', $.proxy(this.onFocus, this));
+                .on('focus', $.proxy(this.onFocus, this))
+                .on('mousedown', $.proxy(this.onMousedown, this))
+                .on('mouseup', $.proxy(this.onMouseup, this));
 
             this.view.on('selection:empty', $.proxy(this.onSelectionEmpty, this));
         },
@@ -1022,6 +1024,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onFocus: function () {
+            // prevent focus on scrollbar mouse clicks: see bug 57293
+            if (this.view.mousedown) return;
+
             var items = this.getItems(),
                 first = items.filter('[tabindex="0"]:first'),
                 index = items.index(first);
