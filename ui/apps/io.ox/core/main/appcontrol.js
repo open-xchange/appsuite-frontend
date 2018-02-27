@@ -14,14 +14,13 @@
 define('io.ox/core/main/appcontrol', [
     'io.ox/core/http',
     'io.ox/core/upsell',
-    'io.ox/core/api/apps',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, appAPI, ext, capabilities, icons, settings, gt) {
+], function (http, upsell, ext, capabilities, icons, settings, gt) {
 
 
     function toggleOverlay(force) {

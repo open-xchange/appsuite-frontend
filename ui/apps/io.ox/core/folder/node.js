@@ -383,8 +383,6 @@ define('io.ox/core/folder/node', [
                 offset = 22;
             }
 
-            var dsc = !!this.model.get('isDSC');
-
             // draw scaffold
             this.$el
                 .attr({
@@ -426,11 +424,6 @@ define('io.ox/core/folder/node', [
 
             if (this.noSelect && o.level > 0) this.$el.addClass('no-select');
             if (this.isVirtual) this.$el.addClass('virtual');
-
-            // add special icon for DSC folders which will be shown in case an error occurs on the account
-            if (dsc) {
-                //this.renderStatusIcon();
-            }
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
             if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app) {

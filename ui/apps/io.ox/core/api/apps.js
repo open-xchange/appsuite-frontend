@@ -38,6 +38,7 @@ define('io.ox/core/api/apps', [
                 return ox.manifests.isDisabled(o.path);
             }).map(function (o) {
                 o.id = o.path.substr(0, o.path.length - 5);
+
                 // Add hasLauncher attribute to apps specified in settings
                 if (_.isUndefined(o.hasLauncher)) o.hasLauncher = _.indexOf(defaultList, o.id) > -1;
                 // hide address book? (e.g. for drive standalone)

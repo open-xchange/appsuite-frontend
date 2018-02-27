@@ -76,27 +76,6 @@ define('io.ox/core/folder/extensions', [
 
         // remote folders
         api.virtual.add('virtual/remote', function () {
-            // use the setting for dsc here in if-else, also consider altnamespace
-            var dsc = mailSettings.get('dsc/enabled', false),
-                id = mailSettings.get('dsc/folder');
-            // smart cache environment
-            if (dsc) {
-                if (account.hasDSCAccount()) {
-                    return account.getStatus().then(function (status) {
-                        //remove main account
-                        delete status['0'];
-
-                        // only request if status is at least for one dsc account ok
-                        if (_(status).any(function (account) { return account.status === 'ok'; })) {
-                            return api.list(id);
-                        }
-                        return [];
-                    });
-
-                }
-                // no account yet, return empty array
-                return $.Deferred().resolve([]);
-            }
             // standard environment
             return api.list('1').then(function (list) {
                 return _(list).filter(function (data) {
