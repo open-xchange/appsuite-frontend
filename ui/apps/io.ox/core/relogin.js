@@ -63,7 +63,7 @@ define('io.ox/core/relogin', [
     }
 
     function showSessionLostDialog(error) {
-        new ModalDialog({ width: 400, backdrop: true, async: true, title: getReason(error) })
+        new ModalDialog({ width: 400, async: true, title: getReason(error) })
             .build(function () {
                 this.$el.addClass('relogin');
                 this.$body.append(
