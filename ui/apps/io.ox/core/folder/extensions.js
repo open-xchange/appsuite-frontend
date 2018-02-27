@@ -279,12 +279,6 @@ define('io.ox/core/folder/extensions', [
             var defaultId = api.altnamespace ? 'default0' : INBOX;
 
             var node = new TreeNodeView({
-                filter: function (id, model) {
-                    // filtering for DSC folders
-                    if (account.isDSC(model.id)) return false;
-
-                    return true;
-                },
                 contextmenu: 'myfolders',
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders

@@ -426,8 +426,6 @@ define('io.ox/core/folder/contextmenu', [
                 // trash or subfolders do not support sharing or permission changes
                 if (api.is('trash', baton.data)) return;
 
-                if (account.isDSC(baton.data.id)) return;
-
                 // check if folder can be shared
                 var id = String(baton.data.id),
                     model = api.pool.getModel(id);

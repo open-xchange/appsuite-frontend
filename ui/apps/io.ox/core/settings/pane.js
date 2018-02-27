@@ -339,7 +339,6 @@ define('io.ox/core/settings/pane', [
             id: 'refreshInterval',
             index: INDEX += 100,
             render: function (baton) {
-                baton.$el.addClass('foo');
                 if (!settings.isConfigurable('refreshInterval')) return;
 
                 baton.$el.append(
