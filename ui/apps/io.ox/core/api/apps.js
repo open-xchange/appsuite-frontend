@@ -52,13 +52,15 @@ define('io.ox/core/api/apps', [
                 return o.hasLauncher;
             });
             return _.compact(apps.map(function (app) {
-                // return manifests in the order they have been specified in `io.ox/core//apps/list`
+                // return manifests in the order they have been specified in `io.ox/core//apps/order`
                 return _.where(appManifests, { id: app })[0];
-            })).concat.apply(appManifests.filter(function (app) {
+            })).concat(appManifests.filter(function (app) {
                 // add all other apps specified via manifests - allow admins to blacklist specific ones
                 // (use `io.ox/core//apps/blacklist`)
-                return !apps.indexOf(app.id) >= 0 || blacklist.indexOf(app.id) >= 0;
-            }));
+                return apps.indexOf(app.id) < 0;
+            })).filter(function (app) {
+                return blacklist.indexOf(app.id) < 0;
+            });
         },
         getAppsWithSettings: function () {
             return _.filter(api.getApps(), function (item) {
