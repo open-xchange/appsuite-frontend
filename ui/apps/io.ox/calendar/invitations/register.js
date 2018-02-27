@@ -223,7 +223,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getDateTimeIntervalMarkup: function () {
-            return this.util.getDateTimeIntervalMarkup(this.model.attributes, { output: 'strings' });
+            return this.util.getDateTimeIntervalMarkup(this.model.attributes, { output: 'strings', zone: moment().tz() });
         },
 
         renderAnnotations: function () {
