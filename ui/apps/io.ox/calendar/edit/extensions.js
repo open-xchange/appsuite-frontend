@@ -430,10 +430,15 @@ define('io.ox/calendar/edit/extensions', [
         id: 'find-free-time-1',
         index: 650,
         nextTo: 'full_time',
-        draw: function () {
-            this.append(
-                $('<div class="hidden-xs col-sm-6 find-free-time"></div>')
-            );
+        draw: function (baton) {
+            if (capabilities.has('freebusy !alone') && _.device('desktop')) {
+                this.append(
+                    $('<div class="hidden-xs col-sm-6 find-free-time">').append(
+                        $('<button type="button" class="btn btn-link">').text(gt('Find a free time'))
+                            .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
+                    )
+                );
+            }
         }
     });
 
@@ -828,21 +833,6 @@ define('io.ox/calendar/edit/extensions', [
             });
         });
     }
-
-    // link free/busy view
-    point.basicExtend({
-        id: 'link-free-busy',
-        index: 100000,
-        draw: function (baton) {
-            // because that works
-            if (capabilities.has('freebusy !alone')) {
-                this.parent().find('.find-free-time').append(
-                    $('<button type="button" class="btn btn-link">').text(gt('Find a free time'))
-                        .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
-                );
-            }
-        }
-    });
 
     if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) {
         ext.point('io.ox/calendar/edit/section')

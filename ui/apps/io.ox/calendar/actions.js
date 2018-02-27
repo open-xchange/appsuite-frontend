@@ -346,7 +346,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
-            return _.device('!smartphone');
+            return _.device('desktop');
         },
         action: function (baton) {
             require(['io.ox/calendar/freetime/main', 'io.ox/core/api/user'], function (freetime, userAPI) {
