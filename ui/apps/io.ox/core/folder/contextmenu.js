@@ -194,7 +194,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
-                    remove(e.data.id, { isDSC: account.isDSC(e.data.id) });
+                    remove(e.data.id);
                 });
             }
 

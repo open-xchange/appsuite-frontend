@@ -1153,7 +1153,7 @@ define('io.ox/core/folder/api', [
         return _(currentlyDeleted).contains(id);
     }
 
-    function remove(ids, options) {
+    function remove(ids) {
 
         // ensure array
         if (!_.isArray(ids)) ids = [ids];
@@ -1181,8 +1181,6 @@ define('io.ox/core/folder/api', [
             tree: tree(ids[0]),
             extendedResponse: true
         };
-
-        if (options && options.isDSC) params.hardDelete = true;
 
         // delete on server
         return http.PUT({
