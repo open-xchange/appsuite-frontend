@@ -158,7 +158,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return e.collection.has('delete') && isBossy && e.baton && e.baton.data && util.hasFlag(e.baton.data, 'organizer');
+                return e.collection.has('delete') && isBossy;
             });
         },
         multiple: function (list) {
