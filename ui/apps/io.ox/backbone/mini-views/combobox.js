@@ -103,6 +103,8 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
                 })
                 .show();
             this.updateQuery();
+            var scrollTarget = this.$dropdown.find('strong').first();
+            if (scrollTarget.length === 1) this.scrollIntoView(scrollTarget);
         },
 
         onClickOption: function (e) {
