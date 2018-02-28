@@ -227,8 +227,8 @@ define('io.ox/calendar/month/perspective', [
                     monthDelimiter = curWeek.clone().endOf('month').isSameOrBefore(endDate),
                     view;
 
-                // add collection for week
-                self.collections[day] = new MonthAppointmentCollection([]);
+                // reuse collection (week started in previous month, there is no need to double that collection) or create a new one
+                self.collections[day] = self.collections[day] || new MonthAppointmentCollection([]);
 
                 if (weeks !== 1) {
                     // new view

@@ -261,6 +261,26 @@ define('io.ox/participants/model', [
         }
     });
 
+    function resolveGroupMembers(participant) {
+        return $.Deferred().resolve()
+            .then(function () {
+                // fetch members in not available yet
+                var members = participant instanceof Backbone.Model ? participant.get('members') : participant.members;
+                return members ? { members: members } : groupAPI.get({ id: participant.id || participant.get('id') });
+            })
+            .then(function (data) {
+                return userAPI.getList(data.members);
+            })
+            .then(function (users) {
+                return _.sortBy(users, 'last_name');
+            });
+    }
+
+    function getValue(obj, name) {
+        obj = obj || {};
+        return obj.get ? obj.get(name) : obj[name];
+    }
+
     var Collection = Backbone.Collection.extend({
 
         model: Model,
@@ -289,54 +309,44 @@ define('io.ox/participants/model', [
             // wrap add function
             this.oldAdd = this.add;
             this.add = this.addUniquely;
+            this.processing = [];
         },
 
-        addUniquely: function (models, opt) {
-            var self = this;
-            _([].concat(models))
-                .each(function (participant) {
-                    // resolve distribution lists
-                    var add;
-                    if (participant instanceof self.model && participant.get('mark_as_distributionlist')) {
-                        add = participant.get('distribution_list');
-                    } else if (participant.mark_as_distributionlist) {
-                        add = participant.distribution_list;
-                    }
-                    // split groups into single users if the option is set. Note: this requires a server call
-                    if (self.options.splitGroups && (participant.type === 2 || (participant.get && participant.get('type') === 2))) {
-                        var groupUsers = participant.get ? participant.get('members') : participant.members;
-                        // if member attribute is not present we need to fetch the group first
-                        if (!groupUsers) {
-                            groupAPI.get({ id: participant.id || participant.get('id') }).done(function (group) {
-                                groupUsers = group.members;
-                                userAPI.getList(groupUsers).done(function (users) {
-                                    users = _(users).sortBy('last_name');
-                                    self.addUniquely(users);
-                                });
-                            });
-                        }
-                        userAPI.getList(groupUsers).done(function (users) {
-                            users = _(users).sortBy('last_name');
-                            self.addUniquely(users);
-                        });
-                    } else {
-                        var models = [], defs = [];
-                        _([].concat(add || participant)).each(function (data) {
-                            // check if model
-                            var mod = data instanceof self.model ? data : new self.model(data);
-                            models.push(mod);
-                            // wait for fetch, then add to collection
-                            defs.push(mod.loading);
-                        });
+        resolve: function () {
+            return $.when.apply($, this.processing);
+        },
 
-                        $.when.apply($, defs).then(function () {
-                            models = _(models).sortBy(function (obj) { return obj.get('last_name'); });
-                            _(models).each(function (model) {
-                                self.oldAdd(model, opt);
-                            });
-                        });
-                    }
+        addUniquely: function (list, opt) {
+            var self = this, defs;
+
+            defs = _.map([].concat(list), function (participant) {
+                // resolve user groups (recursion)
+                if (self.options.splitGroups && getValue(participant, 'type') === 2) {
+                    return resolveGroupMembers(participant).then(self.addUniquely.bind(self));
+                }
+
+                // resolve distribution lists
+                var isDistributionList = getValue(participant, 'mark_as_distributionlist');
+                participant = isDistributionList ? getValue(participant, 'distribution_list') : participant;
+
+                var models = [], defs = [];
+                _.each([].concat(participant), function (data) {
+                    // check if model
+                    var mod = data instanceof self.model ? data : new self.model(data);
+                    models.push(mod);
+                    // wait for fetch, then add to collection
+                    defs.push(mod.loading);
                 });
+
+                return $.when.apply($, defs).then(function () {
+                    models = _(models).sortBy(function (obj) { return obj.get('last_name'); });
+                    _(models).each(function (model) {
+                        self.oldAdd(model, opt);
+                    });
+                    return models;
+                });
+            });
+            this.processing = this.processing.concat(_.flatten(defs));
         }
     });
 
