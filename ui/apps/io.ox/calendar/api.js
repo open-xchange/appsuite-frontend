@@ -120,7 +120,16 @@ define('io.ox/calendar/api', [
                 }
                 return function request(opt, method) {
                     method = method || 'GET';
-                    return http[method](opt)['catch'](function (err) {
+                    return http[method](opt).then(function (result) {
+                        if (_.isArray(result)) {
+                            result.forEach(function (r) {
+                                if (r.error) {
+                                    ox.trigger('http:error:' + r.code, r);
+                                }
+                            });
+                        }
+                        return result;
+                    }, function (err) {
                         if (err.code !== 'CAL-5072') throw err;
 
                         var start = moment(opt.params.rangeStart),
@@ -466,6 +475,8 @@ define('io.ox/calendar/api', [
                     until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT_DAY_ONLY)
                 }, options);
 
+                var order = _(list).pluck('entity');
+
                 return http.PUT({
                     module: 'chronos',
                     params: {
@@ -474,6 +485,12 @@ define('io.ox/calendar/api', [
                         until: options.until
                     },
                     data: { attendees: list }
+                }).then(function (items) {
+                    // response order might not be the same as in the request. Fix that.
+                    items.sort(function (a, b) {
+                        return order.indexOf(a.attendee.entity) - order.indexOf(b.attendee.entity);
+                    });
+                    return items;
                 });
             },
 

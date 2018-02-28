@@ -1,0 +1,8 @@
+.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected * {
+    color: @selected-color !important;
+}
+
+#io-ox-top-logo-small {
+    width: @io-ox-dynamic-theme-logoWidth;
+    background-image: @io-ox-dynamic-theme-logoURL;
+}

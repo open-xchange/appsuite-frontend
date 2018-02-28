@@ -14,15 +14,13 @@
 define('io.ox/core/main/appcontrol', [
     'io.ox/core/http',
     'io.ox/core/upsell',
-    'io.ox/backbone/views/window',
-    'io.ox/core/api/apps',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, windowview, appAPI, ext, capabilities, icons, settings, gt) {
+], function (http, upsell, ext, capabilities, icons, settings, gt) {
 
 
     function toggleOverlay(force) {
@@ -214,17 +212,30 @@ define('io.ox/core/main/appcontrol', [
         id: 'logo',
         index: 200,
         draw: function () {
+            var logo, action = settings.get('logoAction', false);
             this.append(
-                $('<div id="io-ox-top-logo">').append(
+                logo = $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
                         alt: ox.serverConfig.productName,
                         src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
-                    }).on('click', function (e) {
-                        e.preventDefault();
-                        ox.trigger('logo-topbar:click');
                     })
                 )
             );
+            if ((/^https?:/).test(action)) {
+                logo.wrap(
+                    $('<a class="btn btn-link logo-btn">').attr({
+                        href: action,
+                        target: '_blank'
+                    })
+                );
+            } else if (action) {
+                logo.wrap(
+                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function (e) {
+                        e.preventDefault();
+                        ox.launch(action);
+                    })
+                );
+            }
         }
     });
 
@@ -232,8 +243,11 @@ define('io.ox/core/main/appcontrol', [
         id: 'launcher',
         index: 300,
         draw: function () {
+            // possible setting here
+            var apps = ox.ui.apps.where({ hasLauncher: true });
+            if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
-                collection: ox.ui.apps.where({ hasLauncher: true })
+                collection: apps
             });
             this.append(launchers.render().$el);
         }

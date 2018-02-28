@@ -74,15 +74,25 @@ define('io.ox/calendar/list/perspective', [
             if (obj instanceof Backbone.Model) obj = obj.attributes;
             // be busy
             this.app.right.busy(true);
+            var self = this,
+                lfoShow = _.lfo(function (appointmentModel) {
+                    // we need to check folder api first when list perspective is used for search results. Those can contain appointments where the user has no right to see the folder
+                    // this affects the shared folder check of the accept decline actions
+                    // if the appointment data itself can tell the UI if it's a shared folder or not we can drop this check. tbd
+                    var def = self.app.props.get('find-result') ? folderAPI.get(appointmentModel.get('folder')) : $.when();
+                    def.always(function (result) {
+                        self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
+                    });
+                });
 
             api.get(obj)
                 .then(
-                    _.lfo(this.drawAppointment.bind(this)),
+                    lfoShow,
                     _.lfo(this.drawMessageRight.bind(this, gt('Could\'t load appointment data.')))
                 );
         },
 
-        drawAppointment: function (model) {
+        drawAppointment: function (model, options) {
             var baton = ext.Baton({ model: model, data: model.attributes });
             if (_.device('smartphone')) {
                 this.app.pages.changePage('detailView');
@@ -94,13 +104,13 @@ define('io.ox/calendar/list/perspective', [
                     app.listView.selection.clear();
                 });
                 // draw details to page
-                p.idle().empty().append(viewDetail.draw(model));
+                p.idle().empty().append(viewDetail.draw(model, options));
                 // update toolbar with new baton
                 this.app.pages.getToolbar('detailView').setBaton(baton);
 
             } else {
                 baton.disable('io.ox/calendar/detail', 'inline-actions');
-                this.app.right.idle().empty().append(viewDetail.draw(baton));
+                this.app.right.idle().empty().append(viewDetail.draw(baton, options));
             }
         },
 

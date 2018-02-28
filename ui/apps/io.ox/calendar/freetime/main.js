@@ -19,10 +19,11 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
+    'io.ox/calendar/util',
     'io.ox/core/folder/api',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, folderAPI) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, util, folderAPI) {
 
     'use strict';
 
@@ -49,7 +50,7 @@ define('io.ox/calendar/freetime/main', [
             var attendeesToAdd = [];
             if (options.parentModel) {
                 attendeesToAdd = options.parentModel.get('attendees');
-                this.model.set('startDate', moment(options.parentModel.get('startDate')).startOf(this.model.get('dateRange')));
+                this.model.set('startDate', util.getMoment(options.parentModel.get('startDate')).startOf(this.model.get('dateRange')));
             } else {
                 if (options.startDate) {
                     this.model.set('startDate', moment(options.startDate).startOf(this.model.get('dateRange')));
@@ -58,6 +59,9 @@ define('io.ox/calendar/freetime/main', [
                     attendeesToAdd = options.attendees;
                 }
             }
+
+            // reference to the date we started the view in (is used to prevent jumping when switching from month to week)
+            this.model.set('viewStartedWith', moment(options.parentModel ? util.getMoment(options.parentModel.get('startDate')) : options.startDate));
 
             this.participantsSubview = new ParticipantsView({ model: this.model, parentView: this });
             this.timeSubview = new TimeView({ model: this.model, parentModel: options.parentModel, parentView: this });
@@ -79,6 +83,11 @@ define('io.ox/calendar/freetime/main', [
                     return;
                 }
                 self.participantsSubview.bodyNode[0].scrollTop = this.scrollTop;
+            });
+            // allow scrolling in the participants area without a scrollbar
+            this.participantsSubview.bodyNode.on('wheel', function (e) {
+                // firefox needs a multiplicator here or it's too slow
+                self.timeSubview.bodyNode[0].scrollTop = self.timeSubview.bodyNode[0].scrollTop + e.originalEvent.deltaY * (_.device('firefox') ? 4 : 1);
             });
 
             this.header = $('<div class="freetime-view freetime-view-header">').addClass('zoomlevel-' + this.model.get('zoom'));
@@ -286,6 +295,7 @@ define('io.ox/calendar/freetime/main', [
             this.view.timeSubview.lassoStart = point.lassoStart;
             this.view.timeSubview.lassoEnd = point.lassoEnd;
             this.view.timeSubview.setDate(point.startDate);
+            this.view.model.set('viewStartedWith', moment(point.startDate));
             this.view.timeSubview.updateLasso(true);
             if (!point.lassoStart) {
                 this.view.timeSubview.keepScrollpos = 'today';

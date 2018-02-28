@@ -323,7 +323,7 @@ define('io.ox/mail/threadview', [
 
         onRemove: function (model) {
             var children = this.getItems(),
-                li = children.filter('[data-cid="' + model.cid + '"]'),
+                li = children.filter(function () { return $(this).attr('data-cid') === model.cid; }),
                 first = li.length ? li.attr('data-cid') && children.first().attr('data-cid') : false,
                 top = this.$messages.scrollTop();
 

@@ -289,9 +289,9 @@ define('io.ox/calendar/month/perspective', [
 
         onChangeColorScheme: function () {
             if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment', this.pane).css({ 'background-color': '', 'color':  '' });
+                $('.appointment', this.main).css({ 'background-color': '', 'color':  '' });
             } else {
-                $('.appointment', this.pane).each(function () {
+                $('.appointment', this.main).each(function () {
                     var $elem = $(this),
                         cid = $elem.data('cid'),
                         folder = util.cid(cid).folder,

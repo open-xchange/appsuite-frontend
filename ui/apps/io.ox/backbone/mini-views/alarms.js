@@ -59,6 +59,7 @@ define('io.ox/backbone/mini-views/alarms', [
         render: function () {
             var self = this;
             this.$el.empty().append(
+                self.list,
                 $('<button class="btn btn-default" type="button">').text(gt('Add new reminder'))
                     .on('click', function () {
                         var duration;
@@ -73,8 +74,7 @@ define('io.ox/backbone/mini-views/alarms', [
 
                         self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: duration, related: 'START' } }));
                         self.updateModel();
-                    }),
-                self.list
+                    })
             );
             this.updateView();
             return this;

@@ -26,7 +26,8 @@ define('io.ox/core/links', [
                 function () {
                     ox.launch(app, { folder: id }).done(function () {
                         // set proper folder
-                        if (this.folder.get() !== id) this.folder.set(id);
+                        if (app === 'io.ox/calendar/main') this.folders.setOnly(id);
+                        else if (this.folder.get() !== id) this.folder.set(id);
                     });
                 },
                 yell
@@ -106,7 +107,7 @@ define('io.ox/core/links', [
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail', 'io.ox/core/folder/api']).done(function (dialogs, api, view, folderApi) {
                 // chrome uses a shadowdom, this prevents the sidepopup from finding the correct parent to attach.
                 var sidepopup = new dialogs.SidePopup({ arrow: !_.device('chrome'), tabTrap: true });
                 if (_.device('chrome')) {
@@ -120,7 +121,11 @@ define('io.ox/core/links', [
                     }
                     api.get(data).then(
                         function success(data) {
-                            popup.idle().append(view.draw(data, { container: popup }));
+                            // some invitation mails contain links to events where the participant has no reading rights. We don't know until we check, as this data is not part of the appointment.
+                            // folder data is used to determine if the this is a shared folder and the folder owner must be used when confirming instead of the logged in user
+                            folderApi.get(data.get('folder')).always(function (result) {
+                                popup.idle().append(view.draw(data, { container: popup, noFolderCheck: result.error !== undefined }));
+                            });
                         },
                         function fail(e) {
                             sidepopup.close();
@@ -200,30 +205,14 @@ define('io.ox/core/links', [
 
     // event hub
     ox.on('click:deep-link-mail', function (e, scope) {
-        var type = e.currentTarget.className.split(' ');
+        var types = e.currentTarget.className.split(' ');
 
-        if (type && type[1]) {
-            switch (type[1]) {
-                case 'deep-link-files':
-                    filesHandler.call(scope, e);
-                    break;
-                case 'deep-link-contacts':
-                    contactsHandler.call(scope, e);
-                    break;
-                case 'deep-link-calendar':
-                    calendarHandler.call(scope, e);
-                    break;
-                case 'deep-link-tasks':
-                    tasksHandler.call(scope, e);
-                    break;
-                case 'deep-link-app':
-                    appHandler.call(scope, e);
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (type[0] === 'mailto-link') mailHandler.call(scope, e);
+        if (types.indexOf('deep-link-files') >= 0) filesHandler.call(scope, e);
+        else if (types.indexOf('deep-link-contacts') >= 0) contactsHandler.call(scope, e);
+        else if (types.indexOf('deep-link-calendar') >= 0) calendarHandler.call(scope, e);
+        else if (types.indexOf('deep-link-tasks') >= 0) tasksHandler.call(scope, e);
+        else if (types.indexOf('deep-link-app') >= 0) appHandler.call(scope, e);
+        else if (types.indexOf('mailto-link') >= 0) mailHandler.call(scope, e);
     });
 
 });

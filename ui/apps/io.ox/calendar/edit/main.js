@@ -52,6 +52,7 @@ define('io.ox/calendar/edit/main', [
             dispose: function () {
                 this.view.off('save', _.bind(this.onSave, this));
                 this.model.off();
+                this.dropZone.remove();
             },
 
             // published via callbacks objects in baton (see below)
@@ -170,7 +171,7 @@ define('io.ox/calendar/edit/main', [
                     data.alarms = data.alarms || util.getDefaultAlarms(data);
 
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
-                    data.transp = data.transp || (util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
+                    data.transp = data.transp || ((util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE');
                     self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
@@ -200,7 +201,7 @@ define('io.ox/calendar/edit/main', [
             create: function (data) {
                 data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
-                data['class'] = 'PUBLIC';
+                if (!data['class']) data['class'] = 'PUBLIC';
                 this.edit(data, { mode: 'create' });
             },
 

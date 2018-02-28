@@ -27,7 +27,7 @@ define('io.ox/tasks/edit/main', [
         // application object
         var app = ox.ui.createApp({
                 name: 'io.ox/tasks/edit',
-                title: gt('Edit task'),
+                title: gt('Create task'),
                 userContent: true,
                 closable: true,
                 floating: !_.device('smartphone')
@@ -118,7 +118,7 @@ define('io.ox/tasks/edit/main', [
                 chromeless: true,
                 floating: !_.device('smartphone'),
                 closable: true,
-                title: gt('Edit task')
+                title: taskData && taskData.id ? gt('Edit task') : gt('Create task')
             });
 
             win.addClass('io-ox-tasks-edit-main');

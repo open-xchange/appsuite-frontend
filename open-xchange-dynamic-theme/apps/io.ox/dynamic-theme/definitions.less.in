@@ -15,15 +15,6 @@
 
 @selected-color: contrast(@selected-background);
 
-.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected * {
-    color: @selected-color !important;
-}
-
 @foldertree-selected-focus-background: @selected-background;
 @foldertree-badge-focus-background: darken(@selected-background, 10%);
 @foldertree-focused-label-color: @selected-color;
-
-#io-ox-top-logo-small {
-    width: @io-ox-dynamic-theme-logoWidth;
-    background-image: @io-ox-dynamic-theme-logoURL;
-}

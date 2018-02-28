@@ -59,12 +59,12 @@ define([
             });
             it('should not draw year if its year 1', function () {
                 //FIXME: this test fails every year at 12.06. +- 1 day
-                expect($(this.node.find('.date')[4]).text()).to.equal('12.6.');
+                expect($(this.node.find('.accent')[4]).text()).to.equal('12.6.');
             });
             it('should recognize yesterday/today/tomorrow', function () {
-                expect($(this.node.find('.date')[0]).text()).to.equal('Gestern');
-                expect($(this.node.find('.date')[1]).text()).to.equal('Heute');
-                expect($(this.node.find('.date')[2]).text()).to.equal('Morgen');
+                expect($(this.node.find('.accent')[0]).text()).to.equal('Gestern');
+                expect($(this.node.find('.accent')[1]).text()).to.equal('Heute');
+                expect($(this.node.find('.accent')[2]).text()).to.equal('Morgen');
             });
 
             it.skip('should should have a sidepopup drawn', function () {

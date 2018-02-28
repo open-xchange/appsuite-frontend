@@ -87,7 +87,7 @@ define('plugins/portal/rss/register', [
                                 }
                                 return '';
                             },
-                            $('<span class="bold">').text(entry.subject), $.txt('')
+                            $('<span>').text(entry.subject), $.txt('')
                         )
                     );
                 });

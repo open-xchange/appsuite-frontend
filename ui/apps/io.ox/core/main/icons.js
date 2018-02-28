@@ -22,14 +22,7 @@ define('io.ox/core/main/icons', [
      * point for customizing icons
      */
 
-    var icons,
-        // map some icons for double use
-        map = {
-            'io.ox/mail/compose': 'io.ox/mail',
-            'io.ox/contacts/edit': 'io.ox/contacts',
-            'io.ox/calendar/edit': 'io.ox/calendar',
-            'io.ox/tasks/edit': 'io.ox/tasks'
-        };
+    var icons, map;
 
     function exposeIcons() {
         // just some sugar
@@ -44,7 +37,25 @@ define('io.ox/core/main/icons', [
 
     // just for customizing purposes
     ext.point('io.ox/core/main/icons').extend({
-        id: 'load',
+        id: 'iconmap',
+        index: 500,
+        run: function () {
+            // map icons for double use
+            map = {
+                'io.ox/mail/compose': 'io.ox/mail',
+                'io.ox/contacts/edit': 'io.ox/contacts',
+                'io.ox/calendar/edit': 'io.ox/calendar',
+                'io.ox/tasks/edit': 'io.ox/tasks',
+                'io.ox/office/text': 'io.ox/office/portal/text',
+                'io.ox/office/spreadsheet': 'io.ox/office/portal/spreadsheet',
+                'io.ox/office/presentation': 'io.ox/office/portal/presentation'
+            };
+        }
+    });
+
+    // just for customizing purposes
+    ext.point('io.ox/core/main/icons').extend({
+        id: 'parse',
         index: 1000,
         run: function () {
             icons = JSON.parse(rawIcons);
@@ -64,33 +75,6 @@ define('io.ox/core/main/icons', [
             _(ox.ui.appIcons).extend(set);
         }
     });
-
-    /*
-    ext.point('io.ox/core/main/icons').extend({
-        id: 'load',
-        index: 1000,
-        run: function () {
-            if (!loadIcons) return;
-            // load all icons and expose them for later use
-            var iconlist = 'default launcher calendar mail contacts files portal tasks presentation text spreadsheet'.split(' '),
-                defs = [];
-
-            _(iconlist).each(function (name) {
-                defs.push($.ajax({
-                    url: ox.base + '/apps/themes/' + ox.theme + '/applauncher/' + name + '.' + iconType,
-                    dataType: 'text'
-                }).done(function (icon) {
-                    icons[name] = icon;
-                    window.icons = icons;
-                }));
-            });
-
-            $.when.apply($, defs).then(function () {
-                exposeIcons();
-                ox.trigger('applauncher-icons:loaded');
-            });
-        }
-    });*/
 
     ext.point('io.ox/core/main/icons').invoke('run');
 

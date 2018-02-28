@@ -26,13 +26,14 @@ define('io.ox/calendar/main', [
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/calendar/api',
+    'io.ox/calendar/folder-select-support',
     'io.ox/calendar/mobile-navbar-extensions',
     'io.ox/calendar/mobile-toolbar-actions',
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
     'io.ox/calendar/week/view'
-], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, DatePicker, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api) {
+], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, DatePicker, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api, addFolderSelectSupport) {
 
     'use strict';
 
@@ -274,12 +275,18 @@ define('io.ox/calendar/main', [
                 draw: function () {
 
                     if (_.device('smartphone')) return;
+                    var layoutRanges = { 'week:workweek': 'week', 'week:week': 'week', 'month': 'month', 'year': 'year' };
 
                     new DatePicker({ parent: this.closest('#io-ox-core'), showTodayButton: false })
                         .on('select', function (date) {
                             app.setDate(date);
+                            this.setDate(date, true);
                         })
                         .listenTo(app.props, 'change:date', function (model, value) {
+                            // check if the layout supports ranges (week, month year). If the new date is still within that range, we don't need to change the mini calendar
+                            // those layous set it always to the first day within their specific range and would overwrite the selection of the user, see(bug 57223)
+                            if (layoutRanges[app.props.get('layout')] && moment(value).startOf(layoutRanges[app.props.get('layout')]).valueOf() === moment(this.getDate()).startOf(layoutRanges[app.props.get('layout')]).valueOf()) return;
+
                             this.setDate(value, true);
                         })
                         .listenTo(app.props, 'change:showMiniCalendar', function (model, value) {
@@ -308,9 +315,6 @@ define('io.ox/calendar/main', [
                 if (folder.module !== 'calendar') return;
                 app.folders.add(folder.id);
                 app.folder.set(folder.id);
-                // repaint node to ensure the checkmark
-                var node = app.treeView.getNodeView(folder.id);
-                if (node) node.repaint();
             });
         },
 
@@ -324,86 +328,10 @@ define('io.ox/calendar/main', [
         },
 
         'multi-folder-selection': function (app) {
-            var folders, prevFolders, singleSelection = false;
-            function setFolders(list, opt) {
-                opt = opt || {};
-                folders = _(list).unique();
-                sort();
-                _.defer(function () {
-                    if (opt.silent !== true) app.trigger('folders:change', folders);
-                    settings.set('selectedFolders', folders).save();
-                });
-            }
-            function sort() {
-                var base = _(folderAPI.pool.models).keys().length,
-                    failed = [],
-                    sorted = _(folders).sortBy(function (folderId) {
-                        var folder = folderAPI.pool.models[folderId];
-                        if (!folder) return failed.push(folderId);
-                        if (folderAPI.is('private', folder.attributes)) return folder.get('index/flat/event/private');
-                        if (folderAPI.is('public', folder.attributes)) return folder.get('index/flat/event/public') + base;
-                        if (folderAPI.is('shared', folder.attributes)) return folder.get('index/flat/event/shared') + base * base;
-                    });
-                if (failed.length === 0) folders = sorted;
-                // Keep this for debugging purposes
-                // else console.error('Sort was impossible due to missing folders in cache. ', failed);
-            }
-            var initalList = settings.get('selectedFolders');
-            if (!initalList || initalList.length === 0) initalList = [folderAPI.getDefaultFolder('calendar')];
-            setFolders(initalList);
-            app.folders = {
-                isSingleSelection: function () {
-                    return singleSelection;
-                },
-                getData: function () {
-                    return $.when.apply($, folders.map(function (folder) {
-                        return folderAPI.get(folder).then(function (folder) {
-                            if (!folder.subscribed) return;
-                            return folder;
-                        }, function () {
-                            app.folders.remove(folder);
-                        });
-                    })).then(function () {
-                        var data = _(arguments).chain().toArray().compact().value();
-                        return _.indexBy(data, 'id');
-                    });
-                },
-                isSelected: function (id) {
-                    var list = prevFolders ? prevFolders : folders;
-                    if (_.isObject(id)) id = id.id;
-                    return list.indexOf(id) >= 0;
-                },
-                list: function () {
-                    return folders;
-                },
-                add: function (folder, opt) {
-                    if (singleSelection) this.reset();
-                    var list = [].concat(folders);
-                    list.push(folder);
-                    setFolders(list, opt);
-                },
-                remove: function (folder, opt) {
-                    if (singleSelection) this.reset();
-                    var list = _(folders).without(folder);
-                    setFolders(list, opt);
-                },
-                setOnly: function (folder) {
-                    singleSelection = true;
-                    if (!prevFolders) prevFolders = folders;
-                    folders = [].concat([folder]);
-                    app.folderView.tree.$el.addClass('single-selection');
-                    _.defer(app.trigger.bind(app, 'folders:change', folders));
-                },
-                reset: function () {
-                    singleSelection = false;
-                    if (!prevFolders) return;
-                    folders = prevFolders;
-                    prevFolders = undefined;
-                    app.folderView.tree.$el.removeClass('single-selection');
-                    _.defer(app.trigger.bind(app, 'folders:change', folders));
-                }
-            };
-            app.on('folder:change', app.folders.reset);
+            addFolderSelectSupport(app);
+            app.on('folder:change', function () {
+                app.folders.reset();
+            });
             app.folderView.tree.on('dblclick', function (e, folder) {
                 if (!folder) return;
                 if ($(e.target).hasClass('color-label')) return;

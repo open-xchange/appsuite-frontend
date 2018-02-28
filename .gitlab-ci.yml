@@ -204,7 +204,7 @@ stop_review:
     - /^bug\//
     - /^poc\//
 
-deploy develop documentation:
+deploy documentation:
   stage: deploy
   variables:
     GIT_STRATEGY: none
@@ -221,24 +221,9 @@ deploy develop documentation:
   allow_failure: true
   only:
     - develop
-
-deploy documentation:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - export VERSION=`ls doku --sort=time | cut -f1 | head -n1`
-    - rsync -aHAX --delete doku/$VERSION/ui/ /var/www/documentation/$VERSION/ui
-    - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
-    - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
-  dependencies:
-    - build documentation
-  tags:
-    - shell
-    - documentation
-  only:
     - master
     - /^master-.*$/
+    - /^release-.*$/
 
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
 deploy e2e dev server:

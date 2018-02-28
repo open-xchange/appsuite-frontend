@@ -211,7 +211,7 @@ define('io.ox/mail/listview', [
             index: 1100,
             draw: function (baton) {
                 this.append(
-                    $('<span class="text-preview gray">').text(baton.data.text_preview || '')
+                    $('<span class="text-preview inline gray">').text(baton.data.text_preview || '')
                 );
             }
         }

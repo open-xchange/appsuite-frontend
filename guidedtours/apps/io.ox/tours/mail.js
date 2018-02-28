@@ -32,7 +32,7 @@ define('io.ox/tours/mail', [
         .step()
             .title(gt('Composing a new E-Mail'))
             .content(gt('To compose a new E-Mail, click on Compose in the toolbar.'))
-            .hotspot('[data-ref="io.ox/mail/actions/compose"]:visible')
+            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
             .on('next', function () {
                 ox.registry.call('mail-compose', 'compose').then(function (result) {
                     composeApp = result.app;

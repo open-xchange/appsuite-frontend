@@ -32,7 +32,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             lazy: false,
             displayStyle: 'cornered',
             title: '',
-            showStickybutton: false
+            showStickybutton: false,
+            showInTaskbar: true,
+            size: 'width-md height-md' // -lg, -md, -sm, -xs
         }
     });
 
@@ -40,7 +42,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
         events: {
             'click [data-action="minimize"]': 'onMinimize',
-            'click [data-action="close"]':    function () { this.model.trigger('quit'); },
+            'click [data-action="close"]':    'onQuit',
             'dblclick .floating-header':      'toggleDisplaystyle',
             'click button[data-view]':        'toggleDisplaystyle'
         },
@@ -48,7 +50,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         initialize: function (options) {
             this.options = options || {};
             this.listenTo(this, 'dispose', remove);
-            if (!this.model) this.model = new WindowModel(_.pick(options, 'title', 'minimized', 'closable', 'win', 'showStickybutton'));
+            if (!this.model) this.model = new WindowModel(_.pick(options, 'title', 'minimized', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar'));
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'change:displayStyle': this.changeDisplayStyle,
@@ -74,6 +76,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 this.model.get('showStickybutton') ? $('<button type="button" class="btn btn-link" data-view="sticky">').append('<i class="fa fa-thumb-tack" aria-hidden="true">') : '',
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
+        },
+        onQuit: function () {
+            this.model.trigger('quit');
         },
 
         open: function () {
@@ -149,7 +154,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
         render: function () {
             var title_id = _.uniqueId('title');
-            this.$el.addClass('floating-window window-container').addClass(this.model.get('displayStyle'))
+            this.$el.addClass('floating-window window-container')
+                .addClass(this.model.get('displayStyle'))
+                .addClass(this.model.get('size'))
                 .attr({ 'aria-labelledby': title_id, tabindex: -1, role: 'dialog' })
                 .append(
                     $('<div class="abs floating-window-content" role="document">').append(
@@ -186,6 +193,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             });
         },
         onClick: function () {
+            if (this.$el) this.$el.addClass('active').siblings().removeClass('active');
             if (!this.model.get('floating')) {
                 this.model.set('minimized', false);
                 this.model.get('win').app.launch();
@@ -196,7 +204,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.model.set('minimized', !initialState);
             ox.trigger('change:document:title', this.model.get('title'));
             this.model.trigger('lazyload');
-            if (this.$el) this.$el.addClass('active').siblings().removeClass('active');
         },
 
         onClose: function () {
@@ -228,11 +235,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         render: function () {
             this.$el.attr('data-cid', this.model.cid).append(
                 $('<button type="button" class="taskbar-button" data-action="restore">').append(
+                    this.$icon = this.model.get('taskbarIcon') ? $('<i class="fa">').addClass(this.model.get('taskbarIcon')) : $(),
                     this.$title = $('<span class="title">'),
                     this.$count = $('<span class="count label label-danger">')
 
                 )
             );
+
             if (this.model.get('closable')) {
                 this.$el.append($('<button type="button" class="btn btn-link pull-right" data-action="close">')
                     .append('<i class="fa fa-times" aria-hidden="true">')
@@ -287,15 +296,18 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             win: app.getWindow(),
             title: app.getTitle() || '',
             closable: true,
-            minimized: false
+            minimized: false,
+            taskbarIcon: app.get('userContentIcon')
         });
 
         app.on('change:title', function (app, title) { model.set('title', title); });
 
         model.once('quit', function () { app.quit(); });
         app.once('quit', function () { model.trigger('close'); });
-        new TaskbarElement({ model: model }).render();
+
         collection.add(model);
+        if (app.get('hideTaskbarEntry') === true) return;
+        new TaskbarElement({ model: model }).render();
     };
 
     return {

@@ -32,12 +32,14 @@ define('io.ox/core/api/apps', [
                 'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
                 'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
                 'io.ox/notes'];
-            var apps =  settings.get('apps/list', defaultList.join(',')).split(',');
+            var apps =  settings.get('apps/order', defaultList.join(',')).split(',');
+            var blacklist = settings.get('apps/blacklist', '').split(',');
             // Construct App Data
             var appManifests = _(ox.manifests.apps).reject(function (o) {
                 return ox.manifests.isDisabled(o.path);
             }).map(function (o) {
                 o.id = o.path.substr(0, o.path.length - 5);
+
                 // Add hasLauncher attribute to apps specified in settings
                 if (_.isUndefined(o.hasLauncher)) o.hasLauncher = _.indexOf(defaultList, o.id) > -1;
                 // hide address book? (e.g. for drive standalone)
@@ -50,8 +52,15 @@ define('io.ox/core/api/apps', [
                 return o.hasLauncher;
             });
             return _.compact(apps.map(function (app) {
+                // return manifests in the order they have been specified in `io.ox/core//apps/order`
                 return _.where(appManifests, { id: app })[0];
-            }));
+            })).concat(appManifests.filter(function (app) {
+                // add all other apps specified via manifests - allow admins to blacklist specific ones
+                // (use `io.ox/core//apps/blacklist`)
+                return apps.indexOf(app.id) < 0;
+            })).filter(function (app) {
+                return blacklist.indexOf(app.id) < 0;
+            });
         },
         getAppsWithSettings: function () {
             return _.filter(api.getApps(), function (item) {

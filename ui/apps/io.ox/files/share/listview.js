@@ -160,15 +160,12 @@ define('io.ox/files/share/listview', [
             if (!list) return;
 
             // turn cids into proper objects
-            var cids = list,
-                cidList = view.collection.get(cids),
-                modelList = cidList ? [cidList] : [],
-                models = (/^folder\./).test(cids) ? filesAPI.resolve(cids, false) : modelList;
+            var modelList = _.map(list, function (cid) { return view.collection.get(cid); });
 
-            list = _(models).invoke('toJSON');
+            var fileDescriptors = _(modelList).invoke('toJSON');
             // extract single object if length === 1
-            var data = list.length === 1 ? list[0] : list;
-            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
+            var data = fileDescriptors.length === 1 ? fileDescriptors[0] : fileDescriptors;
+            var baton = new ext.Baton({ data: data, models: modelList, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
 
             view.contextMenu.showContextMenu(event, baton);
         },
@@ -216,7 +213,7 @@ define('io.ox/files/share/listview', [
                 sharedItemElementList = view.getItems().toArray();
 
             sharedItemElementList.forEach(function (elmLi/*, idx, list*/) {
-                model = collection.getByCid(elmLi.getAttribute('data-cid'));
+                model = collection.get(elmLi.getAttribute('data-cid'));
 
                 if (elmLi.getAttribute('data-share-type') === 'public-link') {
 
@@ -436,18 +433,24 @@ define('io.ox/files/share/listview', [
 
                 if (capabilities.has('!gab || alone') && !hasUser(baton)) return;
 
-                var iconClass = 'fa-link';
-                if (hasGuests(baton)) {
+                var iconClass = 'fa-link',
+                    iconTitle = gt('Public link');
+                if (hasGuests(baton) && hasUser(baton)) {
                     iconClass = 'fa-user-plus';
+                    iconTitle = gt('Internal & external users');
+                } else if (hasGuests(baton)) {
+                    iconClass = 'fa-user-plus';
+                    iconTitle = gt('External users');
                 } else if (hasUser(baton)) {
                     iconClass = 'fa-user';
+                    iconTitle = gt('Internal users');
                 }
 
                 this.append(
                     $('<div class="list-item-column type">').append(
                         $('<i class="fa">')
                             .addClass(iconClass)
-                            .attr('title', gt('Internal users'))
+                            .attr('title', iconTitle)
                     )
                 );
             }

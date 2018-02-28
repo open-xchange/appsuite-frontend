@@ -24,8 +24,10 @@ define('io.ox/calendar/actions/subscribe-ical', [
 
     'use strict';
 
-    function iCalProbe(model) {
-        var config = model.toJSON();
+    function iCalProbe(model, sendCredentials) {
+        var config = { uri: model.get('uri') };
+        if (sendCredentials && model.get('ical-user')) config.login = model.get('ical-user');
+        if (sendCredentials && model.get('ical-pw')) config.password = model.get('ical-pw');
         return http.PUT({
             module: 'chronos/account',
             params: {
@@ -54,18 +56,22 @@ define('io.ox/calendar/actions/subscribe-ical', [
         id: 'credentials',
         index: 200,
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
+            var guid;
             this.$body.append(
-                $('<div class="credential-wrapper">').hide().append(
+                $('<form class="credential-wrapper" autocomplete="off">').hide().append(
+                    // prepend these to inputs to capture autofill in most browsers if the user has saved his credentials
+                    $('<input type="text">').hide(),
+                    $('<input type="password">').hide(),
                     $('<div class="alert alert-warning">').text(
                         gt('Authentication failed. Please fill in login and password.')
                     ),
                     $('<div class="form-group">').append(
-                        mini.getInputWithLabel('login', gt('Login'), this.model)
+                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Login')),
+                        new mini.InputView({ name: 'ical-user', model: this.model, id: guid, autocomplete: false }).render().$el
                     ),
                     $('<div class="form-group">').append(
-                        $('<label>').attr('for', guid).text(gt('Password')),
-                        new mini.PasswordView({ name: 'password', model: this.model, id: guid }).render().$el
+                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Password')),
+                        new mini.PasswordView({ name: 'ical-pw', model: this.model, id: guid, autocomplete: false }).render().$el
                     )
                 )
             );
@@ -83,8 +89,9 @@ define('io.ox/calendar/actions/subscribe-ical', [
         .addCancelButton()
         .addButton({ label: 'Subscribe', action: 'subscribe' })
         .on('subscribe', function () {
-            var self = this;
-            iCalProbe(this.model).then(function (data) {
+            var self = this,
+                sendCredentials = self.$('.credential-wrapper').is(':visible');
+            iCalProbe(this.model, sendCredentials).then(function (data) {
                 data.module = 'event';
                 return folderAPI.create('1', data);
             }).then(function () {

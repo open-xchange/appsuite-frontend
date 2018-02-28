@@ -262,9 +262,7 @@ define('io.ox/files/toolbar', [
     });
 
     new actions.Action('io.ox/files/dropdown/share', {
-        requires: function (e) {
-            return (e.baton.models.length !== 1);
-        },
+        requires: function () { return true; },
         action: $.noop
     });
 

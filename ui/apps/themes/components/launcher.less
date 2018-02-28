@@ -29,7 +29,7 @@
 // adjust positions of top-bar and screens
 #io-ox-core {
     #io-ox-topbar { display: none; }
-    #io-ox-screens { top: @appcontrol-height; }
+    #io-ox-screens { top: @appcontrol-height - 1; }
 }
 
 .smartphone {
@@ -41,7 +41,20 @@
     list-style: none;
     height: @appcontrol-height;
     margin: 8px 7px 0 13px;
-    img { height: 100%; }
+    img {
+        height: 100%;
+        margin-top: -1px;
+    }
+}
+
+.logo-btn {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    &:focus, &:hover {
+        outline: 0;
+        background: rgba(0, 0, 0, .3);
+    }
 }
 
 #io-ox-appcontrol {
@@ -54,6 +67,8 @@
     height: @appcontrol-height - 1;
     border-bottom: 1px solid rgba(0, 0, 0, 0.90);
     padding: 0;
+    display: flex;
+    align-content: center;
 
     &:before {
         content: '';
@@ -74,11 +89,6 @@
         transition: opacity 5s linear;
     }
 
-    display: flex;
-    flex-flow: row nowrap;
-    align-content: center;
-    align-items: center;
-
     & > div {
         display: block;
     }
@@ -98,6 +108,7 @@
         min-width: 0;
         min-height: auto;
         & > button {
+            margin-top: -1px;
             position: relative;
             z-index: 2;
             height: @appcontrol-height;
@@ -178,6 +189,7 @@
             padding:0;
             border: 0;
             outline: 0;
+            margin-top: -1px;
             .title { display: none; }
             .badge {
                 position: absolute;
@@ -196,9 +208,9 @@
     }
 
     #io-ox-topsearch {
+        margin-top: 15px;
         margin-right: 24px;
         flex-grow: 1;
-        display: flex;
 
         .search-box > .form-group { margin-bottom: 0; }
 
@@ -232,16 +244,14 @@
             border: 1px solid rgba(255, 255, 255, 0.30);
         }
 
-        // have to write it this way, assemble-less has problems
-        // with ::placeholder
-        .token-input::placeholder {
-            color: #fff;
-        }
-        .tokenfield-placeholder::placeholder {
-            color: #fff;
-        }
+        // NOTE: Placeholders: IE 11 first and needs !important
+        .token-input:-ms-input-placeholder { color: #fff !important; }
+        .tokenfield-placeholder:-ms-input-placeholder { color: #fff !important; }
+
+        .token-input::placeholder { color: #fff; }
+        .tokenfield-placeholder::placeholder { color: #fff; }
         .token-input, .tokenfield-placeholder {
-            &::-webkit-input-placeholder, &:-ms-input-placeholder, &::-ms-input-placeholder {
+            &::-webkit-input-placeholder, &::-ms-input-placeholder {
                 color: #fff;
             }
         }
@@ -357,9 +367,11 @@
         .title {
             position: absolute;
             top: 75%;
+            left: 0;
             color: @launcher-fg;
             font-size: @launcher-text-size;
             text-align: center;
+            width: @launcher-size;
             .smartphone & {
                 top: 11px;
                 left: 48px;

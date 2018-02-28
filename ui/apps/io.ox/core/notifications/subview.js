@@ -436,7 +436,9 @@ define('io.ox/core/notifications/subview', [
                 fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.nodes.sidepopup,
                 status = notifications.getStatus(),
-                getCid = this.model.get('api').cid || _.cid;
+                getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
+                self = this;
+
             // toggle?
             if (status === 'sidepopup' && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
                 notifications.closeSidepopup();
@@ -454,10 +456,10 @@ define('io.ox/core/notifications/subview', [
                 if (_.isString(this.model.get('detailview'))) {
                     require([this.model.get('detailview')], function (detailview) {
                         //extend with empty object to not overwrite the model
-                        notifications.openSidepopup(cid, detailview, data);
+                        notifications.openSidepopup(cid, detailview, data, self.model.get('detailviewOptions'));
                     });
                 } else {
-                    notifications.openSidepopup(cid, this.model.get('detailview'), data);
+                    notifications.openSidepopup(cid, this.model.get('detailview'), data, this.model.get('detailviewOptions'));
                 }
             }
         }

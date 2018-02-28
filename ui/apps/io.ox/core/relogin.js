@@ -63,11 +63,10 @@ define('io.ox/core/relogin', [
     }
 
     function showSessionLostDialog(error) {
-        new new ModalDialog({ width: 400, backdrop: true, async: true })
+        new ModalDialog({ width: 400, async: true, title: getReason(error) })
             .build(function () {
                 this.$el.addClass('relogin');
                 this.$body.append(
-                    $('<h4>').text(getReason(error)),
                     $('<div>').text(gt('You have to sign in again'))
                 );
             })
@@ -75,9 +74,11 @@ define('io.ox/core/relogin', [
             .on('ok', function () {
                 ox.trigger('relogin:cancel');
                 gotoLoginLocation();
-            }).show(function () {
+            })
+            .on('open', function () {
                 $('#io-ox-core').addClass('blur');
-            });
+            })
+            .open();
     }
 
     function relogin(request, deferred, error) {

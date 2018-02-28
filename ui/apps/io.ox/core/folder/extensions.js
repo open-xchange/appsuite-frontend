@@ -76,27 +76,6 @@ define('io.ox/core/folder/extensions', [
 
         // remote folders
         api.virtual.add('virtual/remote', function () {
-            // use the setting for dsc here in if-else, also consider altnamespace
-            var dsc = mailSettings.get('dsc/enabled', false),
-                id = mailSettings.get('dsc/folder');
-            // smart cache environment
-            if (dsc) {
-                if (account.hasDSCAccount()) {
-                    return account.getStatus().then(function (status) {
-                        //remove main account
-                        delete status['0'];
-
-                        // only request if status is at least for one dsc account ok
-                        if (_(status).any(function (account) { return account.status === 'ok'; })) {
-                            return api.list(id);
-                        }
-                        return [];
-                    });
-
-                }
-                // no account yet, return empty array
-                return $.Deferred().resolve([]);
-            }
             // standard environment
             return api.list('1').then(function (list) {
                 return _(list).filter(function (data) {
@@ -300,12 +279,6 @@ define('io.ox/core/folder/extensions', [
             var defaultId = api.altnamespace ? 'default0' : INBOX;
 
             var node = new TreeNodeView({
-                filter: function (id, model) {
-                    // filtering for DSC folders
-                    if (account.isDSC(model.id)) return false;
-
-                    return true;
-                },
                 contextmenu: 'myfolders',
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders
@@ -909,7 +882,7 @@ define('io.ox/core/folder/extensions', [
             index: 300,
             draw: function () {
                 if (!capabilities.has('calendar_schedjoules')) return;
-                this.link('schedjoules', gt('List of public calendars and events'), function () {
+                this.link('schedjoules', gt('Browse calendars of interest'), function () {
                     require(['io.ox/calendar/settings/schedjoules/schedjoules'], function (schedjoules) {
                         schedjoules.open();
                     });
@@ -950,7 +923,7 @@ define('io.ox/core/folder/extensions', [
                 this.header(gt('Import calendar'));
                 this.link('import', gt('Upload file'), function () {
                     require(['io.ox/core/import/import'], function (importer) {
-                        importer.show('calendar');
+                        importer.show('event');
                     });
                 });
             }

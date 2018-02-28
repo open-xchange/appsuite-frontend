@@ -30,7 +30,7 @@ define('io.ox/core/import/import', [
         index: 100,
         render: function (baton) {
             baton.module = this.model.get('module');
-            if (!/^(calendar)$/.test(baton.module)) return;
+            if (!/^(event)$/.test(baton.module)) return;
             this.$body.append(
                 $('<div class="form-group">').append(
                     mini.getInputWithLabel('folderName', gt('Folder name'), this.model)
@@ -51,6 +51,7 @@ define('io.ox/core/import/import', [
             if (list.length === 0) return;
             // default selection
             this.model.set('format', list[0].value);
+            if (list.length === 1) return;
             this.$body.append(
                 $('<div class="form-group">').append(
                     $('<label>').attr('for', guid).text(gt('Format')),
@@ -66,7 +67,7 @@ define('io.ox/core/import/import', [
         id: 'ical',
         index: 100,
         customize: function (baton) {
-            if (!/^(calendar|tasks)$/.test(baton.module)) return;
+            if (!/^(event|tasks)$/.test(baton.module)) return;
             this.push({ value: 'ICAL', label: gt('Calendar') });
         }
     });
@@ -93,7 +94,7 @@ define('io.ox/core/import/import', [
     ext.point('io.ox/core/import').extend({
         id: 'file',
         index: 300,
-        render: function () {
+        render: function (baton) {
             var label = $('<span class="filename">').css('margin-left', '7px'),
                 fileUpload;
             this.$body.append(
@@ -103,6 +104,7 @@ define('io.ox/core/import/import', [
                 }).append(label)
             );
             var $input = this.$fileUploadInput = fileUpload.find('input[type="file"]');
+            if (baton.module === 'event') $input.attr('accept', '.ics,.ical');
             $input.on('change', function (e) {
                 e.preventDefault();
                 var buttonText = '';
@@ -120,13 +122,13 @@ define('io.ox/core/import/import', [
         render: function (baton) {
 
             // show option only for calendar and tasks
-            if (!(baton.module === 'calendar' || baton.module === 'tasks')) return;
+            if (!(baton.module === 'event' || baton.module === 'tasks')) return;
             this.$body.append(
                 new mini.CustomCheckboxView({
                     name: 'ignoreUuids',
                     model: this.model,
-                    label: baton.module === 'calendar' ?
-                        gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
+                    label: baton.module === 'event' ?
+                        gt('Ignore existing appointments. Helpful to import public holiday calendars, for example.') :
                         gt('Ignore existing events')
                 }).render().$el
             );
@@ -135,12 +137,12 @@ define('io.ox/core/import/import', [
 
     ext.point('io.ox/core/import').extend({
         id: 'help',
-        index: 300,
-        draw: function (baton) {
+        index: 500,
+        render: function (baton) {
 
             if (baton.module !== 'contacts') return;
 
-            this.append(
+            this.$body.append(
                 $('<div class="help-block">').append(
                     // inline help
                     $('<b>').text(gt('Note on CSV files:')),
@@ -163,7 +165,7 @@ define('io.ox/core/import/import', [
         show: function (module, id) {
 
             new ModalDialog({
-                focus: module === 'calendar' ? 'input[name="folderName"]' : 'select[name="format"]',
+                focus: module === 'event' ? 'input[name="folderName"]' : 'select[name="format"]',
                 async: true,
                 help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
                 point: 'io.ox/core/import',
@@ -176,7 +178,7 @@ define('io.ox/core/import/import', [
             .inject({
                 createFolder: function (module, title) {
                     var invalid = false,
-                        folder = module === 'calendar' ? '1' : folderAPI.getDefaultFolder(module);
+                        folder = module === 'event' ? '1' : folderAPI.getDefaultFolder(module);
                     ext.point('io.ox/core/filename')
                         .invoke('validate', null, title, 'folder')
                         .find(function (result) {
@@ -225,7 +227,7 @@ define('io.ox/core/import/import', [
                     this.close();
                 },
                 onCompleteFail: function (data) {
-                    if (this.tempFolder && this.model.get('module') === 'calendar') folderAPI.remove(this.tempFolder.id);
+                    if (this.tempFolder && this.model.get('module') === 'event') folderAPI.remove(this.tempFolder.id);
                     this.onPartialFail(data);
                 }
             })

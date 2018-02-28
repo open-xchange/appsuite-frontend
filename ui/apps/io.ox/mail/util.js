@@ -546,50 +546,67 @@ define('io.ox/mail/util', [
 
         authenticity: (function () {
 
-            var map = {
-                // contact image
-                image: function (level, status) {
-                    if (level === 1) return /(fail)/.test(status);
-                    return /(fail|neutral)/.test(status);
-                },
-                // prepend in sender block (detail)
-                icon: function (level, status) {
-                    if (level === 1) return /(fail)/.test(status);
-                    if (level === 2) return /(fail|pass|trusted)/.test(status);
-                    if (level === 3) return /(fail|neutral|pass|trusted)/.test(status);
-                },
-                // info box wihtin mail detail
-                box: function (level, status) {
-                    if (level === 1) return /(fail)/.test(status);
-                    return /(fail|trusted)/.test(status);
-                },
-                // disable links, replace external images
-                block: function (level, status) {
-                    if (level === 1) return;
-                    return /(fail)/.test(status);
-                },
-                // 'via' hint for different mail server
-                via: function (level, status) {
-                    if (level === 1) return;
-                    return /(fail)/.test(status);
+            function getAuthenticityLevel() {
+                if (!settings.get('features/authenticity', false)) return 'none';
+                return settings.get('authenticity/level');
+            }
+
+            function getAuthenticityStatus(data) {
+                var level = getAuthenticityLevel();
+                if (level === 'none') return;
+                if (!_.isObject(data)) return;
+                return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
+            }
+
+            function isRelevant(aspect, level, status) {
+                switch (aspect) {
+                    // contact image
+                    case 'image':
+                        if (/fail/.test(level)) return status === 'fail';
+                        if (level === 'all') return /(fail|neutral)/.test(status);
+                        return false;
+                    // prepend in sender block (detail)
+                    case 'icon':
+                        switch (level) {
+                            case 'fail': return status === 'fail';
+                            case 'fail_trusted': return /(fail|trusted)/.test(status);
+                            case 'fail_trusted_pass': return /(fail|pass|trusted)/.test(status);
+                            case 'all': return true;
+                            default: return false;
+                        }
+                    // info box wihtin mail detail
+                    case 'box':
+                        if (/fail/.test(level)) return status === 'fail';
+                        return /(fail|trusted)/.test(status);
+                    // disable links, replace external images and 'via' hint for different mail server
+                    case 'block':
+                    case 'via':
+                        if (level === 'fail') return false;
+                        return status === 'fail';
+                    default:
+                        return false;
                 }
-            };
+
+            }
 
             return function (aspect, data) {
-                var status = that.getAuthenticityStatus(data),
-                    level = parseInt(settings.get('features/authenticity-level', 2), 10);
-                // feature disabled or level 'naive'
-                if (!status || !/^(1|2|3)$/.test(level)) return;
-                var isEnabled = map[aspect] ? map[aspect].call(undefined, level, status) : false;
-                return isEnabled ? status : undefined;
+                var status = getAuthenticityStatus(data),
+                    level = getAuthenticityLevel();
+
+                if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
+
+                return isRelevant(aspect, level, status) ? status : undefined;
             };
         })(),
 
-        getAuthenticityStatus: function (data) {
-            if (!settings.get('features/authenticity', false)) return;
-            if (!/^(1|2|3)$/.test(settings.get('features/authenticity-level', 2))) return;
-            if (!_.isObject(data)) return;
-            return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
+        getAuthenticityMessage: function (status, email) {
+            switch (status) {
+                case 'fail': return gt('This might be a phishing email because we could not verify that it is really from %1$s.', email);
+                case 'neutral': return gt('We could not verify that this email is from %1$s.', email);
+                case 'pass':
+                case 'trusted': return gt('We could verify that this email is from %1$s.', email);
+                default: return '';
+            }
         },
 
         isMalicious: (function () {

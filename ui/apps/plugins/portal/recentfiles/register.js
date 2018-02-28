@@ -15,11 +15,12 @@ define('plugins/portal/recentfiles/register', [
     'io.ox/core/extensions',
     'io.ox/files/api',
     'io.ox/core/api/user',
+    'io.ox/core/strings',
     'gettext!plugins/portal',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'less!plugins/portal/recentfiles/style'
-], function (ext, filesAPI, userAPI, gt, settings, filesSettings) {
+], function (ext, filesAPI, userAPI, strings, gt, settings, filesSettings) {
 
     'use strict';
 
@@ -101,25 +102,28 @@ define('plugins/portal/recentfiles/register', [
 
                 content.append(
                     _(data).map(function (file) {
-                        var filename = String(file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title || '');
+                        var filename = String(file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title || ''),
+                            size = strings.fileSize(file.file_size, 1),
+                            ago = moment.duration(file.last_modified - _.utc()).humanize(true);
                         // create nice filename for long names
-                        if (filename.length > 20) {
+                        if (filename.length > 25) {
                             // remove leading & tailing date stufff
                             filename = filename
                                 .replace(/^[0-9_\-.]{5,}(\D)/i, '\u2026$1')
                                 .replace(/[0-9_\-.]{5,}(\.\w+)?$/, '\u2026$1');
                         }
-                        return $('<li class="item" tabindex="0">')
+                        return $('<li class="item file" tabindex="0">')
                             .data('item', file)
                             .append(
-                                $('<div class="file info">').text(
-                                    type === 'recentfiles' ?
-                                        // show WHO changed it
-                                        file.modified_by.display_name :
-                                        // show WHEN it was changed
-                                        moment.utc(file.last_modified).format('l LT')
-                                ),
-                                $('<div class="file title">').text(_.noI18n(_.ellipsis(filename), { max: 20 })), $.txt(' ')
+                                $('<div class="title">').text(_.noI18n(_.ellipsis(filename), { max: 25 })), $.txt(' '),
+                                $('<div class="clearfix">').append(
+                                    // show WHO changed it OR file size
+                                    $('<span class="pull-left ellipsis">').text(
+                                        type === 'recentfiles' ? file.modified_by.display_name : size
+                                    ),
+                                    // show WHEN it was changed
+                                    $('<span class="pull-right accent">').text(ago)
+                                )
                             );
                     })
                 );

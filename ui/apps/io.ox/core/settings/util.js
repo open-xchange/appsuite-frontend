@@ -49,6 +49,7 @@ define('io.ox/core/settings/util', ['io.ox/backbone/mini-views/common'], functio
         },
 
         compactSelect: function (name, label, model, list, options) {
+            if (model.isConfigurable && !model.isConfigurable(name)) return $();
             options = options || {};
             var id = 'settings-' + name;
             return $('<div class="form-group row">').append(

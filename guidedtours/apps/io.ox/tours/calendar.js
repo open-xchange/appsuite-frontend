@@ -33,7 +33,7 @@ define('io.ox/tours/calendar', [
             .step()
                 .title(gt('Creating a new appointment'))
                 .content(gt('To create a new appointment, click on New in the toolbar.'))
-                .spotlight('[data-ref="io.ox/calendar/detail/actions/create"]')
+                .spotlight('.io-ox-calendar-window .primary-action .btn:visible, [data-ref="io.ox/calendar/detail/actions/create"]:visible')
                 .on('next', function () {
                     ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/model']).then(function (edit, models) {
                         var app = edit.getApp();

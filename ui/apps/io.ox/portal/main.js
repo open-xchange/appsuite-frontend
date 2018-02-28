@@ -114,7 +114,7 @@ define('io.ox/portal/main', [
                 baton.$.greeting = $('<span class="greeting-phrase">'),
                 $('<span class="signin">').append(
                     //#. Portal. Logged in as user
-                    $('<label class="unstyled">').text(gt('Signed in as')),
+                    $('<span>').text(gt('Signed in as')),
                     $.txt(' '), userAPI.getTextNode(ox.user_id, { type: 'email' })
                 )
             );
@@ -130,7 +130,7 @@ define('io.ox/portal/main', [
                     $header.find('[role="log"]').remove();
                     $header.find('.form-group')
                         .addClass('pull-right')
-                        .prepend($('<button type="button" class="btn btn-primary" data-action="customize">')
+                        .prepend($('<button type="button" class="btn btn-link" data-action="customize">')
                             .text(gt('Customize this page'))
                             .on('click', openSettings));
 

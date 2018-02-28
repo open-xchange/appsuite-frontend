@@ -243,16 +243,16 @@ define('io.ox/files/main', [
         },
 
         'long-running-jobs': function () {
-            jobsAPI.on('added:infostore', function (data) {
+            jobsAPI.on('added:infostore', function () {
                 require(['io.ox/core/yell'], function (yell) {
-                    //#. %1$s: folder name
-                    yell('info', gt(' Moving folder "%1$s" takes longer to finish', data.job.label));
+                    //#. moving folders/files
+                    yell('info', gt('Move operation takes longer to finish'));
                 });
             });
-            jobsAPI.on('finished:infostore', _.debounce(function (data) {
+            jobsAPI.on('finished:infostore', _.debounce(function () {
                 require(['io.ox/core/yell'], function (yell) {
-                    //#. %1$s: folder name
-                    yell('info', gt(' Finished moving folder "%1$s"', data.job.label));
+                    //#. %1$s: moving folders/files
+                    yell('info', gt('Finished moving'));
                 });
             }, 50));
         },
@@ -1502,7 +1502,10 @@ define('io.ox/files/main', [
             });
         },
 
-        // Bug 56943: error handling on external folder delete
+        // FLD-0008 -> not found
+        //  => Bug 56943: error handling on external folder delete
+        // FLD-0003 -> permission denied
+        //  => Bug 57149: error handling on permission denied
         'special-error-handling': function (app) {
             var process = _.debounce(function (error) {
                 var model = folderAPI.pool.getModel(app.folder.get());
@@ -1510,8 +1513,7 @@ define('io.ox/files/main', [
                 app.folder.setDefault();
                 notifications.yell(error);
             }, 1000, true);
-
-            app.listenTo(ox, 'http:error:FLD-0008', function (error, request) {
+            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003', function (error, request) {
                 var folder = request.params.parent || request.data.parent;
                 if (!folder || folder !== this.folder.get()) return;
                 if (folderAPI.isBeingDeleted(folder)) return;

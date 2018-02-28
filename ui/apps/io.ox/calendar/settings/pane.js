@@ -166,7 +166,7 @@ define('io.ox/calendar/settings/pane', [
                     this.$el.append(
                         fieldset = util.fieldset(
                             //#. settings: context of a birthday calendar
-                            gt('Birthday'),
+                            gt('Birthday calendar'),
                             $('<div class="form-group">').append(checkbox)
                         ).busy()
                     );
@@ -210,15 +210,15 @@ define('io.ox/calendar/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         gt('New appointment'),
-                        $('<div>').append(
+                        $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder')),
                             new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDateTime' }).render().$el
                         ),
-                        $('<div>').append(
+                        $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder for all-day appointments')),
                             new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
                         ),
-                        capabilities.has('calendar_birthdays') ? $('<div>').append(
+                        capabilities.has('calendar_birthdays') ? $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
                             new AlarmsView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
                         ) : '',

@@ -1006,7 +1006,7 @@ define('io.ox/core/folder/api', [
                         action: 'update',
                         done: false,
                         showIn: model.get('module'),
-                        label: model.get('title'), id: result.job || result.data.job,
+                        id: result.job || result.data.job,
                         successCallback: successCallback,
                         failCallback: failCallback });
                     return result;
@@ -1153,7 +1153,7 @@ define('io.ox/core/folder/api', [
         return _(currentlyDeleted).contains(id);
     }
 
-    function remove(ids, options) {
+    function remove(ids) {
 
         // ensure array
         if (!_.isArray(ids)) ids = [ids];
@@ -1181,8 +1181,6 @@ define('io.ox/core/folder/api', [
             tree: tree(ids[0]),
             extendedResponse: true
         };
-
-        if (options && options.isDSC) params.hardDelete = true;
 
         // delete on server
         return http.PUT({
@@ -1267,18 +1265,22 @@ define('io.ox/core/folder/api', [
         .done(function () {
             _(list).each(function (model) {
                 var id = model.get('id');
-                api.get(id, { cache: false })
-                    .done(function (folderModel) {
+                api.get(id, { cache: false }).done(function (folderModel) {
+                    api.path(folderModel.folder_id).done(function (folderModels) {
                         api.pool.getModel(folderModel.folder_id).set('subscr_subflds', true);
-                        api.pool.getCollection(folderModel.folder_id).add(model);
+                        folderModels.push(folderModel);
+                        _.each(folderModels, function (tmp) {
+                            api.pool.getCollection(tmp.folder_id).add(tmp);
+                        });
                         api.trigger('restore', model.toJSON());
-                    })
-                    .fail(function (error) {
-                        // folder does not exist
-                        if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
-                            removeFromAllCollections(model);
-                        }
                     });
+                })
+                .fail(function (error) {
+                    // folder does not exist
+                    if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
+                        removeFromAllCollections(model);
+                    }
+                });
             });
         })
         .fail(function () {

@@ -370,9 +370,9 @@ define('io.ox/calendar/model', [
                 var method = opt.paginate === true ? 'add' : 'set';
                 data = _(data)
                     .chain()
-                    .map(function (data, folderId) {
+                    .map(function (data) {
                         if (data.events) return data.events;
-                        api.trigger('all:fail', folderId);
+                        api.trigger('all:fail', data.folder);
                     })
                     .compact()
                     .flatten()
