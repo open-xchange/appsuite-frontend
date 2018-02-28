@@ -52,6 +52,7 @@ define('io.ox/calendar/edit/main', [
             dispose: function () {
                 this.view.off('save', _.bind(this.onSave, this));
                 this.model.off();
+                this.dropZone.remove();
             },
 
             // published via callbacks objects in baton (see below)
