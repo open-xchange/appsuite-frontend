@@ -46,13 +46,32 @@ define('io.ox/core/main/appcontrol', [
             this.listenTo(this.model, 'change:tooltip', this.updateTooltip);
             this.listenTo(settings, 'change:coloredIcons', this.render);
         },
-        onClick: function () {
-            // used on mobile
-            if (this.model.get('state') === 'running' && this.model.get('closable')) {
-                this.model.launch();
-                return;
+        checkUpsell: function () {
+            var requires = this.model.get('requires');
+            if (!upsell.has(requires)) {
+                upsell.trigger({ type: 'app', id: this.model.get('id'), missing: upsell.missing(requires) });
+                return true;
             }
-            ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+            return false;
+        },
+        drawUpsellIcon: function (elem) {
+            if (this.checkUpsell()) {
+                elem.addClass('upsell').append(
+                    _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
+                        return $('<i class="fa" aria-hidden="true">').addClass(icon);
+                    })
+                );
+            }
+        },
+        onClick: function () {
+            if (!this.checkUpsell()) {
+                // used on mobile
+                if (this.model.get('state') === 'running' && this.model.get('closable')) {
+                    this.model.launch();
+                    return;
+                }
+                ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+            }
         },
         quitApp: function (e) {
             // used on mobile
@@ -91,7 +110,8 @@ define('io.ox/core/main/appcontrol', [
                 $('<div class="svgwrap">').append(this.$svg),
                 $('<div class="title">').text(this.model.get('title'))
             );
-
+            // checks for upsell and append an icon if needed
+            this.drawUpsellIcon(cell.find('.title'));
             return cell;
         },
         toggleBadge: function () {

@@ -65,6 +65,8 @@ define('io.ox/core/upsell', [
         capabilityCache = {},
         enabledCache = {};
 
+    //enabled = { infostore: true }; //uncomment for debugging
+
     var that = {
 
         // convenience functions
