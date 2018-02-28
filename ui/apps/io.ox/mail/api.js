@@ -1547,7 +1547,8 @@ define('io.ox/mail/api', [
                 context: ox.context_id,
                 decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
-                sequence: 1
+                sequence: 1,
+                session: ox.session
             });
         switch (mode) {
             case 'view':
