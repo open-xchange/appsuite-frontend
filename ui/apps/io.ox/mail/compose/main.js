@@ -88,7 +88,9 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                         if (type !== 'compose' && settings.get('features/fixContentType', false)) {
                             // mitigate Bug#56496, force a get request to make sure content_type is correctly set
                             // in most cases, this should return the mail from pool ('detail')
-                            return mailAPI.get(obj);
+                            // need circumvent caching, here, because all requests always break data again and we can
+                            // never be sure about data being correct
+                            return mailAPI.get(_.pick(obj, 'id', 'folder_id'), { cache: false });
                         }
                         return obj;
                     }).then(function (latestMail) {
