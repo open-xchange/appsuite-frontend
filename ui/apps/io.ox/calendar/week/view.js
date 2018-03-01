@@ -125,7 +125,7 @@ define('io.ox/calendar/week/view', [
                 fulltimeCon:  $('<div class="fulltime-container">'),
                 timeline:     $('<div class="timeline">'),
                 dayLabel:     $('<div class="footer">'),
-                kwInfo:       _.device('smartphone') ? $('<div class="info">') : $('<a href="#" class="info">').on('click', $.preventDefault),
+                kwInfo:       _.device('smartphone') ? $('<div class="info">') : $('<button class="info btn btn-link">'),
                 weekViewCon:  $('<div class="week-view-container">'),
                 weekCon:      $('<div class="week-container">'),
                 moreAppointmentsIndicators: $('<div class="more-appointments-container">')
@@ -161,7 +161,6 @@ define('io.ox/calendar/week/view', [
             this.setStartDate(opt.startDate || moment());
             this.initSettings();
 
-            //append datepicker
             if (!_.device('smartphone')) {
                 require(['io.ox/backbone/views/datepicker'], function (Picker) {
                     new Picker({ date: self.startDate })
@@ -172,6 +171,11 @@ define('io.ox/calendar/week/view', [
                         .on('before:open', function () {
                             this.setDate(self.startDate);
                         });
+                    var props = self.app.props.on('change:showMiniCalendar change:folderview', togglePicker);
+                    togglePicker();
+                    function togglePicker() {
+                        self.kwInfo.prop('disabled', props.get('folderview') && props.get('showMiniCalendar'));
+                    }
                 });
             }
 
@@ -186,41 +190,32 @@ define('io.ox/calendar/week/view', [
         },
 
         rerender: function () {
-            var self = this;
+
             function cont() {
-                var scrollTop = self.pane.scrollTop();
+                var scrollTop = this.pane.scrollTop();
                 // clean up
-                self.pane.empty();
-                self.fulltimePane.empty();
-                self.fulltimeCon.empty();
-                self.timeline.empty();
-                self.weekCon.empty();
-                self.moreAppointmentsIndicators.empty();
+                // detach first so that the date picker link still works
+                this.kwInfo.detach();
+                this.pane.empty();
+                this.fulltimePane.empty();
+                this.fulltimeCon.empty();
+                this.timeline.empty();
+                this.weekCon.empty();
+                this.moreAppointmentsIndicators.empty();
                 // render again
-                self.isMergeView = _.device('!smartphone') && self.mode === 'day' && self.app.folders.list().length > 0 && settings.get('mergeview');
-                if (self.mode === 'workweek') self.columns = settings.get('numDaysWorkweek');
-                if (self.mode === 'day') self.$el.toggleClass('merge-view', self.isMergeView);
-                self.setStartDate(self.startDate);
-                self.render();
-                self.renderAppointments();
-                self.perspective.refresh();
+                this.isMergeView = _.device('!smartphone') && this.mode === 'day' && this.app.folders.list().length > 0 && settings.get('mergeview');
+                if (this.mode === 'workweek') this.columns = settings.get('numDaysWorkweek');
+                if (this.mode === 'day') this.$el.toggleClass('merge-view', this.isMergeView);
+                this.setStartDate(this.startDate);
+                this.render();
+                this.renderAppointments();
+                this.perspective.refresh();
                 // reset pane
-                self.pane.scrollTop(scrollTop);
-                self.pane.on('scroll', self.updateHiddenIndicators.bind(self));
-                if (_.device('!smartphone')) {
-                    self.kwInfo.on('click', $.preventDefault);
-                    require(['io.ox/backbone/views/datepicker'], function (Picker) {
-                        new Picker({ date: self.startDate })
-                            .attachTo(self.kwInfo)
-                            .on('select', function (date) {
-                                self.setStartDate(date);
-                            });
-                    });
-                }
+                this.pane.scrollTop(scrollTop);
+                this.pane.on('scroll', this.updateHiddenIndicators.bind(this));
             }
 
-            if ($('.time:visible', self.pane).length === 0) self.app.getWindow().one('show', cont);
-            else cont();
+            if ($('.time:visible', this.pane).length === 0) this.app.getWindow().one('show', cont.bind(this)); else cont.call(this);
         },
 
         /**
