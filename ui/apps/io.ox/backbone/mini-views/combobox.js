@@ -8,10 +8,12 @@
  *
  * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Matthias Biggeleben <richard.petersen@open-xchange.com>
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/combobox', [], function () {
+define('io.ox/backbone/mini-views/combobox', [
+    'io.ox/core/util'
+], function (util) {
 
     'use strict';
 
@@ -22,6 +24,8 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
             'focus input': 'onFocus',
             'keydown input': 'onKeydown',
             'keyup input': 'onKeyup',
+            'mousedown .dropdown-menu': 'onMousedownMenu',
+            'mouseup .dropdown-menu': 'onMouseupMenu',
             'mousedown .dropdown-menu li': 'onClickOption'
         },
 
@@ -84,6 +88,7 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
         },
 
         onBlur: function () {
+            if (this.preventBlur) return;
             this.$input.attr({
                 'aria-expanded': false,
                 'aria-activedescendant': null
@@ -94,7 +99,8 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
         },
 
         onFocus: function () {
-            var pos = this.$input.position();
+            var pos = this.$input.position(),
+                dropdownOpen = this.$dropdown.is(':visible');
             this.$input.attr('aria-expanded', true);
             this.$dropdown
                 .css({
@@ -104,10 +110,35 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
                 .show();
             this.updateQuery();
             var scrollTarget = this.$dropdown.find('strong').first();
-            if (scrollTarget.length === 1) this.scrollIntoView(scrollTarget);
+            if (!dropdownOpen && scrollTarget.length === 1) this.scrollIntoView(scrollTarget);
+        },
+
+        onMousedownMenu: function (e) {
+            var clickX = e.offsetX,
+                innerWidth = this.$('li').first().outerWidth(),
+                outerWidth = innerWidth + util.getScrollBarWidth();
+            // prevent clicks on scrollbar
+            if (clickX >= innerWidth && clickX <= outerWidth) {
+                this.preventBlur = true;
+                e.preventDefault();
+
+                // IE and edge doe not trigger a mouse-up event and the input looses focus. Do it manually a short time after
+                if (_.browser.ie || _.browser.edge) {
+                    var self = this;
+                    _.defer(function () {
+                        self.$input.focus();
+                        self.preventBlur = false;
+                    });
+                }
+            }
+        },
+
+        onMouseupMenu: function () {
+            this.preventBlur = false;
         },
 
         onClickOption: function (e) {
+            this.preventBlur = false;
             this.index = $(e.currentTarget).closest('li').index();
             this.select();
             this.onBlur();

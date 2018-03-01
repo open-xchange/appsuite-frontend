@@ -1279,13 +1279,6 @@ define('io.ox/calendar/util', [
             }];
         },
 
-        getScrollBarWidth: _.memoize(function () {
-            var $outer = $('<div>').css({ visibility: 'hidden', width: 100, overflow: 'scroll' }).appendTo('body'),
-                widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
-            $outer.remove();
-            return 100 - widthWithScroll;
-        }),
-
         getMoment: function (date) {
             if (_.isObject(date)) return moment.tz(date.value, date.tzid || moment().tz());
             return moment(date);
