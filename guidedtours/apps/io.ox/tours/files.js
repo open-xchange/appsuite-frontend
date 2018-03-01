@@ -258,10 +258,13 @@ define('io.ox/tours/files', [
             current.view = app.props.get('layout');
 
             // set folder and layout: ensure we find the uploaded 'drive app tour.txt'
-            if (current.folder !== standardFolder) app.folder.set(standardFolder);
-            if (current.view === 'tile') app.props.set('layout', 'list');
-            // ensure
-            tour.start();
+            if (current.folder === standardFolder) return cont();
+            return app.folder.set(standardFolder).then(cont);
+
+            function cont() {
+                if (current.view === 'tile') app.props.set('layout', 'list');
+                tour.start();
+            }
         });
     });
 });
