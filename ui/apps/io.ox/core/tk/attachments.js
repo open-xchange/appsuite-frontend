@@ -145,9 +145,11 @@ define('io.ox/core/tk/attachments', [
                 var self = this;
                 this.allAttachments = _(this.attachmentsOnServer.concat(this.attachmentsToAdd)).reject(function (attachment) {
                     return _(self.attachmentsToDelete).any(function (toDelete) {
-                        if (attachment.managedId) {
-                            return toDelete.managedId === attachment.managedId;
-                        }
+                        // local file
+                        if (attachment.newAttachment) return;
+                        // remote file calendar
+                        if (attachment.managedId) return toDelete.managedId === attachment.managedId;
+                        // remote file tasks
                         return toDelete.id === attachment.id;
                     });
                 });
