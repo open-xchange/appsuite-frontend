@@ -93,21 +93,7 @@ Scenario('fullday appointments', function *(I) {
     I.clickToolbar('View');
     I.click('Week');
 
-    //remove previously created appointments
-    yield I.executeAsyncScript(function (done) {
-        const appointments = $('.appointment')
-            .toArray()
-            .filter((e) => $(e).text() === 'Fullday test')
-            .map(function (e) {
-                const folder = $(e).data('folder');
-                return { folder, id: $(e).data('cid').replace(folder + '.', '') };
-            });
-
-        if (appointments.length === 0) return done();
-        require(['io.ox/calendar/api']).then(function (api) {
-            return api.remove(appointments, {});
-        }).then(done);
-    });
+    yield I.removeAllAppointments();
 
     I.click('New appointment');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
