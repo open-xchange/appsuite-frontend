@@ -138,6 +138,7 @@ define('io.ox/tours/files', [
                 .title(gt('Preview files'))
                 .content(gt('Clicking on the view icon leads you to a preview of the selected file.'))
                 .on('before:show', function () {
+                    if (_.device('touch')) return $('.list-view li[data-cid="' + key + '"]').tap();
                     $('.list-view li[data-cid="' + key + '"]').click();
                 })
                 .waitFor('.classic-toolbar-container [data-action="viewer"]')
