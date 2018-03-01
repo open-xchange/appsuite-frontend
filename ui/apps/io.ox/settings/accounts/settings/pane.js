@@ -90,16 +90,22 @@ define('io.ox/settings/accounts/settings/pane', [
             index: INDEX += 100,
             render: function () {
 
-                this.collection = keychainModel.wrap(api.getAll());
-
-                this.$el.append(
-                    new ListView({
+                var collection = this.collection = keychainModel.wrap(api.getAll()),
+                    view = new ListView({
                         tagName: 'ul',
                         childView: AccountViews.ListItem,
                         collection: this.collection,
                         filter: this.hasNoOAuthCredentials
-                    })
-                    .render().$el
+                    });
+
+                require(['io.ox/oauth/keychain'], function (oauthAPI) {
+                    view.listenTo(oauthAPI.accounts, 'add remove', function () {
+                        collection.reset(keychainModel.wrap(api.getAll()).models);
+                    });
+                });
+
+                this.$el.append(
+                    view.render().$el
                 );
 
                 this.updateStatuses();

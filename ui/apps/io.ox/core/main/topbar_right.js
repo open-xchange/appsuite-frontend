@@ -335,7 +335,7 @@ define('io.ox/core/main/topbar_right', [
                         $('<div class="contact-picture" aria-hidden"true">')
                         .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
                         { internal_userid: ox.user_id },
-                        { width: 40, height: 40 }
+                        { width: 40, height: 40, fallback: false }
                     )
                 );
             }

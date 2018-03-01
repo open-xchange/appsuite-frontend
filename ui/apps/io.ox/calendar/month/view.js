@@ -379,7 +379,7 @@ define('io.ox/calendar/month/view', [
                         event = api.pool.getModel(cid).clone(),
                         s = event.getMoment('startDate'),
                         start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }),
-                        end = start.add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
+                        end = start.clone().add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
                     if (event.getTimestamp('startDate') !== start.valueOf() || event.getTimestamp('endDate') !== end.valueOf()) {
                         // save for update calculations
                         if (event.has('rrule')) {

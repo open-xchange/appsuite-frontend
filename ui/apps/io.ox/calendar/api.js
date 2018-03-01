@@ -732,7 +732,7 @@ define('io.ox/calendar/api', [
                         start = moment().startOf('day').valueOf();
                         end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
                     }
-                    if (model.getTimestamp('endDate') < start) return false;
+                    if (model.getTimestamp('endDate') <= start) return false;
                     if (model.getTimestamp('startDate') >= end) return false;
                     return true;
                 });

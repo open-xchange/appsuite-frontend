@@ -24,8 +24,9 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
-    'gettext!io.ox/calendar'
-], function (View, api, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/util'
+], function (View, api, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt, coreUtil) {
 
     'use strict';
 
@@ -470,7 +471,7 @@ define('io.ox/calendar/month/perspective', [
             }
 
             this.pane
-                .css('right', -util.getScrollBarWidth() + 'px')
+                .css('right', -coreUtil.getScrollBarWidth() + 'px')
                 .on('scroll', $.proxy(function (e) {
                     var $current = this.currentView.$el,
                         current = $current.get(0),

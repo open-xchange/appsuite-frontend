@@ -110,7 +110,7 @@
     .file-type-pdf    &:before { content: '\f1c1'; color: #C01E07; }  // fa-file-pdf-o
     .file-type-zip    &:before { content: '\f187'; color: #FF940A; }  // fa-archive
     .file-type-svg    &:before { content: '\f1c9'; color: #F4502A; }  // fa-file-code-o
-    .file-type-txt    &:before { content: '\f044'; }                  // fa-edit
+    .file-type-txt    &:before { content: '\f0f6'; }                  // fa-edit
     .file-type-guard  &:before { content: '\f023'; }                  // fa-lock
     .file-type-folder &:before { content: '\f07b'; }                  // fa-folder
 }
@@ -168,7 +168,7 @@
             > li.list-item {
                 border-width: 0 @default-padding (@default-padding - @base-padding) 0;
 
-                + .tooltip {
+                .tooltip {
                     display: inherit !important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
 
                     padding: 0 5px;

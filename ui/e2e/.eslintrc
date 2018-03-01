@@ -12,6 +12,9 @@
         "es6": true,
         "codeceptjs/codeceptjs": true
     },
+    "parserOptions": {
+        "ecmaVersion": 8
+    },
 
     "rules": {
         "indent": [2, 4, {"SwitchCase": 1, "MemberExpression": "off" }],

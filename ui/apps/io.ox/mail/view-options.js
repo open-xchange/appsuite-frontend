@@ -160,26 +160,25 @@ define('io.ox/mail/view-options', [
         id: 'sort',
         index: 100,
         draw: function (baton) {
-            var view = this.data('view');
+            var view = this.data('view'),
+                folder = baton.app.folder.get();
 
             view.listenTo(baton.app, 'folder:change', onFolderChange);
 
             view.option('sort', 610, gt('Date'), { radio: true })
-                .option('sort', 'from-to', gt('From'), { radio: true })
+                .option('sort', 'from-to', account.is('sent|drafts', folder) ? gt('To') : gt('From'), { radio: true })
                 .option('sort', 651, gt('Unread'), { radio: true })
                 .option('sort', 608, gt('Size'), { radio: true })
-                .option('sort', 607, gt('Subject'), { radio: true })
-                //#. Sort by messages that have attachments
-                .option('sort', 602, gt('Has Attachment'), { radio: true });
+                .option('sort', 607, gt('Subject'), { radio: true });
 
+            //#. Sort by messages that have attachments
+            if (folderAPI.pool.getModel(folder).supports('ATTACHMENT_MARKER')) view.option('sort', 602, gt('Attachments'), { radio: true });
             // color flags
             if (settings.get('features/flag/color')) this.data('view').option('sort', 102, gt('Color'), { radio: true });
-
             // sort by /flagged messages, internal naming is "star"
             //#. Sort by messages which are flagged, "Flag" is used in dropdown
             if (settings.get('features/flag/star')) this.data('view').option('sort', 660, gt('Flag'), { radio: true });
 
-            onFolderChange();
             function onFolderChange() {
                 var folder = baton.app.folder.get(), link, textNode;
                 // toggle from-to label by folder type
@@ -237,9 +236,14 @@ define('io.ox/mail/view-options', [
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item margin-auto').on('dblclick', function (e) {
-                e.stopPropagation();
-            }));
+            this.append(
+                dropdown.render().$el
+                    .addClass('grid-options toolbar-item margin-auto')
+                    .find('.dropdown-menu')
+                    .addClass('dropdown-menu-right')
+                    .end()
+                    .on('dblclick', function (e) { e.stopPropagation(); })
+            );
 
             // hide in all-unseen folder and for search results
             var toggle = _.partial(toggleByState, app, dropdown.$el);
