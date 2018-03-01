@@ -59,6 +59,12 @@ define('io.ox/tours/files', [
         tour.step()
                 .title(gt('The Drive app'))
                 .content(gt('Welcome to your cloud storage app. This Guided Tour will introduce you to your new online storage solution - your one point to access online stored files from all your accounts. This is where you can upload and save your files, share them and synchronize them with different devices.  '))
+                .on('before:show', function () {
+                    ox.trigger('launcher:toggleOverlay', true);
+                })
+                .on('before:hide', function () {
+                    ox.trigger('launcher:toggleOverlay', false);
+                })
                 .hotspot('[data-app-name="io.ox/files"]')
                 .spotlight('[data-app-name="io.ox/files"]')
                 .on('close', cleanup)
