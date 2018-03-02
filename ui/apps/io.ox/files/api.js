@@ -1159,6 +1159,19 @@ define('io.ox/files/api', [
                 def.resolve(errorText || response);
             },
             failCallback = function (error) {
+                // if a job fails, check if this is conflict thing, if it is use the successcallback
+                if (_.isArray(error)) {
+                    for (var i = 0; i < error.length; i++) {
+                        if (error[i].error.categories === 'CONFLICT') {
+                            callback(error);
+                            return;
+                        }
+                    }
+                } else if (error.categories === 'CONFLICT') {
+                    callback(error);
+                    return;
+                }
+
                 def.reject(error);
             };
 
@@ -1177,7 +1190,9 @@ define('io.ox/files/api', [
                 return;
             }
             callback(result);
-        }, failCallback);
+        }, function (error) {
+            def.reject(error);
+        });
         return def;
     }
 

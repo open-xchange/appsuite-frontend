@@ -56,6 +56,8 @@ define('io.ox/core/api/jobs', [
                             api.trigger('finished:' + job.id, result);
                             // used to trigger redraw of folderview
                             api.trigger('finished:' + job.showIn, result);
+                        }).fail(function (result) {
+                            doneJobs[job.id].failCallback(result);
                         });
                     });
                 });

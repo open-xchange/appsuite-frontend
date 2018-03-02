@@ -543,29 +543,38 @@ define('io.ox/files/actions', [
                                     response = [response];
                                 }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
-                                _(response).each(function (error) {
-                                    if (error.error) {
-                                        if (error.error.categories === 'CONFLICT' && (error.error.code.indexOf('FILE_STORAGE') === 0 || error.error.code === 'FLD-1038')) {
+                                _.each(response, function (error) {
+                                    var errorResponse = _.isObject(error) ? error : error.error;
+
+                                    if (errorResponse) {
+
+                                        var errorCausedByFolder = errorResponse.code === 'FLD-1038';
+                                        var errorCausedByFile = errorResponse.code.indexOf('FILE_STORAGE') === 0;
+                                        var warningsInErrorResponse = _.isArray(errorResponse.warnings) ? errorResponse.warnings : [errorResponse.warnings];
+
+                                        if (errorResponse.categories === 'CONFLICT' && (errorCausedByFile || errorCausedByFolder)) {
+
+                                            // -> populate error title for the dialog
                                             if (!conflicts.title) {
-                                                conflicts.title = error.error.error;
+                                                conflicts.title = errorResponse.error;
                                             }
 
-                                            if (_.isArray(error.error.warnings)) {
-                                                _(error.error.warnings).each(function (warning) {
+                                            if (_.isArray(warningsInErrorResponse)) {
+                                                _(warningsInErrorResponse).each(function (warning) {
                                                     conflicts.warnings.push(warning.error);
                                                     if (type === 'move' && !_(filesLeft).findWhere({ id: warning.error_params[3] })) {
                                                         filesLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
                                                     }
                                                 });
                                             } else {
-                                                conflicts.warnings.push(error.error.warnings.error);
-                                                if (type === 'move' && !_(filesLeft).findWhere({ id: error.error.warnings.error_params[3] })) {
-                                                    filesLeft.push(_(list).findWhere({ id: error.error.warnings.error_params[3] }));
+                                                conflicts.warnings.push(errorResponse.warnings.error);
+                                                if (type === 'move' && !_(filesLeft).findWhere({ id: errorResponse.warnings.error_params[3] })) {
+                                                    filesLeft.push(_(list).findWhere({ id: errorResponse.warnings.error_params[3] }));
                                                 }
                                             }
                                             // unfortunately move and copy responses do nt have the same structure
                                             if (type === 'copy') {
-                                                filesLeft.push(_(list).findWhere({ id: error.error.error_params[1] }));
+                                                filesLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
                                             }
                                         }
                                     }
