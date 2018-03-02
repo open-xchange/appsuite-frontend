@@ -16,7 +16,7 @@
 @launcher-size: 96px;
 @launcher-vertical-amount: 3;
 @launcher-spacing: 2px;
-@launcher-outer-spacing: 16px;
+@launcher-outer-spacing: 8px;
 
 @quicklaunch-width: @appcontrol-height;
 @quicklaunch-width-smartphone: @appcontrol-height-smartphone;
@@ -308,7 +308,10 @@
     display: none;
     position: absolute;
     background: white;
-    box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     z-index: 1;
 
     top: @appcontrol-height;
