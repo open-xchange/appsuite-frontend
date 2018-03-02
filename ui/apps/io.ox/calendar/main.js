@@ -670,15 +670,16 @@ define('io.ox/calendar/main', [
             };
         },
 
-        'primary-action': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
 
-            app.addPrimaryAction({
-                point: 'io.ox/calendar/sidepanel',
-                label: gt('New appointment'),
-                action: 'io.ox/calendar/detail/actions/create',
-                toolbar: 'create'
-            });
-        },
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/calendar/sidepanel',
+        //         label: gt('New appointment'),
+        //         action: 'io.ox/calendar/detail/actions/create',
+        //         toolbar: 'create'
+        //     });
+        // },
 
         'sidepanel': function (app) {
 

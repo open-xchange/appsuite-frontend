@@ -43,9 +43,6 @@ define('io.ox/tasks/toolbar', [
             mobile: 'hi',
             label: gt('New'),
             title: gt('New task'),
-            customize: function (baton) {
-                this.parent().toggle(!baton.app.props.get('folderview'));
-            },
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'
         },

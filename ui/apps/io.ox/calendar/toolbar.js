@@ -43,9 +43,6 @@ define('io.ox/calendar/toolbar', [
             mobile: 'hi',
             label: gt('New'),
             title: gt('New appointment'),
-            customize: function (baton) {
-                this.parent().toggle(!baton.app.props.get('folderview'));
-            },
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },

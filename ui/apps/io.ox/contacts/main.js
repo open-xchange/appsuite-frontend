@@ -859,15 +859,16 @@ define('io.ox/contacts/main', [
             };
         },
 
-        'primary-action': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
 
-            app.addPrimaryAction({
-                point: 'io.ox/contacts/sidepanel',
-                label: gt('New contact'),
-                action: 'io.ox/contacts/actions/create',
-                toolbar: 'create'
-            });
-        },
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/contacts/sidepanel',
+        //         label: gt('New contact'),
+        //         action: 'io.ox/contacts/actions/create',
+        //         toolbar: 'create'
+        //     });
+        // },
 
         'sidepanel': function (app) {
 
