@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gettext!io.ox/core'], function (DisposableView, gt) {
+define('io.ox/backbone/views/window', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/core/a11y',
+    'gettext!io.ox/core'
+], function (DisposableView, a11y, gt) {
 
     'use strict';
 
@@ -43,6 +47,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         events: {
             'click [data-action="minimize"]': 'onMinimize',
             'click [data-action="close"]':    'onQuit',
+            'keydown':                        'onKeydown',
             'dblclick .floating-header':      'toggleDisplaystyle',
             'click button[data-view]':        'toggleDisplaystyle'
         },
@@ -77,8 +82,26 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
+
         onQuit: function () {
             this.model.trigger('quit');
+        },
+
+        onKeydown: function (e) {
+            this.onEscape(e);
+            this.onTab(e);
+        },
+
+        onEscape: function (e) {
+            if (e.which !== 27) return;
+            if (e.isDefaultPrevented()) return;
+            if ($(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input')) return;
+            this.onQuit();
+        },
+
+        onTab: function (e) {
+            if (e.which !== 9) return;
+            a11y.trapFocus(this.$el, e);
         },
 
         open: function () {
