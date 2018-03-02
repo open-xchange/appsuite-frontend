@@ -32,7 +32,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             'shown.bs.dropdown': 'onShown',
             'hidden.bs.dropdown': 'resetDropdownOverlay',
             'keydown *[data-toggle="dropdown"]': 'onKeyDown',
-            'ready': 'onReady'
+            'ready': 'onReady',
+            'contextmenu': 'onContextMenu'
+        },
+
+        onContextMenu: function (e) {
+            e.preventDefault();
         },
 
         onReady: function () {
@@ -121,6 +126,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 if (_.browser.IE === 11) {
                     positions.bottom = 'auto';
                 }
+
                 // outside viewport?
                 positions.left = Math.max(this.margin, positions.left);
                 positions.left = Math.min(availableWidth - positions.width - this.margin, positions.left);

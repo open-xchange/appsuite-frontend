@@ -352,19 +352,24 @@ define('io.ox/files/contextmenu', [
         },
 
         calcPositionFromEvent: function (e) {
+            var target, top, left, targetOffset;
 
-            // 'fixed' is important for setting the position (see dropdown.js)
-            var target = $(e.currentTarget).data('fixed', true);
-
-            var top = e.pageY - 20;
-            var left = e.pageX + 30;
-
-            if (e.type === 'keydown') {
-                var targetOffset = target.offset();
+            if (e.isKeyboardEvent) {
+                // for keyboardEvent
+                target = $(document.activeElement);
+                targetOffset = target.offset();
                 top = targetOffset.top;
                 // open at the mid from the list
                 left = targetOffset.left + (target.width() / 2);
+            } else {
+                // for mouseEvent
+                target = $(e.currentTarget);
+                top = e.pageY - 20;
+                left = e.pageX + 30;
             }
+
+            // 'fixed' is important for setting the position (see dropdown.js)
+            target.data('fixed', true);
 
             return { target: target, top: top, left: left };
         },

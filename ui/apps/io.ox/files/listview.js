@@ -26,18 +26,22 @@ define('io.ox/files/listview', [
     var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
 
     function listViewKeyHandler(e) {
+        var shiftF10 = (e.shiftKey && e.which === 121);
 
-        var shiftF10 = (e.shiftKey && e.which === 121),
-            menuKey = (_.device('windows') && e.which === 93);
-
-        if (shiftF10 || menuKey) {
-            e.preventDefault();
+        if (_.device('macos') && shiftF10) {
+            e.isKeyboardEvent = true;
             this.onContextMenu(e);
         }
     }
 
     function onContextMenu(e) {
-
+        if (_.device('!macos') && _.device('desktop')) {
+            if ((_.device('chrome') || _.device('firefox')) && e.button === 0) {
+                e.isKeyboardEvent = true;
+            } else if (_.device('ie') && e.pageX === 0 && e.pageY === 0) {
+                e.isKeyboardEvent = true;
+            }
+        }
         var view = this;
         var app = view.app;
         // the link to render the context menu with it's entries.
