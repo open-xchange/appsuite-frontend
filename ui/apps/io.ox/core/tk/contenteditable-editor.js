@@ -237,6 +237,14 @@ define('io.ox/core/tk/contenteditable-editor', [
         opt.toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', opt.toolbar2);
         opt.toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', opt.toolbar3);
 
+        // remove unsupported stuff
+        if (!capabilities.has('emoji')) {
+            opt.toolbar1 = opt.toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar2 = opt.toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar3 = opt.toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
+        }
+
         var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
 
         // remove all toolbars in mobileapp
