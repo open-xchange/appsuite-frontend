@@ -98,8 +98,6 @@ define('io.ox/calendar/edit/extensions', [
                         baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
                         baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
-                    // make sure alarms are correctly created
-                    baton.parentView.alarmsView.updateModel();
 
                     // save attachment data to model
                     if (attachments.length) {
@@ -629,7 +627,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 1100,
         className: 'col-md-12',
         render: function () {
-            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView({ model: this.model });
+            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView.linkView({ model: this.model });
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').text(gt('Reminder')),

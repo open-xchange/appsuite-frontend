@@ -64,7 +64,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     }
                     // backbone model is fine. No need to require chronos model
                     alarmsModel = new Backbone.Model(appointmentData);
-                    alarmsView = new AlarmsView({ model: alarmsModel });
+                    alarmsView = new AlarmsView.linkView({ model: alarmsModel });
                     reminderSelect = $('<fieldset>').append(
                         $('<legend>').text(gt('Reminder')),
                         alarmsView.render().$el
@@ -185,9 +185,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                         performConfirm(checkConflicts);
                     })
                     .show(function () {
-                        if (alarmsView) {
-                            alarmsView.reactToResize();
-                        }
                         // do not focus on mobiles. No, never, please. It does simply not work!
                         if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
                     });

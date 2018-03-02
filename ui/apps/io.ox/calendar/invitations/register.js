@@ -234,20 +234,13 @@ define('io.ox/calendar/invitations/register', [
 
         renderReminder: function () {
             if (!this.AlarmsView || !this.alarmsModel) return;
-            var alarmsViewInstance = new this.AlarmsView({ model: this.alarmsModel });
+            var alarmsViewInstance = new this.AlarmsView.linkView({ model: this.alarmsModel });
             this.$el.find('.itip-actions').before(
                 $('<div class="itip-reminder">').append(
                     $('<legend>').text(gt('Reminder')),
                     alarmsViewInstance.render().$el
                 )
             );
-            // custom event that is triggered when the view is actually appended to the dom
-            this.on('appended', alarmsViewInstance.reactToResize);
-            var callback = _(alarmsViewInstance.reactToResize).bind(alarmsViewInstance);
-            $(window).on('resize', callback);
-            alarmsViewInstance.on('dispose', function () {
-                $(window).off('resize', callback);
-            });
         },
 
         getActions: function () {
