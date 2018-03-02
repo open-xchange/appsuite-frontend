@@ -56,6 +56,9 @@ define('io.ox/backbone/views/window', [
             this.options = options || {};
             this.listenTo(this, 'dispose', remove);
             if (!this.model) this.model = new WindowModel(_.pick(options, 'title', 'minimized', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar'));
+
+            this.model.set('previousFocus', document.activeElement, { silent: true });
+
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'change:displayStyle': this.changeDisplayStyle,
@@ -106,6 +109,7 @@ define('io.ox/backbone/views/window', [
 
         open: function () {
             $('#io-ox-screens').append(this.$el);
+            this.$el.focus();
             if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
             this.activate();
             return this;
@@ -193,7 +197,6 @@ define('io.ox/backbone/views/window', [
                         $('<div class="floating-body abs">').append(this.$body)
                     )
                 );
-
             return this;
         }
     });
@@ -240,8 +243,25 @@ define('io.ox/backbone/views/window', [
 
         onRemove: function () {
             var model = this.model;
+            var siblings = this.$el.siblings();
             this.$el.velocity('fadeOut', {
-                duration: 200, complete: function (el) { $(el).remove(); collection.remove(model); }
+                duration: 200, complete: function (el) {
+                    $(el).remove();
+                    if ($(model.get('previousFocus')).is(':visible')) {
+                        // Restore previous focus if possible
+                        $(model.get('previousFocus')).focus();
+
+                    } else if (siblings.length >= 1) {
+                        // If previous focus can't be restored focus next minimized window in taskbar if present
+                        siblings.first().focus();
+                    } else if ($('.folder-tree').is(':visible')) {
+                        // Reset focus to foldertree of current App if visible
+                        $('.folder-tree:visible .folder.selected').focus();
+                    } else {
+                        a11y.getFirstFocusableListItem($('.window-container:visible').first()).visibleFocus();
+                    }
+                    collection.remove(model);
+                }
             });
         },
 
