@@ -188,6 +188,7 @@ define('io.ox/calendar/month/view', [
             } else {
                 this.$el.prepend(weekinfo);
             }
+            this.renderAppointments();
             return this;
         },
 

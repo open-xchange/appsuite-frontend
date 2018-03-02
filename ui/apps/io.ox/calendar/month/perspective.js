@@ -150,7 +150,7 @@ define('io.ox/calendar/month/perspective', [
                 weeks = opt.weeks || this.updateLoad,
                 apiData = {
                     start: opt.start,
-                    end: moment(opt.start).add(weeks, 'weeks').valueOf()
+                    end: moment(opt.start).add(weeks, 'weeks').endOf('week').valueOf()
                 };
             // do folder magic
             if (this.folder.id !== 'virtual/all-my-appointments') {
@@ -225,7 +225,7 @@ define('io.ox/calendar/month/perspective', [
                 while (curWeek.clone().endOf('month').isSame(endOfMonth)) {
                     var endOfWeek = curWeek.clone().endOf('week');
 
-                    day = curWeek.valueOf();
+                    day = curWeek.clone().startOf('week').valueOf();
 
                     var weekType = '';
                     if (isFirstWeek) {
@@ -260,7 +260,7 @@ define('io.ox/calendar/month/perspective', [
                         $('<tbody>').append(currMonth)
                     ).css('height', 100 / 7 * currMonth.length + '%')
                 );
-                weeks += currMonth.length;
+                weeks += currMonth.length + 1;
                 currMonth = [];
             }
             if (!param.up) {
