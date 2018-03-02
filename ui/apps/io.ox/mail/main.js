@@ -1797,15 +1797,16 @@ define('io.ox/mail/main', [
             });
         },
 
-        'primary-action': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
 
-            app.addPrimaryAction({
-                point: 'io.ox/mail/sidepanel',
-                label: gt('Compose'),
-                action: 'io.ox/mail/actions/compose',
-                toolbar: 'compose'
-            });
-        },
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/mail/sidepanel',
+        //         label: gt('Compose'),
+        //         action: 'io.ox/mail/actions/compose',
+        //         toolbar: 'compose'
+        //     });
+        // },
 
         'sidepanel': function (app) {
             if (_.device('smartphone')) return;

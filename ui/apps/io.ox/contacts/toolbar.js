@@ -42,8 +42,6 @@ define('io.ox/contacts/toolbar', [
             ref: 'io.ox/contacts/dropdown/new',
             customize: function (baton) {
 
-                this.parent().toggle(!baton.app.props.get('folderview'));
-
                 this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
                 new Dropdown({
