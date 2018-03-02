@@ -40,7 +40,11 @@
 #io-ox-top-logo {
     list-style: none;
     height: @appcontrol-height;
-    margin: 8px 7px 0 13px;
+
+    // Keep this for dynamic themes
+    font-size: 0;
+    line-height: @appcontrol-height - 1;
+
     img {
         height: 100%;
         margin-top: -1px;
