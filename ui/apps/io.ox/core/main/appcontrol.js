@@ -134,43 +134,45 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    var QuickLaunchersCollection = Backbone.Collection.extend({
-        initialize: function () {
-            var self = this;
-            this.reset(this.fetch());
-            settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
-        },
-        fetch: function () {
-            var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
-            return _(quicklaunch.map(function (o) {
-                return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
-            })).compact();
-        }
-    });
+    // reverted for 7.10
+    // var QuickLaunchersCollection = Backbone.Collection.extend({
+    //     initialize: function () {
+    //         var self = this;
+    //         this.reset(this.fetch());
+    //         settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
+    //     },
+    //     fetch: function () {
+    //         var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
+    //         return _(quicklaunch.map(function (o) {
+    //             return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
+    //         })).compact();
+    //     }
+    // });
 
-    var QuickLaunchersView = Backbone.View.extend({
-        attributes: {
-            'id': 'io-ox-quicklaunch'
-        },
-        events: {
-            'click button': 'onClick'
-        },
-        initialize: function () {
-            this.collection = new QuickLaunchersCollection();
-            this.listenTo(this.collection, { 'reset': this.render });
-        },
-        onClick: function () {
-            toggleOverlay(false);
-        },
-        render: function () {
-            this.$el.empty().append(
-                this.collection.map(function (model) {
-                    return new LauncherView({ model: model, quicklaunch: true }).render().$el;
-                })
-            );
-            return this;
-        }
-    });
+    // reverted for 7.10
+    // var QuickLaunchersView = Backbone.View.extend({
+    //     attributes: {
+    //         'id': 'io-ox-quicklaunch'
+    //     },
+    //     events: {
+    //         'click button': 'onClick'
+    //     },
+    //     initialize: function () {
+    //         this.collection = new QuickLaunchersCollection();
+    //         this.listenTo(this.collection, { 'reset': this.render });
+    //     },
+    //     onClick: function () {
+    //         toggleOverlay(false);
+    //     },
+    //     render: function () {
+    //         this.$el.empty().append(
+    //             this.collection.map(function (model) {
+    //                 return new LauncherView({ model: model, quicklaunch: true }).render().$el;
+    //             })
+    //         );
+    //         return this;
+    //     }
+    // });
 
     var LaunchersView = Backbone.View.extend({
         attributes: {
@@ -273,14 +275,15 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol').extend({
-        id: 'quicklauncher',
-        index: 400,
-        draw: function () {
-            var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
-            this.append(quicklaunchers.render().$el);
-        }
-    });
+    // reverted for 7.10
+    // ext.point('io.ox/core/appcontrol').extend({
+    //     id: 'quicklauncher',
+    //     index: 400,
+    //     draw: function () {
+    //         var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
+    //         this.append(quicklaunchers.render().$el);
+    //     }
+    // });
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'search',
@@ -502,7 +505,6 @@ define('io.ox/core/main/appcontrol', [
 
     return {
         LauncherView: LauncherView,
-        LaunchersView: LaunchersView,
-        QuickLaunchersView: QuickLaunchersView
+        LaunchersView: LaunchersView
     };
 });
