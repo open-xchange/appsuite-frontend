@@ -101,7 +101,8 @@ define('io.ox/core/main/appcontrol', [
 
             this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
-            if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
+            // reverted for 7.10
+            // if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
 
             if (id === 'io.ox/calendar' || this.model.options.name.match(/calendar/)) this.drawDate();
 
@@ -231,8 +232,22 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol').extend({
-        id: 'logo',
+        id: 'launcher',
         index: 200,
+        draw: function () {
+            // possible setting here
+            var apps = ox.ui.apps.where({ hasLauncher: true });
+            if (apps.length <= 1) return;
+            var launchers = window.launchers = new LaunchersView({
+                collection: apps
+            });
+            this.append(launchers.render().$el);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'logo',
+        index: 300,
         draw: function () {
             var logo, action = settings.get('logoAction', false);
             this.append(
@@ -258,20 +273,6 @@ define('io.ox/core/main/appcontrol', [
                     })
                 );
             }
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol').extend({
-        id: 'launcher',
-        index: 300,
-        draw: function () {
-            // possible setting here
-            var apps = ox.ui.apps.where({ hasLauncher: true });
-            if (apps.length <= 1) return;
-            var launchers = window.launchers = new LaunchersView({
-                collection: apps
-            });
-            this.append(launchers.render().$el);
         }
     });
 
