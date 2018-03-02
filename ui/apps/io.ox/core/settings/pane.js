@@ -498,6 +498,7 @@ define('io.ox/core/settings/pane', [
 
                     this.$requestLink = $('<br>').add(this.$requestLink);
                 }
+                if (desktopNotifications.getPermissionStatus().match(/granted|denied/)) this.$requestLink.hide();
             }
         },
         //
