@@ -57,7 +57,7 @@
     "node": ">=0.10"
   },
   "dependencies": {
-    "@open-xchange/tinymce": "^4.6.3-6",
+    "@open-xchange/tinymce": "4.6.3-7",
     "tinymce": "4.6.7"
   }
 }
