@@ -14,6 +14,7 @@
 define('io.ox/core/folder/tree', [
     'io.ox/backbone/disposable',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
@@ -22,7 +23,7 @@ define('io.ox/core/folder/tree', [
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Dropdown, Selection, api, ext, a11y, settings, gt) {
+], function (DisposableView, Dropdown, ContextMenuUtils, Selection, api, ext, a11y, settings, gt) {
 
     'use strict';
 
@@ -221,6 +222,7 @@ define('io.ox/core/folder/tree', [
         },
 
         onKeydownMenuKeys: function (e) {
+            ContextMenuUtils.macOSKeyboardHandler(e);
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
             if (e.type === 'keydown') {
                 var shiftF10 = (e.shiftKey && e.which === 121),
@@ -228,9 +230,9 @@ define('io.ox/core/folder/tree', [
                 if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
                     this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
 
-                    // e.preventDefault() is needed here to surpress browser menu
-                    if (shiftF10 || menuKey) {
-                        e.preventDefault();
+                    // e.isKeyboardEvent will be true for Shift-F10 triggered context menus on macOS
+                    // other browsers will just trigger contextmenu events
+                    if (e.isKeyboardEvent) {
                         this.onContextMenu(e);
                     }
                 }
