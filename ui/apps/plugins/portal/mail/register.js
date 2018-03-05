@@ -23,8 +23,9 @@ define('plugins/portal/mail/register', [
     'io.ox/backbone/disposable',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/http',
     'less!plugins/portal/mail/style'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities) {
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities, http) {
 
     'use strict';
 
@@ -141,7 +142,7 @@ define('plugins/portal/mail/register', [
                     return {
                         action: 'all',
                         folder: params.folder,
-                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                        columns: http.defaultColumns.mail.all,
                         sort: params.sort || '610',
                         order: params.order || 'desc',
                         timezone: 'utc'
