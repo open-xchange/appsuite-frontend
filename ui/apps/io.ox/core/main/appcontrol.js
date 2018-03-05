@@ -237,7 +237,8 @@ define('io.ox/core/main/appcontrol', [
         draw: function () {
             // possible setting here
             var apps = ox.ui.apps.where({ hasLauncher: true });
-            if (apps.length <= 1) return;
+            // reverted for 7.10
+            //if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
                 collection: apps
             });

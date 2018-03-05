@@ -112,13 +112,19 @@
         min-width: 0;
         min-height: auto;
         & > button {
+            // styles for fa-icon
+            font-size: 18px;
+            color: #fff;
+            padding: 2px 16px 0px 16px;
+            width: 64px;
+            // svg styles
+            //padding: 24px 16px;
+            //width: @appcontrol-height - 16;
             margin-top: -1px;
             position: relative;
             z-index: 2;
             height: @appcontrol-height;
-            width: @appcontrol-height - 16;
             display: inline-block;
-            padding: 24px 16px;
             border: 0;
             svg .fill-c1 { fill: #fff; }
         }
@@ -407,14 +413,23 @@
                 height: 40px;
             }
         }
-        svg {
+
+        svg, i {
             position: relative;
-            top: -10px;
-            height: 100%;
-            width: 100%;
+            //top: -10px;
+            //height: 100%;
+            //width: 100%;
+            top: 10px;
+            font-size: 36px;
+            color: @app-color-standard;
             overflow: visible;
             .smartphone & {
-                top: 0;
+                // top: -10px;
+
+                // for FA icons
+                top: auto;
+                line-height: 42px;
+                font-size: 24px;
             }
             // overwrite stroke colors if coloredicons are configured
             &.colored {
