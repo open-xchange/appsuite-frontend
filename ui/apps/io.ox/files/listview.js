@@ -13,35 +13,21 @@
 
 define('io.ox/files/listview', [
     'io.ox/core/tk/list',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'settings!io.ox/core',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ext, extensions, filesAPI, settings) {
+], function (ListView, ContextMenuUtils, ext, extensions, filesAPI, settings) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
 
-    function listViewKeyHandler(e) {
-        var shiftF10 = (e.shiftKey && e.which === 121);
-
-        if (_.device('macos') && shiftF10) {
-            e.isKeyboardEvent = true;
-            this.onContextMenu(e);
-        }
-    }
-
     function onContextMenu(e) {
-        if (_.device('!macos') && _.device('desktop')) {
-            if ((_.device('chrome') || _.device('firefox')) && e.button === 0) {
-                e.isKeyboardEvent = true;
-            } else if (_.device('ie') && e.pageX === 0 && e.pageY === 0) {
-                e.isKeyboardEvent = true;
-            }
-        }
+        ContextMenuUtils.checkKeyboardEvent(e);
         var view = this;
         var app = view.app;
         // the link to render the context menu with it's entries.
@@ -101,13 +87,6 @@ define('io.ox/files/listview', [
 
         onContextMenu: onContextMenu
     });
-
-    // extend the onItemKeydown handler from list by additional handlers
-    var orgListHandler = ListView.prototype.onItemKeydown;
-    ListView.prototype.onItemKeydown = function () {
-        orgListHandler.apply(this, arguments);
-        listViewKeyHandler.apply(this, arguments);
-    };
 
     // we redraw only if a relevant attribute changes (to avoid flickering)
     FileListView.relevantAttributes = ['index', 'id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version', 'index/virtual/favorites/infostore'];

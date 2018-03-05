@@ -13,10 +13,11 @@
 
 define('io.ox/core/tk/list', [
     'io.ox/backbone/disposable',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/tk/list-selection',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extensions'
-], function (DisposableView, Selection, dnd, ext) {
+], function (DisposableView, ContextMenuUtils, Selection, dnd, ext) {
 
     'use strict';
 
@@ -109,6 +110,8 @@ define('io.ox/core/tk/list', [
 
         onItemKeydown: function (e) {
             if (keyEvents[e.which]) this.trigger(keyEvents[e.which], e);
+            ContextMenuUtils.macOSKeyboardHandler(e);
+            if (e.isKeyboardEvent) this.onContextMenu(e);
         },
 
         // use throttle instead of debouce in order to respond during scroll momentum

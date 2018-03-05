@@ -15,10 +15,11 @@
 define('io.ox/core/tk/list-contextmenu', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/collection',
     'gettext!io.ox/core'
-], function (ext, Dropdown, actions, Collection, gt) {
+], function (ext, Dropdown, ContextMenuUtils, actions, Collection, gt) {
     'use strict';
 
     function renderItems() {
@@ -84,6 +85,8 @@ define('io.ox/core/tk/list-contextmenu', [
 
     var Contextmenu = {
         onContextMenu: function (e) {
+            ContextMenuUtils.checkKeyboardEvent(e);
+
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
