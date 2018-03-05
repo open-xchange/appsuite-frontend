@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-23 13:12+0100\n"
+"PO-Revision-Date: 2018-03-05 13:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1872,7 +1872,7 @@ msgstr "Arbeitswochenlänge"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Default reminder"
-msgstr "Standard-Erinnerung"
+msgstr "Standarderinnerung"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Default reminder for all-day appointments"
