@@ -95,7 +95,7 @@ Scenario('fullday appointments', function *(I) {
 
     yield I.removeAllAppointments();
 
-    I.click('New appointment');
+    I.clickToolbar('New');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
     I.fillField('Subject', 'Fullday test');
     I.click('All day', '.checkbox > label');
