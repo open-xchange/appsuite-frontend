@@ -11,9 +11,9 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 define('io.ox/core/main/icons', [
-    'io.ox/core/extensions',
-    'raw!io.ox/core/images/icons_rounded.json'
-], function (ext, rawIcons) {
+    'io.ox/core/extensions'
+    //'raw!io.ox/core/images/icons_rounded.json'
+], function (ext) {
 
     'use strict';
 
@@ -58,7 +58,22 @@ define('io.ox/core/main/icons', [
         id: 'parse',
         index: 1000,
         run: function () {
-            icons = JSON.parse(rawIcons);
+            // reverted for 7.10
+            /*icons = JSON.parse(rawIcons);*/
+            // use FA icons for 7.10
+            icons = {
+                'io.ox/mail': '<i class="fa fa-envelope app-icon-mail">',
+                'io.ox/calendar': '<i class="fa fa-calendar">',
+                'io.ox/contacts': '<i class="fa fa-user">',
+                'io.ox/files': '<i class="fa fa-cloud">',
+                'io.ox/portal': '<i class="fa fa-th-large">',
+                'io.ox/tasks': '<i class="fa fa-check-square-o">',
+                'io.ox/office/portal/text': '<i class="fa fa-file-text">',
+                'io.ox/office/portal/spreadsheet': '<i class="fa fa-table">',
+                'io.ox/office/portal/presentation': '<i class="fa fa-list-alt">',
+                'launcher': '<i class="fa fa-th">',
+                'fallback': '<i class="fa fa-question">'
+            };
             exposeIcons();
         }
     });
