@@ -252,12 +252,7 @@ define('io.ox/calendar/api', [
                                 api.pool.propagateAdd(obj);
                             });
                         }
-                        return list.map(function (obj, index) {
-                            // if we have full data use the full data, in list data recurrence ids might be missing
-                            // you can request exceptions without recurrence id because they have own ids, but in the reponse they still have a recurrence id, which is needed for the correct cid
-                            if (data[index]) {
-                                obj = data[index];
-                            }
+                        return list.map(function (obj) {
                             if (isRecurrenceMaster(obj)) return api.pool.get('detail').add(data);
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
