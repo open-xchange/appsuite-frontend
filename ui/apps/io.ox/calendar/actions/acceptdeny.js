@@ -174,7 +174,12 @@ define('io.ox/calendar/actions/acceptdeny', [
                             };
                             if (alarmsModel) requestData.alarms = alarmsModel.get('alarms');
                             requestData.attendee.partStat = action.toUpperCase();
-                            if (message) requestData.attendee.comment = message;
+                            if (message) {
+                                requestData.attendee.comment = message;
+                            } else if (requestData.attendee.comment) {
+                                // if there was a previous comment we send null to remove it
+                                requestData.attendee.comment = null;
+                            }
                             if (!series && o.recurrenceId) requestData.recurrenceId = o.recurrenceId;
                             // don't check if confirmation status did not change
                             // no conflicts possible if you decline the appointment
