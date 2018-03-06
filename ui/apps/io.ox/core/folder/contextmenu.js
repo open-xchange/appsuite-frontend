@@ -174,8 +174,11 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
+                var folderId = baton.app.folder.get(),
+                    model = api.pool.getModel(folderId);
 
                 if (!api.can('rename', baton.data)) return;
+                if (api.is('trash', model.toJSON())) return;
 
                 contextUtils.addLink(this, {
                     action: 'rename',
@@ -201,13 +204,14 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!api.can('remove:folder', baton.data)) return;
-
+                var folderId = baton.app.folder.get(),
+                    model = api.pool.getModel(folderId);
                 contextUtils.addLink(this, {
                     action: 'delete',
                     data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
-                    text: gt('Delete')
+                    text: api.is('trash', model.toJSON()) ? gt('Delete forever') : gt('Delete')
                 });
             };
         }()),

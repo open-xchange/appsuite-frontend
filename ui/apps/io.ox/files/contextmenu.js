@@ -409,6 +409,13 @@ define('io.ox/files/contextmenu', [
             this.$dropdownMenu.removeAttr('role');
 
             //baton.$el = ul; NOTE: found no case were needed, but when there is a bug with certain actions, check if this helps
+            ext.point(link + '/items').replace({
+                id: 'delete',
+                index: 1900,
+                ref: 'io.ox/files/actions/delete',
+                section: '60',
+                label: baton.insideTrash ? gt('Delete forever') : gt('Delete')
+            });
             var finishedRendering = ext.point(link).invoke('draw', ul, baton);
             return finishedRendering;
         }

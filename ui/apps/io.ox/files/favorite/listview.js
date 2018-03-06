@@ -44,7 +44,7 @@ define('io.ox/files/favorite/listview', [
         list = _(models).invoke('toJSON');
         // extract single object if length === 1
         var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.myFavoriteListView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, favorite: true });
+        var baton = new ext.Baton({ data: data, models: models, collection: app.myFavoriteListView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, favorite: true, insideTrash: false });
 
         view.contextMenu.showContextMenu(e, baton);
     }

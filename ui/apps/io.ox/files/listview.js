@@ -52,9 +52,15 @@ define('io.ox/files/listview', [
         list = _(models).invoke('toJSON');
         // extract single object if length === 1
         var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/ });
 
-        view.contextMenu.showContextMenu(e, baton);
+        return require(['io.ox/core/folder/api']).then(function (folderApi) {
+            var folderId = app.folder.get(),
+                model = folderApi.pool.getModel(folderId);
+
+            var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, insideTrash: folderApi.is('trash', model.toJSON()) });
+
+            view.contextMenu.showContextMenu(e, baton);
+        });
     }
 
     //
