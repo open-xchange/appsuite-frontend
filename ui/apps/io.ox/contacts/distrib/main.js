@@ -181,6 +181,8 @@ define('io.ox/contacts/distrib/main', [
 
             // hash state support
             var state = app.getState();
+            if ('app' in state && state.app !== 'io.ox/contacts') return $.when();
+
             if ('id' in state) {
                 app.edit(state);
             } else if ('folder' in state) {

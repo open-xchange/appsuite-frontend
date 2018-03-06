@@ -119,12 +119,14 @@ define('io.ox/calendar/actions', [
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (distlist) {
-                ox.load(['io.ox/contacts/distrib/main', 'settings!io.ox/core']).done(function (m, coreSettings) {
-                    m.getApp().launch().done(function () {
-                        this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
-                        // trigger an empty remove just to get rid of unnecessary values in contacts
-                        if (!_.isEmpty(distlist)) this.view.baton.member.trigger('remove', {}, this.view.baton.member);
-                    });
+                require(['settings!io.ox/core'], function (coreSettings) {
+                    ox.launch('io.ox/contacts/distrib/main')
+                        .done(function () {
+                            this.create(coreSettings.get('folder/contacts'), {
+                                distribution_list: distlist,
+                                display_name: baton.data.summary
+                            });
+                        });
                 });
             });
         }
