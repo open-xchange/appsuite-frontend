@@ -89,7 +89,10 @@ define('io.ox/core/folder/tree', [
         },
 
         // See Bug: 54812 (Note: This should not be necessary, but node does not get focus otherwise)
-        onClick: function (e) { $(e.currentTarget).focus(); },
+        onClick: function (e) {
+            if ($(document.activeElement).is('.folder.selectable.selected')) return;
+            $(e.currentTarget).focus();
+        },
 
         // counter-part
         onAppear: function (id, handler) {
