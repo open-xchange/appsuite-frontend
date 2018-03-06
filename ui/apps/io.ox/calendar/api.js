@@ -102,6 +102,9 @@ define('io.ox/calendar/api', [
         extendedFields = [defaultFields, 'deleteExceptionDates', 'changeExceptionDates'].join(','),
 
         api = {
+            // used externally by itip updates in mail invites
+            updatePoolData: processResponse,
+
             // convenience function
             cid: util.cid,
 
