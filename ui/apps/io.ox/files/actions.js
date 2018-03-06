@@ -611,7 +611,9 @@ define('io.ox/files/actions', [
                                 }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _.each(response, function (error) {
-                                    var errorResponse = _.isObject(error) ? error : error.error;
+                                    // check the error structure to prevent a nested error object
+                                    var errorResponse = _.isString(error.error) ? error : error.error;
+
 
                                     if (errorResponse) {
 
