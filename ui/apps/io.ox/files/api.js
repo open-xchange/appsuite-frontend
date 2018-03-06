@@ -1240,7 +1240,7 @@ define('io.ox/files/api', [
                 def.resolve(errorText || response);
             },
             failCallback = function (error) {
-                // if a job fails, check if this is conflict thing, if it is use the successcallback
+                // if a job fails, check if this is a conflict thing, if it is use the successcallback
                 if (_.isArray(error)) {
                     for (var i = 0; i < error.length; i++) {
                         if (error[i].error.categories === 'CONFLICT') {
@@ -1257,18 +1257,25 @@ define('io.ox/files/api', [
             };
 
         http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (result) {
-            if (type === 'move' && result && result[0] && result[0].data && result[0].data.job) {
-                // long running job. Add to jobs list and return here
-                //#. %1$s: Folder name
-                jobsAPI.addJob({
-                    module: 'folders',
-                    action: 'update',
-                    done: false,
-                    showIn: 'infostore',
-                    id: result[0].data.job,
-                    successCallback: callback,
-                    failCallback: failCallback });
-                return;
+            if (type === 'move' && result && result.length) {
+                result = _(result).map(function (res) {
+                    if (res.data && res.data.job) {
+                        // long running job. Add to jobs list
+                        jobsAPI.addJob({
+                            module: 'folders',
+                            action: 'update',
+                            done: false,
+                            showIn: 'infostore',
+                            id: res.data.job,
+                            successCallback: callback,
+                            failCallback: failCallback });
+                        return;
+                    }
+                    return res;
+                });
+                result = _(result).compact();
+                // if all responses in the multiple where long running jobs, we return here. Otherwise we continue with what already finished
+                if (result.length === 0) return;
             }
             callback(result);
         }, function (error) {

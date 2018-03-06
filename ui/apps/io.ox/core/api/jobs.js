@@ -47,17 +47,23 @@ define('io.ox/core/api/jobs', [
                     _(_(doneJobs).keys()).each(function (key) {
                         var job = doneJobs[key];
                         api.get(job.id).done(function (result) {
-                            if (result.error && doneJobs[job.id].failCallback) {
-                                doneJobs[job.id].failCallback(result);
-                            } else if (doneJobs[job.id].successCallback) {
-                                doneJobs[job.id].successCallback(result);
+                            if (result.error && doneJobs[job.id].failCallback.length) {
+                                _(doneJobs[job.id].failCallback).each(function (cb) {
+                                    cb(result);
+                                });
+                            } else if (doneJobs[job.id].successCallback.length) {
+                                _(doneJobs[job.id].successCallback).each(function (cb) {
+                                    cb(result);
+                                });
                             }
 
                             api.trigger('finished:' + job.id, result);
                             // used to trigger redraw of folderview
                             api.trigger('finished:' + job.showIn, result);
                         }).fail(function (result) {
-                            doneJobs[job.id].failCallback(result);
+                            _(doneJobs[job.id].failCallback).each(function (cb) {
+                                cb(result);
+                            });
                         });
                     });
                 });
@@ -106,8 +112,8 @@ define('io.ox/core/api/jobs', [
                         // only infostore for now
                         showIn: 'infostore',
                         // use generic fallback
-                        successCallback: function () { ox.trigger('refresh.all'); },
-                        failCallback: function () { ox.trigger('refresh.all'); }
+                        successCallback: [function () { ox.trigger('refresh.all'); }],
+                        failCallback: [function () { ox.trigger('refresh.all'); }]
                     }, job));
                 });
             });
@@ -133,7 +139,18 @@ define('io.ox/core/api/jobs', [
             });
         },
         addJob: function (job) {
-            if (!job || longRunningJobs[job.id]) return;
+            if (!job) return;
+
+            // make sure we have arrays
+            job.failCallback = [].concat(job.failCallback);
+            job.successCallback = [].concat(job.successCallback);
+
+            // if it already exists we just add the callbacks
+            if (longRunningJobs[job.id]) {
+                longRunningJobs[job.id].failCallback = longRunningJobs[job.id].failCallback.concat(job.failCallback);
+                longRunningJobs[job.id].successCallback = longRunningJobs[job.id].successCallback.concat(job.successCallback);
+                return;
+            }
 
             longRunningJobs[job.id] = job;
 
