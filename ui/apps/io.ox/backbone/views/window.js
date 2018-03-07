@@ -19,12 +19,18 @@ define('io.ox/backbone/views/window', [
 
     'use strict';
 
-    var backdrop = $('<div id="floating-window-backdrop">').on('click', function () {
-        _(collection.filter(function (model) { return model.get('floating'); })).each(function (model) {
-            model.set('minimized', true);
-        });
-        ox.trigger('change:document:title', ox.ui.App.getCurrentApp().get('title'));
-        backdrop.hide();
+    var backdrop = $('<div id="floating-window-backdrop">').on({
+        'click': function () {
+            _(collection.filter(function (model) { return model.get('floating'); })).each(function (model) {
+                model.set('minimized', true);
+            });
+            ox.trigger('change:document:title', ox.ui.App.getCurrentApp().get('title'));
+            backdrop.hide();
+        },
+        'drag dragend dragenter dragexit dragleave dragover dragstart drop': function (e) {
+            // prevent drag bubbling to underlying dropzones cause drop somehow doesn't bubble reliably
+            e.stopPropagation();
+        }
     }).hide();
 
     var collection = new Backbone.Collection();

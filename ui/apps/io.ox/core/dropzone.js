@@ -43,6 +43,7 @@ define('io.ox/core/dropzone', [], function () {
                     this.leaving = false;
                     if (!this.checked) this.checked = true; else return;
                     if (!this.isValid(e)) return;
+                    if (!this.isScope(e)) return;
                     if (!this.visible) this.show();
                     return false;
                 case 'dragleave':
@@ -85,6 +86,7 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
+            this.floating = undefined;
 
             $(document).on(EVENTS, this.onDrag.bind(this));
             // firefox does not fire dragleave correct when leaving the window.
@@ -99,6 +101,12 @@ define('io.ox/core/dropzone', [], function () {
 
         isValid: function (e) {
             return this.isEnabled(e) && this.isFile(e);
+        },
+
+        isScope: function (e) {
+            if (_.isUndefined(this.floating)) this.floating = !!this.$el.closest('.floating-window').length;
+            var isTargetFloating = !!$(e.target).closest('.floating-window').length;
+            return (this.floating && isTargetFloating) || (!this.floating && !isTargetFloating);
         },
 
         // overwrite for custom checks
