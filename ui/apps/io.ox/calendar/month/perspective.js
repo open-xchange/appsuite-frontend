@@ -329,7 +329,7 @@ define('io.ox/calendar/month/perspective', [
             scrollToDate();
 
             if (!this.current.isSame(previous, 'month')) {
-                this.app.setDate(this.current);
+                this.app.setDate(moment([this.current.year(), this.current.month()]));
             }
         },
 
