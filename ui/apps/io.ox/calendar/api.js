@@ -213,7 +213,8 @@ define('io.ox/calendar/api', [
                     return http.PUT({
                         module: 'chronos',
                         params: {
-                            action: 'list'
+                            action: 'list',
+                            extendedEntities: true
                         },
                         data: list
                     })['catch'](function (err) {
