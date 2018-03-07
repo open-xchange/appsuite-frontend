@@ -486,7 +486,7 @@ define('io.ox/calendar/month/perspective', [
                     }
                 }, this))
                 .on('scrollend', $.proxy(function () {
-                    this.app.setDate(moment([this.current.year(), this.current.month()]));
+                    this.app.setDate(moment([this.current.year(), this.current.month()]), { silent: true });
                 }, this));
 
             app.props.on('change:date', function (model, value) {
