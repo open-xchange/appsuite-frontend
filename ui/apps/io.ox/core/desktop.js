@@ -405,6 +405,13 @@ define('io.ox/core/desktop', [
                         model.trigger('close');
                     });
                 });
+
+                win.floating.listenTo(model, 'change:minimized', function (model, minimized) {
+                    if (!win.app.dropZone) return;
+                    if (minimized) return win.app.dropZone.remove();
+                    win.app.dropZone.include();
+                });
+
                 win.app.once('quit', function () { model.trigger('close'); });
             }
             // add app name
