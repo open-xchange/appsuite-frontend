@@ -38,7 +38,7 @@ define('io.ox/calendar/list/perspective', [
             });
 
             container.parent().removeClass('black white');
-            container.parent().addClass(util.getForegroundColor(color));
+            container.parent().addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
         },
 
         selectAppointment: function (model) {
