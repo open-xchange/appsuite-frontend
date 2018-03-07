@@ -521,8 +521,6 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12 col-sm-6',
         render: function () {
 
-            if (settings.get('colorScheme') !== 'custom') return;
-
             var picker = new ColorPicker({
                 model: this.model,
                 attribute: 'color',

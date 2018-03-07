@@ -128,7 +128,6 @@ define('io.ox/calendar/freetime/timeView', [
                 .divider()
                 .header(gt('Appointment types'))
                 .option('showFree', true, gt('Free'))
-                .option('showReserved', true, gt('Reserved'))
                 .divider()
                 .header(gt('Date range'))
                 .option('dateRange', 'week', gt('Week'), { radio: true })
@@ -444,7 +443,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.on('change:dateRange', self.onChangeDateRange.bind(this));
             this.model.on('change:timeSlots', self.renderBody.bind(this));
             this.model.on('change:zoom', self.updateZoom.bind(this));
-            this.model.on('change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateVisibility.bind(this));
+            this.model.on('change:showFree', self.updateVisibility.bind(this));
 
             this.parentView = options.parentView;
 
@@ -491,10 +490,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
         },
         updateVisibility: function () {
-            this.bodyNode.toggleClass('showFree', this.model.get('showFree'))
-                .toggleClass('showTemporary', this.model.get('showTemporary'))
-                .toggleClass('showReserved', this.model.get('showReserved'))
-                .toggleClass('showAbsent', this.model.get('showAbsent'));
+            this.bodyNode.addClass('showReserved').toggleClass('showFree', this.model.get('showFree'));
         },
         onScroll: function () {
             this.headerNodeRow2.scrollLeft(this.bodyNode.scrollLeft());

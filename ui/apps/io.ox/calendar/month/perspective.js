@@ -288,30 +288,6 @@ define('io.ox/calendar/month/perspective', [
             container.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
         },
 
-        onChangeColorScheme: function () {
-            if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment', this.main).css({ 'background-color': '', 'color':  '' });
-            } else {
-                $('.appointment', this.main).each(function () {
-                    var $elem = $(this),
-                        cid = $elem.data('cid'),
-                        folder = util.cid(cid).folder,
-                        model = api.pool.getModel(cid),
-                        folderModel = folderAPI.pool.models[folder];
-                    if (!model || !folderModel) return;
-                    var color = util.getAppointmentColor(folderModel.attributes, model);
-                    if (!color) return;
-                    $elem.css({
-                        'background-color': color,
-                        'color': util.getForegroundColor(color)
-                    }).data('background-color', color);
-                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
-                        $elem.attr('data-folder', folder);
-                    }
-                });
-            }
-        },
-
         update: function (useCache) {
             var day = $('#' + moment().format('YYYY-M-D'), this.pane);
 
@@ -562,8 +538,6 @@ define('io.ox/calendar/month/perspective', [
                 .on('change:perspective', function () {
                     self.dialog.close();
                 });
-
-            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
 
             // adjust scrolltop manually on folderview change (see Bug 56691)
             var topToHeight;

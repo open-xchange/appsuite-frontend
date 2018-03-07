@@ -45,12 +45,10 @@ define('io.ox/calendar/week/extensions', [
             }
 
             var folderId = a.get('folder');
-            if (baton.app.props.get('colorScheme') === 'custom') {
-                if (String(folder.id) === String(folderId)) {
-                    addColors(folder);
-                } else if (folderId !== undefined) {
-                    folderAPI.get(folderId).done(addColors);
-                }
+            if (String(folder.id) === String(folderId)) {
+                addColors(folder);
+            } else if (folderId !== undefined) {
+                folderAPI.get(folderId).done(addColors);
             }
 
             if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {

@@ -41,30 +41,6 @@ define('io.ox/calendar/list/perspective', [
             container.parent().addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
         },
 
-        onChangeColorScheme: function () {
-            if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment .color-label', this.main).css({ 'background-color': '', 'color':  '' });
-            } else {
-                $('.appointment', this.main).each(function () {
-                    var $this = $(this),
-                        cid = $this.data('cid'),
-                        folder = util.cid(cid).folder,
-                        model = api.pool.getModel(cid),
-                        folderModel = folderAPI.pool.models[folder];
-                    if (!model || !folderModel) return;
-                    var color = util.getAppointmentColor(folderModel.attributes, model),
-                        $elem = $this.find('.color-label');
-                    $elem.css({
-                        'background-color': color,
-                        'color': util.getForegroundColor(color)
-                    });
-                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
-                        $elem.attr('data-folder', folder);
-                    }
-                });
-            }
-        },
-
         selectAppointment: function (model) {
             this.app.listView.selection.set([model.cid]);
         },
@@ -231,8 +207,6 @@ define('io.ox/calendar/list/perspective', [
             app.listView.once('first-reset', function () {
                 app.listView.selection.set(cids);
             });
-
-            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
         }
 
     });
