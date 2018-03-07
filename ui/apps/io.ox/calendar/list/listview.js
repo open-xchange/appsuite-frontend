@@ -48,7 +48,6 @@ define('io.ox/calendar/list/listview', [
                     var conf = util.getConfirmationStatus(model);
                     self.addClass(util.getConfirmationClass(conf) + (model.get('hard_conflict') ? ' hardconflict' : ''));
 
-                    if (baton.app.props.get('colorScheme') !== 'custom') return;
                     var color = util.getAppointmentColor(folder, model);
                     colorLabel.css({
                         'background-color': color

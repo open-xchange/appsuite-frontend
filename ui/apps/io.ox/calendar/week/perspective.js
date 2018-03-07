@@ -271,30 +271,6 @@ define('io.ox/calendar/week/perspective', [
             });
         },
 
-        onChangeColorScheme: function () {
-            if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment', this.view.pane).css({ 'background-color': '', 'color':  '' });
-            } else {
-                $('.appointment', this.view.pane).each(function () {
-                    var $elem = $(this),
-                        cid = $elem.data('cid'),
-                        folder = util.cid(cid).folder,
-                        model = api.pool.getModel(cid),
-                        folderModel = folderAPI.pool.models[folder];
-                    if (!model || !folderModel) return;
-                    var color = util.getAppointmentColor(folderModel.attributes, model);
-                    if (!color) return;
-                    $elem.css({
-                        'background-color': color,
-                        'color': util.getForegroundColor(color)
-                    }).data('background-color', color);
-                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
-                        $elem.attr('data-folder', folder);
-                    }
-                });
-            }
-        },
-
         /**
          * refresh appointment data
          */
@@ -501,8 +477,6 @@ define('io.ox/calendar/week/perspective', [
                 .on('keydown', function (e) {
                     self.view.fnKey(e);
                 });
-
-            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
 
             this.followDeepLink();
         },

@@ -181,11 +181,6 @@ define('io.ox/calendar/toolbar', [
             .option('folderview', true, gt('Folder view'))
             .option('showMiniCalendar', true, gt('Mini calendar'))
             .option('checkboxes', true, gt('Checkboxes'))
-            .divider()
-            .header(gt('Color scheme'))
-            .option('colorScheme', 'custom', gt('Custom colors'), { radio: true })
-            .option('colorScheme', 'classic', gt('Classic colors'), { radio: true })
-            .option('colorScheme', 'dark', gt('Dark colors'), { radio: true })
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 

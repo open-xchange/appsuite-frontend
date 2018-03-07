@@ -567,31 +567,29 @@ define('io.ox/core/folder/contextmenu', [
                 var extProps = baton.data['com.openexchange.calendar.extendedProperties'];
                 if (extProps && extProps.color && extProps.color.proected === false) return;
 
-                if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
-                    var listItem, container = this.parent();
+                var listItem, container = this.parent();
 
-                    this.append(listItem = $('<li role="presentation">'));
+                this.append(listItem = $('<li role="presentation">'));
 
-                    require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
-                        listItem.append(
-                            new ColorPicker({
-                                model: api.pool.getModel(baton.data.id),
-                                getValue: function () {
-                                    return calendarUtil.getFolderColor(this.model.attributes);
-                                },
-                                setValue: function (value) {
-                                    api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
-                                        require(['io.ox/core/notifications'], function (notifications) {
-                                            notifications.yell(error);
-                                        });
+                require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
+                    listItem.append(
+                        new ColorPicker({
+                            model: api.pool.getModel(baton.data.id),
+                            getValue: function () {
+                                return calendarUtil.getFolderColor(this.model.attributes);
+                            },
+                            setValue: function (value) {
+                                api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
+                                    require(['io.ox/core/notifications'], function (notifications) {
+                                        notifications.yell(error);
                                     });
-                                }
-                            }).render().$el
-                        );
-                        // trigger ready to recompute bounds of smart dropdown
-                        container.trigger('ready');
-                    });
-                }
+                                });
+                            }
+                        }).render().$el
+                    );
+                    // trigger ready to recompute bounds of smart dropdown
+                    container.trigger('ready');
+                });
             };
         })(),
 

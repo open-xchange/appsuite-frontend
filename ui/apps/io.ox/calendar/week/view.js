@@ -374,17 +374,17 @@ define('io.ox/calendar/week/view', [
             if (!this.lasso) {
                 var cid = util.cid(String($(e.currentTarget).data('cid'))),
                     el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]', this.$el),
-                    bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                    bg = el.data('background-color');
                 switch (e.type) {
                     case 'mouseenter':
                         if (e.relatedTarget && e.relatedTarget.tagName !== 'TD') {
                             el.addClass('hover');
-                            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
+                            el.css('background-color', util.lightenDarkenColor(bg, 0.9));
                         }
                         break;
                     case 'mouseleave':
                         el.removeClass('hover');
-                        if (bg) el.css('background-color', bg);
+                        el.css('background-color', bg);
                         break;
                     default:
                         break;

@@ -463,7 +463,6 @@ define('io.ox/calendar/main', [
                 'date': moment().valueOf(),
                 'layout': view,
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
-                'colorScheme': app.settings.get('colorScheme', 'custom'),
                 'mobileFolderSelectMode': false,
                 'showMiniCalendar': app.settings.get('showMiniCalendar', true)
             });
@@ -476,9 +475,6 @@ define('io.ox/calendar/main', [
             app.setDate = function (arg) {
                 app.props.set('date', moment(arg).valueOf());
             };
-
-            // store colorScheme in settings to ensure that 'colorScheme' is not undefined
-            app.settings.set('colorScheme', app.props.get('colorScheme'));
         },
 
         'listview-checkboxes': function (app) {
@@ -515,7 +511,6 @@ define('io.ox/calendar/main', [
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .set('showMiniCalendar', data.showMiniCalendar)
-                    .set('colorScheme', data.colorScheme)
                     .save();
             }, 500));
         },
@@ -545,33 +540,6 @@ define('io.ox/calendar/main', [
                 app.listView.toggleCheckboxes(value);
                 app.listControl.$('.select-all').toggle('value');
             });
-        },
-
-        /*
-         * Respond to change:colorScheme
-         */
-        'change:colorScheme': function (app) {
-            var selectScheme = function (app, value) {
-                var node = app.getWindow().nodes.outer;
-
-                switch (value) {
-                    case 'classic': node.removeClass('dark-colors custom-colors'); break;
-                    case 'dark':
-                        if (_.device('smartphone')) {
-                            node.removeClass('dark-colors custom-colors');
-                        } else {
-                            node.removeClass('custom-colors').addClass('dark-colors');
-                        }
-                        break;
-                    case 'custom': node.removeClass('dark-colors').addClass('custom-colors'); break;
-                    default: node.removeClass('dark-colors custom-colors'); break;
-                }
-            };
-
-            app.props.on('change:colorScheme', function (model, value) {
-                selectScheme(app, value);
-            });
-            selectScheme(app, app.props.get('colorScheme'));
         },
 
         /*

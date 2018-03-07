@@ -134,18 +134,18 @@ define('io.ox/calendar/month/view', [
         onEnterAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
-                bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                bg = el.data('background-color');
             el.addClass('hover');
-            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
+            el.css('background-color', util.lightenDarkenColor(bg, 0.9));
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
-                bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                bg = el.data('background-color');
             el.removeClass('hover');
-            if (bg) el.css('background-color', bg);
+            el.css('background-color', bg);
         },
 
         // handler for mobile month view day-change
@@ -447,12 +447,10 @@ define('io.ox/calendar/month/view', [
             }
 
             var folderId = a.get('folder');
-            if (baton.app.props.get('colorScheme') === 'custom') {
-                if (String(folder.id) === String(folderId)) {
-                    addColors(folder);
-                } else if (folderId !== undefined) {
-                    folderAPI.get(folderId).done(addColors);
-                }
+            if (String(folder.id) === String(folderId)) {
+                addColors(folder);
+            } else if (folderId !== undefined) {
+                folderAPI.get(folderId).done(addColors);
             }
 
             if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
