@@ -285,7 +285,7 @@ define('io.ox/calendar/month/perspective', [
                 'color': util.getForegroundColor(color)
             }).data('background-color', color);
             container.removeClass('black white');
-            container.addClass(util.getForegroundColor(color));
+            container.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
         },
 
         onChangeColorScheme: function () {
