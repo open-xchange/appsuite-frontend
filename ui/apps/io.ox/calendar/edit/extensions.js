@@ -368,12 +368,12 @@ define('io.ox/calendar/edit/extensions', [
         nextTo: 'end-date',
         render: function () {
             var model = this.model,
-                userTimezone = moment().zoneAbbr(),
+                userTimezone = moment().tz(),
                 helpBlock = $('<div class="col-xs-12 help-block">').hide();
 
             function setHint() {
-                var startTimezone = model.getMoment('startDate').zoneAbbr(),
-                    endTimezone = model.getMoment('endDate').zoneAbbr(),
+                var startTimezone = model.getMoment('startDate').tz(),
+                    endTimezone = model.getMoment('endDate').tz(),
                     isVisible = startTimezone !== userTimezone || endTimezone !== userTimezone;
                 helpBlock.toggle(isVisible);
                 if (isVisible) {
