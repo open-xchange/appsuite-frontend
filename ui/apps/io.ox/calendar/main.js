@@ -473,8 +473,15 @@ define('io.ox/calendar/main', [
                 return moment(app.props.get('date'));
             };
 
-            app.setDate = function (arg) {
-                app.props.set('date', moment(arg).valueOf());
+            app.setDate = function (newDate) {
+                // try to keep month and year if possible
+                if (!_.isArray(newDate._i)) return app.props.set('date', moment(newDate).valueOf());
+                var oldDate = this.getDate(),
+                    initArgs = newDate._i,
+                    year = initArgs.length > 0 ? initArgs[0] : oldDate.year(),
+                    month = initArgs.length > 1 ? initArgs[1] : oldDate.month(),
+                    day = initArgs.length > 2 ? initArgs[2] : oldDate.date();
+                app.props.set('date', moment([year, month, day]).valueOf());
             };
 
             // store colorScheme in settings to ensure that 'colorScheme' is not undefined
