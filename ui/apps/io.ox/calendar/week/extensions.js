@@ -26,7 +26,7 @@ define('io.ox/calendar/week/extensions', [
         draw: function (baton) {
             var self = this,
                 a = baton.model,
-                folder = baton.folders[a.get('folder')],
+                folder = folderAPI.pool.getModel(a.get('folder')).toJSON(),
                 conf = 1,
                 confString = '%1$s',
                 classes = '';
