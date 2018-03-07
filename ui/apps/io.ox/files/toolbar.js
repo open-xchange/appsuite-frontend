@@ -280,10 +280,15 @@ define('io.ox/files/toolbar', [
 
     new actions.Action('io.ox/files/dropdown/share', {
         requires: function (e) {
-            var folderId = e.baton.app.folder.get(),
-                model = folderApi.pool.getModel(folderId);
-
-            return !folderApi.is('trash', model.toJSON());
+            var model,
+                folderId;
+            if (e.baton.app) {
+                folderId = e.baton.app.folder.get();
+            } else if (e.baton.data) {
+                folderId = e.baton.data.folder_id;
+            }
+            model = folderApi.pool.getModel(folderId);
+            return model ? !folderApi.is('trash', model.toJSON()) : false;
         },
         action: $.noop
     });
