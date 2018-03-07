@@ -139,7 +139,7 @@ define('io.ox/calendar/model', [
             if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
-            else this.model.unset('rrule');
+            else this.model.set('rrule', null);
         },
 
         deserialize: function () {
