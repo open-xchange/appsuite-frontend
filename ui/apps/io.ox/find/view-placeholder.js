@@ -23,13 +23,14 @@ define('io.ox/find/view-placeholder', ['io.ox/backbone/disposable'], function (D
         },
 
         initialize: function (options) {
+            var win = options.app.getWindow();
             // field stub already rendered by desktop.js
-            this.setElement($('.io-ox-find[data-app="' + options.app.get('parent').id + '"]'));
+            this.setElement(win.nodes.sidepanel.find('.io-ox-find'));
 
             // shortcuts
             this.ui = {
-                field: this.$el.find('.search-field')
-                //action: this.$el.find('.action-show')
+                field: this.$el.find('.search-field'),
+                action: this.$el.find('.action-show')
             };
 
             // reuse
@@ -40,22 +41,22 @@ define('io.ox/find/view-placeholder', ['io.ox/backbone/disposable'], function (D
         },
 
         hideSpinner: function () {
-            //this.ui.action.removeClass('io-ox-busy');
+            this.ui.action.removeClass('io-ox-busy');
         },
 
         showSpinner: function () {
-            //this.ui.action.addClass('io-ox-busy');
+            this.ui.action.addClass('io-ox-busy');
         },
 
         disable: function () {
             this.ui.field.prop('disabled', true);
-            //this.ui.action.prop('disabled', true);
+            this.ui.action.prop('disabled', true);
             this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
         },
 
         enable: function () {
             this.ui.field.prop('disabled', false);
-            //this.ui.action.prop('disabled', false);
+            this.ui.action.prop('disabled', false);
             this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
         },
 

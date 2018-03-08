@@ -12,12 +12,11 @@
  */
 
 define('io.ox/find/view-facets', [
-    'io.ox/backbone/views/extensible',
     'io.ox/find/extensions-facets',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'gettext!io.ox/core'
-], function (ExtensibleView, extensions, api, ext, gt) {
+], function (extensions, api, ext, gt) {
 
     'use strict';
 
@@ -33,19 +32,19 @@ define('io.ox/find/view-facets', [
         draw: extensions.list
     });
 
-    ext.point(POINT + '/select/options').extend({
+    ext.point(POINT + '/dropdown/default').extend({
         index: 100,
-        draw: extensions.options
+        draw: extensions.dropdownDefault
     });
 
-    ext.point(POINT + '/select/options/item').extend({
+    ext.point(POINT + '/dropdown/default/item').extend({
         index: 100,
         draw: extensions.item
     });
 
     ext.point(POINT + '/dropdown/folder').extend({
         index: 100,
-        draw: extensions.folder
+        draw: extensions.dropdownFolder
     });
 
     ext.point(POINT + '/dropdown/account').extend({
@@ -53,59 +52,55 @@ define('io.ox/find/view-facets', [
         draw: $.noop
     });
 
+    ext.point(POINT + '/help').extend({
+        index: 100,
+        draw: extensions.help
+    });
+
     /**
      * BACKBONE
      */
 
     // container view
-    var FacetsView = ExtensibleView.extend({
-
-        className: 'search-box-filter',
+    var FacetsView = Backbone.View.extend({
 
         attributes: {
             'aria-label': gt('Search facets'),
             'role': 'navigation'
         },
 
-        constructor: function (props) {
+        initialize: function (props) {
             _.extend(this, props);
+
+            this.setElement(this.parent.$el.find('.search-box-filter'));
+
             this.register();
-            ExtensibleView.prototype.constructor.apply(this, arguments);
         },
 
         register: function () {
-            this.listenTo(this.app.model.manager, 'active', this.hide);
-            this.listenTo(this.app, 'find:config-updated', this.render);
+            this.listenTo(this.app.model.manager, 'active', $.proxy(this.redraw, this));
+            this.listenTo(this.app, 'find:config-updated', $.proxy(this.render, this));
+        },
+
+        redraw: function () {
+            this.render();
         },
 
         render: function () {
             this.reset();
-            this.$el.append(
-                this.$dropdown = $('<form class="dropdown" autocomplete="off">')
-            );
-            ext.point(POINT + '/toolbar').invoke('draw', this.$dropdown, this.baton);
+            // container node
+            ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
+            // adjust height by parents height (maybe tokenfield has morge than on line visible)
+            this.$el.find('ul.classic-toolbar').outerHeight(this.$el.parent().outerHeight());
             return this;
         },
 
-        toggle: function (state) {
-            this.app.trigger('facets:toggle');
-            if (state === undefined) state = !this.isOpen();
-            this.$el.css('width', this.$el.closest('.search-box').outerWidth())
-                    .toggleClass('open', state);
-            //this.$dropdownToggle.attr('aria-expanded', state);
-            this.trigger(state ? 'open' : 'close');
-        },
-
-        isOpen: function () {
-            return this.$el.hasClass('open');
-        },
-
         show: function () {
-            this.toggle(true);
+            this.$el.show();
         },
 
         hide: function () {
-            this.toggle(false);
+            this.$el.hide();
         },
 
         reset: function () {
@@ -170,7 +165,6 @@ define('io.ox/find/view-facets', [
                                     id: target,
                                     name: label
                                 });
-                                self.render();
                             });
                     },
                     disable: function (data) {

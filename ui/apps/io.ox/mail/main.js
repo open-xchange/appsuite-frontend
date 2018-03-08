@@ -1653,6 +1653,10 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
             function registerPoolAdd(model, find) {
                 find.on('collectionLoader:created', function (loader) {
                     loader.each = function (obj) {
