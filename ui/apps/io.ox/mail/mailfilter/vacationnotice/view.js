@@ -326,12 +326,12 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             id: 'aliases',
             render: function (baton) {
 
-                if (this.data.aliases.length <= 1) return;
-                if (!settings.get('features/setAddressesInVacationNotice', true)) return;
-
                 var model = this.model,
                     primaryMail = this.data.primary || this.data.aliases[0];
                 model.set('primaryMail', primaryMail);
+
+                if (this.data.aliases.length <= 1) return;
+                if (!settings.get('features/setAddressesInVacationNotice', true)) return;
 
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);
