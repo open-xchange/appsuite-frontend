@@ -104,7 +104,7 @@
 
     #io-ox-top-logo {
         width: auto;
-        margin: 0 24px 0 25px; // like rightside
+        margin: 0 24px 0 24px; // like rightside
     }
 
     #io-ox-launcher {
@@ -270,8 +270,8 @@
 
     #io-ox-toprightbar,
     #io-ox-toprightbar > ul,
-    #io-ox-toprightbar > ul li,
-    #io-ox-toprightbar > ul li a {
+    #io-ox-toprightbar > ul > li,
+    #io-ox-toprightbar > ul > li a {
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
@@ -280,10 +280,10 @@
     }
 
     #io-ox-toprightbar {
-        padding-right: 25px; // break alignment on purpose
+        padding-right: 12px; // break alignment on purpose
         .launcher {
             a {
-                padding: 16px 13px;
+                padding: 16px 11px;
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
@@ -312,47 +312,15 @@
     }
 }
 
-#io-ox-launchgrid {
-    display: none;
-    position: absolute;
-    right: 0px; // for 7.10 launcher right
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 3px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    z-index: 1;
+#io-ox-launcher .dropdown-menu {
 
-    top: @appcontrol-height;
+    padding: @launcher-outer-spacing;
+    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
 
-    .smartphone & {
-        width: 65%;
-    }
-
-    .open & {
-        display: block;
-    }
-
-    .indicator {
-        display: none;
-    }
-
-    .cflex {
-        display: flex;
-        flex-direction: row;
-        align-items: left;
-        vertical-align: top;
-        flex-wrap: wrap;
-        padding: @launcher-outer-spacing;
-        width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2;
-
-        .smartphone & {
-            width: 100%;
-            padding: 8px 6px;
-            max-height: 430px; // 9 apps
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
-            z-index: 10; // prevent scrolling of underlying div on iOS
+    li {
+        float: left;
+        .fa {
+            width: auto;
         }
     }
 
@@ -401,7 +369,6 @@
                 color: #ffc107;
             }
         }
-        //&.active .title { font-weight: bold; }
         .badge {
             position: absolute;
             top: 43%;
@@ -413,10 +380,6 @@
         .svgwrap {
             width: @svg-wrap-size;
             height: 100%;
-            .smartphone & {
-                width: 40px;
-                height: 40px;
-            }
         }
 
         svg, i {
@@ -522,6 +485,10 @@
 }
 
 .smartphone {
+
+    .svgwrap {
+        display: none;
+    }
 
     #io-ox-launchgrid, #io-ox-launchgrid-overlay { top: @appcontrol-height-smartphone; }
     #io-ox-quicklaunch { display: none; }
