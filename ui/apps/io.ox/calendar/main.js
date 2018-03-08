@@ -594,6 +594,10 @@ define('io.ox/calendar/main', [
         },
 
         'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list';
 

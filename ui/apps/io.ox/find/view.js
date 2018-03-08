@@ -37,13 +37,11 @@ define('io.ox/find/view', [
             'focusout': 'smartCancel',
             // subview buttons
             'click .action-cancel': 'cancel',
-            'keydown .action-cancel': 'cancel',
-            // facets
-            'click .action-options': 'onToggle'
+            'keydown .action-cancel': 'cancel'
         },
 
         classes: {
-            active: 'active',
+            active: 'io-ox-find-active',
             userchange: 'changed-by-user'
         },
 
@@ -84,12 +82,21 @@ define('io.ox/find/view', [
 
             // shortcuts
             this.ui = {
+                container: undefined,
+                body: undefined,
+                manager: undefined,
+                // subviews
                 searchbox: undefined,
                 facets: undefined
             };
 
             // field stub already rendered
-            this.setElement($('.io-ox-find[data-app="' + this.app.get('parent').id + '"]'));
+            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
+
+            // shortcuts
+            this.ui.container = this.$el.closest('.window-container');
+            this.ui.body = this.ui.container.find('.window-body');
+            this.ui.manager = $('#io-ox-windowmanager');
 
             // create empty view
             this.ui.searchbox = new AutocompleteView(_.extend(props, { parent: this }));
@@ -97,16 +104,25 @@ define('io.ox/find/view', [
 
         },
 
-        render: function () {
-            this.ui.searchbox.render().$el.append(
-                this.ui.facets.render().$el
-            );
-            return this;
+        calculateDimensions: function () {
+            this.css = {
+                body: {
+                    closed: this.ui.body.css('top'),
+                    open: this.$el.outerHeight() + 'px'
+                },
+                el: {
+                    closed: this.$el.css('top'),
+                    open: this.ui.manager.offset().top + 'px'
+                }
+            };
         },
 
-        onToggle: function (e) {
-            $(e.target).focus();
-            this.ui.facets.toggle();
+        render: function () {
+            // replaces stub
+            this.ui.searchbox.render();
+            this.ui.facets.render();
+            this.register();
+            return this;
         },
 
         onKeydown: function (e) {
@@ -118,10 +134,16 @@ define('io.ox/find/view', [
         show: function () {
             this.trigger('focusin');
             if (this.isActive()) return;
+            this.calculateDimensions();
+            // apply margin to next
+            this.$el.next().css('margin-top', this.css.body.open);
+            // apply dynamic styles
+            this.ui.body.css('top', this.css.body.open);
             // css switch-class
-            this.$el.addClass(this.classes.active);
+            this.ui.container.addClass(this.classes.active);
             // bubble
             this.ui.searchbox.show();
+            this.ui.facets.show();
             // loose coupling
             this.trigger('show');
         },
@@ -129,8 +151,13 @@ define('io.ox/find/view', [
         // collapse (keep focus)
         hide: function () {
             if (!this.isActive() || !this.isEmpty()) return;
+            // remove margin-top from next
+            this.$el.next().css('margin-top', '');
+            // reset dynamic styles
+            this.ui.body.css('top', this.css.body.closed);
+            this.$el.css('top', this.css.el.closed);
             // css switch-class
-            this.$el.removeClass(this.classes.active);
+            this.ui.container.removeClass(this.classes.active);
             // bubble
             this.ui.searchbox.hide();
             this.ui.facets.hide();
@@ -147,7 +174,7 @@ define('io.ox/find/view', [
             this.ui.searchbox.reset();
             this.ui.facets.reset();
             // remove flags
-            this.$el.removeClass(this.classes.userchange);
+            this.ui.container.removeClass(this.classes.userchange);
             // throw event
             this.trigger('reset');
         },
@@ -162,12 +189,12 @@ define('io.ox/find/view', [
         },
 
         userchange: function () {
-            this.$el.addClass(this.classes.userchange);
+            this.ui.container.addClass(this.classes.userchange);
             this.setFocus();
         },
 
         hasChanged: function () {
-            return this.$el.hasClass(this.classes.userchange);
+            return this.ui.container.hasClass(this.classes.userchange);
         },
 
         // on focusout
@@ -182,13 +209,31 @@ define('io.ox/find/view', [
             }, 150);
         },
 
+        _onResize: function (delta) {
+            var box = this.$el,
+                facets = this.ui.facets.$el.find('ul'),
+                tree = this.$el.closest('.window-sidepanel').find('.folder-tree'),
+                winbody = this.$el.closest('.window-container').find('.window-body');
+
+            box.outerHeight(box.outerHeight() + delta);
+            facets.outerHeight(facets.outerHeight() + delta);
+            tree.offset({ top: tree.offset().top + delta });
+            if (this.app.isActive()) {
+                winbody.offset({ top: winbody.offset().top + delta });
+            }
+        },
+
+        register: function () {
+            this.ui.searchbox.on('resize', _.bind(this._onResize, this));
+        },
+
         setFocus: function () {
             // focus search field
             return this.ui.searchbox.setFocus();
         },
 
         isActive: function () {
-            return this.$el.hasClass(this.classes.active);
+            return this.ui.container.hasClass(this.classes.active);
         },
 
         isEmpty: function () {

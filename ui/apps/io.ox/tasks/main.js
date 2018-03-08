@@ -645,6 +645,10 @@ define('io.ox/tasks/main', [
         },
 
         'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
             function registerHandler(model, find) {
                 find.on({
                     'find:query': function () {
