@@ -31,7 +31,7 @@ define('io.ox/core/main/appcontrol', [
     ox.on('launcher:toggleOverlay', toggleOverlay);
 
     var LauncherView = Backbone.View.extend({
-        tagName: 'button',
+        tagName: 'a',
         className: 'btn btn-link lcell',
         attributes: {
             type: 'button'
@@ -176,27 +176,24 @@ define('io.ox/core/main/appcontrol', [
     // });
 
     var LaunchersView = Backbone.View.extend({
-        attributes: {
-            id: 'io-ox-launcher'
-        },
-        events: {
-            'click button': 'onClick',
-            'click #io-ox-launchgrid-overlay-inner': 'onClick'
-        },
-        onClick: function (force) {
-            toggleOverlay(force);
+        className: 'dropdown',
+        id: 'io-ox-launcher',
+
+        initialize: function () {
+            this.listenTo(ox, 'launcher:toggleOverlay', function () {
+                this.$('[data-toggle="dropdown"]').dropdown('toggle');
+            });
         },
         render: function () {
             this.$el.append(
-                $('<button type="button" class="launcher-btn btn btn-link" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to:">').append(icons.launcher),
-                $('<div id="io-ox-launchgrid">').append(
-                    $('<div class="cflex">').append(
-                        this.collection.map(function (model) {
-                            return new LauncherView({ model: model }).render().$el;
-                        })
-                    )
-                ),
-                $('<div id="io-ox-launchgrid-overlay-inner">')
+                $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+                $('<ul class="dropdown-menu dropdown-menu-right">').append(
+                    this.collection.map(function (model) {
+                        return $('<li role="presentation">').append(
+                            new LauncherView({ model: model }).render().$el
+                        );
+                    })
+                )
             );
             return this;
         }
