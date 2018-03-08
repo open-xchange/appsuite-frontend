@@ -237,20 +237,20 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol').extend({
-        id: 'launcher',
-        index: 200,
-        draw: function () {
-            // possible setting here
-            var apps = ox.ui.apps.where({ hasLauncher: true });
-            // reverted for 7.10
-            //if (apps.length <= 1) return;
-            var launchers = window.launchers = new LaunchersView({
-                collection: apps
-            });
-            this.append(launchers.render().$el);
-        }
-    });
+    // ext.point('io.ox/core/appcontrol').extend({
+    //     id: 'launcher',
+    //     index: 200,
+    //     draw: function () {
+    //         // possible setting here
+    //         var apps = ox.ui.apps.where({ hasLauncher: true });
+    //         // reverted for 7.10
+    //         //if (apps.length <= 1) return;
+    //         var launchers = window.launchers = new LaunchersView({
+    //             collection: apps
+    //         });
+    //         this.append(launchers.render().$el);
+    //     }
+    // });
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'logo',
@@ -293,6 +293,23 @@ define('io.ox/core/main/appcontrol', [
     //     }
     // });
 
+    // for 7.10
+    // move launcher to the right
+    ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'launcher',
+        index: 120,
+        draw: function () {
+            // possible setting here
+            var apps = ox.ui.apps.where({ hasLauncher: true });
+            // reverted for 7.10
+            //if (apps.length <= 1) return;
+            var launchers = window.launchers = new LaunchersView({
+                collection: apps
+            });
+            this.append(launchers.render().$el);
+        }
+    });
+
     ext.point('io.ox/core/appcontrol').extend({
         id: 'search',
         index: 500,
@@ -302,6 +319,7 @@ define('io.ox/core/main/appcontrol', [
             ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
         }
     });
+
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'right',
