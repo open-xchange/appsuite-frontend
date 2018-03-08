@@ -241,7 +241,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 $('<div class="checkbox custom">').append(
                     $('<label>').attr('for', id).prepend(
                         $('<input type="checkbox" class="sr-only">')
-                            .attr({ 'id': id, 'data-action': o.action })
+                            .attr({ 'id': id, 'name': o.action })
                             .prop('checked', o.status),
                         $('<i class="toggle" aria-hidden="true">'),
                         $.txt(o.label || '\u00a0')
