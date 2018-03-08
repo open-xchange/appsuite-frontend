@@ -258,7 +258,7 @@ define('io.ox/calendar/util', [
                     $('<span class="time">').append(
                         timeStr ? $.txt(timeStr) : '',
                         // Yep there are appointments without timezone. May not be all day appointmens either
-                        data.startDate.tzid ? this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel) : ''
+                        data.startDate.tzid && !options.noTimezoneLabel ? this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel) : ''
                     )
                 );
             }

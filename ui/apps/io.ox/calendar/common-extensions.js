@@ -86,10 +86,7 @@ define('io.ox/calendar/common-extensions', [
         datetime: function (baton) {
             var data = baton.data.event || baton.data;
             this.append(
-                $('<div class="date-time">').append(
-                    $('<span class="date">').text(util.getDateInterval(data)),
-                    $('<span class="time">').text(util.getTimeInterval(data))
-                )
+                util.getDateTimeIntervalMarkup(data, { zone: moment().tz(), noTimezoneLabel: true })
             );
         },
 
