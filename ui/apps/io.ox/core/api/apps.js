@@ -32,7 +32,7 @@ define('io.ox/core/api/apps', [
                 'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
                 'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
                 'io.ox/notes'];
-            var apps =  settings.get('apps/order', defaultList.join(',')).split(',');
+            var apps =  settings.get('apps/order', '').split(',');
             var blacklist = settings.get('apps/blacklist', '').split(',');
             // Construct App Data
             // seems to do nothign, ox.manifest.apps is already cleaned up
@@ -50,7 +50,7 @@ define('io.ox/core/api/apps', [
                 return o;
             }).filter(function (o) {
                 return o.hasLauncher;
-            });
+            }).sort(function (a, b) { return a.index > b.index; });
 
             return _.compact(apps.map(function (app) {
                 // return manifests in the order they have been specified in `io.ox/core//apps/order`
