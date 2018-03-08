@@ -105,17 +105,19 @@ define('io.ox/core/boot/load', [
 
         if (!capabilities.has('webmail')) return;
 
+        var columns = http.defaultColumns.mail;
+
         // always extend columns (we can do that now and if we start with mail with need this)
         if (mailSettings.get('features/textPreview', true)) {
-            http.defaultColumns.mail.unseen += ',662';
-            http.defaultColumns.mail.all += ',662';
-            http.defaultColumns.mail.search += ',662';
+            columns.unseen += ',662';
+            columns.all += ',662';
+            columns.search += ',662';
         }
 
         if (mailSettings.get('features/authenticity', false)) {
-            http.defaultColumns.mail.unseen += ',664';
-            http.defaultColumns.mail.all += ',664';
-            http.defaultColumns.mail.search += ',664';
+            columns.unseen += ',664';
+            columns.all += ',664';
+            columns.search += ',664';
         }
 
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
@@ -131,7 +133,7 @@ define('io.ox/core/boot/load', [
             params = {
                 action: action,
                 folder: folder,
-                columns: http.defaultColumns.mail.all,
+                columns: columns.all,
                 sort: sort,
                 order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
                 categoryid: 'general',
