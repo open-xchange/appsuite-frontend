@@ -39,14 +39,15 @@
 
 #io-ox-top-logo {
     list-style: none;
-    height: @appcontrol-height;
+    // height: @appcontrol-height;
 
     // Keep this for dynamic themes
     font-size: 0;
     line-height: @appcontrol-height - 1;
 
     img {
-        height: 100%;
+        width: 60px;
+        max-height: 100%;
         margin-top: -1px;
     }
 }
@@ -103,7 +104,7 @@
 
     #io-ox-top-logo {
         width: auto;
-        margin: 0 24px 0 16px;
+        margin: 0 24px 0 25px; // like rightside
     }
 
     #io-ox-launcher {
@@ -116,7 +117,7 @@
             font-size: 18px;
             color: #fff;
             padding: 2px 16px 0px 16px;
-            width: 64px;
+            width: 48px;
             // svg styles
             //padding: 24px 16px;
             //width: @appcontrol-height - 16;
@@ -279,9 +280,10 @@
     }
 
     #io-ox-toprightbar {
+        padding-right: 25px; // break alignment on purpose
         .launcher {
             a {
-                padding: 16px 12px;
+                padding: 16px 13px;
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
@@ -313,6 +315,7 @@
 #io-ox-launchgrid {
     display: none;
     position: absolute;
+    right: 0px; // for 7.10 launcher right
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 3px;
