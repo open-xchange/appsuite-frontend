@@ -37,10 +37,16 @@ define('io.ox/files/actions', [
         allowedFileExtensions.push('pgp');
     }
 
-    function isTrash(app) {
-        var folderId = app.folder.get(),
-            model = folderAPI.pool.getModel(folderId);
-        return folderAPI.is('trash', model.toJSON());
+    function isTrash(baton) {
+        var model,
+            folderId;
+        if (baton.app) {
+            folderId = baton.app.folder.get();
+        } else if (baton.data) {
+            folderId = baton.data.folder_id;
+        }
+        model = folderAPI.pool.getModel(folderId);
+        return model ? folderAPI.is('trash', model.toJSON()) : false;
     }
 
     // actions
@@ -89,7 +95,7 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                if (e.baton.app && isTrash(e.baton.app)) return false;
+                if (isTrash(e.baton)) return false;
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
                     var model = _.first(e.baton.models);
                     var isEncrypted = model && model.isEncrypted();
@@ -355,7 +361,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-            if (e.baton.app && isTrash(e.baton.app)) return false;
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -376,7 +382,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-            if (e.baton.app && isTrash(e.baton.app)) return false;
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -439,7 +445,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
-            if (e.baton.app && isTrash(e.baton.app)) return false;
+            if (isTrash(e.baton)) return false;
             // one?
             if (!e.collection.has('one')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
@@ -473,7 +479,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/save-as-pdf', {
         capabilities: 'document_preview', // document converter.
         requires: function (e) {
-            if (e.baton.app && isTrash(e.baton.app)) return false;
+            if (isTrash(e.baton)) return false;
             // one?
             if (!e.collection.has('one')) return false;
 
@@ -504,7 +510,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
-            if (e.baton.app && isTrash(e.baton.app)) return false;
+            if (isTrash(e.baton)) return false;
             if (!e.collection.has('one', 'items')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
@@ -1012,7 +1018,7 @@ define('io.ox/files/actions', [
     // Action to add files/folders to favorites
     new Action('io.ox/files/favorites/add', {
         requires: function (e) {
-            if (e.baton.app && isTrash(e.baton.app)) return false;
+            if (isTrash(e.baton)) return false;
             if (capabilities.has('guest && anonymous')) return false;
             if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
                 if (Array.isArray(e.context)) {
