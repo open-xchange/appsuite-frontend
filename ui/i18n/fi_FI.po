@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-05 16:37+0200\n"
+"PO-Revision-Date: 2018-03-06 18:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -1184,14 +1184,12 @@ msgid "Starts on"
 msgstr "Alkaa"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Start time"
-msgstr "Aloituspäivämäärä"
+msgstr "Aloitusaika"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "End time"
-msgstr "Loppupäivämäärän aikavyöhyke"
+msgstr "Lopetusaika"
 
 #. %1$s timezone abbreviation of the user
 #. %2$s time interval of event
