@@ -258,23 +258,28 @@ define('io.ox/calendar/model', [
         },
 
         setDefaultAttendees: function (options) {
+            if (!options.create) return $.when();
             var self = this;
             return folderAPI.get(this.get('folder')).then(function (folder) {
-                if (!options.create) return;
-                var isPrivate = folderAPI.is('private', folder),
-                    isShared = folderAPI.is('shared', folder);
+                var isShared = folderAPI.is('shared', folder);
                 return require(['io.ox/core/api/user']).then(function (userAPI) {
                     return userAPI.get({ id: isShared ? folder.created_by : undefined });
                 }).then(function (user) {
-                    if (isPrivate) {
-                        self.set('organizer', {
-                            cn: user.display_name,
-                            email: user.email1,
-                            uri: 'mailto:' + user.email1,
-                            entity: ox.user_id
-                        });
+                    self.set('organizer', {
+                        cn: user.display_name,
+                        email: user.email1,
+                        uri: 'mailto:' + user.email1,
+                        entity: user.id
+                    });
+                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' });
+                    // Merge attributes or add (note add with merge option does not overwrite old values with new ones, so it cannot be used here)
+                    if (self.getAttendees().get(newAttendee)) {
+                        self.getAttendees().get(newAttendee).set(newAttendee);
+                        // trigger add manually to make sure the attendee attribute and collection are synced correctly -> see follow up events action
+                        self.getAttendees().trigger('add');
+                    } else {
+                        self.getAttendees().add(newAttendee);
                     }
-                    self.getAttendees().add(util.createAttendee(user, { partStat: 'ACCEPTED' }));
                 });
             });
         },
