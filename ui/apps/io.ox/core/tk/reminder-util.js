@@ -93,7 +93,7 @@ define('io.ox/core/tk/reminder-util', [
             //#, c-format
             label = gt('Reminder for task %1$s.', model.get('title'));
         } else {
-            var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
+            var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() });
             //appointment
             info = $('<a class="notification-info" role="button">').append(
                 $('<span class="span-to-div time">').text(strings.timeStr),
