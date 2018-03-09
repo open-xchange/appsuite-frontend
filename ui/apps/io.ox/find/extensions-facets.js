@@ -129,7 +129,7 @@ define('io.ox/find/extensions-facets', [
                     dropdown.option(id, option.id, label);
 
                     if (conflicting) {
-                        dropdown.$ul.children().last().addClass('conflicting');
+                        dropdown.$ul.children().last().find('a').addClass('disabled');
                     }
                 });
             });
