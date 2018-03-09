@@ -139,7 +139,8 @@ define('io.ox/files/actions', [
                         guardAuth.authorize().then(function (auth) {
                             var params = {
                                 cryptoAction: 'Decrypt',
-                                cryptoAuth: auth
+                                cryptoAuth: auth,
+                                session: ox.session
                             };
                             launch(params);
                         });
