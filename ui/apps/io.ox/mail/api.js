@@ -2070,7 +2070,8 @@ define('io.ox/mail/api', [
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
         // in the collection which is wanted behavior.
-        _.extend(obj, last);
+        // use most recent text preview
+        _.extend(obj, last, { text_preview: obj.text_preview || '' });
 
         // only store plain composite keys instead of full objects
         obj.thread = _(thread).map(_.cid);

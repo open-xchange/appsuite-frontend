@@ -448,6 +448,8 @@ define('io.ox/mail/listview', [
                 return lacksPreview;
             });
 
+            if (!ids.length) return;
+
             api.fetchTextPreview(ids).done(function (hash) {
                 _(models).each(function (model) {
                     var msg = _(api.threads.get(model.cid)).first(), cid = _.cid(msg);
@@ -554,7 +556,7 @@ define('io.ox/mail/listview', [
             // set subject to first message in thread so a Thread has a constant subject
             data.subject = api.threads.subject(data) || data.subject || '';
             // get text preview
-            data.text_preview = _(thread).first().text_preview || data.text_preview || '';
+            data.text_preview = model.get('text_preview');
             // done
             return data;
         },
