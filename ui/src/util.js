@@ -126,6 +126,11 @@
          */
         param: function (obj) {
             return this.serialize(obj, ' / ', _.identity);
+        },
+
+        // quite like param but also drop undefined values
+        cacheKey: function (obj) {
+            return this.param($.extend({}, obj));
         }
     });
 

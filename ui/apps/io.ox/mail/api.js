@@ -1995,22 +1995,22 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
+                    categoryid: params.category_id || params.categoryid,
                     columns: http.defaultColumns.mail.all,
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
-                    categoryid: params.category_id || params.categoryid,
                     timezone: 'utc'
                 };
             }
             return {
                 action: 'all',
                 folder: params.folder,
+                categoryid: params.category_id || params.categoryid,
                 columns: http.defaultColumns.mail.all,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
-                categoryid: params.category_id || params.categoryid,
                 timezone: 'utc'
             };
         },

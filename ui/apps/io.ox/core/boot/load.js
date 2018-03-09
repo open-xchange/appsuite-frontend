@@ -133,10 +133,12 @@ define('io.ox/core/boot/load', [
             params = {
                 action: action,
                 folder: folder,
+                categoryid: 'general',
                 columns: columns.all,
                 sort: sort,
                 order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
-                categoryid: 'general',
+                includeSent: true,
+                max: 300,
                 timezone: 'utc',
                 limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
             };
@@ -146,11 +148,15 @@ define('io.ox/core/boot/load', [
             delete params.categoryid;
         }
 
-        if (thread) _.extend(params, { includeSent: true, max: 300 });
+        if (!thread) {
+            // delete instead of adding to maintain proper order of parameters
+            delete params.includeSent;
+            delete params.max;
+        }
 
         http.GET({ module: 'mail', params: params }).done(function (data) {
             // the collection loader will check ox.rampup for this data
-            ox.rampup['mail/' + _.param(params)] = data;
+            ox.rampup['mail/' + _.cacheKey(params)] = data;
         });
     }
 
