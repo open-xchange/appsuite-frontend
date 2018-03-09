@@ -379,12 +379,12 @@ define('io.ox/calendar/week/view', [
                     case 'mouseenter':
                         if (e.relatedTarget && e.relatedTarget.tagName !== 'TD') {
                             el.addClass('hover');
-                            el.css('background-color', util.lightenDarkenColor(bg, 0.9));
+                            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
                         }
                         break;
                     case 'mouseleave':
                         el.removeClass('hover');
-                        el.css('background-color', bg);
+                        if (bg) el.css('background-color', bg);
                         break;
                     default:
                         break;
