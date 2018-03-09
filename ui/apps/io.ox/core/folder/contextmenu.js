@@ -626,6 +626,23 @@ define('io.ox/core/folder/contextmenu', [
             });
         },
 
+        // not used in folder contextmenu
+        // but in the "select all" menu in listview
+        selectAll: function (baton) {
+            if (baton.module !== 'mail') return;
+
+            contextUtils.addLink(this, {
+                action: 'selectall',
+                data: { folder: baton.data.id, app: baton.app },
+                enabled: true,
+                handler: function () {
+                    baton.listView.selection.selectAll();
+                    baton.listView.trigger('selection:showHint');
+                },
+                text: gt('Select all messages')
+            });
+        },
+
         divider: contextUtils.divider
     };
 

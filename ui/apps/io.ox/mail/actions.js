@@ -554,6 +554,7 @@ define('io.ox/mail/actions', [
         }
     });
 
+
     // all actions
 
     new Action('io.ox/mail/actions/sendmail', {

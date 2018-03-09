@@ -978,7 +978,6 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             app.showMultiple = function (list) {
-
                 app.threadView.empty();
                 list = api.resolve(list, app.isThreaded());
 
@@ -1002,16 +1001,22 @@ define('io.ox/mail/main', [
                                 gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
                             ),
                             // inline actions
-                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
-                                $('<div class="inline-actions">').append(
+                            id && total > list.length && !search ?
+                                $('<div class="inline-actions selection-message">').append(
                                     gt('There are %1$d messages in this folder; not all messages are displayed in the list currently.', total)
-                                )
+                                ).hide()
                                 : $()
                         );
                 });
             };
-        },
 
+            app.showSelectionMessage = function () {
+                _.defer(function () {
+                    app.right.find('.selection-message').show();
+                });
+            };
+        },
+        // && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true'
         /*
          * Define function to reflect multiple selection
          */
@@ -1155,6 +1160,10 @@ define('io.ox/mail/main', [
                     app.right.find('.multi-selection-message div').attr('id', null);
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) react('action', list);
+                },
+                'selection:showHint': function () {
+                    // just enable the info text in rightside
+                    app.showSelectionMessage();
                 }
             });
         },
