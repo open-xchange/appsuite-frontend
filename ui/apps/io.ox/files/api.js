@@ -172,7 +172,7 @@ define('io.ox/files/api', [
             return (
                 this.isPgp() ||
                 // check if file has "guard" file extension
-                (/\.(grd|grd2|pgp)$/).test(this.get('filename'))
+                (/\.(grd|grd2|pgp)$/i).test(this.get('filename'))
             );
         },
 
@@ -207,7 +207,7 @@ define('io.ox/files/api', [
 
             // If has extension .xyz.pgp, remove the pgp and return extension
             if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
-                extension = parts[parts.length - 1];
+                extension = parts[parts.length - 1].toLowerCase();
             } else {
                 extension = '';
             }
