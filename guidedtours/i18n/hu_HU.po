@@ -301,12 +301,6 @@ msgstr ""
 "Fájlokat oszthat meg kollégáival és külső személyekkel. Közösen dolgozhat "
 "velük dokumentumokon és beállíthat különböző hozzáférési jogosultságokat."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr "Tipp: bármikor újraindíthatja a termékbemutatót a rendszermenüből."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Mi szerint vannak rendezve a beállítások"
@@ -324,14 +318,6 @@ msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
 "Ha nem akarja továbbiakban megjeleníteni a négyzetet, akkor kattintson a "
 "törlés ikonra."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"Új értesítés megérkezésekor pl. meghívás találkozóra, az információs terület "
-"megnyílik."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -409,10 +395,6 @@ msgstr "E-mail társalgások olvasása"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Részletek olvasása"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Bemutató újraindítása"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -500,18 +482,6 @@ msgstr ""
 "találkozókra kattintva a Részletes nézetben a találkozó adatai és az ahhoz "
 "kapcsolódó funkciók jelennek meg."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Az Új elemek ikon"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Az Új elemek ikon megmutatja a találkozó emlékeztetők és más értesítések "
-"számát. Az ikonra kattintva megnyílik az információs terület."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "A Portál"
@@ -549,10 +519,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "A mappastruktúra"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Az információs terület"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -711,7 +677,12 @@ msgstr ""
 "található mezőben. Mellékletként dokumentumok csatolhatók a feladathoz."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "Az alkalmazás indításához kattintson a menüsáv bal oldalán található "
 "bejegyzések egyikére."
@@ -751,10 +722,16 @@ msgstr ""
 "kattintson az E-mail beállításokra a bal oldalon."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
@@ -763,9 +740,13 @@ msgstr ""
 "részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
 "található Rendszer menü ikonra és válassza ki a Beállításokat."
@@ -812,6 +793,17 @@ msgstr "A levél elküldéséhez kattintson a Küldés gombra"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"A kijelentkezéshez kattintson a menüsor jobb felső részében található "
+"Rendszer menü ikonra és válassza ki a Kijelentkezést."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "A kijelentkezéshez kattintson a menüsor jobb felső részében található "
 "Rendszer menü ikonra és válassza ki a Kijelentkezést."
@@ -901,6 +893,21 @@ msgstr ""
 #~ msgid "Guided tour for this app"
 #~ msgstr "Az alkalmazás bemutatója"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr "Tipp: bármikor újraindíthatja a termékbemutatót a rendszermenüből."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Új értesítés megérkezésekor pl. meghívás találkozóra, az információs "
+#~ "terület megnyílik."
+
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Bemutató újraindítása"
+
 #~ msgid "The Icons view"
 #~ msgstr "Ikonnézet"
 
@@ -921,6 +928,16 @@ msgstr ""
 #~ "dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra "
 #~ "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Az Új elemek ikon"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Az Új elemek ikon megmutatja a találkozó emlékeztetők és más értesítések "
+#~ "számát. Az ikonra kattintva megnyílik az információs terület."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -937,6 +954,9 @@ msgstr ""
 #~ msgstr ""
 #~ "A Mozaik nézet minden fájlról egy nagy ikont jelenít meg. Az ikonra "
 #~ "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
+
+#~ msgid "The info area"
+#~ msgstr "Az információs terület"
 
 #~ msgid "To create a note, click on New > Add note in the toolbar."
 #~ msgstr ""

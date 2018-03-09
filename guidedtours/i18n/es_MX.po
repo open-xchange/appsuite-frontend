@@ -307,14 +307,6 @@ msgstr ""
 "Puede también colaborar en un documento y establecer diferentes permisos de "
 "acceso."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Sugerencia: puede reiniciar la visita guiada siempre que lo desee desde el "
-"menú de sistema."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Cómo están organizados los ajustes"
@@ -330,14 +322,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Si ya no quiere ver más un panel, presione en el icono de borrar."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"En caso de nuevas notificaciones, por ejemplo invitaciones a citas, se abre "
-"el área de información."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -415,10 +399,6 @@ msgstr "Lectura de conversaciones recientes"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Lectura de los detalles"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Reiniciar visita guiada"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -507,18 +487,6 @@ msgstr ""
 "presiona en una cita, los datos de dicha cita y algunas funciones se "
 "muestran en la Vista de detalle."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "El icono Nuevos objetos"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"El icono Nuevos objetos muestra el número de recordatorios de citas u otras "
-"notificaciones. Si se presiona el icono, se abre el área de información."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "El Portal"
@@ -556,10 +524,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "El árbol de carpetas"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "El área de información"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -720,7 +684,12 @@ msgstr ""
 "hay debajo de Participantes. Puede agregar documentos adjuntos a la tarea."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "Para iniciar una aplicación, presione en un elemento de la izquierda de la "
 "barra de menús."
@@ -759,10 +728,16 @@ msgstr ""
 "Presione en Correo en la parte izquierda."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Para abrir la ayuda, presione el icono Menú de sistema de la parte superior "
@@ -771,9 +746,13 @@ msgstr ""
 "inicio o Tabla de contenidos en la parte superior de la ventana. "
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Para abrir los ajustes, presione el icono Menú del sistema situado en la "
 "parte superior derecha de la barra de menús. Seleccione Configuración."
@@ -819,6 +798,17 @@ msgstr "Para enviar el correo, presione en Enviar"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Para cerrar la sesión, presione el icono Menú del sistema situado a la "
+"derecha de la barra de menús. Seleccione Cerrar sesión."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Para cerrar la sesión, presione el icono Menú del sistema situado a la "
 "derecha de la barra de menús. Seleccione Cerrar sesión."
@@ -6594,6 +6584,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Alta prioridad"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Sugerencia: puede reiniciar la visita guiada siempre que lo desee desde "
+#~ "el menú de sistema."
+
 #~ msgid "History of error messages"
 #~ msgstr "Historial de mensajes de error"
 
@@ -6788,6 +6785,13 @@ msgstr ""
 #~ msgstr ""
 #~ "En caso de nuevas notificaciones, por ejemplo, invitaciones a citas, se "
 #~ "abre el área de información en el lado derecho."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "En caso de nuevas notificaciones, por ejemplo invitaciones a citas, se "
+#~ "abre el área de información."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -9777,6 +9781,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Recursos:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Reiniciar visita guiada"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Restaurar la última operación"
 
@@ -11136,6 +11143,17 @@ msgstr ""
 #~ "ficheros. Pulse en un fichero para ver más detalles y funciones en la "
 #~ "ventana emergente."
 
+#~ msgid "The New objects icon"
+#~ msgstr "El icono Nuevos objetos"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "El icono Nuevos objetos muestra el número de recordatorios de citas u "
+#~ "otras notificaciones. Si se presiona el icono, se abre el área de "
+#~ "información."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -11403,6 +11421,9 @@ msgstr ""
 #~ "El icono de la parte inferior derecha le ayuda a ordenar los correos "
 #~ "electrónicos. Pulse el icono para obtener una lista de criterios de "
 #~ "ordenación."
+
+#~ msgid "The info area"
+#~ msgstr "El área de información"
 
 #~ msgid "The links will be deleted by #DATE#"
 #~ msgstr "Los enlaces se borrarán el #DATE#"

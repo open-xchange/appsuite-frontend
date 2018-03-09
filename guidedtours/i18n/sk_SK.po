@@ -303,14 +303,6 @@ msgstr ""
 "Tu môžete zdieľať súbory s vašimi kolegami a externými kontaktami. Môžete "
 "tiež spolupracovať na dokumente a nastaviť rôzne prístupové práva."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Tip: Prehliadky môžete spustiť z menu Systém kedykoľvek ich budete "
-"potrebovať."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Ako sú organizované nastavenia"
@@ -324,14 +316,6 @@ msgstr "Ak dvakrát kliknete na email v zozname, otvorí sa v samostatnom okne."
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Ak už štvorec nechcete zobrazovať, kliknite na ikonu Zmazať."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"V prípade nových upozornení ako napr. pozvanie na schôdzku sa otvorí oblasť "
-"informácií."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -407,10 +391,6 @@ msgstr "Čítanie emailových konverzácií"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Čítanie podrobností"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Znovu spustiť Prehliadku"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -497,18 +477,6 @@ msgstr ""
 "kliknete na schôdzku, údaje schôdzky a niektoré funkcie sa zobrazia v "
 "Zobrazení podrobností."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Ikona Nové objekty"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Ikona Nové objekty zobrazuje počet upozornení na schôdzky alebo iné "
-"oznámenia. Ak kliknete na ikonu, otvorí sa oblasť informácií."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portál"
@@ -546,10 +514,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Strom priečinkov"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Oblasť informácií"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -705,7 +669,12 @@ msgstr ""
 "pridať dokumenty ako prílohu k úlohe."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "Aplikáciu spustíte kliknutím na položku na ľavej strane panela menu."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -742,10 +711,16 @@ msgstr ""
 "strane."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Ak chcete otvoriť Pomocníka, kliknite na ikonu menu Systém v pravej hornej "
@@ -754,9 +729,13 @@ msgstr ""
 "tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Nastavenia otvoríte kliknutím na ikonu menu Systém v pravej hornej časti "
 "panela menu. Vyberte Nastavenia."
@@ -802,6 +781,17 @@ msgstr "Email odošlete kliknutím na Odoslať"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Odhlásite sa kliknutím na ikonu systémového menu v pravej hornej časti "
+"panela menu. Vyberte Odhlásiť sa."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Odhlásite sa kliknutím na ikonu systémového menu v pravej hornej časti "
 "panela menu. Vyberte Odhlásiť sa."
@@ -4743,6 +4733,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Vysoká priorita"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Tip: Prehliadky môžete spustiť z menu Systém kedykoľvek ich budete "
+#~ "potrebovať."
+
 #~ msgid "History of error messages"
 #~ msgstr "História chybových správ"
 
@@ -4922,6 +4919,13 @@ msgstr ""
 #~ msgstr ""
 #~ "V prípade nových upozornení ako napr. pozvanie na schôdzku sa otvorí "
 #~ "oblasť informácií na pravej strane."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "V prípade nových upozornení ako napr. pozvanie na schôdzku sa otvorí "
+#~ "oblasť informácií."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -7496,6 +7500,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Zdroje:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Znovu spustiť Prehliadku"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Obnoviť poslednú operáciu"
 
@@ -8745,6 +8752,16 @@ msgstr ""
 #~ "Pomocou zaškrtávacích políčok vyberte súbory. Kliknutím na súbor "
 #~ "zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Ikona Nové objekty"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Ikona Nové objekty zobrazuje počet upozornení na schôdzky alebo iné "
+#~ "oznámenia. Ak kliknete na ikonu, otvorí sa oblasť informácií."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -8967,6 +8984,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Ikona na pravej spodnej strane vám pomáha zoraďovať vaše emaily. "
 #~ "Kliknutím na ikonu získate zoznam kritérií zoraďovania."
+
+#~ msgid "The info area"
+#~ msgstr "Oblasť informácií"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Povinné pole %1$s nie je definované."

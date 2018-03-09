@@ -296,14 +296,6 @@ msgstr ""
 "ここでファイルを同僚や外部の連絡先と共有できます。また、ドキュメントを共同で"
 "作業したり、異なるアクセス権限を設定できます。"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"ヒント：ガイドツアーはいつでも必要な時にシステムメニューから再度開始すること"
-"できます。"
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "設定の項目について"
@@ -318,12 +310,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "タイルを表示しない場合は、削除アイコンをクリックします。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr "アポイントの招待などの新規通知の場合は、情報エリアが表示されます。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -398,10 +384,6 @@ msgstr "メールスレッドの表示"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "詳細情報の閲覧"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "ガイドツアーを再度実行します。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -488,18 +470,6 @@ msgstr ""
 "ントをクリックすると、そのアポイントのデータと機能が詳細ビューに表示されま"
 "す。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "新規オブジェクト アイコン"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"新規オブジェクトアイコンは、アポイントアラームなどの通知を表示します。アイコ"
-"ンをクリックすると、情報エリアが表示されます。"
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "ポータル"
@@ -537,10 +507,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "フォルダ ツリー"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "情報エリア"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -693,7 +659,12 @@ msgstr ""
 "できます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "アプリケーションを起動するには、メニュー バーの左側にある項目をクリックしま"
 "す。"
@@ -731,10 +702,16 @@ msgstr ""
 "リックします。設定 を選択します。左側のメールをクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "ヘルプを表示するには、メニューバーの右上のシステムメニューアイコンをクリック"
@@ -743,9 +720,13 @@ msgstr ""
 "たは目次をクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリックし"
 "ます。設定 を選択します。"
@@ -791,6 +772,17 @@ msgstr "メールを送信するには、送信をクリックします。"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"サインアウトするには、メニューバーの右上のシステムメニューアイコンをクリック"
+"します。サインアウトを選択します。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "サインアウトするには、メニューバーの右上のシステムメニューアイコンをクリック"
 "します。サインアウトを選択します。"
@@ -5573,6 +5565,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "優先度 (高)"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "ヒント：ガイドツアーはいつでも必要な時にシステムメニューから再度開始するこ"
+#~ "とできます。"
+
 #~ msgid "History"
 #~ msgstr "履歴"
 
@@ -5763,6 +5762,11 @@ msgstr ""
 #~ msgstr ""
 #~ "アポイントの出席依頼など、新規の通知があると、画面右側に情報エリアが表示さ"
 #~ "れます。"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr "アポイントの招待などの新規通知の場合は、情報エリアが表示されます。"
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -8603,6 +8607,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "設備:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "ガイドツアーを再度実行します。"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "最新の操作を復元"
 
@@ -9982,6 +9989,16 @@ msgstr ""
 #~ "マイ インフォストア フォルダは、インフォストア セクションの個人用の "
 #~ "UserStore フォルダのコピーです。"
 
+#~ msgid "The New objects icon"
+#~ msgstr "新規オブジェクト アイコン"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "新規オブジェクトアイコンは、アポイントアラームなどの通知を表示します。アイ"
+#~ "コンをクリックすると、情報エリアが表示されます。"
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -10211,6 +10228,9 @@ msgstr ""
 #~ msgstr ""
 #~ "右下にあるアイコンでメールをソートできます。このアイコンをクリックすると、"
 #~ "ソート条件の一覧が表示されます。"
+
+#~ msgid "The info area"
+#~ msgstr "情報エリア"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "必須フィールド %1$s が入力されていません。"

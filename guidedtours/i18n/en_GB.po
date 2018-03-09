@@ -299,14 +299,6 @@ msgstr ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "How the settings are organised"
@@ -322,14 +314,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "If you no longer want to display a square, click the delete icon."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"In case of new notifications, e.g.: appointment invitations, the info area "
-"is opened."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -406,10 +390,6 @@ msgstr "Reading E-Mail conversations"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Reading the details"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Restart Guided Tour"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -497,18 +477,6 @@ msgstr ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "The New objects icon"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "The Portal"
@@ -546,10 +514,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "The folder tree"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "The info area"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -699,7 +663,12 @@ msgstr ""
 "Participants. You can add documents as attachments to the task."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "To launch an app, click on an entry on the left side of the menu bar."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -735,10 +704,16 @@ msgstr ""
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "To open the help, click the System menu icon on the upper right side of the "
@@ -747,9 +722,13 @@ msgstr ""
 "upper part of the window."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "To open the settings, click the System menu icon on the upper right side of "
 "the menu bar. Select Settings."
@@ -794,6 +773,17 @@ msgstr "To send the E-Mail, click on Send"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"To sign out, click the System menu icon on the upper right side of the menu "
+"bar. Select Sign out."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
@@ -3005,6 +2995,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "High priority"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+
 #~ msgid "Hobby"
 #~ msgstr "Hobby"
 
@@ -3103,6 +3100,13 @@ msgstr ""
 #~ msgstr ""
 #~ "In case of new notifications, e.g.: appointment invitations, the info "
 #~ "area is opened on the right side."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "In case of new notifications, e.g.: appointment invitations, the info "
+#~ "area is opened."
 
 #~ msgid "In progress"
 #~ msgstr "In progress"
@@ -4502,6 +4506,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Resources"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Restart Guided Tour"
+
 #~ msgid "Restore applications"
 #~ msgstr "Restore applications"
 
@@ -5151,6 +5158,16 @@ msgstr ""
 #~ "checkboxes to select files. Click on a file to view further details and "
 #~ "functions in the pop-up."
 
+#~ msgid "The New objects icon"
+#~ msgstr "The New objects icon"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5351,6 +5368,9 @@ msgstr ""
 #~ msgstr ""
 #~ "The icon on the bottom right side helps you sort your email messages. "
 #~ "Click the icon to get a list of sort criteria."
+
+#~ msgid "The info area"
+#~ msgstr "The info area"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "The number of recipients is limited to %1$s recipients per field"

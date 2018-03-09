@@ -279,12 +279,6 @@ msgstr ""
 "您能与您的同事和外部联系人分享文件，您们也能在一个文档上协作和设置不同访问"
 "权。"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr "提示：您随时能按需要从系统菜单重新开始导览。"
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "设定如何组织的"
@@ -298,12 +292,6 @@ msgstr "如果在列表里的一个电子邮件上单击，会在一个分离的
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "如果您不再要显示一个方块，单击删除图标。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr "为免有新通知，例如：约会邀请，会开启信息区域。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -376,10 +364,6 @@ msgstr "阅读电子邮件交谈"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "阅读详情"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "重新开始导览"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -464,16 +448,6 @@ msgstr ""
 "列表视图显示一个当前文件夹里约会的列表。如果在一个约会上单击，会在详细视图里"
 "显示约会的数据和一些功能。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "新对象图标"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr "新对象图标显示约会提醒其他通知数。如果单击图标，会打开信息区域。"
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "门户"
@@ -506,10 +480,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "文件夹树"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "信息区域"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -642,7 +612,12 @@ msgstr ""
 "务成附件。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "要执行一个应用程序，请单击菜单条左边的一个项目。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -674,19 +649,29 @@ msgstr ""
 "子邮件。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应用"
 "程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -726,6 +711,15 @@ msgstr "要发送电子邮件，单击发送。"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr "要注销，请单击菜单条右上方的系统菜单图标。选择注销。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr "要注销，请单击菜单条右上方的系统菜单图标。选择注销。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -4380,6 +4374,11 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "高优先级"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr "提示：您随时能按需要从系统菜单重新开始导览。"
+
 #~ msgid "Hobby"
 #~ msgstr "兴趣"
 
@@ -4490,6 +4489,11 @@ msgstr ""
 #~ "In case of new notifications, e.g. appointment invitations, the info area "
 #~ "is opened on the right side."
 #~ msgstr "假若有新通知，比如约会邀请，信息区域会在右边打开。"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr "为免有新通知，例如：约会邀请，会开启信息区域。"
 
 #~ msgid "In progress"
 #~ msgstr "进行中"
@@ -6043,6 +6047,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "资源"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "重新开始导览"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "复原最后操作"
 
@@ -6788,6 +6795,14 @@ msgstr ""
 #~ "列表视图显示像体积和更改时间等详情。使用选择框以选择文件。在一个文件上单击"
 #~ "以在弹出窗口里检视更多详情和功能。"
 
+#~ msgid "The New objects icon"
+#~ msgstr "新对象图标"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr "新对象图标显示约会提醒其他通知数。如果单击图标，会打开信息区域。"
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -6973,6 +6988,9 @@ msgstr ""
 #~ "icon to get a list of sort criteria."
 #~ msgstr ""
 #~ "在右下方的图标帮助您排序您的电子邮件。单击图标以获得一个排序准则列表。"
+
+#~ msgid "The info area"
+#~ msgstr "信息区域"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "收件人数量限制每输入字段 %1$s 个"

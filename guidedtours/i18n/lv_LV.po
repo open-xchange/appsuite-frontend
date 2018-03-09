@@ -306,14 +306,6 @@ msgstr ""
 "kontaktpersonām. Jūs varat arī sadarboties dokumentu rediģēšanā un iestatīt "
 "dažādas pieejas tiesības."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Padoms: Jūs varat atsākt ekskursijas jebkurā jums vēlamajā laikā, "
-"aktivizējot tās sistēmas izvēlnē."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Iestatījumu organizācija"
@@ -330,14 +322,6 @@ msgstr ""
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
 "Ja vairs nevēlaties parādīt kvadrātu, noklikšķiniet uz dzēšanas ikonas."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"Jaunu paziņojumu gadījumā (piemēram pie mītiņu uzaicinājumiem) tiek atvērts "
-"informatīvais apgabals."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -415,10 +399,6 @@ msgstr "E-pasta sarunu lasīšana"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Detaļu apskats"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Atsākt ekskursiju"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -505,18 +485,6 @@ msgstr ""
 "Noklikšķinot uz tikšanās ieraksta, detaļu skatā tiek parādīta tikšanās "
 "informācija un būtiskākās pārvaldības funkcijas."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Jauno objektu ikona"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Jauno objektu ikona parāda mītiņu atgādinājumu vai citu paziņojumu skaitu. "
-"Noklikšķinot uz šīs ikonas tiek atvērts informatīvais apgabals."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portāls"
@@ -554,10 +522,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Mapju koks"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Informatīvais apgabals"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -714,7 +678,12 @@ msgstr ""
 "'Dalībnieki'. Uzdevumam var tikt pievienoti atbilstošie dokumenti."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "Lai startētu aplikāciju, aktivizējiet izvēlni izvēņu joslas augšējā kresajā "
 "malā."
@@ -753,10 +722,16 @@ msgstr ""
 "pasta izvēlnes."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Lai atvērtu palīgu, noklikšķiniet uz sistēmas ikonas izvēlņu joslas labajā "
@@ -766,9 +741,13 @@ msgstr ""
 "augšējā daļā."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Lai atvērtu iestatījumus, noklikšķiniet uz sistēmas izvēlņu ikonas izvēlņu "
 "joslas augšējā labajā malā un izvēlieties iestatījumu izvēlni."
@@ -814,6 +793,17 @@ msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Lai atslēgtos no sistēmas noklikšķiniet uzsistēmas izvēlņu ikonas izvēlņu "
+"joslas augšējā labajā malā un izvēlieties izvēlni 'Atslēgties'."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Lai atslēgtos no sistēmas noklikšķiniet uzsistēmas izvēlņu ikonas izvēlņu "
 "joslas augšējā labajā malā un izvēlieties izvēlni 'Atslēgties'."
@@ -4772,6 +4762,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Augsta prioritāte"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Padoms: Jūs varat atsākt ekskursijas jebkurā jums vēlamajā laikā, "
+#~ "aktivizējot tās sistēmas izvēlnē."
+
 #~ msgid "History of error messages"
 #~ msgstr "Kļūdu ziņojumu vēsture"
 
@@ -4951,6 +4948,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Jaunu paziņojumu gadījumā (piemēram, uzaicinājumiem uz tikšanos) labajā "
 #~ "pusē tiek atvērts informatīvais apgabals."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Jaunu paziņojumu gadījumā (piemēram pie mītiņu uzaicinājumiem) tiek "
+#~ "atvērts informatīvais apgabals."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -7525,6 +7529,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Resursi:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Atsākt ekskursiju"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Atjaunot pēdējo operāciju"
 
@@ -8779,6 +8786,16 @@ msgstr ""
 #~ "Noklikšķinot uz faila tiek parādīts uznirstošais logs ar papildus detaļām "
 #~ "un funkcijām."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Jauno objektu ikona"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Jauno objektu ikona parāda mītiņu atgādinājumu vai citu paziņojumu "
+#~ "skaitu. Noklikšķinot uz šīs ikonas tiek atvērts informatīvais apgabals."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -9007,6 +9024,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Ikona vēstuļu saraksta apakšējā kreisajā stūrī atļauj šķirot un kārtot e-"
 #~ "pasta vēstules. Noklikšķiniet uz tās un izvēlieties kritērijus."
+
+#~ msgid "The info area"
+#~ msgstr "Informatīvais apgabals"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Obligātais lauks %1$s nav definēts."

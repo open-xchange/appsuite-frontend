@@ -309,14 +309,6 @@ msgstr ""
 "kan ook samenwerken aan één document en verschillende toegangsrechten "
 "instellen."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Hint: u kan een rondleiding op elk moment dat u wenst starten vanuit het "
-"systeemmenu."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "De instellingen zijn als volgt ingedeeld"
@@ -334,14 +326,6 @@ msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
 "Als u een vlak niet langer wilt tonen moet u op het verwijderen pictogram "
 "klikken."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"Als er nieuwe meldingen zijn, bijvoorbeeld uitnodigingen voor een afspraak, "
-"wordt het meldingengebied geopend."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -420,10 +404,6 @@ msgstr "E-mailconversaties lezen"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Details lezen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Herstart de Rondleiding"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -512,19 +492,6 @@ msgstr ""
 "een afspraak klikt worden de gegevens van de afspraak en een aantal functies "
 "getoond in het Detailoverzicht."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Het 'Nieuwe objecten' pictogram"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Het Nieuwe objecten pictogram toont een aantal afspraakherinneringen of "
-"andere kennisgevingen. Als u op het picogram klikt gaat het informatiegebied "
-"open."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Het portaal"
@@ -562,10 +529,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "De mappenboom"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Het meldingengebied"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -723,7 +686,12 @@ msgstr ""
 "Deelnemers. U kan documenten toevoegen als bijlage bij de taak."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "Om een app te starten moet u op een item links in de menubalk klikken."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -760,10 +728,16 @@ msgstr ""
 "mail aan de linkerkant."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Om de help te tonen, klikt u het Systeem menu pictogram in de "
@@ -772,9 +746,13 @@ msgstr ""
 "Startpagina of Inhoudsopgave in het bovenste gedeelte."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Om de instellingen te openen moet u op het Systeemmenu pictogram klikken in "
 "de rechterbovenhoek van de menubalk. Kies Instellingen."
@@ -819,6 +797,17 @@ msgstr "Om een e-mailbericht te versturen klikt u op Verzenden"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Om af te melden moet u op het Systeemmenu pictogram klikken in de "
+"rechterbovenhoek van de menubalk. Kies Afmelden."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Om af te melden moet u op het Systeemmenu pictogram klikken in de "
 "rechterbovenhoek van de menubalk. Kies Afmelden."
@@ -2904,6 +2893,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Hoge prioriteit"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Hint: u kan een rondleiding op elk moment dat u wenst starten vanuit het "
+#~ "systeemmenu."
+
 #~ msgid "Hobby"
 #~ msgstr "Hobby"
 
@@ -2995,6 +2991,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Als er nieuwe meldingen zijn, bijvoorbeeld uitnodigingen voor een "
 #~ "afspraak, wordt het meldingengebied geopend aan de rechterzijde."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Als er nieuwe meldingen zijn, bijvoorbeeld uitnodigingen voor een "
+#~ "afspraak, wordt het meldingengebied geopend."
 
 #~ msgid "In progress"
 #~ msgstr "Is bezig"
@@ -4314,6 +4317,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Bronnen"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Herstart de Rondleiding"
+
 #~ msgid "Restore applications"
 #~ msgstr "Applicaties herstellen"
 
@@ -4945,6 +4951,17 @@ msgstr ""
 #~ "wijziging. Gebruik de selectievakken om bestanden te selecteren. Klik op "
 #~ "een bestand om meer details en functies te tonen in de pop-up."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Het 'Nieuwe objecten' pictogram"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Het Nieuwe objecten pictogram toont een aantal afspraakherinneringen of "
+#~ "andere kennisgevingen. Als u op het picogram klikt gaat het "
+#~ "informatiegebied open."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5139,6 +5156,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Het pictogram in de hoek rechtsonder helpt u bij het sorteren van uw e-"
 #~ "mailberichten. Klik op dit pictogram voor een lijst met sorteeropties."
+
+#~ msgid "The info area"
+#~ msgstr "Het meldingengebied"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Het aantal ontvangers is beperkt tot %1$s per veld"

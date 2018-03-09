@@ -297,14 +297,6 @@ msgstr ""
 "kautta. Voit myös tehdä asiakirjayhteistyötä ja määrittää erilaisia "
 "käyttöoikeuksia."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Vinkki: voit aloittaa ohjatun kierroksen järjestelmävalikosta uudelleen "
-"milloin vain."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Asetusten järjestys"
@@ -319,12 +311,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Jos et halua neliön näkyvän, napsauta poistokuvaketta."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr "Saadessasi uusia ilmoituksia, esim. tapaamiskutsuja, infoalue avautuu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -400,10 +386,6 @@ msgstr "Sähköpostikeskustelun lukeminen"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Yksityiskohtien katselu"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Aloita opastettu kierros uudestaan"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -491,18 +473,6 @@ msgstr ""
 "tapaamista listassa, tapaamisen tiedot ja joitakin toimintoja näytetään "
 "tarkastelunäkymässä."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Uusia kohteita kuvake"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Uudet kohteet -kuvake näyttää tapaamismuistutusten ja muiden ilmoitusten "
-"määrän. Informaatioalue avautuu napauttamalla kuvaketta."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portaali"
@@ -540,10 +510,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Kansiopuu"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Tietoalue"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -699,7 +665,12 @@ msgstr ""
 "osiossa. Voit lisätä asiakirjoja tehtävän liitteiksi."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "Käynnistääksesi sovellus napsauta kohtaa valikkopalkin vasemmassa reunassa."
 
@@ -737,10 +708,16 @@ msgstr ""
 "vasemmalla."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Avataksesi ohjeet, napsauta järjestelmävalikon kuvaketta valikkolakin "
@@ -749,9 +726,13 @@ msgstr ""
 "tai sisällysluettelossa."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Avaa asetukset napsauttamalla järjestelmävalikon kuvaketta valikkopalkin "
 "oikeassa yläreunassa. Valitse Asetukset."
@@ -798,6 +779,17 @@ msgstr "Lähetä sähköposti napsauttamalla Lähetä"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Kirjautuaksesi ulos, napsauta järjestelmävalikkon hammaspyöräkuvaketta "
+"valikkopalkin oikeassa reunassa. Valitse Kirjaudu ulos."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Kirjautuaksesi ulos, napsauta järjestelmävalikkon hammaspyöräkuvaketta "
 "valikkopalkin oikeassa reunassa. Valitse Kirjaudu ulos."
@@ -2843,6 +2835,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Tärkeä"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Vinkki: voit aloittaa ohjatun kierroksen järjestelmävalikosta uudelleen "
+#~ "milloin vain."
+
 #~ msgid "Hobby"
 #~ msgstr "Harrastus"
 
@@ -2932,6 +2931,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Uusien ilmoitusten, esimerkiksi tapaamiskutsujen, saapuessa, tietoalue "
 #~ "avautuu oikealle reunalle."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Saadessasi uusia ilmoituksia, esim. tapaamiskutsuja, infoalue avautuu."
 
 #~ msgid "In progress"
 #~ msgstr "Meneillään"
@@ -4216,6 +4221,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Resurssit"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Aloita opastettu kierros uudestaan"
+
 #~ msgid "Restore applications"
 #~ msgstr "Keskeneräisiä toimintoja"
 
@@ -4808,6 +4816,16 @@ msgstr ""
 #~ "Valintaruutujen avulla voit valita tiedostoja. Tiedostoa napsauttamalla "
 #~ "näet lisää yksityiskohtia ja valikoiman toimintoja."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Uusia kohteita kuvake"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Uudet kohteet -kuvake näyttää tapaamismuistutusten ja muiden ilmoitusten "
+#~ "määrän. Informaatioalue avautuu napauttamalla kuvaketta."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5016,6 +5034,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Oikean alareunan kuvake avustaa sähköpostien lajittelussa. Napsauta "
 #~ "kuvaketta saadaksesi lista lajitteluperusteista."
+
+#~ msgid "The info area"
+#~ msgstr "Tietoalue"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr ""
