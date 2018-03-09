@@ -540,7 +540,7 @@ define('io.ox/files/api', [
         fetch: function (params) {
 
             var module = this.module,
-                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
+                key = module + '/' + _.cacheKey(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
                 noSelect = this.noSelect(params),
                 virtual = this.virtual(params),
