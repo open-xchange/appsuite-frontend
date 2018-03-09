@@ -147,7 +147,7 @@ define('io.ox/calendar/month/view', [
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.addClass('hover');
-            el.css('background-color', util.lightenDarkenColor(bg, 0.9));
+            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
         },
 
         // handler for onmouseleave event for hover effect
@@ -156,7 +156,7 @@ define('io.ox/calendar/month/view', [
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.removeClass('hover');
-            el.css('background-color', bg);
+            if (bg) el.css('background-color', bg);
         },
 
         // handler for mobile month view day-change
