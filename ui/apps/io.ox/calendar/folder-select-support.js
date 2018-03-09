@@ -96,7 +96,9 @@ define('io.ox/calendar/folder-select-support', [
 
     FolderSelection.prototype.remove = function (folder, opt) {
         if (this.singleSelection) this.reset();
-        var list = _(this.folders).without(folder);
+        var list = _(this.folders).filter(function (f) {
+            return String(f) !== String(folder);
+        });
         this.repaintNode(folder);
         setFolders.call(this, list, opt);
     };
