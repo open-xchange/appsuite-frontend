@@ -44,6 +44,7 @@ define('io.ox/core/main/appcontrol', [
             this.quicklaunch = options.quicklaunch;
             this.listenTo(this.model, 'change:hasBadge', this.toggleBadge);
             this.listenTo(this.model, 'change:tooltip', this.updateTooltip);
+            this.listenTo(this.model, 'change:title', this.updateTitle);
             this.listenTo(settings, 'change:coloredIcons', this.render);
         },
         checkUpsell: function () {
@@ -121,6 +122,11 @@ define('io.ox/core/main/appcontrol', [
             var tooltipAttribute = this.quicklaunch ? 'title' : 'aria-label';
             var tooltip = this.model.get('tooltip') ? ' (' + this.model.get('tooltip') + ')' : '';
             this.$el.attr(tooltipAttribute, this.model.get('title') + tooltip);
+        },
+        updateTitle: function (model, newTitle) {
+            var $title = this.icon.find('.title');
+            $title.text(newTitle);
+            this.drawUpsellIcon($title);
         },
         render: function () {
             this.$el.empty().attr({
