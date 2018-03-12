@@ -18,8 +18,9 @@ define('io.ox/core/folder/actions/properties', [
     'io.ox/backbone/views/modal',
     'settings!io.ox/contacts',
     'settings!io.ox/caldav',
-    'gettext!io.ox/core'
-], function (ext, api, capabilities, ModalDialog, contactsSettings, caldavConfig, gt) {
+    'gettext!io.ox/core',
+    'io.ox/oauth/keychain'
+], function (ext, api, capabilities, ModalDialog, contactsSettings, caldavConfig, gt, oauthAPI) {
 
     'use strict';
 
@@ -94,6 +95,76 @@ define('io.ox/core/folder/actions/properties', [
                 )
             );
         }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'description',
+        index: 400,
+        render: function () {
+            var provider = this.model.get('com.openexchange.calendar.provider');
+            if (provider !== 'ical') return;
+            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties');
+            if (!extendedProperties || !extendedProperties.description) return;
+            this.$body.append(group(gt('Description'), extendedProperties.description.value));
+        }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'ical-url',
+        index: 500,
+        render: function () {
+            var provider = this.model.get('com.openexchange.calendar.provider');
+            if (provider !== 'ical') return;
+            var config = this.model.get('com.openexchange.calendar.config');
+            if (!config || !config.uri) return;
+            this.$body.append(group(gt('iCal URL'), config.uri));
+        }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'last-updated',
+        index: 600,
+        render: function () {
+            var provider = this.model.get('com.openexchange.calendar.provider');
+            if (provider !== 'ical') return;
+            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties');
+            if (!extendedProperties || !extendedProperties.lastUpdate) return;
+            this.$body.append(group(gt('Last updated'), moment(extendedProperties.lastUpdate.value).fromNow()));
+        }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'email',
+        index: 700,
+        render: function () {
+            var provider = this.model.get('com.openexchange.calendar.provider');
+            if (provider !== 'google') return;
+            var config = this.model.get('com.openexchange.calendar.config');
+            if (!config || !config.oauthId) return;
+            var account = oauthAPI.accounts.get(config.oauthId);
+            if (!account) return;
+            var displayName = account.get('displayName');
+            if (!displayName) return;
+            this.$body.append(group(gt('Account'), displayName));
+        }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'provider',
+        index: 800,
+        render: (function () {
+            var providerMapping = {
+                'ical': gt('iCal-Feed'),
+                'google': gt('Google subscription'),
+                'schedjoules': gt('Calendars of interest')
+            };
+            return function () {
+                var provider = this.model.get('com.openexchange.calendar.provider');
+                if (!provider) return;
+                if (!providerMapping[provider]) return;
+                this.$body.append(group(gt('Type'), providerMapping[provider]));
+            };
+        }())
     });
 
     return function folderProperties(id) {
