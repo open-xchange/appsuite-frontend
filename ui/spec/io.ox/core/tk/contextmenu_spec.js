@@ -54,7 +54,7 @@ define([
                 while (exts.length) exts.pop();
             });
             it('should populate dropdown with items from "io.ox/test/contextmenu" extension point', function () {
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(1);
                     expect(view.$dropdownMenu.is('[role="menu"]')).to.be.true;
                 });
@@ -77,7 +77,7 @@ define([
                 view.remove();
             });
             it('should not render anything', function () {
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
                     // check a11y stuff, empty menus should not have a role menu
                     expect(view.$dropdownMenu.is('[role="menu"]')).to.be.false;
@@ -147,7 +147,7 @@ define([
             });
 
             it('should not render for actions disabled via "requires"', function () {
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(1);
                     expect(view.$dropdownMenu.text()).to.equal('test label');
                     // check a11y stuff, empty menus should not have a role menu
@@ -157,7 +157,7 @@ define([
 
             it('should render custom extension point if specified', function () {
                 view.contextMenuRef = 'io.ox/test/custom/contextmenu';
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(2);
                     expect(view.$dropdownMenu.text()).to.equal('test labelsecond test label');
                     // check a11y stuff, empty menus should not have a role menu
@@ -167,7 +167,7 @@ define([
 
             it('should respect dynamically disabled extensions', function () {
                 ext.point('io.ox/test/contextmenu').disable('test');
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
                     ext.point('io.ox/test/contextmenu').enable('test');
                 });
@@ -184,7 +184,7 @@ define([
                     ref: 'io.ox/test/actions/testSpy',
                     label: ''
                 });
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(requiresSpy.calledOnce).to.be.true;
                     const e = requiresSpy.firstCall.args[0],
                         baton = e.baton;
@@ -235,7 +235,7 @@ define([
                     ref: 'io.ox/test/actions/test',
                     label: 'testing'
                 });
-                return view.toggleContextMenu($('body')).then(function () {
+                return view.toggleContextMenu({ target: $('body') }).then(function () {
                     expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
                     expect(testactionSpy.calledOnce).to.be.true;
                 });

@@ -49,7 +49,7 @@ define('io.ox/backbone/mini-views/contextmenu-utils', [
         );
     }
 
-    return {
+    var api = {
         a: a,
         disable: disable,
         addLink: addLink,
@@ -80,6 +80,32 @@ define('io.ox/backbone/mini-views/contextmenu-utils', [
             } else if (_.device('ie') && e.pageX === 0 && e.pageY === 0) {
                 e.isKeyboardEvent = true;
             }
+        },
+        /**
+         * Calculate the desired position for a given contextmenu event.
+         * Takes keyboard events into account.
+         */
+        positionForEvent: function positionForEvent(e) {
+            api.checkKeyboardEvent(e);
+            var target, top, left, targetOffset;
+
+            if (e.isKeyboardEvent) {
+                // for keyboardEvent
+                target = $(document.activeElement);
+                targetOffset = target.offset();
+                top = targetOffset.top;
+                // open at the mid from the list
+                left = targetOffset.left + (target.width() / 2);
+            } else {
+                // for mouseEvent
+                target = $(e.currentTarget);
+                top = e.pageY - 20;
+                left = e.pageX + 30;
+            }
+
+            return { target: target, top: top, left: left };
         }
     };
+
+    return api;
 });
