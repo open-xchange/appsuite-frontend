@@ -36,46 +36,46 @@ define('io.ox/core/folder/actions/properties', [
         );
     }
 
-    ext.point('io.ox/core/folder/actions/properties').extend({
-        id: 'type',
-        index: 100,
-        render: (function () {
-            function ucfirst(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
-            return function () {
-                var module = this.model.get('module');
-                this.$body.append(
-                    group(
-                        gt('Folder type'), ucfirst(module)
-                    )
-                );
-            };
-        }())
-    });
+    // ext.point('io.ox/core/folder/actions/properties').extend({
+    //     id: 'type',
+    //     index: 100,
+    //     render: (function () {
+    //         function ucfirst(str) {
+    //             return str.charAt(0).toUpperCase() + str.slice(1);
+    //         }
+    //         return function () {
+    //             var module = this.model.get('module');
+    //             this.$body.append(
+    //                 group(
+    //                     gt('Folder type'), ucfirst(module)
+    //                 )
+    //             );
+    //         };
+    //     }())
+    // });
 
-    ext.point('io.ox/core/folder/actions/properties').extend({
-        id: 'count',
-        index: 200,
-        render: function () {
-            if (!this.model.supports('count_total')) return;
+    // ext.point('io.ox/core/folder/actions/properties').extend({
+    //     id: 'count',
+    //     index: 200,
+    //     render: function () {
+    //         if (!this.model.supports('count_total')) return;
 
-            var total = this.model.get('total'),
-                module = this.model.get('module');
-            // fix count in global address book if the admin is hidden
-            if (String(this.model.get('id')) === '6' && !contactsSettings.get('showAdmin', false)) total--;
-            this.$body.append(
-                group(
-                    module === 'mail' ?
-                        //#. number of messages in a folder (mail only)
-                        gt('Number of messages') :
-                        //#. number of items in a folder
-                        gt('Number of items'),
-                    total
-                )
-            );
-        }
-    });
+    //         var total = this.model.get('total'),
+    //             module = this.model.get('module');
+    //         // fix count in global address book if the admin is hidden
+    //         if (String(this.model.get('id')) === '6' && !contactsSettings.get('showAdmin', false)) total--;
+    //         this.$body.append(
+    //             group(
+    //                 module === 'mail' ?
+    //                     //#. number of messages in a folder (mail only)
+    //                     gt('Number of messages') :
+    //                     //#. number of items in a folder
+    //                     gt('Number of items'),
+    //                 total
+    //             )
+    //         );
+    //     }
+    // });
 
     ext.point('io.ox/core/folder/actions/properties').extend({
         id: 'caldav-url',
