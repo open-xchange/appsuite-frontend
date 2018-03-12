@@ -324,7 +324,8 @@ define('io.ox/core/folder/view', [
                         section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
 
                     if (section && /(mail|contacts|calendar|tasks|infostore)/.test(tree.module) && tree.flat && tree.context === 'app') {
-                        ids.push('virtual/flat/' + tree.module + '/' + section);
+                        var module = tree.module === 'calendar' ? 'event' : tree.module;
+                        ids.push('virtual/flat/' + module + '/' + section);
                     }
                     tree.open = _(tree.open.concat(ids)).uniq();
                 })
