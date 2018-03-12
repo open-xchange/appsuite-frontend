@@ -12,19 +12,16 @@
  */
 
 define('io.ox/core/folder/actions/properties', [
+    'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/capabilities',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/contacts',
     'settings!io.ox/caldav',
     'gettext!io.ox/core'
-], function (api, capabilities, dialogs, contactsSettings, caldavConfig, gt) {
+], function (ext, api, capabilities, ModalDialog, contactsSettings, caldavConfig, gt) {
 
     'use strict';
-
-    function ucfirst(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
 
     function group(label, value) {
         var guid = _.uniqueId('form-control-label-');
@@ -39,49 +36,77 @@ define('io.ox/core/folder/actions/properties', [
         );
     }
 
-    return function folderProperties(id) {
-
-        var model = api.pool.getModel(id),
-            module = model.get('module'),
-            total = model.get('total');
-
-        // fix count in global address book if the admin is hidden
-        if (String(id) === '6' && !contactsSettings.get('showAdmin', false)) total--;
-
-        new dialogs.ModalDialog()
-            .header(
-                $('<h4>').text(gt('Properties') + ': ' + model.get('title'))
-            )
-            .build(function () {
-
-                var node = this.getContentNode().append(
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'type',
+        index: 100,
+        render: (function () {
+            function ucfirst(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+            return function () {
+                var module = this.model.get('module');
+                this.$body.append(
                     group(
                         gt('Folder type'), ucfirst(module)
-                    ),
-                    model.supports('count_total') ?
-                        group(
-                            module === 'mail' ?
-                                //#. number of messages in a folder (mail only)
-                                gt('Number of messages') :
-                                //#. number of items in a folder
-                                gt('Number of items'),
-                            total
-                        ) :
-                        ''
+                    )
                 );
-                // show CalDAV URL for calendar and task folders (tasks only supports private folders)
-                // users requires "caldav" capability
-                if (capabilities.has('caldav') && (module === 'calendar' || (module === 'tasks' && model.is('private')))) {
-                    node.append(
-                        group(gt('CalDAV URL'),
-                            caldavConfig.get('url')
-                                .replace('[hostname]', location.host)
-                                .replace('[folderId]', id)
-                        )
-                    );
-                }
-            })
-            .addPrimaryButton('ok', gt('Close'))
-            .show();
+            };
+        }())
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'count',
+        index: 200,
+        render: function () {
+            if (!this.model.supports('count_total')) return;
+
+            var total = this.model.get('total'),
+                module = this.model.get('module');
+            // fix count in global address book if the admin is hidden
+            if (String(this.model.get('id')) === '6' && !contactsSettings.get('showAdmin', false)) total--;
+            this.$body.append(
+                group(
+                    module === 'mail' ?
+                        //#. number of messages in a folder (mail only)
+                        gt('Number of messages') :
+                        //#. number of items in a folder
+                        gt('Number of items'),
+                    total
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'caldav-url',
+        index: 300,
+        render: function () {
+            if (!capabilities.has('caldav')) return;
+            var module = this.model.get('module');
+            // show CalDAV URL for calendar and task folders (tasks only supports private folders)
+            // users requires "caldav" capability
+            if (module !== 'calendar' && (module !== 'tasks' || this.model.is('private'))) return;
+            this.$body.append(
+                group(gt('CalDAV URL'),
+                    caldavConfig.get('url')
+                        .replace('[hostname]', location.host)
+                        .replace('[folderId]', this.model.get('id'))
+                )
+            );
+        }
+    });
+
+    return function folderProperties(id) {
+
+        var model = api.pool.getModel(id);
+
+        new ModalDialog({
+            title: gt('Properties') + ': ' + model.get('title'),
+            point: 'io.ox/core/folder/actions/properties',
+            model: model,
+            width: 500
+        })
+        .addButton({ label: gt('Close'), action: 'close' })
+        .open();
     };
 });

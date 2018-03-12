@@ -516,6 +516,7 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+                if (baton.module !== 'calendar') return;
 
                 contextUtils.addLink(this, {
                     action: 'properties',
@@ -756,13 +757,12 @@ define('io.ox/core/folder/contextmenu', [
             draw: contextUtils.divider
         },
         // -----------------------------------------------
-        /*
+
         {
             id: 'properties',
-            index: 6100,
+            index: 6000,
             draw: extensions.properties
         },
-        */
         {
             id: 'refresh-calendar',
             index: 6100,
