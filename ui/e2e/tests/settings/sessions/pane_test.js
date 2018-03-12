@@ -22,7 +22,7 @@ Scenario('lists all sessions', function (I) {
     I.see('You are currently signed in with the following devices');
 
     // web clients
-    I.see('CalDav/CardDav(Mac)');
+    I.see('Exchange ActiveSync(Mac)');
     I.see('OX Mail(Android)');
     I.see('OX Mail(iOS)');
     I.see('Safari(iOS)');
