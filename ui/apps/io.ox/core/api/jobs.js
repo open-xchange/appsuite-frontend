@@ -19,6 +19,21 @@ define('io.ox/core/api/jobs', [
 
     var longRunningJobs = {}, jobTimer;
 
+    // A failsafe iterator that doesn't break the iteration when one callback throws an error.
+    // This is important, because callbacks after a thrown error would not be invoked anymore.
+    // This can lead to unresolved deferreds.
+    function iterateCallbacksFailsafe(array, result) {
+        _(array).each(function (cb) {
+            try {
+                cb(result);
+            } catch (e) {
+                // just catch errors to prevent that later callbacks are not invoked
+                // IMPORTANT: this is normal behavior for the 'throw error' hack in files/api.js/'update()'
+                if (ox.debug) { console.warn('Catched error inside callback, probably normal for quota error', e); }
+            }
+        });
+    }
+
     var api = {
 
         updateJobTimer: function () {
@@ -48,22 +63,17 @@ define('io.ox/core/api/jobs', [
                         var job = doneJobs[key];
                         api.get(job.id).done(function (result) {
                             if (result.error && doneJobs[job.id].failCallback.length) {
-                                _(doneJobs[job.id].failCallback).each(function (cb) {
-                                    cb(result);
-                                });
+                                iterateCallbacksFailsafe(doneJobs[job.id].failCallback, result);
+
                             } else if (doneJobs[job.id].successCallback.length) {
-                                _(doneJobs[job.id].successCallback).each(function (cb) {
-                                    cb(result);
-                                });
+                                iterateCallbacksFailsafe(doneJobs[job.id].successCallback, result);
                             }
 
                             api.trigger('finished:' + job.id, result);
                             // used to trigger redraw of folderview
                             api.trigger('finished:' + job.showIn, result);
                         }).fail(function (result) {
-                            _(doneJobs[job.id].failCallback).each(function (cb) {
-                                cb(result);
-                            });
+                            iterateCallbacksFailsafe(doneJobs[job.id].failCallback, result);
                         });
                     });
                 });
