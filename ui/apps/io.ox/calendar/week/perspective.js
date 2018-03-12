@@ -285,18 +285,6 @@ define('io.ox/calendar/week/perspective', [
                 self.view.folder(data);
                 // save folder data to view and update
                 self.getAppointments(useCache);
-
-                // register event to listen to color changes on current folder
-                if (self.folderModels) {
-                    self.folderModels.forEach(function (folderModel) {
-                        folderModel.off('change:com.openexchange.calendar.extendedProperties', self.updateColor);
-                    });
-                }
-                self.folderModels = _(folders).map(function (folder) {
-                    var model = folderAPI.pool.getModel(folder.id);
-                    model.on('change:com.openexchange.calendar.extendedProperties', self.updateColor, self);
-                    return model;
-                });
             });
         },
         /**
@@ -320,6 +308,8 @@ define('io.ox/calendar/week/perspective', [
          * @param  {object} opt options from perspective
          */
         afterShow: function (app, opt) {
+            var self = this;
+
             // hide current view
             if (this.view) {
                 this.view.$el.hide();
@@ -364,6 +354,12 @@ define('io.ox/calendar/week/perspective', [
                     .on('updateAppointment', this.updateAppointment, this)
                     .on('onRefresh', this.refresh, this)
                     .on('change:navbar:date', this.changeNavbarDate, this);
+
+                this.view.listenTo(folderAPI, 'before:update', function (id, model) {
+                    if (model.get('module') !== 'calendar') return;
+                    if (!model.changed['com.openexchange.calendar.extendedProperties']) return;
+                    self.updateColor(model);
+                });
 
                 this.views[opt.perspective] = this.view.render();
                 this.main.append(this.view.$el.show());

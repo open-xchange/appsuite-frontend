@@ -675,6 +675,14 @@ define('io.ox/calendar/main', [
             });
         },
 
+        /*
+         * Add support for virtual folder "All my public appointments"
+         */
+        'virtual-folders': function (app) {
+            app.folderView.tree.selection.addSelectableVirtualFolder('cal://0/allPublic');
+        },
+
+
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';

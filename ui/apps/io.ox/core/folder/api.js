@@ -99,6 +99,7 @@ define('io.ox/core/folder/api', [
     }
 
     function isVirtual(id) {
+        if (id === 'cal://0/allPublic') return true;
         return /^virtual/.test(id);
     }
 
@@ -459,6 +460,22 @@ define('io.ox/core/folder/api', [
             title: gt('Unread messages')
         });
     }
+
+    if (capabilities.has('edit_public_folders')) {
+        pool.addModel({
+            folder_id: '1',
+            id: 'cal://0/allPublic',
+            module: 'calendar',
+            permissions: [{ bits: 0, entity: ox.user_id, group: false }],
+            standard_folder: true,
+            supported_capabilities: [],
+            title: gt('All my public appointments'),
+            total: -1,
+            type: 1,
+            subscribed: true
+        });
+    }
+
 
     //
     // Propagate
@@ -826,6 +843,10 @@ define('io.ox/core/folder/api', [
             .value();
     }
 
+    function injectVirtualCalendarFolder(array) {
+        array.unshift(pool.getModel('cal://0/allPublic').toJSON());
+    }
+
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
@@ -906,6 +927,8 @@ define('io.ox/core/folder/api', [
                     // otherwise
                     return true;
                 });
+                // inject 'All my public appointments' for calender/public
+                if (module === 'event' && id === 'public') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -937,6 +960,8 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
         if (isVirtual(id)) return $.when();
+
+        if (!options.silent) api.trigger('before:update before:update:' + id, id, model);
 
         // build data object
         var data = { folder: changes },
