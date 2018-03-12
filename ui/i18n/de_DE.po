@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-09 11:01+0100\n"
+"PO-Revision-Date: 2018-03-12 16:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -981,13 +981,6 @@ msgstr "Account erfolgreich hinzugefügt"
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "iCal URL"
 msgstr "iCal-URL"
-
-#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
-#, fuzzy
-msgid "Authentication failed. Please fill in login and password."
-msgstr ""
-"Authentifizierung fehlgeschlagen. Bitte geben Sie Ihren Benutzernamen und "
-"das Passwort ein."
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -4261,6 +4254,10 @@ msgstr "Alle Kalender anzeigen"
 msgid "Show this calendar only"
 msgstr "Nur diesen Kalender anzeigen"
 
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+msgid "Select all messages"
+msgstr "Alle Nachrichten auswählen"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "My shares"
@@ -4341,8 +4338,9 @@ msgid "Subscribe to calendar"
 msgstr "Kalender abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
 msgid "Browse calendars of interest"
-msgstr ""
+msgstr "Kalender von Interesse durchsuchen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Google calendar"
@@ -4543,6 +4541,7 @@ msgstr[1] "Sie werden in %1$d Sekunden automatisch abgemeldet"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+#, fuzzy
 msgid "Automatic sign out"
 msgstr "Automatisch abmelden"
 
@@ -10256,6 +10255,11 @@ msgstr "Android"
 msgid "iOS"
 msgstr "iOS"
 
+#. Context: Session Management. Active session on platform/os.
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Linux"
+msgstr "Linux"
+
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Firefox"
 msgstr "Firefox"
@@ -10279,6 +10283,10 @@ msgstr "Edge"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange ActiveSync"
+msgstr "Exchange ActiveSync"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -11940,6 +11948,12 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr ""
+#~ "Authentifizierung fehlgeschlagen. Bitte geben Sie Ihren Benutzernamen und "
+#~ "das Passwort ein."
 
 #~ msgid "Color scheme"
 #~ msgstr "Farbschema"
