@@ -460,11 +460,16 @@ define('io.ox/calendar/invitations/register', [
         repaint: function () {
             this.options.container.analyzeIMIPAttachment(this.imip)
                 .done(function (list) {
-                    var data = list[0],
-                        change = data.changes[0],
+                    var data = _(list).first() || {},
+                        change = data.changes ? data.changes[0] : {},
                         eventData = change.deletedEvent || change.newEvent || change.currentEvent;
-                    if (!eventData) return;
-                    this.model.set(eventData);
+                    // update content
+                    this.options.actions = data.actions;
+                    this.options.introduction = change.introduction;
+                    this.options.diffDescription = change.diffDescription;
+                    this.options.annotations = data.annotations;
+                    if (eventData) this.model.set(eventData);
+                    else delete this.model;
                     this.render();
                 }.bind(this));
         }
@@ -772,7 +777,8 @@ define('io.ox/calendar/invitations/register', [
             return this.analyzeIMIPAttachment(imip).done(function (list) {
                 if (list.length === 0) return;
 
-                var data = list[0], model,
+                var model,
+                    data = _(list).first() || {},
                     change = data.changes ? data.changes[0] : {},
                     eventData = change.deletedEvent || change.newEvent || change.currentEvent;
                 if (eventData) model = new models.Model(eventData);
