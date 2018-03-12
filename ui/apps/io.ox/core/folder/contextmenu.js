@@ -759,11 +759,6 @@ define('io.ox/core/folder/contextmenu', [
         // -----------------------------------------------
 
         {
-            id: 'properties',
-            index: 6000,
-            draw: extensions.properties
-        },
-        {
             id: 'refresh-calendar',
             index: 6100,
             draw: extensions.refreshCalendar
@@ -797,6 +792,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'restore',
             index: 6600,
             draw: extensions.restoreFolder
+        },
+        {
+            id: 'properties',
+            index: 6700,
+            draw: extensions.properties
         }
     );
 
