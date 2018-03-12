@@ -95,6 +95,12 @@ define('io.ox/settings/security/sessions/settings/pane', [
                     gt('iOS')
                 );
                 this.set('os', 'apple');
+            } else if (os === 'linux') {
+                this.set('operatingSystem',
+                    //#. Context: Session Management. Active session on platform/os.
+                    gt('Linux')
+                );
+                this.set('os', 'linux');
             }
         }
     });
