@@ -307,7 +307,7 @@ define('io.ox/calendar/invitations/register', [
             this.$el.empty();
             if (this.$el.is(':hidden')) this.$el.fadeIn(300);
 
-            var actions = this.getActions(), buttons;
+            var actions, buttons;
 
             this.renderScaffold();
             this.renderAnnotations();
@@ -322,6 +322,7 @@ define('io.ox/calendar/invitations/register', [
             this.renderChanges();
 
             // get standard buttons
+            actions = this.getActions();
             buttons = this.getButtons(actions);
             if (buttons.length === 0) return this;
             // use doesn't need any controls to "ignore" the message
@@ -436,7 +437,8 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getActions: function () {
-            return this.options.actions;
+            if (this.getConfirmationStatus() !== 'ACCEPTED') return this.options.actions;
+            return _(this.options.actions).without('decline', 'tentative', 'accept');
         },
 
         renderAnnotations: function () {
