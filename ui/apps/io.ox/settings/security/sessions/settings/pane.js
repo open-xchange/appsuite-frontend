@@ -117,7 +117,22 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'apps',
         index: 200,
         customize: function () {
-            if (this.getDeviceInfo('client').type === 'browser') return;
+            var type = this.getDeviceInfo('client').type;
+            if (type === 'browser') return;
+            // try to get client from type
+            switch (type) {
+                case 'oxapp':
+                    this.set('application', settings.get('productname/mailapp') || 'OX Mail');
+                    return;
+                case 'dav':
+                    this.set('application', gt('CalDav/CardDav'));
+                    return;
+                case 'eas':
+                    this.set('application', gt('Exchange ActiveSync'));
+                    return;
+                default:
+            }
+            // fallback to client identifier
             switch (this.get('client')) {
                 case 'open-xchange-mailapp':
                 case 'open-xchange-mobile-api-facade':
@@ -131,7 +146,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
                     this.set('application', settings.get('productname/oxdrive') || 'OXDrive');
                     break;
                 case 'USM-EAS':
-                    this.set('application', gt('CalDav/CardDav'));
+                    this.set('application', gt('Exchange ActiveSync'));
                     break;
                 case 'USM-JSON':
                     this.set('application', settings.get('productname/oxtender') || 'OXtender');
