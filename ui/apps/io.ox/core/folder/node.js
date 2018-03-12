@@ -336,10 +336,9 @@ define('io.ox/core/folder/node', [
             }, options);
 
             // also set: folder, parent, tree
-
             this.model = api.pool.getModel(o.model_id);
             this.noSelect = !this.model.can('read');
-            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder) || this.folder === 'cal://0/allPublic';
 
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
