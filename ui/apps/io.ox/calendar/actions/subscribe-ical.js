@@ -120,7 +120,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
             width: 500
         })
         .addCancelButton()
-        .addButton({ label: 'Subscribe', action: 'subscribe' })
+        .addButton({ label: gt('Subscribe'), action: 'subscribe' })
         .on('subscribe', function () {
             var self = this;
             iCalProbe(this.model).then(function (data) {
