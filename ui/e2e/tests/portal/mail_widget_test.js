@@ -24,7 +24,7 @@ Scenario('adding a mail containing XSS code', function* (I) {
     I.click('#io-ox-launcher button.launcher-btn');
     I.click('Portal', { css: '#io-ox-launcher' });
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
-    I.waitForStalenessOf({ css: '.widgets .widget.io-ox-busy' }, 20);
+    I.waitForDetached({ css: '.widgets .widget.io-ox-busy' }, 20);
 
     let widgetId = yield I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
     let type = yield I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
@@ -34,6 +34,6 @@ Scenario('adding a mail containing XSS code', function* (I) {
 
     I.click(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .disable-widget`);
     I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForStalenessOf(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"]`);
+    I.waitForDetached(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"]`);
     I.logout();
 });

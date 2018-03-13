@@ -42,7 +42,7 @@ Scenario.skip('Create appointment with all fields', function* (I) {
         // click here to make sure, that the create-listener is bound before the model is saved
         $('.io-ox-calendar-edit-window button[data-action="save"]').trigger('click');
     });
-    I.waitForStalenessOf('.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window');
 
     // // check appointment in all views
     // // 1) day view
@@ -80,7 +80,7 @@ Scenario.skip('Create appointment with all fields', function* (I) {
     I.click('Delete');
     I.waitForVisible('.io-ox-dialog-popup .modal-body');
     I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForStalenessOf(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
+    I.waitForDetached(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
 
     I.logout();
 

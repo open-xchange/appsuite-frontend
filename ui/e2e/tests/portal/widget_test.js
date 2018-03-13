@@ -28,6 +28,6 @@ Scenario('add and remove Inbox widget', function* (I) {
     expect(title).to.contain('Inbox');
     I.click(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"] .disable-widget`);
     I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForStalenessOf(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"]`);
+    I.waitForDetached(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"]`);
     I.logout();
 });

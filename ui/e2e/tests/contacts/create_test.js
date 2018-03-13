@@ -19,7 +19,7 @@ Scenario('adds a contact with all fields', function (I) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForStalenessOf('.primary-action button.disabled');
+    I.waitForDetached('.primary-action button.disabled');
     I.click('New contact', '.primary-action');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
@@ -78,7 +78,7 @@ Scenario('adds a contact with all fields', function (I) {
     I.fillField('note', 'a comment in the comment field');
 
     I.click('Save');
-    I.waitForStalenessOf('.io-ox-contacts-edit-window');
+    I.waitForDetached('.io-ox-contacts-edit-window');
 
     // wait for detail view
     I.click('.io-ox-contacts-window .leftside');
