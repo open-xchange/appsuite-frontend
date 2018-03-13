@@ -102,6 +102,7 @@
           if (/^\/\//.test(path)) {
             location.href = location.href.replace(path, path.substr(1));
           }
+
         </script>
     </head>
     <body class="unselectable">
@@ -113,10 +114,8 @@
               <div class="bounce3"></div>
             </div>
             <div id="timeout-error">
-                <span data-i18n="Connection timed out. Please try reloading the page.">Connection timed out. Please try reloading the page.</span>
-                <a href="#" id="timeout-reload" data-i18n="Reload">Reload</a>
-            </div>
 
+            </div>
         </div>
         <!-- Core Panel -->
         <div id="io-ox-core" class="abs unselectable" style="display: none">
@@ -239,12 +238,26 @@
         <div id="tmp" style="display: none;">
             <iframe src="javascript:false" name="store-credentials" width="0" height="0" tabindex="-1" title="empty" style="display:none"></iframe>
         </div>
+        <script>
+            /* inject correct language here at the very start manually*/
+          (function () {
+            var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+              languages = ['en', 'de', 'it'],
+              message = {
+                'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
+                'de': ['Zeitüberschreitung bei der Verbindung. Bittte versuchen Sie, die Seite neu', 'Neu laden'],
+                'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina']
+              };
+
+            if (languages.indexOf(language) === -1) language = 'en';
+            document.getElementById('timeout-error').innerHTML = '<span>' + message[language][0] +'</span><a href="#" class="timeout-reload">' + message[language][0] + '</a>';
+          }());
+        </script>
         <script src="<%= base %>/boot.js"></script>
         <noscript>
             <p class="noscript">This app uses JavaScript. Your browser either doesn't support JavaScript or you have it turned off. To use this app please use a JavaScript enabled browser.</p>
         <!-- see bug #27608 and #26722 -->
         </noscript>
-
         <script src="<%= base %>/precore.js" defer="defer"></script>
     </body>
 </html>
