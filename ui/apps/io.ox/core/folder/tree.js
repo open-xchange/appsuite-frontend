@@ -33,7 +33,7 @@ define('io.ox/core/folder/tree', [
 
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
-            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
+            'contextmenu .folder.selectable[aria-haspopup="true"]': 'onContextMenu',
             'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys',
             'keydown .folder.selectable': 'onKeydown',
             'click .folder.selectable.selected': 'onClick'
@@ -184,7 +184,7 @@ define('io.ox/core/folder/tree', [
             return options;
         },
 
-        toggleContextMenu: function (target, top, left) {
+        toggleContextMenu: function (pos) {
 
             // return early on close
             var isOpen = this.dropdown.$el.hasClass('open');
@@ -192,8 +192,8 @@ define('io.ox/core/folder/tree', [
 
             _.defer(function () {
 
-                this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
-                this.dropdown.$toggle = target;
+                this.$dropdownMenu.css({ top: pos.top, left: pos.left, bottom: 'auto' }).empty().busy();
+                this.dropdown.$toggle = pos.target;
                 this.$dropdownToggle.dropdown('toggle');
 
             }.bind(this));
@@ -207,7 +207,7 @@ define('io.ox/core/folder/tree', [
                 left = offset.left + target.outerWidth() + 7;
 
             target.data('preventFocus', true);
-            this.toggleContextMenu(target, top, left);
+            this.toggleContextMenu({ target: target, top: top, left: left });
         },
 
         onKeydown: function (e) {
@@ -243,17 +243,7 @@ define('io.ox/core/folder/tree', [
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            var target = $(e.currentTarget).data('fixed', true), top = e.pageY - 20, left = e.pageX + 30;
-            if (target.is('.contextmenu-control')) {
-                top = target.offset().top;
-                left = target.offset().left + 40;
-                target.removeData('fixed');
-            }
-            if (e.type === 'contextmenu' && target.hasClass('contextmenu-control')) {
-                // if the contextmenubutton was rightclicked, the selection doesn't change, so we are allowed to prevent the default in this case (Bug 42409 remains fixed)
-                e.preventDefault();
-            }
-            this.toggleContextMenu(target, top, left);
+            this.toggleContextMenu(ContextMenuUtils.positionForEvent(e));
         },
 
         getContextMenuId: function (id) {
