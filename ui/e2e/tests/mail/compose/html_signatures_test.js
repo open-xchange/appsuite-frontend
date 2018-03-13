@@ -22,16 +22,16 @@ const signatures = [
     'The content of the fourth signature'
 ];
 
-function* selectAndAssertSignature(I, name, compare) {
+async function selectAndAssertSignature(I, name, compare) {
     I.click('Signatures');
     I.click(name);
-    let result = yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *');
+    let result = await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *');
     result = [].concat(result).join('');
     if (compare instanceof RegExp) expect(result).to.match(compare);
     else expect(result).to.equal(compare);
 }
 
-Scenario('compose new mail with signature above correctly placed and changed', function* (I) {
+Scenario('compose new mail with signature above correctly placed and changed', async function (I) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultSignature', '0');
@@ -40,29 +40,29 @@ Scenario('compose new mail with signature above correctly placed and changed', f
     I.click('Compose', '.primary-action');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
-    expect(yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
+    expect(await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
         '<div><br></div>',
         `<div class="io-ox-signature"><p>${signatures[0]}</p></div>`
     ]);
 
-    yield* selectAndAssertSignature(I, 'Second signature above', `<div><br></div><div class="io-ox-signature"><p>${signatures[1]}</p></div>`);
-    yield* selectAndAssertSignature(I, 'First signature below', `<div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>`);
-    yield* selectAndAssertSignature(I, 'Second signature below', `<div><br></div><div class="io-ox-signature"><p>${signatures[3]}</p></div>`);
-    yield* selectAndAssertSignature(I, 'No signature', '<div><br></div>');
-    yield* selectAndAssertSignature(I, 'First signature above', `<div><br></div><div class="io-ox-signature"><p>${signatures[0]}</p></div>`);
+    await selectAndAssertSignature(I, 'Second signature above', `<div><br></div><div class="io-ox-signature"><p>${signatures[1]}</p></div>`);
+    await selectAndAssertSignature(I, 'First signature below', `<div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>`);
+    await selectAndAssertSignature(I, 'Second signature below', `<div><br></div><div class="io-ox-signature"><p>${signatures[3]}</p></div>`);
+    await selectAndAssertSignature(I, 'No signature', '<div><br></div>');
+    await selectAndAssertSignature(I, 'First signature above', `<div><br></div><div class="io-ox-signature"><p>${signatures[0]}</p></div>`);
 
     // insert some text
     I.appendField('.io-ox-mail-compose-window .editor .editable', 'some user input');
-    expect(yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
+    expect(await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
         '<div>some user input</div>',
         `<div class="io-ox-signature"><p>${signatures[0]}</p></div>`
     ]);
 
-    yield* selectAndAssertSignature(I, 'Second signature above', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[1]}</p></div>`);
-    yield* selectAndAssertSignature(I, 'First signature below', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[2]}</p></div>`);
-    yield* selectAndAssertSignature(I, 'Second signature below', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[3]}</p></div>`);
-    yield* selectAndAssertSignature(I, 'No signature', '<div>some user input</div>');
-    yield* selectAndAssertSignature(I, 'First signature above', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[0]}</p></div>`);
+    await selectAndAssertSignature(I, 'Second signature above', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[1]}</p></div>`);
+    await selectAndAssertSignature(I, 'First signature below', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[2]}</p></div>`);
+    await selectAndAssertSignature(I, 'Second signature below', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[3]}</p></div>`);
+    await selectAndAssertSignature(I, 'No signature', '<div>some user input</div>');
+    await selectAndAssertSignature(I, 'First signature above', `<div>some user input</div><div class="io-ox-signature"><p>${signatures[0]}</p></div>`);
 
     // // discard mail
     I.click('Discard');
@@ -73,7 +73,7 @@ Scenario('compose new mail with signature above correctly placed and changed', f
     I.logout();
 });
 
-Scenario('compose new mail with signature below correctly placed initially', function* (I) {
+Scenario('compose new mail with signature below correctly placed initially', async function (I) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultSignature', '2');
@@ -82,7 +82,7 @@ Scenario('compose new mail with signature below correctly placed initially', fun
     I.click('Compose', '.primary-action');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
-    expect(yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
+    expect(await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
         '<div><br></div>',
         `<div class="io-ox-signature"><p>${signatures[2]}</p></div>`
     ]);
@@ -95,7 +95,7 @@ Scenario('compose new mail with signature below correctly placed initially', fun
     I.logout();
 });
 
-Scenario('Reply to mail with signature above correctly placed and changed', function* (I) {
+Scenario('Reply to mail with signature above correctly placed and changed', async function (I) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultReplyForwardSignature', '0');
@@ -104,34 +104,34 @@ Scenario('Reply to mail with signature above correctly placed and changed', func
     // click on first email
     I.click('.io-ox-mail-window .leftside ul li.list-item');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
-    expect(yield I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
+    expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     // reply to that mail
     I.click('.io-ox-mail-window .window-content a[data-action="more"]');
     I.click('Reply');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
-    expect((yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).join('')).to.match(
+    expect((await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).join('')).to.match(
         new RegExp(`^<div><br></div><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`)
     );
 
-    yield* selectAndAssertSignature(I, 'Second signature above', new RegExp(`^<div><br></div><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
-    yield* selectAndAssertSignature(I, 'First signature below', new RegExp(`^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
-    yield* selectAndAssertSignature(I, 'Second signature below', new RegExp(`^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
-    yield* selectAndAssertSignature(I, 'No signature', new RegExp('^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div>$'));
-    yield* selectAndAssertSignature(I, 'First signature above', new RegExp(`^<div><br></div><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    await selectAndAssertSignature(I, 'Second signature above', new RegExp(`^<div><br></div><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    await selectAndAssertSignature(I, 'First signature below', new RegExp(`^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
+    await selectAndAssertSignature(I, 'Second signature below', new RegExp(`^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
+    await selectAndAssertSignature(I, 'No signature', new RegExp('^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div>$'));
+    await selectAndAssertSignature(I, 'First signature above', new RegExp(`^<div><br></div><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
 
     // insert some text
     I.appendField('.io-ox-mail-compose-window .editor .editable', 'some user input');
-    expect((yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).join('')).to.match(
+    expect((await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).join('')).to.match(
         /^<div>some user input<\/div><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
     );
 
-    yield* selectAndAssertSignature(I, 'Second signature above', new RegExp(`^<div>some user input</div><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
-    yield* selectAndAssertSignature(I, 'First signature below', new RegExp(`^<div>some user input</div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
-    yield* selectAndAssertSignature(I, 'Second signature below', new RegExp(`^<div>some user input</div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
-    yield* selectAndAssertSignature(I, 'No signature', new RegExp('^<div>some user input</div><blockquote type="cite">.*</blockquote><div><br></div>$'));
-    yield* selectAndAssertSignature(I, 'First signature above', new RegExp(`^<div>some user input</div><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    await selectAndAssertSignature(I, 'Second signature above', new RegExp(`^<div>some user input</div><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    await selectAndAssertSignature(I, 'First signature below', new RegExp(`^<div>some user input</div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
+    await selectAndAssertSignature(I, 'Second signature below', new RegExp(`^<div>some user input</div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
+    await selectAndAssertSignature(I, 'No signature', new RegExp('^<div>some user input</div><blockquote type="cite">.*</blockquote><div><br></div>$'));
+    await selectAndAssertSignature(I, 'First signature above', new RegExp(`^<div>some user input</div><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
 
     // discard mail
     I.click('Discard');
@@ -141,7 +141,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', func
     I.logout();
 });
 
-Scenario('Reply to mail with signature below correctly placed initially', function* (I) {
+Scenario('Reply to mail with signature below correctly placed initially', async function (I) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultReplyForwardSignature', '2');
@@ -150,14 +150,14 @@ Scenario('Reply to mail with signature below correctly placed initially', functi
     // click on first email
     I.click('.io-ox-mail-window .leftside ul li.list-item');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
-    expect(yield I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
+    expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     //     // reply to that mail
     I.click('.io-ox-mail-window .window-content a[data-action="more"]');
     I.click('Reply');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
-    expect((yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).join('')).to.match(
+    expect((await I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).join('')).to.match(
         new RegExp(`^<div><br></div><blockquote type="cite">.*</blockquote><div><br></div><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`)
     );
 
