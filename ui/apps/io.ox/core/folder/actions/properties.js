@@ -104,26 +104,29 @@ define('io.ox/core/folder/actions/properties', [
     });
 
     ext.point('io.ox/core/folder/actions/properties').extend({
-        id: 'description',
-        index: 400,
-        render: function () {
-            var provider = this.model.get('com.openexchange.calendar.provider');
-            if (provider !== 'ical') return;
-            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties');
-            if (!extendedProperties || !extendedProperties.description) return;
-            this.$body.append(group(gt('Description'), extendedProperties.description.value));
-        }
-    });
-
-    ext.point('io.ox/core/folder/actions/properties').extend({
         id: 'ical-url',
-        index: 500,
+        index: 400,
         render: function () {
             var provider = this.model.get('com.openexchange.calendar.provider');
             if (provider !== 'ical') return;
             var config = this.model.get('com.openexchange.calendar.config');
             if (!config || !config.uri) return;
             this.$body.append(group(gt('iCal URL'), config.uri));
+        }
+    });
+
+    ext.point('io.ox/core/folder/actions/properties').extend({
+        id: 'description',
+        index: 500,
+        render: function () {
+            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties');
+            if (!extendedProperties || !extendedProperties.description || !extendedProperties.description.value) return;
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label>').text(gt('Description')),
+                    $('<div class="help-block">').text(extendedProperties.description.value)
+                )
+            );
         }
     });
 
@@ -135,15 +138,21 @@ define('io.ox/core/folder/actions/properties', [
             if (provider !== 'ical') return;
             var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties');
             if (!extendedProperties || !extendedProperties.lastUpdate) return;
-            this.$body.append(group(gt('Last updated'), moment(extendedProperties.lastUpdate.value).fromNow()));
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label>').text(gt('Last updated')),
+                    $('<div class="help-block">').text(moment(extendedProperties.lastUpdate.value).fromNow())
+                )
+            );
         }
     });
 
     ext.point('io.ox/core/folder/actions/properties').extend({
-        id: 'email',
+        id: 'account',
         index: 700,
         render: function () {
-            var provider = this.model.get('com.openexchange.calendar.provider');
+            var self = this,
+                provider = this.model.get('com.openexchange.calendar.provider');
             if (provider !== 'google') return;
             var config = this.model.get('com.openexchange.calendar.config');
             if (!config || !config.oauthId) return;
@@ -151,7 +160,21 @@ define('io.ox/core/folder/actions/properties', [
             if (!account) return;
             var displayName = account.get('displayName');
             if (!displayName) return;
-            this.$body.append(group(gt('Account'), displayName));
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label>').text(gt('Account')),
+                    $('<div>').append(
+                        $('<a href="#" role="button">').text(displayName).on('click', function (e) {
+                            var options = { id: 'io.ox/settings/accounts' };
+                            ox.launch('io.ox/settings/main', options).done(function () {
+                                this.setSettingsPane(options);
+                            });
+                            e.preventDefault();
+                            self.close();
+                        })
+                    )
+                )
+            );
         }
     });
 
@@ -168,7 +191,12 @@ define('io.ox/core/folder/actions/properties', [
                 var provider = this.model.get('com.openexchange.calendar.provider');
                 if (!provider) return;
                 if (!providerMapping[provider]) return;
-                this.$body.append(group(gt('Type'), providerMapping[provider]));
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<label>').text(gt('Type')),
+                        $('<div class="help-block">').text(providerMapping[provider])
+                    )
+                );
             };
         }())
     });
