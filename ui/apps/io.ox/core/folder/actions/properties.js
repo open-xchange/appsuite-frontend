@@ -19,8 +19,9 @@ define('io.ox/core/folder/actions/properties', [
     'settings!io.ox/contacts',
     'settings!io.ox/caldav',
     'gettext!io.ox/core',
-    'io.ox/oauth/keychain'
-], function (ext, api, capabilities, ModalDialog, contactsSettings, caldavConfig, gt, oauthAPI) {
+    'io.ox/oauth/keychain',
+    'io.ox/backbone/mini-views/copy-to-clipboard'
+], function (ext, api, capabilities, ModalDialog, contactsSettings, caldavConfig, gt, oauthAPI, CopyToClipboard) {
 
     'use strict';
 
@@ -30,10 +31,15 @@ define('io.ox/core/folder/actions/properties', [
             // label
             $('<label class="control-label">').attr('for', guid).text(label),
             // value
-            $('<input type="text" class="form-control">')
-                .attr('id', guid)
-                .prop('readonly', true)
-                .val(value)
+            $('<div class="input-group link-group">').append(
+                $('<input type="text" class="form-control">')
+                    .attr('id', guid)
+                    .prop('readonly', true)
+                    .val(value),
+                $('<span class="input-group-btn">').append(
+                    new CopyToClipboard({ targetId: '#' + guid }).render().$el
+                )
+            )
         );
     }
 
