@@ -86,7 +86,7 @@ $(window).load(function () {
             if (e.requireType === 'timeout' && $('#background-loader').is(':visible')) {
                 $('.throbber').hide();
                 $('#timeout-error').show();
-                $('#timeout-reload').on('click', function (e) {
+                $('.timeout-reload').on('click', function (e) {
                     e.preventDefault();
                     _.url.hash({ 'waitSeconds': 30 });
                     location.reload();
