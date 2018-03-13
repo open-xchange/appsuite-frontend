@@ -551,7 +551,7 @@ define('io.ox/find/main', [
                         }
 
                         // mandatory
-                        if (app.isMandatory('account') && !manager.findWhere({ id: 'account' })) {
+                        if (app.isMandatory('account') && !(manager.findWhere({ id: 'account' }) && manager.findWhere({ id: 'account' }).getActive().length)) {
                             facets.push({
                                 facet: 'account',
                                 filter: null,
