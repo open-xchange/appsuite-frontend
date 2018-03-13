@@ -949,6 +949,9 @@ define('io.ox/calendar/week/view', [
             var renderTimeline = function () {
                 var d = moment();
                 self.timeline.css({ top: ((d.hours() / 24 + d.minutes() / 1440) * 100) + '%' });
+                // check for parent container in case of the next day
+                var todayContainer = $('.week-container .day[date="' + moment().weekday() + '"]', self.pane);
+                if (!todayContainer.hasClass('today')) self.rerender();
             };
             // create and animate timeline
             renderTimeline();
@@ -1209,7 +1212,7 @@ define('io.ox/calendar/week/view', [
                     self.timeline.show();
                 }
                 days.push(day);
-                tmpDate.add(1, 'day');
+                if (!self.isMergeView) tmpDate.add(1, 'day');
             });
 
             this.dayLabel.empty().append(days);
