@@ -14,8 +14,9 @@
 
 define('io.ox/tours/settings', [
     'io.ox/core/tk/wizard',
+    'settings!io.ox/core',
     'gettext!io.ox/tours'
-], function (Tour, gt) {
+], function (Tour, settings, gt) {
 
     'use strict';
 
@@ -25,7 +26,7 @@ define('io.ox/tours/settings', [
         app: 'io.ox/settings',
         priority: 1
     }, function () {
-        new Tour()
+        var tour = new Tour()
         .step()
             .title(gt('Opening the settings'))
             .content(gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings.'))
@@ -65,21 +66,36 @@ define('io.ox/tours/settings', [
             .on('hide', function () {
                 $('#topbar-settings-dropdown').css('display', '');
             })
-            .end()
-        .step()
-            .title(gt('Signing out'))
-            .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
-            .hotspot('#topbar-settings-dropdown a[data-action="logout"]')
-            .spotlight('#topbar-settings-dropdown a[data-action="logout"]')
-            .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a[data-action="logout"]')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
-            })
-            .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
-            })
-            .end()
-        .start();
+            .end();
+
+        if (settings.get('features/dedicatedLogoutButton', false) !== true) {
+            // dropdown menu entry
+            tour.step()
+                .title(gt('Signing out'))
+                .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
+                .hotspot('#topbar-settings-dropdown a[data-action="logout"]')
+                .spotlight('#topbar-settings-dropdown a[data-action="logout"]')
+                .referTo('#topbar-settings-dropdown')
+                .waitFor('#topbar-settings-dropdown a[data-action="logout"]')
+                .on('wait', function () {
+                    $('#topbar-settings-dropdown').css('display', 'block');
+                })
+                .on('hide', function () {
+                    $('#topbar-settings-dropdown').css('display', '');
+                })
+            .end();
+        } else {
+            // dedicatedLogoutButton: top bar entry
+            tour.step()
+                .title(gt('Signing out'))
+                .content(gt('To sign out, click the logout icon on the upper right side of the menu bar.'))
+                .hotspot('#io-ox-topbar a[data-action="sign-out"]')
+                .spotlight('#io-ox-topbar a[data-action="sign-out"]')
+                .referTo('#io-ox-topbar')
+                .waitFor('#io-ox-topbar a[data-action="sign-out"]')
+                .end();
+        }
+
+        tour.start();
     });
 });

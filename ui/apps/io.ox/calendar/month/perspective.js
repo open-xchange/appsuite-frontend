@@ -150,7 +150,7 @@ define('io.ox/calendar/month/perspective', [
                 weeks = opt.weeks || this.updateLoad,
                 apiData = {
                     start: opt.start,
-                    end: moment(opt.start).add(weeks, 'weeks').valueOf()
+                    end: moment(opt.start).add(weeks, 'weeks').endOf('week').valueOf()
                 };
             // do folder magic
             if (this.folder.id !== 'virtual/all-my-appointments') {
@@ -192,19 +192,13 @@ define('io.ox/calendar/month/perspective', [
                     up: false,
                     multi: 1
                 }, opt),
-                views = [],
                 months = param.multi * self.updateLoad,
                 currMonth = [],
-                monthGroups = [],
+                renderedElements = [],
                 weeks = 1, curWeek, start;
 
-
             if (param.up) {
-                if (self.firstWeek.date() === 1) {
-                    curWeek = self.firstWeek.subtract(months, 'months').startOf('week').clone();
-                } else {
-                    curWeek = self.firstWeek.add(1, 'week').subtract(months, 'months').startOf('month').startOf('week').clone();
-                }
+                curWeek = self.firstWeek.subtract(months, 'months').startOf('month').clone();
             } else {
                 curWeek = self.lastWeek.clone();
             }
@@ -221,72 +215,57 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (; monthGroups.length < months; weeks++, curWeek.add(8, 'd').startOf('week')) {
-                var day = curWeek.valueOf(),
-                    endDate = curWeek.clone().endOf('week'),
-                    monthDelimiter = curWeek.clone().endOf('month').isSameOrBefore(endDate),
-                    view;
+            for (var i = 0; i < months; i++) {
+                var day, endOfMonth = curWeek.clone().endOf('month'),
+                    isFirstWeek = true;
+                curWeek = curWeek.startOf('month');
 
-                // reuse collection (week started in previous month, there is no need to double that collection) or create a new one
-                self.collections[day] = self.collections[day] || new MonthAppointmentCollection([]);
+                renderedElements.push($('<div class="week month-name">').attr('id', curWeek.format('YYYY-MM')).append($('<h1 class="unstyled">').text(curWeek.format('MMMM YYYY'))));
 
-                if (weeks !== 1) {
+                while (curWeek.clone().endOf('month').isSame(endOfMonth)) {
+                    var endOfWeek = curWeek.clone().endOf('week');
+
+                    day = curWeek.clone().startOf('week').valueOf();
+
+                    var weekType = '';
+                    if (isFirstWeek) {
+                        weekType = 'first';
+                        isFirstWeek = false;
+                    } else if (curWeek.clone().startOf('month').isBefore(endOfWeek.clone().startOf('month'))) {
+                        weekType = 'last';
+                    }
+
+                    // reuse collection (week started in previous month, there is no need to double that collection) or create a new one
+                    self.collections[day] = self.collections[day] || new MonthAppointmentCollection([]);
+
                     // new view
-                    view = createView({
+                    currMonth.push(createView({
                         collection: self.collections[day],
                         day: day,
                         folder: self.folder,
                         pane: this.pane,
                         app: this.app,
                         perspective: this,
-                        weekType: monthDelimiter ? 'last' : ''
-                    });
-                    views.push(view.render().el);
-                    currMonth.push(view.el);
-                }
-                if (monthDelimiter && currMonth.length) {
-                    monthGroups.push(currMonth);
-                    currMonth = [];
+                        weekType: weekType
+                    }).render().el);
+
+                    curWeek.add(1, 'week').startOf('week');
                 }
 
-                if (monthGroups.length === months) {
-                    if (!param.up) {
-                        this.lastWeek = curWeek;
-                    }
-                    break;
-                }
+                // add an
+                //if (view) view.$el.addClass('no-border');
 
-                // seperate last days if month before and first days of next month
-                if (monthDelimiter || weeks === 1) {
-
-                    endDate.add(1, 'd').startOf('month');
-                    // add an
-                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<h1 class="unstyled">').text(endDate.format('MMMM YYYY'))));
-                    currMonth.push(views[views.length - 1]);
-                    if (view) view.$el.addClass('no-border');
-
-                    if (!endDate.clone().startOf('week').isSame(endDate)) {
-                        // do not render this, if start of current week is the same as start of current month
-                        views.push(createView({
-                            collection: self.collections[day],
-                            day: day,
-                            folder: self.folder,
-                            pane: this.pane,
-                            app: this.app,
-                            perspective: this,
-                            weekType: 'first'
-                        }).render().el);
-
-                        currMonth.push(views[views.length - 1]);
-                    }
-                }
+                renderedElements.push(
+                    $('<table class="month" aria-readonly="true">').append(
+                        $('<tbody>').append(currMonth)
+                    ).css('height', 100 / 7 * currMonth.length + '%')
+                );
+                weeks += currMonth.length + 1;
+                currMonth = [];
             }
-
-            monthGroups = _(_(monthGroups).map(function (nodes) {
-                return [nodes.shift(), $('<table class="month" aria-readonly="true">').append(
-                    $('<tbody>').append(nodes)
-                ).css('height', 100 / 7 * nodes.length + '%')];
-            })).flatten();
+            if (!param.up) {
+                this.lastWeek = curWeek;
+            }
 
             // add and render view
             if (param.up) {
@@ -294,9 +273,9 @@ define('io.ox/calendar/month/perspective', [
                     curOffset = firstWeek.offset().top - this.scrollTop();
 
                 // don't scroll under the scrollOffset, as this will cause infine scrolling
-                this.pane.prepend(monthGroups).scrollTop(Math.max(-monthGroups[0].offset().top - curOffset, this.scrollOffset + 1));
+                this.pane.prepend(renderedElements).scrollTop(Math.max(-renderedElements[0].offset().top - curOffset, this.scrollOffset + 1));
             } else {
-                this.pane.append(monthGroups);
+                this.pane.append(renderedElements);
             }
             if (_.device('ie <= 11')) {
                 this.calculateHeights();
@@ -510,8 +489,8 @@ define('io.ox/calendar/month/perspective', [
             var self = this;
             this.app = app;
             this.current = moment(app.refDate || moment()).startOf('month');
-            this.previous = moment(this.current).subtract(1, 'month');
-            this.firstWeek = moment(this.previous).startOf('week');
+            this.previous = this.current.clone().subtract(1, 'month');
+            this.firstWeek = this.previous.clone().startOf('week');
             this.lastWeek = this.firstWeek.clone();
 
             this.main

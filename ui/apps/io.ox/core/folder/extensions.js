@@ -46,7 +46,7 @@ define('io.ox/core/folder/extensions', [
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
             // ensure fixed order; rely on defaultFolders (see bug 56563)
-            ['sent', 'drafts', 'spam', 'trash', 'archive'].forEach(function (type) {
+            ['drafts', 'sent', 'spam', 'trash', 'archive'].forEach(function (type) {
                 var folder = defaultFolders[type];
                 if (!folder) return;
                 if (type === 'archive' && !capabilities.has('archive_emails')) return;

@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@open-xchange/tinymce@4.6.3-4":
-  version "4.6.3-4"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-4.tgz#fa2516decd3f5fb6aeca7ec376485c6ab7a26d94"
+"@open-xchange/tinymce@4.6.3-7":
+  version "4.6.3-7"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-7.tgz#e91c957d9957d27833307de9290200c1fabb918f"
   dependencies:
     tinymce "^4.6.3"
 

@@ -35,6 +35,8 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
 
         // on container resize
         applySizeConstraints: function () {
+            // don't save for list layout, doesn't make sense and breaks it for other layouts
+            if (this.listView.app.props.get('layout') === 'list') return;
             // do nothing, if element is not visible, can't calculate sizes in this case
             if (!this.$el.is(':visible')) return;
 
