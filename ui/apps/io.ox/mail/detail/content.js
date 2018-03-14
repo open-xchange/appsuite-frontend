@@ -323,7 +323,15 @@ define('io.ox/mail/detail/content',
                     link.text(text);
                 }
                 link = $(node).filter(':not([href^="mailto:"])');
-                if (link.attr('href')) link.attr('rel', 'noopener');
+                if (link.attr('href')) {
+                    // other links
+                    link.attr({ 'rel': 'noopener', 'target': '_blank' });
+                    link.attr('href', encodeURI(link.attr('href')));
+                } else if (link.attr('href') && link.attr('href') === '') {
+                    // missing or broken href attribute
+                    // remove href as it points to nowhere
+                    link.removeAttr('href');
+                }
             });
         }
     });

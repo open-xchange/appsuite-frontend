@@ -60,6 +60,15 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
+                        flatten: true,
+                        src: [
+                            'dompurify/dist/purify.min.js'
+                        ],
+                        cwd: 'bower_components',
+                        dest: 'build/static/3rd.party/'
+                    },
+                    {
+                        expand: true,
                         src: ['*.{png,svg,swf,gif,xap,css}', '!{jquery,*.min}.js'],
                         cwd: 'bower_components/mediaelement/build/',
                         dest: 'build/apps/3rd.party/mediaelement/',
