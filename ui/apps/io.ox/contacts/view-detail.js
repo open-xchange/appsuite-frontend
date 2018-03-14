@@ -29,8 +29,9 @@ define('io.ox/contacts/view-detail', [
     'settings!io.ox/core',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
+    'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, coreSettings, attachments, http) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, coreSettings, attachments, http, DOMPurify) {
 
     'use strict';
 
@@ -499,7 +500,8 @@ define('io.ox/contacts/view-detail', [
                             var url = $.trim(baton.data.url);
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
-                            return $('<a target="_blank" rel="noopener">').attr('href', url).text(url);
+                            var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(url)).text(url);
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], SAFE_FOR_JQUERY: true, RETURN_DOM: true });
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),

@@ -209,7 +209,12 @@ define('io.ox/mail/detail/content', [
                     }
                 } else if (link.attr('href')) {
                     // other links
-                    link.attr('rel', 'noopener');
+                    link.attr({ 'rel': 'noopener', 'target': '_blank' });
+                    link.attr('href', encodeURI(link.attr('href')));
+                } else if (!href) {
+                    // missing or broken href attribute
+                    // remove href as it points to nowhere
+                    link.removeAttr('href');
                 }
             });
         },
