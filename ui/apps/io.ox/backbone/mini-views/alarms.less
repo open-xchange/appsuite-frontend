@@ -11,12 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.alarms-view-dialog {
+.modal.flex.alarms-view-dialog {
     .modal-content {
-        min-height: 500px;
-        // if there is not enough space we set themin height to the max height if modal dialogs
+        min-height: 300px;
+        max-height: 500px;
+        // if there is not enough space we set the min height to the max height in modal dialogs
         @media (max-height: 548px) {
             min-height: ~"calc(100vh - 48px)";
+            max-height: ~"calc(100vh - 48px)";
         }
     }
 }
@@ -29,20 +31,26 @@
             padding-top: 5px;
             padding-bottom: 5px;
 
+            .item {
+                .form-control {
+                    width: 28%;
+                }
+                line-height: 30px;
+                display: flex;
+                justify-content: space-between;
+            }
+
             &:hover {
                 background-color: #eeeeee;
             }
             .alarm-remove {
+                width: 40px;
                 text-align: center;
                 &:hover,&:focus {
                     background-color: #cc0000;
                     color: #fff;
                     background-clip: content-box;
                 }
-            }
-
-            .row {
-                line-height: 30px;
             }
         }
     }
