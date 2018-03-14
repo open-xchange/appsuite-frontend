@@ -148,7 +148,9 @@ define('io.ox/files/share/model', [
             var self = this;
             switch (action) {
                 case 'read':
-                    return api.getLink(this.toJSON()).then(function (data, timestamp) {
+                    return api.getLink(this.toJSON()).then(function (result) {
+                        var data = result.data,
+                            timestamp = result.timestamp;
                         // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
                         //
                         // api call returns e.g.
