@@ -102,6 +102,7 @@ define('plugins/portal/mail/register', [
         },
 
         onExpire: function () {
+            // revert flag since this is an active collection (see bug 54111)
             this.collection.expired = false;
         },
 
@@ -126,6 +127,15 @@ define('plugins/portal/mail/register', [
         if (props.id) return $.when('default' + props.id + '/INBOX');
         return accountAPI.getUnifiedMailboxName().then(function (mb) {
             return mb ? mb + '/INBOX' : api.getDefaultFolder();
+        });
+    }
+
+
+    function reload(baton) {
+        require(['io.ox/portal/main'], function (portal) {
+            // force refresh
+            baton.collection.expired = true;
+            portal.getApp().refreshWidget(baton.model, 0);
         });
     }
 
@@ -173,12 +183,9 @@ define('plugins/portal/mail/register', [
             };
 
             return $.when(getFolderName(baton)).done(function (folderName) {
+                api.on('refresh.all', _.partial(reload, baton));
                 api.on('update', function (event, list, target) {
-                    if (target === folderName) {
-                        require(['io.ox/portal/main'], function (portal) {
-                            portal.getApp().refreshWidget(baton.model, 0);
-                        });
-                    }
+                    if (target === folderName) reload(baton);
                 });
             });
         },
