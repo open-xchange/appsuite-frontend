@@ -22,18 +22,10 @@
     }
 }
 
-.powermove-window-open .io-ox-mail-compose-window.cornered {
-    // if the floating window is small we need more space for the labels (560px)
-    @media (max-width: 1672px) {
-        .mail-input {
-            padding-left: 25px;
-        }
-    }
-}
-
 .io-ox-mail-compose {
+
     // baseline adjustment
-    padding-top: @default-padding;
+    padding-top: 8px;
 
     & > .mail-compose-fields > .row {
 
@@ -80,14 +72,15 @@
             &:-ms-input-placeholder { color: transparent; }
         }
 
-        .maillabel a {
+        .maillabel {
             color: #767676;
-            font-size: 13px;
-            font-weight: bold;
+            font-size: 12px;
+            font-weight: normal;
             line-height: 20px;
             display: inline-block;
             padding-top: 5px;
             margin-bottom: 4px;
+            a { color: inherit; }
         }
     }
 
@@ -339,6 +332,17 @@
     }
 }
 
+html:not(.smartphone) {
+
+    [data-extension-id=composetoolbar] {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        margin-bottom: 0;
+    }
+}
+
+
 .smartphone {
     .io-ox-mail-compose {
         padding-top: 8px;
@@ -455,6 +459,7 @@
 
             &.open { border-bottom: 1px solid #ccc; }
             &.empty { border-bottom: 0; }
+            &.open .list-container { padding-left: 24px; }
         }
         .hidden-file-picker {
             font-size: 15px;

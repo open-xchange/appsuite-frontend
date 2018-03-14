@@ -22,35 +22,6 @@
     top: 40px;
     overflow: hidden;
     z-index: 10;
-
-    &.powermove-window-open {
-        .floating-window.cornered {
-
-            &.powermove {
-                right: 1032px;
-            }
-
-            @media (max-width: 1992px) {
-                width: 800px;
-                &.powermove {
-                    right: 872px;
-                }
-                .container {
-                    min-width: 770px;
-                }
-            }
-
-            @media (max-width: 1672px) {
-                width: 560px;
-                &.powermove {
-                    right: 632px;
-                }
-                .container {
-                    min-width: 530px;
-                }
-            }
-        }
-    }
 }
 
 #io-ox-windowmanager {
@@ -72,18 +43,13 @@
     margin: 0;
     z-index: 11;
     pointer-events: none;
-    display: none;
-
-    html.taskbar-visible & {
-        display: block;
-    }
+    display: block;
 
     #io-ox-taskbar {
         // when the arrow controls are enabled again, set the padding to 0
         padding: 0 56px;
         list-style-type: none;
         overflow: hidden;
-        justify-content: flex-end;
         margin: 0;
         width: 100%;
         display: flex;
@@ -98,22 +64,14 @@
             line-height: 32px;
             min-width: 90px;
 
-            &.active .taskbar-button,&.active button[data-action="close"] {
-                font-weight: bold;
-                //background-color: @brand-primary;
-            }
-
             i {
                 margin-right: 8px;
             }
 
             .taskbar-button {
-                display: flex;
-                align-items: center;
                 border-radius: 0;
                 border: 0;
                 color: white;
-                //font-weight: bold;
                 text-align: left;
                 width: 100%;
                 overflow: hidden;
@@ -136,42 +94,13 @@
                     top: -1px;
                     margin-left:auto;
                 }
+                .maximize-icon {
+                    margin-top: 8px;
+                }
             }
-            button[data-action="close"] {
-                color: white;
-                background-color: #464646;
-                display: inline-block;
-                padding-right: 16px;
-            }
-        }
-    }
-
-    .taskbar-control {
-        width: 32px;
-        height: 32px;
-        line-height: 32px;
-        border: 0;
-        background-color: #f5f5f5;
-        color: rgba(0, 0, 0, 0.7);
-        font-weight: bold;
-        overflow: hidden;
-        flex-shrink: 0;
-        margin: 0 12px;
-
-        &:hover:not([disabled]) {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        &[disabled] {
-            color: rgba(0, 0, 0, 0.2);
         }
     }
 }
-
-/*#io-ox-core.taskbar-visible {
-    #io-ox-screens { bottom: 40px; }
-    #io-ox-taskbar-container { height: 40px; }
-}*/
 
 .touch {
     #io-ox-screens { top: 40px; }
@@ -417,21 +346,6 @@
     .progress .progress-bar { border-radius: 2px; }
 }
 
-.window-head {
-    font-size: @window-head-font-size;
-    background-color: @window-head-color;
-    position: absolute;
-    top: 0;
-    width: @window-head-width;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
-    .user-select(none);
-    filter: none;
-
-    &.css-table { table-layout: fixed; }
-}
-
 .window-sidepanel {
     position: absolute;
     top: 0;
@@ -525,9 +439,9 @@
 .window-body {
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
-    left: @window-head-width;
+    left: 0;
+    right: 0;
     white-space: normal;
     z-index: 1;
     .user-select(text);
@@ -567,16 +481,6 @@
     overflow: auto;
 }
 
-#floating-window-backdrop {
-    z-index: 4;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    // almost transparent
-    background-color: rgba(255, 255, 255, 0.01);
-    position: absolute;
-}
-
 .floating-window {
 
     position: absolute;
@@ -584,70 +488,42 @@
     z-index: 5;
     background: transparent;
     outline: 0;
-
+    &.active {
+        z-index: 6;
+    }
     .floating-window-content {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
 
-    .container {
+    .window-body, .container {
         width: 100%;
-        // needed or tiny-mce toolbar has resize issues
-        min-width: 930px;
     }
 
-    html.taskbar-visible & {
-        &.cornered {
-            bottom: 56px;
-        }
+    width: 920px;
+    height: 750px;
+    right: 56px;
+    bottom: 56px;
+    top: auto;
+    left: auto;
 
-        &.centered .floating-window-content {
-            bottom: 56px;
-        }
+    /* width */
+    &.width-xs { width: 640px; }
+    &.width-sm { width: 720px; }
+    &.width-md { width: 800px; }
+    &.width-lg { width: 920px; }
+
+    .floating-header .controls button[data-action="normal"] {
+        display: none;
     }
 
-    &.cornered {
-        width: 960px;
-        height: 65%;
-        min-height: 640px;
-        right: 56px;
-        bottom: 16px;
-        top: auto;
-        left: auto;
-
-        @media (max-width: 1992px) {
-            width: 900px;
-
-            .container {
-                min-width: 870px;
-            }
-        }
-
-        @media (max-width: 1016px) {
-            margin: 0 auto;
-            left: 16px;
-            right: 16px;
-        }
-
-        @media (max-width: 932px) {
-            width: auto;
-            min-width: auto;
-            .container {
-                min-width: auto;
-            }
-        }
-
-         @media (max-height: 800px) {
-            height: calc(~"100% - 32px");
-            min-height: auto;
-        }
-        .floating-header .controls button[data-action="cornered"] {
-            display: none;
-        }
+    .container {
+        width: 100% !important;
+        min-width: auto;
     }
 
-    &.centered {
-        // higher z-index because of powermove windows
-        z-index: 6;
+    .hidden { display: none; }
+
+    &.maximized {
         width: 1060px;
         height: 100%;
         position: relative;
@@ -660,10 +536,9 @@
 
         .floating-window-content {
             top: 16px;
-            bottom: 16px;
-        }
+            bottom: 56px;        }
 
-        .floating-header .controls button[data-action="centered"] {
+        .floating-header .controls button[data-action="maximized"] {
             display: none;
         }
 
@@ -767,26 +642,6 @@
 
 // TINY SCREENS
 @media (max-width: 540px) {
-    .window-head {
-        top: auto;
-        right: 0;
-        width: auto;
-        height: 40px;
-        background-color: #f5f5f5;
-        border-top: 1px solid #ddd;
-        border-right: 0 none;
-
-        .toolbar-button {
-
-            line-height: 44px;
-            float: left;
-            margin: 0;
-
-            & > a {
-                height: 40px;
-            }
-        }
-    }
 
     .window-body {
         bottom: 40px;
@@ -851,13 +706,6 @@
         .rightside-navbar,
         .rightside { display:none; }
     }
-}
-
-// landscape fullscreen on iPhone
-// iOS will go fullscreen and show an overaly with own buttons
-// we need to position our buttons around them
-@media (height: 320px) and (orientation:landscape) {
-    .window-head { padding-right: 40px; }
 }
 
 // small screens (mobile)

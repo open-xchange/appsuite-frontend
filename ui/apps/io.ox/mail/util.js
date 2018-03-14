@@ -249,7 +249,7 @@ define('io.ox/mail/util', [
 
                 if (i < $i - 1) {
                     tmp.append(
-                        $('<span class="delimiter">').text(',\u00A0\u00A0\u00A0 ')
+                        $('<span class="delimiter">').text(',\u00A0\u00A0 ')
                     );
                 }
             }
