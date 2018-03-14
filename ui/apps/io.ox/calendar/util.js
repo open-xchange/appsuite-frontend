@@ -370,16 +370,16 @@ define('io.ox/calendar/util', [
                 var i = item.value.match(/\d+/)[0];
                 switch (item.format) {
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', i), i);
                         break;
                     case 'hours':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d hour', '%1$d hours', i), i);
                         break;
                     case 'days':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d day', '%1$d days', i), i);
                         break;
                     case 'weeks':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d week', '%1$d weeks', i), i);
                         break;
                     // no default
                 }

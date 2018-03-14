@@ -54,7 +54,7 @@ define('io.ox/backbone/mini-views/alarms', [
             var self = this;
             this.$el.empty().append(
                 self.list,
-                $('<button class="btn btn-default" type="button">').text(gt('Add new reminder'))
+                $('<button class="btn btn-default" type="button">').text(gt('Add reminder'))
                     .on('click', function () {
                         var duration;
 
@@ -96,32 +96,30 @@ define('io.ox/backbone/mini-views/alarms', [
 
             var row, container;
 
-            container = $('<li class="alarm-list-item">').append(row = $('<div class="row">')).data('id', alarm.uid);
+            container = $('<li class="alarm-list-item">').append(row = $('<div class="item">')).data('id', alarm.uid);
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="col-xs-4 alarm-action">').text(alarm.action).val(alarm.action));
+                row.append($('<div class="alarm-action">').text(alarm.action).val(alarm.action));
             } else {
-                row.append($('<div class="col-xs-4">').append(
+                row.append(
                     $('<select class="form-control alarm-action">').append(
                         $('<option>').text(gt('Notification')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO')
                         // TODO enable when mw supports this
                         //$('<option>').text(gt('Mail')).val('EMAIL')
                     ).val(alarm.action)
-                ));
+                );
             }
 
             if (alarm.trigger.duration) {
                 var selectbox, relatedbox;
-                row.append($('<div>').addClass('col-xs-4').append(
+                row.append(
                     selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
-                    }))
-                ),
-                $('<div>').addClass('col-xs-3').append(
+                    })),
                     relatedbox = $('<select class="form-control alarm-related">').append(_.map(relatedLabels, function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
-                ));
+                );
 
                 // add custom option so we can show non standard times
                 if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration.replace('-', '')) === -1) {
@@ -131,11 +129,11 @@ define('io.ox/backbone/mini-views/alarms', [
                 relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
                 selectbox.val(alarm.trigger.duration.replace('-', ''));
             } else {
-                row.append($('<div class="alarm-time">').addClass('col-xs-7').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
+                row.append($('<div class="alarm-time">').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(
-                $('<span role="button" tabindex="0" class="alarm-remove">').addClass('col-xs-1').append($('<i class="alarm-remove fa fa-trash">'))
+                $('<span role="button" tabindex="0" class="alarm-remove">').append($('<i class="alarm-remove fa fa-trash">'))
             );
 
             return container;
@@ -234,13 +232,14 @@ define('io.ox/backbone/mini-views/alarms', [
             return node;
         },
         openDialog: function () {
-            var self = this,
-                revert = this.model.get(this.attribute) || [];
+            var self = this;
 
             require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                var alarmView = new alarmsView({ model: self.model, attribute: self.attribute });
+                var model = {}, alarmView;
+                model[self.attribute] = self.model.get(self.attribute);
+                alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute });
                 new ModalDialog({
-                    title: gt('Edit Reminders'),
+                    title: gt('Edit reminders'),
                     width: 600
                 })
                 .build(function () {
@@ -248,10 +247,10 @@ define('io.ox/backbone/mini-views/alarms', [
                     this.$el.addClass('alarms-view-dialog');
                 })
                 .addCancelButton()
-                .addButton({ action: 'ok', label: gt('Ok') })
-                .on('cancel', function () {
+                .addButton({ action: 'apply', label: gt('apply') })
+                .on('apply', function () {
                     //set alarms back to previous value
-                    self.model.set('alarms', revert);
+                    self.model.set('alarms', alarmView.getAlarmsArray());
                 })
                 .open();
             });
