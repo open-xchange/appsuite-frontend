@@ -367,6 +367,34 @@ define('io.ox/calendar/main', [
             });
         },
 
+        'account-errors': function (app) {
+            app.treeView.on('click:account-error', function (folder) {
+                var accountError = folder['com.openexchange.calendar.accountError'];
+                if (!accountError) return;
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                    new ModalDialog({
+                        point: 'io.ox/calendar/account-errors',
+                        title: gt('Calendar account error')
+                    })
+                    .extend({
+                        default: function () {
+                            this.$body.append(
+                                $('<div class="info-text">')
+                                    .css('word-break', 'break-word')
+                                    .text(accountError.error)
+                            );
+                        }
+                    })
+                    .addCancelButton()
+                    .addButton({ label: gt('Try again'), action: 'retry', className: 'btn-primary' })
+                    .on('retry', function () {
+                        api.collectionLoader.load({ folders: [folder.id], sync: true });
+                    })
+                    .open();
+                });
+            });
+        },
+
         'listview': function (app) {
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true });
             app.listView.model.set({ view: 'list' }, { silent: true });

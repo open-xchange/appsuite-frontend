@@ -1093,6 +1093,20 @@ define('io.ox/core/folder/extensions', [
                         folderLabel.prepend(target);
                     });
                 }
+            },
+            {
+                id: 'account-errors',
+                index: 500,
+                draw: function (baton) {
+                    if (!/^calendar$/.test(baton.data.module)) return;
+
+                    var accountError = baton.data['com.openexchange.calendar.accountError'];
+                    if (accountError) {
+                        baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                    } else {
+                        baton.view.hideStatusIcon();
+                    }
+                }
             }
         );
     });
