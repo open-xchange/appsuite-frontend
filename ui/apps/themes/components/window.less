@@ -62,7 +62,7 @@
             display: flex;
             height: 32px;
             line-height: 32px;
-            min-width: 90px;
+            min-width: 100px;
 
             i {
                 margin-right: 8px;
@@ -77,26 +77,23 @@
                 overflow: hidden;
                 background-color: #464646;
                 padding-left: 16px;
+                display: flex;
+                align-items: center;
+
                 &.io-ox-busy:before {
                     color: white;
                     margin-top: -15px;
                 }
 
                 .title {
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
+                    .ellipsis();
                     margin-right: 8px;
                 }
                 .count {
                     padding: 4px 5px;
-                    position: relative;
-                    top: -1px;
-                    margin-left:auto;
+                    margin-right: 8px;
                 }
-                .maximize-icon {
-                    margin-top: 8px;
-                }
+                .spacing { flex-grow: 1; }
             }
         }
     }

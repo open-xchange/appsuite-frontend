@@ -377,6 +377,8 @@ define('io.ox/backbone/views/window', [
                     this.$icon = this.model.get('taskbarIcon') ? $('<i class="fa">').addClass(this.model.get('taskbarIcon')) : $(),
                     this.$title = $('<span class="title">'),
                     this.$count = $('<span class="count label label-danger">'),
+                    // margin-right-auto for flex
+                    $('<span class="spacing">'),
                     $('<i class="maximize-icon pull-right fa fa-window-maximize" aria-hidden="true">')
                 )
             );
