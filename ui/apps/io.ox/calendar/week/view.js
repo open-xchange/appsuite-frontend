@@ -949,13 +949,16 @@ define('io.ox/calendar/week/view', [
             var renderTimeline = function () {
                 var d = moment();
                 self.timeline.css({ top: ((d.hours() / 24 + d.minutes() / 1440) * 100) + '%' });
-                // check for parent container in case of the next day
-                var todayContainer = $('.week-container .day[date="' + moment().weekday() + '"]', self.pane);
-                if (!todayContainer.hasClass('today')) self.rerender();
+                // check, if the day changed
+                var now = _.now(),
+                    lastRendered = parseInt(self.timeline.attr('data-last') || now, 10);
+                self.timeline.attr('data-last', now);
+                if (moment(lastRendered).startOf('day').valueOf() !== moment(now).startOf('day').valueOf()) self.rerender();
             };
             // create and animate timeline
             renderTimeline();
-            setInterval(renderTimeline, 60000);
+            if (this.intervalId) clearInterval(this.intervalId);
+            this.intervalId = setInterval(renderTimeline, 60000);
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
