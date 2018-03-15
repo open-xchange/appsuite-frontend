@@ -183,10 +183,12 @@ define('io.ox/contacts/distrib/main', [
             var state = app.getState();
             if ('app' in state && state.app !== 'io.ox/contacts') return $.when();
 
-            if ('id' in state) {
-                app.edit(state);
-            } else if ('folder' in state) {
-                app.create(state.folder);
+            if (!app.attributes.floating) {
+                if ('id' in state) {
+                    app.edit(state);
+                } else if ('folder' in state) {
+                    app.create(state.folder);
+                }
             }
         });
 
