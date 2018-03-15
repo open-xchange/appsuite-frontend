@@ -245,15 +245,14 @@
             /* inject correct language here at the very start manually*/
           (function () {
             var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-              languages = ['en', 'de', 'it'],
-              message = {
+              messages = {
                 'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
-                'de': ['Zeitüberschreitung bei der Verbindung. Bittte versuchen Sie, die Seite neu', 'Neu laden'],
+                'de': ['Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.', 'Neu laden'],
                 'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina']
               };
 
-            if (languages.indexOf(language) === -1) language = 'en';
-            document.getElementById('timeout-error').innerHTML = '<span>' + message[language][0] +'</span><a href="#" class="timeout-reload">' + message[language][0] + '</a>';
+            var msg = messages[language] || messages['en'];
+            document.getElementById('timeout-error').innerHTML = '<span>' + msg[0] +'</span><a href="#" class="timeout-reload">' + msg[1] + '</a>';
           }());
         </script>
         <script src="<%= base %>/boot.js"></script>
