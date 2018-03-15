@@ -438,7 +438,7 @@ define('io.ox/mail/detail/view', [
                     return;
                 }
 
-                //wait until width doesn't change anymore
+                // wait until width doesn't change anymore
                 if (widthChange && !options.forceApply) {
                     baton.view.iframePrevWidth = frame.width();
                     _.delay(resizeFrame, 300, once, { widthChanged: true });
@@ -474,9 +474,6 @@ define('io.ox/mail/detail/view', [
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
-
-                // fixes overflow (see bug 55876)
-                if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
 
                 // save width so we can track if the width changed (smartphone slide animation, listview width change, window resize). If the with changed, we need to recalculate from scratch
                 baton.view.iframePrevWidth = frame.width();
@@ -517,7 +514,6 @@ define('io.ox/mail/detail/view', [
             this.idle().append(baton.iframe);
         }
     });
-
 
     ext.point('io.ox/mail/detail/body').extend({
         id: 'iframe-events',
