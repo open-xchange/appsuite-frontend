@@ -3726,7 +3726,7 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr ""
-"Zeitüberschreitung bei der Verbindung. Bittte versuchen Sie, die Seite neu "
+"Zeitüberschreitung bei der Verbindung. Bitte versuchen Sie, die Seite neu "
 "zu laden."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
