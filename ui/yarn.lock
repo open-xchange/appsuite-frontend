@@ -3552,11 +3552,12 @@ pause@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/pause/-/pause-0.0.1.tgz#1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d"
 
-pdfjs-dist@1.7.225:
-  version "1.7.225"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.7.225.tgz#22bfe442e927e83dfd8dcb39d75b02336ad93524"
+pdfjs-dist@1.9.426:
+  version "1.9.426"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.426.tgz#20eb0fd56ccfd10fba053b201e02375ae0c171c4"
   dependencies:
     node-ensure "^0.0.0"
+    worker-loader "^0.8.0"
 
 performance-now@^0.2.0:
   version "0.2.0"
