@@ -255,6 +255,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3201': 'com.openexchange.calendar.extendedProperties',
                 '3203': 'com.openexchange.calendar.provider',
                 '3220': 'com.openexchange.caldav.url',
+                '3204': 'com.openexchange.calendar.accountError',
                 '3205': 'com.openexchange.calendar.config'
             },
             'user': {

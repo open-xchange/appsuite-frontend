@@ -375,7 +375,10 @@ define('io.ox/mail/main', [
                             if (node) {
                                 if (obj[accountData.id].status === 'invalid_ssl') {
 
-                                    node.showStatusIcon(obj[accountData.id].message, modus, error);
+                                    var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
+                                        data = modus ? error : node.options.model_id;
+
+                                    node.showStatusIcon(obj[accountData.id].message, event, data);
 
                                 } else {
                                     node.hideStatusIcon();
