@@ -312,12 +312,10 @@ define('io.ox/contacts/edit/main', [
                     savePoint = {
                         description: gt('Contact') + (title ? ': ' + title : ''),
                         module: 'io.ox/contacts/edit',
-                        point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited')
+                        point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited'),
+                        passPointOnGetApp: true
                     };
-                // to restore the my contact data dialog, we need to pass the data on the getApp call
-                if (app.userMode) {
-                    savePoint.passPointOnGetApp = true;
-                }
+
                 return savePoint;
             }
             return false;
