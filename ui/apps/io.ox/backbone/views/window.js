@@ -360,6 +360,7 @@ define('io.ox/backbone/views/window', [
         onChangeTitle: function () {
             var title = this.model.get('title').trim();
             this.$title.text(title);
+            this.$el.attr('data-original-title', title);
             if (!this.model.get('minimized')) ox.trigger('change:document:title', this.model.get('title'));
         },
 
@@ -386,6 +387,13 @@ define('io.ox/backbone/views/window', [
             this.onChangeTitle();
             this.onChangeCount();
             this.onChangeMinimized();
+
+            this.$el.attr({
+                'data-toggle': 'tooltip',
+                'data-placement': 'top',
+                'data-container': 'body'
+            }).tooltip();
+
             $('#io-ox-taskbar').append(this.$el);
             return this;
         }
