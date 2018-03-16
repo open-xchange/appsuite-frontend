@@ -144,7 +144,10 @@ define('io.ox/calendar/folder-select-support', [
     };
 
     FolderSelection.prototype.repaintNode = function (id) {
-        if (!this.app || !this.app.treeView) return console.log('Cannot repaint node: ' + id);
+        if (!this.app || !this.app.treeView) {
+            if (ox.debug) console.log('Cannot repaint node: ' + id);
+            return;
+        }
         var nodes = this.app.treeView.$('[data-id="' + id + '"]');
         nodes.each(function () {
             var node = $(this).data('view');
