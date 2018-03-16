@@ -379,7 +379,7 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
 
-            var $content = $(content.get(baton.data).content);
+            var $content = $(content.get(baton.data).content), resizing = false;
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -389,19 +389,33 @@ define('io.ox/mail/detail/view', [
                         .find('head').append('<style>' + contentStyle + '</style>').end()
                         .find('body').append($content);
                     $(this.contentWindow)
-                        .on('resize', { iframe: this }, onElementResize).trigger('resize');
+                        .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
+                        .on('resize', { iframe: $(this) }, onWindowResize)
+                        .trigger('resize');
                 }.bind(this));
             });
 
-            function onElementResize(e) {
+            function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins
-                var height = this.document.body.scrollHeight;
-                if (height) e.data.iframe.style.height = height + 'px';
+                // set height for iframe and its parent
+                e.data.iframe.parent().addBack().height(this.document.body.scrollHeight);
+            }
+
+            function onWindowResize(e) {
+                // avoid event-based recursion
+                if (!resizing) resizing = true; else return;
+                // revert outer size to support shrinking
+                e.data.iframe.height('');
+                onImmediateResize.call(this, e);
+                // we need to wait until allowing further resize events
+                // setTimeout is bad because we don't know how long to wait exactly
+                // requestAnimationFrame seems to be the proper tool
+                requestAnimationFrame(function () { resizing = false; });
             }
 
             // track images since they can change dimensions
             $content.find('img').on('load error', function () {
-                $(this).off().trigger('resize');
+                $(this).off().trigger('complete');
             });
 
             // remove event handlers on dispose
