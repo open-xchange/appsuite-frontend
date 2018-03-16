@@ -940,7 +940,7 @@ define('io.ox/files/api', [
             }))
             .then(function (array) {
                 // add new items to the pool
-                _(array).each(mergeDetailInPool);
+                _(array.filter(Boolean)).each(mergeDetailInPool);
                 // reconstruct results
                 if (options.fullModels) {
                     return _(ids).map(has, collection);
