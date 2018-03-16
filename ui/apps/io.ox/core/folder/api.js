@@ -1265,15 +1265,9 @@ define('io.ox/core/folder/api', [
         .done(function () {
             _(list).each(function (model) {
                 var id = model.get('id');
-                api.get(id, { cache: false }).done(function (folderModel) {
-                    api.path(folderModel.folder_id).done(function (folderModels) {
-                        api.pool.getModel(folderModel.folder_id).set('subscr_subflds', true);
-                        folderModels.push(folderModel);
-                        _.each(folderModels, function (tmp) {
-                            api.pool.getCollection(tmp.folder_id).add(tmp);
-                        });
-                        api.trigger('restore', model.toJSON());
-                    });
+                api.get(id, { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('restore', model.toJSON());
                 })
                 .fail(function (error) {
                     // folder does not exist
