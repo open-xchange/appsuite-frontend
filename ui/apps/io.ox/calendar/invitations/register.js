@@ -123,7 +123,7 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(fullModel, { noFolderCheck: true }));
+                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true }));
                     });
                 });
             });
@@ -320,6 +320,9 @@ define('io.ox/calendar/invitations/register', [
 
             this.renderSummary();
             this.renderChanges();
+
+            // don't offer actions when this is an external account => not supported
+            if (parseInt(this.mailModel.get('account_id'), 10) !== 0) return this;
 
             // get standard buttons
             actions = this.getActions();
