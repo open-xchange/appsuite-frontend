@@ -549,7 +549,7 @@ define('io.ox/mail/detail/content', [
             $(this).hide().prev().show();
             // needed for FF to handle the resize
             _.delay(function () {
-                $(e.delegateTarget).trigger('resize');
+                $(e.delegateTarget).trigger('resize').trigger('toggle-blockquote');
             }, 20);
 
             $(this).remove();
