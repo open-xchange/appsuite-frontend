@@ -179,12 +179,11 @@ define('io.ox/contacts/edit/main', [
                             }
                             considerSaved = true;
                             win.idle();
-                            if (app.dropZone) app.dropZone.remove();
                             app.quit();
                         });
 
                         if (settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
-
+                            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'
                             }, editView);
