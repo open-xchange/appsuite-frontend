@@ -26,6 +26,7 @@ define('io.ox/backbone/views/window', [
     var WindowModel = Backbone.Model.extend({
         defaults: {
             minimized: false,
+            active: true,
             floating: true,
             lazy: false,
             displayStyle: 'normal',
@@ -54,7 +55,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(options).pick('title', 'minimized', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
+                    _(options).pick('title', 'minimized', 'active', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
                 );
             }
 
@@ -219,6 +220,7 @@ define('io.ox/backbone/views/window', [
             if (this.$el.hasClass('active')) return;
             collection.each(function (windowModel) { windowModel.trigger('deactivate'); });
             this.$el.addClass('active');
+            this.model.set('active', true);
 
             if (this.model.get('lazy')) return this.model.set('lazy', false);
 
@@ -227,6 +229,7 @@ define('io.ox/backbone/views/window', [
 
         deactivate: function () {
             this.$el.removeClass('active');
+            this.model.set('active', false);
         },
 
         setTitle: function (title) {
