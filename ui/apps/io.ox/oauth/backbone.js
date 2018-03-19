@@ -59,7 +59,7 @@ define('io.ox/oauth/backbone', [
 
             var callbackName = 'oauth' + generateId(),
                 params = {
-                    action: 'init',
+                    action: 'reauthorize',
                     serviceId: account.get('serviceId'),
                     displayName: account.get('displayName'),
                     cb: callbackName,

@@ -28,10 +28,7 @@ define('io.ox/files/actions/add-storage-account', [
     'use strict';
 
     function createAccount(service) {
-        var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-            return !account.hasScopes('drive');
-        })[0] ||
-        new OAuth.Account.Model({
+        var account = new OAuth.Account.Model({
             serviceId: service.id,
             displayName: oauthAPI.chooseDisplayName(service)
         });

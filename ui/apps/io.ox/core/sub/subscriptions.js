@@ -310,10 +310,7 @@ define('io.ox/core/sub/subscriptions', [
 
     function createAccount(service, scope) {
         var serviceId = service.formDescription[0].options.type,
-            account = oauthAPI.accounts.forService(serviceId).filter(function (account) {
-                return !account.hasScopes(scope);
-            })[0] ||
-            new OAuth.Account.Model({
+            account = new OAuth.Account.Model({
                 serviceId: serviceId,
                 displayName: oauthAPI.chooseDisplayName(service)
             });

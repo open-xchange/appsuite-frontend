@@ -183,14 +183,10 @@ define('io.ox/mail/accounts/settings', [
 
                 list.listenTo(list, 'select', function (service) {
                     if (service.get('type') === 'wizard') return;
-                    var account = oauthAPI.accounts.forService(service.id)
-                        .filter(function (account) {
-                            return !account.hasScopes('mail');
-                        })[0] ||
-                        new OAuth.Account.Model({
-                            serviceId: service.id,
-                            displayName: oauthAPI.chooseDisplayName(service)
-                        });
+                    var account = new OAuth.Account.Model({
+                        serviceId: service.id,
+                        displayName: oauthAPI.chooseDisplayName(service)
+                    });
 
                     account.enableScopes('mail').save().then(function () {
                         baton.popup.busy();
