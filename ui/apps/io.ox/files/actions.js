@@ -537,7 +537,7 @@ define('io.ox/files/actions', [
                         successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
-                                    filesLeft = [];
+                                    itemsLeft = [];
 
                                 if (!_.isArray(response)) {
                                     response = [response];
@@ -546,7 +546,6 @@ define('io.ox/files/actions', [
                                 _.each(response, function (error) {
                                     // check the error structure to prevent a nested error object
                                     var errorResponse = _.isString(error.error) ? error : error.error;
-
 
                                     if (errorResponse) {
 
@@ -561,33 +560,43 @@ define('io.ox/files/actions', [
                                                 conflicts.title = errorResponse.error;
                                             }
 
-                                            if (_.isArray(warningsInErrorResponse)) {
-                                                _(warningsInErrorResponse).each(function (warning) {
-                                                    conflicts.warnings.push(warning.error);
-                                                    if (type === 'move' && !_(filesLeft).findWhere({ id: warning.error_params[3] })) {
-                                                        filesLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
+                                            // -> populate 'itemsLeft' for folder that will be moved after pressed on ignore conflict
+                                            if (errorCausedByFolder && type === 'move' && !_(itemsLeft).findWhere({ id: errorResponse.error_params[1] })) {
+                                                itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                            }
+
+                                            // -> populate 'itemsLeft' list for files that will be moved after pressed on ignore conflict
+                                            // note: when a folder is moved and the conflict happens for files in this folder, don't move these files but only the folder
+                                            if (!errorCausedByFolder && type === 'move' && warningsInErrorResponse) {
+                                                _.each(warningsInErrorResponse, function (warning) {
+                                                    if (!_(itemsLeft).findWhere({ id: warning.error_params[3] })) {
+                                                        itemsLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
                                                     }
                                                 });
-                                            } else {
-                                                conflicts.warnings.push(errorResponse.warnings.error);
-                                                if (type === 'move' && !_(filesLeft).findWhere({ id: errorResponse.warnings.error_params[3] })) {
-                                                    filesLeft.push(_(list).findWhere({ id: errorResponse.warnings.error_params[3] }));
-                                                }
                                             }
+
+                                            // -> populate shown warnings for the dialog
+                                            if (warningsInErrorResponse) {
+                                                _.each(warningsInErrorResponse, function (warning) {
+                                                    conflicts.warnings.push(warning.error);
+                                                });
+                                            }
+
                                             // unfortunately move and copy responses do nt have the same structure
                                             if (type === 'copy') {
-                                                filesLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
                                             }
                                         }
                                     }
                                 });
 
-                                if (conflicts.title && filesLeft.length) {
+                                if (conflicts.title && itemsLeft.length) {
                                     require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
-                                                api[type](filesLeft, baton.target || apiInput.target, true);
+                                                api[type](itemsLeft, baton.target || apiInput.target, true);
+
                                             },
                                             callbackCancel: function () {
                                                 // note: drag&drop and actions via menu use a different baton, see b53498
