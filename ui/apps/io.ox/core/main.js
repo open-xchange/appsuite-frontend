@@ -2002,6 +2002,10 @@ define('io.ox/core/main', [
             // IMAP-specific: 'Relogin required'
             case 'MSG-1000':
             case 'MSG-1001':
+            case 'MSG-1036':
+            case 'MSG-1038':
+            case 'MSG-1039':
+            case 'MSG-1040':
             // INUSE (see bug 37218)
             // falls through
             case 'MSG-1031':
