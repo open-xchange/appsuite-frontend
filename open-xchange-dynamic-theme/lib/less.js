@@ -268,7 +268,7 @@ less.tree.Negative.prototype.print =
 less.tree.Operation.prototype.print = function(opt) {
     var op = this.isSpaced ? " " + this.op + " " : this.op;
     return this.op === "*" || this.op === "/" ?
-        printList(this.operands, op, 1) :
+        printList(this.operands, op, { prec: 1 }) :
         opt && opt.prec ? ["(", printList(this.operands, op), ")"] :
                                 printList(this.operands, op);
 };

@@ -14,14 +14,14 @@ The theme generator consists of the single package open-xchange-dynamic-theme, w
 
 ## Enabling the Plugin
 
-The plugin is enabled or disabled by the capability _dynamic-theme_, e.g. in a file `/opt/open-xchange/etc/dynamic-theme.properties` set
+The plugin is enabled or disabled by the capability `dynamic-theme`, e.g. in a file `/opt/open-xchange/etc/dynamic-theme.properties` set
 
 ```
 com.openexchange.capability.dynamic-theme=true
 ```
 
 When using the plugin, the actual theme should be the built-in default theme.
-To prevent all users from changing it and hide the theme selector in the preferences, set the property **io.ox/core//theme** to read-only. 
+To prevent all users from changing it and hide the theme selector in the preferences, set the property `io.ox/core//theme` to read-only. 
 To do this, change the file `/opt/open-xchange/etc/meta/appsuite.yaml` as follows:
 
 ```yaml
@@ -42,29 +42,30 @@ Then, to hide the theme selector for users with a dynamic theme, use the Configu
 
 The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties`, which contains the global defaults for the custom theme settings. Any of the settings contained in that file can be changed per-context or at any other granularity supported by the Configuration Cascade. The individual settings are as follows:
 
-```
-# default: #333
-io.ox/dynamic-theme//frameColor
+| Variable              | Default               | Dark/Light | Description
+| --------------------- | --------------------- | ---------- | -----------
+| `mainColor`           | `#283f73`             | dark       | The main highlight color. Setting only this variable might already be enough.
+| `linkColor`           | same as `mainColor`   | dark       | Text color for links and border-less buttons.
+| `loginColor`          | `#1f3d66`             | dark       | Background color of the login screen.
+| `headerPrefixColor`   | `#6cbafc`             | light      | Text color of the "OX" prefix on the login screen.
+| `headerColor`         | `#fff`                | light      | Text color of the "App Suite" product name on the login screen.
+| `headerLogo`          |                       |            | URL of an image which replaces the "OX App Suite" header text on the login screen.
+| `logoURL`             |                       |            | URL of the logo in the top left corner of the top bar.
+| `logoWidth`           | `auto`                |            | Optional width of the logo as number of pixels or any CSS length unit. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
+| `logoHeight`          | `auto`                |            | Optional height of the logo as number of pixels or any CSS length unit. The maximum value is 64. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
+| `topbarBackground`    | same as `mainColor`   | dark       | Background color of the top bar.
+| `topbarHover`         | `rgba(0, 0, 0, 0.3)`  | dark       | Background of an item in the top bar when it has the keyboard focus, the mouse hovers it, or it is active.
+| `listSelected`        | `#ddd`                | light      | Background of selected items in the list view when the list view does not have the keyboard focus.
+| `listHover`           | `#f7f7f7`             | light      | Background of a not selected item in the list view when the mouse hovers over it.
+| `listSelectedFocus`   | same as `mainColor`   | dark       | Background color of selected items in the list view when the list view has the keyboard focus.
+| `folderBackground`    | `#f5f5f5`             | light      | Background color of left the side panel.
+| `folderSelected`      | `rgba(0, 0, 0, 0.1)`  | light      | Background of a selected item in the side panel when the side panel does not have the keyboard focus.
+| `folderHover`         | `rgba(0, 0, 0, 0.05)` | light      | Background color of a not selected item in the side panel when the mouse hovers over it.
+| `folderSelectedFocus` | same as `mainColor`   | dark       | Background color of a selected item in the side panel when the side panel has the keyboard focus.
 
-# default: #39a9e1
-io.ox/dynamic-theme//selectionColor
-
-# default: 60
-io.ox/dynamic-theme//logoWidth
-
-# default: apps/themes/default/logo-small.png
-io.ox/dynamic-theme//logoURL
-```
-
-The colors can be any CSS color; logoWidth is specified in pixels; logoURL can be relative (to /appsuite/), or absolute. 
-When using absolute URLs to point to different hosts, use the form //hostname/path to keep the protocol (HTTP or HTTPS) and avoid any unnecessary security warnings.
-
-# Maintenance
-
-The source file `apps/io.ox/dynamic-theme/definitions.less` contains the Less rules for the theme. All keys in the namespace _io.ox/dynamic-theme//_ are converted to Less variables by prefixing them with _@io-ox-dynamic-theme-_. 
-The set of keys in the following files must be kept in sync:
-
-- apps/io.ox/dynamic-themes/definitions.less.in
-- apps/io.ox/dynamic-theme/settings/defaults.js
-- lib/update-dynamic-theme.js
-- conf/settings/open-xchange-dynamic-theme.properties
+In the configuration file, each variable name must be preceded by '`io.ox/dynamic-theme//`'.
+When referring to the value of other variables on the right side of the equals sign,
+(like in the default value of `linkColor`) the variable names must be preceded by '`@io-ox-dynamic-theme-`'.
+The colors can be any CSS color. `headerLogo` and `logoURL` can be relative (to `/appsuite/`), or absolute.
+When using absolute URLs to point to different hosts, use the form `//hostname/path`
+to keep the protocol (HTTP or HTTPS) and avoid any unnecessary security warnings.
