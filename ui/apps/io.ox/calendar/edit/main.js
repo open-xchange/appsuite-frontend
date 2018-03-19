@@ -52,7 +52,6 @@ define('io.ox/calendar/edit/main', [
             dispose: function () {
                 this.view.off('save', _.bind(this.onSave, this));
                 this.model.off();
-                this.dropZone.remove();
             },
 
             // published via callbacks objects in baton (see below)
@@ -368,6 +367,7 @@ define('io.ox/calendar/edit/main', [
         });
 
         app.setLauncher(function () {
+            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
             this.dropZone = new dnd.UploadZone({
                 ref: 'io.ox/calendar/edit/dnd/actions'
             }, this);

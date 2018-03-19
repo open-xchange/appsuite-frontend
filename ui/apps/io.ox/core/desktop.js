@@ -622,6 +622,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
+                if (self.dropZone && self.dropZone.remove) self.dropZone.remove();
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
