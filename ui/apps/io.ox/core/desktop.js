@@ -399,9 +399,11 @@ define('io.ox/core/desktop', [
                     });
                 });
 
-                win.floating.listenTo(model, 'change:minimized', function (model, minimized) {
+                // handle dropzone
+                win.floating.listenTo(model, 'change:active change:minimized', function (model) {
                     if (!win.app.dropZone) return;
-                    if (minimized) return win.app.dropZone.remove();
+                    var active = model.get('active') && !model.get('minimized');
+                    if (!active) return win.app.dropZone.remove();
                     win.app.dropZone.include();
                 });
 
