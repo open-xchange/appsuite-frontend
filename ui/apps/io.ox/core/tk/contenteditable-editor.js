@@ -331,7 +331,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                     _.defer(function () {
                         // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                         toolbar.find('span.mce-txt').attr('tabindex', -1);
-                        toolbar.find('.mce-menubtn').closest('.mce-flow-layout-item').addClass('hidden');
+                        toolbar.find('.mce-menubtn').closest('.mce-flow-layout-item').addClass('hidden-window-xs');
                     });
                 });
 
