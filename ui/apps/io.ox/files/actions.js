@@ -828,7 +828,7 @@ define('io.ox/files/actions', [
     // Action to revoke the sharing of the files.
     new Action('io.ox/files/share/revoke', {
         requires: function (e) {
-            console.log(e);
+
             return isShareable(e, 'link') || isShareable(e, 'invite');
         },
         action: function (baton) {
