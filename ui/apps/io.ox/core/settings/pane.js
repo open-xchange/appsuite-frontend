@@ -514,7 +514,7 @@ define('io.ox/core/settings/pane', [
                     util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink)
                 ];
 
-                if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
+                //if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
 
                 baton.$el.append($('<div class="form-group">').append(options));
             }
