@@ -1225,6 +1225,13 @@ define('io.ox/files/api', [
         var fn = type === 'move' ? move : copy,
             def = $.Deferred(),
             callback = function (response) {
+
+                // this needs refactoring: when moving a folder successful with larger files (long running job)
+                // the finished jobs have no 'multiple' response, therefore the input 'result' here is a String
+                // (see http.js/processResponse why). When a String is returned in this function, later functions
+                // detects that as an error, which is wrong. Therefore prevent that as an intermediate workaround.
+                response = _.isString(response) ? [] : response;
+
                 var errorText, i = 0, $i = response ? response.length : 0;
                 // look if anything went wrong
                 for (; i < $i; i++) {

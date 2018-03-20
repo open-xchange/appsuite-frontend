@@ -609,6 +609,7 @@ define('io.ox/files/actions', [
                         label: label,
                         success: success,
                         successCallback: function (response, apiInput) {
+                            // see file/api.js transfer(): in case of an error the callback returns a string
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
                                     itemsLeft = [];
@@ -620,7 +621,6 @@ define('io.ox/files/actions', [
                                 _.each(response, function (error) {
                                     // check the error structure to prevent a nested error object
                                     var errorResponse = _.isString(error.error) ? error : error.error;
-
 
                                     if (errorResponse) {
 
@@ -670,8 +670,28 @@ define('io.ox/files/actions', [
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
-                                                api[type](itemsLeft, baton.target || apiInput.target, true);
+                                                api[type](itemsLeft, baton.target || apiInput.target, true)
+                                                .always(function (response) {
 
+                                                    // see file/api.js transfer(): in case of an error the callback returns a string
+                                                    // important: only errors must be checked, conflicts can't happen here, since the
+                                                    // ignoreConflicts flag is 'true' at api.move
+                                                    var error = _.isString(response);
+
+                                                    if (error) {
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('error', response);
+                                                            api.trigger('reload:listview');
+                                                        });
+
+                                                    } else {
+                                                        //no error, must be success
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('success', itemsLeft.length > 1 ? success.multiple : success.single);
+                                                        });
+                                                    }
+
+                                                });
                                             },
                                             callbackCancel: function () {
                                                 // note: drag&drop and actions via menu use a different baton, see b53498
