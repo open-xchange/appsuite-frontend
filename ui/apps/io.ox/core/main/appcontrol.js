@@ -81,7 +81,7 @@ define('io.ox/core/main/appcontrol', [
             this.model.quit();
         },
         drawCloser: function () {
-            var close = $('<button type="button" class="btn btn-link closer">').append(
+            var close = $('<a href="#" type="button" class="btn btn-link closer">').append(
                 $('<i class="fa fa-times" aria-hidden="true">'));
             this.$el.append(close);
             this.closer = close;
@@ -135,8 +135,8 @@ define('io.ox/core/main/appcontrol', [
                 'data-app-name': this.model.get('name')
             }).append(this.icon = this.drawIcon());
             this.updateTooltip();
-            // used on mobile
-            if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
+            // used on mobile, reverted for 7.10
+            // if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
             return this;
         }
     });
@@ -193,7 +193,7 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                $('<ul class="dropdown-menu dropdown-menu-right">').append(
+                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
                     this.collection.map(function (model) {
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model }).render().$el
@@ -329,20 +329,25 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol').extend({
-        id: 'mobile',
+        id: 'runningAppsMobile',
         index: 1000,
         draw: function () {
             if (_.device('!smartphone')) return;
-            var self = this;
 
+            // add running app to menu
             ox.ui.apps.on('add', function (model) {
                 if (model.get('closable')) {
-                    self.find('.cflex').append(new LauncherView({ model: model }).render().$el);
+                    $('.launcher-dropdown').append(
+                        $('<li role="presentation">').append(
+                            new LauncherView({ model: model }).render().$el
+                        )
+                    );
                 }
             });
 
+            // remove on close
             ox.ui.apps.on('remove', function (model) {
-                self.find('[data-id="' + model.get('id') + '"]').remove();
+                $('.launcher-dropdown').find('[data-id="' + model.get('id') + '"]').parent().remove();
             });
         }
     });
