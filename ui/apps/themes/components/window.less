@@ -46,8 +46,7 @@
     display: block;
 
     #io-ox-taskbar {
-        // when the arrow controls are enabled again, set the padding to 0
-        padding: 0 56px;
+        padding: 0 8px;
         list-style-type: none;
         overflow: hidden;
         margin: 0;
@@ -486,7 +485,7 @@
     background: transparent;
     outline: 0;
     &.active {
-        z-index: 6;
+        z-index: 7;
     }
     .floating-window-content {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -498,16 +497,32 @@
 
     width: 920px;
     height: 750px;
-    right: 56px;
-    bottom: 56px;
-    top: auto;
-    left: auto;
+    right: auto;
+    bottom: auto;
+    // start window in the middle
+    top: ~"calc(50% - 375px)";
 
     /* width */
-    &.width-xs { width: 640px; }
-    &.width-sm { width: 720px; }
-    &.width-md { width: 800px; }
-    &.width-lg { width: 920px; }
+    &.width-xs {
+        width: 640px;
+        // start window in the middle
+        left: ~"calc(50% - 320px)";
+    }
+    &.width-sm {
+        width: 720px;
+        // start window in the middle
+        left: ~"calc(50% - 360px)";
+    }
+    &.width-md {
+        width: 800px;
+        // start window in the middle
+        left: ~"calc(50% - 400px)";
+    }
+    &.width-lg {
+        width: 920px;
+        // start window in the middle
+        left: ~"calc(50% - 460px)";
+    }
 
     .floating-header .controls button[data-action="normal"] {
         display: none;
@@ -522,18 +537,7 @@
 
     &.maximized {
         width: 1060px;
-        height: 100%;
-        position: relative;
-        display: flex;
-        align-items: center;
-        right: auto;
-        margin: 0 auto;
-        bottom: 0;
-        top: 0;
-
-        .floating-window-content {
-            top: 16px;
-            bottom: 56px;        }
+        height: ~"calc(100% - 72px)";
 
         .floating-header .controls button[data-action="maximized"] {
             display: none;
@@ -613,6 +617,17 @@
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-width: 0 1px 1px 1px;
     }
+}
+
+// used to prevent iframe issues when dragging
+#floating-window-backdrop {
+    z-index: 6;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    // almost transparent
+    background-color: rgba(255, 255, 255, 0.01);
+    position: absolute;
 }
 
 .rightside-navbar { display: none; }
