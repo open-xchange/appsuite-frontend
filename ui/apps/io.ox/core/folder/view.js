@@ -287,7 +287,7 @@ define('io.ox/core/folder/view', [
             // due to needed support for older androids we use click here
             tree.$el.on('click', '.folder', _.debounce(function (e) {
                 // use default behavior for arrow
-                if ($(e.target).is('.folder-arrow, .fa')) return;
+                if ($(e.target).is('.folder-arrow, .fa, .color-label')) return;
                 // use default behavior for non-selectable virtual folders
                 var targetFolder = $(e.target).closest('.folder'),
                     mobileSelectMode = app.props.get('mobileFolderSelectMode');

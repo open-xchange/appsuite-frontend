@@ -468,14 +468,8 @@ define('io.ox/calendar/main', [
                 indent: false,
                 module: 'calendar'
             });
-            // always change to month view after folder change
-            var cb = function () {
-                if (app.getWindow().currentPerspective !== 'month') {
-                    ox.ui.Perspective.show(app, 'month');
-                }
-            };
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb });
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month' });
             page.append(tree.render().$el);
         },
 
