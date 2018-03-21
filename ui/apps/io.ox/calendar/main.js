@@ -303,11 +303,35 @@ define('io.ox/calendar/main', [
          * Folder view support
          */
         'folder-view': function (app) {
+            if (_.device('smartphone')) return;
 
             app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar', dblclick: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
+        },
+
+        'folder-view-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({
+                app: app,
+                contextmenu: true,
+                flat: true,
+                indent: false,
+                module: 'calendar'
+            });
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month' });
+            page.append(tree.render().$el);
+            app.treeView = tree;
         },
 
         'folder-create': function (app) {
@@ -446,31 +470,6 @@ define('io.ox/calendar/main', [
             };
 
             app.toggleFolders = toggle;
-        },
-
-        /*
-         * Folder view mobile support
-         */
-        'folder-view-mobile': function (app) {
-            if (_.device('!smartphone')) return;
-
-            var nav = app.pages.getNavbar('folderTree'),
-                page = app.pages.getPage('folderTree');
-
-            nav.on('rightAction', function () {
-                app.toggleFolders();
-            });
-
-            var tree = new TreeView({
-                app: app,
-                contextmenu: true,
-                flat: true,
-                indent: false,
-                module: 'calendar'
-            });
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month' });
-            page.append(tree.render().$el);
         },
 
         /*
@@ -728,6 +727,7 @@ define('io.ox/calendar/main', [
                 id: 'tree',
                 index: 100,
                 draw: function (baton) {
+                    if (_.device('smartphone')) return;
                     // add border & render tree and add to DOM
                     this.addClass('border-right').append(baton.app.treeView.$el);
                 }
