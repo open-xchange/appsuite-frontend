@@ -284,9 +284,7 @@ define('io.ox/calendar/month/view', [
         },
 
         renderAppointments: function () {
-            var self = this,
-                tempDate;
-            // clear first
+            var self = this;
             $('.appointment, .fa-circle', this.$el).remove();
 
             // loop over all appointments
@@ -308,15 +306,7 @@ define('io.ox/calendar/month/view', [
 
                 if (_.device('smartphone')) {
                     var cell = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el);
-                    if (tempDate === undefined) {
-                        // first run, draw
-                        this.renderAppointmentIndicator(cell);
-                    } else if (!startMoment.isSame(tempDate, 'day')) {
-                        // one mark per day is enough
-                        this.renderAppointmentIndicator(cell);
-                    }
-                    // remember for next run
-                    tempDate = startMoment.clone();
+                    this.renderAppointmentIndicator(cell.empty());
                 } else {
                     // draw across multiple days
                     while (maxCount >= 0) {
