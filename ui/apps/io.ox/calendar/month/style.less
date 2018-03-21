@@ -52,6 +52,14 @@
         .overflow-y(scroll);
         .backface-visibility(hidden);
 
+        .smartphone & {
+            overflow: hidden;
+
+            .month {
+                height: ~"calc(100% - 100px)";
+            }
+        }
+
         .month {
             width: 100%;
         }

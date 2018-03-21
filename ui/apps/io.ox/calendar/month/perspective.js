@@ -40,7 +40,7 @@ define('io.ox/calendar/month/perspective', [
         tops:           {},     // scrollTop positions of the shown weeks
         firstMonth:     null,   // moment of the first month
         lastMonth:      null,   // moment of the last month
-        updateLoad:     2,      // amount of months to be loaded on scroll events
+        updateLoad:     _.device('smartphone') ? 0 : 2,      // amount of months to be loaded on scroll events
         initLoad:       2,      // amount of initial called updates
         scrollOffset:   _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
         currentView:    $(),    // the view with the current month
@@ -320,6 +320,7 @@ define('io.ox/calendar/month/perspective', [
 
             var firstDay = $('#' + target.format('YYYY-MM'), self.pane),
                 scrollToDate = function () {
+                    if (_.device('smartphone')) return;
                     if (firstDay.length === 0) return;
                     firstDay.get(0).scrollIntoView();
                 };
@@ -435,24 +436,26 @@ define('io.ox/calendar/month/perspective', [
                 this.scaffold.prepend(toolbarNode);
             }
 
-            this.pane
-                .css('right', -coreUtil.getScrollBarWidth() + 'px')
-                .on('scroll', $.proxy(function (e) {
-                    var $current = this.currentView.$el,
-                        current = $current.get(0),
-                        top = current.offsetTop,
-                        height = current.offsetHeight;
-                    if (top + height < e.target.scrollTop) {
-                        this.drawMonths({ down: true });
-                        e.target.scrollTop += $current.get(0).offsetTop - top;
-                    } else if (top > e.target.scrollTop + e.target.offsetHeight) {
-                        this.drawMonths({ up: true });
-                        e.target.scrollTop += $current.get(0).offsetTop - top;
-                    }
-                }, this))
-                .on('scrollend', $.proxy(function () {
-                    this.app.setDate(moment([this.current.year(), this.current.month()]), { silent: true });
-                }, this));
+            if (!_.device('smartphone')) {
+                this.pane
+                    .css('right', -coreUtil.getScrollBarWidth() + 'px')
+                    .on('scroll', $.proxy(function (e) {
+                        var $current = this.currentView.$el,
+                            current = $current.get(0),
+                            top = current.offsetTop,
+                            height = current.offsetHeight;
+                        if (top + height < e.target.scrollTop) {
+                            this.drawMonths({ down: true });
+                            e.target.scrollTop += $current.get(0).offsetTop - top;
+                        } else if (top > e.target.scrollTop + e.target.offsetHeight) {
+                            this.drawMonths({ up: true });
+                            e.target.scrollTop += $current.get(0).offsetTop - top;
+                        }
+                    }, this))
+                    .on('scrollend', $.proxy(function () {
+                        this.app.setDate(moment([this.current.year(), this.current.month()]), { silent: true });
+                    }, this));
+            }
 
             app.props.on('change:date', function (model, value) {
                 if (!this.pane.is(':visible')) return;

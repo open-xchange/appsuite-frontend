@@ -374,6 +374,24 @@ define('io.ox/calendar/actions', [
     });
 
     // Actions mobile
+    new Action('io.ox/calendar/actions/monthview/showNext', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth('next');
+        }
+    });
+
+    new Action('io.ox/calendar/actions/monthview/showPrevious', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth('prev');
+        }
+    });
+
     new Action('io.ox/calendar/actions/dayview/showNext', {
         requires: true,
         action: function (baton) {
