@@ -30,7 +30,6 @@ define('io.ox/mail/settings/defaults', [], function () {
         'autoSaveDraftsAfter': 'disabled',
         'allowHtmlMessages': true,
         'allowHtmlImages': false,
-        'displayEmoticons': false,
         'isColorQuoted': false,
         'defaultSignature': false,
         'defaultReplyForwardSignature': false,
@@ -46,7 +45,12 @@ define('io.ox/mail/settings/defaults', [], function () {
         'playSound': true,
         'confirmReplyToMailingLists': true,
         'unseenMessagesFolder': true,
-        'showCheckboxes': true  // show checkboxes in mail list as default
+        'showCheckboxes': true,  // show checkboxes in mail list as default
+        'authenticity': {
+            // none, fail, fail_trusted, fail_trusted_pass, all, silly
+            level: 'fail_trusted',
+            domains: ''
+        }
     };
 
     return settingsDefaults;

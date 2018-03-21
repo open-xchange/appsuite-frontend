@@ -22,12 +22,13 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
+    'io.ox/core/api/jobs',
     'io.ox/core/util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -66,9 +67,9 @@ define('io.ox/files/api', [
                 // pim attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
-                    file_size: attributes.file_size,
-                    file_mimetype: attributes.file_mimetype,
-                    id: attributes.id,
+                    file_size: attributes.file_size || attributes.size,
+                    file_mimetype: attributes.file_mimetype || attributes.fmtType,
+                    id: attributes.id || attributes.managedId,
                     folder_id: attributes.folder,
                     module: attributes.module,
                     origData: attributes,
@@ -1040,6 +1041,58 @@ define('io.ox/files/api', [
         });
     };
 
+    /**
+     * Restore a bunch of fileModels to their originally source.
+     *
+     * @param {api.Model[]} list
+     *  Array of fileModels
+     */
+    api.restore = function (list) {
+        // ensure array
+        if (!_.isArray(list)) list = [list];
+
+        // local copy for model data
+        var data = [];
+
+        _(list).each(function (model) {
+            data.push({ id: model.get('id'), folder: model.get('folder_id') });
+
+            // remove model from collections
+            _(api.pool.collections).invoke('remove', model);
+            model.set('unread', 0);
+        });
+
+        // restore on server
+        return http.PUT({
+            module: 'infostore',
+            params: {
+                action: 'restore',
+                folder: data[0].id === '1' || /^default\d+/.test(data[0].id) ? 0 : 1
+            },
+            data: data,
+            appendColumns: false
+        })
+        .done(function (responseArray) {
+            var folderId,
+                affectedFolders = [];
+
+            _.each(responseArray, function (response) {
+                folderId = response.path[0].id;
+
+                if (!_.contains(affectedFolders, folderId)) {
+                    affectedFolders.push(folderId);
+                }
+
+                api.trigger('reload:listview');
+            });
+        })
+        .fail(function () {
+            _(list).each(function (model) {
+                api.propagate('restore:fail', model.toJSON());
+            });
+        });
+    };
+
     //
     // Respond to folder API
     //
@@ -1070,6 +1123,9 @@ define('io.ox/files/api', [
         'before:remove before:move': function (data) {
             var collection = pool.get('detail'), cid = _.cid(data);
             collection.remove(collection.get(cid));
+        },
+        'restore': function () {
+            api.trigger('reload:listview');
         }
     });
 
@@ -1124,7 +1180,9 @@ define('io.ox/files/api', [
                 params: {
                     action: 'move',
                     folder: targetFolderId,
-                    ignoreWarnings: ignoreWarnings
+                    ignoreWarnings: ignoreWarnings,
+                    // allow long running jobs
+                    allow_enqueue: true
                 },
                 data: items,
                 appendColumns: false
@@ -1164,22 +1222,44 @@ define('io.ox/files/api', [
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {
 
-        var fn = type === 'move' ? move : copy;
-
-        return http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (response) {
-            var errorText, i = 0, $i = response ? response.length : 0;
-            // look if anything went wrong
-            for (; i < $i; i++) {
-                // conflicts are handled separately
-                if (response[i].error && response[i].error.categories !== 'CONFLICT') {
-                    errorText = response[i].error.error;
-                    break;
+        var fn = type === 'move' ? move : copy,
+            def = $.Deferred(),
+            callback = function (response) {
+                var errorText, i = 0, $i = response ? response.length : 0;
+                // look if anything went wrong
+                for (; i < $i; i++) {
+                    // conflicts are handled separately
+                    if (response[i].error && response[i].error.categories !== 'CONFLICT') {
+                        errorText = response[i].error.error;
+                        break;
+                    }
                 }
+                // propagete move/copy event
+                api.propagate(type, list, targetFolderId);
+
+                def.resolve(errorText || response);
+            },
+            failCallback = function (error) {
+                def.reject(error);
+            };
+
+        http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (result) {
+            if (type === 'move' && result && result[0] && result[0].data && result[0].data.job) {
+                // long running job. Add to jobs list and return here
+                //#. %1$s: Folder name
+                jobsAPI.addJob({
+                    module: 'folders',
+                    action: 'update',
+                    done: false,
+                    showIn: 'infostore',
+                    id: result[0].data.job,
+                    successCallback: callback,
+                    failCallback: failCallback });
+                return;
             }
-            // propagete move/copy event
-            api.propagate(type, list, targetFolderId);
-            return errorText || response;
-        });
+            callback(result);
+        }, failCallback);
+        return def;
     }
 
     /**
@@ -1283,6 +1363,8 @@ define('io.ox/files/api', [
 
         var params = _.extend({
             action: action,
+            // force the response to be json(ish) instead of plain html (fixes some error messages)
+            force_json_response: true,
             timestamp: _.then()
         }, options.params);
 
@@ -1574,6 +1656,10 @@ define('io.ox/files/api', [
                     api.trigger('add:file', file);
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
+                    break;
+
+                case 'restore:fail':
+                    api.trigger('restore:fail', file);
                     break;
 
                 case 'add:version':

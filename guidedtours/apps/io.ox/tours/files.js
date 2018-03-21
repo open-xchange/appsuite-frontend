@@ -59,6 +59,12 @@ define('io.ox/tours/files', [
         tour.step()
                 .title(gt('The Drive app'))
                 .content(gt('Welcome to your cloud storage app. This Guided Tour will introduce you to your new online storage solution - your one point to access online stored files from all your accounts. This is where you can upload and save your files, share them and synchronize them with different devices.  '))
+                .on('before:show', function () {
+                    ox.trigger('launcher:toggleOverlay', true);
+                })
+                .on('before:hide', function () {
+                    ox.trigger('launcher:toggleOverlay', false);
+                })
                 .hotspot('[data-app-name="io.ox/files"]')
                 .spotlight('[data-app-name="io.ox/files"]')
                 .on('close', cleanup)
@@ -132,6 +138,7 @@ define('io.ox/tours/files', [
                 .title(gt('Preview files'))
                 .content(gt('Clicking on the view icon leads you to a preview of the selected file.'))
                 .on('before:show', function () {
+                    if (_.device('touch')) return $('.list-view li[data-cid="' + key + '"]').tap();
                     $('.list-view li[data-cid="' + key + '"]').click();
                 })
                 .waitFor('.classic-toolbar-container [data-action="viewer"]')
@@ -228,22 +235,6 @@ define('io.ox/tours/files', [
                 .hotspot('a[data-action="add-storage-account"]', { position: 'right' })
                 .on('close', cleanup)
                 .end()
-            .step()
-                .title(gt('Restart Guided Tour'))
-                .content(gt('Hint: you can always restart guided tours, any time you need them, from the system menu.'))
-                .on('before:show', function () {
-                    if ($('.topbar-settings-dropdown:visible').length === 0) {
-                        $('#io-ox-topbar-dropdown-icon').addClass('open');
-                    }
-                })
-                .on('done close', function () {
-                    $('#io-ox-topbar-dropdown-icon').removeClass('open');
-                    cleanup();
-                })
-                .spotlight('#io-ox-topbar-dropdown-icon [data-action="guided-tour"]', { position: 'left' })
-                .hotspot('#io-ox-topbar-dropdown-icon [data-action="guided-tour"]', { position: 'left' })
-
-                .end()
             .on('stop', function () {
                 if (createApp) {
                     //prevent app from asking about changed content
@@ -268,10 +259,13 @@ define('io.ox/tours/files', [
             current.view = app.props.get('layout');
 
             // set folder and layout: ensure we find the uploaded 'drive app tour.txt'
-            if (current.folder !== standardFolder) app.folder.set(standardFolder);
-            if (current.view === 'tile') app.props.set('layout', 'list');
-            // ensure
-            tour.start();
+            if (current.folder === standardFolder) return cont();
+            return app.folder.set(standardFolder).then(cont);
+
+            function cont() {
+                if (current.view === 'tile') app.props.set('layout', 'list');
+                tour.start();
+            }
         });
     });
 });

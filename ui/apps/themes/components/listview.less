@@ -246,18 +246,13 @@
         color: @grid-selected-color;
         background-color: @selected-background;
         .gray { color: @grid-selected-color; }
-        i { color: @grid-selected-checkbox-color; }
+        i:not(.color-stable) { color: @grid-selected-checkbox-color; }
         &:hover { background-color: lighten(@selected-background, 2%); }
         &:focus, &:focus:hover { background-color: @selected-focussed-background; }
     }
 
     .list-item-row {
         clear: right;
-    }
-
-    .list-item-row + .list-item-row {
-        position: relative;
-        top: -2px;
     }
 
     & > .list-item:last-child { margin-bottom: 100px; }
@@ -357,16 +352,6 @@
 }
 
 .leftside .list-view .list-item { outline: 0; }
-
-// Deprecated: High contrast theme will be removed soon
-.list-view {
-    .list-item.selected:not(.no-checkbox) .fa-checkmark {
-        html.high-contrast & { color: @hc-link-color; }
-    }
-    &.visible-selection.has-focus .list-item.selected {
-        html.high-contrast & { background-color: @hc-link-color; }
-    }
-}
 
 /* New list view */
 .megalist {

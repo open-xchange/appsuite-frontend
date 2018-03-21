@@ -65,7 +65,7 @@ define('io.ox/metrics/extensions', [
             ox.on('loadtime', function (data) {
                 // use app when available
                 var app = data.app,
-                    action = app && app.get ? app.get('trackingId') || app.get('name') || app.get('id') : data.id;
+                    action = app && app instanceof Backbone.Model ? app.get('trackingId') || app.get('name') || app.get('id') : data.id;
                 metrics.trackEvent({
                     app: 'core',
                     target: 'loadtime',

@@ -1,7 +1,6 @@
 {
   "name": "open-xchange-appsuite-saml",
-  "version": "7.10.0-0",
-  "license": "CC-BY-NC-SA-2.5",
+  "version": "7.10.0-3",
   "description": "App Suite UI SAML",
   "repository": {
     "type": "git",

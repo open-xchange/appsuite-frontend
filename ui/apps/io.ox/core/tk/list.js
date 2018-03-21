@@ -113,8 +113,12 @@ define('io.ox/core/tk/list', [
 
         // use throttle instead of debouce in order to respond during scroll momentum
         onScroll: _.throttle(function () {
-
-            if (this.isBusy || this.complete || !this.loader.collection || !this.$el.is(':visible')) return;
+            if (this.complete) {
+                this.removeBusyIndicator();
+                this.isBusy = false;
+                return;
+            }
+            if (this.isBusy || !this.loader.collection || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
@@ -146,13 +150,14 @@ define('io.ox/core/tk/list', [
 
         // load more data (wraps paginate call)
         processPaginate: function () {
-            if (!this.options.pagination || this.isBusy || this.complete) return;
+            // Bug 54793: this.complete could be undefined
+            if (!this.options.pagination || this.isBusy || !!this.complete) return;
             this.paginate();
         },
 
         // support for custom keys, e.g. needed to identify threads or folders
         getCompositeKey: function (model) {
-            return model.cid;
+            return model.isFolder && model.isFolder() ? 'folder.' + model.get('id') : model.cid;
         },
 
         // called when the view model changes (not collection models)
@@ -164,6 +169,8 @@ define('io.ox/core/tk/list', [
             this.idle();
             this.toggleComplete(false);
             this.getItems().remove();
+            delete this.currentLabel;
+            this.$('.list-item-label').remove();
             if (this.selection) this.selection.reset();
             this.$el.scrollTop(0);
         },
@@ -189,10 +196,11 @@ define('io.ox/core/tk/list', [
         },
 
         onReset: function () {
+            var self = this;
             this.empty();
-            this.$el.append(
-                this.collection.map(this.renderListItem, this)
-            );
+            this.collection.each(function (model) {
+                self.$el.append(self.renderListItem(model, true));
+            });
             this.trigger('reset', this.collection, this.firstReset);
             if (this.firstReset) {
                 this.trigger('first-reset', this.collection);
@@ -210,8 +218,14 @@ define('io.ox/core/tk/list', [
             this.queue.add(model).render();
         },
 
-        onRemove: function (model) {
+        lastElementOfLabel: function (li) {
+            var prev = li.prev(), next = li.next(), label = li.attr('data-label');
+            if (prev.attr('data-label') === label) return false;
+            if (next.attr('data-label') === label) return false;
+            return true;
+        },
 
+        onRemove: function (model) {
             var children = this.getItems(),
                 cid = this.getCompositeKey(model),
                 li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
@@ -225,6 +239,10 @@ define('io.ox/core/tk/list', [
             }
 
             if (this.selection) this.selection.remove(cid, li);
+
+            // remove label if this is the last element of that label
+            if (this.options.labels && this.lastElementOfLabel(li)) li.prev().remove();
+
             li.remove();
 
             this.trigger('remove-mobile');
@@ -290,25 +308,31 @@ define('io.ox/core/tk/list', [
                 return node && parseInt(node.getAttribute('data-index'), 10);
             }
 
-            // fix for bugs #51594 and #51596
-            // [L3] Drive opens wrong files directly after upload - wrong link in UI
-            //
             return function () {
                 // needless cause added models not drawn yet (debounced renderListItems)
                 if (this.queue.list.length) return;
 
-                var items, detached, sorted;
+                var dom, sorted, i, j, length, node, reference, index, done = {};
 
                 // sort all nodes by index
-                items = this.getItems();
-                if (items.length > 1) {
-                    var prevFocus = document.activeElement;
-                    detached = items.detach();
-                    sorted = _.sortBy(detached, getIndex);
+                dom = this.getItems().toArray();
+                sorted = _(dom).sortBy(getIndex);
 
-                    this.$el.append(sorted);
-                    // restore the lost focus after sorting due to detach() - e.g. in drive when adding new folders b54897
-                    if (prevFocus) { prevFocus.focus(); }
+                // apply sorting (step by step to keep focus)
+                // the arrays "dom" and "sorted" always have the same length
+                for (i = 0, j = 0, length = sorted.length; i < length; i++) {
+                    node = sorted[i];
+                    reference = dom[j];
+                    // mark as processed
+                    done[i] = true;
+                    // same element?
+                    if (node === reference) {
+                        // fast forward "j" if pointing at processed items
+                        do { index = getIndex(dom[++j]); } while (done[index]);
+                    } else if (reference) {
+                        // change position in dom
+                        this.el.insertBefore(node, reference);
+                    }
                 }
             };
         }()),
@@ -462,7 +486,8 @@ define('io.ox/core/tk/list', [
                 draggable: false,
                 selection: true,
                 scrollable: true,
-                swipe: false
+                swipe: false,
+                labels: false
             }, options);
 
             var events = {}, dndEnabled = false, self = this;
@@ -516,6 +541,10 @@ define('io.ox/core/tk/list', [
             // enable drag & drop; avoid enabling dnd twice
             if (this.options.draggable && !dndEnabled) {
                 dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            }
+
+            if (this.options.labels) {
+                this.filter = function () { return !$(this).hasClass('list-item-label'); };
             }
 
             this.ref = this.ref || options.ref;
@@ -602,6 +631,7 @@ define('io.ox/core/tk/list', [
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
             this.toggleComplete(false);
+            this.toggleExpired(false);
             this.listenTo(collection, {
                 // forward events
                 'all': this.forwardCollectionEvents,
@@ -639,7 +669,11 @@ define('io.ox/core/tk/list', [
         // respond to expire event (usually triggered by the GC)
         onExpire: function () {
             // revert flag since this is an active collection (see bug 54111)
-            this.collection.expired = false;
+            this.toggleExpired(false);
+        },
+
+        toggleExpired: function (flag) {
+            this.collection.expired = flag;
         },
 
         // if true current collection is regarded complete
@@ -745,11 +779,31 @@ define('io.ox/core/tk/list', [
             return li;
         },
 
-        renderListItem: function (model) {
+        getPreviousLabel: function (li) {
+            var elem = li;
+            while (elem.length > 0 && !elem.hasClass('list-item-label')) elem = elem.prev();
+            return elem.text();
+        },
+
+        renderListLabel: function (label) {
+            return $('<li class="list-item list-item-label">')
+                .text(label);
+        },
+
+        renderListItem: function (model, drawlabels) {
             var li = this.createListItem(),
                 baton = this.getBaton(model);
+            // prepend label if necessary
+            if (drawlabels && this.options.labels) {
+                var label = this.getLabel(model);
+                if (this.currentLabel !== label) {
+                    this.$el.append(this.renderListLabel(label));
+                    this.currentLabel = label;
+                }
+            }
             // add cid and full data
             li.attr({ 'data-cid': this.getCompositeKey(model), 'data-index': model.get('index') });
+            if (this.options.labels) li.attr('data-label', this.getLabel(model));
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
@@ -765,17 +819,29 @@ define('io.ox/core/tk/list', [
             this.queue.iterate(function (model) {
 
                 var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
-                    li = this.renderListItem(model);
+                    li = this.renderListItem(model, false), modelLabel, listLabel;
 
                 // insert or append
                 if (index < children.length) {
-                    children.eq(index).before(li);
+                    var childAfter = children.eq(index);
+                    if (this.options.labels) {
+                        modelLabel = this.getLabel(model);
+                        listLabel = this.getPreviousLabel(childAfter);
+                        if (modelLabel !== listLabel) childAfter = childAfter.prev();
+                    }
+                    childAfter.before(li);
                     // scroll position might have changed due to insertion
                     if (li[0].offsetTop <= this.el.scrollTop) {
                         this.el.scrollTop += li.outerHeight(true);
                     }
                 } else {
                     this.$el.append(li);
+                }
+
+                if (this.options.labels) {
+                    listLabel = this.getPreviousLabel(li);
+                    modelLabel = this.getLabel(model);
+                    if (modelLabel !== listLabel) li.before(this.renderListLabel(modelLabel));
                 }
 
                 // forward event

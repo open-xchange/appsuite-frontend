@@ -106,10 +106,6 @@ define('io.ox/mail/settings/pane', [
                         gt.pgettext('noun', 'View'),
                         // html
                         util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
-                        // images
-                        util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
-                        // emojis
-                        util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
                         // colored quotes
                         util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
                         // fixed width
@@ -155,6 +151,8 @@ define('io.ox/mail/settings/pane', [
             id: 'behavior',
             index: INDEX += 100,
             render: function () {
+
+                if (capabilities.has('guest')) return;
 
                 var contactCollect = !!capabilities.has('collect_email_addresses');
 
@@ -266,8 +264,8 @@ define('io.ox/mail/settings/pane', [
             index: 300,
             render: function () {
 
-                // we don't really need that on a smartphone (I guess)
-                if (_.device('smartphone')) return;
+                // we don't really need that on a smartphone (I guess) nor guests
+                if (_.device('smartphone') || capabilities.has('guest')) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')

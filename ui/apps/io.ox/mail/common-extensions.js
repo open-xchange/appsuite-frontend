@@ -15,7 +15,6 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
-    'io.ox/core/emoji/util',
     'io.ox/mail/util',
     'io.ox/mail/api',
     'io.ox/core/api/account',
@@ -24,6 +23,7 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/api/user',
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
@@ -31,7 +31,7 @@ define('io.ox/mail/common-extensions', [
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, links, actions, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
@@ -40,19 +40,30 @@ define('io.ox/mail/common-extensions', [
         return !!baton.app && !!baton.app.props.get('find-result');
     }
 
-    function pictureHalo(node, data) {
-        // user should be in cache from rampup data
-        // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+    function pictureHalo(node, data, baton) {
+
+        // authenticity
+        var status = util.authenticity('image', baton && baton.model.toJSON());
+        if (status) return node.text(status === 'neutral' ? '?' : '!');
+
+        // add initials
+        var initials = getInitials(baton.data.from);
+        node.text(initials);
+
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
-        userAPI.get({ id: ox.user_id }).then(function (user) {
-            var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-            contactsAPI.pictureHalo(
-                node,
-                (useUserApi ? { id: ox.user_id } : { email: address }),
-                { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-            );
-        });
+
+        return contactsAPI.pictureHalo(
+            node,
+            { email: address },
+            { width: 40, height: 40, effect: 'fadeIn', fallback: false }
+        );
+    }
+
+    //
+    function getInitials(from) {
+        if (!_.isArray(from) || !from.length) return '';
+        var name = util.getDisplayName(from[0]);
+        return contactsUtil.getInitials({ display_name: name });
     }
 
     var extensions = {
@@ -87,6 +98,29 @@ define('io.ox/mail/common-extensions', [
             });
         },
 
+        authenticity: function (baton) {
+            var status = util.authenticity('box', baton && baton.model.toJSON());
+            if (!status) return;
+
+            var section = $('<section class="authenticity">'),
+                data = baton.data,
+                from = data.from || [], email;
+
+            _(from).each(function (item) {
+                email = String(item[1] || '').toLowerCase();
+                section.append(
+                    $('<div>')
+                        .addClass(status.toLowerCase())
+                        .append(
+                            $('<b>').text(status === 'fail' ? gt('Warning:') + ' ' : gt('Note:') + ' '),
+                            $.txt(util.getAuthenticityMessage(status, email))
+                        )
+                );
+            });
+
+            this.append(section);
+        },
+
         picture: function (baton) {
             // show picture of sender or first recipient
             // special cases:
@@ -98,10 +132,9 @@ define('io.ox/mail/common-extensions', [
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
-            this.append(node);
-
-            if (isSearchResult(baton) && data.picture) return pictureHalo(node, data.picture);
-            pictureHalo(node, addresses);
+            this.append(
+                isSearchResult(baton) && data.picture ? pictureHalo(node, data.picture) : pictureHalo(node, addresses, baton)
+            );
         },
 
         senderPicture: function (baton) {
@@ -109,8 +142,9 @@ define('io.ox/mail/common-extensions', [
             var addresses = baton.data.from,
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
-            this.append(node);
-            pictureHalo(node, addresses);
+            this.append(
+                pictureHalo(node, addresses, baton)
+            );
         },
 
         date: function (baton, options) {
@@ -152,7 +186,8 @@ define('io.ox/mail/common-extensions', [
             var $el = $('<div class="from">'),
                 data = baton.data,
                 from = data.from || [],
-                length = from.length;
+                length = from.length,
+                status = util.authenticity('icon', data);
 
             // from is special as we need to consider the "sender" header
             // plus making the mail address visible (see bug 56407)
@@ -167,11 +202,35 @@ define('io.ox/mail/common-extensions', [
                     $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
                         .data({ email: email, email1: email })
                         .text(name)
+                        .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
+
                 );
 
                 if (name !== email) {
-                    $el.append($('<span class="address">').text('<' + email + '>'));
+                    $el.append(
+                        $('<span class="address">')
+                            .text('<' + email + '>')
+                            .addClass(status ? 'authenticity-sender ' + status : '')
+                    );
                 }
+
+                if (status) {
+                    $el.append(
+                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').popover({
+                            trigger: 'focus hover',
+                            content: util.getAuthenticityMessage(status, email)
+                        })
+                        .append(
+                            $('<i class="fa">').addClass(function () {
+                                if (status === 'neutral') return 'fa-question'; //fa-question
+                                if (status === 'fail') return '';
+                                return 'fa-check';
+                            })
+                            .addClass(status ? 'authenticity-icon-' + status : '')
+                        )
+                    );
+                }
+
 
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
@@ -389,19 +448,14 @@ define('io.ox/mail/common-extensions', [
 
             var data = baton.data,
                 keepPrefix = baton.data.threadSize === 1,
-                subject = util.getSubject(data, keepPrefix),
-                node;
+                subject = util.getSubject(data, keepPrefix);
 
             this.append(
                 $('<div class="subject">').append(
                     $('<span class="flags">'),
-                    node = $('<span class="drag-title">').text(subject)
+                    $('<span class="drag-title">').text(subject)
                 )
             );
-
-            emoji.processEmoji(_.escape(subject), function (html) {
-                node.html(html);
-            });
         },
 
         // a11y: set title attribute on outer list item
@@ -578,6 +632,7 @@ define('io.ox/mail/common-extensions', [
                         el: $el,
                         mode: settings.get('attachments/layout/detail/' + _.display(), 'list')
                     });
+                view.openByDefault = settings.get('attachments/layout/detail/open', view.openByDefault);
 
                 $el.append(view.render().$el);
 

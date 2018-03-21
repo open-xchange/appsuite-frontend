@@ -12,8 +12,9 @@
  */
 
 define('io.ox/contacts/actions/invite', [
-    'io.ox/contacts/api'
-], function (api) {
+    'io.ox/contacts/api',
+    'io.ox/calendar/util'
+], function (api, calendarUtil) {
 
     'use strict';
 
@@ -27,7 +28,7 @@ define('io.ox/contacts/actions/invite', [
                 return;
             } else if (obj.internal_userid || obj.user_id) {
                 // internal user
-                return { type: 1, id: obj.internal_userid || obj.user_id };
+                return { type: 1, user_id: obj.internal_userid || obj.user_id, display_name: obj.display_name, email1: obj.email1 };
             }
             // external user
             return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
@@ -88,9 +89,20 @@ define('io.ox/contacts/actions/invite', [
         }
 
         def.done(function (participants) {
-            require(['io.ox/calendar/edit/main', 'settings!io.ox/core'], function (m, coreSettings) {
+
+            require(['io.ox/calendar/edit/main', 'settings!io.ox/calendar'], function (m, calendarSettings) {
                 m.getApp().launch().done(function () {
-                    this.create({ participants: participants, folder_id: coreSettings.get('folder/calendar') });
+                    var refDate = moment().startOf('hour').add(1, 'hours'),
+                        attendees = [];
+                    _.each(participants, function (user) {
+                        attendees.push(calendarUtil.createAttendee(user));
+                    });
+                    this.create({
+                        attendees: attendees,
+                        folder_id: calendarSettings.get('chronos/defaultFolderId'),
+                        startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
+                        endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
+                    });
                 });
             });
         });

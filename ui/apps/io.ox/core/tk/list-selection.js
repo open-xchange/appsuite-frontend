@@ -71,6 +71,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             });
         },
 
+        resolve: function () {
+            var view = this.view;
+            return this.get().map(function (cid) {
+                return view.collection.get(cid);
+            });
+        },
+
         getItems: function (filter) {
             var items = this.view.$el.find(SELECTABLE);
             return filter ? items.filter(filter) : items;
@@ -150,7 +157,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.trigger('selection:doubleclick', [cid]);
         },
 
-        triggerChange: function (items) {
+        triggerChange: function (items, currentTargetCID) {
             items = items || this.getItems();
             // default event
             var list = this.get(), events = 'selection:change';
@@ -169,7 +176,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else {
                 events += ' selection:subset';
             }
-            this.view.trigger(events, list);
+            this.view.trigger(events, list, currentTargetCID);
         },
 
         clear: function (items) {
@@ -400,14 +407,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 index = (/38|36/.test(e.which) ? 0 : -1);
             }
 
-            this.resetTabIndex(items, items.eq(index));
+            var currentTarget = items.eq(index);
+            this.resetTabIndex(items, currentTarget);
             this.resetCheckmark(items);
             this.pick(index, items, e);
             // just call get position to update "direction"
             this.getPosition();
             // alternative selection mode needs this, has no effect in default mode
             if (this.isMultiple(e) || this.isRange(e)) {
-                this.triggerChange(items);
+                this.triggerChange(items, currentTarget.attr('data-cid'));
             } else {
                 this.selectEvents(items);
             }
@@ -525,7 +533,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // support custom events
             if (options.customEvents) return;
             // always trigger in multiple mode (sometimes only checkbox is changed)
-            if (!_.isEqual(previous, this.get())) this.triggerChange(items);
+            if (!_.isEqual(previous, this.get())) this.triggerChange(items, $(e.currentTarget).attr('data-cid'));
         },
 
         onSwipeDelete: function (e) {
@@ -950,14 +958,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         onClick: function (e) {
             var previous = this.get(),
-                mousedownSelect = (e.type === 'mousedown' && !this.isMultiple(e) && !$(e.currentTarget).is('.selected'));
+                currentTarget = $(e.currentTarget),
+                mousedownSelect = (e.type === 'mousedown' && !this.isMultiple(e) && !currentTarget.is('.selected'));
 
             prototype.onClick.call(this, e, { customEvents: mousedownSelect });
             if (mousedownSelect) {
                 this.selectEvents();
             }
             //trigger events (if only checkbox is changed the events are not triggered by normal function)
-            if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems());
+            if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems(), currentTarget.attr('data-cid'));
         },
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
@@ -997,7 +1006,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.$el
                 .on('click', SELECTABLE, $.proxy(this.onClick, this))
                 .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-                .on('focus', $.proxy(this.onFocus, this));
+                .on('focus', $.proxy(this.onFocus, this))
+                .on('mousedown', $.proxy(this.onMousedown, this))
+                .on('mouseup', $.proxy(this.onMouseup, this));
 
             this.view.on('selection:empty', $.proxy(this.onSelectionEmpty, this));
         },
@@ -1013,6 +1024,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onFocus: function () {
+            // prevent focus on scrollbar mouse clicks: see bug 57293
+            if (this.view.mousedown) return;
+
             var items = this.getItems(),
                 first = items.filter('[tabindex="0"]:first'),
                 index = items.index(first);
@@ -1022,11 +1036,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         onClick: function (e) {
             var items = this.getItems(),
-                index = items.index($(e.currentTarget));
+                currentTarget = $(e.currentTarget),
+                index = items.index(currentTarget);
 
             this.resetTabIndex(items, items.eq(index));
             this.pick(index, items, e);
-            this.triggerChange(items);
+            this.triggerChange(items, currentTarget.attr('data-cid'));
             this.setPosition(e);
         },
 
@@ -1102,7 +1117,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             }
 
             // simple select includes only current node
-            this.triggerChange(items);
+            this.triggerChange(items, current.attr('data-cid'));
             this.setPosition(e, index);
             this.focus(index, items);
         }

@@ -101,7 +101,7 @@ define('io.ox/core/folder/picker', [
             var parentview = tree.getNodeView(tree.selection.get() || tree.root);
             require(['io.ox/core/folder/actions/add'], function (add) {
                 // request and open create-folder-dialog
-                add(mapIds(parentview.folder), { module: o.module }).then(
+                add(mapIds(parentview.folder, true), { module: o.module === 'calendar' ? 'event' : o.module }).then(
                     function (data) {
                         // add additonal 5ms to tree nodes debounced onSort handler
                         _.delay(function () {
@@ -112,9 +112,10 @@ define('io.ox/core/folder/picker', [
                 );
             });
         }
-        function mapIds(id) {
+        function mapIds(id, isCreate) {
             if (tree.flat) {
-                return id;
+                // in flat folder views new folders are always created in the root folder
+                return isCreate ? api.getDefaultFolder(tree.module) : id;
             }
             if (id === 'virtual/myfolders') {
                 return api.altnamespace ? 'default0' : 'default0' + mailAPI.separator + 'INBOX';
@@ -134,7 +135,7 @@ define('io.ox/core/folder/picker', [
             .addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
 
         if (o.createFolderButton) {
-            dialog.addAlternativeButton({ action: 'create', label: gt('Create folder') });
+            dialog.addAlternativeButton({ action: 'create', label: o.createFolderText || gt('Create folder') });
         }
 
         if (o.alternativeButton) {
@@ -157,7 +158,7 @@ define('io.ox/core/folder/picker', [
             context: o.context,
             filter: o.filter,
             flat: !!o.flat,
-            // no links like my contact data or subscubre calendar in picker
+            // no links like my contact data or subscibre calendar in picker
             noLinks: true,
             indent: o.indent,
             module: o.module,

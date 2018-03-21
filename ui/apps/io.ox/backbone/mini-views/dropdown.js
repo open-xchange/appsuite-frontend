@@ -39,6 +39,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (_.device('smartphone')) return;
             if (this.smart === false && !this.$overlay) return;
             if (!this.$el.hasClass('open')) return;
+            this.$ul.css({ width: 'auto', height: 'auto' });
             this.adjustBounds();
         },
 
@@ -94,7 +95,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 width = this.$toggle.outerWidth(),
                 availableWidth = $(window).width(),
                 availableHeight = $(window).height(),
-                topbar = $('#io-ox-topbar');
+                topbar = $('#io-ox-appcontrol');
 
             // hits bottom ?
             if (bounds.top + bounds.height > availableHeight - this.margin) {
@@ -356,6 +357,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         prepareReuse: function () {
             if (this.$toggle) this.$toggle.remove();
             if (this.$ul) this.$ul.empty();
+            return this;
         },
 
         dispose: function () {

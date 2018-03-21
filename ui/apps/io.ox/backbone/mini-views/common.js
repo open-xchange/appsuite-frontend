@@ -48,11 +48,12 @@ define('io.ox/backbone/mini-views/common', [
     var InputView = AbstractView.extend({
         el: '<input type="text" class="form-control">',
         // firefox does not trigger a change event if you drop text.
-        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
+        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop', 'paste': 'onPaste' } : { 'change': 'onChange', 'paste': 'onPaste' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
         onDrop: firefoxDropHelper,
+        onPaste: pasteHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
@@ -90,7 +91,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
-            this.model.set(this.name, value, { validate: true });
+            this.model.set(this.name, value, { validate: true, _event: 'change' });
         },
         // paste doesn't trigger a change event
         onPaste: pasteHelper,
@@ -205,13 +206,29 @@ define('io.ox/backbone/mini-views/common', [
 
     //
     // <input type="checkbox">
+    // if you require custom values instead of true and false you may pass the option customValues. This must be an object containing the values to be used with 'true' and 'false' as keys.
+    // used for transparency in calendar edit for example
     //
 
     var CheckboxView = AbstractView.extend({
         el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
+        getValue: function () {
+            return (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) ? this.options.customValues[this.isChecked()] : this.isChecked();
+        },
+        setValue: function () {
+            var val = this.model.get(this.name) || this.options.defaultVal;
+            if (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) {
+                // val = this.options.customValues['true'] === val;
+                val = _.isEqual(this.options.customValues['true'], val);
+            } else {
+                // make true boolean
+                val = !!val;
+            }
+            return val;
+        },
         onChange: function () {
-            this.model.set(this.name, this.isChecked());
+            this.model.set(this.name, this.getValue());
         },
         isChecked: function () {
             return !!this.$input.prop('checked');
@@ -221,7 +238,7 @@ define('io.ox/backbone/mini-views/common', [
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$input.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
+            this.$input.prop('checked', this.setValue());
         },
         render: function () {
             this.$input.attr({ name: this.name });
@@ -346,11 +363,25 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
-            this.$el.append(_.map(this.options.list, function (option) {
-                return $('<option>').attr({ value: option.value }).text(option.label);
-            }));
+            this.$el.append(
+                this.options.groups ?
+                    this.renderOptionGroups(this.options.list) :
+                    this.renderOptions(this.options.list)
+            );
             this.update();
             return this;
+        },
+        renderOptionGroups: function (items) {
+            return _(items).map(function (item) {
+                return $('<optgroup>').attr('label', item.label).append(
+                    this.renderOptions(item.options)
+                );
+            }, this);
+        },
+        renderOptions: function (items) {
+            return _(items).map(function (item) {
+                return $('<option>').attr({ value: item.value }).text(item.label);
+            });
         }
     });
 

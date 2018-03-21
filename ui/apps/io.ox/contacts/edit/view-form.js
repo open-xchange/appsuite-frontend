@@ -226,6 +226,15 @@ define('io.ox/contacts/edit/view-form', [
                 if (baton.app) {
                     var row = $('<div class="header">');
                     ext.point(ref + '/edit/buttons').invoke('draw', row, baton);
+
+                    var pos = _.device('!desktop') ? 'top' : settings.get('features/windowHeaderPosition', 'bottom');
+                    // set header apparently means "append to" header. So let's empty it, to avoid redraw issues
+                    if (pos === 'top') {
+                        baton.app.getWindow().nodes.header.empty();
+                    } else {
+                        baton.app.getWindow().nodes.footer.empty();
+                    }
+                    baton.app.getWindow().nodes.header.empty();
                     baton.app.getWindow().setHeader(row);
                 }
             }
@@ -479,12 +488,7 @@ define('io.ox/contacts/edit/view-form', [
 
         new actions.Action(ref + '/actions/edit/discard', {
             action: function () {
-                if (ref === 'io.ox/core/user') {
-                    //invoked by sidepopup (portal); uses event of hidden sidebar-close button
-                    $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
-                } else {
-                    $(this).trigger('controller:quit');
-                }
+                $(this).trigger('controller:quit');
             }
         });
 

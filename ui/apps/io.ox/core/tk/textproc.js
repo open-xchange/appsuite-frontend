@@ -12,10 +12,7 @@
  */
 'use strict';
 
-define('io.ox/core/tk/textproc', [
-    'io.ox/core/emoji/util',
-    'settings!io.ox/mail'
-], function (emoji, mailSettings) {
+define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings) {
 
     // simplify DOM tree
     function simplify(memo, elem) {
@@ -83,26 +80,8 @@ define('io.ox/core/tk/textproc', [
         return memo;
     }
 
-    function removeEmptyParagraphs() {
-        var self = $(this),
-            contents = self.contents();
-        if (contents.length === 1 && contents.get(0).tagName === 'BR') {
-            self.remove();
-        }
-    }
-
     function unwrap() {
         $(this).children().first().unwrap();
-    }
-
-    function makeParagraph() {
-        var self = $(this),
-            style = self.attr('style'),
-            p = $('<p>');
-        if (style) {
-            p.attr('style', style);
-        }
-        self.replaceWith(p.append(self.contents()));
     }
 
     function replaceCodeByEm() {
@@ -124,10 +103,6 @@ define('io.ox/core/tk/textproc', [
                 self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
             }
         }
-    }
-
-    function addLinebreak() {
-        $(this).after($('<br>'));
     }
 
     function beautifyTable() {
@@ -161,17 +136,21 @@ define('io.ox/core/tk/textproc', [
             .find('td, th').css({ borderBottom: '1px solid #555' });
     }
 
+    function replaceParagraphs() {
+        var p = $(this),
+            style = p.attr('style'),
+            div = $('<div>');
+        if (style) div.attr('style', style);
+        p.replaceWith(div.append(p.contents()), $('<div><br></div>'));
+    }
+
     return {
 
         paste_preprocess: function (pl, o) {
             //console.debug('pre', o.content);
             o.content = o.content
                 // remove comments
-                .replace(/<!--(.*?)-->/g, '')
-                // remove emoji images and convert them back to unicode characters
-                .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1');
-
-            o.content = emoji.processEmoji(o.content);
+                .replace(/<!--(.*?)-->/g, '');
         },
 
         paste_postprocess: function (pl, o) {
@@ -207,24 +186,16 @@ define('io.ox/core/tk/textproc', [
             } while (!done);
             // beautify tables
             node.find('table').each(beautifyTable);
-            // replace top-level <div> by <p>
-            node.eq(0).children('div').each(makeParagraph);
-            // remove <p> with just one <br> inside
-            node.find('p').each(removeEmptyParagraphs);
-
-            if (mailSettings.get('compose/simpleLineBreaks', false)) {
-                node.find('p').each(addLinebreak);
-            }
+            // replace <p>...</p> by <div>....<br></div>
+            node.find('p').each(replaceParagraphs);
         },
 
         htmltotext: function (string) {
-            var reSimpleLinebreak = /margin(-bottom)?:\s?0(px)?/i;
+
             var ELEMENTS = [
                 {
                     patterns: 'p',
                     replacement: function (str, attrs, innerHTML) {
-                        // transform before inline style was applied (setting as indicator) or after (inline style)
-                        if (mailSettings.get('compose/simpleLineBreaks', false) || reSimpleLinebreak.test(str)) return innerHTML || '';
                         return innerHTML ? ('\n\n' + innerHTML + '\n') : '';
                     }
                 },

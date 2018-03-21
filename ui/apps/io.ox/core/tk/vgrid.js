@@ -211,6 +211,7 @@ define('io.ox/core/tk/vgrid', [
             'mouseup.resize': function () {
                 $(this).off('mousemove.resize mouseup.resize');
                 e.data.updateSettings('width/' + _.display(), width);
+                $(document).trigger('resize');
             }
         });
     };
@@ -927,6 +928,7 @@ define('io.ox/core/tk/vgrid', [
             resize();
             currentOffset = null;
             initialized = true;
+            $(document).trigger('resize');
             // load all IDs
             return loadAll();
         };

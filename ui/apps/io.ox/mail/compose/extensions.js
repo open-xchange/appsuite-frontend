@@ -74,7 +74,7 @@ define('io.ox/mail/compose/extensions', [
             // label
             this.$el.empty().append(
                 $('<label class="maillabel col-xs-1">').text(gt('From')),
-                $('<div class="col-xs-11">').append(
+                $('<div class="mail-input col-xs-11">').append(
                     // label gets rendered by dropdown view, dropdown.$el is empty now
                     this.dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                 )
@@ -227,7 +227,7 @@ define('io.ox/mail/compose/extensions', [
 
             this.append(
                 $('<div class="row sender-realname" data-extension-id="sender-realname">').append(
-                    $('<div class="col-xs-11 col-xs-offset-1">')
+                    $('<div class="mail-input col-xs-11 col-xs-offset-1">')
                         .text(gt('This email just contains your email address as sender. Your real name is not used.'))
                 )
             );
@@ -301,6 +301,7 @@ define('io.ox/mail/compose/extensions', [
                         extPoint: POINT,
                         isMail: true,
                         apiOptions: {
+                            users: true,
                             limit: settings.get('compose/autocompleteApiLimit', 20),
                             contacts: true,
                             distributionlists: true,
@@ -312,7 +313,7 @@ define('io.ox/mail/compose/extensions', [
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
-                var node = $('<div class="col-xs-11">').append(tokenfieldView.$el);
+                var node = $('<div class="mail-input col-xs-11">').append(tokenfieldView.$el);
 
                 if (attr === 'to') {
                     ext.point(POINT + '/recipientActions').invoke('draw', node);
@@ -434,7 +435,7 @@ define('io.ox/mail/compose/extensions', [
             this.append(
                 $('<div data-extension-id="subject" class="row subject">').append(
                     $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr('for', guid),
-                    $('<div class="col-xs-12 col-sm-11">').append(
+                    $('<div class="mail-input col-xs-12 col-sm-11">').append(
                         new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )

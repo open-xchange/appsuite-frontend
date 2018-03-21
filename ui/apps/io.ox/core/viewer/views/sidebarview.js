@@ -18,6 +18,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'io.ox/core/viewer/settings',
+    'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
@@ -28,7 +29,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/extPatterns/links',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
+], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesRegistry, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
 
     'use strict';
 
@@ -316,8 +317,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             // initially set model
             this.model = model;
+
             // show tab navigation in office standalone mode
-            if (this.standalone && Capabilities.has('document_preview') && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
+            if (this.standalone && !_.device('smartphone') && TypesRegistry.isDocumentType(model)) {
                 this.$('.viewer-sidebar-tabs').removeClass('hidden');
                 var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
                 this.activateTab(lastActivatedThumbnail);

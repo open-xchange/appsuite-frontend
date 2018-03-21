@@ -164,6 +164,7 @@ define('io.ox/core/page-controller', [], function () {
 
             showNavbar(to);
             showToolbar(to);
+            ox.ui.apps.trigger('layout', app);
             return def;
         };
 

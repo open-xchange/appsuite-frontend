@@ -35,6 +35,26 @@ define('io.ox/core/boot/util', [], function () {
 
     ox.on('language', displayFeedback);
 
+    ox.on('change:document:title', function (arg) {
+        var elements = [].concat(arg),
+            change = _.lfo(changeDocumentTitle);
+
+        // skip if we don't have a session (i.e. during signin) because there is no way to get anything via user api
+        if (ox.signin) return change(elements);
+
+        require(['io.ox/core/api/user', 'io.ox/contacts/util'], function (api, util) {
+            api.get({ id: ox.user_id }).done(function (data) {
+                var user = util.getMailFullName(data) || ox.user;
+                elements.push(user);
+                change(elements);
+            });
+        });
+    });
+
+    function changeDocumentTitle(elements) {
+        document.title = document.customTitle = _.compact(_.uniq(elements)).concat(ox.serverConfig.productName).join(' - ');
+    }
+
     var exports = {
 
         DURATION: 250,
@@ -44,7 +64,8 @@ define('io.ox/core/boot/util', [], function () {
         gt: _.identity,
 
         setPageTitle: function (title) {
-            document.title = title || '';
+            ox.trigger('change:document:title', title);
+            // document.title = title || '';
             $('[name="apple-mobile-web-app-title"]').attr('content', title);
         },
 

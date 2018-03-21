@@ -46,7 +46,7 @@ module.exports.config = {
         chai.config.includeStack = true;
 
         var config = require('codeceptjs').config.get();
-        if (/127\.0\.0\.1/.test(config.helpers.WebDriverIO.host)) {
+        if (config.helpers.WebDriverIO && /127\.0\.0\.1/.test(config.helpers.WebDriverIO.host)) {
             require('@open-xchange/codecept-helper').selenium
                 .start(localConf.e2e.selenium)
                 .then(done);

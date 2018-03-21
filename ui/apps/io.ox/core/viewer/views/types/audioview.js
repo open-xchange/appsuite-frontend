@@ -22,7 +22,8 @@ define('io.ox/core/viewer/views/types/audioview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *

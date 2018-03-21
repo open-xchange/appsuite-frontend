@@ -532,9 +532,8 @@ define('io.ox/files/filepicker', [
                             notifications.yell('error', gt.ngettext(
                                 'The uploaded file does not match the requested file type.',
                                 'None of the uploaded files matches the requested file type.', list.length));
+                            dialog.idle();
                         }
-
-                        dialog.idle();
                     }, notifications.yell);
                 }
             });
@@ -571,7 +570,7 @@ define('io.ox/files/filepicker', [
             addClass: 'zero-padding add-infostore-file',
             button: options.primaryButtonText,
             alternativeButton: options.uploadButton ? gt('Upload local file') : undefined,
-            height: _.device('smartphone') ? containerHeight : 350,
+            height: _.device('desktop') ? 350 : containerHeight,
             module: 'infostore',
             persistent: 'folderpopup/filepicker',
             root: '9',
@@ -603,8 +602,18 @@ define('io.ox/files/filepicker', [
                         .on('change', { dialog: dialog, tree: tree }, fileUploadHandler);
                 }
                 // standard handling for desktop only
-                if (_.device('!smartphone')) {
+                if (_.device('desktop')) {
                     dialog.$body.append(filesPane);
+                    filesPane.on('dblclick', '.file', function () {
+                        var file = $('input', this).data('file');
+                        if (!file) return;
+                        def.resolve([file]);
+                        dialog.close();
+                    });
+                } else if (_.device('!smartphone')) {
+                    // tablet
+                    dialog.$body.append(filesPane);
+                    dialog.$body.css({ overflowY: 'hidden' });
                     filesPane.on('dblclick', '.file', function () {
                         var file = $('input', this).data('file');
                         if (!file) return;

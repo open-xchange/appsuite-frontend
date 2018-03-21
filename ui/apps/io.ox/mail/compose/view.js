@@ -265,7 +265,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="col-xs-5 col-md-5 col-md-offset-1">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-5 col-md-5 col-md-offset-1">');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -633,9 +633,8 @@ define('io.ox/mail/compose/view', [
             // get mail
             var mail = this.model.getMailForDraft();
 
-            // never append vcard when saving as draft
-            // backend will append vcard for every send operation (which save as draft is)
-            delete mail.vcard;
+            // disabled for fix of bug 56704
+            //delete mail.vcard;
 
             var view = this,
                 baton = new ext.Baton({
@@ -775,6 +774,13 @@ define('io.ox/mail/compose/view', [
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
+
+                if (this.app.getWindow && this.app.getWindow().floating) {
+                    this.app.getWindow().floating.toggle(true);
+                } else if (_.device('smartphone')) {
+                    this.app.getWindow().resume();
+                    ox.trigger('launcher:toggleOverlay', false);
+                }
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
@@ -969,17 +975,14 @@ define('io.ox/mail/compose/view', [
         },
 
         getParagraph: function (text, isHTML) {
-            //use div for html cause innerHTML for p tags with nested tags fail
-            var node = (/(<([^>]+)>)/ig).test(text) ? $('<div>') : $('<p>');
-            node.addClass('io-ox-signature')
-                .append(!!isHTML ? text : this.editor.ln2br(text));
+            var node = $('<div class="io-ox-signature">').append(!!isHTML ? text : this.editor.ln2br(text));
             return $('<div>').append(node).html();
         },
 
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p[^>]*class="default-style"[^>]*><br><\/p>)+/, '');
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<div[^>]*class="default-style"[^>]*><br><\/div>)+/, '');
             var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },

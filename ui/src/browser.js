@@ -46,14 +46,14 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    55,
+        'Chrome':    60,
         'Safari':    10,
         'Firefox':   52,
         'IE':        11
     };
 
     us.platformSupport = {
-        'Android':  4.2,
+        'Android':  4.4,
         'iOS':      9.0,
         'WindowsPhone': 99.0 // special case to exclude WindowsPhone as a mobile platform
     };
@@ -316,7 +316,7 @@
             // check condition
             condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return browserLC[match] || display[match] || misc[match] || 'false';
+                return browserLC[match] || display[match] || misc[match];
             });
             if (debug) {
                 console.debug(condition);

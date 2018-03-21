@@ -29,7 +29,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     });
 
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
             var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
@@ -57,7 +57,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             } else {
                 this.model.set(this.name, this.$el.val());
             }
-
+            // force validation
+            this.onKeyup();
         },
         onKeyup: function () {
             var state;
@@ -288,7 +289,6 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         opt.model.on('change:comparison', function (m, value) {
             if (!_.contains(emptyValuesAllowed, value)) {
                 input.prop('disabled', false);
-                opt.model.set('values', opt.defaults.values, { silent: true });
                 if (opt.defaults.id !== 'header') opt.model.set('headers', opt.defaults.headers);
 
             } else {

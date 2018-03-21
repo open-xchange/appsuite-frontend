@@ -35,6 +35,7 @@ define('io.ox/core/dropzone', [], function () {
 
         onDrag: function (e) {
             if (!this.$el.parent().is(':visible')) return;
+            if (!this.isSupported()) return;
             switch (e.type) {
                 case 'dragenter':
                 case 'dragover':
@@ -56,6 +57,8 @@ define('io.ox/core/dropzone', [], function () {
                 // no default
             }
         },
+
+        isSupported: _.constant(true),
 
         stop: function (e) {
             e.preventDefault();

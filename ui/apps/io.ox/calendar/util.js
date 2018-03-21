@@ -17,23 +17,18 @@ define('io.ox/calendar/util', [
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
     'io.ox/core/util',
-    'io.ox/core/folder/folder-color',
     'io.ox/core/tk/dialogs',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, settings, coreSettings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt) {
 
     'use strict';
 
     // day names
     var n_count = [gt('fifth / last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('fifth / last')],
-        // shown as
-        n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
-        shownAsClass = 'reserved temporary absent free'.split(' '),
-        shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
-        confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
+        chronosStates = 'NEEDS-ACTION ACCEPTED DECLINED TENTATIVE'.split(' '),
         confirmTitles = [
             gt('unconfirmed'),
             gt('accepted'),
@@ -41,7 +36,6 @@ define('io.ox/calendar/util', [
             gt('tentative')
         ],
         n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
-        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')],
         superessiveWeekdays = [
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
@@ -64,7 +58,8 @@ define('io.ox/calendar/util', [
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
             gt.pgettext('superessive', 'Saturday')
-        ];
+        ],
+        attendeeLookupArray = ['', 'INDIVIDUAL', 'GROUP', 'RESOURCE', 'RESOURCE', 'INDIVIDUAL'];
 
     var that = {
 
@@ -86,6 +81,56 @@ define('io.ox/calendar/util', [
             SATURDAY: 64
         },
 
+        colors: [
+            // light
+            { label: gt('light red'), value: '#FFE2E2' },
+            { label: gt('light orange'), value: '#FDE2B9' },
+            { label: gt('light yellow'), value: '#FFEEB0' },
+            { label: gt('light olive'), value: '#E6EFBD' },
+            { label: gt('light green'), value: '#CAF1D0' },
+            { label: gt('light cyan'), value: '#CCF4FF' },
+            { label: gt('light azure'), value: '#CFE6FF' },
+            { label: gt('light blue'), value: '#D4E0FD' },
+            { label: gt('light indigo'), value: '#D1D6FE' },
+            { label: gt('light purple'), value: '#E2D0FF' },
+            { label: gt('light magenta'), value: '#F7CBF8' },
+            { label: gt('light pink'), value: '#F7C7E0' },
+            { label: gt('light gray'), value: '#EBEBEB' },
+            // medium
+            { label: gt('red'), value: '#F5AAAA' },
+            { label: gt('orange'), value: '#FFB341' },
+            { label: gt('yellow'), value: '#FFCF1A' },
+            { label: gt('olive'), value: '#C5D481' },
+            { label: gt('green'), value: '#AFDDA0' },
+            { label: gt('cyan'), value: '#A2D9E7' },
+            { label: gt('azure'), value: '#9BC8F7' },
+            { label: gt('blue'), value: '#B1C3EE' },
+            { label: gt('indigo'), value: '#949EEC' },
+            { label: gt('purple'), value: '#B89AE9' },
+            { label: gt('magenta'), value: '#D383D5' },
+            { label: gt('pink'), value: '#E18BB8' },
+            { label: gt('gray'), value: '#C5C5C5' },
+            // dark
+            { label: gt('dark red'), value: '#C84646' },
+            { label: gt('dark orange'), value: '#B95900' },
+            { label: gt('dark yellow'), value: '#935700' },
+            { label: gt('dark olive'), value: '#66761F' },
+            { label: gt('dark green'), value: '#376B27' },
+            { label: gt('dark cyan'), value: '#396D7B' },
+            { label: gt('dark azure'), value: '#27609C' },
+            { label: gt('dark blue'), value: '#445F9F' },
+            { label: gt('dark indigo'), value: '#5E6AC1' },
+            { label: gt('dark purple'), value: '#734EAF' },
+            { label: gt('dark magenta'), value: '#9A369C' },
+            { label: gt('dark pink'), value: '#A4326D' },
+            { label: gt('dark gray'), value: '#6B6B6B' }
+        ],
+
+        PRIVATE_EVENT_COLOR: '#616161',
+
+        ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
+        ZULU_FORMAT_DAY_ONLY: 'YYYYMMDD',
+
         isBossyAppointmentHandling: function (opt) {
 
             opt = _.extend({
@@ -98,7 +143,7 @@ define('io.ox/calendar/util', [
 
             var check = function (data) {
                 if (folderAPI.is('private', data)) {
-                    var isOrganizer = opt.app.organizerId === ox.user_id;
+                    var isOrganizer = that.hasFlag(opt.app, 'organizer');
                     return opt.invert ? !isOrganizer : isOrganizer;
                 }
                 return true;
@@ -106,9 +151,9 @@ define('io.ox/calendar/util', [
 
             if (opt.folderData) return $.when(check(opt.folderData));
 
-            if (!opt.app.folder_id) return $.when(false);
+            if (!opt.app.folder) return $.when(false);
 
-            return folderAPI.get(opt.app.folder_id).then(function (data) {
+            return folderAPI.get(opt.app.folder).then(function (data) {
                 return check(data);
             });
         },
@@ -135,13 +180,12 @@ define('io.ox/calendar/util', [
             return moment(timestamp ? timestamp : undefined).format('ddd, l');
         },
 
-        getSmartDate: function (data) {
-            var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date);
-            return m.calendar();
+        getSmartDate: function (model) {
+            return model.getMoment('startDate').calendar();
         },
 
-        getEvenSmarterDate: function (data) {
-            var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date),
+        getEvenSmarterDate: function (model) {
+            var m = model.getMoment('startDate'),
                 startOfDay = moment().startOf('day');
             // past?
             if (m.isBefore(startOfDay)) {
@@ -162,7 +206,7 @@ define('io.ox/calendar/util', [
 
         // function that returns markup for date and time + timzonelabel
         getDateTimeIntervalMarkup: function (data, options) {
-            if (data && data.start_date && data.end_date) {
+            if (data && data.startDate && data.endDate) {
 
                 options = _.extend({ timeZoneLabel: { placement:  _.device('touch') ? 'bottom' : 'top' }, a11y: false, output: 'markup' }, options);
 
@@ -175,20 +219,25 @@ define('io.ox/calendar/util', [
                     endDate,
                     dateStr,
                     timeStr,
-                    timeZoneStr = moment(data.start_date).zoneAbbr(),
+                    timeZoneStr = that.getMoment(data.startDate).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
-                if (data.full_time) {
-                    startDate = moment.utc(data.start_date).local(true);
-                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                if (that.isAllday(data)) {
+                    startDate = moment.utc(data.startDate.value).local(true);
+                    endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment(data.start_date);
-                    endDate = moment(data.end_date);
+                    startDate = that.getMoment(data.startDate);
+                    endDate = that.getMoment(data.endDate);
+                    if (options.zone) {
+                        startDate.tz(options.zone);
+                        endDate.tz(options.zone);
+                        timeZoneStr = startDate.zoneAbbr();
+                    }
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     dateStr = startDate.format(fmtstr);
                     timeStr = this.getTimeInterval(data, options.zone);
-                } else if (data.full_time) {
+                } else if (that.isAllday(data)) {
                     dateStr = this.getDateInterval(data);
                     timeStr = this.getTimeInterval(data, options.zone);
                 } else {
@@ -208,7 +257,8 @@ define('io.ox/calendar/util', [
                     // time
                     $('<span class="time">').append(
                         timeStr ? $.txt(timeStr) : '',
-                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel)
+                        // Yep there are appointments without timezone. May not be all day appointmens either
+                        data.startDate.tzid ? this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel) : ''
                     )
                 );
             }
@@ -216,23 +266,23 @@ define('io.ox/calendar/util', [
         },
 
         getDateInterval: function (data, a11y) {
-            if (data && data.start_date && data.end_date) {
+            if (data && data.startDate && data.endDate) {
                 var startDate, endDate,
                     fmtstr = a11y ? 'dddd, l' : 'ddd, l';
 
                 a11y = a11y || false;
 
-                if (data.full_time) {
-                    startDate = moment.utc(data.start_date).local(true);
-                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                if (that.isAllday(data)) {
+                    startDate = moment.utc(data.startDate.value).local(true);
+                    endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment(data.start_date);
-                    endDate = moment(data.end_date);
+                    startDate = that.getMoment(data.startDate);
+                    endDate = that.getMoment(data.endDate);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
                 }
-                if (a11y && data.full_time) {
+                if (a11y && that.isAllday(data)) {
                     //#. date intervals for screenreaders
                     //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
                     //#. %1$s is the start date
@@ -250,12 +300,12 @@ define('io.ox/calendar/util', [
         },
 
         getTimeInterval: function (data, zone, a11y) {
-            if (!data || !data.start_date || !data.end_date) return '';
-            if (data.full_time) {
+            if (!data || !data.startDate || !data.endDate) return '';
+            if (that.isAllday(data)) {
                 return this.getFullTimeInterval(data, true);
             }
-            var start = moment(data.start_date),
-                end = moment(data.end_date);
+            var start = that.getMoment(data.startDate),
+                end = that.getMoment(data.endDate);
             if (zone) {
                 start.tz(zone);
                 end.tz(zone);
@@ -285,62 +335,50 @@ define('io.ox/calendar/util', [
         },
 
         getReminderOptions: function () {
-            // TODO: moment.js alternative mode
-            // var opt = {};
-            // [-1,0,5,10,15,30,45,60,120,240,360,480,720,1440,2880,4320,5760,7200,8640,10080,20160,30240,40320].forEach(function (val) {
-            //     opt[val] = val < 0 ? gt('No reminder') : moment.duration(val, 'minutes').humanize();
-            // });
-            // return opt;
 
             var options = {},
                 reminderListValues = [
-                    { value: -1, format: 'string' },
-                    { value: 0, format: 'minutes' },
-                    { value: 5, format: 'minutes' },
-                    { value: 10, format: 'minutes' },
-                    { value: 15, format: 'minutes' },
-                    { value: 30, format: 'minutes' },
-                    { value: 45, format: 'minutes' },
+                    // value is ical duration format
+                    { value: 'PT0M', format: 'minutes' },
+                    { value: 'PT5M', format: 'minutes' },
+                    { value: 'PT10M', format: 'minutes' },
+                    { value: 'PT15M', format: 'minutes' },
+                    { value: 'PT30M', format: 'minutes' },
+                    { value: 'PT45M', format: 'minutes' },
 
-                    { value: 60, format: 'hours' },
-                    { value: 120, format: 'hours' },
-                    { value: 240, format: 'hours' },
-                    { value: 360, format: 'hours' },
-                    { value: 480, format: 'hours' },
-                    { value: 720, format: 'hours' },
+                    { value: 'PT1H', format: 'hours' },
+                    { value: 'PT2H', format: 'hours' },
+                    { value: 'PT4H', format: 'hours' },
+                    { value: 'PT6H', format: 'hours' },
+                    { value: 'PT8H', format: 'hours' },
+                    { value: 'PT12H', format: 'hours' },
 
-                    { value: 1440, format: 'days' },
-                    { value: 2880, format: 'days' },
-                    { value: 4320, format: 'days' },
-                    { value: 5760, format: 'days' },
-                    { value: 7200, format: 'days' },
-                    { value: 8640, format: 'days' },
+                    { value: 'P1D', format: 'days' },
+                    { value: 'P2D', format: 'days' },
+                    { value: 'P3D', format: 'days' },
+                    { value: 'P4D', format: 'days' },
+                    { value: 'P5D', format: 'days' },
+                    { value: 'P6D', format: 'days' },
 
-                    { value: 10080, format: 'weeks' },
-                    { value: 20160, format: 'weeks' },
-                    { value: 30240, format: 'weeks' },
-                    { value: 40320, format: 'weeks' }
+                    { value: 'P1W', format: 'weeks' },
+                    { value: 'P2W', format: 'weeks' },
+                    { value: 'P3W', format: 'weeks' },
+                    { value: 'P4W', format: 'weeks' }
                 ];
 
             _(reminderListValues).each(function (item) {
-                var i;
+                var i = item.value.match(/\d+/)[0];
                 switch (item.format) {
-                    case 'string':
-                        options[item.value] = gt('No reminder');
-                        break;
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), item.value);
+                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', i), i);
                         break;
                     case 'hours':
-                        i = Math.floor(item.value / 60);
                         options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
                         break;
                     case 'days':
-                        i = Math.floor(item.value / 60 / 24);
                         options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
                         break;
                     case 'weeks':
-                        i = Math.floor(item.value / 60 / 24 / 7);
                         options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
                         break;
                     // no default
@@ -355,24 +393,26 @@ define('io.ox/calendar/util', [
         },
 
         getDurationInDays: function (data) {
-            return moment(data.end_date).diff(data.start_date, 'days');
+            return that.getMoment(data.endDate).diff(that.getMoment(data.startDate), 'days');
         },
 
         getStartAndEndTime: function (data) {
             var ret = [];
-            if (!data || !data.start_date || !data.end_date) return ret;
-            if (data.full_time) {
+            if (!data || !data.startDate || !data.endDate) return ret;
+            if (that.isAllday(data)) {
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
-                ret.push(moment(data.start_date).format('LT'), moment(data.end_date).format('LT'));
+                ret.push(moment.tz(data.startDate.value, data.startDate.tzid).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid).format('LT'));
             }
             return ret;
         },
 
         addTimezoneLabel: function (parent, data, options) {
 
-            var current = moment(data.start_date);
-
+            var current = moment(data.startDate);
+            if (data.startDate.value) {
+                current = that.getMoment(data[options.attrName || 'startDate']);
+            }
             parent.append(
                 $.txt(this.getTimeInterval(data)),
                 this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(current.zoneAbbr()), data, options)
@@ -382,8 +422,6 @@ define('io.ox/calendar/util', [
         },
 
         addTimezonePopover: function (parent, data, opt) {
-
-            var current = moment(data.start_date);
 
             opt = _.extend({
                 placement: 'left',
@@ -421,7 +459,7 @@ define('io.ox/calendar/util', [
             }
 
             function getTitle() {
-                return that.getTimeInterval(data) + ' ' + current.zoneAbbr();
+                return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
             }
 
             parent.popover({
@@ -446,7 +484,7 @@ define('io.ox/calendar/util', [
                 $(this).data('bs.popover').inState.click = false;
             });
 
-            if (opt.closeOnScroll && !coreSettings.get('features/accessibility', true)) {
+            if (opt.closeOnScroll) {
                 // add listener on popup shown. Otherwise we will not get the correct scrollparent at this point (if the popover container is not yet added to the dom)
                 parent.on('shown.bs.popover', function () {
                     parent.scrollParent().one('scroll', function () {
@@ -461,27 +499,30 @@ define('io.ox/calendar/util', [
         },
 
         getShownAsClass: function (data) {
-            return shownAsClass[(data.shown_as || 1) - 1];
+            if (that.hasFlag(data, 'transparent')) return 'free';
+            return 'reserved';
         },
 
         getShownAsLabel: function (data) {
-            return shownAsLabel[(data.shown_as || 1) - 1];
+            if (that.hasFlag(data, 'transparent')) return 'free';
+            return 'label-info';
         },
 
         getShownAs: function (data) {
-            return n_shownAs[(data.shown_as || 1) - 1];
+            if (that.hasFlag(data, 'transparent')) return 'free';
+            return gt('Reserved');
         },
 
         getConfirmationSymbol: function (status) {
-            return n_confirm[status || 0];
+            return n_confirm[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
         },
 
         getConfirmationClass: function (status) {
-            return confirmClass[status || 0];
+            return (_(status).isNumber() ? chronosStates[status] : status || 'NEEDS-ACTION').toLowerCase();
         },
 
         getConfirmationLabel: function (status) {
-            return confirmTitles[status || 0];
+            return confirmTitles[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
         },
 
         getRecurrenceDescription: function (data) {
@@ -620,51 +661,67 @@ define('io.ox/calendar/util', [
         },
 
         getRecurrenceString: function (data) {
+            if (data.rrule) data = new (require('io.ox/calendar/model').Model)(data);
+            if (data instanceof Backbone.Model && data.getRruleMapModel) data = data.getRruleMapModel();
+            if (data instanceof Backbone.Model) data = data.toJSON();
             var str = that.getRecurrenceDescription(data);
             if (data.recurrence_type > 0 && (data.until || data.occurrences)) str += ' ' + that.getRecurrenceEnd(data);
             return str;
         },
-        // basically the same as in recurrence-view, just without model
+        // basically the same as in recurrence-view
         // used to fix reccurence information when Ïging
-        updateRecurrenceDate: function (appointment, old_start_date) {
-            if (!appointment || !old_start_date) return;
+        updateRecurrenceDate: function (event, oldDate) {
+            if (!event || !oldDate) return;
 
-            var type = appointment.recurrence_type;
+            var rruleMapModel = event.getRruleMapModel(),
+                type = rruleMapModel.get('recurrence_type');
             if (type === 0) return;
-            var oldDate = moment(old_start_date),
-                date = moment(appointment.start_date);
 
-            // if weekly and only single day selected
-            if (type === 2 && appointment.days === 1 << oldDate.day()) {
-                appointment.days = 1 << date.day();
+            var date = event.getMoment('startDate');
+
+            // if weekly, shift bits
+            if (type === 2) {
+                var shift = date.diff(oldDate, 'days') % 7,
+                    days = rruleMapModel.get('days');
+                if (shift < 0) shift += 7;
+                for (var i = 0; i < shift; i++) {
+                    days = days << 1;
+                    if (days > 127) days -= 127;
+                }
+                rruleMapModel.set('days', days);
             }
 
             // if monthly or yeary, adjust date/day of week
             if (type === 3 || type === 4) {
-                if (_(appointment).has('days')) {
+                if (rruleMapModel.has('days')) {
                     // repeat by weekday
-                    appointment.day_in_month = ((date.date() - 1) / 7 >> 0) + 1;
-                    appointment.days = 1 << date.day();
+                    rruleMapModel.set({
+                        day_in_month: ((date.date() - 1) / 7 >> 0) + 1,
+                        days: 1 << date.day()
+                    });
                 } else {
                     // repeat by date
-                    appointment.day_in_month = date.date();
+                    rruleMapModel.set('day_in_month', date.date());
                 }
             }
 
             // if yearly, adjust month
             if (type === 4) {
-                appointment.month = date.month();
+                rruleMapModel.set('month', date.month());
             }
 
             // change until
-            if (appointment.until && moment(appointment.until).isBefore(date)) {
-                appointment.until = date.add(1, ['d', 'w', 'M', 'y'][appointment.recurrence_type - 1]).valueOf();
+            if (rruleMapModel.get('until') && moment(rruleMapModel.get('until')).isBefore(date)) {
+                rruleMapModel.set('until', date.add(1, ['d', 'w', 'M', 'y'][rruleMapModel.get('recurrence_type') - 1]).valueOf());
             }
-            return appointment;
+            rruleMapModel.serialize();
+            return event;
         },
 
-        getNote: function (data) {
-            var text = $.trim(data.note || '')
+        getNote: function (data, prop) {
+            // calendar: description, tasks: note
+            prop = prop || 'description';
+            var text = $.trim(data[prop] || (data.get ? data.get(prop) : ''))
                 .replace(/\n{3,}/g, '\n\n')
                 .replace(/</g, '&lt;');
             //use br to keep linebreaks when pasting (see 38714)
@@ -677,47 +734,69 @@ define('io.ox/calendar/util', [
                 // internal users
                 _(data.users).each(function (obj) {
                     hash[String(obj.id)] = {
-                        status: obj.confirmation || 0,
-                        comment: obj.confirmmessage || ''
+                        status: obj.confirmation || 0
                     };
+                    // only add confirm message if there is one
+                    if (obj.confirmmessage) {
+                        hash[String(obj.id)].comment = obj.confirmmessage;
+                    }
                 });
                 // external users
                 _(data.confirmations).each(function (obj) {
                     hash[obj.mail] = {
-                        status: obj.status || 0,
-                        comment: obj.message || obj.confirmmessage || ''
+                        status: obj.status || 0
                     };
+                    // only add confirm message if there is one
+                    if (obj.message || obj.confirmmessage) {
+                        hash[String(obj.id)].comment = obj.message || obj.confirmmessage;
+                    }
                 });
             }
             return hash;
         },
 
-        getConfirmationStatus: function (obj, id, defaultStatus) {
-            var hash = this.getConfirmations(obj),
-                user = id || ox.user_id;
-            return hash[user] ? hash[user].status : (defaultStatus || 0);
+        getConfirmationStatus: function (model, defaultStatus) {
+            if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
+            if (model.hasFlag('accepted')) return 'ACCEPTED';
+            if (model.hasFlag('tentative')) return 'TENTATIVE';
+            if (model.hasFlag('declined')) return 'DECLINED';
+            if (model.hasFlag('needs_action')) return 'NEEDS-ACTION';
+            if (model.hasFlag('event_accepted')) return 'ACCEPTED';
+            if (model.hasFlag('event_tentative')) return 'TENTATIVE';
+            if (model.hasFlag('event_declined')) return 'DECLINED';
+            return defaultStatus || 'NEEDS-ACTION';
         },
 
         getConfirmationMessage: function (obj, id) {
-            var hash = this.getConfirmations(obj),
-                user = id || ox.user_id;
-            return hash[user] ? hash[user].comment : '';
+            var user = _(obj.attendees).findWhere({
+                entity: id || ox.user_id
+            });
+            if (!user) return;
+            return user.comment;
         },
 
         getConfirmationSummary: function (conf) {
             var ret = { count: 0 };
             // init
-            _.each(confirmClass, function (cls, i) {
+            _.each(chronosStates, function (cls, i) {
                 ret[i] = {
                     icon: n_confirm[i] || '<i class="fa fa-exclamation-circle" aria-hidden="true">',
                     count: 0,
-                    css: cls,
+                    css: cls.toLowerCase(),
                     title: confirmTitles[i] || ''
                 };
             });
+
             _.each(conf, function (c) {
-                ret[c.status].count++;
-                ret.count++;
+                // tasks
+                if (_.isNumber(c.status)) {
+                    ret[c.status].count++;
+                    ret.count++;
+                // don't count groups or ressources, ignore unknown states (the spec allows custom partstats)
+                } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && c.cuType === 'INDIVIDUAL') {
+                    ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())].count++;
+                    ret.count++;
+                }
             });
             return ret;
         },
@@ -754,50 +833,45 @@ define('io.ox/calendar/util', [
 
         resolveParticipants: function (data) {
             // clone array
-            var participants = data.participants.slice(),
+            var attendees = data.attendees.slice(),
                 IDs = {
                     user: [],
                     group: [],
                     ext: []
                 };
 
-            var organizerIsExternalParticipant = !data.organizerId && _.isString(data.organizer) && _.find(participants, function (p) {
-                return p.mail === data.organizer || p.email1 === data.organizer;
+            var organizerIsExternalParticipant = !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
+                return p.mail === data.organizer.email;
             });
 
             if (!organizerIsExternalParticipant) {
-                participants.unshift({
-                    display_name: data.organizer,
-                    mail: data.organizer,
-                    type: 5
-                });
+                attendees.unshift(data.organizer);
             }
 
-            _.each(participants, function (participant) {
-                switch (participant.type) {
-                    // internal user
-                    case 1:
-                        // user API expects array of integer [1337]
-                        IDs.user.push(participant.id);
+            _.each(attendees, function (attendee) {
+                switch (attendee.cuType) {
+                    case 'INDIVIDUAL':
+                        // internal user
+                        if (attendee.entity) {
+                            // user API expects array of integer [1337]
+                            IDs.user.push(attendee.entity);
+                        } else {
+                            // external attendee
+                            IDs.ext.push({
+                                display_name: attendee.cn,
+                                mail: attendee.email,
+                                mail_field: 0
+                            });
+                        }
                         break;
-                    // user group
-                    case 2:
+                    // group
+                    case 'GROUP':
                         // group expects array of object [{ id: 1337 }], yay (see bug 47207)
-                        IDs.group.push({ id: participant.id });
+                        IDs.group.push({ id: attendee.entity });
                         break;
                     // resource or rescource group
-                    case 3:
-                    case 4:
+                    case 'RESOURCE':
                         // ignore resources
-                        break;
-                    // external user
-                    case 5:
-                        // external user
-                        IDs.ext.push({
-                            display_name: participant.display_name,
-                            mail: participant.mail,
-                            mail_field: 0
-                        });
                         break;
                     // no default
                 }
@@ -845,17 +919,19 @@ define('io.ox/calendar/util', [
             });
         },
 
-        getAppointmentColorClass: function (folder, appointment) {
-
+        getAppointmentColor: function (folder, eventModel) {
             var folderColor = that.getFolderColor(folder),
-                appointmentColor = appointment.color_label || 0,
-                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 1 : 0);
+                eventColor = eventModel.get('color'),
+                defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
+                conf = that.getConfirmationStatus(eventModel, defaultStatus);
 
-            // shared appointments which are unconfirmed or declined don't receive color classes
-            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) return '';
+            if (_.isNumber(eventColor)) eventColor = that.colors[eventColor - 1].value;
+
+            // shared appointments which are needs-action or declined don't receive color classes
+            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (appointment.private_flag) folderColor = 10;
+            if (that.isPrivate(eventModel)) folderColor = that.PRIVATE_EVENT_COLOR;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -863,31 +939,126 @@ define('io.ox/calendar/util', [
             // }
 
             // set color of appointment. if color is 0, then use color of folder
-            var color = appointmentColor === 0 ? folderColor : appointmentColor;
-            return 'color-label-' + color;
+            return !eventColor ? folderColor : eventColor;
         },
 
-        canAppointmentChangeColor: function (folder, appointment) {
-            var appointmentColor = appointment.color_label || 0,
-                privateFlag = appointment.private_flag || false,
-                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+        lightenDarkenColor: _.memoize(function (col, amt) {
+            if (_.isString(col)) col = this.colorToHex(col);
+            col = that.hexToHSL(col);
+            col[2] = Math.floor(col[2] * amt);
+            col[2] = Math.max(Math.min(100, col[2]), 0);
+            return 'hsl(' + col[0] + ',' + col[1] + '%,' + col[2] + '%)';
+        }),
 
-            // shared appointments which are unconfirmed or declined don't receive color classes
-            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
-                return false;
+        colorToHex: _.memoize(function (color) {
+            var data = that.colorToRGB(color);
+            return (data[0] << 16) + (data[1] << 8) + data[2];
+        }),
+
+        colorToHSL: _.memoize(function (color) {
+            var hex = that.colorToHex(color);
+            return that.hexToHSL(hex);
+        }),
+
+        colorToRGB: _.memoize(function () {
+
+            var canvas = document.createElement('canvas'), context = canvas.getContext('2d');
+            canvas.width = 1;
+            canvas.height = 1;
+
+            return function (color) {
+                context.fillStyle = 'rgba(0, 0, 0, 0)';
+                context.clearRect(0, 0, 1, 1);
+                context.fillStyle = color;
+                context.fillRect(0, 0, 1, 1);
+                return context.getImageData(0, 0, 1, 1).data;
+            };
+        }()),
+
+        hexToHSL: _.memoize(function (color) {
+            var r = (color >> 16) / 255,
+                g = ((color >> 8) & 0x00FF) / 255,
+                b = (color & 0x0000FF) / 255,
+                max = Math.max(r, g, b), min = Math.min(r, g, b),
+                h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // achromatic
+            } else {
+                var d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                    default: h = 0; break;
+                }
+                h /= 6;
             }
 
-            return appointmentColor === 0 && !privateFlag;
+            return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
+        }),
+
+        getRelativeLuminance: (function () {
+
+            function val(x) {
+                x /= 255;
+                return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+            }
+
+            return function (rgb) {
+                return 0.2126 * val(rgb[0]) + 0.7152 * val(rgb[1]) + 0.0722 * val(rgb[2]);
+            };
+        }()),
+
+        // returns color ensuring a color contrast higher than 1:4.5
+        // based on algorithm as defined by https://www.w3.org/TR/WCAG20-TECHS/G18.html#G18-tests
+        getForegroundColor: _.memoize(function (color) {
+
+            function colorContrast(foreground) {
+                var l2 = that.getRelativeLuminance(that.colorToRGB(foreground));
+                return (l1 + 0.05) / (l2 + 0.05);
+            }
+
+            var l1 = that.getRelativeLuminance(that.colorToRGB(color)),
+                hsl = that.colorToHSL(color),
+                hue = hsl[0],
+                sat = hsl[1] > 0 ? 30 : 0,
+                lum = 50,
+                foreground;
+
+            if (l1 < 0.18333) return 'white';
+
+            // start with 50% luminance; then go down until color contrast exceeds 5 (little higher than 4.5)
+            // whoever finds a simple way to calculate this programmatically
+            // (and which is still correct in all cases) gets a beer or two
+            do {
+                foreground = 'hsl(' + hue + ', ' + sat + '%, ' + lum + '%)';
+                lum -= 5;
+            } while (lum >= 0 && colorContrast(foreground) < 5);
+
+            return foreground;
+        }),
+
+        canAppointmentChangeColor: function (folder, eventModel) {
+            var eventColor = eventModel.get('color'),
+                privateFlag = that.isPrivate(eventModel),
+                defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
+                conf = that.getConfirmationStatus(eventModel, defaultStatus);
+
+            // shared appointments which are needs-action or declined don't receive color classes
+            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return false;
+
+            return !eventColor && !privateFlag;
         },
 
-        getFolderColor: color.getFolderColor,
-
-        getColorLabel: function (colorIndex) {
-            if (colorIndex >= 0 && colorIndex < colorLabels.length) {
-                return colorLabels[colorIndex];
-            }
-
-            return '';
+        getFolderColor: function (folder) {
+            var defaultColor = settings.get('defaultFolderColor', '#CFE6FF'),
+                extendedProperties = folder['com.openexchange.calendar.extendedProperties'] || {},
+                color = extendedProperties.color ? (extendedProperties.color.value || defaultColor) : defaultColor;
+            // fallback if color is an index (might still occur due to defaultFolderColor)
+            if (_.isNumber(color)) color = that.colors[color - 1].value;
+            return color;
         },
 
         getDeepLink: function (data) {
@@ -905,21 +1076,236 @@ define('io.ox/calendar/util', [
             ].join('');
         },
 
-        getRecurrenceChangeDialog: function () {
+        getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
-                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series.'))
-                    .addPrimaryButton('appointment', gt('Create exception'), 'appointment')
+                    .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
+                    .addPrimaryButton('series', gt('Series'), 'series')
+                    .addButton('appointment', gt('Appointment'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
-        getRecurrenceEditDialog: function () {
-            return new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series',
-                        //#. Use singular in this context
-                        gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
+        showRecurrenceDialog: function (model) {
+            if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
+            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
+                var dialog = new dialogs.ModalDialog();
+                if (model.hasFlag('first_occurrence')) {
+                    dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
+                    dialog.addPrimaryButton('series', gt('Series'), 'series');
+                } else if (model.hasFlag('last_occurrence')) {
+                    return $.when('appointment');
+                } else {
+                    dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
+                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
+                }
+
+                return dialog.addButton('appointment', gt('This appointment'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .show();
+            }
+            return $.when('appointment');
+        },
+
+        isPrivate: function (data, strict) {
+            return that.hasFlag(data, 'private') || (!strict && that.hasFlag(data, 'confidential'));
+        },
+
+        returnIconsByType: function (obj) {
+            var icons = {
+                type: [],
+                property: []
+            };
+
+            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').append($('<i class="fa fa-question-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Tentative'))));
+            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').append($('<i class="fa fa-user-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))));
+            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
+            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-repeat" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
+            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-user-o" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
+            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').append($('<i class="fa fa-paperclip" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Attachments'))));
+            return icons;
+        },
+
+        getCurrentRangeOptions: function () {
+            var app = ox.ui.apps.get('io.ox/calendar');
+            if (!app) return {};
+            var window = app.getWindow();
+            if (!window) return {};
+            var perspective = window.getPerspective();
+            if (!perspective) return;
+
+            var rangeStart, rangeEnd;
+            switch (perspective.name) {
+                case 'week':
+                    var view = perspective.view;
+                    rangeStart = moment(view.startDate).utc();
+                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
+                    break;
+                case 'month':
+                    rangeStart = moment(perspective.firstMonth).startOf('week').utc();
+                    rangeEnd = moment(perspective.lastMonth).endOf('month').endOf('week').utc();
+                    break;
+                case 'list':
+                    rangeStart = moment().startOf('day').utc();
+                    rangeEnd = moment().startOf('day').add((app.listView.collection.offset || 0) + 1, 'month').utc();
+                    break;
+                default:
+            }
+
+            if (!rangeStart || !rangeEnd) return {};
+            return {
+                expand: true,
+                rangeStart: rangeStart.format(that.ZULU_FORMAT),
+                rangeEnd: rangeEnd.format(that.ZULU_FORMAT)
+            };
+        },
+
+        rangeFilter: function (start, end) {
+            return function (obj) {
+                var tsStart = that.getMoment(obj.startDate),
+                    tsEnd = that.getMoment(obj.endDate);
+                if (tsEnd < start) return false;
+                if (tsStart > end) return false;
+                return true;
+            };
+        },
+
+        cid: function (o) {
+            if (_.isObject(o)) {
+                if (o.attributes) o = o.attributes;
+                var cid = o.folder + '.' + o.id;
+                if (o.recurrenceId) cid += '.' + o.recurrenceId;
+                return cid;
+            } else if (_.isString(o)) {
+                var s = o.split('.'),
+                    r = { folder: s[0], id: s[1] };
+                if (s.length === 3) r.recurrenceId = s[2];
+                return r;
+            }
+        },
+
+        // creates an attendee object from a user object or model and contact model or object
+        // distribution lists create an array of attendees representing the menmbers of the distribution list
+        // used to create default participants and used by addparticipantsview
+        // options can contain attendee object fields that should be prefilled (usually partStat: 'ACCEPTED')
+        createAttendee: function (user, options) {
+
+            if (!user) return;
+            // make it work for models and objects
+            user = user instanceof Backbone.Model ? user.attributes : user;
+
+            // distribution lists are split into members
+            if (user.mark_as_distributionlist) {
+                return _(user.distribution_list).map(this.createAttendee);
+            }
+            options = options || {};
+            var attendee = {
+                cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
+                cn: user.display_name,
+                partStat: 'NEEDS-ACTION'
+            };
+
+            if (attendee.cuType !== 'RESOURCE') {
+                if ((user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
+                attendee.email = user.field ? user[user.field] : (user.email1 || user.mail);
+                attendee.uri = 'mailto:' + attendee.email;
+            } else {
+                attendee.partStat = 'ACCEPTED';
+                if (user.description) attendee.comment = user.description;
+                attendee.entity = user.id;
+            }
+
+            if (attendee.cuType === 'GROUP') {
+                attendee.entity = user.id;
+                // not really needed. Added just for convenience. Helps if group should be resolved
+                attendee.members = user.members;
+            }
+            // not really needed. Added just for convenience. Helps if distibution list should be created
+            if (attendee.cuType === 'INDIVIDUAL') {
+                attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
+                attendee.contact = {
+                    display_name: user.display_name,
+                    first_name: user.first_name,
+                    last_name: user.last_name
+                };
+            }
+            // override with predefined values if given
+            return _.extend(attendee, options);
+        },
+
+        // all day appointments have no timezone and the start and end dates are in date format not date-time
+        // checking the start date is sufficient as the end date must be of the same type, according to the spec
+        isAllday: function (app) {
+            if (!app) return false;
+            app = app instanceof Backbone.Model ? app.attributes : app;
+            var time = app.startDate;
+            // there is no time value for all day appointments
+            return this.isLocal(app) && (time.value.indexOf('T') === -1);
+        },
+
+        // appointments may be in local time. This means they do not move when the timezone changes. Do not confuse this with UTC time
+        isLocal: function (app) {
+            if (!app) return false;
+            var time = app instanceof Backbone.Model ? app.get('startDate') : app.startDate;
+            return time && time.value && !time.tzid;
+        },
+
+        // convenience function to convert old alarms into new chronos alarms
+        // TODO remove once migration process is implemented
+        convertAlarms: function (alarm) {
+            // already converted
+            if (_.isArray(alarm)) return alarm;
+            var alarmTime = alarm,
+                alarmUnit = 'M';
+
+            if (isNaN(parseInt(alarmTime, 10))) {
+                // ignore unparsable alarms
+                return [];
+            }
+
+            if (alarmTime >= 10080) {
+                alarmTime = alarmTime / 10080;
+                alarmUnit = 'W';
+            } else if (alarmTime >= 1440) {
+                alarmTime = alarmTime / 1440;
+                alarmUnit = 'D';
+            } else if (alarmTime >= 60) {
+                alarmTime = alarmTime / 60;
+                alarmUnit = 'H';
+            }
+
+            return [{
+                action: 'DISPLAY',
+                description: '',
+                trigger: { duration: '-PT' + alarmTime + alarmUnit, related: 'START' }
+            }];
+        },
+
+        getMoment: function (date) {
+            if (_.isObject(date)) return moment.tz(date.value, date.tzid || moment().tz());
+            return moment(date);
+        },
+
+        // get the right default alarm for an event
+        // note: the defautl alarm for the birthday calendar is not considered here. Ther is no use case since you cannot edit those events atm.
+        getDefaultAlarms: function (event) {
+            // no event or not fulltime (isAllday returns false for no event)
+            if (!this.isAllday(event)) {
+                return settings.get('chronos/defaultAlarmDateTime', [{
+                    action: 'DISPLAY',
+                    description: '',
+                    trigger: { duration: '-PT15M', related: 'START' }
+                }]);
+            }
+            return settings.get('chronos/defaultAlarmDate', [{
+                action: 'DISPLAY',
+                description: '',
+                trigger: { duration: '-PT12H', related: 'START' }
+            }]);
+        },
+
+        hasFlag: function (data, flag) {
+            if (data instanceof Backbone.Model) return data.hasFlag(flag);
+            if (!data.flags || !data.flags.length) return false;
+            return data.flags.indexOf(flag) >= 0;
         }
     };
 

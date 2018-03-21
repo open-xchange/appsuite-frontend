@@ -36,25 +36,24 @@ define('io.ox/tours/intro', [
             .end()
         .step()
             .title(gt('Launching an app'))
-            .content(gt('To launch an app, click on an entry on the left side of the menu bar.'))
-            .hotspot('.launcher[data-app-name="io.ox/mail"]')
-            .referTo('.launcher[data-app-name="io.ox/mail"]')
+            .on('before:show', function () { if ($('#io-ox-launchgrid:visible').length === 0) $('#io-ox-launcher .btn').first().click(); })
+            .content(gt('To launch an app, use the quick launch icons on the left side of the menu bar or click on an entry inside the app launcher menu.'))
+            .hotspot('#io-ox-launchgrid')
+            .referTo('#io-ox-launchgrid')
+            .on('hide', function () { if ($('#io-ox-launchgrid:visible').length === 1) $('#io-ox-launcher .btn').first().click(); })
             .end()
         .step()
             .title(gt('Displaying the help or the settings'))
             .content(gt('To display the help or the settings, click the System menu icon in the menu bar.'))
-            .hotspot('.launcher .fa-bars.launcher-icon')
+            .hotspot('#io-ox-topbar-dropdown-icon')
             .referTo('#topbar-settings-dropdown')
             .waitFor('#topbar-settings-dropdown')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
-            })
-            .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
-            })
+            .on('wait', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
+            .on('hide', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
             .on('before:show', function () { notifications.hide(); })
             .end()
-        .step()
+        // notification area is not always shown in new topbar
+        /*.step()
             .title(gt('The New objects icon'))
             .content(gt('The New objects icon shows the number of appointment reminders or other notifications. If clicking the icon, the info area opens.'))
             .hotspot('#io-ox-notifications-icon')
@@ -67,14 +66,14 @@ define('io.ox/tours/intro', [
             .hotspot('#io-ox-notifications-icon')
             .referTo('#io-ox-notifications')
             .on('before:show', function () { notifications.show(); $('#io-ox-notifications').show(); })
-            .end()
+            .end()*/
         .step()
             .title(gt('Creating new items'))
             .content(gt('To create a new E-Mail, click the Compose new E-Mail in the toolbar.'))
             .navigateTo('io.ox/mail/main')
-            .waitFor('.classic-toolbar .io-ox-action-link:first')
-            .hotspot('.classic-toolbar .io-ox-action-link:first')
-            .referTo('.classic-toolbar .io-ox-action-link:first')
+            .waitFor('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
+            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
+            .referTo('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
             .on('before:show', function () { notifications.hide(); })
             .end()
         .step()
@@ -93,7 +92,7 @@ define('io.ox/tours/intro', [
         .step()
             .title(gt('Searching for objects'))
             .content(gt('To search for objects, click the Search icon in the menu bar.'))
-            .spotlight('.generic-toolbar.io-ox-find')
+            .spotlight('.search-box')
             .end()
         .step()
             .title(gt('The toolbar'))
@@ -121,12 +120,8 @@ define('io.ox/tours/intro', [
             .hotspot('#topbar-settings-dropdown .io-ox-context-help')
             .referTo('#topbar-settings-dropdown')
             .waitFor('#topbar-settings-dropdown')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
-            })
-            .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
-            })
+            .on('wait', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
+            .on('hide', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
             .end()
         .start();
     });

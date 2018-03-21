@@ -30,6 +30,15 @@ define('io.ox/backbone/views/recurrence-view', [
             }
         });
 
+    var recurrenceUtil = {
+        getStart: function (model) {
+            return model.get('start_time') || model.get('start_date');
+        },
+        previousStart: function (model) {
+            return model.previous('start_time') || model.previous('start_date');
+        }
+    };
+
     ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
         index: INDEX += 100,
         id: 'repeat',
@@ -83,7 +92,7 @@ define('io.ox/backbone/views/recurrence-view', [
                     }),
                     update = function (model) {
                         var type = model.get('recurrence_type'),
-                            startAttribute = model.get('start_time') || model.get('start_date'),
+                            startAttribute = recurrenceUtil.getStart(model),
                             startDate = moment(startAttribute),
                             day_in_month = model.get('day_in_month'),
                             days = model.get('days');
@@ -172,8 +181,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             value: 'weekday'
                         }],
                         serialize: function (selection) {
-                            var startAttribute = this.model.get('start_time') || this.model.get('start_date'),
-                                day = moment(startAttribute),
+                            var day = moment(recurrenceUtil.getStart(this.model)),
                                 type = this.model.get('recurrence_type');
 
                             if (selection === 'date') {
@@ -406,7 +414,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         old = this.getValue();
                     if (old === selection) return;
 
-                    var start = this.model.get('start_time') || this.model.get('start_date');
+                    var start = recurrenceUtil.getStart(this.model);
 
                     if (selection === 'never') {
                         this.model.set({
@@ -574,7 +582,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 var val = this.$input.prop('checked'),
                     old = this.model.get('recurrence_type') > 0;
                 if (!old && val) {
-                    var startAttribute = this.model.get('start_time') || this.model.get('start_date'),
+                    var startAttribute = recurrenceUtil.getStart(this.model),
                         startDate = moment(startAttribute);
                     this.model.set({
                         'recurrence_type': 2,
@@ -622,7 +630,7 @@ define('io.ox/backbone/views/recurrence-view', [
             },
             validateUntil: function () {
                 var until = moment(this.get('until')),
-                    start = moment(this.get('start_time') || this.get('start_date')),
+                    start = moment(recurrenceUtil.getStart(this)),
                     valid = !this.has('until') || until.isAfter(start, 'day') || until.isSame(start, 'day');
                 if (valid) this.trigger('valid:until');
                 else this.trigger('invalid:until', gt('Please insert a date after the start date'));
@@ -647,7 +655,7 @@ define('io.ox/backbone/views/recurrence-view', [
             }
         });
 
-    return Backbone.View.extend({
+    return mini.AbstractView.extend({
 
         className: 'recurrence-view',
 
@@ -656,8 +664,15 @@ define('io.ox/backbone/views/recurrence-view', [
         },
 
         initialize: function () {
+            this.originalModel = this.model;
+            this.model = this.getMappedModel();
             this.listenTo(this.model, 'change:recurrence_type change:interval change:days change:day_in_month change:month change:occurrences change:until', this.updateSummary);
-            this.listenTo(this.model, 'change:start_time change:start_date', this.onChangeStart);
+            this.listenTo(this.model, 'change:start_time change:start_date change:startDate', this.onChangeStart);
+        },
+
+        getMappedModel: function () {
+            if (this.model.getRruleMapModel) return this.model.getRruleMapModel();
+            return this.model;
         },
 
         onOpenDialog: function () {
@@ -721,22 +736,28 @@ define('io.ox/backbone/views/recurrence-view', [
                 visible = this.model.get('recurrence_type') > 0;
             this.$('.summary').toggleClass('hidden', !visible);
             if (visible) {
-                var data = this.model.toJSON();
-                $summary.text(util.getRecurrenceString(data));
+                $summary.text(util.getRecurrenceString(this.model));
             }
         },
 
         onChangeStart: function () {
             var type = this.model.get('recurrence_type');
             if (type === 0) return;
-            var oldDate = moment(this.model.previous('start_time') || this.model.previous('start_date')),
-                date = moment(this.model.get('start_time') || this.model.get('start_date'));
+            var oldDate = moment(recurrenceUtil.previousStart(this.model)),
+                date = moment(recurrenceUtil.getStart(this.model));
 
             if (this.model.get('full_time') === true) date.utc();
 
-            // if weekly and only single day selected
-            if (type === 2 && this.model.get('days') === 1 << oldDate.day()) {
-                this.model.set('days', 1 << date.day());
+            // if weekly, shift bits
+            if (type === 2) {
+                var shift = date.diff(oldDate, 'days') % 7,
+                    days = this.model.get('days');
+                if (shift < 0) shift += 7;
+                for (var i = 0; i < shift; i++) {
+                    days = days << 1;
+                    if (days > 127) days -= 127;
+                }
+                this.model.set('days', days);
             }
 
             // if monthly or yeary, adjust date/day of week
@@ -762,6 +783,12 @@ define('io.ox/backbone/views/recurrence-view', [
             if (this.model.get('until') && moment(this.model.get('until')).isBefore(date)) {
                 this.model.set('until', date.add(1, momentShorthands[this.model.get('recurrence_type') - 1]).valueOf());
             }
+        },
+
+        dispose: function () {
+            // make sure, that the events of the mapped model are removed
+            if (this.originalModel !== this.model) this.model.stopListening();
+            mini.AbstractView.prototype.dispose.call();
         }
 
     });

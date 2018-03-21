@@ -140,7 +140,7 @@
         }
 
         .list-item-column.type {
-            width: 20px;
+            width: 40px;
             color: #717171;
         }
     }
@@ -149,7 +149,7 @@
 .modal.share-permissions-dialog {
 
     .modal-content {
-        min-height: 450px;
+        min-height: 250px;
     }
 
     .modal-header {
@@ -175,15 +175,6 @@
         }
     }
 
-    .modal-body {
-        padding: 16px 0;
-        min-height: 184px;
-
-        &.IE11 {
-            max-height: 184px; /* workaround for IE11 with resizing the contact list */
-        }
-    }
-
     .modal-footer {
 
         .cascade {
@@ -194,12 +185,27 @@
             margin-right: 10px;
             margin-bottom: 0;
         }
+    }
+
+    .modal-body {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+        &.IE11 {
+            max-height: 184px; /* workaround for IE11 with resizing the contact list */
+            .share-options {
+                &.IE {
+                    min-width: inherit;
+                    max-width: inherit;
+                }
+            }
+        }
 
         .share-options {
             text-align: left;
-            border-bottom: 1px solid #e5e5e5;
-            margin-left: -16px;
-            width: ~"calc(100% + 32px)";
+            border-top: 1px solid #e5e5e5;
+            margin: 0;
 
             textarea {
                 resize: vertical;
@@ -225,6 +231,14 @@
 
                 .resize-polyfill.resize-polyfill-br { cursor: ns-resize; }
             }
+        }
+
+        .permissions-view {
+            width: 100%;
+            overflow-y: auto;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            min-height: 72px;
         }
     }
 

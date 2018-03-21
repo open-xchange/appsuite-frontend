@@ -308,18 +308,39 @@ define('io.ox/tasks/main', [
             grid.setListRequest(listRequest);
         },
 
+        'restore-grid-options': function (app) {
+
+            app.getGridOptions = function (folder) {
+                var options = app.settings.get(['viewOptions', folder], {});
+                return _.extend({ done: true, sort: 'urgency', order: 'asc' }, options);
+            };
+
+            function restore(folder) {
+                var data = app.getGridOptions(folder);
+                app.grid.props.set(data);
+            }
+
+            app.on('folder:change', restore);
+            restore(app.folder.get());
+        },
+
+        'store-grid-options': function (app) {
+            app.grid.props.on('change', _.debounce(function () {
+                if (app.props.get('find-result')) return;
+                var folder = app.folder.get(), data = app.grid.props.toJSON();
+                app.settings
+                    .set(['viewOptions', folder], { done: data.done, sort: data.sort, order: data.order })
+                    .save();
+            }, 500));
+        },
+
         'grid-options': function (app) {
             var grid = app.grid;
-            // add grid options
-            grid.prop('done', true);
-            grid.prop('sort', 'urgency');
-            grid.prop('order', 'asc');
-
             function updateGridOptions() {
 
                 var dropdown = grid.getToolbar().find('.grid-options'),
-                    props = grid.prop();
-                if (props.order === 'desc') {
+                    props = grid.props;
+                if (props.get('order') === 'desc') {
                     dropdown.find('.fa-arrow-down').css('opacity', 1).end()
                         .find('.fa-arrow-up').css('opacity', 0.4);
                 } else {
@@ -327,8 +348,8 @@ define('io.ox/tasks/main', [
                         .find('.fa-arrow-down').css('opacity', 0.4);
                 }
                 //update api property (used cid in api.updateAllCache, api.create)
-                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 317;
-                api.options.requests.all.order = props.order;
+                api.options.requests.all.sort = props.get('sort') !== 'urgency' ? props.get('sort') : 317;
+                api.options.requests.all.order = props.get('order');
             }
 
             grid.selection.on('change', app.removeButton);
@@ -624,27 +645,35 @@ define('io.ox/tasks/main', [
         },
 
         'inplace-find': function (app) {
+            function registerHandler(model, find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.grid.getToolbar().find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.grid.getToolbar().find('.grid-options:first').show();
+                    }
+                });
+            }
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
-
-            app.initFind().on({
-                'find:query': function () {
-                    // hide sort options
-                    app.grid.getToolbar().find('.grid-options:first').hide();
-                },
-                'find:cancel': function () {
-                    // show sort options again
-                    app.grid.getToolbar().find('.grid-options:first').show();
-                }
-            });
-
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
         },
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.sect.tasks.gui';
             };
+        },
+
+        'primary-action': function (app) {
+            app.addPrimaryAction({
+                point: 'io.ox/tasks/sidepanel',
+                label: gt('New task'),
+                action: 'io.ox/tasks/actions/create',
+                toolbar: 'create'
+            });
         },
 
         'sidepanel': function (app) {
@@ -837,6 +866,9 @@ define('io.ox/tasks/main', [
         app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Tasks toolbar'));
 
         app.grid = grid;
+
+        // workaround: windowmanager not visible so height calculation for grid item fails
+        if (!ox.ui.screens.current()) ox.ui.screens.one('show-windowmanager', grid.paint.bind(grid));
 
         app.getGrid = function () {
             return grid;

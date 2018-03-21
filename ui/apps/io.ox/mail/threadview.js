@@ -20,12 +20,11 @@ define('io.ox/mail/threadview', [
     'io.ox/mail/detail/view',
     'io.ox/mail/detail/mobileView',
     'io.ox/core/tk/list-dnd',
-    'io.ox/core/emoji/util',
     'io.ox/core/http',
     'gettext!io.ox/mail',
     'less!io.ox/mail/style',
     'io.ox/mail/listview'
-], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
+], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
 
     'use strict';
 
@@ -93,42 +92,13 @@ define('io.ox/mail/threadview', [
 
             var keepPrefix = baton.view.collection.length === 1,
                 data = baton.view.model.toJSON(),
-                subject = util.getSubject(api.threads.subject(data) || data.subject, keepPrefix),
-                node = $('<h1 class="subject">').text(subject);
+                subject = util.getSubject(api.threads.subject(data) || data.subject, keepPrefix);
 
-            this.append(node);
-
-            emoji.processEmoji(node.html(), function (text) {
-                node.html(text);
-            });
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'toggle-big-screen',
-        index: 110,
-        draw: function (baton) {
-            if (!baton.view.standalone) return;
             this.append(
-                $('<a href="#" role="button" class="toggle-big-screen">')
-                .append('<i class="fa fa-expand" aria-hidden="true">')
-                .attr('aria-label', gt('Toggle viewport size'))
-                .tooltip({
-                    animation: false,
-                    container: 'body',
-                    placement: 'left',
-                    title: gt('Toggle viewport size')
-                })
-                .on('click', function () {
-                    // remove tooltip on click as the viewport changes
-                    var self = $(this);
-                    _.defer(function () { self.tooltip('hide'); });
-                })
+                $('<h1 class="subject">').text(subject)
             );
         }
     });
-
-    // Thread view
 
     var ThreadView = Backbone.View.extend({
 
@@ -140,7 +110,6 @@ define('io.ox/mail/threadview', [
             'click .back-navigation .previous-mail': 'onPrevious',
             'click .back-navigation .next-mail': 'onNext',
             'click .toggle-all': 'onToggleAll',
-            'click .toggle-big-screen': 'onToggleBigscreen',
             'keydown': 'onKeydown'
         },
 
@@ -209,15 +178,6 @@ define('io.ox/mail/threadview', [
                 this.toggleMail(model.cid, state);
             }, this);
             http.resume();
-        },
-
-        onToggleBigscreen: function (e) {
-            e.preventDefault();
-            this.$el.toggleClass('big-screen');
-        },
-
-        toggleBigScreen: function (state) {
-            this.$el.toggleClass('big-screen', state);
         },
 
         toggleMail: function (cid, state) {
@@ -363,7 +323,7 @@ define('io.ox/mail/threadview', [
 
         onRemove: function (model) {
             var children = this.getItems(),
-                li = children.filter('[data-cid="' + model.cid + '"]'),
+                li = children.filter(function () { return $(this).attr('data-cid') === model.cid; }),
                 first = li.length ? li.attr('data-cid') && children.first().attr('data-cid') : false,
                 top = this.$messages.scrollTop();
 

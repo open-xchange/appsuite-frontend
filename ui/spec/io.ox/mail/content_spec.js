@@ -27,90 +27,90 @@ define(['io.ox/mail/detail/content'], function (content) {
 
             it('does not change plain text', function () {
                 var html = process('Lorem ipsum');
-                expect(html).to.equal('Lorem ipsum');
+                expect(html).to.equal('<div>Lorem ipsum</div>');
             });
 
             it('transforms new lines', function () {
                 var html = process('Lorem ipsum\ndolor sit amet');
-                expect(html).to.equal('Lorem ipsum<br>dolor sit amet');
+                expect(html).to.equal('<div>Lorem ipsum</div><div>dolor sit amet</div>');
             });
 
             it('transforms trailing new lines', function () {
                 var html = process('Lorem ipsum\ndolor\nsit\n');
-                expect(html).to.equal('Lorem ipsum<br>dolor<br>sit<br>');
+                expect(html).to.equal('<div>Lorem ipsum</div><div>dolor</div><div>sit</div>');
             });
 
             it('transforms a single new line', function () {
                 var html = process('\n');
-                expect(html).to.equal('<br>');
+                expect(html).to.equal('<div><br></div>');
             });
 
             // LINKS & ADDRESSES
 
             it('transforms links', function () {
                 var html = process('Lorem http://ip.sum! dolor');
-                expect(html).to.equal('Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor');
+                expect(html).to.equal('<div>Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor</div>');
             });
 
             it('transforms links inside parentheses', function () {
                 var html = process('Lorem (http://ip.sum) dolor');
-                expect(html).to.equal('Lorem (<a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>) dolor');
+                expect(html).to.equal('<div>Lorem (<a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>) dolor</div>');
             });
 
             it('transforms links inside angle brackets', function () {
                 var html = process('Lorem <http://ip.sum> dolor');
-                expect(html).to.equal('Lorem &lt;<a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>> dolor');
+                expect(html).to.equal('<div>Lorem &lt;<a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>> dolor</div>');
             });
 
             it('transforms mail addresses', function () {
                 var html = process('Lorem <ipsum@dolor.amet>');
-                expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>>');
+                expect(html).to.equal('<div>Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>></div>');
             });
 
             it('transforms multiple mail addresses', function () {
                 var html = process('One "ipsum@dolor.amet" and another "ipsum@dolor.amet".');
-                expect(html).to.equal('One "<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>" and another "<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>".');
+                expect(html).to.equal('<div>One "<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>" and another "<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>".</div>');
             });
 
             it('ignores invalid addresses', function () {
                 var html = process('One "ipsum@dolor" and another "@dolor.amet".');
-                expect(html).to.equal('One "ipsum@dolor" and another "@dolor.amet".');
+                expect(html).to.equal('<div>One "ipsum@dolor" and another "@dolor.amet".</div>');
             });
 
             // QUOTES
 
             it('transforms quotes', function () {
                 var html = process('> Lorem ipsum');
-                expect(html).to.equal('<blockquote type="cite">Lorem ipsum</blockquote>');
+                expect(html).to.equal('<blockquote type="cite"><div>Lorem ipsum</div></blockquote>');
             });
 
             it('transforms quotes across multiple lines', function () {
                 var html = process('\n> Lorem ipsum\n> dolor sit');
-                expect(html).to.equal('<br><blockquote type="cite">Lorem ipsum<br>dolor sit</blockquote>');
+                expect(html).to.equal('<div><br></div><blockquote type="cite"><div>Lorem ipsum</div><div>dolor sit</div></blockquote>');
             });
 
             it('transforms nested quotes', function () {
                 var html = process('\n> Lorem ipsum\n> > dolor sit\n> amet');
-                expect(html).to.equal('<br><blockquote type="cite">Lorem ipsum<blockquote type="cite">dolor sit</blockquote>amet</blockquote>');
+                expect(html).to.equal('<div><br></div><blockquote type="cite"><div>Lorem ipsum</div><blockquote type="cite"><div>dolor sit</div></blockquote><div>amet</div></blockquote>');
             });
 
             it('transforms nested quotes (2/1/2)', function () {
                 var html = process('> > Lorem ipsum\n> dolor sit\n> > amet');
-                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>dolor sit<blockquote type="cite">amet</blockquote></blockquote>');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite"><div>Lorem ipsum</div></blockquote><div>dolor sit</div><blockquote type="cite"><div>amet</div></blockquote></blockquote>');
             });
 
             it('transforms nested quotes with consecutive brackets', function () {
                 var html = process('>> Lorem\n>> ipsum');
-                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite"><div>Lorem</div><div>ipsum</div></blockquote></blockquote>');
             });
 
             it('transforms quotes without trailing new line', function () {
                 var html = process('> Lorem\n>\n> ipsum\n>\n\n');
-                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum<br></blockquote><br>');
+                expect(html).to.equal('<blockquote type="cite"><div>Lorem</div><div><br></div><div>ipsum</div><div><br></div></blockquote><div><br></div>');
             });
             it('transforms nested quotes without trailing new line', function () {
                 var html = process('> > Lorem ipsum\n> amet\ndolor sit');
-                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>amet</blockquote>dolor sit');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite"><div>Lorem ipsum</div></blockquote><div>amet</div></blockquote><div>dolor sit</div>');
             });
         });
 
@@ -203,7 +203,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
         it('should process plain text', function () {
             var result = process('\r\rHello World ', 'text/plain');
-            expect(result.content.innerHTML).to.equal('Hello World');
+            expect(result.content.innerHTML).to.equal('<div>Hello World</div>');
         });
 
         it('should set proper class for plain text mails', function () {
@@ -219,12 +219,12 @@ define(['io.ox/mail/detail/content'], function (content) {
 
         it('should remove leading white-space', function () {
             var result = process(' \n \n  \ntext', 'text/plain');
-            expect(result.content.innerHTML).to.equal('text');
+            expect(result.content.innerHTML).to.equal('<div>text</div>');
         });
 
         it('should reduce long \n sequences', function () {
             var result = process('text\n\n\n\ntext\n\n', 'text/plain');
-            expect(result.content.innerHTML).to.equal('text<br><br><br>text');
+            expect(result.content.innerHTML).to.equal('<div>text</div><div><br></div><div><br></div><div>text</div>');
         });
 
         it('should simplify links', function () {
@@ -236,7 +236,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
             it('should detect email addresses (text/plain)', function () {
                 var result = process('test\notto.xantner@open-xchange.com\ntest', 'text/plain');
-                expect(result.content.innerHTML).to.equal('test<br><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a><br>test');
+                expect(result.content.innerHTML).to.equal('<div>test</div><div><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a></div><div>test</div>');
             });
 
             it('should detect email addresses (text/html; @)', function () {

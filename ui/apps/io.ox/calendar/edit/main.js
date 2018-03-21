@@ -6,9 +6,10 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
 define('io.ox/calendar/edit/main', [
@@ -33,9 +34,11 @@ define('io.ox/calendar/edit/main', [
 
         var app = ox.ui.createApp({
             name: 'io.ox/calendar/edit',
-            title: 'Edit Appointment',
+            title: gt('Edit Appointment'),
             userContent: true,
-            closable: true
+            closable: true,
+            floating: !_.device('smartphone'),
+            sendInternalNotifications: true
         });
 
         _.extend(app, {
@@ -49,6 +52,7 @@ define('io.ox/calendar/edit/main', [
             dispose: function () {
                 this.view.off('save', _.bind(this.onSave, this));
                 this.model.off();
+                this.dropZone.remove();
             },
 
             // published via callbacks objects in baton (see below)
@@ -67,27 +71,42 @@ define('io.ox/calendar/edit/main', [
                 notifications.yell('success', gt('Description has been copied'));
             },
 
-            edit: function (data, opt) {
+            edit: function (model, opt) {
 
-                var self = this;
-                data = data || {};
+                var self = this,
+                    data = {};
+                // work with models and objects
+                if (model) {
+                    if (model instanceof Backbone.Model) {
+                        data = model.toJSON();
+                    } else if (_.isObject(model)) {
+                        data = model;
+                    }
+                }
                 opt = _.extend({
                     mode: 'edit'
                 }, opt);
 
-                app.cid = 'io.ox/calendar:' + opt.mode + '.' + _.cid(data);
+                app.cid = 'io.ox/calendar:' + opt.mode + '.' + util.cid(model);
 
                 function cont() {
                     // create app window
                     var win = ox.ui.createWindow({
                         name: 'io.ox/calendar/edit',
-                        chromeless: true
+                        chromeless: true,
+                        floating: !_.device('smartphone'),
+                        closable: true,
+                        title: gt('Edit Appointment')
                     });
 
                     self.setWindow(win);
 
-                    self.model.setDefaultParticipants({ create: opt.mode === 'create' }).done(function () {
-
+                    self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
+                        if (opt.mode === 'edit' && util.isAllday(self.model)) {
+                            // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
+                            // this day will be added again on save
+                            self.model.set('endDate', { value: moment(self.model.get('endDate').value).subtract('1', 'days').format('YYYYMMDD') });
+                        }
                         app.view = self.view = new EditView({
                             model: self.model,
                             mode: opt.mode,
@@ -105,59 +124,12 @@ define('io.ox/calendar/edit/main', [
 
                         self.considerSaved = true;
 
-                        self.model.set('endTimezone', self.model.get('timezone'));
-
-                        self.model
-                            .on('change', function () {
-                                self.considerSaved = false;
-                            })
-                            .on('backendError', function (error) {
-                                try {
-                                    self.getWindow().idle();
-                                } catch (e) {
-                                    if (error.code === 'UPL-0005') {
-                                        //uploadsize to big; remove busy animation
-                                        api.removeFromUploadList(_.ecid(this.attributes));
-                                    }
-                                }
-                                if (error.conflicts) return;
-                                var message;
-                                // hmm, backend likes to send an empty object in "problematic" which makes it hard to check
-                                if (error.problematic && error.problematic.length > 0 && !_.isEmpty(error.problematic[0])) {
-                                    message = _(error.problematic).map(function (field) {
-                                        var id = http.getColumn('calendar', field.id) || field.id,
-                                            name = util.columns[id] || id;
-                                        return gt('The field "%1$s" exceeds its maximum size of %2$d characters.', name, field.max_size);
-                                    }).join(' ');
-                                } else {
-                                    message = error.error;
-                                }
-                                notifications.yell('error', message);
-                            })
-                            .on('conflicts', function (conflicts) {
-
-                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    conflictView.dialog(conflicts)
-                                        .on('cancel', function () {
-                                            // add temp timezone attribute again
-                                            self.model.set('endTimezone', self.model.endTimezone, { silent: true });
-                                            delete self.model.endTimezone;
-                                            // restore model attributes for moving
-                                            if (self.moveAfterSave) self.model.set('folder_id', self.moveAfterSave, { silent: true });
-                                        })
-                                        .on('ignore', function () {
-                                            self.model.set('ignore_conflicts', true, { validate: true });
-                                            self.model.save().then(_.bind(self.onSave, self));
-                                        });
-                                });
-                            });
-
                         self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
                             if (app.dropZone) app.dropZone.include();
                             //set url parameters
-                            self.setState({ folder: self.model.attributes.folder_id, id: self.model.get('id') ? self.model.attributes.id : null });
+                            self.setState({ folder: self.model.attributes.folder, id: self.model.get('id') ? self.model.attributes.id : null });
                         });
 
                         if (app.dropZone) win.on('hide', function () { app.dropZone.remove(); });
@@ -165,19 +137,19 @@ define('io.ox/calendar/edit/main', [
                         if (opt.mode === 'edit') {
 
                             if (opt.action === 'appointment') {
-                                self.model.set('recurrence_type', 0, { validate: true });
+                                self.model.set('rrule', undefined, { validate: true });
                                 self.model.mode = 'appointment';
                             }
 
                             if (opt.action === 'series') self.model.mode = 'series';
-
-                            // init alarm
-                            if (self.model.get('alarm') === undefined || self.model.get('alarm') === null) {
-                                //0 is valid don't change to -1 then
-                                self.model.set('alarm', -1, { silent: true, validate: true });
-                            }
+                            if (opt.action === 'thisandfuture') self.model.mode = 'thisandfuture';
                         }
 
+                        self.model.on('change', function () {
+                            self.considerSaved = false;
+                        });
+
+                        self.initialModelData = self.model.toJSON();
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         //used by guided tours so they can show the next step when everything is ready
@@ -186,24 +158,40 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 function loadFolder() {
-                    folderAPI.get(self.model.get('folder_id')).always(cont);
+                    folderAPI.get(self.model.get('folder')).always(cont);
                 }
 
                 // check mode
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
-                    self.setState({ folder: data.folder_id, id: data.id });
-                    self.model = new AppointmentModel(data);
+                    self.setState({ folder: data.folder, id: data.id });
+                    self.model = new AppointmentModel.Model(data);
                 } else {
                     // default values from settings
-                    data.alarm = data.alarm || settings.get('defaultReminder', 15);
-                    if (data.full_time) {
-                        data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
+                    data.alarms = data.alarms || util.getDefaultAlarms(data);
+
+                    // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
+                    data.transp = data.transp || ((util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE');
+                    self.model = new AppointmentModel.Model(data);
+                    if (!data.folder || /^virtual/.test(data.folder)) {
+                        self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
                     }
-                    self.model = new AppointmentModel(data);
-                    if (!data.folder_id || /^virtual/.test(data.folder_id)) {
-                        self.model.set('folder_id', data.folder_id = folderAPI.getDefaultFolder('calendar'));
-                    }
+                }
+
+                // if we restore alarms, check if they differ from the defaults
+                var isDefault = JSON.stringify(_(data.alarms).pluck('action', 'trigger')) === JSON.stringify(_(util.getDefaultAlarms(data)).pluck('action', 'trigger'));
+
+                // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
+                if (isDefault) {
+                    self.model.on('change:startDate change:endDate', _.debounce(function () {
+                        if (util.isAllday(this.previousAttributes()) === util.isAllday(this)) return;
+                        if (!this.userChangedAlarms) {
+                            this.set('alarms', util.getDefaultAlarms(this));
+                        }
+                    }, 0));
+                    self.model.on('userChangedAlarms', function () {
+                        this.userChangedAlarms = true;
+                    });
                 }
                 loadFolder();
             },
@@ -211,13 +199,15 @@ define('io.ox/calendar/edit/main', [
             considerSaved: false,
 
             create: function (data) {
+                data = data instanceof Backbone.Model ? data.toJSON() : data;
+                // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
+                if (!data['class']) data['class'] = 'PUBLIC';
                 this.edit(data, { mode: 'create' });
             },
 
             getDirtyStatus: function () {
                 if (this.considerSaved) return false;
-
-                return !_.isEmpty(this.model.changedSinceLoading());
+                return !_.isEqual(this.model.toJSON(), this.initialModelData);
             },
 
             onShowWindow: function () {
@@ -243,11 +233,12 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 var self = this;
-                if (self.model.get('title')) {
-                    self.getWindow().setTitle(self.model.get('title'));
-                    self.setTitle(self.model.get('title'));
+                self.model.adjustEndDate = true;
+                if (self.model.get('summary')) {
+                    self.getWindow().setTitle(self.model.get('summary'));
+                    self.setTitle(self.model.get('summary'));
                 }
-                self.model.on('keyup:title', function (value) {
+                self.model.on('keyup:summary', function (value) {
                     if (!value) value = self.model.get('id') ? gt('Edit appointment') : gt('Create appointment');
 
                     self.getWindow().setTitle(value);
@@ -270,7 +261,50 @@ define('io.ox/calendar/edit/main', [
             },
 
             onSave: function (data) {
-                if (this.moveAfterSave) {
+                var self = this;
+                if (data && data.conflicts) {
+                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                        conflictView.dialog(data.conflicts)
+                            .on('cancel', function () {
+                                self.getWindow().idle();
+
+                                // restore times (we add a day before saving allday appointments)
+                                if (self.view.tempEndDate && self.view.tempStartDate) {
+                                    self.model.set('endDate', self.view.tempEndDate, { silent: true });
+                                    self.model.set('startDate', self.view.tempStartDate, { silent: true });
+                                    self.view.tempEndDate = self.view.tempStartDate = null;
+                                }
+                            })
+                            .on('ignore', function () {
+                                var sendNotifications = self.get('sendInternalNotifications');
+                                if (self.view.options.mode === 'create') {
+                                    api.create(
+                                        self.model,
+                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                    ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                } else {
+                                    api.update(
+                                        self.model,
+                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                    ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                }
+                            });
+                    });
+                    return;
+                }
+
+                // update model with current data
+                if (data) this.model.set(data.toJSON());
+
+                // needed for attachment uploads to work
+                if (this.view.options.mode === 'create') {
+                    this.model.trigger('create');
+                } else {
+                    this.model.trigger('update');
+                }
+
+                // TODO can this be removed?
+                /*if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
                         self = this;
@@ -280,46 +314,40 @@ define('io.ox/calendar/edit/main', [
                         delete self.moveAfterSave;
                         save();
                     }, fail);
-                } else {
-                    if (this.model.endTimezone) {
-                        this.model.set('endTimezone', this.model.endTimezone);
-                        delete this.model.endTimezone;
-                    }
-                    this.considerSaved = true;
-                    this.getWindow().idle();
-                    this.quit();
-                }
+                } else {*/
+                this.model.adjustEndDate = false;
+                this.considerSaved = true;
+                self.getWindow().idle();
+                this.quit();
+                //}
             },
 
-            onError: function (error, options) {
-                // conflicts have their own special handling
-                if (error.conflicts) return;
+            onError: function (error) {
 
-                this.model.set('ignore_conflicts', false, { validate: true, isSave: true });
-                if (this.model.endTimezone) {
-                    // must be silent or validation removes errormessages
-                    this.model.set('endTimezone', this.model.endTimezone, { silent: true, isSave: true });
-                    delete this.model.endTimezone;
+                /*// restore state of model attributes for moving
+                if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
+                    this.model.set('folder', this.moveAfterSave, { silent: true });
                 }
-
-                // restore state of model attributes for moving
-                if (this.moveAfterSave && this.model.get('folder_id') !== this.moveAfterSave) {
-                    this.model.set('folder_id', this.moveAfterSave, { silent: true });
-                }
-                delete this.moveAfterSave;
+                delete this.moveAfterSave;*/
                 this.getWindow().idle();
+
+                // restore times (we add a day before saving allday appointments)
+                if (this.tempEndDate && self.tempStartDate) {
+                    this.model.set('endDate', this.tempEndDate);
+                    this.model.set('startDate', this.tempStartDate);
+                    this.tempEndDate = this.tempStartDate = null;
+                }
                 // when to do what?
                 // show validation errors inline -> dont yell
-                // show server errors caused by move (whatever that might be) -> yell
-                // everything else -> no yell, handled by backendError (see above)
-                if (error && (options && options.isMoveOperation)) notifications.yell(error);
+                // show server errors caused -> yell
+                if (error) notifications.yell(error);
             },
 
             failSave: function () {
                 if (this.model) {
-                    var title = this.model.get('title');
+                    var summary = this.model.get('summary');
                     return {
-                        description: gt('Appointment') + (title ? ': ' + title : ''),
+                        description: gt('Appointment') + (summary ? ': ' + summary : ''),
                         module: 'io.ox/calendar/edit',
                         point: this.model.attributes
                     };
@@ -352,6 +380,12 @@ define('io.ox/calendar/edit/main', [
             //be gently
             if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    } else if (_.device('smartphone')) {
+                        app.getWindow().resume();
+                        ox.trigger('launcher:toggleOverlay', false);
+                    }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
@@ -384,7 +418,7 @@ define('io.ox/calendar/edit/main', [
         getApp: createInstance,
         reuse: function (type, data) {
             if (type === 'edit') {
-                return ox.ui.App.reuse('io.ox/calendar:edit.' + _.cid(data));
+                return ox.ui.App.reuse('io.ox/calendar:edit.' + util.cid(data));
             }
         }
     };

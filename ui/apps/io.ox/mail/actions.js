@@ -73,29 +73,15 @@ define('io.ox/mail/actions', [
             return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data) && !isGuest();
         },
         action: function (baton) {
+
             // also called by inplace-reply-recover extension
             var cid = _.cid(baton.data),
-                // needs baton view
-                view = baton.view,
                 // reply to all, so count, to, from, cc and bcc and subtract 1 (you don't sent the mail to yourself)
                 numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1;
-            // hide inline link
-            view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
 
-            require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-                view.$('section.attachments').after(
-                    new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
-                    .on('send', function (cid) {
-                        view.$el.closest('.thread-view-control').data('open', cid);
-                    })
-                    .on('dispose', function () {
-                        if (!view.$el) return;
-                        view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').show().focus();
-                        view = null;
-                    })
-                    .render()
-                    .$el
-                );
+            require(['io.ox/mail/inplace-reply'], function (quickreply) {
+                if (quickreply.reuse(cid)) return;
+                quickreply.getApp().launch({ cid: cid, from: baton.data.from, subject: baton.data.subject, numberOfRecipients: numberOfRecipients });
             });
         }
     });
@@ -294,10 +280,25 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/flag', {
         requires: function (e) {
-            return settings.get('features/flag/star') && e.collection.has('some');
+            if (!settings.get('features/flag/star') || !e.collection.has('some')) return false;
+
+            return _(e.baton.array()).any(function (obj) {
+                return !util.isFlagged(obj);
+            });
         },
         action: function (baton) {
-            api.flag(baton.data);
+            api.flag(baton.data, true);
+        }
+    });
+
+    new Action('io.ox/mail/actions/unflag', {
+        requires: function (e) {
+            if (!settings.get('features/flag/star') || !e.collection.has('some')) return false;
+
+            return _(e.baton.array()).any(util.isFlagged);
+        },
+        action: function (baton) {
+            api.flag(baton.data, false);
         }
     });
 
@@ -631,11 +632,6 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
-        customize: function (baton) {
-            if (!baton.view.$('.inplace-reply').length) return;
-            // inplace reply was recovered
-            baton.view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
-        },
         mobile: 'lo',
         //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
         label: gt('Quick reply'),
@@ -891,7 +887,7 @@ define('io.ox/mail/actions', [
         id: 'viewer',
         index: 600,
         mobile: 'hi',
-        label: gt('View kack'),
+        label: gt('View'),
         ref: 'io.ox/mail/actions/viewer'
     }));
 

@@ -17,9 +17,8 @@ define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
     'pdfjs-dist/build/pdf',
-    'pdfjs-dist/build/pdf.worker',
     'settings!io.ox/core'
-], function (PDFView, Util, PDFJSLib, PDFJSWorker, Settings) {
+], function (PDFView, Util, PDFJSLib, Settings) {
 
     'use strict';
 

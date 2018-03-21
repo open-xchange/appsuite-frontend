@@ -18,11 +18,12 @@ define('io.ox/mail/listview', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/tk/list',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/core/folder/api',
     'gettext!io.ox/mail',
     'io.ox/mail/view-options',
     'less!io.ox/mail/style'
-], function (extensions, ext, util, api, account, ListView, folderAPI, gt) {
+], function (extensions, ext, util, api, account, ListView, Contextmenu, folderAPI, gt) {
 
     'use strict';
 
@@ -204,6 +205,15 @@ define('io.ox/mail/listview', [
             id: 'subject',
             index: 1000,
             draw: extensions.subject
+        },
+        {
+            id: 'text-preview',
+            index: 1100,
+            draw: function (baton) {
+                this.append(
+                    $('<span class="text-preview inline gray">').text(baton.data.text_preview || '')
+                );
+            }
         }
     );
 
@@ -262,7 +272,7 @@ define('io.ox/mail/listview', [
             id: 'row3',
             index: 300,
             draw: function (baton) {
-                if (!baton.app.useTextPreview()) return;
+                if (!baton.app || !baton.app.useTextPreview) return;
                 var row = $('<div class="list-item-row">');
                 ext.point('io.ox/mail/listview/item/default/row3').invoke('draw', row, baton);
                 this.append(row);
@@ -358,7 +368,7 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
                 this.append(
-                    $('<div class="text-preview gray">').text(baton.data.text_preview || '')
+                    $('<div class="text-preview multiline gray">').text(baton.data.text_preview || '')
                 );
             }
         }
@@ -389,7 +399,7 @@ define('io.ox/mail/listview', [
         }
     });
 
-    var MailListView = ListView.extend({
+    var MailListView = ListView.extend(Contextmenu).extend({
 
         ref: 'io.ox/mail/listview',
 
@@ -411,6 +421,10 @@ define('io.ox/mail/listview', [
 
             this.$el.on('scrollend', this.fetchTextPreview.bind(this));
             this.on('collection:load collection:reload', this.fetchTextPreview);
+
+            this.selection.resolve = function () {
+                return api.resolve(this.get(), this.view.app.isThreaded());
+            };
         },
 
         fetchTextPreview: function () {

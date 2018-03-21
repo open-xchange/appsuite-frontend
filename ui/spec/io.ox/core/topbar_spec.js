@@ -13,13 +13,13 @@
 define([
     'io.ox/core/extensions'
 ], function (ext) {
-    describe('Core: Topbar extensions', function () {
+    describe.skip('Core: Topbar extensions', function () {
         describe('right dropdown', function () {
             describe('provides an app specific help', function () {
                 var node = $('<div>');
                 beforeEach(function () {
-                    ext.point('io.ox/core/topbar/right/dropdown').get('app-specific-help', function (e) {
-                        e.invoke('draw', node.empty());
+                    ext.point('io.ox/core/appcontrol/right/dropdown').get('app-specific-help', function (e) {
+                        e.invoke('extend', node.empty());
                         expect(node.children()).to.have.length.above(0);
                     });
                 });

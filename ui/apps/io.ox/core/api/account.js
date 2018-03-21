@@ -22,13 +22,9 @@ define('io.ox/core/api/account', [
     // quick hash for sync checks
     var idHash = {},
         typeHash = {},
-        dscHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
-        altnamespace = settings.get('namespace', 'INBOX/') === '',
-        // check for DSC (Dovecot Smart Cache) setup
-        dscPrefix = settings.get('dsc/folder', false),
-        isDSC = settings.get('dsc/enabled', false);
+        altnamespace = settings.get('namespace', 'INBOX/') === '';
 
     var process = function (data) {
 
@@ -141,55 +137,6 @@ define('io.ox/core/api/account', [
     };
 
     /**
-     * is dsc folder
-     * @param  {string}  id (folder_id)
-     * @return { boolean }
-     */
-    api.isDSC = function (id) {
-        return id.indexOf(dscPrefix) === 0;
-    };
-
-    /**
-     * get the account id for a given DSC root folder
-     * @param  { string } folder (root_folder)
-     * @return { int } id
-     */
-    api.getIdForDSCRootFolder = function (folder) {
-        return dscHash[folder];
-    };
-
-    /**
-     * get the root folder for a given account id
-     * @param  { int } id
-     * @return { string } folder (root_folder)
-     */
-    api.getDSCRootFolderForId = function (id) {
-        return _.findKey(dscHash, function (value) {
-            return value === id;
-        });
-    };
-
-    /**
-     * get the account id for a given folder which is
-     * child of a DSC account/rootfolder
-     * @param  { string } folder
-     * @return { int } account id
-     */
-    api.getIdForDSCFolder = function (folder) {
-        if (!folder) return;
-        var id;
-
-        _(dscHash).each(function (accountId, rootFolder) {
-            if (folder.indexOf(rootFolder) === 0) id = accountId;
-        });
-
-        return id;
-    };
-
-    api.hasDSCAccount = function () {
-        return !_.isEmpty(dscHash);
-    };
-    /**
      * get unified mailbox name
      * @return { deferred} returns array or null
      */
@@ -262,12 +209,6 @@ define('io.ox/core/api/account', [
      */
     api.getFoldersByType = function (type, accountId) {
 
-        if (isDSC && accountId !== undefined && accountId !== 0) {
-            // in DSC environment return nothing here for all
-            // types. DSC does not know a mapping for the standard
-            // folders.
-            return [];
-        }
         return _(typeHash)
             .chain()
             .map(function (value, key) {
@@ -319,9 +260,6 @@ define('io.ox/core/api/account', [
         if (typeof str === 'number') {
             // return number
             return str;
-        } else if (isDSC) {
-            // dsc accounts need special handling
-            if (api.getIdForDSCFolder(str)) return api.getIdForDSCFolder(str);
         } else if (/^default(\d+)/.test(String(str))) {
             // is not unified mail?
             if (!api.isUnified(str)) {
@@ -553,20 +491,10 @@ define('io.ox/core/api/account', [
         return load().done(function (list) {
             idHash = {};
             typeHash = {};
-            dscHash = {};
             // add check here
             _(list).each(function (account) {
                 // remember account id
                 idHash[account.id] = true;
-                // fill DSC hash if needed
-                if (isDSC) {
-                    if (account.id !== 0) {
-                        dscHash[account.root_folder] = account.id;
-                        // prevent filling wrong typeHash in DSC environment
-                        // return here early
-                        return;
-                    }
-                }
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
@@ -722,6 +650,8 @@ define('io.ox/core/api/account', [
             }
 
             return reload().done(function (result) {
+                // add folder type full names
+                result = process(result);
                 // update call returned the new account (this is the case for mail)
                 api.cache[id] = result;
             })

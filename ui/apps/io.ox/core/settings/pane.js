@@ -29,7 +29,19 @@ define('io.ox/core/settings/pane', [
 
     'use strict';
 
-    var INDEX = 0, MINUTES = 60000;
+    var INDEX = 0,
+        MINUTES = 60000,
+        availableApps = appAPI.getApps().map(function (o) {
+            return {
+                label: /*#, dynamic*/gt.pgettext('app', o.title),
+                value: o.path
+            };
+        }).concat([{ label: gt('None'), value: '' }]);
+
+    // Check that the app exists in available applications
+    function getAvailablePath(app) {
+        return _(availableApps).findWhere({ 'value': app }) ? app : '';
+    }
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -69,35 +81,40 @@ define('io.ox/core/settings/pane', [
                             .value();
                     },
 
+                    getDesigns: function () {
+                        return [
+                            {
+                                label: gt('Unicolor'),
+                                options: [
+                                    { label: gt('Blue'), value: 'blue' }
+                                ]
+                            },
+                            {
+                                label: gt('Multicolor'),
+                                options: [
+                                    { label: gt('Indigo'), value: 'night' },
+                                    { label: gt('Green'), value: 'twilight' },
+                                    { label: gt('Turquoise'), value: 'dawn' },
+                                    { label: gt('Blue'), value: 'day' },
+                                    { label: gt('Purple/Magenta'), value: 'dusk' }
+                                ]
+                            },
+                            {
+                                //.# Option label for the automatic theme changer (changes theme depending on time)
+                                label: gt('Automatic'),
+                                options: [
+                                    { label: gt('Time-dependent'), value: 'time' }
+                                ]
+                            }
+                        ];
+                    },
+
                     hasMoreThanOneTheme: function () {
                         return _(settingOptions.get('themes')).size() > 1;
                     },
 
                     getRefreshOptions: function () {
                         return [
-                            { label: gt('5 minutes'), value: 5 * MINUTES },
-                            { label: gt('10 minutes'), value: 10 * MINUTES },
-                            { label: gt('15 minutes'), value: 15 * MINUTES },
-                            { label: gt('30 minutes'), value: 30 * MINUTES }
-                        ];
-                    },
-
-                    getAutoStartOptions: function () {
-                        return [].concat(
-                            _(appAPI.getFavorites()).map(function (app) {
-                                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
-                            }),
-                            [{ label: gt('None'), value: 'none' }]
-                        );
-                    },
-
-                    hasMoreThanOneAutoStartOption: function () {
-                        return _(appAPI.getFavorites()).size() > 1;
-                    },
-
-                    getAutoLogoutOptions: function () {
-                        return [
-                            { label: gt('Never'), value: 0 },
                             { label: gt('5 minutes'), value: 5 * MINUTES },
                             { label: gt('10 minutes'), value: 10 * MINUTES },
                             { label: gt('15 minutes'), value: 15 * MINUTES },
@@ -297,12 +314,24 @@ define('io.ox/core/settings/pane', [
                     util.compactSelect('theme', gt('Theme'), this.model, this.getThemeOptions())
                 );
             }
-        }
-    );
+        },
+        //
+        // Design
+        //
+        {
+            id: 'design',
+            index: INDEX += 100,
+            render: function (baton) {
 
-    INDEX = 0;
+                // don't offer for IE11 as some design don't work technically
+                if (_.device('ie <= 11')) return;
+                if (!settings.get('features/designs', true)) return;
 
-    ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
+                baton.$el.append(
+                    util.compactSelect('design', gt('Design'), this.model, this.getDesigns(), { groups: true })
+                );
+            }
+        },
         //
         // Refresh Interval
         //
@@ -310,14 +339,19 @@ define('io.ox/core/settings/pane', [
             id: 'refreshInterval',
             index: INDEX += 100,
             render: function (baton) {
-
                 if (!settings.isConfigurable('refreshInterval')) return;
 
                 baton.$el.append(
                     util.compactSelect('refreshInterval', gt('Refresh interval'), this.model, this.getRefreshOptions())
                 );
             }
-        },
+        }
+    );
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
+
         //
         // Auto start
         //
@@ -327,26 +361,78 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
 
                 if (!settings.isConfigurable('autoStart')) return;
-                if (!this.hasMoreThanOneAutoStartOption()) return;
+                if (availableApps <= 2) return;
 
                 baton.$el.append(
-                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, this.getAutoStartOptions())
+                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
                 );
             }
         },
         //
-        // Auto Logout
+        // Quicklaunch apps
         //
         {
-            id: 'autoLogout',
+            id: 'quickLaunch',
             index: INDEX += 100,
             render: function (baton) {
+                // FIXME: wow, this is complicated. We need a separate model, because the setting is actually supposed to be
+                // _one_ string instead of just fields in an object. Since settings are no real models, we can not sync
+                // silently between the states.
+                var quickLaunchModel = new Backbone.Model(),
+                    settings = this.model,
+                    settingsStr = settings.get('quicklaunch'),
+                    // first view does all the event handling, cleans up listeners on dispose
+                    firstView = null;
+                if (settingsStr) {
+                    var a = settingsStr.split(',');
+                    for (var pos = 0; pos <= a.length; pos++) {
+                        quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
+                    }
+                }
+                function appsForPos(pos) {
+                    return [0, 1, 2]
+                        .filter(function (i) { return i !== pos; })
+                        .map(function (i) { return quickLaunchModel.get('apps/quicklaunch' + i); })
+                        .reduce(function (acc, app) {
+                            return acc.filter(function (a) { return a.value !== app || app === ''; });
+                        }, availableApps);
+                }
+                var multiSelect = function (name, label, options) {
+                    options = options || {};
+                    var id = 'settings-' + name,
+                        view = new mini.SelectView({ id: id, name: name, model: quickLaunchModel, list: appsForPos(options.pos), pos: options.pos });
 
-                if (!settings.isConfigurable('autoLogout')) return;
+                    if (!firstView) firstView = view;
+                    view.listenTo(quickLaunchModel, 'change', function () {
+                        this.options.list = appsForPos(this.options.pos);
+                        this.$el.empty();
+                        this.render();
+                    });
+                    return $('<div class="col-md-6">').append(
 
+                        $('<label>').attr('for', id).text(label),
+                        view.render().$el
+                    );
+                };
                 baton.$el.append(
-                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch0', gt('Quick launch 1'), { pos: 0 })),
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch1', gt('Quick launch 2'), { pos: 1 })),
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch2', gt('Quick launch 3'), { pos: 2 }))
                 );
+
+                firstView.listenTo(quickLaunchModel, 'change', function () {
+                    settings.set('quicklaunch', [
+                        quickLaunchModel.get('apps/quicklaunch0'),
+                        quickLaunchModel.get('apps/quicklaunch1'),
+                        quickLaunchModel.get('apps/quicklaunch2')
+                    ].join(','));
+                });
+                firstView.listenTo(settings, 'change:quicklaunch', function (settingsStr) {
+                    var a = settingsStr.split(',');
+                    for (var pos = 0; pos <= a.length; pos++) {
+                        quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
+                    }
+                });
             }
         }
     );
@@ -361,18 +447,12 @@ define('io.ox/core/settings/pane', [
             id: 'data-fixes',
             index: INDEX += 100,
             render: function () {
-
                 // change old settings values to new ones
                 switch (this.model.get('autoOpenNotification')) {
                     case 'always': // falls through
                     case 'noEmail': this.model.set('autoOpenNotification', true); break;
                     case 'Never': this.model.set('autoOpenNotification', false); break;
                     // no default
-                }
-
-                var value = this.model.get('features/accessibility');
-                if (value === '' || value === undefined) {
-                    this.model.set('features/accessibility', true);
                 }
             }
         },
@@ -426,22 +506,15 @@ define('io.ox/core/settings/pane', [
         {
             id: 'options',
             render: function (baton) {
+                var options = [
+                    util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
+                    util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink)
+                ];
 
-                baton.$el.append(
-                    $('<div class="form-group">').append(
-                        util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
-                        util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
-                        util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
-                        util.checkbox('highcontrast', gt('High contrast theme'), this.model)
-                    )
-                );
+                if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
+
+                baton.$el.append($('<div class="form-group">').append(options));
             }
         }
     );
-
-    // register once
-    settings.on('change:highcontrast', function (value) {
-        $('html').toggleClass('high-contrast', value);
-    });
-
 });

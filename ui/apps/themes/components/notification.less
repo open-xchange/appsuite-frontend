@@ -18,7 +18,7 @@
     //over UI but under dropdowns
     z-index: 11;
     font-size: 14px;
-    top: 40px;
+    top: 64px;
     background-color: @notification-pane-background;
     background-clip: padding-box;
     display: none;
@@ -56,11 +56,6 @@
     }
 
     &.active { display: block; }
-
-    html.high-contrast & {
-        background-color: @black; //HC
-        color: @white;
-    }
 
     #io-ox-notifications-display {
 
@@ -142,11 +137,6 @@
             padding: 0 14px;
             border: 0;
             display: inline-block;
-
-            html.high-contrast & {
-                color: @white;
-            }
-
         }
 
         .clear-button {
@@ -217,10 +207,6 @@
                 pointer-events: none;
                 font-weight: bold;
                 .ellipsis();
-
-                html.high-contrast & {
-                    color: @white;
-                }
             }
 
             .subject {
@@ -253,6 +239,9 @@
                 text-align: right;
                 margin: 5px 0;
             }
+            .open-in-calendar {
+                padding: 0;
+            }
         }
 
         .open-app {
@@ -278,6 +267,19 @@
 .touch #io-ox-notifications #io-ox-notifications-display .item .clear-single-button {
      //no hover on touch devices, so always show single hide buttons
      display: inline-block;
+}
+
+.notifications-icon {
+    opacity: 1;
+    transition: opacity 0.2s linear;
+    &.no-notifications {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+#io-ox-notifications-icon {
+    min-width: 64px;
 }
 
 #io-ox-notifications-popups {

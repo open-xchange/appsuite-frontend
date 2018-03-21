@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 16:24+0000\n"
+"POT-Creation-Date: 2018-02-21 10:31+0000\n"
 "PO-Revision-Date: 2017-05-17 22:59+0000\n"
 "Last-Translator: martimarkov <marti.markov@icloud.com>\n"
 "Language-Team: Bulgarian\n"
@@ -304,14 +304,6 @@ msgstr ""
 "Тук можете да споделяте файлове с вашите колеги и външни контакти. Също така "
 "можете да си сътрудничите с документ и да зададете различни права за достъп."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Съвет: Винаги можете да рестартирате екскурзовод, когато имате нужда от "
-"него, от системното меню."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Как се организират настройките"
@@ -328,14 +320,6 @@ msgstr ""
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
 "Ако вече не искате да показвате квадрат, кликнете върху иконата за изтриване."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"В случай на нови известия, напр. Покани за срещи, се отваря информационната "
-"зона."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -413,10 +397,6 @@ msgstr "Четене на разговори по електронната по�
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Четене на подробностите"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Рестартирайте ръководството"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -505,18 +485,6 @@ msgstr ""
 "кликнете върху среща, данните от събитието и някои функции се показват в "
 "изгледа \"Подробности\"."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Иконата \"Нови обекти\""
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Иконата \"Нови обекти\" показва броя напомняния за назначения или други "
-"известия. Ако щракнете върху иконата, ще се отвори информационната зона."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Порталът"
@@ -554,10 +522,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Дървото на папките"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Информационната зона"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -719,7 +683,12 @@ msgstr ""
 "Можете да добавяте документи като прикачен файл към задачата."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "За да стартирате приложение, кликнете върху елемент в лявата част на лентата "
 "с менюта."
@@ -758,10 +727,16 @@ msgstr ""
 "Настройки. Кликнете върху E-Mail от лявата страна."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "За да отворите помощта, кликнете върху иконата на системното меню в горната "
@@ -770,9 +745,13 @@ msgstr ""
 "страница или Съдържание в горната част на прозореца."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "За да отворите настройките, кликнете върху иконата на системното меню в "
 "горната дясна част на лентата с менюта. Изберете Настройки."
@@ -818,6 +797,17 @@ msgstr "За да изпратите електронната поща, клик
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"За да излезете от профила си, кликнете върху иконата на системното меню в "
+"горната дясна част на лентата с менюта. Изберете Изход."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "За да излезете от профила си, кликнете върху иконата на системното меню в "
 "горната дясна част на лентата с менюта. Изберете Изход."
@@ -898,3 +888,33 @@ msgstr ""
 "до онлайн съхранените файлове от всичките ви профили. Тук можете да качвате "
 "и запазвате файловете си, да ги споделяте и да ги синхронизирате с различни "
 "устройства.  "
+
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Съвет: Винаги можете да рестартирате екскурзовод, когато имате нужда от "
+#~ "него, от системното меню."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "В случай на нови известия, напр. Покани за срещи, се отваря "
+#~ "информационната зона."
+
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Рестартирайте ръководството"
+
+#~ msgid "The New objects icon"
+#~ msgstr "Иконата \"Нови обекти\""
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Иконата \"Нови обекти\" показва броя напомняния за назначения или други "
+#~ "известия. Ако щракнете върху иконата, ще се отвори информационната зона."
+
+#~ msgid "The info area"
+#~ msgstr "Информационната зона"

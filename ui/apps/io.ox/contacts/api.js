@@ -457,6 +457,12 @@ define('io.ox/contacts/api', [
                     api.trigger('update', data);
                     // trigger refresh.all, since position might have changed
                     api.trigger('refresh.all');
+                    // reset image?
+                    if (o.data.image1 === '') {
+                        // to clear picture halo's cache
+                        api.trigger('update:image', data);
+                        api.trigger('reset:image reset:image:' + _.ecid(data), data);
+                    }
                 });
             });
         });
@@ -662,7 +668,7 @@ define('io.ox/contacts/api', [
     api.pictureHalo = (function () {
 
         // local hash to recognize URLs that have been fetched already
-        var cachesURLs = {},
+        var cachedURLs = {},
             uniq = ox.t0,
             fallback = api.getFallbackImage();
 
@@ -676,13 +682,17 @@ define('io.ox/contacts/api', [
                 // use lazyload?
                 opt.container = opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
                 if (opt.lazyload || opt.container) {
-                    node.css('background-image', 'url(' + fallback + ')')
-                        .attr('data-original', url)
+                    if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
+                    node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            if (image.width === 1) url = fallback;
-                            else cachesURLs[url] = url;
-                            node.attr('data-original', url)
-                                .css('background-image', 'url(' + url + ')');
+                            if (image.width === 1) {
+                                url = opt.fallback ? fallback : null;
+                            } else {
+                                cachedURLs[url] = url;
+                            }
+                            if (url) {
+                                node.text('').attr('data-original', url).css('background-image', 'url(' + url + ')');
+                            }
                             node = url = opt = null;
                             $(this).off('.lazyload');
                         })
@@ -690,8 +700,8 @@ define('io.ox/contacts/api', [
                 } else {
                     $(new Image()).on('load error', function (e) {
                         var fail = this.width === 1 || e.type === 'error';
-                        if (!fail) cachesURLs[url] = url;
-                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                        if (!fail) cachedURLs[url] = url;
+                        if (!fail || opt.fallback) node.text('').css('background-image', 'url(' + (fail ? fallback : url) + ')');
                         node = null;
                         $(this).off();
                     })
@@ -704,7 +714,6 @@ define('io.ox/contacts/api', [
         return function (node, data, options) {
 
             var params,
-                useApi = options.api || 'contact',
                 url,
                 opt = _.extend({
                     width: 48,
@@ -713,7 +722,8 @@ define('io.ox/contacts/api', [
                     // lazy load block
                     lazyload: false,
                     effect: 'show',
-                    urlOnly: false
+                    urlOnly: false,
+                    fallback: true
                 }, options);
             delete opt.api;
             // use copy of data object because of delete-statements
@@ -754,7 +764,7 @@ define('io.ox/contacts/api', [
                 url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
                 url = coreUtil.getShardingRoot(url);
 
-            } else if (!data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
+            } else if (opt.fallback && !data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
                 url = fallback;
             }
 
@@ -800,11 +810,11 @@ define('io.ox/contacts/api', [
                 }
             }
 
-            url = coreUtil.getShardingRoot((useApi === 'user' ? '/image/user/picture?' : '/halo/contact/picture?') + $.param(params));
+            url = coreUtil.getShardingRoot('/halo/contact/picture?' + $.param(params));
 
             // cached?
-            if (cachesURLs[url]) {
-                return opt.urlOnly ? cachesURLs[url] : node.css('background-image', 'url(' + cachesURLs[url] + ')');
+            if (cachedURLs[url]) {
+                return opt.urlOnly ? cachedURLs[url] : node.text('').css('background-image', 'url(' + cachedURLs[url] + ')');
             }
 
             try {
@@ -986,11 +996,11 @@ define('io.ox/contacts/api', [
 
     /**
      * is ressource (duck check)
-     * @param  {object} obj (contact)
+     * @param  {object} obj (contact) or calendar event attendee
      * @return {boolean}
      */
     api.looksLikeResource = function (obj) {
-        return 'mailaddress' in obj && 'description' in obj;
+        return ('mailaddress' in obj && 'description' in obj) || ('cuType' in obj && obj.cuType === 'RESOURCE');
     };
 
     /**
@@ -1052,6 +1062,8 @@ define('io.ox/contacts/api', [
         var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
             // use these fields for local lookups
             fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
+
+        if (settings.get('showDepartment')) fields.push('department');
 
         // check for minimum length
         function hasMinLength(str) {
@@ -1163,7 +1175,6 @@ define('io.ox/contacts/api', [
     });
 
     api.on('maybeNewContact', function () {
-        if (ox.debug) console.info('Clearing autocomplete cache');
         api.autocomplete.cache = {};
     });
 

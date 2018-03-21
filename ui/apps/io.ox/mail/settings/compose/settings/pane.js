@@ -283,6 +283,7 @@ define('io.ox/mail/settings/compose/settings/pane', [
             id: 'advanced',
             index: INDEX += 100,
             render: function () {
+                if (capabilities.has('guest')) return;
                 this.$el.append(
                     util.fieldset(gt('Advanced settings'),
                         $('<div class="form-group">').append(

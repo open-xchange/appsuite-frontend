@@ -30,7 +30,8 @@ define('io.ox/core/notifications/subview', [
                 itemNode = $('<ul class="items list-unstyled">'),
                 extensionPoints = model.get('extensionPoints'),
                 desktopNotificationFor = model.get('showNotificationFor'),
-                specific = model.get('specificDesktopNotification');
+                specific = model.get('specificDesktopNotification'),
+                self = this;
 
             //make sure it's only displayed once
             model.set('showNotificationFor', null);
@@ -89,15 +90,21 @@ define('io.ox/core/notifications/subview', [
                             drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
+                    }, function () {
+                        // if list fails (insufficient permissions etc) we try again with get requests, this way we can at least show working alarms
+                        model.set('useListRequest', false);
+                        viewNode.empty();
+                        ext.point('io.ox/core/notifications/default/main').invoke('draw', self, baton);
                     });
                 } else {
                     var defs = [];
                     for (i = 0; i < max && items[i]; i++) {
-                        //mail needs unseen attribute, shouldn't bother other apis
-                        //extend with empty object to not overwrite the model
-                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i])));
+                        // mail needs unseen attribute, shouldn't bother other apis
+                        // extend with empty object to not overwrite the model
+                        // if get fails, hide the reminder
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i]), _(view.hide).bind(view, items[i])));
                     }
-                    $.when.apply($, defs).then(function () {
+                    $.when.apply($, defs).always(function () {
                         itemNode.idle();
                     });
                 }
@@ -189,19 +196,22 @@ define('io.ox/core/notifications/subview', [
                 if (apiEvents.add) {
                     api.on(apiEvents.add, function () {
                         //strip off the event parameter
-                        self.addNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.addNotifications.apply(self, items);
                     });
                 }
                 if (apiEvents.remove) {
                     api.on(apiEvents.remove, function () {
                         //strip off the event parameter
-                        self.removeNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.removeNotifications.apply(self, items);
                     });
                 }
                 if (apiEvents.reset) {
                     api.on(apiEvents.reset, function () {
                         //strip off the event parameter
-                        self.resetNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.resetNotifications.apply(self, items);
                     });
                 }
             }
@@ -272,7 +282,7 @@ define('io.ox/core/notifications/subview', [
                 this.collection.remove(obj);
 
                 //use a timer to unhide the model
-                if (time) {
+                if (_.isNumber(time)) {
                     setTimeout(function () {
                         self.hiddenCollection.remove(obj);
                         //don't add twice
@@ -359,6 +369,9 @@ define('io.ox/core/notifications/subview', [
             }
         },
         addNotifications: function (items, silent) {
+
+            if (!items) return;
+
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
@@ -371,12 +384,31 @@ define('io.ox/core/notifications/subview', [
             this.collection.add(items, { silent: silent });
         },
         removeNotifications: function (items, silent) {
+
+            if (!items) return;
+
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
             //stop here if nothing changes, to prevent event triggering and redrawing
             if (items.length === 0 || (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
                 return;
+            }
+
+            // smartRemove removes the item without redrawing (manual remove of the nodes)
+            if (this.model.get('smartRemove')) {
+                this.collection.remove(items, { silent: true });
+                var self = this;
+
+                _(items).each(function (item) {
+                    if (item.get) item = item.attributes;
+                    self.$el.find('[data-cid="' + _.cid(item) + '"]').remove();
+                });
+
+                if (this.collection.size() === 0) {
+                    this.render(this.$el.parent());
+                }
+                this.trigger('responsive-remove');
             }
             this.collection.remove(items, { silent: silent });
         },
@@ -403,18 +435,20 @@ define('io.ox/core/notifications/subview', [
                 api = this.model.get('api'),
                 fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.nodes.sidepopup,
-                status = notifications.getStatus();
+                status = notifications.getStatus(),
+                getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
+                self = this;
+
             // toggle?
             if (status === 'sidepopup' && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
-                //sidepopup.close();
                 notifications.closeSidepopup();
             } else {
                 notifications.closeSidepopup();
                 var data;
                 if (api && !fullModel) {
-                    data = api.get(_.extend({}, _.cid(cid), { unseen: true }));
+                    data = api.get(_.extend({}, getCid(cid), { unseen: true }));
                 } else {
-                    data = this.collection.get(_.cid(cid)).attributes;
+                    data = this.collection.get(getCid(cid)).attributes;
                 }
                 if (!data) {
                     return;
@@ -422,10 +456,10 @@ define('io.ox/core/notifications/subview', [
                 if (_.isString(this.model.get('detailview'))) {
                     require([this.model.get('detailview')], function (detailview) {
                         //extend with empty object to not overwrite the model
-                        notifications.openSidepopup(cid, detailview, data);
+                        notifications.openSidepopup(cid, detailview, data, self.model.get('detailviewOptions'));
                     });
                 } else {
-                    notifications.openSidepopup(cid, this.model.get('detailview'), data);
+                    notifications.openSidepopup(cid, this.model.get('detailview'), data, this.model.get('detailviewOptions'));
                 }
             }
         }

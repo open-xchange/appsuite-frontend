@@ -27,7 +27,7 @@
     }
 
     &.form-control {
-        padding: 3px 3px 0 3px;
+        padding: 4px 3px 0 3px;
         height: auto;
     }
 
@@ -83,6 +83,11 @@
         .tt-dropdown-menu {
             width: @tokenfield-menu-width;
             min-width: @tokenfield-menu-width;
+        }
+        //add some more space if departments shown
+        html.showDepartment & .tt-dropdown-menu {
+            width: @tokenfield-menu-width + 100px;
+            min-width: @tokenfield-menu-width + 100px;
         }
     }
 }

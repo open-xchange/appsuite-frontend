@@ -31,15 +31,64 @@
 
     .toolbar {
         .info {
-            cursor: pointer;
-            text-decoration: none;
+            max-width: none;
+            padding: 0;
+            border: 0;
+            vertical-align: baseline;
+            margin-right: 16px;
+        }
+        .info[disabled] {
+            opacity: 1;
+            cursor: default;
+            .fa-caret-down { display: none; }
         }
     }
 
     .footer-container {
+        position: relative;
+        height: 50px;
+
         .footer {
             .overflow-y(scroll);
             .overflow-x(hidden);
+            padding-top: 17px;
+
+            .weekday {
+                color: #767676;
+                text-align: left;
+                line-height: 24px;
+                font-size: 14px;
+                text-decoration: none;
+
+                &.merge-view-label {
+                    border-bottom: 2px solid;
+                    margin-right: 1px;
+                    margin-left: 1px;
+
+                    .io-ox-calendar-main:not(.custom-colors) & {
+                        border-color: transparent!important;
+                    }
+                }
+
+                .number {
+                    font-size: 20px;
+                    .fontWeight(bold);
+                    color: black;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+
+                &.today {
+                    color: @calendar-today;
+                    background-color: transparent;
+
+                    .number {
+                        color: @calendar-today;
+                    }
+                }
+            }
         }
     }
 
@@ -50,7 +99,7 @@
         bottom: 0;
         // top: was @calendar-toolbar-height + @calendar-toolbar-top-padding;
         // but that doesn't make sense, result is close however
-        top: 67px;
+        top: 90px;
 
         // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
         z-index: 1;
@@ -73,7 +122,6 @@
             height: @weekview-footer-height;
             .overflow-y(scroll);
             .overflow-x(hidden);
-            border-bottom: 1px solid @weekview-border;
             margin-left: @weekview-time-width;
             right: 0;
 
@@ -103,6 +151,7 @@
             .overflow-x(hidden);
             position: absolute;
             top: @weekview-footer-height;
+            border-top: 1px solid @weekview-border;
             left: 0;
             right: 0;
             bottom: 0;
@@ -146,15 +195,16 @@
                 .timeline {
                     position: absolute;
                     height: 0;
-                    width: 100%;
-                    border-bottom: 3px solid @calendar-today;
+                    left: -1px;
+                    right: 0;
+                    border-bottom: 2px solid @calendar-today;
                     z-index: 10;
                     .user-select(none);
                 }
 
                 .appointment-content {
                     line-height: 16px;
-                    padding: 4px 7px;
+                    padding: 4px;
                 }
 
                 .dark-colors & .appointment-content {
@@ -193,7 +243,6 @@
             position: relative;
             height: 100%;
             float: left;
-            background-color: rgba(0, 0, 0, 0.01);
             border-left: 1px solid @weekview-border;
             .user-select(none);
 
@@ -202,7 +251,7 @@
                 border-bottom: 1px solid @weekview-border-light;
                 height: 24px;
 
-                &.out { border-color: transparent; }
+                &.out { border-color: transparent; background-color: rgba(0, 0, 0, 0.02); }
 
                 &:last-child, .time:last-child { border: none; }
 
@@ -270,10 +319,7 @@
     }
 
     // Hide days in dayview
-    .dayview {
-        .fulltime .day:not(.node) {
-            display: none;
-        }
+    .dayview:not(.merge-view)  {
 
         .toolbar { padding-bottom: @calendar-toolbar-top-padding; }
 
@@ -325,7 +371,7 @@
             cursor: default;
         }
 
-        .private-flag {
+        .private-flag, .confidential-flag, .tentative-flag {
             float: left;
             font-size: 15px;
             margin-right: 3px;
@@ -334,14 +380,31 @@
         .appointment-content {
             height: 100%;
             font-size: 12px;
-            padding: 0 7px;
+            padding: 0 4px;
             border-left: 2px solid;
             border-color: inherit;
             .ellipsis();
 
             * { .ellipsis(); }
-        }
 
+            .flags {
+                display: block;
+                text-align: end;
+                font-size: 11px;
+                opacity: 0.70;
+                line-height: 1em;
+
+                span {
+                    margin-left: 4px;
+                }
+
+                &.bottom-right {
+                    position: absolute;
+                    bottom: 4px;
+                    right: 4px;
+                }
+            }
+        }
     }
 
     // Resize bars
@@ -431,7 +494,7 @@
             }
         }
 
-        .dayview .week-view-container { top: 0; }
+        .dayview:not(.merge-view) .week-view-container { top: 0; }
     }
 }
 

@@ -25,6 +25,18 @@ define('io.ox/core/folder/actions/common', [
 
     return {
 
+        selectOnly: function (e) {
+            var app = ox.ui.apps.get('io.ox/calendar');
+            if (app.folders.isSingleSelection()) app.folders.reset();
+            else app.folders.setOnly(e.data.folder.id);
+        },
+
+        refreshCalendar: function (e) {
+            require(['io.ox/calendar/api'], function (calendarApi) {
+                calendarApi.collectionLoader.load({ folders: [e.data.folder.id], sync: true });
+            });
+        },
+
         markFolderSeen: function (e) {
             mailAPI.allSeen(e.data.folder);
         },

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 16:27+0000\n"
+"POT-Creation-Date: 2018-02-21 10:36+0000\n"
 "PO-Revision-Date: 2017-04-12 05:43+0000\n"
 "Last-Translator: marko <marko.toom@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -300,14 +300,6 @@ msgstr ""
 "Võimaldab failide jagamist kolleegide ja väliste kontaktidega. Võite teha "
 "koostööd dokumendi kallal ja seadistada erinevaid juurdepääsuõigusi."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Vihje: vajadusel saab tutvustust suvalisel ajal süsteemi menüüst "
-"taaskäivitada."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Kuidas seaded on organiseeritud"
@@ -322,12 +314,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Kui ruudu edasine kuvamine pole vajalik, klõpsake kustutamisikoonil."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr "Uute teavituste, nt. kohtumiskutsete korral avaneb infoala."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -404,10 +390,6 @@ msgstr "E-kirjavahetuste lugemine"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Üksikasjade lugemine"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Tutvustuse taaskäivitus"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -495,18 +477,6 @@ msgstr ""
 "mõnel kohtumistest, kuvatakse kohtumise andmed ja mõningad funktsioonid "
 "Üksikasjade vaates."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Uute objektide ikoon"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Ikoon Uus näitab koosolekute meeldetuletusi ja teisi teateid. Kui vajutad "
-"ikoonile, siis avaneb täpsem info. "
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portaal"
@@ -543,10 +513,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Kaustapuu"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Infoala"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -692,7 +658,12 @@ msgstr ""
 "Ülesandele saab manusena lisada dokumente."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "Rakenduse käivitamiseks klõpsake kirjel menüüriba vasakul poolel."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -727,10 +698,16 @@ msgstr ""
 "paremas servas. Valige Seaded. Klõpsake E-post vasakul poolel."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Abi avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
@@ -738,9 +715,13 @@ msgstr ""
 "abiteabe sirvimiseks klõpsake elemendil Avaleht või Sisukord akna ülaosas."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Seadete avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
 "poolel. Valige Seaded."
@@ -785,6 +766,17 @@ msgstr "E-kirja saatmiseks klõpsake Saada"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Väljalogimiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
+"poolel. Valige Logi välja."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Väljalogimiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
 "poolel. Valige Logi välja."
@@ -863,3 +855,31 @@ msgstr ""
 "uuest võrgupõhisest mälulahendusest, mis võimaldab juurdepääsu salvestatud "
 "failidele teie kõigilt kontodelt. Siitkaudu saate oma faile üles laadida ja "
 "salvestada, jagada ning erinevate seadmetega sünkroniseerida.  "
+
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Vihje: vajadusel saab tutvustust suvalisel ajal süsteemi menüüst "
+#~ "taaskäivitada."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr "Uute teavituste, nt. kohtumiskutsete korral avaneb infoala."
+
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Tutvustuse taaskäivitus"
+
+#~ msgid "The New objects icon"
+#~ msgstr "Uute objektide ikoon"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Ikoon Uus näitab koosolekute meeldetuletusi ja teisi teateid. Kui vajutad "
+#~ "ikoonile, siis avaneb täpsem info. "
+
+#~ msgid "The info area"
+#~ msgstr "Infoala"

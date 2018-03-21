@@ -19,23 +19,44 @@ define('io.ox/mail/actions/source', [
 
     'use strict';
 
+    function getAuthenticityBlock(data) {
+        if (!data || !(data.spf || data.dkim || data.dmarc)) return;
+        var content = _.chain(['spf', 'dkim', 'dmarc'])
+                .filter(function (key) { return data[key]; })
+                .map(function (key) {
+                    if (!data[key] || !data[key].reason) return;
+                    return key.toUpperCase() + ': ' + data[key].reason;
+                })
+                .value()
+                .join('\n');
+        if (!content.trim()) return;
+        return [
+            $('<h2 id="mail-authenticity-headline">').text(gt('Authentication details')),
+            $('<textarea class="form-control mail-authenticity-view" readonly="readonly" aria-labelledby="mail-authenticity-headline">')
+            .val(content)
+        ];
+    }
+
     return function (baton) {
         var data = baton.first();
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog({ width: 700 })
+            new dialogs.ModalDialog({ width: 700, addClass: 'mail-source-dialog' })
                 .addPrimaryButton('close', gt('Close'), 'close')
                 .header(
                     $('<h1 class="modal-title" id="mail-source">').text(gt('Mail source') + ': ' + (data.subject || ''))
                 )
                 .append(
-                    $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly" aria-labelledby="mail-source">')
+                    $('<textarea class="form-control mail-source-view" readonly="readonly" aria-labelledby="mail-source">')
                     .on('keydown', function (e) {
                         if (e.which !== 27) e.stopPropagation();
                     })
                 )
+                .append(getAuthenticityBlock(data.authenticity))
                 .show(function () {
+                    this.busy();
                     api.getSource(data).done(function (src) {
-                        this.find('textarea').val(src || '').css({ visibility: 'visible', cursor: 'default' });
+                        this.find('textarea.mail-source-view').val(src || '');
+                        this.find('.modal-body').css({ visibility: 'visible' });
                         this.idle();
                     }.bind(this));
                 });

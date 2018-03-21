@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
-    'io.ox/calendar/model',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
@@ -21,9 +21,9 @@ define('io.ox/calendar/week/view', [
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/print',
-    'less!io.ox/calendar/print-style',
-    'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
+    'static/3rd.party/jquery-ui.min.js',
+    'io.ox/calendar/week/extensions'
+], function (ext, api, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
 
     'use strict';
 
@@ -84,7 +84,8 @@ define('io.ox/calendar/week/view', [
             var events = {
                 'click .control.next,.control.prev': 'onControlView',
                 'click .appointment': 'onClickAppointment',
-                'click .weekday': 'onCreateAppointment'
+                'click .weekday': 'onCreateAppointment',
+                'click .merge-split': 'onMergeSplit'
             };
 
             if (_.device('touch')) {
@@ -122,10 +123,10 @@ define('io.ox/calendar/week/view', [
                 pane:         $('<div class="scrollpane f6-target" tabindex="-1">').on('scroll', this.updateHiddenIndicators.bind(this)),
                 fulltimePane: $('<div class="fulltime">'),
                 fulltimeCon:  $('<div class="fulltime-container">'),
-                fulltimeNote: $('<div class="node">'),
                 timeline:     $('<div class="timeline">'),
                 dayLabel:     $('<div class="footer">'),
-                kwInfo:       _.device('smartphone') ? $('<div class="info">') : $('<a href="#" class="info">').on('click', $.preventDefault),
+                kwInfo:       _.device('smartphone') ? $('<div class="info">') : $('<button class="info btn btn-link">'),
+                weekViewCon:  $('<div class="week-view-container">'),
                 weekCon:      $('<div class="week-container">'),
                 moreAppointmentsIndicators: $('<div class="more-appointments-container">')
             });
@@ -138,11 +139,12 @@ define('io.ox/calendar/week/view', [
             this.perspective = opt.perspective;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
-            this.refDate = opt.refDate || moment();
+            this.isMergeView = _.device('!smartphone') && this.mode === 'day' && this.app.folders.list().length > 1 && settings.get('mergeview');
 
             switch (this.mode) {
                 case 'day':
                     this.$el.addClass('dayview');
+                    if (this.isMergeView) this.$el.addClass('merge-view');
                     this.columns = 1;
                     break;
                 case 'workweek':
@@ -156,93 +158,79 @@ define('io.ox/calendar/week/view', [
                     break;
             }
 
-            this.collection
-                .on('change', this.redrawAppointment, this);
-            this.setStartDate(this.refDate);
+            this.setStartDate(opt.startDate || moment());
             this.initSettings();
 
-            //append datepicker
             if (!_.device('smartphone')) {
                 require(['io.ox/backbone/views/datepicker'], function (Picker) {
                     new Picker({ date: self.startDate })
                         .attachTo(self.kwInfo)
                         .on('select', function (date) {
                             self.setStartDate(date, false);
-                            self.trigger('onRefresh');
                         })
                         .on('before:open', function () {
                             this.setDate(self.startDate);
                         });
-                });
-            }
-
-            if (this.mode === 'workweek') {
-                this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', function () {
-                    function reset() {
-                        var scrollTop = self.pane.scrollTop();
-                        // clean up
-                        self.pane.empty();
-                        self.fulltimePane.empty();
-                        self.fulltimeCon.empty();
-                        self.fulltimeNote.empty();
-                        self.timeline.empty();
-                        self.weekCon.empty();
-                        self.moreAppointmentsIndicators.empty();
-                        // render again
-                        self.columns = settings.get('numDaysWorkweek');
-                        self.setStartDate();
-                        self.render();
-                        self.renderAppointments();
-                        self.perspective.refresh();
-                        // reset pane
-                        self.pane.scrollTop(scrollTop);
-                        self.pane.on('scroll', self.updateHiddenIndicators.bind(self));
-                        if (_.device('!smartphone')) {
-                            self.kwInfo.on('click', $.preventDefault);
-                            require(['io.ox/backbone/views/datepicker'], function (Picker) {
-                                new Picker({ date: self.startDate })
-                                    .attachTo(self.kwInfo)
-                                    .on('select', function (date) {
-                                        self.setStartDate(date);
-                                        self.trigger('onRefresh');
-                                    });
-                            });
-                        }
+                    var props = self.app.props.on('change:showMiniCalendar change:folderview', togglePicker);
+                    togglePicker();
+                    function togglePicker() {
+                        self.kwInfo.prop('disabled', props.get('folderview') && props.get('showMiniCalendar'));
                     }
-
-                    if ($('.time:visible', self.pane).length === 0) self.app.getWindow().one('show', reset);
-                    else reset();
                 });
             }
+
+            if (this.mode === 'workweek') this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', this.rerender);
+            if (this.mode === 'day') {
+                this.listenTo(settings, 'change:mergeview', this.rerender);
+                this.listenTo(this.app, 'folders:change', function () {
+                    if (!settings.get('mergeview')) return;
+                    _.delay(function () { self.rerender(); }, 20);
+                });
+            }
+        },
+
+        rerender: function () {
+
+            function cont() {
+                var scrollTop = this.pane.scrollTop();
+                // clean up
+                // detach first so that the date picker link still works
+                this.kwInfo.detach();
+                this.pane.empty();
+                this.fulltimePane.empty();
+                this.fulltimeCon.empty();
+                this.timeline.empty();
+                this.weekCon.empty();
+                this.moreAppointmentsIndicators.empty();
+                // render again
+                this.isMergeView = _.device('!smartphone') && this.mode === 'day' && this.app.folders.list().length > 0 && settings.get('mergeview');
+                if (this.mode === 'workweek') this.columns = settings.get('numDaysWorkweek');
+                if (this.mode === 'day') this.$el.toggleClass('merge-view', this.isMergeView);
+                this.setStartDate(this.startDate);
+                this.render();
+                this.renderAppointments();
+                this.perspective.refresh();
+                // reset pane
+                this.pane.scrollTop(scrollTop);
+                this.pane.on('scroll', this.updateHiddenIndicators.bind(this));
+            }
+
+            if ($('.time:visible', this.pane).length === 0) this.app.getWindow().one('show', cont.bind(this)); else cont.call(this);
         },
 
         /**
          * reset appointment collection
          * avoids processing concurrent requests in wrong order
-         * @param  { number } startDate starttime from initail request
+         * @param  { number } startDate starttime from inital request
          * @param  { array }  data      all appointments returend by API
          */
-        reset: function (startDate, data) {
+        reset: function (startDate, models) {
             if (startDate === this.apiRefTime.valueOf()) {
                 var ws = this.startDate.valueOf(),
                     we = moment(this.startDate).add(this.columns, 'days').valueOf();
+                models = _(models).filter(util.rangeFilter(ws, we));
                 // reset collection; transform raw dato to proper models
-                data = _(data)
-                    .filter(function (obj) {
-                        var os = obj.start_date,
-                            oe = obj.end_date;
-                        if (obj.full_time) {
-                            os = moment.utc(os).local(true).valueOf();
-                            oe = moment.utc(oe).local(true).valueOf();
-                        }
-                        return (os >= ws && os < we) || (oe > ws && oe < we) || (os <= ws && oe >= we);
-                    })
-                    .map(function (obj) {
-                        var model = new AppointmentModel(obj);
-                        model.id = _.cid(obj);
-                        return model;
-                    });
-                this.collection.reset(data);
+                this.collection.reset(models);
                 if (this.collection.length > this.limit) {
                     var self = this;
                     console.warn('Too many appointments. There are ' + this.collection.length + ' appointments. The limit is ' + this.limit + '. Resize, drag and opacity are disabled due to performance reasons.');
@@ -255,6 +243,19 @@ define('io.ox/calendar/week/view', [
             }
         },
 
+        setCollection: function (collection) {
+            if (this.collection === collection) return;
+
+            if (this.collection) this.stopListening(this.collection);
+            this.collection = collection;
+
+            this.renderAppointments();
+
+            this
+                .listenTo(this.collection, 'change', this.redrawAppointment, this)
+                .listenTo(this.collection, 'add remove reset', _.debounce(this.renderAppointments), this);
+        },
+
         /**
          * set week reference start date
          * @param { string|number|LocalDate } opt
@@ -264,6 +265,9 @@ define('io.ox/calendar/week/view', [
          * @param { boolean } utc     true if full-time appointment
          */
         setStartDate: function (opt, utc) {
+
+            var previous = moment(this.startDate);
+
             utc = utc || false;
             if (opt) {
                 // number | LocalDate
@@ -272,19 +276,15 @@ define('io.ox/calendar/week/view', [
                         opt = moment.utc(opt).local(true).valueOf();
                     }
                     this.startDate = moment(opt);
-                    this.refDate = moment(this.startDate);
                 }
                 //string
                 if (typeof opt === 'string') {
                     this.startDate[opt === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
-                    this.refDate[opt === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
                 }
             } else {
                 // today button
                 this.startDate = moment();
-                this.refDate = moment(this.startDate);
             }
-
             // normalize startDate to beginning of the week or day
             switch (this.mode) {
                 case 'day':
@@ -299,21 +299,18 @@ define('io.ox/calendar/week/view', [
                     this.startDate.startOf('week');
                     break;
             }
+
             // set api reference date to the beginning of the month
             var month = this.startDate.month();
-            if (month % 2 === 1) {
-                month--;
-            }
+            if (month % 2 === 1) month--;
             this.apiRefTime = moment(this.startDate).month(month).date(1);
-            if (this.app) this.app.refDate = this.refDate;
-        },
 
-        /**
-         * apply new reference date and refresh view
-         */
-        applyRefDate: function () {
-            this.setStartDate(this.refDate.valueOf());
-            this.trigger('onRefresh');
+            // only trigger change event if date has changed
+            if (!this.startDate.isSame(previous)) {
+                this.trigger('change:date', this.startDate);
+                if (ox.debug) console.log('refresh calendar data');
+                this.trigger('onRefresh');
+            }
         },
 
         /**
@@ -375,16 +372,19 @@ define('io.ox/calendar/week/view', [
          */
         onHover: function (e) {
             if (!this.lasso) {
-                var cid = _.cid(String($(e.currentTarget).data('cid'))),
-                    el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
+                var cid = util.cid(String($(e.currentTarget).data('cid'))),
+                    el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]', this.$el),
+                    bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
                 switch (e.type) {
                     case 'mouseenter':
                         if (e.relatedTarget && e.relatedTarget.tagName !== 'TD') {
                             el.addClass('hover');
+                            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
                         }
                         break;
                     case 'mouseleave':
                         el.removeClass('hover');
+                        if (bg) el.css('background-color', bg);
                         break;
                     default:
                         break;
@@ -405,7 +405,6 @@ define('io.ox/calendar/week/view', [
             if (cT.hasClass('prev') || (e.type === 'swiperight' && !this.lasso)) {
                 this.setStartDate('prev');
             }
-            this.trigger('onRefresh');
             return false;
         },
 
@@ -436,14 +435,16 @@ define('io.ox/calendar/week/view', [
             }
 
             return _.throttle(function () {
-                var min = this.pane.scrollTop(),
+                var self = this,
+                    min = this.pane.scrollTop(),
                     max = this.pane.scrollTop() + this.pane.height(),
                     threshold = 3,
-                    columnWidth = 100 / this.columns;
+                    columns = this.isMergeView ? this.app.folders.list() : _.range(this.columns),
+                    columnWidth = 100 / columns.length;
 
                 this.moreAppointmentsIndicators.empty();
-                for (var d = 0; d < this.columns; d++) {
-                    var appointments = this.weekCon.find('.day:nth-child(' + (d + 1) + ') > .appointment');
+                columns.forEach(function (c, i) {
+                    var appointments = self.weekCon.find('.day:nth-child(' + (i + 1) + ') > .appointment');
                     var earlier = appointments.filter(function (index, el) {
                         el = $(el);
                         return el.position().top + el.height() - threshold < min;
@@ -453,18 +454,18 @@ define('io.ox/calendar/week/view', [
                         return el.position().top + threshold > max;
                     }).length;
                     if (earlier > 0) {
-                        this.moreAppointmentsIndicators.append(
-                            indicatorButton(d, columnWidth)
+                        self.moreAppointmentsIndicators.append(
+                            indicatorButton(i, columnWidth)
                                 .addClass('earlier fa-caret-up')
                         );
                     }
                     if (later > 0) {
-                        this.moreAppointmentsIndicators.append(
-                            indicatorButton(d, columnWidth)
+                        self.moreAppointmentsIndicators.append(
+                            indicatorButton(i, columnWidth)
                                 .addClass('later fa-caret-down')
                         );
                     }
-                }
+                });
             }, 100);
         }()),
 
@@ -487,12 +488,10 @@ define('io.ox/calendar/week/view', [
                 case 37:
                     // left
                     this.setStartDate('prev');
-                    this.trigger('onRefresh');
                     break;
                 case 39:
                     // right
                     this.setStartDate('next');
-                    this.trigger('onRefresh');
                     break;
                 case 13:
                     // enter
@@ -510,20 +509,21 @@ define('io.ox/calendar/week/view', [
 
         /**
          * handler for single- and double-click events on appointments
+         * TODO check if this code is an exact duplication of the week-views onclick appointment
          * @param  { MouseEvent } e Mouse event
          */
         onClickAppointment: function (e) {
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(String(cT.data('cid')));
+                    obj = util.cid(String(cT.data('cid')));
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
                         .removeClass('current opac')
-                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
+                        .not($('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.$el))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
-                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
+                    $('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.$el).addClass('current');
                     self.trigger('showAppointment', e, obj);
 
                 } else {
@@ -543,7 +543,9 @@ define('io.ox/calendar/week/view', [
                     clearTimeout(self.clickTimer);
                     self.clicks = 0;
                     self.clickTimer = null;
-                    self.trigger('openEditAppointment', e, obj);
+                    api.get(obj).done(function (model) {
+                        self.trigger('openEditAppointment', e, model.attributes);
+                    });
                 }
             }
         },
@@ -556,35 +558,42 @@ define('io.ox/calendar/week/view', [
 
             e.preventDefault();
 
-            if (!folderAPI.can('create', this.folder())) return;
+            var self = this,
+                getFolder = this.mode === 'day' && settings.get('mergeview') ? folderAPI.get($(e.currentTarget).attr('data-folder-cid') || this.folder().id) : $.when(this.folder());
 
-            var start = this.getTimeFromDateTag($(e.currentTarget).attr('date'));
+            getFolder.done(function (folder) {
+                if (!folderAPI.can('create', folder)) return;
 
-            if ($(e.target).hasClass('timeslot')) {
-                // calculate timestamp for current position
-                start.add(this.getTimeFromPos(e.target.offsetTop), 'milliseconds');
-                this.trigger('openCreateAppointment', e, {
-                    start_date: start.valueOf(),
-                    end_date: start.add(1, 'hour').valueOf()
-                });
-            }
-            if ($(e.target).hasClass('day') || $(e.target).hasClass('weekday')) {
-                // calculate timestamp for current position
-                this.trigger('openCreateAppointment', e, {
-                    start_date: start.utc(true).valueOf(),
-                    end_date: start.add(1, 'day').valueOf(),
-                    full_time: true
-                });
-            }
+                var start = self.getTimeFromDateTag($(e.currentTarget).attr('date'));
+
+                if ($(e.target).hasClass('timeslot')) {
+                    // calculate timestamp for current position
+                    start.add(self.getTimeFromPos(e.target.offsetTop), 'milliseconds');
+                    self.trigger('openCreateAppointment', e, {
+                        startDate: { value: start.format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() },
+                        endDate: { value: start.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() },
+                        folder: folder.id
+                    });
+                }
+                if ($(e.target).hasClass('day') || $(e.target).closest('.weekday').length > 0) {
+                    // calculate timestamp for current position
+                    self.trigger('openCreateAppointment', e, {
+                        startDate: { value: start.utc(true).format('YYYYMMDD') },
+                        endDate: { value: start.utc(true).format('YYYYMMDD') },
+                        folder: folder.id,
+                        allDay: true
+                    });
+                }
+            });
         },
 
         /**
          * handler for appointment updates
-         * @param  { Object } obj appointment object
+         * @param  { Object } event event model
          */
-        onUpdateAppointment: function (obj) {
-            if (obj.start_date && obj.end_date && obj.start_date <= obj.end_date) {
-                this.trigger('updateAppointment', obj);
+        onUpdateAppointment: function (event) {
+            if (event.get('startDate') && event.get('endDate') && event.getTimestamp('startDate') <= event.getTimestamp('endDate')) {
+                this.trigger('updateAppointment', event);
             }
         },
 
@@ -593,167 +602,169 @@ define('io.ox/calendar/week/view', [
          * @param  { MouseEvent } e mouseevents on day container
          */
         onLasso: function (e) {
-            if (this.options.allowLasso === false || !folderAPI.can('create', this.folder())) {
-                return;
-            }
+            var self = this,
+                getFolder = this.mode === 'day' && settings.get('mergeview') ? folderAPI.get($(e.target).closest('.day').attr('data-folder-cid') || this.folder().id) : $.when(this.folder());
 
-            // switch mouse events
-            switch (e.type) {
-                case 'mousedown':
-                    if (this.lasso === false && $(e.target).hasClass('timeslot')) {
-                        this.lasso = true;
-                        this.mousedownAt = e.pageY + this.pane.scrollTop();
-                    }
-                    break;
+            getFolder.done(function (folder) {
+                if (!folderAPI.can('create', folder)) return;
 
-                case 'mousemove':
-                    e.preventDefault();
-                    var cT = $(e.currentTarget),
-                        curDay = parseInt(cT.attr('date'), 10),
-                        mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop()),
-                        thresholdExceeded = Math.abs(this.mousedownAt - (e.pageY + this.pane.scrollTop())) > 4;
+                // switch mouse events
+                switch (e.type) {
+                    case 'mousedown':
+                        if (self.lasso === false && $(e.target).hasClass('timeslot')) {
+                            self.lasso = true;
+                            self.mousedownAt = e.pageY + self.pane.scrollTop();
+                        }
+                        break;
 
-                    // normal move
-                    if (_.isObject(this.lasso) && e.which === 1) {
-                        var lData = this.lasso.data(),
-                            down = mouseY > lData.start,
-                            right = curDay > lData.startDay,
-                            dayChange = curDay !== lData.lastDay,
-                            dayDiff = Math.abs(curDay - lData.startDay),
-                            lassoStart = this.roundToGrid(lData.start, (down && dayDiff === 0) || right ? 'n' : 's');
+                    case 'mousemove':
+                        e.preventDefault();
+                        var cT = $(e.currentTarget),
+                            curDay = parseInt(cT.attr('date'), 10),
+                            mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop()),
+                            thresholdExceeded = Math.abs(self.mousedownAt - (e.pageY + self.pane.scrollTop())) > 4;
 
-                        if (dayDiff > 0) {
-                            if (dayChange) {
-                                // move mouse to another day area
+                        // normal move
+                        if (_.isObject(self.lasso) && e.which === 1) {
+                            var lData = self.lasso.data(),
+                                down = mouseY > lData.start,
+                                right = curDay > lData.startDay,
+                                dayChange = curDay !== lData.lastDay,
+                                dayDiff = Math.abs(curDay - lData.startDay),
+                                lassoStart = self.roundToGrid(lData.start, (down && dayDiff === 0) || right ? 'n' : 's');
 
-                                // update start lasso
-                                this.lasso.css({
-                                    height: right ? 'auto' : lassoStart,
-                                    top: right ? lassoStart : 0,
-                                    bottom: right ? 0 : 'auto'
-                                });
+                            if (dayDiff > 0) {
+                                if (dayChange) {
+                                    // move mouse to another day area
 
-                                // create temp. helper lasso
-                                var tmpLasso = $('<div>')
-                                    .addClass('appointment lasso')
-                                    .css({
-                                        height: right ? this.roundToGrid(mouseY, 's') : 'auto',
-                                        minHeight: this.minCellHeight,
-                                        top: right ? 0 : this.roundToGrid(mouseY, 'n'),
+                                    // update start lasso
+                                    self.lasso.css({
+                                        height: right ? 'auto' : lassoStart,
+                                        top: right ? lassoStart : 0,
+                                        bottom: right ? 0 : 'auto'
+                                    });
+
+                                    // create temp. helper lasso
+                                    var tmpLasso = $('<div>')
+                                        .addClass('appointment lasso')
+                                        .css({
+                                            height: right ? self.roundToGrid(mouseY, 's') : 'auto',
+                                            minHeight: self.minCellHeight,
+                                            top: right ? 0 : self.roundToGrid(mouseY, 'n'),
+                                            bottom: right ? 'auto' : 0
+                                        });
+
+                                    // remove or resize helper
+                                    $.each(lData.helper, function (i, el) {
+                                        if (i >= dayDiff) {
+                                            el.remove();
+                                            delete lData.helper[i];
+                                        } else {
+                                            el.css({
+                                                height: 'auto',
+                                                top: 0,
+                                                bottom: 0
+                                            });
+                                        }
+                                    });
+                                    lData.helper[dayDiff] = tmpLasso;
+                                    lData.last = tmpLasso;
+
+                                    // add last helper to pane
+                                    cT.append(tmpLasso);
+                                } else {
+                                    // change only last helper height
+                                    lData.last.css({
+                                        height: right ? self.roundToGrid(mouseY, 's') : 'auto',
+                                        minHeight: self.minCellHeight,
+                                        top: right ? 0 : self.roundToGrid(mouseY, 'n'),
                                         bottom: right ? 'auto' : 0
                                     });
 
-                                // remove or resize helper
-                                $.each(lData.helper, function (i, el) {
-                                    if (i >= dayDiff) {
-                                        el.remove();
-                                        delete lData.helper[i];
-                                    } else {
-                                        el.css({
-                                            height: 'auto',
-                                            top: 0,
-                                            bottom: 0
-                                        });
-                                    }
-                                });
-                                lData.helper[dayDiff] = tmpLasso;
-                                lData.last = tmpLasso;
-
-                                // add last helper to pane
-                                cT.append(tmpLasso);
+                                }
                             } else {
-                                // change only last helper height
-                                lData.last.css({
-                                    height: right ? this.roundToGrid(mouseY, 's') : 'auto',
-                                    minHeight: this.minCellHeight,
-                                    top: right ? 0 : this.roundToGrid(mouseY, 'n'),
-                                    bottom: right ? 'auto' : 0
+                                var newHeight = 0;
+                                if (Math.abs(lData.start - mouseY) > 5) {
+                                    newHeight = Math.abs(lassoStart - self.roundToGrid(mouseY, down ? 's' : 'n'));
+                                } else {
+                                    mouseY = lData.start;
+                                }
+                                if (dayChange) {
+                                    lData.last.remove();
+                                    delete lData.last;
+                                }
+                                self.lasso.css({
+                                    height: newHeight,
+                                    top: lassoStart - (down ? 0 : newHeight)
                                 });
-
+                                lData.start = lassoStart;
                             }
+                            lData.stop = self.roundToGrid(mouseY, (down && dayDiff === 0) || right ? 's' : 'n');
+                            lData.lastDay = curDay;
+                        }
+
+                        // first move
+                        if (self.lasso === true && $(e.target).hasClass('timeslot')) {
+                            if (!thresholdExceeded) return;
+                            self.lasso = $('<div>')
+                                .addClass('appointment lasso')
+                                .css({
+                                    height: self.cellHeight,
+                                    minHeight: 0,
+                                    top: self.roundToGrid(mouseY, 'n')
+                                })
+                                .data({
+                                    start: self.roundToGrid(mouseY, 'n'),
+                                    stop: self.roundToGrid(mouseY, 's'),
+                                    startDay: curDay,
+                                    lastDay: curDay,
+                                    helper: {}
+                                })
+                                .appendTo(cT);
                         } else {
-                            var newHeight = 0;
-                            if (Math.abs(lData.start - mouseY) > 5) {
-                                newHeight = Math.abs(lassoStart - this.roundToGrid(mouseY, down ? 's' : 'n'));
+                            self.trigger('mouseup');
+                        }
+                        break;
+
+                    case 'mouseup':
+                        e.preventDefault();
+                        if (_.isObject(self.lasso) && e.which === 1) {
+                            var l = self.lasso.data();
+
+                            // no action on 0px move
+                            if (l.start === l.stop && l.lastDay === l.startDay) {
+                                self.cleanUpLasso();
+                                break;
+                            }
+
+                            var start = self.getTimeFromDateTag(Math.min(l.startDay, l.lastDay)),
+                                end = self.getTimeFromDateTag(Math.max(l.startDay, l.lastDay));
+
+                            if (l.startDay === l.lastDay) {
+                                start.add(self.getTimeFromPos(Math.min(l.start, l.stop)), 'milliseconds');
+                                end.add(self.getTimeFromPos(Math.max(l.start, l.stop)), 'milliseconds');
                             } else {
-                                mouseY = lData.start;
+                                start.add(self.getTimeFromPos(l.startDay > l.lastDay ? l.stop : l.start), 'milliseconds');
+                                end.add(self.getTimeFromPos(l.startDay > l.lastDay ? l.start : l.stop), 'milliseconds');
                             }
-                            if (dayChange) {
-                                lData.last.remove();
-                                delete lData.last;
-                            }
-                            this.lasso.css({
-                                height: newHeight,
-                                top: lassoStart - (down ? 0 : newHeight)
+
+                            self.cleanUpLasso();
+
+                            self.trigger('openCreateAppointment', e, {
+                                startDate: { value: start.format('YYYYMMDD[T]HHmmss'), tzid: start.tz() },
+                                endDate: { value: end.format('YYYYMMDD[T]HHmmss'), tzid: end.tz() },
+                                folder: folder.id
                             });
-                            lData.start = lassoStart;
+                            e.stopImmediatePropagation();
                         }
-                        lData.stop = this.roundToGrid(mouseY, (down && dayDiff === 0) || right ? 's' : 'n');
-                        lData.lastDay = curDay;
-                    }
+                        self.lasso = false;
+                        break;
 
-                    // first move
-                    if (this.lasso === true && $(e.target).hasClass('timeslot')) {
-                        if (!thresholdExceeded) return;
-                        this.lasso = $('<div>')
-                            .addClass('appointment lasso')
-                            .css({
-                                height: this.cellHeight,
-                                minHeight: 0,
-                                top: this.roundToGrid(mouseY, 'n')
-                            })
-                            .data({
-                                start: this.roundToGrid(mouseY, 'n'),
-                                stop: this.roundToGrid(mouseY, 's'),
-                                startDay: curDay,
-                                lastDay: curDay,
-                                helper: {}
-                            })
-                            .appendTo(cT);
-                    } else {
-                        this.trigger('mouseup');
-                    }
-                    break;
-
-                case 'mouseup':
-                    e.preventDefault();
-                    if (_.isObject(this.lasso) && e.which === 1) {
-                        var l = this.lasso.data();
-
-                        // no action on 0px move
-                        if (l.start === l.stop && l.lastDay === l.startDay) {
-                            this.cleanUpLasso();
-                            break;
-                        }
-
-                        var start = this.getTimeFromDateTag(Math.min(l.startDay, l.lastDay)),
-                            end = this.getTimeFromDateTag(Math.max(l.startDay, l.lastDay));
-
-                        if (l.startDay === l.lastDay) {
-                            start.add(this.getTimeFromPos(Math.min(l.start, l.stop)), 'milliseconds');
-                            end.add(this.getTimeFromPos(Math.max(l.start, l.stop)), 'milliseconds');
-                        } else {
-                            start.add(this.getTimeFromPos(l.startDay > l.lastDay ? l.stop : l.start), 'milliseconds');
-                            end.add(this.getTimeFromPos(l.startDay > l.lastDay ? l.start : l.stop), 'milliseconds');
-                        }
-
-                        this.cleanUpLasso();
-
-                        this.trigger('openCreateAppointment', e, {
-                            start_date: start.valueOf(),
-                            end_date: end.valueOf(),
-                            lasso: true
-                        });
-                        e.stopImmediatePropagation();
-                    }
-                    this.lasso = false;
-                    break;
-
-                default:
-                    this.lasso = false;
-                    break;
-            }
-            return;
+                    default:
+                        self.lasso = false;
+                        break;
+                }
+            });
         },
 
         /**
@@ -768,6 +779,11 @@ define('io.ox/calendar/week/view', [
             });
             lasso.remove();
             this.lasso = false;
+        },
+
+        onMergeSplit: function (e) {
+            e.preventDefault();
+            settings.set('mergeview', !settings.get('mergeview')).save();
         },
 
         renderTimeLabel: function (timezone, className) {
@@ -938,18 +954,6 @@ define('io.ox/calendar/week/view', [
             renderTimeline();
             setInterval(renderTimeline, 60000);
 
-            // mattes: guess we don't need this any more in week and work week view
-            if (!_.device('touch') && this.columns === 1) {
-                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment'))
-                    .addClass('day')
-                    .css('width', '100%')
-                    .attr({
-                        unselectable: 'on',
-                        // only used in dayview, so date is always  0
-                        date: 0
-                    }));
-            }
-
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
             // visual indicators for hidden appointmeints
@@ -958,19 +962,21 @@ define('io.ox/calendar/week/view', [
             });
 
             // create days
-            for (var d = 0; d < this.columns; d++) {
-
+            var columns = this.isMergeView ? this.app.folders.list() : _.range(this.columns);
+            columns.forEach(function (c, index) {
                 var day = $('<div>')
                     .addClass('day')
-                    .width(100 / this.columns + '%')
-                    .attr('date', d);
+                    .attr('date', self.isMergeView ? 0 : index)
+                    .width(100 / columns.length + '%');
+
+                if (_(c).isString()) day.attr('data-folder-cid', c);
 
                 // add days to fulltime panel
-                this.fulltimePane
+                self.fulltimePane
                     .append(day.clone());
 
-                this.weekCon.append(day);
-            }
+                self.weekCon.append(day);
+            });
 
             this.renderTimeslots();
 
@@ -992,12 +998,17 @@ define('io.ox/calendar/week/view', [
                         })
                         .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
-                    this.kwInfo
+                    this.kwInfo,
+                    this.mode === 'day' && this.app.folders.list().length > 1 ? $('<a href="#" class="merge-split">').tooltip({
+                        placement: 'bottom',
+                        title: settings.get('mergeview') ? gt('Click to merge all folders into one column') : gt('Click to split all folders into separate columns')
+                        //#. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
+                    }).text(settings.get('mergeview') ? gt('Merge') : gt('Split')) : ''
                 ),
                 $('<div class="footer-container">').append(
                     this.dayLabel
                 ),
-                $('<div class="week-view-container">').append(
+                this.weekViewCon.append(
                     this.timeLabelBar,
                     this.fulltimeCon.empty().append(this.fulltimePane),
                     this.pane.empty().append(
@@ -1126,12 +1137,13 @@ define('io.ox/calendar/week/view', [
          * show and hide timeline
          */
         renderDayLabel: function () {
-
-            var days = [],
+            var self = this,
+                days = [],
                 today = moment().startOf('day'),
-                tmpDate = moment(this.startDate);
+                tmpDate = moment(this.startDate),
+                columns = this.isMergeView ? this.app.folders.list() : _.range(this.columns);
             // something new?
-            if (this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef && this.columnsRef === this.columns) {
+            if (this.mode !== 'day' && this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef && this.columnsRef === this.columns) {
                 if (this.options.todayClass && this.columns > 1) {
                     var weekViewContainer = $('.week-view-container', this.$el);
                     weekViewContainer.find('.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
@@ -1150,40 +1162,62 @@ define('io.ox/calendar/week/view', [
 
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
-            for (var d = 0; d < this.columns; d++) {
+
+            columns.forEach(function (c, index) {
                 var day = $('<a href="#" class="weekday" role="button">')
                     .attr({
-                        date: d,
+                        date: self.isMergeView ? 0 : index,
                         title: gt('Create all-day appointment')
                     })
-                    .text(tmpDate.format('ddd D'))
-                    .width(100 / this.columns + '%');
+                    .append(
+                        $.txt(tmpDate.format('ddd ')),
+                        $('<span class="number">').text(tmpDate.format('D'))
+                    )
+                    .width(100 / columns.length + '%');
+
+                if (_(c).isString()) {
+                    day
+                        .addClass('merge-view-label')
+                        .attr({
+                            'data-folder-cid': c, // need this when inserting events in this column
+                            'data-folder': c // this is used when folder color changes
+                        })
+                        .css('width', 'calc(' + day.css('width') + ' - 2px)');
+                    folderAPI.get(c).done(function (folder) {
+                        day
+                            .css({
+                                'border-color': util.getFolderColor(folder)
+                            })
+                            .text(folder.display_title || folder.title);
+                    });
+                }
+
                 // mark today
                 if (util.isToday(tmpDate)) {
-
-                    var todayContainer = $('.week-container .day[date="' + d + '"]', this.pane);
-
-                    if (this.columns > 1) {
-                        todayContainer.addClass(this.options.todayClass);
+                    var todayContainer;
+                    if (self.isMergeView) {
+                        todayContainer = $('.week-container .day', self.pane).first();
+                        self.timeline.css('width', (columns.length * 105) + '%');
+                    } else {
+                        todayContainer = $('.week-container .day[date="' + index + '"]', self.pane);
+                        if (self.columns > 1) todayContainer.addClass(self.options.todayClass);
+                        day
+                            .prepend($('<span class="sr-only">').text(gt('Today')))
+                            .addClass(self.options.todayClass);
                     }
-
-                    day
-                        .prepend($('<span class="sr-only">').text(gt('Today')))
-                        .addClass(this.options.todayClass);
-
-                    todayContainer.append(this.timeline);
-                    this.timeline.show();
+                    todayContainer.append(self.timeline);
+                    self.timeline.show();
                 }
                 days.push(day);
                 tmpDate.add(1, 'day');
-            }
+            });
 
             this.dayLabel.empty().append(days);
 
             this.kwInfo.empty().append(
                 $('<span>').text(
                     this.columns > 1
-                        ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
+                        ? this.startDate.format('MMMM YYYY')
                         : this.startDate.format('ddd, l')
                 ),
                 $.txt(' '),
@@ -1217,8 +1251,37 @@ define('io.ox/calendar/week/view', [
             var self = this,
                 draw = {},
                 appointmentStartDate,
-                fulltimeColPos = [0],
-                fulltimeCount = 0;
+                numColumns = this.isMergeView ? this.app.folders.list().length : this.columns,
+                fulltimeTable = _.range(numColumns).map(function () { return []; }),
+                maxRow = 0;
+
+            /*
+             * Simple algorithm to find free space for appointment. Works as follows:
+             * 1) Has a table with slots which are empty by default
+             * 2) Requests a certain column and width
+             * 3) Search for first row, where all these fields are empty
+             * 4) Mark these cells in the table as reserved
+             * 5) Calculate maximum number of rows as a side-effect
+             */
+            function reserveRow(table, start, width) {
+                var row, column, empty;
+                start = Math.max(0, start);
+                width = Math.min(table.length, start + width) - start;
+                // check for free space
+                for (row = 0; row <= maxRow && !empty; row++) {
+                    empty = true;
+                    for (column = start; column < start + width; column++) {
+                        if (table[column][row]) {
+                            empty = false;
+                            break;
+                        }
+                    }
+                }
+                // reserve free space
+                for (column = start; column < start + width; column++) table[column][row - 1] = true;
+                maxRow = Math.max(row, maxRow);
+                return row - 1;
+            }
 
             // clear all first
             $('.appointment', this.$el).remove();
@@ -1228,51 +1291,38 @@ define('io.ox/calendar/week/view', [
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                appointmentStartDate = moment(model.get('start_date'));
+                appointmentStartDate = model.getMoment('startDate');
 
                 // is declined?
-                if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
+                if (util.getConfirmationStatus(model) !== 'DECLINED' || this.showDeclined) {
                     // is fulltime?
-                    if (model.get('full_time') && this.options.showFulltime) {
-
-                        appointmentStartDate = moment.utc(model.get('start_date')).local(true);
+                    if (util.isAllday(model) && this.options.showFulltime) {
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
 
-                        fulltimeCount++;
-                        var node = this.renderAppointment(model), row,
-                            fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
+                        var node = this.renderAppointment(model),
+                            fulltimePos = this.isMergeView ? this.app.folders.list().indexOf(model.get('folder')) : appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment.utc(model.get('end_date')).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = this.isMergeView ? 1 : Math.max(model.getMoment('endDate').diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos), 1),
+                            row = reserveRow(fulltimeTable, fulltimePos, fulltimeWidth);
 
-                        // loop over all column positions
-                        for (row = 0; row < fulltimeColPos.length; row++) {
-                            if (fulltimeColPos[row] <= model.get('start_date')) {
-                                fulltimeColPos[row] = model.get('end_date');
-                                break;
-                            }
-                        }
-
-                        if (row === fulltimeColPos.length) {
-                            fulltimeColPos.push(model.get('end_date'));
-                        }
                         node.css({
                             height: this.fulltimeHeight,
                             lineHeight: this.fulltimeHeight + 'px',
-                            width: (100 / this.columns) * fulltimeWidth + '%',
-                            left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
+                            width: (100 / numColumns) * fulltimeWidth + '%',
+                            left: (100 / numColumns) * Math.max(0, fulltimePos) + '%',
                             top: row * (this.fulltimeHeight + 1)
                         });
                         this.fulltimePane.append(node);
                     } else {
                         // fix fulltime appointments to local time when this.showFulltime === false
-                        if (model.get('full_time')) {
-                            model.set({ start_date: moment.utc(model.get('start_date')).local(true).valueOf() }, { silent: true });
-                            model.set({ end_date: moment.utc(model.get('end_date')).local(true).valueOf() }, { silent: true });
-                        }
+                        /*if (!model.get('startDate').tzid) {
+                            model.set({ startDate: moment.utc(model.get('startDate')).local(true).valueOf() }, { silent: true });
+                            model.set({ endDate: moment.utc(model.get('endDate')).local(true).valueOf() }, { silent: true });
+                        }*/
 
-                        var startLocal = moment(Math.max(model.get('start_date'), this.startDate.valueOf())),
-                            endLocal = moment(model.get('end_date')),
+                        var startLocal = moment(Math.max(appointmentStartDate.valueOf(), this.startDate.valueOf())),
+                            endLocal = model.getMoment('endDate').local(),
                             start = moment(startLocal).startOf('day').valueOf(),
                             end = moment(endLocal).startOf('day').valueOf(),
                             maxCount = 0,
@@ -1281,16 +1331,16 @@ define('io.ox/calendar/week/view', [
                         // draw across multiple days
                         while (maxCount <= this.columns) {
                             var app = this.renderAppointment(model),
-                                sel = '[date="' + startLocal.diff(this.startDate, 'day') + '"]';
+                                sel = this.isMergeView ? '[data-folder-cid="' + model.get('folder') + '"]' : '[date="' + startLocal.diff(this.startDate, 'day') + '"]';
                             maxCount++;
 
                             if (start !== end) {
                                 endLocal = moment(startLocal).endOf('day');
-                                if (model.get('end_date') - endLocal.valueOf() > 1) {
+                                if (model.get('endDate').valueOf() - endLocal.valueOf() > 1) {
                                     style += 'rmsouth';
                                 }
                             } else {
-                                endLocal = moment(model.get('end_date'));
+                                endLocal = model.getMoment('endDate').local();
                             }
 
                             // kill overlap appointments with length null
@@ -1323,22 +1373,21 @@ define('io.ox/calendar/week/view', [
             // calculate full-time appointment container height
             var ftHeight = 1;
             if (this.options.showFulltime) {
-                ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
-                this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px' });
+                ftHeight = (maxRow <= this.fulltimeMax ? maxRow : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
+                this.fulltimePane.css({ height: maxRow * (this.fulltimeHeight + 1) + 'px' });
                 this.fulltimeCon.resizable({
                     handles: 's',
                     minHeight: this.fulltimeHeight,
-                    maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
+                    maxHeight: maxRow * (this.fulltimeHeight + 1),
                     resize: function () {
                         self.pane.css({ top: self.fulltimeCon.outerHeight() });
                     }
                 });
             }
             this.fulltimeCon.css({ height: ftHeight + 'px' });
-            this.pane.css({ top: ftHeight + 'px' });
+            this.pane.css({ top: (ftHeight + (_.device('smartphone') ? 0 : 16)) + 'px' });
+            this.moreAppointmentsIndicators.css({ top: (ftHeight + (_.device('smartphone') ? 0 : 16)) + 'px' });
             if (this.timeLabelBar) this.timeLabelBar.css({ top: (ftHeight - 22) + 'px' });
-
-            this.fulltimeNote[fulltimeCount === 0 ? 'show' : 'hide']();
 
             // fix for hidden scrollbars on small DIVs (esp. Firefox Win)
             var fullConWitdth = this.fulltimeCon[0].clientWidth + this.fulltimeCon[0].offsetLeft;
@@ -1406,10 +1455,10 @@ define('io.ox/calendar/week/view', [
 
                     node.css({
                         top: pos.top,
-                        left: left + '%',
+                        left: 'calc(' + left + '% - 1px)',
                         height: height + 'px',
                         lineHeight: self.minCellHeight + 'px',
-                        width: width + '%',
+                        width: 'calc(' + width + '% - 10px)',
                         minHeight: (self.minCellHeight - (border ? 2 : 1)) + 'px',
                         maxWidth: self.appWidth + '%'
                         // zIndex: j
@@ -1420,453 +1469,14 @@ define('io.ox/calendar/week/view', [
                 self.$('.week-container ' + day, self.$el).append(apps);
             });
 
-            // disable d'n'd on small devices or really big collections
-            if (this.collection.length > this.limit || _.device('smartphone')) return;
-
-            // init drag and resize widget on appointments
-            var colWidth = this.$('.day:first').outerWidth(),
-                paneOffset = this.$('.week-container').offset().left,
-                paneHeight = self.height();
-
-            // add resizable and draggable plugin to all appointments with modify class
-            $('.week-container .day>.appointment.modify', this.$el)
-                .resizable({
-                    handles: 'n, s',
-                    grid: [0, self.cellHeight],
-                    // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
-                    minHeight: self.cellHeight - 2,
-                    containment: 'parent',
-                    start: function (e, ui) {
-                        // close sidepopup so it doesn't interfere with dragging/resizing
-                        if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
-                        var d = $(this).data('ui-resizable');
-                        // get fresh dimensions as window size and/or timezone favorites might change
-                        colWidth = self.$('.day:first').outerWidth();
-                        paneOffset = self.$('.week-container').offset().left;
-                        // init custom resize object
-                        d.my = {};
-                        // set current day
-                        $.extend(d.my, {
-                            curHelper: $(this),
-                            all: $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el),
-                            day: Math.floor((e.pageX - paneOffset) / colWidth),
-                            handle: ''
-                        });
-                        d.my.firstPos = parseInt(d.my.all.first().closest('.day').attr('date'), 10);
-                        d.my.lastPos = parseInt(d.my.all.last().closest('.day').attr('date'), 10);
-                        d.my.lastHeight = d.my.all.last().height();
-                        d.my.startPos = d.my.day;
-                    },
-                    resize:  function (e, ui) {
-                        var el = $(this),
-                            d = el.data('ui-resizable'),
-                            day = Math.floor((e.pageX - paneOffset) / colWidth),
-                            mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
-
-                        // detect direction
-                        if (ui.position.top !== ui.originalPosition.top) {
-                            d.my.handle = 'n';
-                        } else if (ui.size.height !== ui.originalSize.height) {
-                            d.my.handle = 's';
-                        }
-
-                        // add new style
-                        d.my.all
-                            .addClass('opac')
-                            .css({
-                                left: 0,
-                                width: '100%',
-                                maxWidth: '100%',
-                                zIndex: 999
-                            });
-
-                        // resize actions
-                        if (day >= d.my.firstPos && d.my.handle === 's') {
-                            // right side
-                            mouseY = self.roundToGrid(mouseY, 's');
-                            // default move
-                            if (day !== d.my.startPos) {
-                                ui.element.css({
-                                    top: ui.originalPosition.top,
-                                    height: paneHeight - ui.position.top
-                                });
-                            } else {
-                                d.my.bottom = ui.size.height + ui.position.top;
-                            }
-                            if (d.my.day === day && day !== d.my.startPos) {
-                                d.my.curHelper.height(function () {
-                                    return mouseY - $(this).position().top;
-                                });
-                                d.my.bottom = mouseY;
-                            } else if (day < d.my.day) {
-                                // move left
-                                if (day >= d.my.lastPos) {
-                                    d.my.all.filter(':visible').last().remove();
-                                } else {
-                                    d.my.all.filter(':visible').last().hide();
-                                }
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                d.my.curHelper = d.my.all.filter(':visible').last();
-                                d.my.curHelper.css({
-                                    minHeight: 0,
-                                    maxHeight: paneHeight
-                                });
-                            } else if (day > d.my.day) {
-                                // move right
-                                if (day > d.my.lastPos) {
-                                    // set new helper
-                                    $('.week-container .day[date="' + day + '"]', self.$el)
-                                        .append(d.my.curHelper = el.clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                } else {
-                                    d.my.curHelper = d.my.all.filter(':hidden').first();
-                                }
-                                if (day > d.my.firstPos) {
-                                    d.my.all.filter(':visible').slice(0, -1).css({
-                                        height: 'auto',
-                                        bottom: 0
-                                    });
-                                    d.my.curHelper.show().css({
-                                        top: 0,
-                                        height: mouseY,
-                                        minHeight: 0
-                                    });
-                                }
-                            }
-                        } else if (day <= d.my.lastPos && d.my.handle === 'n') {
-                            // left side
-                            mouseY = self.roundToGrid(mouseY, 'n');
-                            if (day !== d.my.startPos) {
-                                ui.element.css({
-                                    top: 0,
-                                    height: ui.size.height + ui.position.top
-                                });
-                            } else {
-                                d.my.top = ui.position.top;
-                            }
-                            if (d.my.day === day && day !== d.my.startPos) {
-                                // default move
-                                d.my.curHelper.css({
-                                    top: mouseY,
-                                    height: (day === d.my.lastPos ? d.my.lastHeight : paneHeight) - mouseY
-                                });
-                                d.my.top = mouseY;
-                            } else if (day > d.my.day) {
-                                // move right
-                                if (day < d.my.startPos) {
-                                    d.my.all.filter(':visible').first().remove();
-                                } else {
-                                    // if original element - do not remove
-                                    d.my.all.filter(':visible').first().hide();
-                                }
-                                // update dataset
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                d.my.curHelper = d.my.all.filter(':visible').first();
-                            } else if (day < d.my.day) {
-                                // move left
-                                if (day < d.my.firstPos) {
-                                    // add new helper
-                                    $('.week-container .day[date="' + day + '"]', self.$el)
-                                        .append(d.my.curHelper = el.clone().addClass('opac'));
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-
-                                } else {
-                                    d.my.curHelper = d.my.all.filter(':hidden').last();
-                                }
-                                if (day < d.my.lastPos) {
-                                    d.my.all.filter(':visible').slice(0, -1).css({
-                                        top: 0,
-                                        height: paneHeight
-                                    }).end().last().height(function (i, h) {
-                                        return $(this).position().top + h;
-                                    }).css({ top: 0 });
-                                    d.my.curHelper.show().css({
-                                        top: mouseY,
-                                        height: paneHeight - mouseY
-                                    });
-                                }
-                                // update dataset
-                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                            }
-                        }
-                        // update day
-                        d.my.day = day;
-                    },
-                    stop: function () {
-                        var el = $(this),
-                            d = el.data('ui-resizable'),
-                            app = self.collection.get(el.data('cid')).attributes,
-                            tmp = self.getTimeFromDateTag(d.my.day);
-                        d.my.all.removeClass('opac');
-                        // save for update calculations
-                        app.old_start_date = app.start_date;
-                        app.old_end_date = app.end_date;
-                        switch (d.my.handle) {
-                            case 'n':
-                                app.start_date = tmp.add(self.getTimeFromPos(d.my.top), 'milliseconds').valueOf();
-                                break;
-                            case 's':
-                                app.end_date = tmp.add(self.getTimeFromPos(d.my.bottom), 'milliseconds').valueOf();
-                                break;
-                            default:
-                                break;
-                        }
-                        // disable widget
-                        el.resizable('disable').busy();
-                        self.onUpdateAppointment(app);
-                    }
-                })
-                .draggable({
-                    grid: [colWidth, self.cellHeight],
-                    distance: 10,
-                    delay: 300,
-                    scroll: true,
-                    revertDuration: 0,
-                    revert: function (drop) {
-                        if (drop === false) {
-                            // no socket object drop occurred.
-                            // revert the appointment by returning true
-                            $(this).show();
-                            return true;
-                        }
-                        // return false so that the appointment does not revert
-                        return false;
-                    },
-                    start: function (e, ui) {
-                        // close sidepopup so it doesn't interfere with dragging/resizing
-                        if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
-                        // write all appointment divs to draggable object
-                        var d = $(this).data('ui-draggable');
-                        d.my = {
-                            all: $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el)
-                                .addClass('opac')
-                                .css({
-                                    left: 0,
-                                    width: '100%',
-                                    maxWidth: '100%',
-                                    zIndex: 999
-                                })
-                        };
-                        _.extend(d.my, {
-                            firstPos: parseInt(d.my.all.first().closest('.day').attr('date'), 10),
-                            lastPos: parseInt(d.my.all.last().closest('.day').attr('date'), 10),
-                            initPos: parseInt($(this).closest('.day').attr('date'), 10),
-                            firstTop: d.my.all.first().position().top,
-                            lastHeight: d.my.all.last().outerHeight(),
-                            lastTop: ui.position.top,
-                            height: $(this).height()
-                        });
-                    },
-                    drag: function (e, ui) {
-                        var d = $(this).data('ui-draggable'),
-                            // normalize to colWith
-                            left = ui.position.left -= ui.originalPosition.left,
-                            move = Math.floor(left / colWidth),
-                            day = d.my.initPos + move,
-                            top = ui.position.top;
-
-                        // correct position
-                        if (d.my.firstPos === d.my.lastPos) {
-                            // start and end on same day
-                            d.my.mode = 4;
-                        } else if (day === d.my.firstPos + move) {
-                            // drag first element
-                            d.my.mode = 3;
-                        } else if (day === d.my.lastPos + move) {
-                            // drag last element
-                            d.my.mode = 2;
-                        } else {
-                            // drag in all other cases
-                            d.my.mode = 1;
-                        }
-
-                        // abort moving
-                        if (day < 0 || day >= self.columns) {
-                            left = ui.position.left = d.my.lastLeft;
-                        } else if (d.my.mode < 4) {
-                            // hide apppintment parts outside of the pane
-                            d.my.all.show();
-                            if (d.my.firstPos + move < 0) {
-                                d.my.all.slice(0, Math.abs(d.my.firstPos + move)).hide();
-                            } else if (d.my.lastPos + move >= self.columns) {
-                                d.my.all.slice((d.my.lastPos + move - self.columns + 1) * -1).hide();
-                            }
-                        }
-
-                        if (d.my.mode === 4 && (top < 0 || (top + d.my.height) > paneHeight)) {
-                            top = ui.position.top = d.my.lastTop;
-                        }
-
-                        // apply new position
-                        d.my.all.css('left', left);
-
-                        // elements do not move
-                        if (ui.position.top < 0 || d.my.mode <= 2) {
-                            ui.position.top = 0;
-                        }
-
-                        // last element
-                        if (d.my.mode === 2) {
-                            d.options.axis = 'x';
-                        }
-
-                        // handling on multi-drag
-                        if (d.my.mode < 4) {
-                            if (d.my.lastTop !== top) {
-                                var diff = top - d.my.lastTop,
-                                    firstTop = d.my.firstTop + diff,
-                                    lastHeight = d.my.lastHeight + diff;
-
-                                // calc first position
-                                if (((d.my.firstTop >= 0 && firstTop < 0) || (d.my.firstTop >= paneHeight && firstTop < paneHeight)) && diff < 0) {
-                                    $('.week-container .day[date="' + (--d.my.firstPos) + '"]', self.$el)
-                                        .append($(this).clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                }
-                                if (((d.my.firstTop < 0 && firstTop >= 0) || (d.my.firstTop < paneHeight && firstTop >= paneHeight)) && diff > 0) {
-                                    d.my.firstPos++;
-                                    d.my.all.first().remove();
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                }
-                                if (firstTop < 0) {
-                                    firstTop += paneHeight;
-                                } else if (firstTop >= paneHeight) {
-                                    firstTop -= paneHeight;
-                                }
-                                // update first element
-                                d.my.all.first().css({
-                                    top: firstTop,
-                                    height: paneHeight - firstTop
-                                });
-
-                                // calc last position
-                                if (((d.my.lastHeight <= 0 && lastHeight > 0) || (d.my.lastHeight <= paneHeight && lastHeight > paneHeight)) && diff > 0) {
-                                    $('.week-container .day[date="' + (++d.my.lastPos) + '"]', self.$el)
-                                        .append($(this).clone());
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                }
-                                if (((d.my.lastHeight > 0 && lastHeight <= 0) || (d.my.lastHeight > paneHeight && lastHeight <= paneHeight)) && diff < 0) {
-                                    d.my.lastPos--;
-                                    d.my.all.last().remove();
-                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
-                                }
-                                if (lastHeight <= 0) {
-                                    lastHeight += paneHeight;
-                                } else if (lastHeight > paneHeight) {
-                                    lastHeight -= paneHeight;
-                                }
-                                d.my.all.last().css({
-                                    top: 0,
-                                    height: lastHeight
-                                });
-
-                                d.my.firstTop += diff;
-                                d.my.lastHeight += diff;
-                            }
-                        }
-                        d.my.lastTop = top;
-                        d.my.lastLeft = left;
-                    },
-                    stop: function (e, ui) {
-                        var d = $(this).data('ui-draggable'),
-                            off = $('.week-container', this.$el).offset(),
-                            move = Math.round(ui.position.left / colWidth),
-                            app = self.collection.get($(this).data('cid')).attributes,
-                            startTS = moment(app.start_date)
-                                .add(self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top), 'milliseconds') // milliseconds
-                                .add(move, 'days') // days
-                                .valueOf();
-                        if (e.pageX < window.innerWidth && e.pageX > off.left && e.pageY < window.innerHeight) {
-                            // save for update calculations
-                            app.old_start_date = app.start_date;
-                            app.old_end_date = app.end_date;
-                            app.drag_move = move;
-                            _.extend(app, {
-                                start_date: startTS,
-                                end_date: startTS + (app.end_date - app.start_date)
-                            });
-                            d.my.all.busy();
-                            // disable widget
-                            $(this).draggable('disable');
-
-                            if (app.start_date !== app.old_start_date) {
-                                self.onUpdateAppointment(app);
-                            } else {
-                                self.renderAppointments();
-                            }
-                        } else {
-                            self.trigger('onRefresh');
-                        }
-                        d.my = null;
-                    }
-                });
-
             $('.week-container .day', this.$el).droppable();
 
-            // remove unused resizable panes
-            $('.day>.appointment.rmnorth .ui-resizable-n, .day>.appointment.rmsouth .ui-resizable-s', this.$el)
-                .remove();
+            ext.point('io.ox/calendar/week/view').invoke('draw', this, {
+                folders: this.getFolders()
+            });
 
-            // init drag and resize widget on full-time appointments
-            $('.fulltime>.appointment.modify', this.$el)
-                .draggable({
-                    grid: [colWidth, 0],
-                    axis: 'x',
-                    delay: 300,
-                    scroll: true,
-                    snap: '.day',
-                    zIndex: 2,
-                    stop: function (e) {
-                        if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
-                            $(this).draggable('disable').busy();
-                            var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
-                                startTS = moment(self.startDate).add(newPos, 'days').utc(true).valueOf(),
-                                app = self.collection.get($(this).data('cid')).attributes;
-                            // save for update calculations
-                            app.old_start_date = app.start_date;
-                            app.old_end_date = app.end_date;
-                            _.extend(app, {
-                                start_date: startTS,
-                                end_date: startTS + (app.end_date - app.start_date)
-                            });
-                            if (app.start_date !== app.old_start_date) {
-                                self.onUpdateAppointment(app);
-                            } else {
-                                self.renderAppointments();
-                            }
-                        } else {
-                            self.trigger('onRefresh');
-                        }
-                    }
-                })
-                .resizable({
-                    grid: [colWidth, 0],
-                    minWidth: colWidth,
-                    handles: 'w, e',
-                    containment: 'parent',
-                    start: function () {
-                        $(this).addClass('opac').css('zIndex', $(this).css('zIndex') + 2000);
-                    },
-                    stop: function (e, ui) {
-                        var el = $(this),
-                            app = self.collection.get(el.data('cid')).attributes,
-                            newDayCount = Math.round(el.outerWidth() / (self.fulltimePane.width() / self.columns));
-                        // save for update calculations
-                        app.old_start_date = app.start_date;
-                        app.old_end_date = app.end_date;
-                        el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
-
-                        if (parseInt(el.position().left, 10) !== parseInt(ui.originalPosition.left, 10)) {
-                            app.start_date = moment(app.end_date).subtract(newDayCount, 'days').valueOf();
-                        } else if (parseInt(el.width(), 10) !== parseInt(ui.originalSize.width, 10)) {
-                            app.end_date = moment(app.start_date).add(newDayCount, 'days').valueOf();
-                        }
-
-                        el.resizable('disable').busy();
-                        self.onUpdateAppointment(app);
-                    }
-                });
             this.updateHiddenIndicators();
+            $('.appointment').trigger('calendar:weekview:rendered');
 
             // global event for tracking purposes
             ox.trigger('calendar:items:render', this);
@@ -1880,13 +1490,14 @@ define('io.ox/calendar/week/view', [
         renderAppointment: function (a) {
             var el = $('<div class="appointment">')
                 .attr({
-                    'data-cid': a.id,
+                    'data-cid': a.cid,
+                    'data-master-id': util.cid({ id: a.get('id'), folder: a.get('folder') }),
                     'data-extension-point': this.extPoint,
-                    'data-composite-id': a.id
+                    'data-composite-id': a.cid
                 });
 
             ext.point(this.extPoint)
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folder: this.folder() })));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folders: this.getFolders() })));
             return el;
         },
 
@@ -1895,14 +1506,22 @@ define('io.ox/calendar/week/view', [
          * @param  { Backbone.Model } a Appointment Model
          */
         redrawAppointment: function (a) {
-            var positionFieldChanged = _(['start_date', 'end_date', 'full_time'])
+            var positionFieldChanged = _(['startDate', 'endDate', 'allDay'])
                 .any(function (attr) { return !_.isUndefined(a.changed[attr]); });
             if (positionFieldChanged) {
                 this.renderAppointments();
             } else {
-                var el = $('[data-cid="' + a.id + '"]', this.$el);
-                el.replaceWith(this.renderAppointment(a)
-                    .attr('style', el.attr('style')));
+                var el = $('[data-cid="' + a.id + '"]', this.$el),
+                    newAppointment = this.renderAppointment(a),
+                    color = newAppointment.css('color'),
+                    backgroundColor = newAppointment.data('background-color') || '';
+                el
+                    .attr({ class: newAppointment.attr('class') })
+                    .css({ color: color, 'background-color': backgroundColor })
+                    .data('background-color', backgroundColor)
+                    .empty()
+                    .append(newAppointment.children());
+                $('.appointment').trigger('calendar:weekview:rendered');
             }
         },
 
@@ -1990,17 +1609,26 @@ define('io.ox/calendar/week/view', [
             return this.folderData;
         },
 
+        setFolders: function (folders) {
+            this.folders = folders;
+        },
+
+        getFolders: function () {
+            return this.folders;
+        },
+
         /**
          * collect request parameter to realize monthly chunks
          * @return { Object } object with startdate, enddate and folderID
          */
         getRequestParam: function () {
-            // return update data
-            return {
-                start: this.apiRefTime.valueOf(),
-                end: moment(this.apiRefTime).add(10, 'weeks').valueOf(),
-                folder: this.folderData.id === 'virtual/all-my-appointments' ? 0 : this.folderData.id
+            var params = {
+                start: this.startDate.valueOf(),
+                end: moment(this.startDate).add(this.columns, 'days').valueOf(),
+                view: 'week',
+                folders: _(this.getFolders()).pluck('id')
             };
+            return params;
         },
 
         /**
@@ -2022,117 +1650,10 @@ define('io.ox/calendar/week/view', [
         },
 
         print: function () {
-            var self = this,
-                folder = self.folder(),
-                folderID = folder.id || folder.folder,
-                templates = {
-                    'day': 'cp_dayview_table_appsuite.tmpl',
-                    'workweek': 'cp_weekview_table_appsuite.tmpl',
-                    'week': 'cp_weekview_table_appsuite.tmpl'
-                },
-                data = null,
-                styleNode = $('<style type="text/css">').text(printStyle);
-
-            if (folderID && folderID !== 'virtual/all-my-appointments') {
-                data = { folder_id: folderID };
-            }
-
-            var win = print.open('printCalendar', data, {
-                template: templates[self.mode],
-                start: moment(self.startDate).utc(true).valueOf(),
-                end: moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
-                work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
-                work_day_end_time: self.workEnd * 36e5
-            });
-
-            if (this.app.props.get('colorScheme') === 'custom') {
-                // apply custom colors
-                win.onload = function () {
-                    $(win.document.head).append(styleNode);
-                    $(win.document.body).addClass('print-view-custom-colors');
-                    win.onload = null;
-                };
-            }
-
-            if (_.browser.firefox) {
-                // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-                var limit = 50,
-                    counter = 0,
-                    interval;
-                // onLoad does not work with firefox on mac, so ugly polling is used
-                interval = setInterval(function () {
-                    counter++;
-                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                        win.print();
-                        clearInterval(interval);
-                    }
-                }, 100);
-            } else {
-                win.print();
-            }
-        }
-    });
-
-    ext.point('io.ox/calendar/week/view/appointment').extend({
-        id: 'default',
-        index: 100,
-        draw: function (baton) {
-            var self = this,
-                a = baton.model,
-                folder = baton.folder,
-                conf = 1,
-                confString = '%1$s',
-                classes = '';
-
-            function addColorClasses(f) {
-                self.addClass(util.getAppointmentColorClass(f, a.attributes));
-
-                if (util.canAppointmentChangeColor(f, a.attributes)) {
-                    self.attr('data-folder', f.id);
-                }
-            }
-
-            var folder_id = a.get('folder_id');
-            if (String(folder.id) === String(folder_id)) {
-                addColorClasses(folder);
-            } else if (folder_id !== undefined) {
-                folderAPI.get(folder_id).done(addColorClasses);
-            }
-
-            if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
-                classes = 'private disabled';
-            } else {
-                conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf) +
-                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
-                if (conf === 3) {
-                    confString =
-                        //#. add confirmation status behind appointment title
-                        //#. %1$s = apppintment title
-                        //#, c-format
-                        gt('%1$s (Tentative)');
-                }
-            }
-
-            this
-                .attr('tabindex', 0)
-                .addClass(classes)
-                .append(
-                    $('<div class="appointment-content">').append(
-                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('title') ? $('<div class="title">').text(gt.format(confString, a.get('title') || '\u00A0')) : '',
-                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
-                    )
-                )
-                .attr({
-                    'data-extension': 'default'
-                });
-
-            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
-                if (!isBossy) {
-                    self.removeClass('modify');
-                }
+            print.request('io.ox/calendar/week/print', {
+                start: moment(this.startDate).valueOf(),
+                end: moment(this.startDate).add(this.columns, 'days').valueOf(),
+                folders: this.folders
             });
         }
     });

@@ -1,0 +1,89 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+.alarms-view {
+    .alarm-list {
+        overflow-x: hidden;
+        margin-bottom: 5px;
+        .alarm-list-item {
+            padding-top: 5px;
+            padding-bottom: 5px;
+
+            &:first-child {
+                padding-top: 10px;
+            }
+            &:hover {
+                background-color: #eeeeee;
+            }
+
+            .alarm-action,.alarm-time {
+                margin: 0;
+            }
+            .alarm-remove {
+                text-align: center;
+                &:hover,&:focus {
+                    background-color: #cc0000;
+                    color: #fff;
+                    background-clip: content-box;
+                }
+            }
+
+            .row {
+                line-height: 30px;
+            }
+
+            @media (max-width: 992px), (max-device-width: 992px) {
+                .alarm-remove {
+                    bottom: 34px;
+                    height: 64px;
+                    line-height: 64px;
+                };
+
+                .alarm-action {
+                    margin-bottom: 4px
+                }
+
+                .row {
+                    height: 64px;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+    &.uses-small-container {
+        .col-xs-10 {
+            width: 83.33333333%;
+        }
+
+        .col-xs-5 {
+            width: 41.66666667%;
+        }
+
+        .alarm-remove {
+            width: 16.66666667%;
+            margin-left: 0;
+            bottom: 34px;
+            height: 64px;
+            line-height: 64px;
+        };
+
+        .alarm-list .alarm-list-item .alarm-action {
+            margin-bottom: 4px
+        }
+
+        .row {
+            height: 64px;
+            overflow: hidden;
+        }
+    }
+}

@@ -42,6 +42,9 @@ define('io.ox/mail/toolbar', [
             mobile: 'hi',
             label: gt('Compose'),
             title: gt('Compose new email'),
+            customize: function (baton) {
+                this.parent().toggle(!baton.app.props.get('folderview'));
+            },
             drawDisabled: true,
             ref: 'io.ox/mail/actions/compose'
         },
@@ -130,10 +133,18 @@ define('io.ox/mail/toolbar', [
         'flag': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-star-o',
+            icon: 'fa fa-star',
             //#. Verb: (to) flag messages
             label: gt.pgettext('verb', 'Flag'),
             ref: 'io.ox/mail/actions/flag'
+        },
+        'unflag': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-star-o',
+            //#. Verb: (to) unflag messages
+            label: gt.pgettext('verb', 'Unflag'),
+            ref: 'io.ox/mail/actions/unflag'
         },
         'archive': {
             prio: 'hi',

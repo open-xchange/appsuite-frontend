@@ -20,14 +20,13 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/api/collection-pool',
     'io.ox/mail/detail/content',
     'io.ox/core/extPatterns/links',
-    'io.ox/core/emoji/util',
     'io.ox/core/a11y',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, contentStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, a11y, gt, contentStyle) {
 
     'use strict';
 
@@ -50,14 +49,11 @@ define('io.ox/mail/detail/view', [
         index: INDEX += 100,
         draw: function (baton) {
 
-            var subject = util.getSubject(baton.data),
-                node = $('<h1 class="subject">').text(subject);
+            var subject = util.getSubject(baton.data);
 
-            emoji.processEmoji(_.escape(subject), function (html) {
-                node.html(html);
-            });
-
-            this.append(node);
+            this.append(
+                $('<h1 class="subject">').text(subject)
+            );
         }
     });
 
@@ -211,8 +207,21 @@ define('io.ox/mail/detail/view', [
         id: 'default',
         index: 100,
         draw: function (baton) {
+            var data = baton.data, from = data.from || [],
+                status = util.authenticity('via', data);
 
-            var data = baton.data, from = data.from || [];
+            if (status && baton.data.authenticity.from_dmain) {
+                this.append(
+                    $('<div class="sender">').append(
+                        $('<span class="io-ox-label">').append(
+                            //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+                            $.txt(gt('Via')),
+                            $.txt('\u00A0\u00A0')
+                        ),
+                        $('<span class="address">').text(baton.data.authenticity.from_dmain)
+                    )
+                );
+            }
 
             // add 'on behalf of'?
             if (!('headers' in data)) return;
@@ -308,10 +317,17 @@ define('io.ox/mail/detail/view', [
 
     var INDEX_notifications = 0;
 
+
     ext.point('io.ox/mail/detail/notifications').extend({
         id: 'phishing',
         index: INDEX_notifications += 100,
         draw: extensions.phishing
+    });
+
+    ext.point('io.ox/mail/detail/notifications').extend({
+        id: 'authenticity',
+        index: INDEX_notifications += 100,
+        draw: extensions.authenticity
     });
 
     ext.point('io.ox/mail/detail/notifications').extend({
@@ -333,6 +349,7 @@ define('io.ox/mail/detail/view', [
             this.append($('<section class="error">').hide());
         }
     });
+
 
     ext.point('io.ox/mail/detail').extend({
         id: 'body',
@@ -363,22 +380,6 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
-        id: 'inplace-reply-recover',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var model = baton.model;
-            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
-                if (!InplaceReplyView.hasDraft(model.cid)) return;
-                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
-                // trigger click to open
-                baton.view.$('.detail-view-header').click();
-                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
-                model = null;
-            });
-        }
-    });
-
     ext.point('io.ox/mail/detail/body').extend({
         id: 'iframe',
         index: 100,
@@ -390,6 +391,7 @@ define('io.ox/mail/detail/view', [
             baton.iframe = iframe;
         }
     });
+
 
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
@@ -416,81 +418,88 @@ define('io.ox/mail/detail/view', [
                 node = data.content,
                 self = this;
 
-            if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.innerHTML, function (html, lib) {
-                    baton.processedEmoji = !lib.loaded;
-                    if (baton.processedEmoji) return;
-                    node.innerHTML = html;
-                });
-            }
-
-            if (this.find('.content-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
-                var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
-                    return require('css!' + point.css).clone();
-                }).value();
-                this.prepend(emojiStyles);
-            }
-
-
             var resizeLoop = 0;
             // function to make sure there is only one resize loop
             function startResizeLoop() {
                 resizeFrame(resizeLoop);
             }
 
-            function resizeFrame(once) {
+            function resizeFrame(once, options) {
+                options = options || {};
+
+                var frame = self.find('.mail-detail-frame'),
+                    widthChange = baton.view.iframePrevWidth && frame.width() !== baton.view.iframePrevWidth,
+                    scrollpos = options.scrollpos,
+                    contents = frame.contents();
+
+                // stop if mail is collapsed or removed
+                if (!baton.view.$el || !baton.view.$el.hasClass('expanded') || contents.length === 0) {
+                    if (!once) resizeLoop = 0;
+                    return;
+                }
+
+                //wait until width doesn't change anymore
+                if (widthChange && !options.forceApply) {
+                    baton.view.iframePrevWidth = frame.width();
+                    _.delay(resizeFrame, 300, once, { widthChanged: true });
+                    return;
+                } else if (options.widthChanged) {
+                    // if we had a width change, we need to calculate from scratch because the mail adapts and the content changes in height (smartphone slide animation, listview width change, window resize).
+                    scrollpos = _.device('smartphone') ? frame.closest('.mail-detail-pane')[0].scrollTop : frame.scrollParent().scrollTop();
+                    frame.css('height', 'auto');
+                    // firefox needs the defer or the height isnt properly applied and the calculation is wrong, causes slight flickering though
+                    if (_.device('firefox')) {
+                        _.defer(resizeFrame, once, { scrollpos: scrollpos, forceApply: true });
+                        return;
+                    }
+                    options.forceApply = true;
+                }
+
                 // increase the delay by 300ms until we max out at 5s
                 // we do this to reduce the load
                 if (!once) resizeLoop = Math.min(resizeLoop + 300, 5000);
 
-                // stop if mail is collapsed or removed
-                if (!baton.view.$el || !baton.view.$el.hasClass('expanded')) {
-                    if (!once) resizeLoop = 0;
-                    return;
-                }
-
-                var frame = self.find('.mail-detail-frame'),
-                    contents = frame.contents(),
-                    height = contents.find('.mail-detail-content').height(),
+                var height = contents.find('.mail-detail-content').height(),
                     prevHeight = height,
                     htmlHeight = contents.find('html').height();
 
-                // frame was removed, we can stop here
-                if (contents.length === 0) {
-                    if (!once) resizeLoop = 0;
-                    return;
-                }
-
-                if (height === 0 && !once) {
-                    // height 0 should(!) never happen, the dom node seems to be not rendered yet and
-                    // calculation fails. Give it another try. Actually only an issue on FF
-                    _.delay(resizeFrame, 10);
-                    return;
-                }
-
+                // don't apply height of 0 or undefined. mail is probably not loaded at all yet, just start the resizeloop again after the delay
                 // check if mail content is really grown or if the mail just has broken css (content size always above 100%)
-                if (!once && height === baton.model.get('iframe-height-change')) {
-                    _.delay(resizeFrame, resizeLoop);
+                if (!options.forceApply && (!height || (!once && height === baton.model.get('iframeHeightAfterChange')))) {
+                    if (!once) _.delay(resizeFrame, resizeLoop);
                     return;
                 }
 
-                if (height < htmlHeight) height = htmlHeight;
+                if (!options.forceApply && height < htmlHeight) height = htmlHeight;
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
 
-                // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
-                // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
-                if (prevHeight !== contents.find('.mail-detail-content').height()) {
-                    // save heightchange so we can distinguish between pictureload and broken mail css
-                    baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
-                }
-
                 // fixes overflow (see bug 55876)
                 if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
 
-                // check height again as there might be slow loading external images
-                if (!once) _.delay(resizeFrame, resizeLoop);
+                // save width so we can track if the width changed (smartphone slide animation, listview width change, window resize). If the with changed, we need to recalculate from scratch
+                baton.view.iframePrevWidth = frame.width();
+
+                // firefox needs the defer here for the height to be applied
+                _.defer(function () {
+                    if (scrollpos !== undefined || options.scrollpos !== undefined) {
+                        if (_.device('smartphone')) {
+                            frame.closest('.mail-detail-pane')[0].scrollTop = scrollpos || options.scrollpos;
+                        } else {
+                            frame.scrollParent().scrollTop(scrollpos || options.scrollpos);
+                        }
+                    }
+
+                    // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
+                    // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
+                    if (prevHeight !== contents.find('.mail-detail-content').height()) {
+                        // save heightchange so we can distinguish between pictureload and broken mail css
+                        baton.model.set('iframeHeightAfterChange', contents.find('.mail-detail-content').height());
+                    }
+                    // check height again as there might be slow loading external images
+                    if (!once) _.delay(resizeFrame, resizeLoop);
+                });
             }
 
             $(node).on('resize imageload', startResizeLoop); // for expanding blockquotes and inline images
@@ -509,8 +518,24 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'iframe-events',
+        index: 1100,
+        draw: function (baton) {
+            var targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
+
+            // forward deep link clicks from iframe scope to document-wide handlers
+            baton.iframe.contents().on('click', targets, function (e) {
+                e.preventDefault();
+                ox.trigger('click:deep-link-mail', e, this);
+            });
+        }
+    });
+
     ext.point('io.ox/mail/detail/body').extend({
         id: 'max-size',
+        index: 1200,
         after: 'content',
         draw: function (baton) {
 

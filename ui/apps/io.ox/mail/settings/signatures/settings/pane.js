@@ -63,10 +63,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 )
             );
 
-            function looksLikeHTML(str) {
-                return (/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/).test(str || '');
-            }
-
             require(['io.ox/core/tk/contenteditable-editor', 'io.ox/mail/api'], function (Editor, mailAPI) {
                 new Editor(container, {
                     toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
@@ -206,8 +202,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         .build(function () {
             this.$el.addClass('io-ox-signature-dialog');
         })
-        .addButton({ action: 'save', label: gt('Save') })
         .addCancelButton()
+        .addButton({ action: 'save', label: gt('Save') })
         .on('save', function () {
             // cancel 'save' on validation error
             this.validateName();
@@ -222,6 +218,29 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         })
         .on('close', function () { if (this.editor) this.editor.destroy(); })
         .open();
+    }
+
+    function looksLikeHTML(str) {
+        return /(<\/?\w+(\s[^<>]*)?>)/.test(str || '');
+    }
+
+    function getSignaturePreview(str) {
+        str = $.trim(str);
+        // fix very special case
+        str = str.replace(/^<pre>([\s\S]+)<\/pre>$/, '$1');
+        if (looksLikeHTML(str)) {
+            return str
+                // remove white-space first
+                .replace(/[\r\n\t]/g, '')
+                // replace <br>, <div>, and <p> by line breaks
+                .replace(/(<br>|<br><\/div>|<\/div>|<\/p>)/gi, '\n')
+                // remove all other tags
+                .replace(/<(?:.|\n)*?>/gm, '')
+                // now convert line breaks to <br>
+                .replace(/\n+/g, '<br>');
+        }
+        // plain text
+        return _.escape(str).replace(/\n+/g, '<br>');
     }
 
     function fnImportSignatures(e) {
@@ -241,11 +260,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 util.checkbox('delete', gt('Delete old signatures after import'), this.model),
                 $('<ul class="io-ox-signature-import">').append(
                     _(signatures).map(function (sig) {
-                        //replace div and p elements to br's and remove all other tags.
-                        var preview = (sig.signature_text || '')
-                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
-                            .replace(/<(?:.|\n)*?>/gm, '')
-                            .replace(/(\n)+/g, '<br>');
+                        // replace div and p elements to br's and remove all other tags
+                        var preview = getSignaturePreview(sig.signature_text);
                         // if preview is empty or a single br-tag use fallback
                         if (preview === '' || preview === '<br>') preview = $('<i>').text(gt('No preview available'));
                         return $('<li>').append(
@@ -424,18 +440,14 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         childOptions: {
                             titleAttribute: 'displayname',
                             customize: function (model) {
-                                var content = model.get('content')
-                                    .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
-                                    .replace(/<(?:.|\n)*?>/gm, '')
-                                    .replace(/(\n)+/g, '<br>');
-
+                                var preview = getSignaturePreview(model.get('content'));
                                 this.$('.list-item-controls').append(
                                     listutils.controlsEdit(),
                                     listutils.controlsDelete()
                                 );
                                 this.$el.append(
                                     $('<div class="signature-preview">').append(
-                                        $('<div>').on('click', clickEdit.bind(self)).append(content)
+                                        $('<div>').on('click', clickEdit.bind(self)).append(preview)
                                     )
                                 );
                                 onChangeDefault();

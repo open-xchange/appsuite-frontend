@@ -299,14 +299,6 @@ msgstr ""
 "Организуйте совместную работу над документами и настройте разные уровни "
 "доступа."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Подсказка. Вы можете вернуться к обзору в любое удобное для вас время, "
-"запустив его из системного меню."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Категории настроек"
@@ -322,14 +314,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Если вы больше не хотите видеть секцию, нажмите на значок удаления."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"Область уведомлений открывается при появлении новых уведомлений (приглашений "
-"на встречи и пр.)"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -406,10 +390,6 @@ msgstr "Чтение обсуждений"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Подробности"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Начать снова"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -494,18 +474,6 @@ msgstr ""
 "Встречи будут показаны в виде списка. Выберите встречу, чтобы открыть ее "
 "параметры."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Значок новых сообщений"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Значок новых сообщений показывает количество напоминаний о встречах или "
-"других уведомлений. По щелчку открывается панель с подробностями."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Портал"
@@ -539,10 +507,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Структура папок"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Область уведомлений"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -692,7 +656,12 @@ msgstr ""
 "Дополнительно можно вложить документы."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "Чтобы запустить приложение, выберите его имя в левой части меню."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -728,10 +697,16 @@ msgstr ""
 "«Параметры», затем в левой части окна выберите «Почта»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Чтобы открыть справку текущего приложения, откройте системное меню в правом "
@@ -739,9 +714,13 @@ msgstr ""
 "верхней части окна выберите «Начальная страница» или «Содержание»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Для доступа к параметрам откройте системное меню в правой части панели "
 "навигации и выберите «Параметры»."
@@ -786,6 +765,17 @@ msgstr "Чтобы отправить письмо, нажмите «Отпра�
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Чтобы завершить сеанс, откройте системное меню в правом верхнем углу и "
+"выберите «Выход»."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Чтобы завершить сеанс, откройте системное меню в правом верхнем углу и "
 "выберите «Выход»."
@@ -3067,6 +3057,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Высокий приоритет"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Подсказка. Вы можете вернуться к обзору в любое удобное для вас время, "
+#~ "запустив его из системного меню."
+
 #~ msgid "Hobby"
 #~ msgstr "Хобби"
 
@@ -3161,6 +3158,13 @@ msgstr ""
 #~ "is opened on the right side."
 #~ msgstr ""
 #~ "Приглашения на встречи и другие уведомления будут показаны в правой части."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Область уведомлений открывается при появлении новых уведомлений "
+#~ "(приглашений на встречи и пр.)"
 
 #~ msgid "In progress"
 #~ msgstr "Выполняется"
@@ -4577,6 +4581,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Ресурсы"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Начать снова"
+
 #~ msgid "Restore applications"
 #~ msgstr "Восстановить приложения"
 
@@ -5234,6 +5241,16 @@ msgstr ""
 #~ "файл, установите флажок напротив его имени. Выберите файл для просмотра "
 #~ "подробной информации."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Значок новых сообщений"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Значок новых сообщений показывает количество напоминаний о встречах или "
+#~ "других уведомлений. По щелчку открывается панель с подробностями."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5426,6 +5443,9 @@ msgstr ""
 #~ "icon to get a list of sort criteria."
 #~ msgstr ""
 #~ "Нажмите значок в правом нижнем углу для просмотра критериев сортировки."
+
+#~ msgid "The info area"
+#~ msgstr "Область уведомлений"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Максимальное число получателей в поле: %1$s"

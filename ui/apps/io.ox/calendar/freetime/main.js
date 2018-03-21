@@ -19,12 +19,17 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
-    'settings!io.ox/core',
+    'io.ox/calendar/util',
+    'io.ox/core/folder/api',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, coreSettings) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, util, folderAPI) {
 
     'use strict';
+
+    // helper variables
+    var SETTINGS_KEYS = ['zoom', 'onlyWorkingHours', 'showFree', 'showReserved', 'compact', 'dateRange', 'showFineGrid'],
+        ZOOM_LEVELS = _([10, 25, 50, 100, 200, 400, 1000]).map(function (level) { return 'zoomlevel-' + level; }).join(' ');
 
     //
     // Freetimeview. Simple view used to coordinate appointments with multiple participants
@@ -42,25 +47,30 @@ define('io.ox/calendar/freetime/main', [
             this.options = options || {};
             this.parentModel = options.parentModel;
             this.app = options.app;
+            var attendeesToAdd = [];
             if (options.parentModel) {
-                this.model.get('participants').add(options.parentModel.get('participants'));
-                this.model.set('currentWeek', moment(options.parentModel.get('start_date')).startOf('week'));
+                attendeesToAdd = options.parentModel.get('attendees');
+                this.model.set('startDate', util.getMoment(options.parentModel.get('startDate')).startOf(this.model.get('dateRange')));
             } else {
                 if (options.startDate) {
-                    this.model.set('currentWeek', moment(options.startDate).startOf('week'));
+                    this.model.set('startDate', moment(options.startDate).startOf(this.model.get('dateRange')));
                 }
-                if (options.participants) {
-                    this.model.get('participants').add(options.participants);
+                if (options.attendees) {
+                    attendeesToAdd = options.attendees;
                 }
             }
+
+            // reference to the date we started the view in (is used to prevent jumping when switching from month to week)
+            this.model.set('viewStartedWith', moment(options.parentModel ? util.getMoment(options.parentModel.get('startDate')) : options.startDate));
 
             this.participantsSubview = new ParticipantsView({ model: this.model, parentView: this });
             this.timeSubview = new TimeView({ model: this.model, parentModel: options.parentModel, parentView: this });
 
             this.model.on('change:zoom', self.updateZoom.bind(this));
-            this.model.on('change:compact', self.updateCompact.bind(this));
-            this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
-            this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
+            this.model.on('change:compact', self.updateClasses.bind(this, 'compact'));
+            this.model.on('change:onlyWorkingHours', self.updateClasses.bind(this, 'onlyWorkingHours'));
+            this.model.on('change:showFineGrid', self.updateClasses.bind(this, 'showFineGrid'));
+            this.model.on(_(SETTINGS_KEYS).map(function (setting) { return 'change:' + setting; }).join(' '), self.updateSettings.bind(this));
 
             api.on('refresh.all update', refresh);
             this.on('dispose', function () {
@@ -74,37 +84,38 @@ define('io.ox/calendar/freetime/main', [
                 }
                 self.participantsSubview.bodyNode[0].scrollTop = this.scrollTop;
             });
+            // allow scrolling in the participants area without a scrollbar
+            this.participantsSubview.bodyNode.on('wheel', function (e) {
+                // firefox needs a multiplicator here or it's too slow
+                self.timeSubview.bodyNode[0].scrollTop = self.timeSubview.bodyNode[0].scrollTop + e.originalEvent.deltaY * (_.device('firefox') ? 4 : 1);
+            });
 
             this.header = $('<div class="freetime-view freetime-view-header">').addClass('zoomlevel-' + this.model.get('zoom'));
             this.body = $('<div class="freetime-view freetime-view-body">').addClass('zoomlevel-' + this.model.get('zoom'));
-            this.updateWorkingHours();
-            this.updateCompact();
+
+            this.updateClasses('onlyWorkingHours');
+            this.updateClasses('showFineGrid');
+            this.updateClasses('compact');
+
+            return this.model.get('attendees').add(attendeesToAdd);
+        },
+
+        updateClasses: function (className) {
+            this.header.toggleClass(className, this.model.get(className));
+            this.body.toggleClass(className, this.model.get(className));
         },
 
         updateSettings: function () {
-            settings.set('scheduling/zoom', this.model.get('zoom'));
-            settings.set('scheduling/onlyWorkingHours', this.model.get('onlyWorkingHours'));
-            settings.set('scheduling/showFree', this.model.get('showFree'));
-            settings.set('scheduling/showAbsent', this.model.get('showAbsent'));
-            settings.set('scheduling/showReserved', this.model.get('showReserved'));
-            settings.set('scheduling/showTemporary', this.model.get('showTemporary'));
-            settings.set('scheduling/compact', this.model.get('compact'));
+            var self = this;
+            _(SETTINGS_KEYS).each(function (key) {
+                settings.set('scheduling/' + key, self.model.get(key));
+            });
             settings.save();
         },
 
         updateZoom: function () {
-            this.header.removeClass('zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
-            this.body.removeClass('zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
-        },
-
-        updateWorkingHours: function () {
-            this.header.toggleClass('only-workinghours', this.model.get('onlyWorkingHours'));
-            this.body.toggleClass('only-workinghours', this.model.get('onlyWorkingHours'));
-        },
-
-        updateCompact: function () {
-            this.header.toggleClass('compact', this.model.get('compact'));
-            this.body.toggleClass('compact', this.model.get('compact'));
+            this.header.removeClass(ZOOM_LEVELS).addClass('zoomlevel-' + this.model.get('zoom'));
+            this.body.removeClass(ZOOM_LEVELS).addClass('zoomlevel-' + this.model.get('zoom'));
         },
 
         renderHeader: function () {
@@ -140,7 +151,7 @@ define('io.ox/calendar/freetime/main', [
 
             distributionListButton.on('click', function () {
                 require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
-                    distrib.showDialog({ participants: self.model.get('participants') });
+                    distrib.showDialog({ attendees: self.model.get('attendees') });
                 });
             });
             return distributionListButton;
@@ -151,7 +162,8 @@ define('io.ox/calendar/freetime/main', [
                 var appointment = this.createAppointment();
 
                 if (appointment) {
-                    appointment.folder = coreSettings.get('folder/calendar');
+                    // TODO change core settings so the default folder isn't just a number
+                    appointment.folder = folderAPI.getDefaultFolder('calendar');
                     ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                         edit.getApp().launch().done(function () {
                             this.create(appointment);
@@ -268,8 +280,8 @@ define('io.ox/calendar/freetime/main', [
                     description: gt('Scheduling'),
                     module: 'io.ox/calendar/freetime',
                     point:  {
-                        participants: this.view.model.get('participants'),
-                        currentWeek: this.view.model.get('currentWeek').valueOf(),
+                        attendees: this.view.model.get('attendees'),
+                        startDate: this.view.model.get('startDate').valueOf(),
                         lassoStart: this.view.timeSubview.lassoStart,
                         lassoEnd: this.view.timeSubview.lassoEnd
                     }
@@ -282,16 +294,15 @@ define('io.ox/calendar/freetime/main', [
 
             this.view.timeSubview.lassoStart = point.lassoStart;
             this.view.timeSubview.lassoEnd = point.lassoEnd;
-            this.view.timeSubview.setDate(point.currentWeek);
+            this.view.timeSubview.setDate(point.startDate);
+            this.view.model.set('viewStartedWith', moment(point.startDate));
             this.view.timeSubview.updateLasso(true);
             if (!point.lassoStart) {
                 this.view.timeSubview.keepScrollpos = 'today';
             } else {
                 this.view.timeSubview.keepScrollpos = this.view.timeSubview.lassoStartTime;
             }
-            this.view.model.get('participants').add(point.participants);
-
-            return $.when();
+            return this.view.model.get('attendees').add(point.attendees);
         };
 
         app.getContextualHelp = function () {

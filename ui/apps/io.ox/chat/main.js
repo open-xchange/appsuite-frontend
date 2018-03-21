@@ -25,21 +25,26 @@ define('io.ox/chat/main', [
     'io.ox/contacts/util',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (data, events, WindowView, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI, contactsUtil) {
+], function (data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI, contactsUtil) {
 
     'use strict';
 
-    var Window = WindowView.extend({
+    var Window = FloatingWindow.View.extend({
 
-        events: {
-            'keydown .left-navigation': 'onLeftNavigationKeydown',
-            'keydown .overlay': 'onOverlayEvent',
-            'click .overlay': 'onOverlayEvent'
+        events: function () {
+            return _.extend(FloatingWindow.View.prototype.events, {
+                'keydown .left-navigation': 'onLeftNavigationKeydown',
+                'keydown .overlay': 'onOverlayEvent',
+                'click .overlay': 'onOverlayEvent'
+            });
         },
 
         initialize: function () {
+            FloatingWindow.View.prototype.initialize.apply(this, arguments);
+
+            var model = this.model;
             this.listenTo(data.backbone.chats, 'unseen', function (count) {
-                this.setCount(count);
+                model.set('count', count);
             });
 
             this.listenTo(events, 'cmd', this.onCommand);
@@ -145,7 +150,7 @@ define('io.ox/chat/main', [
         }
     });
 
-    var window = new Window({ title: 'OX Chat' }).open(),
+    var window = new Window({ title: 'OX Chat' }).render().open(),
         user = ox.rampup.user;
 
     // start with BAD style and hard-code stuff

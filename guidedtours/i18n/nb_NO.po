@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 16:30+0000\n"
+"POT-Creation-Date: 2018-02-21 10:43+0000\n"
 "PO-Revision-Date: 2017-05-09 12:42+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -301,12 +301,6 @@ msgstr ""
 "Her kan du dele filer med kolleger og eksterne kontakter. Du kan også "
 "samarbeide på et dokument, og sette forskjellige tilgangsrettigheter."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr "Tips: du kan alltid starte omvisninger når som helst fra systemmenyen."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Hvordan innstillingene er organisert"
@@ -321,14 +315,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Hvis du ønsker å fjerne en widget, klikk på krysset."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"Når du mottar nye varsler, f.eks. avtaleinvitasjoner, blir varslingsområdet "
-"åpnet."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -405,10 +391,6 @@ msgstr "Lese epostsamtaler"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Se flere detaljer"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Start omvisning på nytt"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -494,18 +476,6 @@ msgstr ""
 "Listevisningen viser en liste over avtaler i den gjeldende mappen. Ved å "
 "klikke på en avtale vil flere detaljer og funksjoner vises i detaljområdet. "
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Varslingsikonet"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Varslingsikonet viser antall avtalepåminnelser eller andre varslinger. Klikk "
-"på ikonet for å åpne varslingsområdet."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portalen"
@@ -543,10 +513,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Mappetreet"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Informasjonsområdet"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -699,7 +665,12 @@ msgstr ""
 "\"Deltakere\". Du kan også legge til dokumenter som vedlegg til oppgaven."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "For å starte en app, klikk på en av dem i menylinjen øverst på siden."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -735,10 +706,16 @@ msgstr ""
 "menylinjen. Velg Innstillinger. Klikk deretter Epost på venstre side."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "For å åpne hjelpedokumentasjonen, klikk systemmeny-ikonet øverst til høyre i "
@@ -746,9 +723,13 @@ msgstr ""
 "deretter vist. "
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "For å endre innstillingene, klikk på systemmeny-ikonet øverst til høyre i "
 "menylinjen. Velg Innstillinger."
@@ -793,6 +774,17 @@ msgstr "For å sende eposten, klikk \"Send\". "
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"For å logge ut, klikk på systemmeny-ikonet øverst til høyre i menylinjen. "
+"Velg \"Logg ut\". "
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "For å logge ut, klikk på systemmeny-ikonet øverst til høyre i menylinjen. "
 "Velg \"Logg ut\". "
@@ -877,6 +869,19 @@ msgstr ""
 #~ msgstr "Vise informasjon"
 
 #~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Tips: du kan alltid starte omvisninger når som helst fra systemmenyen."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Når du mottar nye varsler, f.eks. avtaleinvitasjoner, blir "
+#~ "varslingsområdet åpnet."
+
+#~ msgid ""
 #~ "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
 #~ "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
 #~ "voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
@@ -896,6 +901,9 @@ msgstr ""
 #~ "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea "
 #~ "rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum "
 #~ "dolor sit amet."
+
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Start omvisning på nytt"
 
 #~ msgid "The Icons view"
 #~ msgstr "Ikonvisning"
@@ -916,6 +924,16 @@ msgstr ""
 #~ "avkrysningsboksene for å velge filer. Klikk på en fil for å vise flere "
 #~ "detaljer og få tilgang til flere funksjoner."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Varslingsikonet"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Varslingsikonet viser antall avtalepåminnelser eller andre varslinger. "
+#~ "Klikk på ikonet for å åpne varslingsområdet."
+
 #~ msgid "The Tiles view"
 #~ msgstr "Flisevisning"
 
@@ -925,6 +943,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Flisevisningen viser et stort ikon for hver fil. Klikk et ikon for å vise "
 #~ "flere detaljer eller funksjoner."
+
+#~ msgid "The info area"
+#~ msgstr "Informasjonsområdet"
 
 #~ msgid "To create a note, click on New > Add note in the toolbar."
 #~ msgstr "For å opprette et notat, klikk Ny > Legg til notat i verktøylinjen."

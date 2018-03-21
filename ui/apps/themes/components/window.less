@@ -22,47 +22,159 @@
     top: 40px;
     overflow: hidden;
     z-index: 10;
+    html.taskbar-visible & {
+        bottom: 40px;
+    }
+
+    &.powermove-window-open {
+        .floating-window.cornered {
+
+            &.powermove {
+                right: 1032px;
+            }
+
+            @media (max-width: 1992px) {
+                width: 800px;
+                &.powermove {
+                    right: 872px;
+                }
+                .container {
+                    min-width: 770px;
+                }
+            }
+
+            @media (max-width: 1672px) {
+                width: 560px;
+                &.powermove {
+                    right: 632px;
+                }
+                .container {
+                    min-width: 530px;
+                }
+            }
+        }
+    }
 }
 
-#io-ox-windowmanager { overflow: hidden; }
+#io-ox-windowmanager {
+    overflow: hidden;
+    &.has-sticky-window {
+        right: 920px;
+    }
+}
 
 #io-ox-windowmanager-pane {
     left: 0;
     width: 100%;
 }
 
-#io-ox-taskbar {
+#io-ox-taskbar-container {
+
     border-top: 1px solid #ccc;
     background-color: #f5f5f5;
     top: auto;
     height: 40px;
-    padding: 3px 56px 2px 2px;
+    padding: 3px 0 2px 0;
     margin: 0;
     display: none;
-    list-style-type: none;
-    button {
-        border: 0;
+
+    html.taskbar-visible & {
+        display: block;
+    }
+
+    #io-ox-taskbar {
+        // when the arrow controls are enabled again, set the padding to 0
+        padding: 0 56px;
+        list-style-type: none;
+        overflow: hidden;
+        justify-content: flex-end;
+        margin: 0;
+        width: 100%;
+        display: flex;
+
+        li {
+            width:240px;
+            margin-left: 8px;
+            overflow: hidden;
+            display: flex;
+            height: 32px;
+            line-height: 32px;
+            min-width: 90px;
+
+            &.active .taskbar-button,&.active button[data-action="close"] {
+                font-weight: bold;
+                //background-color: @brand-primary;
+            }
+
+            i {
+                margin-right: 8px;
+            }
+
+            .taskbar-button {
+                display: flex;
+                align-items: center;
+                border-radius: 0;
+                border: 0;
+                color: white;
+                //font-weight: bold;
+                text-align: left;
+                width: 100%;
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0.7);
+                padding-left: 16px;
+                &.io-ox-busy:before {
+                    color: white;
+                    margin-top: -15px;
+                }
+
+                .title {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    margin-right: 8px;
+                }
+                .count {
+                    padding: 4px 5px;
+                    position: relative;
+                    top: -1px;
+                    margin-left:auto;
+                }
+            }
+            button[data-action="close"] {
+                color: white;
+                background-color: rgba(0, 0, 0, 0.7);
+                display: inline-block;
+                padding-right: 16px;
+            }
+        }
+    }
+
+    .taskbar-control {
+        width: 32px;
         height: 32px;
         line-height: 32px;
-        color: white;
+        border: 0;
+        background-color: #f5f5f5;
+        color: rgba(0, 0, 0, 0.7);
         font-weight: bold;
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 0 16px;
-        width: 240px;
-        float: right;
-        margin-left: 8px;
-        text-align: left;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        .title {
-            margin-right: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin: 0 12px;
+
+        &:hover:not([disabled]) {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        &[disabled] {
+            color: rgba(0, 0, 0, 0.2);
         }
     }
 }
 
-#io-ox-core.taskbar-visible {
+/*#io-ox-core.taskbar-visible {
     #io-ox-screens { bottom: 40px; }
-    #io-ox-taskbar { display: block; }
-}
+    #io-ox-taskbar-container { height: 40px; }
+}*/
 
 .touch {
     #io-ox-screens { top: 40px; }
@@ -112,6 +224,10 @@
         .container {
             padding-left:0;
             padding-right:0;
+        }
+
+        .inline-yell {
+            display: none;
         }
 
         h1.title { display: none; }
@@ -316,12 +432,7 @@
     .user-select(none);
     filter: none;
 
-    html.high-contrast & { border-right: 1px solid @hc-border-color; }
-
-    &.css-table {
-        table-layout: fixed;
-    }
-
+    &.css-table { table-layout: fixed; }
 }
 
 .window-sidepanel {
@@ -459,29 +570,131 @@
     overflow: auto;
 }
 
+#floating-window-backdrop {
+    z-index: 4;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    // almost transparent
+    background-color: rgba(255, 255, 255, 0.01);
+    position: absolute;
+}
+
 .floating-window {
 
     position: absolute;
-    z-index: 1;
-    width: 960px;
-    height: 640px;
-    max-height: 90%;
-    right: 56px;
-    bottom: 16px;
+    // higher than sidepopup
+    z-index: 5;
     background: transparent;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     outline: 0;
 
-    .transition(0.3s ease-in-out);
-    transform-origin: 100% 0;
+    .floating-window-content {
+        box-shadow: 0px 0 80px 4px rgba(0, 0, 0, 0.5)
+    }
+
+    .container {
+        width: 100%;
+        // needed or tiny-mce toolbar has resize issues
+        min-width: 930px;
+    }
+
+    &.cornered {
+        width: 960px;
+        height: 65%;
+        min-height: 640px;
+        right: 56px;
+        bottom: 16px;
+        top: auto;
+        left: auto;
+
+        @media (max-width: 1992px) {
+            width: 900px;
+
+            .container {
+                min-width: 870px;
+            }
+        }
+
+        @media (max-width: 1016px) {
+            margin: 0 auto;
+            left: 16px;
+            right: 16px;
+        }
+
+        @media (max-width: 932px) {
+            width: auto;
+            min-width: auto;
+            .container {
+                min-width: auto;
+            }
+        }
+
+         @media (max-height: 800px) {
+            height: calc(~"100% - 32px");
+            min-height: auto;
+        }
+        .floating-header .controls button[data-action="cornered"] {
+            display: none;
+        }
+    }
+
+    &.centered {
+        // higher z-index because of powermove windows
+        z-index: 6;
+        width: 1060px;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        right: auto;
+        margin: 0 auto;
+        bottom: 0;
+        top: 0;
+
+        .floating-window-content {
+            top: 16px;
+            bottom: 16px;
+        }
+
+        .floating-header .controls button[data-action="centered"] {
+            display: none;
+        }
+
+        @media (max-width: 1092px) {
+            width: auto;
+            margin-right: 16px;
+            margin-left: 16px;
+            .container {
+                min-width: auto;
+            }
+        }
+    }
+
+    &.sticky {
+        width: 920px;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        left: auto;
+
+        .floating-header .controls button[data-action="sticky"] {
+            display: none;
+        }
+
+        .floating-window-content {
+            box-shadow: none;
+        }
+    }
 
     @headerHeight: 32px;
 
     .floating-header {
         height: @headerHeight;
         bottom: auto;
-        background: rgba(0, 0, 0, 0.70);
-        padding: 0 16px;
+        background: #333;
+        padding: 0 8px 0 16px;
+        display: flex;
+
         h1 {
             margin: 0;
             padding: 0;
@@ -489,19 +702,28 @@
             font-weight: bold;
             line-height: @headerHeight;
             color: white;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
         .count {
+            padding: 3px 7px;
+            position: relative;
+            top: -1px;
             margin-left: 8px;
         }
         .controls {
-            position: absolute;
-            top: 0;
-            right: 0;
-            a {
+            margin-left:auto;
+            flex-shrink: 0;
+
+            button {
                 color: white;
                 line-height: @headerHeight;
-                padding: 0 16px;
+                padding: 0 8px;
                 display: inline-block;
+                &[data-action="close"] {
+                    font-size: 18px;
+                }
             }
         }
     }
@@ -509,13 +731,6 @@
     .floating-body {
         top: @headerHeight;
         background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        border-width: 0 1px 1px 1px;
-    }
-
-    &.minimized {
-        bottom: -100%;
-        transform: scale(0.1);
     }
 }
 

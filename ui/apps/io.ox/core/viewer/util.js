@@ -43,7 +43,7 @@ define('io.ox/core/viewer/util', [
     Util.CATEGORY_ICON_MAP = {
         'file': 'fa-file-o',
         'txt': 'fa-file-text-o',
-        'doc': 'fa-file-word-o',
+        'doc': 'fa-file-text-o',
         'ppt': 'fa-file-powerpoint-o',
         'xls': 'fa-file-excel-o',
         'image': 'fa-file-image-o',
@@ -191,17 +191,20 @@ define('io.ox/core/viewer/util', [
     };
 
     Util.renderItemSize = function (model) {
-        var size, total, sizeString;
+        var fileSize, itemCount, resultString;
 
-        if (model.isFile()) {
-            size = model.get('file_size');
-            sizeString = (_.isNumber(size)) ? _.filesize(size) : '-';
+        // for files
+        if (model.isFile() || model.isMailAttachment() || model.isPIMAttachment()) {
+            fileSize = model.get('file_size');
+            resultString = (_.isNumber(fileSize)) ? _.filesize(fileSize) : '-';
+
+        // for folders
         } else {
-            total = model.get('total');
-            sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
+            itemCount = model.get('total');
+            resultString = (_.isNumber(itemCount)) ? gt.format(gt.ngettext('1 item', '%1$d items', itemCount), itemCount) : '-';
         }
 
-        return sizeString;
+        return resultString;
     };
 
     var ModelSourceRefMap = {

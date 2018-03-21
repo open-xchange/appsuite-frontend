@@ -49,18 +49,6 @@ define('io.ox/mail/detail/main', [
             };
         },
 
-        /*
-         * toogle big screen mode for wide mails
-         */
-        'big-screen-toggle': function (app) {
-            // if the mail is too big and we get some scrollbars,
-            // toggle bigscreen by default
-            app.threadView.on('mail:detail:body:render', function () {
-                var width = $(app.threadView.$el).find('.mail-detail-frame').contents().find('.mail-detail-content').width();
-                if (width >= 850) app.threadView.toggleBigScreen(true);
-            });
-        },
-
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
@@ -96,6 +84,7 @@ define('io.ox/mail/detail/main', [
         // application object
         var app = ox.ui.createApp({
             closable: true,
+            floating: !_.device('smartphone'),
             name: NAME,
             title: ''
         });
@@ -120,7 +109,9 @@ define('io.ox/mail/detail/main', [
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
-                toolbar: false
+                toolbar: false,
+                closable: true,
+                floating: !_.device('smartphone')
             });
 
             app.setWindow(win);

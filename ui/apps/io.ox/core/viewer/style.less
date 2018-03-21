@@ -71,6 +71,10 @@
     @document-thumbnail-border-color: #e0e0e0;
     @document-thumbnail-number-color: #999999;
     @document-thumbnail-number-hover-color: #FFFFFF;
+
+    @viewer-displayer-spreadsheet-header-pane-text-color: #e0e0e0;
+    @viewer-displayer-spreadsheet-header-pane-border-color: #999999;
+    @viewer-displayer-spreadsheet-header-pane-background-color: #222222;
 }
 
 .viewer-light-colors () {
@@ -123,6 +127,10 @@
     @document-thumbnail-border-color: #e0e0e0;
     @document-thumbnail-number-color: #333333;
     @document-thumbnail-number-hover-color: #333333;
+
+    @viewer-displayer-spreadsheet-header-pane-text-color: #333333;
+    @viewer-displayer-spreadsheet-header-pane-border-color: #e0e0e0;
+    @viewer-displayer-spreadsheet-header-pane-background-color: #f8f8f8;
 }
 
 
@@ -481,12 +489,10 @@
             }
         }
 
-        #viewer-carousel,
         .carousel-inner,
         .item,
         .swiper-container { height: 100%; }
 
-        #viewer-carousel,
         .swiper-container {
 
             // copied directly from 'io.ox/presenter/style.less' ... see line 278
@@ -636,6 +642,31 @@
             i {
                 font-size: 56px;
                 text-align: center;
+            }
+        }
+
+        .viewer-displayer-spreadsheet {
+
+            .io-ox-office-main.io-ox-office-spreadsheet-main {
+
+                .pane-root {
+                    > .header-pane .cell, > .corner-pane {
+                        color: @viewer-displayer-spreadsheet-header-pane-text-color;
+                        background-color: @viewer-displayer-spreadsheet-header-pane-background-color;
+                        border-right-color: @viewer-displayer-spreadsheet-header-pane-border-color;
+                        border-bottom-color: @viewer-displayer-spreadsheet-header-pane-border-color;
+                    }
+                }
+
+                > .app-pane {
+                    border-top: 1px solid @viewer-displayer-spreadsheet-header-pane-border-color;
+                }
+
+                .grid-layer.drawing-layer.comment-layer {
+                    color: #333333;
+                }
+
+                ::-webkit-scrollbar-corner { background-color: @viewer-displayer-spreadsheet-header-pane-background-color; }
             }
         }
 

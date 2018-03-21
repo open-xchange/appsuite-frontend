@@ -293,7 +293,7 @@ define('io.ox/mail/util', [
             // styles as string
             obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
             // node
-            obj.node = $('<p>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
+            obj.node = $('<div>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
             return obj;
         },
 
@@ -544,12 +544,78 @@ define('io.ox/mail/util', [
             return data.folder_id === undefined && data.filename !== undefined;
         },
 
+        authenticity: (function () {
+
+            function getAuthenticityLevel() {
+                if (!settings.get('features/authenticity', false)) return 'none';
+                return settings.get('authenticity/level');
+            }
+
+            function getAuthenticityStatus(data) {
+                var level = getAuthenticityLevel();
+                if (level === 'none') return;
+                if (!_.isObject(data)) return;
+                return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
+            }
+
+            function isRelevant(aspect, level, status) {
+                switch (aspect) {
+                    // contact image
+                    case 'image':
+                        if (/fail/.test(level)) return status === 'fail';
+                        if (level === 'all') return /(fail|neutral)/.test(status);
+                        return false;
+                    // prepend in sender block (detail)
+                    case 'icon':
+                        switch (level) {
+                            case 'fail': return status === 'fail';
+                            case 'fail_trusted': return /(fail|trusted)/.test(status);
+                            case 'fail_trusted_pass': return /(fail|pass|trusted)/.test(status);
+                            case 'all': return true;
+                            default: return false;
+                        }
+                    // info box wihtin mail detail
+                    case 'box':
+                        if (/fail/.test(level)) return status === 'fail';
+                        return /(fail|trusted)/.test(status);
+                    // disable links, replace external images and 'via' hint for different mail server
+                    case 'block':
+                    case 'via':
+                        if (level === 'fail') return false;
+                        return status === 'fail';
+                    default:
+                        return false;
+                }
+
+            }
+
+            return function (aspect, data) {
+                var status = getAuthenticityStatus(data),
+                    level = getAuthenticityLevel();
+
+                if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
+
+                return isRelevant(aspect, level, status) ? status : undefined;
+            };
+        })(),
+
+        getAuthenticityMessage: function (status, email) {
+            switch (status) {
+                case 'fail': return gt('This might be a phishing email because we could not verify that it is really from %1$s.', email);
+                case 'neutral': return gt('We could not verify that this email is from %1$s.', email);
+                case 'pass':
+                case 'trusted': return gt('We could verify that this email is from %1$s.', email);
+                default: return '';
+            }
+        },
+
         isMalicious: (function () {
             if (!settings.get('maliciousCheck')) return _.constant(false);
             var blacklist = settings.get('maliciousFolders');
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
+                if (that.authenticity('block', data)) return true;
                 // nested mails don't have their own folder id. So use the parent mails folder id
                 return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };

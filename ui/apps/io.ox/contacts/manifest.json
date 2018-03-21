@@ -1,10 +1,9 @@
 {
     "title": "Address Book",
-    "company": "Open-Xchange",
-    "icon": "addressbook.png",
-    "category": "Basic",
     "settings": true,
     "requires": "contacts",
     "refreshable": true,
+    "searchable": true,
+    "hasLauncher": true,
     "index": 700
 }

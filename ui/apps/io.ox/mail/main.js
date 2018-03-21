@@ -36,6 +36,8 @@ define('io.ox/mail/main', [
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'settings!io.ox/core',
+    'io.ox/core/api/certificate',
+    'io.ox/settings/security/certificates/settings/utils',
     'io.ox/mail/actions',
     'io.ox/mail/mobile-navbar-extensions',
     'io.ox/mail/mobile-toolbar-actions',
@@ -43,7 +45,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -254,10 +256,15 @@ define('io.ox/mail/main', [
             app.treeView = tree;
         },
 
-        'folder-view-dsc-events': function (app) {
-            // open accounts page on when the user clicks on error indicator
-            app.treeView.on('accountlink:dsc', function () {
-                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' });
+        'folder-view-ssl-events': function (app) {
+            // open certificates page when the user clicks on error indicator
+            app.treeView.on('accountlink:ssl', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/certificate' });
+            });
+
+            // open examin dialig when the user clicks on error indicator
+            app.treeView.on('accountlink:sslexamine', function (error) {
+                certUtils.openExaminDialog(error);
             });
         },
 
@@ -346,28 +353,61 @@ define('io.ox/mail/main', [
 
         },
 
-        'folder-view-dsc-error': function (app) {
-            function updateStatus() {
-                if (ox.debug) console.log('refreshing DSC status');
-                accountAPI.getStatus().done(function (s) {
-                    _(s).each(function (d, id) {
-                        if (d.status !== 'ok') {
-                            accountAPI.get(id).done(function (account) {
-                                var node = app.treeView.getNodeView(account.root_folder);
-                                if (node) node.showStatusIcon(d.message);
-                            });
-                        }
+        'folder-view-account-ssl-error': function (app) {
+
+            function filterAccounts(hostname, data) {
+                var accountData = [];
+                _.each(data, function (account) {
+                    if (_(_.values(account)).contains(hostname)) accountData.push(account);
+                });
+                return accountData;
+            }
+
+            function updateStatus(hostname, modus, error) {
+
+                accountAPI.all().done(function (data) {
+                    var relevantAccounts = hostname ? filterAccounts(hostname, data) : data;
+
+                    _.each(relevantAccounts, function (accountData) {
+                        accountAPI.getStatus(accountData.id).done(function (obj) {
+                            var node = app.treeView.getNodeView(accountData.root_folder);
+
+                            if (node) {
+                                if (obj[accountData.id].status === 'invalid_ssl') {
+
+                                    node.showStatusIcon(obj[accountData.id].message, modus, error);
+
+                                } else {
+                                    node.hideStatusIcon();
+                                    node.render();
+                                }
+                            }
+
+                        });
                     });
-                });
-            }
 
-            if (settings.get('dsc/enabled')) {
-                api.on('refresh.all', function () {
-                    updateStatus();
                 });
 
-                app.updateDSCStatus = updateStatus;
             }
+
+            ox.on('http:error SSL:remove', function (error) {
+                if (/^SSL/.test(error.code)) {
+                    certificateAPI.get({ fingerprint: error.error_params[0] }).done(function (data) {
+                        if (_.isEmpty(data)) {
+                            updateStatus(data.hostname, ['accountlink:sslexamine'], error);
+                        } else {
+                            updateStatus(data.hostname);
+                        }
+
+                    });
+                }
+
+            });
+
+            accountAPI.on('refresh:ssl', function (e, hostname) {
+                updateStatus(hostname);
+            });
+
         },
 
         'mail-quota': function (app) {
@@ -576,6 +616,14 @@ define('io.ox/mail/main', [
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {});
                 if (!app.settings.get('threadSupport', true)) options.thread = false;
+
+                // ignore unavailable sort options
+                var isUnavailable =
+                    (!settings.get('features/flag/color') && options.sort === 102) ||
+                    (!settings.get('features/flag/star') && options.sort === 660) ||
+                    (options.sort === 602 && !folderAPI.pool.getModel(folder).supports('ATTACHMENT_MARKER'));
+                if (isUnavailable) delete options.sort;
+
                 return _.extend({ sort: 610, order: 'desc', thread: false }, options);
             };
         },
@@ -598,7 +646,7 @@ define('io.ox/mail/main', [
                 // do not accidentally overwrite other attributes on folderchange
                 if (!app.changingFolders) {
                     // set proper order first
-                    model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                    model.set('order', (/^(610|608|102|660|651)$/).test(value) ? 'desc' : 'asc', { silent: true });
                     app.props.set('order', model.get('order'));
                 }
                 // now change sort columns
@@ -1112,8 +1160,11 @@ define('io.ox/mail/main', [
         },
 
         'preserve-selection': function (app) {
+            if (_.device('smartphone')) return;
             app.listView.on({
                 'selection:add': function (list) {
+                    // only preserve items, if the current collection is sort by unread
+                    if (app.props.get('sort') !== 651) return;
                     _(list).each(function (cid) {
                         api.pool.preserveModel(cid, true);
                     });
@@ -1132,6 +1183,7 @@ define('io.ox/mail/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 app.threadView.toggleNavigation(value === 'list');
+                ox.ui.apps.trigger('layout', app);
             });
 
             app.threadView.toggleNavigation(app.props.get('layout') === 'list');
@@ -1358,11 +1410,12 @@ define('io.ox/mail/main', [
                 return a !== b;
             }
 
-            api.on('beforedelete', function (e, ids) {
+            api.on('beforedelete beforeexpunge', function (e, ids) {
                 var selection = app.listView.selection.get();
                 if (isSingleThreadMessage(ids, selection)) return;
+                // make sure to have strings
+                if (ids.length > 0 && !_.isString(ids[0])) ids = _(ids).map(_.cid);
                 // looks for intersection
-                ids = _(ids).map(_.cid);
                 if (_.intersection(ids, selection).length) {
                     app.listView.selection.dodge();
                     if (ids.length === 1) return;
@@ -1600,14 +1653,15 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            if (!app.isFindSupported()) return;
+            function registerPoolAdd(model, find) {
+                find.on('collectionLoader:created', function (loader) {
+                    loader.each = function (obj) {
+                        api.pool.add('detail', obj);
+                    };
+                });
+            }
 
-            app.initFind().on('collectionLoader:created', function (loader) {
-                loader.each = function (obj) {
-                    api.pool.add('detail', obj);
-                };
-            });
+            return app.get('find') ? registerPoolAdd(app, app.get('find')) : app.once('change:find', registerPoolAdd);
         },
         // respond to pull-to-refresh in mail list on mobiles
         'on:pull-to-refresh': function (app) {
@@ -1649,12 +1703,10 @@ define('io.ox/mail/main', [
                 app.listView.restoreFocus(true);
             });
             // folder tree: focus list view on <enter>
-            // folder tree: focus top-bar on <escape>
             app.folderView.tree.$el.on('keydown', '.folder', function (e) {
                 // check if it's really the folder - not the contextmenu toggle
                 if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
-                if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
             });
         },
 
@@ -1742,6 +1794,16 @@ define('io.ox/mail/main', [
 
                     this.append($el);
                 }
+            });
+        },
+
+        'primary-action': function (app) {
+
+            app.addPrimaryAction({
+                point: 'io.ox/mail/sidepanel',
+                label: gt('Compose'),
+                action: 'io.ox/mail/actions/compose',
+                toolbar: 'compose'
             });
         },
 

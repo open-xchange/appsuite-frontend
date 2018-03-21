@@ -14,13 +14,14 @@
 
 define('plugins/notifications/calendar/register', [
     'io.ox/calendar/api',
-    'io.ox/core/api/reminder',
+    'io.ox/core/yell',
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
-    'settings!io.ox/core'
-], function (calAPI, reminderAPI, ext, Subview, gt, util, settings) {
+    'settings!io.ox/core',
+    'io.ox/core/tk/sounds-util'
+], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil) {
 
     'use strict';
 
@@ -40,60 +41,52 @@ define('plugins/notifications/calendar/register', [
         draw: function (baton) {
             var model = baton.model,
                 node = this,
-                view = baton.view,
                 onClickChangeStatus = function (e) {
                     // stopPropagation could be prevented by another markup structure
                     e.stopPropagation();
                     require(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
-                        acceptdeny(model.attributes);
+                        acceptdeny(model.attributes, { noFolderCheck: true });
                     });
                 },
                 onClickAccept = function (e) {
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/actions/change-confirmation'], function (folderAPI, calendarSettings, action) {
-                        folderAPI.get(o.folder).done(function (folder) {
-                            o.data = {
-                                // default reminder
-                                alarm: parseInt(calendarSettings.get('defaultReminder', 15), 10),
-                                confirmmessage: '',
-                                confirmation: 1
-                            };
-                            // add current user id in shared or public folder
-                            if (folderAPI.is('shared', folder)) {
-                                o.data.id = folder.created_by;
-                            }
+                    require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (calendarSettings, util) {
+                        o.data = {
+                            // default reminder
+                            alarms: util.getDefaultAlarms(appointmentData),
+                            attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
+                            id: appointmentData.id,
+                            folder: appointmentData.folder
+                        };
+                        // convenience function to convert old alarms into new chronos alarms
+                        // TODO remove once migration process is implemented
+                        o.data.alarms = util.convertAlarms(o.data.alarms);
+                        o.data.attendee.partStat = 'ACCEPTED';
 
-                            // check if user is allowed to set the reminder time
-                            var modifyBits = folderAPI.bits(folder, 14),
-                                message = false;
-                            // only own objects if bit is 1
-                            if (modifyBits === 0 || (modifyBits === 1 && appointmentData.organizerId !== ox.user_id)) {
-                                delete o.data.alarm;
-                                message = true;
-                            }
-
-                            action(appointmentData).done(function success() {
-                                view.responsiveRemove(model);
-                                calAPI.confirm(o).done(function () {
-                                    // remove model from hidden collection or new invitations when the appointment changes will not be displayed
-                                    view.hiddenCollection.remove(model);
-                                    if (message) {
-                                        require(['io.ox/core/yell'], function (yell) {
-                                            yell('warning', gt('Your default reminder could not be set for this appointment due to insufficient permissions'));
+                        var expand = util.getCurrentRangeOptions();
+                        calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
+                            if (result && result.conflicts) {
+                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                    conflictView.dialog(result.conflicts)
+                                        .on('ignore', function () {
+                                            calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
                                         });
-                                    }
-                                }).fail(function () {
-                                    view.unHide(model);
                                 });
-                            });
+                                return;
+                            }
+                        })
+                        .fail(function (error) {
+                            yell(error);
                         });
                     });
                 };
 
             var cid = _.cid(model.attributes),
-                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
+                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' }),
+                recurrenceString = util.getRecurrenceString(model.attributes);
+
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
@@ -104,9 +97,41 @@ define('plugins/notifications/calendar/register', [
                 $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
                     $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
-                    $('<span class="span-to-div title">').text(model.get('title')),
+                    recurrenceString === '' ? [] : $('<span class="span-to-div recurrence">').text(recurrenceString),
+                    $('<span class="span-to-div title">').text(model.get('summary')),
                     $('<span class="span-to-div location">').text(model.get('location')),
-                    $('<span class="span-to-div organizer">').text(model.get('organizer')),
+                    $('<span class="span-to-div organizer">').text(model.get('organizer').cn),
+                    $('<button type="button" class="btn btn-link open-in-calendar">').text(gt('Open in calendar')).on('click', function (e) {
+                        if (e.type !== 'click' && e.which !== 13) return;
+
+                        var options = {
+                            folder: model.get('folder'),
+                            id: model.get('id'),
+                            perspective: 'week:week'
+                        };
+
+                        ox.launch('io.ox/calendar/main', options).done(function () {
+                            this.folders.add(options.folder);
+                            // no need for a redraw, just select the folder
+                            this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
+                            var currentPage =  this.pages.getCurrentPage();
+                            // resume calendar app
+                            if (currentPage && currentPage.perspective) {
+                                var e = $.Event('click', { target: currentPage.perspective.main });
+                                currentPage.perspective.setNewStart = true;
+                                currentPage.perspective.showAppointment(e, options, { arrow: false });
+                            } else {
+                                // perspective is not initialized yet on newly launched calendar app
+                                var self = this;
+                                this.on('aftershow:done', function (perspective) {
+                                    var e = $.Event('click', { target: perspective.main });
+                                    perspective.setNewStart = true;
+                                    perspective.showAppointment(e, options, { arrow: false });
+                                    self.off('aftershow:donw');
+                                });
+                            }
+                        });
+                    }),
                     $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
                 $('<div class="actions">').append(
@@ -114,7 +139,7 @@ define('plugins/notifications/calendar/register', [
                         .attr({
                             'focus-id': 'calendar-invite-' + cid + '-accept-decline',
                             // button aria labels need context
-                            'aria-label': gt('Accept/Decline') + ' ' + model.get('title')
+                            'aria-label': gt('Accept/Decline') + ' ' + model.get('summary')
                         })
                         .css('margin-right', '14px')
                         .text(gt('Accept / Decline'))
@@ -122,7 +147,7 @@ define('plugins/notifications/calendar/register', [
                     $('<button type="button" class="refocus btn btn-success" data-action="accept">')
                         .attr({
                             // button aria labels need context
-                            'aria-label': gt('Accept invitation') + ' ' + model.get('title'),
+                            'aria-label': gt('Accept invitation') + ' ' + model.get('summary'),
                             'focus-id': 'calendar-invite-' + cid + '-accept'
                         })
                         .on('click', onClickAccept)
@@ -147,7 +172,7 @@ define('plugins/notifications/calendar/register', [
                 reminderUtil.draw(node, baton.model, options);
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
-                    reminderAPI.deleteReminder(baton.requestedModel.attributes);
+                    calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     baton.view.collection.remove(baton.requestedModel.attributes);
                 });
                 node.find('[data-action="reminder"]').on('click change', function (e) {
@@ -159,10 +184,25 @@ define('plugins/notifications/calendar/register', [
                     var min = $(e.target).data('value') || $(e.target).val();
                     //0 means 'pick a time here' was selected. Do nothing.
                     if (min !== '0') {
-                        baton.view.hide(baton.requestedModel, min * 60000);
+                        calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {
+                            calAPI.getAlarms();
+                        });
+                        baton.view.collection.remove(baton.requestedModel.attributes);
                     }
                 });
             });
+        }
+    });
+
+    ext.point('io.ox/core/notifications/calendar-reminder/footer').extend({
+        draw: function (baton) {
+            if (baton.view.collection.length > 1) {
+                //#. notification pane: action  to remove/acknowledge all reminders (they don't show up anymore)
+                this.append($('<button class="btn btn-link">').text(gt('Remove all reminders')).on('click', function () {
+                    calAPI.acknowledgeAlarm(baton.view.collection.toJSON());
+                    baton.view.collection.reset();
+                }));
+            }
         }
     });
 
@@ -172,14 +212,14 @@ define('plugins/notifications/calendar/register', [
         register: function () {
             var options = {
                     id: 'io.ox/calendarreminder',
-                    api: reminderAPI,
-                    apiEvents: {
-                        reset: 'set:calendar:reminder'
-                    },
+                    api: calAPI,
+                    useListRequest: true,
+                    useApiCid: true,
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
-                        item: 'io.ox/core/notifications/calendar-reminder/item'
+                        item: 'io.ox/core/notifications/calendar-reminder/item',
+                        footer: 'io.ox/core/notifications/calendar-reminder/footer'
                     },
                     detailview: 'io.ox/calendar/view-detail',
                     autoOpen: autoOpen,
@@ -191,7 +231,7 @@ define('plugins/notifications/calendar/register', [
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
-                        var title = model.get('title'),
+                        var title = model.get('summary'),
                             date = ', ' + util.getDateInterval(model.attributes),
                             time = ', ' + util.getTimeInterval(model.attributes);
 
@@ -205,15 +245,99 @@ define('plugins/notifications/calendar/register', [
                     //#. Reminders (notifications) about appointments
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
-                subview = new Subview(options);
+                nextAlarmTimer,
+                nextAlarm,
+                alarmsToShow = [],
+                subview = new Subview(options),
+                audioQueue = [],
+                playing = false,
+                playAlarm = function (alarm) {
+                    if (alarm) {
+                        audioQueue.push(alarm);
+                    }
+                    if (!playing && audioQueue.length) {
+                        playing = true;
+                        var alarmToPlay = audioQueue.shift();
+                        calAPI.get(alarmToPlay).done(function (eventModel) {
+                            yell('info', eventModel ? eventModel.get('summary') : gt('Appointment reminder'));
+                            soundUtil.playSound();
+                            calAPI.acknowledgeAlarm(alarmToPlay);
+                            setTimeout(function () {
+                                playing = false;
+                                playAlarm();
+                            }, 5000);
+                        }).fail(function () {
+                            playing = false;
+                            playAlarm();
+                        });
+                    }
+                };
 
+            calAPI.on('resetChronosAlarms', function (alarms) {
+                var alarmsToAdd = [],
+                    now = new moment().utc().format(util.ZULU_FORMAT),
+                    timerFunction = function () {
+                        subview.addNotifications(nextAlarm);
+                        nextAlarm = undefined;
+                        now = new moment().utc().format(util.ZULU_FORMAT);
+                        var temp = [];
+                        _(alarmsToShow).each(function (alarm) {
+                            if (alarm.time > now) {
+                                if (alarm.action === 'AUDIO') {
+                                    playAlarm(alarm);
+                                } else {
+                                    subview.addNotifications(alarm);
+                                }
+                            } else if (!nextAlarm || nextAlarm.time > alarm.time) {
+                                if (nextAlarm) {
+                                    temp.push(nextAlarm);
+                                }
+                                nextAlarm = alarm;
+                            } else {
+                                temp.push(alarm);
+                            }
+                        });
+                        alarmsToShow = temp;
+                        if (nextAlarm) {
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm).utc().valueOf() - new moment(now).utc().valueOf());
+                        }
+                    };
+
+                nextAlarm = undefined;
+                if (nextAlarmTimer) {
+                    clearTimeout(nextAlarmTimer);
+                    nextAlarmTimer = undefined;
+                }
+                _(alarms).each(function (alarm) {
+                    if (alarm.time > now) {
+                        if (!nextAlarm || nextAlarm.time > alarm.time) {
+                            if (nextAlarm) {
+                                alarmsToShow.push(nextAlarm);
+                            }
+
+                            nextAlarm = alarm;
+                        } else {
+                            alarmsToShow.push(alarm);
+                        }
+                    } else if (alarm.action === 'AUDIO') {
+                        playAlarm(alarm);
+                    } else {
+                        alarmsToAdd.push(alarm);
+                    }
+                });
+
+                if (nextAlarm) {
+                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).valueOf() - new moment(now).valueOf());
+                }
+                subview.resetNotifications(alarmsToAdd);
+            });
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
                 autoOpen = value;
                 subview.model.set('autoOpen', value);
             });
 
-            reminderAPI.getReminders();
+            calAPI.getAlarms();
         }
     });
 
@@ -224,6 +348,9 @@ define('plugins/notifications/calendar/register', [
             var options = {
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
+                    fullModel: true,
+                    smartRemove: true,
+                    useApiCid: true,
                     apiEvents: {
                         reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
@@ -235,6 +362,7 @@ define('plugins/notifications/calendar/register', [
                         item: 'io.ox/core/notifications/invites/item'
                     },
                     detailview: 'io.ox/calendar/view-detail',
+                    detailviewOptions: { noFolderCheck: true },
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
                         //#. Title of generic desktop notification about new invitations to appointments

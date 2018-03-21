@@ -34,19 +34,17 @@ define('io.ox/core/notifications/badgeview', [
             this.nodes = {};
         },
         onChangeCount: function () {
-            if (!this.nodes.badge) {
-                return;
-            }
+
+            if (!this.nodes.badge) return;
+
             var count = this.model.get('count'),
                 //#. %1$d number of notifications in notification area
                 //#, c-format
                 a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count);
-            if (count === 0) {
-                this.$el.addClass('no-notifications');
-            } else {
-                this.$el.removeClass('no-notifications');
-            }
-            //don't create a loop here
+
+            this.$el.toggleClass('no-notifications', count === 0);
+
+            // don't create a loop here
             this.model.set('a11y', a11y, { silent: true });
             this.nodes.badge.toggleClass('empty', count === 0);
             this.nodes.icon.attr('title', a11y);
@@ -71,7 +69,7 @@ define('io.ox/core/notifications/badgeview', [
                 'aria-controls': 'io-ox-notifications-display'
             })
             .append(
-                this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
+                this.nodes.icon = $(), //$('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
                 this.nodes.badge = $('<span class="badge" aria-hidden="true">').append(
                     this.nodes.number = $('<span class="number">')
                 )

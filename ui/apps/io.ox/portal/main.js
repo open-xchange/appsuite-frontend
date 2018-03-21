@@ -114,8 +114,8 @@ define('io.ox/portal/main', [
                 baton.$.greeting = $('<span class="greeting-phrase">'),
                 $('<span class="signin">').append(
                     //#. Portal. Logged in as user
-                    $('<label class="unstyled">').text(gt('Signed in as')),
-                    $.txt(' '), userAPI.getTextNode(ox.user_id, { target: 'identifier' })
+                    $('<span>').text(gt('Signed in as')),
+                    $.txt(' '), userAPI.getTextNode(ox.user_id, { type: 'email' })
                 )
             );
 
@@ -130,7 +130,7 @@ define('io.ox/portal/main', [
                     $header.find('[role="log"]').remove();
                     $header.find('.form-group')
                         .addClass('pull-right')
-                        .prepend($('<button type="button" class="btn btn-primary" data-action="customize">')
+                        .prepend($('<button type="button" class="btn btn-link" data-action="customize">')
                             .text(gt('Customize this page'))
                             .on('click', openSettings));
 
@@ -498,6 +498,33 @@ define('io.ox/portal/main', [
                 decoration.removeClass('pending error-occurred');
             },
             function fail(e) {
+                function getTrustOption() {
+
+                    var solutionContainer = $('<div>').append(
+                        $('<a class="solution">').text(gt('Inspect certificate')).on('click', function () {
+
+                            require(['io.ox/settings/security/certificates/settings/utils']).done(function (certUtils) {
+                                certUtils.openExaminDialog(e);
+
+                            });
+
+                        })
+                    );
+
+                    setTimeout(function () {
+                        solutionContainer.find('.solution').off('click')
+                        .empty()
+                        .append(
+                            $('<a class="solution">').text(gt('Try again.')).on('click', function () {
+                                node.find('.decoration').addClass('pending');
+                                loadAndPreview(point, node, baton);
+                            })
+                        );
+                    }, 60000);
+
+                    return solutionContainer;
+                }
+
                 // special return value?
                 if (e === 'remove') {
                     widgets.remove(baton.model);
@@ -511,7 +538,7 @@ define('io.ox/portal/main', [
                     // if an account was removed, disable widget (do not delete it)
                     // to avoid further requests
                     baton.model.set('enabled', false, { validate: false });
-                    yell('info', gt.format(gt('The widget "%s" was disabled as the account seems to be removed or is no longer available.'), baton.model.get('title')));
+                    yell('info', gt.format(gt('The widget "%s" was disabled as the account might have been removed or is no longer available.'), baton.model.get('title')));
                 } else if (e.code !== 'OAUTH-0006') {
                     // show error message unless it's just missing oauth account
                     node.append(
@@ -521,11 +548,12 @@ define('io.ox/portal/main', [
                             $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
                             $('<br>'),
                             // retry
-                            e.retry !== false ?
-                                $('<a class="solution">').text(gt('Try again.')).on('click', function () {
+                            e.retry !== false ? [
+                                (!/SSL/.test(e.code)) ? $('<a class="solution">').text(gt('Try again.')).on('click', function () {
                                     node.find('.decoration').addClass('pending');
                                     loadAndPreview(point, node, baton);
-                                }) : $()
+                                }) : $(), (/SSL/.test(e.code)) ? getTrustOption() : $()] : $()
+
                         )
                     );
                     if (point.prop('stopLoadingOnError')) {
@@ -738,10 +766,10 @@ define('io.ox/portal/main', [
             // portal apps with a fixed position toolbar
             if (_.device('smartphone')) {
                 app.getWindow().on('hide', function () {
-                    $('#io-ox-topbar').removeClass('toolbar-fixed-position');
+                    // $('#io-ox-topbar').removeClass('toolbar-fixed-position');
                     app.getWindow().nodes.outer.removeClass('content-v-shift');
                 }).on('show', function () {
-                    $('#io-ox-topbar').addClass('toolbar-fixed-position');
+                    // $('#io-ox-topbar').addClass('toolbar-fixed-position');
                     app.getWindow().nodes.outer.addClass('content-v-shift');
                 });
             }

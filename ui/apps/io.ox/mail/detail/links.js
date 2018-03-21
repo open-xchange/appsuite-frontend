@@ -14,15 +14,14 @@
 define('io.ox/mail/detail/links', [
     'io.ox/mail/api',
     'io.ox/core/util',
-    'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, emoji, ext, settings, gt) {
+], function (api, util, ext, settings, gt) {
     'use strict';
 
     // fix hosts (still need a configurable list on the backend)
-    // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
+    //ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
 
     function isValidHost(url) {
         var match = url.match(/^https?:\/\/([^\/#]+)/i);
@@ -127,7 +126,6 @@ define('io.ox/mail/detail/links', [
                 link = $('<a href="#" target="_blank" class="deep-link" role="button">')
                     .attr('href', data.link)
                     .text(text);
-
             // no white-liste app?
             if (!data.className) return null;
 

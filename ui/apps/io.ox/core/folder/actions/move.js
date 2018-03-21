@@ -155,7 +155,7 @@ define('io.ox/core/folder/actions/move', [
             var model = api.pool.getModel(id),
                 module = model.get('module'),
                 flat = api.isFlat(module),
-                context = accountAPI.isDSC(id) ? 'dsc' : 'popup';
+                context = 'popup';
             picker({
                 async: true,
                 addClass: 'zero-padding',

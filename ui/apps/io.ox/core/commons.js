@@ -738,12 +738,14 @@ define('io.ox/core/commons', [
     };
 
     // factory
-    $.createViewContainer = function (baton, api, getter) {
+    $.createViewContainer = function (baton, api, getter, options) {
 
-        var data = baton instanceof ext.Baton ? baton.data : baton,
+        options = options || {};
+        var cidGetter = options.cidGetter || _.ecid,
+            data = baton instanceof ext.Baton ? baton.data : baton,
             cid = _.cid(data),
-            ecid = _.ecid(data),
-            shortecid = 'recurrence_position' in data ? _.ecid({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
+            ecid = cidGetter(data),
+            shortecid = 'recurrenceID' in data ? cidGetter({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
@@ -754,7 +756,8 @@ define('io.ox/core/commons', [
 
                 if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
-                    if (!data.id) {
+                    var createevent = !data.id;
+                    if (createevent) {
                         data.id = arguments[1].id;
                     }
                     // get fresh object
@@ -764,6 +767,7 @@ define('io.ox/core/commons', [
                         } else {
                             baton = data;
                         }
+                        baton.isCreateEvent = createevent;
                         if (node) node.triggerHandler('redraw', baton);
                     });
                 }
@@ -801,7 +805,7 @@ define('io.ox/core/commons', [
             api.on('delete update', redraw);
         } else {
             // single item
-            folderAPI.on('update', checkFolder, { cid: cid, folder: data.folder_id });
+            folderAPI.on('update', checkFolder, { cid: cid, folder: data.folder_id || data.folder });
             api.on('delete:' + ecid + (shortecid ? ' delete:' + shortecid : ''), remove);
             api.on('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
             api.on('move:' + ecid, move);

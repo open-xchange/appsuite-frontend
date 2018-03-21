@@ -16,8 +16,6 @@ define('io.ox/calendar/conflicts/conflictList', [
     'io.ox/calendar/common-extensions',
     'io.ox/calendar/api',
     'io.ox/core/folder/api',
-    'io.ox/core/api/user',
-    'io.ox/core/api/resource',
     'io.ox/core/util',
     'io.ox/calendar/util',
     'io.ox/contacts/util',
@@ -25,7 +23,7 @@ define('io.ox/calendar/conflicts/conflictList', [
     'gettext!io.ox/calendar/conflicts/conflicts',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/style'
-], function (ext, extensions, calAPI, folderAPI, userAPI, resourceAPI, coreUtil, util, contactsUtil, ModalDialog, gt, settings) {
+], function (ext, extensions, calAPI, folderAPI, coreUtil, util, contactsUtil, ModalDialog, gt, settings) {
 
     'use strict';
 
@@ -39,17 +37,19 @@ define('io.ox/calendar/conflicts/conflictList', [
         var baton = e.data.baton;
         if (!!e.data.content.children().length) return;
         // there is no folder given for appointments where the user is not invited, so just use the data available
-        if (!baton.data.folder_id) {
-            ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), ext.Baton.ensure(baton.data));
+        if (!baton.data.event.folder) {
+            ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), ext.Baton.ensure(baton.data.event));
             e.data.content.show();
             return;
         }
-        calAPI.get(baton.data).done(function (appointment) {
+        calAPI.get(baton.data.event).done(function (appointment) {
             // we don't show details for private appointments in shared/public folders (see bug 37971)
-            var folder = folderAPI.pool.getModel(baton.data.folder_id);
-            if (appointment.private_flag && appointment.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
+            var folder = folderAPI.pool.getModel(baton.data.event.folder);
+            if (appointment.get('private_flag') && appointment.get('createdBy').entity !== ox.user_id && !folderAPI.is('private', folder)) return;
             appointment.nohalo = true;
-            ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), ext.Baton.ensure(appointment));
+            baton = ext.Baton.ensure(appointment.attributes);
+            baton.model = appointment;
+            ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), baton);
             e.data.content.show();
         });
     }
@@ -66,29 +66,18 @@ define('io.ox/calendar/conflicts/conflictList', [
         draw: extensions.datetime
     });
 
-    function getConflictName(participant) {
-        if (participant.type === 3) {
-            return resourceAPI.get({ id: participant.id }).then(function (resource) {
-                return $('<span class="resource-link">').text(resource.display_name).html();
-            });
-
-        // internal user
-        } else if (participant.type === 1) {
-            return userAPI.get({ id: participant.id }).then(function (user) {
-                return coreUtil.renderPersonalName({ html: contactsUtil.getFullName(user, true) }, participant).html();
-            });
-        }
-        return $.when();
+    function getConflictName(attendee) {
+        return coreUtil.renderPersonalName({ html: contactsUtil.getFullName(attendee, true) }, attendee).html();
     }
 
     ext.point('io.ox/calendar/conflicts').extend({
         index: INDEX += 100,
         id: 'conflicts',
         draw: function (baton) {
-            if (!baton.data.participants) return;
+            if (!baton.data.conflicting_attendees) return;
             var node = $('<div class="conflicts">').text(gt('Conflicts:') + ' ');
 
-            $.when.apply($, _(baton.data.participants).map(getConflictName)).then(function () {
+            $.when.apply($, _(baton.data.conflicting_attendees).map(getConflictName)).then(function () {
                 node.append([].slice.call(arguments).join('<span class="delimiter">\u00A0\u2022 </span>'));
             });
 
@@ -115,8 +104,8 @@ define('io.ox/calendar/conflicts/conflictList', [
         id: 'participants',
         draw: function (baton) {
             var node = $('<div>');
-            require(['io.ox/participants/detail'], function (ParticipantsView) {
-                var pView = new ParticipantsView(baton, {
+            require(['io.ox/participants/chronos-detail'], function (AttendeesView) {
+                var pView = new AttendeesView(baton, {
                     summary: false, inlineLinks: false, halo: false
                 });
                 node.append(pView.draw());
@@ -148,6 +137,15 @@ define('io.ox/calendar/conflicts/conflictList', [
 
     ext.point('io.ox/calendar/conflicts/details/list').extend({
         index: INDEX += 100,
+        id: 'sentby',
+        draw: function (baton) {
+            baton.sendbyNode = $('<span>');
+            extensions.sentBy.bind(this)(baton);
+        }
+    });
+
+    ext.point('io.ox/calendar/conflicts/details/list').extend({
+        index: INDEX += 100,
         id: 'shownAs',
         draw: extensions.shownAs
     });
@@ -171,16 +169,16 @@ define('io.ox/calendar/conflicts/conflictList', [
     });
 
     function drawList(conflicts) {
-        return _(conflicts).sortBy('start_date').map(function (conflict) {
+        return _(conflicts).sortBy(function (conflict) { return conflict.event.startDate; }).map(function (conflict) {
             var baton = ext.Baton.ensure(conflict),
                 summary = $('<div class="conflict-summary">'),
                 details = $('<div class="conflict-details">').hide(),
                 icon = $('<i class="fa fa-angle-right" aria-hidden="true">'),
-                toggle = $('<a href="#" role="button" class="detail-toggle">').attr('title', gt('Show appointment details')).append(icon),
+                toggle = $('<a href="#" role="button" class="detail-toggle">').attr('summary', gt('Show appointment details')).append(icon),
                 li = $('<li>').append(toggle, summary, details);
 
             // use same setting as schedulingview (freeBusyStrict) to decide if we show infos about appointments the user is not invited too
-            if (settings.get('freeBusyStrict', true) && conflict.created_by !== ox.user_id && _.isUndefined(conflict.title)) {
+            if (settings.get('freeBusyStrict', true) && conflict.event.createdBy.entity !== ox.user_id && _.isUndefined(conflict.event.summary)) {
                 toggle.remove();
                 details.remove();
             } else {

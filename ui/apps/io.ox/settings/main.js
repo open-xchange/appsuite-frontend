@@ -30,7 +30,6 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
-    'io.ox/settings/sessions/settings/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
@@ -113,21 +112,7 @@ define('io.ox/settings/main', [
         }).scrollable();
 
         // Create extensions for the apps
-        var appsInitialized = appsAPI.getInstalled().done(function (installed) {
-
-            var apps = _.filter(installed, function (item) {
-                if (!item.settings) return false;
-                if (item.device && !_.device(item.device)) return false;
-                // check for dedicated requirements for settings (usually !guest)
-                if (item.settingsRequires && !capabilities.has(item.settingsRequires)) return false;
-                // check for device requirements for settings
-                if (item.settingsDevice && !_.device(item.settingsDevice)) return false;
-                // special code for tasks because here settings depend on a capability
-                // could have been done in manifest, but I did not want to change the general structure
-                // because of one special case, that might even disappear in the future
-                if (item.id === 'io.ox/tasks') return capabilities.has('delegate_tasks');
-                return true;
-            });
+        var appsInitialized = $.when(appsAPI.getAppsWithSettings()).done(function (apps) {
 
             ext.point('io.ox/settings/pane').extend({
                 id: 'main',
@@ -450,17 +435,30 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
-        ext.point('io.ox/settings/pane').extend({
+        // security group
+
+        ext.point('io.ox/settings/pane/general').extend({
             id: 'security',
-            index: 200,
-            subgroup: 'io.ox/settings/pane/security',
-            folderOptions: {
-                title: gt('Security'),
-                headless: false,
-                indent: true,
-                className: 'folder un-selectable'
-            }
+            title: gt('Security'),
+            ref: 'io.ox/settings/security',
+            index: 300
         });
+
+        ext.point('io.ox/settings/pane/general/security').extend({
+            id: 'sessions',
+            title: gt('Active clients'),
+            ref: 'io.ox/settings/security/sessions',
+            index: 100
+        });
+
+        if (!capabilities.has('guest')) {
+            ext.point('io.ox/settings/pane/general/security').extend({
+                id: 'certificates',
+                title: gt('Certificates'),
+                ref: 'io.ox/settings/security/certificates',
+                index: 150
+            });
+        }
 
         var submodules = _(keychainAPI.submodules).filter(function (submodule) {
             return !submodule.canAdd || submodule.canAdd.apply(this);
@@ -471,7 +469,7 @@ define('io.ox/settings/main', [
         if (!capabilities.has('guest') && (capabilities.has('webmail') || submodules.length > 0)) {
             ext.point('io.ox/settings/pane/general').extend({
                 title: gt('Accounts'),
-                index: 300,
+                index: 200,
                 id: 'io.ox/settings/accounts'
             });
         }
@@ -487,13 +485,6 @@ define('io.ox/settings/main', [
             index: 500,
             subgroup: 'io.ox/settings/pane/external'
         });
-
-        // ext.point('io.ox/settings/pane').extend({
-        //     id: 'sessions',
-        //     index: 600,
-        //     subgroup: 'io.ox/settings/pane/sessionlist'
-        // });
-
 
         // enqueue is probably a bad name, but since it's not exposed …
         // only resolve the last object enqueed

@@ -65,7 +65,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
 
             var halo = {
                 // alternative fields to get the name
-                name: options.full_name || options.display_name || options.name,
+                name: options.full_name || options.display_name || options.name || options.cn,
                 // halo view looks for email1
                 email: options.email,
                 email1: options.email,
@@ -264,7 +264,15 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 if (ox.debug) return '//' + defaultUrl + url;
                 return '//' + hosts[index] + url;
             };
-        }())
+        }()),
+
+        getScrollBarWidth: _.memoize(function () {
+            var $outer = $('<div>').css({ visibility: 'hidden', width: 100, overflow: 'scroll' }).appendTo('body'),
+                widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
+            $outer.remove();
+            return 100 - widthWithScroll;
+        })
+
     };
 
     return that;

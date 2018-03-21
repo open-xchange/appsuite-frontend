@@ -32,9 +32,10 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
+    'io.ox/core/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil) {
 
     'use strict';
 
@@ -308,6 +309,7 @@ define('io.ox/files/share/permissions', [
 
             render: function () {
                 this.getEntityDetails();
+                if (this.model.get('type') === 'anonymous') return false;
                 this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
@@ -1056,16 +1058,19 @@ define('io.ox/files/share/permissions', [
                             if (e.type === 'keydown' && e.which !== 13) return;
 
                             // use shown input
-                            var value = $.trim($(this).typeahead('val'));
-                            if (_.isEmpty(value)) return;
+                            var value = $.trim($(this).typeahead('val')),
+                                list = coreUtil.getAddresses(value);
 
-                            // add to collection
-                            permissionsView.collection.add(new Permission({
-                                bits: getBitsExternal(objModel),
-                                contact: { email1: value },
-                                type: 'guest',
-                                new: true
-                            }));
+                            _.each(list, function (value) {
+                                if (_.isEmpty(value)) return;
+                                // add to collection
+                                permissionsView.collection.add(new Permission({
+                                    bits: getBitsExternal(objModel),
+                                    contact: { email1: value },
+                                    type: 'guest',
+                                    new: true
+                                }));
+                            });
 
                             // clear input field
                             $(this).typeahead('val', '');
@@ -1073,7 +1078,7 @@ define('io.ox/files/share/permissions', [
                     )
                 );
 
-                dialog.$footer.prepend(
+                dialog.$body.append(
                     // add message - not available for mail
                     $('<div class="share-options form-group">')
                     .toggle(notificationDefault)
@@ -1099,7 +1104,7 @@ define('io.ox/files/share/permissions', [
 
                 // apply polyfill for CSS resize which IE doesn't support natively
                 if (_.browser.IE) {
-                    window.resizeHandlerPolyfill(dialog.$footer.find('.message-text')[0]);
+                    window.resizeHandlerPolyfill(dialog.$body.find('.message-text')[0]);
                 }
 
                 dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {

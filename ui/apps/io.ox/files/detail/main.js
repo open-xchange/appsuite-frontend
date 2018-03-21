@@ -105,6 +105,9 @@ define('io.ox/files/detail/main', [
                 toolbar: false
             });
 
+            // necessary when plugging Spreadsheet into the Viewer, otherwise the Drive side bar would be visible
+            win.nodes.outer.css('z-index', 2);
+
             app.setWindow(win);
             app.mediate();
             win.show();

@@ -147,6 +147,12 @@ define('io.ox/core/api/user', [
                         api.trigger('update:' + _.ecid(data), data);
                         api.trigger('update', data);
                         api.trigger('refresh.list');
+                        // reset image?
+                        if (o.data.image1 === '') {
+                            // to clear picture halo's cache
+                            contactsApi.trigger('update:image', data);
+                            api.trigger('reset:image reset:image:' + o.id, { id: o.id });
+                        }
                         // get new contact and trigger contact events
                         // skip this if GAB is missing
                         if (data.folder_id === 6 && capabilities.has('!gab')) return;
@@ -176,10 +182,12 @@ define('io.ox/core/api/user', [
                 api.caches.get.clear(),
                 api.caches.all.clear(),
                 api.caches.list.clear()
-            ).then(function () {
+            )
+            .then(function () {
                 api.trigger('refresh.list');
-                api.trigger('update', {
-                    id: o.id
+                require(['io.ox/contacts/api']).then(function (contactsApi) {
+                    contactsApi.trigger('update:image', { id: o.id });
+                    api.trigger('update update:image update:image:' + o.id, { id: o.id });
                 });
             });
 
@@ -237,13 +245,15 @@ define('io.ox/core/api/user', [
      * @return { object} text node
      */
     api.getTextNode = function (id, options) {
-        var opt = _.extend({ target: 'name' }, options),
+        var opt = _.extend({ type: 'name' }, options),
             node = document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = opt.target === 'name' ?
-                    data.display_name || data.email1 :
-                    data.email1 || data.display_name;
+                var name = '';
+                if (opt.type === 'name') name = data.display_name || data.email1;
+                else if (opt.type === 'email') name = data.email1 || data.display_name;
+                else if (opt.type === 'initials') name = util.getInitials(data);
+                node.nodeValue = name;
             })
             .always(function () {
                 // use defer! otherwise we return null on cache hit

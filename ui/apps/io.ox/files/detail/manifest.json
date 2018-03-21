@@ -1,5 +1,4 @@
 {
-    "category": "Basic",
     "requires": "infostore",
     "refreshable": true,
     "visible": false

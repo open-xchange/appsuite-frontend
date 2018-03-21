@@ -32,7 +32,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 name: 'io.ox/mail/compose',
                 title: gt('Compose'),
                 userContent: true,
-                closable: true
+                closable: true,
+                floating: !_.device('smartphone')
             }),
             win;
 
@@ -40,7 +41,11 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/mail/compose',
-                chromeless: true
+                chromeless: true,
+                // attributes for the floating window
+                floating: !_.device('smartphone'),
+                closable: true,
+                title: gt('Compose')
             }));
 
             // use main role on 'outer' to include actions in header
@@ -75,7 +80,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
             return function (obj) {
 
                 var def = $.Deferred();
-                _.url.hash('app', 'io.ox/mail/compose:' + type);
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
@@ -88,7 +92,9 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                         if (type !== 'compose' && settings.get('features/fixContentType', false)) {
                             // mitigate Bug#56496, force a get request to make sure content_type is correctly set
                             // in most cases, this should return the mail from pool ('detail')
-                            return mailAPI.get(obj);
+                            // need circumvent caching, here, because all requests always break data again and we can
+                            // never be sure about data being correct
+                            return mailAPI.get(_.pick(obj, 'id', 'folder_id'), { cache: false });
                         }
                         return obj;
                     }).then(function (latestMail) {
@@ -112,7 +118,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                         win.nodes.header.removeClass('sr-only');
                         win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
                         win.idle();
-                        win.setTitle(gt('Compose'));
+                        win.setTitle(obj.subject || gt('Compose'));
                         def.resolve({ app: app });
                         ox.trigger('mail:' + type + ':ready', obj, app);
                     })
@@ -153,7 +159,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
         getApp: createInstance,
 
         reuse: function (type, data) {
-            //disable reuse if at least one app is sending (depends on type)
+            // disable reuse if at least one app is sending (depends on type)
             var unblocked = function (sendtype) {
                 return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
             };

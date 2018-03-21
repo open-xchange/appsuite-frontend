@@ -39,7 +39,8 @@ define('io.ox/core/viewer/views/types/documentview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *

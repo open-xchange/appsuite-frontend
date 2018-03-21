@@ -47,6 +47,7 @@ define('io.ox/core/notifications', [
             self.bannerHeight = 0;
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
+
             this.badgeview.$el.on('keydown', function (e) {
                 // open on space key, up and down arrow, just like a dropdown
                 // if already open, focus first item (last on arrow up)
@@ -199,7 +200,7 @@ define('io.ox/core/notifications', [
         //opens a Sidepopup using the given renderer using the provided data
         //a renderer can be an object with a draw function or an object that contains a View constructor
         //data may be an object or a deferred object returning valid data (for example our api.get() functions)
-        openSidepopup: function (cid, renderer, data) {
+        openSidepopup: function (cid, renderer, data, options) {
             var self = this,
                 cont = function () {
                     // open dialog first to be visually responsive
@@ -219,10 +220,10 @@ define('io.ox/core/notifications', [
                                 var cont = function (data) {
                                     //work with real model view or just draw method with baton
                                     if (renderer.View) {
-                                        var view = new renderer.View({ data: data });
+                                        var view = new renderer.View({ data: data }, options);
                                         popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                                     } else {
-                                        popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
+                                        popup.idle().append(renderer.draw({ data: data }, options).addClass('no-padding'));
                                     }
 
                                     if (_.device('smartphone')) {
@@ -359,20 +360,6 @@ define('io.ox/core/notifications', [
             options = options || {};
             // if it's open already we're done
             if (this.isOpen()) return;
-
-            // adjust top if there is a banner
-            if (!this.bannerHeight) {
-                var bannerHeight = $('#io-ox-banner:visible').css('height'),
-                    nodeHeight = parseInt(this.nodes.main.css('top').replace('px', ''), 10);
-
-                if (bannerHeight !== undefined) {
-                    bannerHeight = parseInt(bannerHeight.replace('px', ''), 10);
-                    this.bannerHeight = bannerHeight;
-
-                    var newHeight = nodeHeight + bannerHeight;
-                    this.nodes.main.css('top', newHeight + 'px');
-                }
-            }
 
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');

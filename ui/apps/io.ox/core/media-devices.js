@@ -19,7 +19,9 @@ define('io.ox/core/media-devices', [
 
     var MESSAGES = {
         'unavailable': gt('There are currently no compatible media devices available on your device.'),
-        'permission-denied': gt('Access to your media devices is denied. Please refer your browser help pages how to reset authorization again.')
+        'permission-denied': gt('Access to your media devices has been denied. Please refer to your browser help pages for how to reset authorization.'),
+        // https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins
+        'non-secure': gt('This feature isn\'t available for non-secure connections.')
     };
 
     var isDeprecatedAPI = !navigator.mediaDevices,
@@ -38,6 +40,8 @@ define('io.ox/core/media-devices', [
         if (device.kind === 'audioinput') return gt('Microphone %1$s', typeCounter[device.kind]);
         //#. %1$s a natural number
         if (device.kind === 'videoinput') return gt('Camera %1$s', typeCounter[device.kind]);
+        //#. %1$s a natural number
+        //#. This text is used to describe an unknown device (camera / microphone etc)
         return gt('Unknown %1$s', typeCounter[device.kind]);
     }
 
@@ -81,6 +85,7 @@ define('io.ox/core/media-devices', [
                 // more explanatory custom messages
                 if (/^(PermissionDeniedError|Permission denied|NotAllowedError)$/.test(e.name || e.message)) message = MESSAGES['permission-denied'];
                 if (/(DevicesNotFoundError)$/.test(e.name || e.message)) message = MESSAGES.unavailable;
+                if (/(secure origins)/.test(e.message)) message = MESSAGES['non-secure'];
 
                 def.reject({ type: e.name, message: message, original_message: e.message });
             }

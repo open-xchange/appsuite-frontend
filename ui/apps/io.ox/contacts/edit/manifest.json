@@ -1,8 +1,5 @@
 {
     "title": "Edit Contact",
-    "company": "Open-Xchange",
-    "icon": "addressbook.png",
-    "category": "Basic",
     "settings": false,
     "requires": "contacts",
     "visible": false

@@ -26,7 +26,6 @@ define('io.ox/core/boot/fixes', [], function () {
     //
 
     var contextmenu_blacklist = [
-        '#io-ox-topbar',
         '.vgrid',
         '.foldertree-sidepanel',
         '.window-toolbar',
@@ -135,6 +134,10 @@ define('io.ox/core/boot/fixes', [], function () {
         }
     }
 
+    // Retina displays
+    if (_.device('retina')) {
+        $('html').addClass('retina');
+    }
 
     //
     // Connection / Window State

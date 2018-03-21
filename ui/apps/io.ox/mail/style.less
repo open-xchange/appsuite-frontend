@@ -16,7 +16,9 @@
 @flag-color: #ffb300;
 @flag-icon: "\f005"; // fa-star
 @flag-icon-unset: "\f006"; // fa-star-o
-
+@a-color-neutral: #f8e400;
+@a-color-trusted: #5c7f31;
+@a-color-fail: #c50000;
 
 // preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
@@ -35,17 +37,27 @@
 .io-ox-mail-window .vsplit .leftside .alert {
     position: relative;
     border-radius: 0;
-    border-top: 0; border-left: 0; border-right: 0;
-    padding-left: 16px;
-    a { color: @alert-info-text; }
+    padding: 8px 16px;
+    line-height: 24px;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    height: 40px;
+    a {
+        color: @alert-info-text;
+    }
     .fa-warning {
         margin-right: 16px;
     }
     .btn-close {
         position:absolute;
         right: 2px;
-        top: 3px;
+        top: 5px;
     }
+}
+
+/* add some extra margins around delete icon to make it easier to click */
+.io-ox-mail-window .classic-toolbar .io-ox-action-link[data-action="delete"] {
+    margin: 0 24px;
 }
 
 .preview-bottom {
@@ -131,7 +143,7 @@
             display: flex;
             align-items: baseline;
             span { .ellipsis(); }
-            padding-left: 8px;
+            padding-left: 16px;
         }
     }
     // toolbar elements won't shrink
@@ -159,8 +171,8 @@
 .mail-item {
 
     .list-item {
-        padding-top: 10px;
-        padding-bottom: 9px;
+        padding-top: 11px;
+        padding-bottom: 12px;
 
         .smartphone & {
             padding-top: 16px;
@@ -177,10 +189,10 @@
         &.column-1 { width: @icon-width; text-align: center; }
         &.column-2 { width: @icon-width; text-align: center; }
         &.column-3 { width: @icon-width; text-align: center; }
-        &.column-4 { width: 35%; padding-right: 10px; }
+        &.column-4 { width: 176px; padding-right: 8px; }
         &.column-5 { width: @icon-width; text-align: center; }
-        &.column-6 { width: 55%; padding-right: 10px; }
-        &.column-7 { width: 140px; text-align: right; }
+        &.column-6 { width: 90%; padding-right: 8px; .ellipsis; }
+        &.column-7 { width: 136px; text-align: right; }
     }
 
     &.list-view .list-item {
@@ -190,6 +202,11 @@
             .priority { float: none; }
 
             .from span.person { .fontWeight(normal); }
+
+            .subject {
+                display: inline;
+                margin-right: 16px;
+            }
 
             .drag-title { opacity: 1; }
 
@@ -206,9 +223,6 @@
 
         &.unread {
             .date { opacity: 1; .fontWeight(bold); }
-            .subject {
-                html.high-contrast & { color: @hc-link-color; }
-            }
         }
     }
 }
@@ -258,6 +272,11 @@
     section.attachments,
     section.notifications,
     section.error { display: none; }
+
+    section.authenticity {
+        padding: 16px 40px;
+        border-bottom: 1px solid #ddd;
+    }
 
     &.expanded section {
         &.attachments,
@@ -387,8 +406,6 @@
         position: absolute;
         top: 2px;
         left: 0;
-
-        html.high-contrast & { color: @hc-link-color; }
     }
 
     .thread-size {
@@ -430,7 +447,6 @@
     .io-ox-label {
         font-weight: bold;
         white-space: nowrap;
-        html.high-contrast & { color: @hc-gray; }
     }
 
     .recipients .person-link {
@@ -516,7 +532,6 @@
             max-height: 20px;
             .ellipsis();
             width: 100%;
-            html.high-contrast & { opacity: 1; }
         }
     }
 
@@ -563,25 +578,30 @@
 
 .mail-item {
 
+    @pictureSize: 32px;
+
     .contact-picture {
         position: absolute;
         left: 0;
         top: 0;
         margin: 0 @default-padding 0 0;
-        .picture(40px, 40px);
+        .picture(@pictureSize, @pictureSize);
+        .flex-center;
+        color: rgba(0, 0, 0, 0.70);
+        background-color: #eee;
+        font-weight: bold;
     }
 
-    &.show-contact-pictures .list-item-content {
+     &.show-contact-pictures .list-item:not(.small) .list-item-content {
         position: relative;
-        padding-left: 56px;
+        padding-left: @pictureSize + 16px;
     }
 
-    &.show-contact-pictures.show-text-preview .contact-picture {
-        top: 6px;
+    &.show-contact-pictures.show-text-preview .list-item:not(.small) .contact-picture {
+        top: 4px;
     }
 
     .selected:not(:focus) .contact-picture {
-        opacity: 0.25;
         -webkit-filter: saturate(0);
     }
 
@@ -608,7 +628,7 @@
         .date { opacity: 1; }
     }
 
-    .text-preview {
+    .text-preview.multiline {
         @lines: 2;
         font-size: 13px;
         line-height: 16px;
@@ -619,12 +639,15 @@
         display: none;
     }
 
-    &.show-text-preview .text-preview {
+    &.show-text-preview .text-preview.multiline {
         display: block; /* Fallback for non-webkit */
         display: -webkit-box;
     }
 
-    @item-line-height: 20px;
+    .text-preview.inline { display: none }
+    &.show-text-preview .text-preview.inline { display: inline; }
+
+    @item-line-height: 16px;
 
     .list-item-content {
         // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
@@ -635,10 +658,11 @@
             font-size: 14px;
             display: inline-block;
             float: left;
-            line-height: 20px;
+            line-height: @item-line-height;
             margin-right: (@default-padding / 2);
             &.seen-unseen-indicator {
-                padding: 2px 5px 2px 0;
+                font-size: 12px;
+                padding: 3px 5px 1px 0;
                 margin: -2px 3px -2px 0;
             }
             &.seen-unseen-indicator:before {
@@ -721,7 +745,7 @@
         background-color: @mail-thread-size-background;
         line-height: 16px;
         padding: 0 4px;
-        margin: 2px 0 0 (@default-padding / 2);
+        margin: 0 0 0 (@default-padding / 2);
         display: inline-block;
         float: right;
         overflow: visible;
@@ -742,7 +766,6 @@
 
     .thread-size {
         min-width: 24px;
-        html.high-contrast & { color: @hc-gray; }
     }
 
     .selected {
@@ -824,10 +847,10 @@
     .unread-toggle {
 
         position: absolute;
-        top: 19px;
+        top: 20px;
         left: @default-padding;
         outline: 0;
-        font-size: 14px;
+        font-size: 12px;
         color: #767676;
         padding: 5px;
         margin: -5px;
@@ -856,6 +879,11 @@
     font-weight: 400;
 }
 
+// smaller padding in floating window to maximize mail display size
+.floating-window thread-view-list{
+    padding: 8px;
+}
+
 .thread-view-list {
 
     padding: @default-padding;
@@ -870,7 +898,7 @@
         .subject {
             font-size: 18px;
             line-height: 24px;
-            padding: 4px 40px 20px 0;
+            padding: 6px 40px 18px 0;
             margin: 0;
             font-weight: 700;
             word-break: break-word;
@@ -936,8 +964,9 @@
 
 .inplace-reply {
 
-    margin: 16px 0 0 0;
-    padding: 0 @default-padding;
+    margin: 0;
+    padding: @default-padding;
+    height: 100%;
 
     .form-group { margin-bottom: 0; }
 
@@ -957,17 +986,19 @@
     }
 }
 
+.floating-quick-reply {
+    &.cornered, &.centered { max-width: 720px; min-height: auto; }
+    &.cornered { max-height: 320px; }
+}
+
 textarea.inplace-editor {
     color: #333;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500; // for better readability
-    line-height: 16px;
+    line-height: normal;
     width: 100%;
-    height: 105px;
-    min-height: 105px;
-    max-height: 401px;
-    padding: 11px 11px (@default-padding / 2) 11px;
-    margin: 0 0 15px 0;
+    height: 100%;
+    padding: 15px;
     resize: none;
 }
 
@@ -1081,9 +1112,24 @@ textarea.inplace-editor {
     .multi-selection-message div { color: #555; }
 }
 
-.mail-source-view {
-    width: 100%;
-    visibility: hidden;
+.mail-source-dialog {
+    .modal-body {
+        height: 400px;
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        .mail-source-view {
+            flex: 1;
+            width: 100%;
+        }
+        .mail-authenticity-view {
+            flex: 1;
+            max-height: 70px;
+        }
+        #mail-authenticity-headline {
+            font-size: 16px;
+        }
+    }
 }
 
 // CATEGORIES
@@ -1192,7 +1238,7 @@ body.dragging .categories-toolbar-container {
             background: white;
             button {
                 font-weight: bold;
-                &:focus {background: white; }
+                &:focus { background: white; }
             }
         }
 
@@ -1215,6 +1261,85 @@ body.dragging .categories-toolbar-container {
             div:empty, span:empty { display: none; }
         }
     }
+}
+
+.authenticity() {
+    padding: 0px 4px;
+    border-radius: 4px;
+}
+
+.authenticity-trusted,
+.authenticity-pass {
+    .authenticity();
+    color: white;
+    background-color: @a-color-trusted;
+}
+
+.authenticity-fail {
+    .authenticity();
+    color: white;
+    background-color: @a-color-fail;
+}
+
+.authenticity-neutral {
+    .authenticity();
+    background-color: @a-color-neutral;
+}
+
+.contact-picture.authenticity-image,
+.mail-item .contact-picture.authenticity-image,
+.mail-detail .contact-picture.authenticity-image {
+    .flex-center();
+    // fallback image main color
+    background-color: #e6e6e6;
+    color: white;
+    .fa {
+        font-size: 24px;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.authenticity-icon-trusted,
+.authenticity-icon-pass,
+.authenticity-icon-neutral,
+.authenticity-icon-fail {
+    font-size: 15px;
+}
+.authenticity-icon-trusted,
+.authenticity-icon-pass {
+    color: @a-color-trusted;
+}
+.authenticity-icon-neutral {
+    color: #888;
+}
+.authenticity-icon-fail {
+    color: @a-color-fail;
+}
+
+.mail-detail .from .authenticity-sender {
+    &.fail {
+        color: @a-color-fail;
+    }
+    &.trusted, &.pass {
+        color: @a-color-trusted;
+    }
+}
+
+.mail-detail section.authenticity  {
+    padding: 0;
+    .fail, .trusted {
+        color: #fff;
+        padding: 16px 40px;
+        line-height: 16px;
+    }
+    .fail {
+        background-color: @a-color-fail;
+    }
+    .trusted {
+        background-color: @a-color-trusted;
+    }
+
 }
 
 .touch {
@@ -1366,6 +1491,11 @@ body.dragging .categories-toolbar-container {
                     margin-right: @default-padding;
                 }
             }
+        }
+
+        section.authenticity {
+            padding: 16px;
+            border-bottom: 1px solid #ddd;
         }
     }
 

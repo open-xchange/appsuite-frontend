@@ -279,12 +279,6 @@ msgstr ""
 "您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
 "限。"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr "提示: 您可以在需要時從系統選單隨時回來導覽。"
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "設定如何整理"
@@ -298,12 +292,6 @@ msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "若您不想要顯示方塊，點擊刪除圖示。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr "在新通知的情況下，例如約會邀請，資訊區域將會打開。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -377,10 +365,6 @@ msgstr "閱讀郵件討論串"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "閱讀詳情"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "重新開始導覽"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -465,16 +449,6 @@ msgstr ""
 "清單視圖會顯示目前資料夾中的約會，點擊約會時，約會資料與一些功能將顯示於詳細"
 "視圖。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "新物件圖示"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr "新物件圖示將會顯示約會提醒數量或其他通知。點選圖示時將會開啟資訊區域。"
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "入口"
@@ -507,10 +481,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "資料夾樹"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "資訊區域"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -642,7 +612,12 @@ msgstr ""
 "附件。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr "要啟動應用程式，點選選單列左方的項目。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -674,19 +649,29 @@ msgstr ""
 "件。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "要開啟說明，點擊選單列右上角的系統選單圖示。選擇說明，將顯示目前選擇程式的說"
 "明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -724,6 +709,15 @@ msgstr "要傳送郵件，點擊傳送"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr "要登出，點選選單列右上角的系統選單，點選登出。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr "要登出，點選選單列右上角的系統選單，點選登出。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -4274,6 +4268,11 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "高優先順序"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr "提示: 您可以在需要時從系統選單隨時回來導覽。"
+
 #~ msgid "Hobby"
 #~ msgstr "興趣"
 
@@ -4384,6 +4383,11 @@ msgstr ""
 #~ "In case of new notifications, e.g. appointment invitations, the info area "
 #~ "is opened on the right side."
 #~ msgstr "有新通知，例如約會邀請時，資訊區域將會開啟於右邊。"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr "在新通知的情況下，例如約會邀請，資訊區域將會打開。"
 
 #~ msgid "In progress"
 #~ msgstr "進行中"
@@ -5940,6 +5944,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "資源"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "重新開始導覽"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "還原上個操作"
 
@@ -6685,6 +6692,15 @@ msgstr ""
 #~ "清單視圖將會顯示大小與修改日期等詳情。使用選取盒來選取檔案，點擊檔案以在彈"
 #~ "出視窗中檢視更多資料或操作功能。"
 
+#~ msgid "The New objects icon"
+#~ msgstr "新物件圖示"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "新物件圖示將會顯示約會提醒數量或其他通知。點選圖示時將會開啟資訊區域。"
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -6865,6 +6881,9 @@ msgstr ""
 #~ "The icon on the bottom right side helps you sort your E-Mails. Click the "
 #~ "icon to get a list of sort criteria."
 #~ msgstr "右下角的圖示幫助您排序郵件。點選圖示以取得排序條件清單。"
+
+#~ msgid "The info area"
+#~ msgstr "資訊區域"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "收件者數量被限制為每欄位 %1$d 位收件者"

@@ -12,16 +12,9 @@
  */
 
 define('io.ox/core/settings/user', [
-    'io.ox/core/extensions',
     'io.ox/core/api/user',
-    'io.ox/contacts/model',
-    'io.ox/contacts/edit/view-form',
-    'io.ox/backbone/views/modal',
-    'io.ox/contacts/util',
-    'io.ox/core/yell',
-    'io.ox/core/a11y',
-    'gettext!io.ox/contacts'
-], function (ext, api, contactModel, ViewForm, ModalDialog, util, yell, a11y, gt) {
+    'io.ox/contacts/model'
+], function (api, contactModel) {
 
     'use strict';
 
@@ -37,67 +30,12 @@ define('io.ox/core/settings/user', [
         getCurrentUser: getCurrentUser,
 
         openModalDialog: function () {
-            var self = this;
-            return new ModalDialog({
-                width: 910,
-                maximize: true,
-                async: true,
-                title: gt('My contact data'),
-                point: 'io.ox/core/settings/user'
-            })
-            .extend({
-                'edit-view': function (baton) {
-                    var EditView = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
-                    baton.realm = factory.realm('edit').get({}).then(function (user) {
-                        baton.view.editView = new EditView({ model: user });
-                    });
-                },
-                'render': function (baton) {
-                    baton.realm = baton.realm.then(function () {
-                        var dialog = baton.view,
-                            model = dialog.editView.model;
-                        // render
-                        dialog.$body.append(dialog.editView.render().$el);
-                        a11y.getTabbable(dialog.$body).first().focus();
-                        dialog.editView.on('sync:start', function () {
-                            // if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
-                            if (model.get('birthday') !== null) return;
-                            dialog.$body.find('[data-field="birthday"]').find('.month,.date').val('');
-                            dialog.$body.find('[data-field="birthday"]').find('.year').val('1604');
-                        });
-                    });
-
-                },
-                'fail': function (baton) {
-                    baton.realm.fail(function () {
-                        var dialog = baton.view;
-                        dialog.$footer.empty();
-                        dialog.addButton({ label: gt('Cancel'), action: 'cancel' });
-                        dialog.disableFormElements();
-                        return dialog.$body.append(
-                            $.fail(gt('Couldn\'t load your contact data.'), function () {
-                                dialog.close();
-                                self.openModalDialog();
-                            })
-                        );
-                    });
-                }
-            })
-            .addButton({ label: gt('Discard'), action: 'discard', className: 'btn-default' })
-            .addButton({ label: gt('Save'), action: 'save' })
-            .addCheckbox({ label: gt('Show all fields'), action: 'toggle', status: false })
-            .on('toggle', function () {
-                this.idle();
-                this.editView.toggle.call(this.editView.$el);
-            })
-            .on('discard', function () { this.close(); })
-            .on('save', function () {
-                var model = this.editView.model;
-                if (!model._valid) return this.idle();
-                model.save().fail(yell);
-                this.close();
-            })
-            .open();
+            getCurrentUser().done(function (model) {
+                ox.load(['io.ox/contacts/edit/main']).done(function (m) {
+                    if (m.reuse('edit', model.attributes)) return;
+                    m.getApp(model.attributes).launch();
+                });
+            });
         }
     };
 });

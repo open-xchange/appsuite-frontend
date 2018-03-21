@@ -143,20 +143,27 @@ define('io.ox/core/tk/tokenfield', [
             /*
              * extension point for a token
              */
+
             ext.point(options.extPoint + '/token').extend({
                 id: 'token',
                 index: 100,
-                draw: function (model) {
+                draw: function (/*model, e, input*/) {
+                    // disabled contact pictures in tokens with 7.10
+                    // Keeping this point for potential customising
                     // add contact picture
-                    $(this).prepend(
+                    /*$(this).prepend(
                         contactAPI.pictureHalo(
                             $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
                             { width: 16, height: 16, scaleType: 'contain', lazyload: true }
                         )
                     );
+                    // when we append the contact picture, the token gets wider, this pushes the input to the next line. To prevent that we update the width of the input field
+                    input.trigger('updateWidth');
+                    */
                 }
             });
+
 
             ext.point(options.extPoint + '/autoCompleteItem').extend({
                 id: 'view',
@@ -406,7 +413,7 @@ define('io.ox/core/tk/tokenfield', [
                             return gt('%1$s. Press backspace to delete.', title);
                         });
                         // customize token
-                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
+                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
                     }
                 },
                 'tokenfield:edittoken': function (e) {
@@ -501,6 +508,10 @@ define('io.ox/core/tk/tokenfield', [
 
             // add non-public api;
             this.hiddenapi = this.input.data('ttTypeahead');
+
+            // debug: force dropdown to stay open
+            // this.hiddenapi.dropdown.close = $.noop;
+            // this.hiddenapi.dropdown.empty = $.noop;
 
             // ignore mouse events when dropdown gets programatically scrolled (see bug 55757)
             function hasMouseMoved(e) {
@@ -647,7 +658,7 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
-            this.getInput().on('focus blur', function (e) {
+            this.getInput().on('focus blur updateWidth', function (e) {
                 var tokenfield = self.$el.data('bs.tokenfield');
                 tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
                 tokenfield.update();

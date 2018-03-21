@@ -22,8 +22,8 @@ define('io.ox/calendar/actions', [
     'io.ox/core/capabilities',
     'io.ox/calendar/actions/change-confirmation',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
+    'io.ox/core/yell'
+], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, yell) {
 
     'use strict';
 
@@ -73,6 +73,9 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
+        requires: function (e) {
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+        },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (recipients) {
                 var hash = {};
@@ -92,13 +95,16 @@ define('io.ox/calendar/actions', [
                         return [rec.display_name, rec.mail];
                     })
                     .value();
-                ox.registry.call('mail-compose', 'compose', { to: recipients, subject: baton.data.title });
+                ox.registry.call('mail-compose', 'compose', { to: recipients, subject: baton.data.summary });
             });
         }
     });
 
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
+        requires: function (e) {
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+        },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/invite']).done(function (action) {
                 action(baton);
@@ -108,6 +114,9 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
+        requires: function (e) {
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+        },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (distlist) {
                 ox.load(['io.ox/contacts/distrib/main', 'settings!io.ox/core']).done(function (m, coreSettings) {
@@ -124,16 +133,19 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/edit', {
         requires: function (e) {
             var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
-                allowed = e.collection.has('one', 'modify');
+                allowed = e.collection.has('one', 'modify'),
+                // only organizer is allowed to make changes. Attendees are only allowed to change their personal alarms or confirmation state
+                isOrganizer = exists && util.hasFlag(e.baton.data, 'organizer');
+
             if (allowed) {
                 // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
-                if (!e.baton.data.folder_id) {
+                if (!e.baton.data.folder) {
                     // you need to have a folder id to edit
                     allowed = false;
                 }
             }
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return allowed && exists && isBossy;
+                return allowed && exists && isBossy && isOrganizer;
             });
         },
         action: function (baton) {
@@ -170,36 +182,31 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/changestatus', {
         requires: function (e) {
 
-            function cont(app) {
+            function cont(model) {
                 return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
-                    var iamUser = false;
-                    if (app.users) {
-                        for (var i = 0; i < app.users.length; i++) {
-                            if (app.users[i].id === ox.user_id) {
-                                iamUser = true;
-                            }
-                        }
-                    }
+                    var attendees = model.get('attendees') || [],
+                        iamUser = !!_(attendees).findWhere({ entity: ox.user_id });
                     return e.collection.has('one') && iamUser && isBossy;
                 });
             }
 
-            var app = e.baton.data;
+            var model = e.baton.model,
+                data = e.baton.data;
 
             // cannot confirm appointments without proper id (happens when detail view was opened from mail invitation from external calendar)
             // must use buttons in invitation mail instead
-            if (!app.id) return false;
+            if (!data.id) return false;
 
             // incomplete
-            if (app.id && !app.users) {
-                return api.get(app).then(cont);
+            if (data && !model) {
+                return api.get(data).then(cont);
             }
-            return cont(app);
+            return cont(model);
         },
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (action) {
-                action(baton.data);
+                action(baton.data, { noFolderCheck: baton.noFolderCheck });
             });
         }
     });
@@ -211,7 +218,7 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/actions/follow-up']).done(function (action) {
-                action(baton.data);
+                action(baton.model);
             });
         }
     });
@@ -291,21 +298,15 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/move', {
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                var isSeries = e.baton.data.recurrence_type > 0;
+                var isSeries = !!e.baton.data.recurrenceId;
                 return e.collection.has('some', 'delete') && isBossy && !isSeries;
             });
         },
         multiple: function (list, baton) {
-
-            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
-
             ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
                 move.item({
                     api: api,
                     button: gt('Move'),
-                    filter: function (id, model) {
-                        return model.id !== 'virtual/all-my-appointments';
-                    },
                     flat: true,
                     indent: false,
                     list: list,
@@ -318,8 +319,7 @@ define('io.ox/calendar/actions', [
                     },
                     target: baton.target,
                     title: gt('Move'),
-                    type: 'move',
-                    vgrid: vgrid
+                    type: 'move'
                 });
             });
         }
@@ -346,45 +346,30 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
-            return _.device('!smartphone');
+            return _.device('desktop');
         },
         action: function (baton) {
-            require(['io.ox/calendar/freetime/main'], function (freetime) {
-                var perspective = baton.app.getWindow().getPerspective(),
-                    now = _.now(),
-                    startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
-                    layout = perspective ? perspective.app.props.get('layout') : '';
+            require(['io.ox/calendar/freetime/main', 'io.ox/core/api/user'], function (freetime, userAPI) {
+                userAPI.get().done(function (user) {
+                    var perspective = baton.app.getWindow().getPerspective(),
+                        now = _.now(),
+                        startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                        layout = perspective ? perspective.app.props.get('layout') : '';
 
-                // see if the current day is in the displayed week.
-                if (startDate < now && layout.indexOf('week:') === 0) {
-                    // calculate end of week/workweek
-                    var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
-                    if (now < max) {
-                        startDate = now;
+                    // see if the current day is in the displayed week.
+                    if (startDate < now && layout.indexOf('week:') === 0) {
+                        // calculate end of week/workweek
+                        var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                        if (now < max) {
+                            startDate = now;
+                        }
                     }
-                }
 
-                freetime.getApp().launch({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] });
+                    freetime.getApp().launch({ startDate: startDate, attendees: [util.createAttendee(user, { partStat: 'ACCEPTED' })] });
+                });
             });
         }
     });
-
-    /*new Action('io.ox/calendar/actions/freebusy', {
-        capabilities: 'freebusy !alone !guest',
-        requires: function () {
-            return _.device('!smartphone');
-        },
-        action: function (baton) {
-            var perspective = baton.app.getWindow().getPerspective(),
-                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
-            ox.launch('io.ox/calendar/freebusy/main', {
-                baton: baton,
-                folder: baton.app.folder.get(),
-                participants: [{ id: ox.user_id, type: 1 }],
-                start_date: start_date
-            });
-        }
-    });*/
 
     // Actions mobile
     new Action('io.ox/calendar/actions/dayview/showNext', {
@@ -441,68 +426,75 @@ define('io.ox/calendar/actions', [
 
     function acceptDecline(baton, accept) {
         if ($(baton.e.target).hasClass('disabled')) return;
-        var appointment = api.reduce(baton.data);
-        changeStatus(baton.data).done(function success() {
-            folderAPI.get(appointment.folder).done(function (folder) {
-                appointment.data = {
-                    confirmmessage: '',
-                    confirmation: accept ? 1 : 2
-                };
+        var appointment = api.reduce(baton.data),
+            def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder);
 
-                if (accept) {
-                    // default reminder
-                    appointment.data.alarm = parseInt(settings.get('defaultReminder', 15), 10);
-                }
+        def.done(function (folder) {
 
-                // add folder owner in shared folder
-                if (folderAPI.is('shared', folder)) {
-                    appointment.data.id = folder.created_by;
-                }
+            appointment.attendee = {
+                // act as folder owner in shared folder
+                entity: !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                partStat: accept ? 'ACCEPTED' : 'DECLINED'
+            };
 
-                // check if only one appointment or the whole series should be accepted
-                // you need to check the recurrence_type too. Exceptions have a recurrence position but no recurrence_type
-                if (baton.data.recurrence_type > 0 && appointment.recurrence_position) {
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
-                                gt('Do you want to decline the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('series',
-                                //#. Use singular in this context
-                                gt('Series'), 'series')
-                            .addButton('appointment', gt('Appointment'), 'appointment')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .then(function (action) {
-                                if (action === 'cancel') {
-                                    return;
-                                }
-                                if (action === 'appointment') {
-                                    appointment.occurrence = appointment.recurrence_position;
-                                }
-                                $(baton.e.target).addClass('disabled');
-                                api.confirm(appointment);
+            if (accept) {
+                // default reminder
+                appointment.alarms = util.getDefaultAlarms(baton.data);
+            }
+
+            // check if only one appointment or the whole series should be accepted
+            // exceptions don't have the same id and seriesId
+            if (baton.data.seriesId === baton.data.id && appointment.recurrenceId) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
+                            gt('Do you want to decline the whole series or just one appointment within the series?'))
+                        .addPrimaryButton('series',
+                            //#. Use singular in this context
+                            gt('Series'), 'series')
+                        .addButton('appointment', gt('Appointment'), 'appointment')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
+                        .show()
+                        .then(function (action) {
+                            if (action === 'cancel') {
+                                return;
+                            }
+                            if (action === 'series') {
+                                delete appointment.recurrenceId;
+                            }
+                            $(baton.e.target).addClass('disabled');
+                            // those links are for fast accept/decline, so don't check conflicts
+                            // TODO discuss this with alex
+                            api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
+                                yell(e);
+                                $(baton.e.target).removeClass('disabled');
                             });
-                    });
-                    return;
-                }
-                $(baton.e.target).addClass('disabled');
-                api.confirm(appointment);
+                        });
+                });
+                return;
+            }
+            $(baton.e.target).addClass('disabled');
+            // those links are for fast accept/decline, so don't check conflicts
+            // TODO discuss this with alex
+            api.confirm(appointment).fail(function (e) {
+                yell(e);
+                $(baton.e.target).removeClass('disabled');
             });
         });
     }
 
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.users).findWhere({ id: ox.user_id })) return false;
-            return _(e.baton.data.users).findWhere({ id: ox.user_id }).confirmation !== 1;
+            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
+            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'ACCEPTED';
         },
         action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.users).findWhere({ id: ox.user_id })) return false;
-            return _(e.baton.data.users).findWhere({ id: ox.user_id }).confirmation !== 2;
+            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
+            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'DECLINED';
         },
         action: acceptDecline
     });
@@ -641,38 +633,44 @@ define('io.ox/calendar/actions', [
         ref: 'io.ox/calendar/detail/actions/print-appointment'
     }));
 
-    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
-        index: 100,
-        id: 'inline-links-participant',
-        ref: 'io.ox/calendar/links/inline-participants',
-        classes: 'io-ox-inline-links embedded'
-    }));
-
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 700,
+        prio: 'lo',
         mobile: 'lo',
         id: 'send mail',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
         label: gt('Send mail to all participants'),
         ref: 'io.ox/calendar/detail/actions/sendmail'
     }));
 
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 200,
-        prio: 'hi',
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 800,
+        prio: 'lo',
         mobile: 'lo',
         id: 'invite',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
         label: gt('Invite to new appointment'),
         ref: 'io.ox/calendar/detail/actions/invite'
     }));
 
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 300,
-        prio: 'hi',
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 900,
+        prio: 'lo',
         mobile: 'lo',
         id: 'save as distlist',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
         label: gt('Save as distribution list'),
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+    }));
+
+    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({//ghj
+        index: 100,
+        id: 'inline-links-participant',
+        ref: 'io.ox/calendar/links/inline-participants',
+        classes: 'io-ox-inline-links embedded'
     }));
 
     ext.point('io.ox/calendar/folderview/premium-area').extend(new links.InlineLinks({

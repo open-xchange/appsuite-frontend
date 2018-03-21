@@ -11,7 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.wizard-container { display: flex; z-index: 999;}
+// smart dropdowns have an index of 100000, so we must be higher
+.wizard-container { display: flex; z-index: 100003;}
 
 .wizard-step {
     font-size: 14px;
@@ -77,18 +78,18 @@
 
 .wizard-overlay {
     background-color: @wizard-backdrop-color;
-    z-index: 997;
+    z-index: 100001;
 }
 
 .wizard-backdrop {
     background-color: @wizard-backdrop-color;
-    z-index: 997;
+    z-index: 100001;
 }
 
 .wizard-spotlight {
     background-color: rgba(255, 255, 255, 0.01);
     box-shadow: 0 10px 50px 0px rgba(0, 0, 0, 0.40);
-    z-index: 998;
+    z-index: 100002;
 }
 
 //

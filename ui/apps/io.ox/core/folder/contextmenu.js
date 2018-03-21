@@ -20,69 +20,11 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/api/filestorage',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, fileSettings, gt) {
 
     'use strict';
-
-    //
-    // drawing utility functions
-    //
-
-    var ColorSelectionView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'custom-colors',
-        events: {
-            'click .color-label': 'select',
-            'remove': 'onRemove'
-        },
-        initialize: function () {
-            this.listenTo(this.model, 'change:meta', this.update);
-        },
-        update: function () {
-            //toggle active class
-            $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
-        },
-        select: function (e) {
-            var meta = _.extend({},
-                this.model.get('meta'),
-                { color_label: $(e.currentTarget).data('index') }
-            );
-
-            api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
-                require(['io.ox/core/notifications'], function (notifications) {
-                    notifications.yell(error);
-                });
-            });
-
-            //prevent dialog from closing
-            e.stopPropagation();
-            e.preventDefault();
-        },
-        render: function (util) {
-            var folderColor = util.getFolderColor({ meta: this.model.get('meta') });
-
-            this.$el.append(
-                _.range(1, 11).map(function (colorNumber) {
-                    return $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
-                        .addClass('color-label-' + colorNumber)
-                        .toggleClass('active', folderColor === colorNumber)
-                        .attr({
-                            'data-index': colorNumber,
-                            'aria-checked': folderColor === colorNumber,
-                            'title': util.getColorLabel(colorNumber)
-                        })
-                        .append($('<i class="fa fa-check" aria-hidden="true">'));
-                })
-            );
-
-            return this;
-        },
-        onRemove: function () {
-            this.stopListening();
-        }
-    });
 
     var extensions = {
 
@@ -252,7 +194,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
-                    remove(e.data.id, { isDSC: account.isDSC(e.data.id) });
+                    remove(e.data.id);
                 });
             }
 
@@ -271,6 +213,39 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
+        // Restore folder
+        //
+        restoreFolder: (function () {
+
+            return function (baton) {
+
+                function handler(e) {
+                    ox.load(['io.ox/files/api', 'io.ox/files/actions/restore']).done(function (filesApi, action) {
+                        var model = new filesApi.Model(api.pool.getModel(e.data.id).toJSON());
+                        var key = e.data.listView.getCompositeKey(model);
+
+                        // the file model of files and folders
+                        var convertedModel = filesApi.resolve([key], false);
+                        action(convertedModel);
+                    });
+                }
+
+                if (!/^(infostore)$/.test(baton.module)) return;
+                if (!api.is('trash', baton.data)) return;
+                if (!api.can('restore:folder', baton.data)) return;
+                if (String(fileSettings.get('folder/trash')) !== baton.data.folder_id) return;
+
+                contextUtils.addLink(this, {
+                    action: 'restore',
+                    data: { id: baton.data.id, listView: baton.app.listView },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Restore')
+                });
+            };
+        }()),
+
+        //
         // Move
         //
         move: (function () {
@@ -283,13 +258,51 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
-                if (!/^(mail|infostore)$/.test(baton.module)) return;
+                if (!/^(mail)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (!api.can('remove:folder', baton.data)) return;
 
                 contextUtils.addLink(this, {
                     action: 'move',
                     data: { id: baton.data.id },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Move')
+                });
+            };
+        }()),
+
+        //
+        // Move - only for Drive
+        //
+        moveDrive: (function () {
+
+            function handler(e) {
+                e.preventDefault();
+                var id = e.data.id;
+                ox.load(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).done(function (filesApi, action) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+
+                    // id from the model must be a compositeKey
+                    var key = e.data.listView.getCompositeKey(model);
+                    var convertedModel = filesApi.resolve([key]);
+
+                    action.invoke('io.ox/files/actions/move', null, ext.Baton({
+                        models: convertedModel,
+                        data: convertedModel[0]
+                    }));
+                });
+            }
+
+            return function (baton) {
+
+                if (!/^(infostore)$/.test(baton.module)) return;
+                if (_.device('smartphone')) return;
+                if (!api.can('remove:folder', baton.data)) return;
+
+                contextUtils.addLink(this, {
+                    action: 'move',
+                    data: { id: baton.data.id, listView: baton.app.listView },
                     enabled: true,
                     handler: handler,
                     text: gt('Move')
@@ -370,6 +383,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (_.device('ios || android')) return;
                 if (!api.can('import', baton.data)) return;
+                if (baton.data.module === 'calendar') return;
 
                 contextUtils.addLink(this, {
                     action: 'import',
@@ -411,8 +425,6 @@ define('io.ox/core/folder/contextmenu', [
                 if (_.device('smartphone')) return;
                 // trash or subfolders do not support sharing or permission changes
                 if (api.is('trash', baton.data)) return;
-
-                if (account.isDSC(baton.data.id)) return;
 
                 // check if folder can be shared
                 var id = String(baton.data.id),
@@ -548,20 +560,29 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!/^calendar$/.test(baton.module)) return;
-                if (!api.is('private', baton.data)) return;
+                var extProps = baton.data['com.openexchange.calendar.extendedProperties'];
+                if (extProps && extProps.color && extProps.color.proected === false) return;
 
                 if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
                     var listItem, container = this.parent();
 
-                    this.append(
-                        listItem = $('<li role="presentation">')
-                    );
+                    this.append(listItem = $('<li role="presentation">'));
 
-                    require(['io.ox/calendar/util'], function (calendarUtil) {
+                    require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
                         listItem.append(
-                            new ColorSelectionView({
-                                model: api.pool.getModel(baton.data.id)
-                            }).render(calendarUtil).$el
+                            new ColorPicker({
+                                model: api.pool.getModel(baton.data.id),
+                                getValue: function () {
+                                    return calendarUtil.getFolderColor(this.model.attributes);
+                                },
+                                setValue: function (value) {
+                                    api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
+                                        require(['io.ox/core/notifications'], function (notifications) {
+                                            notifications.yell(error);
+                                        });
+                                    });
+                                }
+                            }).render().$el
                         );
                         // trigger ready to recompute bounds of smart dropdown
                         container.trigger('ready');
@@ -569,6 +590,39 @@ define('io.ox/core/folder/contextmenu', [
                 }
             };
         })(),
+
+        //
+        // manual refresh calendar data from external provider
+        //
+        refreshCalendar: function (baton) {
+            // only in calendar module
+            if (!/^calendar$/.test(baton.module)) return;
+            // check if folder supports cache updates ("cached" capability is present)
+            if (!api.can('sync:cache', baton.data)) return;
+
+            contextUtils.addLink(this, {
+                action: 'refresh-calendar',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.refreshCalendar,
+                text: gt('Refresh this calendar')
+            });
+        },
+
+        //
+        // Only select that calendar folder
+        //
+        selectOnly: function (baton) {
+            if (!/^calendar$/.test(baton.module)) return;
+            var isOnly = baton.view.$el.hasClass('single-selection');
+            contextUtils.addLink(this, {
+                action: 'select-only',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.selectOnly,
+                text: isOnly ? gt('Show all calendars') : gt('Show this calendar only')
+            });
+        },
 
         divider: contextUtils.divider
     };
@@ -592,6 +646,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'move',
             index: 1200,
             draw: extensions.move
+        },
+        {
+            id: 'moveDrive',
+            index: 1250,
+            draw: extensions.moveDrive
         },
         {
             id: 'publications',
@@ -686,24 +745,39 @@ define('io.ox/core/folder/contextmenu', [
         },
         */
         {
-            id: 'toggle',
+            id: 'refresh-calendar',
+            index: 6100,
+            draw: extensions.refreshCalendar
+        },
+        {
+            id: 'select-only',
             index: 6200,
+            draw: extensions.selectOnly
+        },
+        {
+            id: 'toggle',
+            index: 6300,
             draw: extensions.toggle
         },
         {
             id: 'showInDrive',
-            index: 6200,
+            index: 6400,
             draw: extensions.showInDrive
         },
         {
             id: 'empty',
-            index: 6300,
+            index: 6500,
             draw: extensions.empty
         },
         {
             id: 'delete',
-            index: 6500,
+            index: 6600,
             draw: extensions.removeFolder
+        },
+        {
+            id: 'restore',
+            index: 6600,
+            draw: extensions.restoreFolder
         }
     );
 

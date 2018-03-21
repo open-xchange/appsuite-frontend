@@ -45,7 +45,10 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
-    var fixtoccbcc = settings.get('features/fixtoccbcc');
+    var fixtoccbcc = settings.get('features/fixtoccbcc'),
+        showDeleted = !settings.get('features/ignoreDeleted', false),
+        sanitize = sanitizer.isEnabled(),
+        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     pool.map = function (data) {
         var cid = _.cid(data), model = this.get(cid);
@@ -78,8 +81,6 @@ define('io.ox/mail/api', [
         return data;
     };
 
-    var sanitize = sanitizer.isEnabled(),
-        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     // generate basic API
     var api = apiFactory({
@@ -96,7 +97,7 @@ define('io.ox/mail/api', [
                 // received_date
                 sort: '610',
                 order: 'desc',
-                deleted: 'true',
+                deleted: showDeleted,
                 // allow DB cache
                 cache: false
             },
@@ -265,6 +266,7 @@ define('io.ox/mail/api', [
     }
 
     function allowImages(obj) {
+        if (util.authenticity('block', obj)) return false;
         if (!settings.get('allowHtmlImages', false)) return false;
         if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
@@ -669,6 +671,20 @@ define('io.ox/mail/api', [
      */
     api.expunge = function (folder_id) {
 
+        var ids = _(pool.getByFolder(folder_id))
+            .chain()
+            .map(function (collection) {
+                return collection.filter(function (model) {
+                    return util.isDeleted(model.attributes);
+                });
+            })
+            .flatten()
+            .pluck('cid')
+            .compact()
+            .value();
+
+        api.trigger('beforeexpunge', ids);
+
         // remove deleted messages immediately
         _(pool.getByFolder(folder_id)).each(function (collection) {
             collection.set(
@@ -1000,7 +1016,10 @@ define('io.ox/mail/api', [
                 action: 'autosave',
                 lineWrapAfter: 0
             };
-            if (obj.security && obj.security.decrypted) params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
+            if (obj.security && obj.security.decrypted) {
+                params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
+                if (obj.security.authentication) params.authToken = obj.security.authentication;
+            }
             return http.wait(
                 http.PUT({
                     module: 'mail',
@@ -1362,7 +1381,9 @@ define('io.ox/mail/api', [
             module: 'mail',
             params: {
                 action: 'new',
-                lineWrapAfter: 0
+                lineWrapAfter: 0,
+                // force the response to be json(ish) instead of plain html (fixes some error messages)
+                force_json_response: true
             },
             data: form,
             dataType: 'json',
@@ -1415,7 +1436,7 @@ define('io.ox/mail/api', [
         .then(function (response) {
             var hash = {};
             _(response).each(function (item) {
-                hash[_.cid(item)] = item.text_preview || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr';
+                hash[_.cid(item)] = item.text_preview || '\u00a0';
             });
             return hash;
         });

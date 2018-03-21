@@ -25,7 +25,13 @@ define('io.ox/tasks/edit/main', [
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt('Edit task'), userContent: true, closable: true }),
+        var app = ox.ui.createApp({
+                name: 'io.ox/tasks/edit',
+                title: gt('Create task'),
+                userContent: true,
+                closable: true,
+                floating: !_.device('smartphone')
+            }),
             // app window
             win,
             //app
@@ -109,7 +115,10 @@ define('io.ox/tasks/edit/main', [
             // get window
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
-                chromeless: true
+                chromeless: true,
+                floating: !_.device('smartphone'),
+                closable: true,
+                title: taskData && taskData.id ? gt('Edit task') : gt('Create task')
             });
 
             win.addClass('io-ox-tasks-edit-main');
@@ -189,6 +198,12 @@ define('io.ox/tasks/edit/main', [
 
             if (app.isDirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    } else if (_.device('smartphone')) {
+                        app.getWindow().resume();
+                        ox.trigger('launcher:toggleOverlay', false);
+                    }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)

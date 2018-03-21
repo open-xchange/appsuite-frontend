@@ -134,6 +134,7 @@ define('io.ox/core/settings', [
         };
 
         var applyDefaults = function () {
+            // Note: This does not support a "deep" extend
             return require([path + '/settings/defaults']).then(function (defaults) {
                 tree = _.extend({}, defaults, tree);
             });

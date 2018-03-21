@@ -81,6 +81,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/settings/defaults.js',
                             'apps/io.ox/core/moment.js',
                             'apps/io.ox/core/viewer/main.js',
+                            'apps/io.ox/core/main/icons.js',
                             // missing for signin
                             'apps/io.ox/core/boot/config.js',
                             'apps/io.ox/core/boot/fixes.js',
@@ -94,6 +95,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/login/openid.js',
                             'apps/io.ox/core/boot/login/standard.js',
                             'apps/io.ox/core/boot/login/token.js',
+                            'apps/io.ox/core/boot/warning.js',
                             'apps/io.ox/core/boot/main.js',
                             'build/apps/io.ox/core/boot.en_US.js',
                             'build/apps/io.ox/core/boot.de_DE.js',
@@ -183,6 +185,18 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/desktopNotifications.js',
                             'apps/io.ox/core/notifications/badgeview.js',
                             // core
+                            'apps/io.ox/core/main/addLauncher.js',
+                            'apps/io.ox/core/main/appcontrol.js',
+                            'apps/io.ox/core/main/autologout.js',
+                            'apps/io.ox/core/main/debug.js',
+                            'apps/io.ox/core/main/i18n.js',
+                            'apps/io.ox/core/main/logout.js',
+                            'apps/io.ox/core/main/offline.js',
+                            'apps/io.ox/core/main/refresh.js',
+                            'apps/io.ox/core/main/registry.js',
+                            'apps/io.ox/core/main/stages.js',
+                            'apps/io.ox/core/main/topbar_right.js',
+                            'apps/io.ox/core/main/warning.js',
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
                             // mail app
@@ -242,7 +256,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/tk/list-selection.js',
                             'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/mail/detail/content.js',
-                            'apps/io.ox/core/emoji/util.js',
                             'apps/io.ox/mail/detail/links.js',
                             'apps/io.ox/core/download.js',
                             // mail app - main
@@ -369,34 +382,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/find/view.js'
                         ],
                         dest: 'build/apps/io.ox/find/bundle.js',
-                        nonull: true
-                    }
-                ]
-            },
-            emoji: {
-                options: {
-                    banner: 'define.async("io.ox/emoji/bundle", [], function () {\n\n' +
-                                '"use strict";\n\n',
-                    /* define 2nd wave that can not be included directly, so should need 2 requests to load emoji feature completely */
-                    footer: '\n\nreturn require([' +
-                            '"css!3rd.party/emoji/emoji.css",' +
-                            '"less!io.ox/emoji/emoji",' +
-                            '"gettext!io.ox/mail/emoji",' +
-                            '"raw!io.ox/emoji/unified.json",' +
-                            '"raw!io.ox/emoji/softbank.json",' +
-                            '"raw!io.ox/emoji/japan_carrier.json",' +
-                            '"3rd.party/emoji/emoji"' +
-                            ']).then(function () { return require(["io.ox/emoji/main"]); });\n});\n'
-                },
-                files: [
-                    {
-                        src: [
-                            'apps/io.ox/mail/emoji/settings/defaults.js',
-                            'apps/io.ox/emoji/categories.js',
-                            'apps/io.ox/emoji/conversions.js',
-                            'apps/io.ox/emoji/main.js'
-                        ],
-                        dest: 'build/apps/io.ox/emoji/bundle.js',
                         nonull: true
                     }
                 ]

@@ -14,8 +14,9 @@
 
 define('io.ox/tours/settings', [
     'io.ox/core/tk/wizard',
+    'settings!io.ox/core',
     'gettext!io.ox/tours'
-], function (Tour, gt) {
+], function (Tour, settings, gt) {
 
     'use strict';
 
@@ -25,19 +26,22 @@ define('io.ox/tours/settings', [
         app: 'io.ox/settings',
         priority: 1
     }, function () {
-        new Tour()
+        var tour = new Tour()
         .step()
             .title(gt('Opening the settings'))
-            .content(gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings.'))
-            .hotspot('#topbar-settings-dropdown a[data-action="settings"]')
-            .spotlight('#topbar-settings-dropdown a[data-action="settings"]')
+            .content(gt('To open the settings, click the user image on the upper right side of the menu bar. Select Settings.'))
+            .hotspot('#topbar-settings-dropdown a[data-name="io.ox/settings"]')
+            .spotlight('#topbar-settings-dropdown a[data-name="io.ox/settings"]')
             .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a[data-action="settings"]')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
+            .waitFor('.smart-dropdown-container #topbar-settings-dropdown a[data-name="io.ox/settings"]')
+            .on('before:show', function () {
+                // without smart-dropdowns onClick handler may cause hiding
+                _.defer(function () {
+                    $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
+                });
             })
             .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
+                $('#topbar-settings-dropdown:visible').dropdown('toggle');
             })
             .end()
         .step()
@@ -54,32 +58,48 @@ define('io.ox/tours/settings', [
             .end()
         .step()
             .title(gt('Opening the help'))
-            .content(gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
+            .content(gt('To open the help, click the user image on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
             .hotspot('#topbar-settings-dropdown a.io-ox-context-help')
             .spotlight('#topbar-settings-dropdown a.io-ox-context-help')
             .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a.io-ox-context-help')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
+            .waitFor('.smart-dropdown-container #topbar-settings-dropdown a.io-ox-context-help')
+            .on('before:show', function () {
+                $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
             })
             .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
+                $('#topbar-settings-dropdown:visible').dropdown('toggle');
             })
-            .end()
-        .step()
-            .title(gt('Signing out'))
-            .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
-            .hotspot('#topbar-settings-dropdown a[data-action="logout"]')
-            .spotlight('#topbar-settings-dropdown a[data-action="logout"]')
-            .referTo('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown a[data-action="logout"]')
-            .on('wait', function () {
-                $('#topbar-settings-dropdown').css('display', 'block');
-            })
-            .on('hide', function () {
-                $('#topbar-settings-dropdown').css('display', '');
-            })
-            .end()
-        .start();
+            .end();
+
+        if (settings.get('features/dedicatedLogoutButton', false) !== true) {
+            // dropdown menu entry
+            tour.step()
+                .title(gt('Signing out'))
+                .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
+                .hotspot('#topbar-settings-dropdown a[data-name="logout"]')
+                .spotlight('#topbar-settings-dropdown a[data-name="logout"]')
+                .referTo('#topbar-settings-dropdown')
+                .waitFor('#topbar-settings-dropdown a[data-name="logout"]')
+                .on('wait', function () {
+                    $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
+                })
+                .on('hide', function () {
+                    $('#topbar-settings-dropdown:visible').dropdown('toggle');
+                })
+                .end();
+
+        } else {
+            // dedicatedLogoutButton: top bar entry
+            tour.step()
+                .title(gt('Signing out'))
+                .content(gt('To sign out, click the logout icon on the upper right side of the menu bar.'))
+                .hotspot('#io-ox-toprightbar a[data-action="sign-out"]')
+                .spotlight('#io-ox-toprightbar a[data-action="sign-out"]')
+                .referTo('#io-ox-toprightbar')
+                .waitFor('#io-ox-toprightbar a[data-action="sign-out"]')
+                .end();
+        }
+
+        tour.start();
     });
 });

@@ -55,11 +55,6 @@ define('io.ox/mail/compose/actions/save', [
             perform: extensions.publishMailAttachments
         },
         {
-            id: 'simple-linebreaks',
-            index: 600,
-            perform: extensions.applySimpleLinebreaks
-        },
-        {
             id: 'send',
             index: 1000,
             perform: function (baton) {

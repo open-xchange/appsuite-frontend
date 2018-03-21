@@ -1,0 +1,512 @@
+@appcontrol-height:                     64px;
+@appcontrol-height-smartphone:          48px;
+@appcontrol-launcher-height-smartphone: 48px;
+
+@launcher-fg:       #666;
+@launcher-bg:       #fff;
+@launcher-fg-hover: #666;
+@launcher-bg-hover: #eee;
+
+@launcher-stroke-width: 3px;
+@launcher-stroke-width-retina: 3px;
+
+@launcher-text-size: 12px;
+@launcher-badge-color: #757575; //#c30000;
+
+@launcher-size: 96px;
+@launcher-vertical-amount: 3;
+@launcher-spacing: 2px;
+@launcher-outer-spacing: 16px;
+
+@quicklaunch-width: @appcontrol-height;
+@quicklaunch-width-smartphone: @appcontrol-height-smartphone;
+
+@quicklaunch-stroke-width: 3px;
+@quicklaunch-stroke-width-retina: 3px;
+
+@svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
+
+// adjust positions of top-bar and screens
+#io-ox-core {
+    #io-ox-topbar { display: none; }
+    #io-ox-screens { top: @appcontrol-height - 1; }
+}
+
+.smartphone {
+    #io-ox-top-logo { display: none; }
+    #io-ox-core #io-ox-screens { top: @appcontrol-height-smartphone; }
+}
+
+#io-ox-top-logo {
+    list-style: none;
+    height: @appcontrol-height;
+    margin: 8px 7px 0 13px;
+    img {
+        height: 100%;
+        margin-top: -1px;
+    }
+}
+
+.logo-btn {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    &:focus, &:hover {
+        outline: 0;
+        background: rgba(0, 0, 0, .3);
+    }
+}
+
+#io-ox-appcontrol {
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 12;
+    color: #fff;
+    height: @appcontrol-height - 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.90);
+    padding: 0;
+    display: flex;
+    align-content: center;
+
+    &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        height: @appcontrol-height - 1;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.90);
+        opacity: 0;
+        .smartphone & {
+            height:  @appcontrol-height-smartphone - 1;
+            border-bottom: 0;
+        }
+    }
+
+    html.time-dependent &:before {
+        transition: opacity 5s linear;
+    }
+
+    & > div {
+        display: block;
+    }
+
+    .badge {
+        background-color: @notification-icon-background;
+    }
+
+    #io-ox-top-logo {
+        width: auto;
+        margin: 0 24px 0 16px;
+    }
+
+    #io-ox-launcher {
+        flex-shrink:0;
+        align-self: auto;
+        min-width: 0;
+        min-height: auto;
+        & > button {
+            margin-top: -1px;
+            position: relative;
+            z-index: 2;
+            height: @appcontrol-height;
+            width: @appcontrol-height - 16;
+            display: inline-block;
+            padding: 24px 16px;
+            border: 0;
+            svg .fill-c1 { fill: #fff; }
+        }
+        button {
+            outline:0;
+        }
+    }
+
+    &.open #io-ox-launcher > button,
+    #io-ox-launcher > button:hover,
+    #io-ox-launcher > button:focus,
+    #io-ox-quicklaunch > button:hover,
+    #io-ox-quicklaunch > button:focus {
+        background: rgba(0, 0, 0, .3);
+        outline: 0;
+        //svg .fill-c1 { fill: @brand-primary; }
+        //svg .stroke-c1 { fill: @brand-primary; }
+    }
+
+    #io-ox-quicklaunch {
+        flex-shrink: 0;
+        min-width: @quicklaunch-width;
+        min-height: auto;
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #eb4400;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 1;
+            top: 20px;
+            left: 33px;
+        }
+
+        .svgwrap {
+            padding: 8px;
+            height: @appcontrol-height;
+        }
+        svg {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: visible;
+            stroke-opacity: .5;
+            fill-opacity: .5;
+            .stroke-c1 { stroke: #fff; }
+            .fill-none { fill: none;   }
+            .fill-c1   { fill: #fff;   }
+            .stroke-w1 {
+                .retina & {
+                    stroke-width: @quicklaunch-stroke-width-retina;
+                }
+                stroke-width: @quicklaunch-stroke-width;
+            }
+            &:hover, &:focus {
+                stroke-opacity: 1;
+                fill-opacity: 1;
+                .fill-c1 {
+                    fill-opacity: 1;
+                }
+            }
+
+        }
+
+        button {
+            position: relative;
+            z-index: 2;
+            height: @appcontrol-height;
+            width: 48px;
+            display: inline-block;
+            padding:0;
+            border: 0;
+            outline: 0;
+            margin-top: -1px;
+            .title { display: none; }
+            .badge {
+                position: absolute;
+                top: 55%;
+                font-size: 9px;
+                z-index: 1;
+                background-color: #c80000;
+            }
+
+            &:focus, &:hover {
+                background: rgba(0, 0, 0, .3);
+                //svg .stroke-c1 { stroke: @launcher-fg-hover; }
+                //svg .fill-c1   { fill: @launcher-fg-hover;   }
+            }
+        }
+    }
+
+    #io-ox-topsearch {
+        margin-top: 15px;
+        margin-right: 24px;
+        flex-grow: 1;
+
+        .search-box > .form-group { margin-bottom: 0; }
+
+        .search-field {
+            border-radius: 0;
+            height: 32px;
+        }
+
+        .tokenfield { padding-top: 2px; }
+
+        .twitter-typeahead .tt-input {
+            background-color: transparent;
+        }
+
+        // input placeholder text
+        .tokenfield-placeholder {
+            // avoid visual changes when tokenfield get's initated
+            padding-left: @default-padding;
+        }
+
+        .io-ox-find {
+            flex: 1;
+            max-width: 350px;
+            margin-left: auto;
+        }
+    }
+
+    .io-ox-find:not(.active) {
+        .search-field {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.30);
+        }
+
+        // NOTE: Placeholders: IE 11 first and needs !important
+        .token-input:-ms-input-placeholder { color: #fff !important; }
+        .tokenfield-placeholder:-ms-input-placeholder { color: #fff !important; }
+
+        .token-input::placeholder { color: #fff; }
+        .tokenfield-placeholder::placeholder { color: #fff; }
+        .token-input, .tokenfield-placeholder {
+            &::-webkit-input-placeholder, &::-ms-input-placeholder {
+                color: #fff;
+            }
+        }
+    }
+
+    #io-ox-toprightbar,
+    #io-ox-toprightbar > ul,
+    #io-ox-toprightbar > ul li,
+    #io-ox-toprightbar > ul li a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        margin: 0;
+    }
+
+    #io-ox-toprightbar {
+        .launcher {
+            a {
+                padding: 16px 12px;
+                cursor: pointer;
+                font-size: 18px;
+                text-decoration: none;
+                color: #fff;
+
+                 &:hover, &:focus {
+                    background: rgba(0, 0, 0, .3);
+                    outline: 0;
+                }
+            }
+        }
+
+        .launcher-icon.fa-question { font-size: 24px; }
+        .launcher-icon.fa-refresh { position: relative; top: 1px; }
+
+        .contact-picture {
+            .picture(32px, 32px);
+            .flex-center;
+            background-color: #eee;
+            color: rgba(0, 0, 0, 0.60);
+            font-size: 13px;
+            font-weight: bold;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.50);
+        }
+    }
+}
+
+#io-ox-launchgrid {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1;
+
+    top: @appcontrol-height;
+
+    .smartphone & {
+        width: 65%;
+    }
+
+    .open & {
+        display: block;
+    }
+
+    .indicator {
+        display: none;
+    }
+
+    .cflex {
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+        vertical-align: top;
+        flex-wrap: wrap;
+        padding: @launcher-outer-spacing;
+        width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2;
+
+        .smartphone & {
+            width: 100%;
+            padding: 8px 6px;
+            max-height: 430px; // 9 apps
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            z-index: 10; // prevent scrolling of underlying div on iOS
+        }
+    }
+
+    .lcell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        margin: @launcher-spacing;
+        height: @launcher-size;
+        width: @launcher-size;
+
+        .closer {
+            font-size: 15px;
+            color: #666;
+            height: 42px;
+        }
+        .smartphone & {
+            width: 100%;
+            height: 42px;
+            flex-direction: row;
+            padding: 0;
+        }
+
+        cursor: pointer;
+
+        .title {
+            position: absolute;
+            top: 75%;
+            left: 0;
+            color: @launcher-fg;
+            font-size: @launcher-text-size;
+            text-align: center;
+            width: @launcher-size;
+            .smartphone & {
+                top: 11px;
+                left: 48px;
+                font-size: 15px;
+            }
+        }
+        //&.active .title { font-weight: bold; }
+        .badge {
+            position: absolute;
+            top: 43%;
+            right: 17%;
+            font-size: 9px;
+            z-index: 1;
+            background-color: @launcher-badge-color;
+        }
+        .svgwrap {
+            width: @svg-wrap-size;
+            height: 100%;
+            .smartphone & {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        svg {
+            position: relative;
+            top: -10px;
+            height: 100%;
+            width: 100%;
+            overflow: visible;
+            .smartphone & {
+                top: 0;
+            }
+            // overwrite stroke colors if coloredicons are configured
+            &.colored {
+                &.app-icon-mail {
+                    .stroke-c1 { stroke: @app-color-mail; }
+                    .fill-c1 { fill: @app-color-mail; }
+                }
+                &.app-icon-calendar {
+                    .stroke-c1 { stroke: @app-color-calendar; }
+                    .fill-c1 { fill: @app-color-calendar; }
+                }
+                &.app-icon-addressbook {
+                    .stroke-c1 { stroke: @app-color-addressbook; }
+                    .fill-c1 { fill: @app-color-addressbook; }
+                }
+                &.app-icon-drive {
+                    .stroke-c1 { stroke: @app-color-drive; }
+                    .fill-c1 { fill: @app-color-drive; }
+                }
+                &.app-icon-tasks {
+                    .stroke-c1 { stroke: @app-color-tasks; }
+                    .fill-c1 { fill: @app-color-tasks; }
+                }
+                &.app-icon-portal {
+                    .stroke-c1 { stroke: @app-color-portal; }
+                    .fill-c1 { fill: @app-color-portal; }
+                }
+                &.app-icon-text {
+                    .stroke-c1 { stroke: @app-color-text; }
+                    .fill-c1 { fill: @app-color-text; }
+                }
+                &.app-icon-spreadsheet {
+                    .stroke-c1 { stroke: @app-color-spreadsheet; }
+                    .fill-c1 { fill: @app-color-spreadsheet; }
+                }
+                &.app-icon-presentation {
+                    .stroke-c1 { stroke: @app-color-presentation; }
+                    .fill-c1 { fill: @app-color-presentation; }
+                }
+            }
+
+            .stroke-c1 { stroke: @launcher-fg; }
+            .fill-none { fill: none;   }
+            .fill-c1   { fill: @launcher-fg; }
+            .stroke-w1 {
+                stroke-width: @launcher-stroke-width;
+                .retina & {
+                    stroke-width: @launcher-stroke-width-retina;
+                }
+            }
+
+        }
+
+    }
+    button.lcell {
+        background: @launcher-bg;
+        &:focus, &:hover {
+            .stroke-c1 { stroke: @launcher-fg-hover }
+            .fill-c1 { fill: @launcher-fg-hover }
+            background: @launcher-bg-hover;
+        }
+    }
+}
+
+#io-ox-launchgrid-overlay {
+    z-index:11;
+    display:none;
+    background-color: rgba(255, 255, 255, 0.01);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: @appcontrol-height;
+    &.open { display:block; }
+}
+
+#io-ox-launchgrid-overlay-inner {
+    position: absolute;
+    display:none;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.smartphone {
+
+    #io-ox-launchgrid, #io-ox-launchgrid-overlay { top: @appcontrol-height-smartphone; }
+    #io-ox-quicklaunch { display: none; }
+    #io-ox-appcontrol {
+        height: @appcontrol-height-smartphone;
+        #io-ox-launcher {
+
+            & > button {
+                height: 44px; //@appcontrol-height-smartphone;
+                width: 100%; // @appcontrol-height-smartphone;
+                padding: 0;
+                &.launcher-btn {
+                    padding: 14px;
+                    width: @appcontrol-launcher-height-smartphone;
+                    height: @appcontrol-launcher-height-smartphone;
+                }
+            }
+        }
+    }
+}

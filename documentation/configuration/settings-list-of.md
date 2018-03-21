@@ -788,6 +788,9 @@ settings!io.ox/contacts
 **showAdmin**
 > show the context admin in addressbook (true/false)
 
+**showDepartment**
+> whenever a contact from the global addressbook is rendered, additionally show the department next to the name (true/false)
+
 **startInGlobalAddressbook**
 > Start in global addressbook when Contacts App is launched (true/false)
 

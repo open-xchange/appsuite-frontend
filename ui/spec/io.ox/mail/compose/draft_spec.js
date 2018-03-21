@@ -17,7 +17,7 @@ define(['io.ox/mail/compose/main', 'waitsFor', 'io.ox/mail/api'], function (comp
     api.SEND_REFRESH_DELAY = 0;
 
     describe('Mail Compose', function () {
-        describe('draft mails', function () {
+        describe.skip('draft mails', function () {
             this.timeout(10000);
 
             var app, pictureHalo, snippetsGetAll, getValidAddress, throttle;

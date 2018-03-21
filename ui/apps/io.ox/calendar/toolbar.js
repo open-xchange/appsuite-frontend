@@ -21,10 +21,11 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, gt) {
+], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, util, gt) {
 
     'use strict';
 
@@ -42,6 +43,9 @@ define('io.ox/calendar/toolbar', [
             mobile: 'hi',
             label: gt('New'),
             title: gt('New appointment'),
+            customize: function (baton) {
+                this.parent().toggle(!baton.app.props.get('folderview'));
+            },
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },
@@ -166,24 +170,26 @@ define('io.ox/calendar/toolbar', [
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
-            .option('layout', 'week:day', gt('Day'), { radio: true })
-            .option('layout', 'week:workweek', gt('Workweek'), { radio: true })
-            .option('layout', 'week:week', gt('Week'), { radio: true })
+            .option('layout', 'week:day', gt('Day'), { radio: true });
+            if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true });
+            dropdown.option('layout', 'week:week', gt('Week'), { radio: true })
             .option('layout', 'month', gt('Month'), { radio: true })
+            .option('layout', 'year', gt('Year'), { radio: true })
             .option('layout', 'list', gt('List'), { radio: true })
             .divider()
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
+            .option('showMiniCalendar', true, gt('Mini calendar'))
             .option('checkboxes', true, gt('Checkboxes'))
             .divider()
             .header(gt('Color scheme'))
+            .option('colorScheme', 'custom', gt('Custom colors'), { radio: true })
             .option('colorScheme', 'classic', gt('Classic colors'), { radio: true })
             .option('colorScheme', 'dark', gt('Dark colors'), { radio: true })
-            .option('colorScheme', 'custom', gt('Custom colors'), { radio: true })
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
-            if (capabilities.has('calendar-printing')) {
+            if (capabilities.has('calendar-printing') && baton.app.props.get('layout') !== 'year') {
                 dropdown
                 .divider()
                 .link('print', gt('Print'), print.bind(null, baton));
@@ -218,7 +224,11 @@ define('io.ox/calendar/toolbar', [
             app.updateToolbar = _.debounce(function (list) {
                 if (!list) return;
                 // extract single object if length === 1
-                list = list.length === 1 ? list[0] : list;
+                if (list.length === 1) {
+                    list = list[0];
+                    // add flags to draw items correctly
+                    list.flags = this.listView.selection.getNode(this.listView.selection.get()).attr('data-flags') || '';
+                }
                 // disable visible buttons
                 toolbarView.disableButtons();
                 // draw toolbar
@@ -232,7 +242,11 @@ define('io.ox/calendar/toolbar', [
 
     function prepareUpdateToolbar(app) {
         var perspective = app.getWindow().getPerspective(),
-            list = perspective && perspective.name === 'list' ? app.getGrid().selection.get() : {};
+            list = perspective && perspective.name === 'list' ? app.listView.selection.get() : {};
+        list = _(list).map(function (item) {
+            if (_.isString(item)) return util.cid(item);
+            return item;
+        });
         app.updateToolbar(list);
     }
 
@@ -242,7 +256,7 @@ define('io.ox/calendar/toolbar', [
         setup: function (app) {
             app.updateToolbar();
             // update toolbar on selection change
-            app.getGrid().selection.on('change', function () {
+            app.listView.on('selection:change', function () {
                 prepareUpdateToolbar(app);
             });
             // folder change

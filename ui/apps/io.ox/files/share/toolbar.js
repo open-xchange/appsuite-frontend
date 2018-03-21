@@ -33,7 +33,7 @@ define('io.ox/files/share/toolbar', [
                 mobile: 'lo',
                 label: gt('Edit share'),
                 drawDisabled: true,
-                ref: 'io.ox/files/share/edit'
+                ref: 'io.ox/files/actions/editShare'
             },
             'delete': {
                 prio: 'hi',
@@ -55,18 +55,6 @@ define('io.ox/files/share/toolbar', [
         action: function (baton) {
             require(['io.ox/files/share/permissions'], function (permissions) {
                 permissions.show(baton.model);
-            });
-        }
-    });
-
-    new actions.Action('io.ox/files/share/revoke', {
-        requires: 'one',
-        action: function (baton) {
-            require(['io.ox/files/share/permissions'], function (permissions) {
-                var collection = new permissions.Permissions();
-                api.revoke(collection, baton.model).then(function () {
-                    yell('success', gt('Revoked access.'));
-                }).fail(yell);
             });
         }
     });

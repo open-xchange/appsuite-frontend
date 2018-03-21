@@ -22,10 +22,9 @@ define('plugins/portal/mail/register', [
     'gettext!plugins/portal',
     'io.ox/backbone/disposable',
     'io.ox/core/api/collection-loader',
-    'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'less!plugins/portal/mail/style'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, emoji, capabilities) {
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities) {
 
     'use strict';
 
@@ -60,8 +59,8 @@ define('plugins/portal/mail/register', [
         },
 
         render: function (baton) {
+
             var self = this,
-                subjectNode,
                 subject = this.model.get('subject') ? _.ellipsis(this.model.get('subject'), { max: 50 }) : gt('No subject'),
                 received = moment(this.model.get('received_date')).format('l');
 
@@ -74,16 +73,14 @@ define('plugins/portal/mail/register', [
                                 return $('<i class="fa fa-circle new-item accent">');
                             }
                         })(),
-                        $('<div class="date">').text(_.noI18n(received)),
+                        $('<div class="date accent">').text(_.noI18n(received)),
                         $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
                     ),
-                    $('<div class="row2">').append(subjectNode = $('<div class="subject normal">').text(subject), $.txt(' '))
+                    $('<div class="row2">').append(
+                        $('<div class="subject ellipsis">').text(subject),
+                        $.txt(' ')
+                    )
                 );
-
-            //process emoji
-            emoji.processEmoji(subjectNode.html(), function (text) {
-                subjectNode.html(text);
-            });
 
             // Give plugins a chance to customize mail display
             ext.point('io.ox/mail/portal/list/item').invoke('customize', this.$el, this.model.toJSON(), baton, this.$el);

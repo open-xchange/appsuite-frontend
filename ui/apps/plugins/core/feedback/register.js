@@ -47,7 +47,7 @@ define('plugins/core/feedback/register', [
 
     function getAppOptions(useWhitelist) {
         var currentApp,
-            apps = _(appApi.getFavorites()).map(function (app) {
+            apps = _(appApi.getApps()).map(function (app) {
                 app.id = app.id.replace(/io\.ox\/(office\/portal\/|office\/)?/, '');
 
                 if (useWhitelist && !_(appWhiteList).contains(app.id)) return;
@@ -410,16 +410,14 @@ define('plugins/core/feedback/register', [
         }
     };
 
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
         id: 'feedback',
-        index: 250,
-        draw: function () {
+        index: 240,
+        extend: function () {
             var currentSetting = settings.get('feedback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
-                    $('<li role="presentation">').append(
-                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
-                    )
+                    $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
                     .on('click', function (e) {
                         e.preventDefault();
                         feedback.show();

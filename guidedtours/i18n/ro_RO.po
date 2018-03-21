@@ -308,14 +308,6 @@ msgstr ""
 "externe. Puteți, de asemena, să colaborați la un document și să setați "
 "diferite drepturi de acces."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Sugestie: puteți reporni vizitele ghidate oricând aveți nevoie, utilizând "
-"meniul sistem."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Cum sunt organizate setările"
@@ -332,14 +324,6 @@ msgstr ""
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
 "Dacă nu mai doriți afișarea cadrului, apăsați pe pictograma de ștergere."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"În cazul unor notificări noi, de ex. invitații pentru întâlniri, se deschide "
-"zona de informații."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -418,10 +402,6 @@ msgstr "Citirea conversațiilor de e-mail"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Citirea detaliilor"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Repornește vizita ghidată"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -510,19 +490,6 @@ msgstr ""
 "un clic pe o întâlnire, datele referitoare la întâlnire și anumite funcții "
 "se afișează în vederea detaliată."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Pictograma Obiecte noi"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Pictograma pentru obiecte noi afișează numărul de mementouri pentru "
-"întâlniri sau alte notificări. Atunci când apăsați pe pictogramă, se "
-"deschide zona de informații."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portalul"
@@ -560,10 +527,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Arborele de dosare"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Zona de informații"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -719,7 +682,12 @@ msgstr ""
 "sub Participanți. Puteți adăuga documente ca fișiere atașate la sarcină."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "Pentru a lansa o aplicație, apăsați pe o intrare din partea stângă a barei "
 "de meniu."
@@ -758,10 +726,16 @@ msgstr ""
 "partea stângă."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "Pentru a deschide ajutorul, apăsați pe pictograma Meniu sistem din partea "
@@ -770,9 +744,13 @@ msgstr ""
 "pe Pagina de pornire sau pe Cuprins în partea superioară a ferestrei."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "Pentru a deschide setările, apăsați pe pictograma Meniu sistem din partea "
 "dreaptă sus a barei de meniu. Selectați Setări."
@@ -820,6 +798,17 @@ msgstr "Pentru a trimite un e-mail, apăsați pe Trimite"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"Pentru a vă deconecta, apăsați pe pictograma Meniu sistem din partea dreapă "
+"sus a barei de meniu. Selectați Deconectare."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Pentru a vă deconecta, apăsați pe pictograma Meniu sistem din partea dreapă "
 "sus a barei de meniu. Selectați Deconectare."
@@ -4805,6 +4794,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Prioritate ridicată"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Sugestie: puteți reporni vizitele ghidate oricând aveți nevoie, utilizând "
+#~ "meniul sistem."
+
 #~ msgid "History of error messages"
 #~ msgstr "Istoricul mesajelor de eroare"
 
@@ -4984,6 +4980,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Atunci când există notificări noi, de exemplu invitații pentru întâlniri, "
 #~ "zona de informații se deschide în partea dreaptă."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "În cazul unor notificări noi, de ex. invitații pentru întâlniri, se "
+#~ "deschide zona de informații."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -7579,6 +7582,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Resurse:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Repornește vizita ghidată"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Restabilește ultima operație"
 
@@ -8837,6 +8843,17 @@ msgstr ""
 #~ "fișier pentru a vizualiza detaliile și funcțiile suplimentare într-o "
 #~ "fereastră pop-up. "
 
+#~ msgid "The New objects icon"
+#~ msgstr "Pictograma Obiecte noi"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Pictograma pentru obiecte noi afișează numărul de mementouri pentru "
+#~ "întâlniri sau alte notificări. Atunci când apăsați pe pictogramă, se "
+#~ "deschide zona de informații."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -9066,6 +9083,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Pictograma din partea stângă jos vă ajută să vă sortați e-mailurile. "
 #~ "Apăsați pe pictogramă pentru a obține o listă cu criterii de sortare."
+
+#~ msgid "The info area"
+#~ msgstr "Zona de informații"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Câmpul obligatoriu %1$s nu este definit."

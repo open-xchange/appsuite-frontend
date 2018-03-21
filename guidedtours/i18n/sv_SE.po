@@ -303,14 +303,6 @@ msgstr ""
 "Här kan du dela filer med dina kollegor och externa kontakter. Du kan också "
 "samarbeta på ett dokument och ange olika åtkomsträttigheter."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Hint: you can always restart guided tours, any time you need them, from the "
-"system menu."
-msgstr ""
-"Tips: du kan alltid starta om guidade rundturer, när som helst, från "
-"systemmenyn."
-
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Hur inställningarna är organiserade"
@@ -326,14 +318,6 @@ msgstr ""
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Om du inte längre vill visa en ruta, klicka på borttagningsikonen."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"För nya aviseringar, t.ex. inbjudningar till möten, kommer "
-"informationsområdet öppnas."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -411,10 +395,6 @@ msgstr "Läsa e-postkonversationer"
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
 msgstr "Läsa detaljerna"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Starta om guidad rundtur"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -501,18 +481,6 @@ msgstr ""
 "ett möte kommer information om mötet och ett par funktioner visas i "
 "Detaljvyn."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Nya objekt-ikonen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of appointment reminders or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Ikonen för Nya objekt visar antalet påminnelser om möten eller andra "
-"aviseringar. Om du klickar på ikonen öppnas informationsområdet."
-
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portalen"
@@ -550,10 +518,6 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
 msgstr "Mappträdet"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The info area"
-msgstr "Informationsområdet"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -708,7 +672,12 @@ msgstr ""
 "Deltagare. Du kan lägga till dokument som bilagor i uppgiften."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid ""
+"To launch an app, use the quick launch icons on the left side of the menu "
+"bar or click on an entry inside the app launcher menu."
 msgstr ""
 "För att starta ett program, klicka på en post på den vänstra sidan av "
 "menyraden."
@@ -746,10 +715,16 @@ msgstr ""
 "till höger i menyfältet. Välj Inställningar. Klicka på E-post till vänster."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the help, click the System menu icon on the upper right side of "
+#| "the menu bar. Select Help. The help for the currently selected app is "
+#| "displayed. To browse the complete help, click on Start Page or Table Of "
+#| "Contents at the upper part of the window."
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 "För att öppna hjälpen, klicka på Systemmenyikonen längst upp till höger i "
@@ -758,9 +733,13 @@ msgstr ""
 "fönstrets övre del."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
 "För att öppna inställningarna, klicka på Systemmenyikonen längst upp till "
 "höger i menyfältet. Välj Inställningar."
@@ -805,6 +784,17 @@ msgstr "För att skicka meddelandet, klicka på Skicka"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
+msgstr ""
+"För att logga ut, klicka på Systemmenyikonen längst upp till höger i "
+"menyraden. Välj Logga ut."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To sign out, click the System menu icon on the upper right side of the "
+#| "menu bar. Select Sign out."
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "För att logga ut, klicka på Systemmenyikonen längst upp till höger i "
 "menyraden. Välj Logga ut."
@@ -4398,6 +4388,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Hög prioritet"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Tips: du kan alltid starta om guidade rundturer, när som helst, från "
+#~ "systemmenyn."
+
 #~ msgid "Hobby"
 #~ msgstr "Hobby"
 
@@ -4553,6 +4550,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Vid nya upplysningar, t.ex. inbjudningar till möten, öppnas "
 #~ "informationsområdet till höger."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "För nya aviseringar, t.ex. inbjudningar till möten, kommer "
+#~ "informationsområdet öppnas."
 
 #~ msgid "In progress"
 #~ msgstr "Arbetar"
@@ -6743,6 +6747,9 @@ msgstr ""
 #~ msgid "Response package exceeds max package size value of 8192k: %1$s"
 #~ msgstr "Svarspaketet överskrider maximala paketstorleken som är 8192k: %1$s"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Starta om guidad rundtur"
+
 #~ msgid "Restore applications"
 #~ msgstr "Återställ program"
 
@@ -7554,6 +7561,16 @@ msgstr ""
 #~ "kryssrutorna för att välja filer. Klicka på en fil för att se ytterligare "
 #~ "detaljer och funktioner i popuprutan."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Nya objekt-ikonen"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Ikonen för Nya objekt visar antalet påminnelser om möten eller andra "
+#~ "aviseringar. Om du klickar på ikonen öppnas informationsområdet."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -7847,6 +7864,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Bilden du försökte bifoga är inte en giltig bild. Den kan vara trasig "
 #~ "eller också är den inte en giltig fil."
+
+#~ msgid "The info area"
+#~ msgstr "Informationsområdet"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Det obligatoriska fältet %1$s är inte definierat."

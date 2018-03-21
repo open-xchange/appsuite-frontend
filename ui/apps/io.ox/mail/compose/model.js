@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define.async('io.ox/mail/compose/model', [
+define('io.ox/mail/compose/model', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/capabilities',
@@ -24,16 +24,6 @@ define.async('io.ox/mail/compose/model', [
 ], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt) {
 
     'use strict';
-
-    var emoji = {};
-    //provide initial fake implementation of the API we need.
-    //this will be overwritten by the emoji API if user has the capability
-    emoji.converterFor = function () {
-        return _.identity;
-    };
-    emoji.sendEncoding = function () {
-        return 'unified';
-    };
 
     var MailModel = Backbone.Model.extend({
 
@@ -225,9 +215,6 @@ define.async('io.ox/mail/compose/model', [
                 content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
             }
 
-            // convert different emoji encodings to unified
-            content = this.convertAllToUnified(content);
-
             return content;
         },
 
@@ -279,16 +266,7 @@ define.async('io.ox/mail/compose/model', [
             this.trigger('needsync');
             var result,
                 attachmentCollection = this.get('attachments'),
-                convert = emoji.converterFor({ to: emoji.sendEncoding() }),
                 content = attachmentCollection.at(0).get('content');
-
-            //convert to target emoji send encoding
-            if (convert && emoji.sendEncoding() !== 'unified') {
-                //convert to send encoding (NOOP, if target encoding is 'unified')
-                this.set('subject', convert(this.get('subject')), { silent: true });
-
-                content = convert(content, this.get('editorMode'));
-            }
 
             // fix inline images
             content = mailUtil.fixInlineImages(content);
@@ -365,10 +343,6 @@ define.async('io.ox/mail/compose/model', [
             if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 
-        convertAllToUnified: emoji.converterFor({
-            from: 'all',
-            to: 'unified'
-        }),
         attachFiles: function attachFiles(files) {
             this.get('attachments').add(files);
         },
@@ -379,15 +353,5 @@ define.async('io.ox/mail/compose/model', [
         }
     });
 
-    var def = $.Deferred();
-
-    if (capabilities.has('emoji')) {
-        require(['io.ox/emoji/bundle']).then(function (e) {
-            emoji = e;
-            def.resolve(MailModel);
-        });
-    } else {
-        def.resolve(MailModel);
-    }
-    return def;
+    return MailModel;
 });

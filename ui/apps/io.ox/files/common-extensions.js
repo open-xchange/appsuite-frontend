@@ -88,7 +88,8 @@ define('io.ox/files/common-extensions', [
         filenameTooltip: function (baton) {
             var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
 
-            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
+            var parent = this.parent();
+            parent.tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
                 title: _.breakWord(filename),
                 trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
                 //placement: 'right auto',                // top | bottom | left | right | auto.
@@ -96,7 +97,10 @@ define('io.ox/files/common-extensions', [
                 animation: true,                        // false
                 //delay: { 'show': 400, 'hide': 50000 },
                 delay: { 'show': 400 },
-                viewport: { selector: '.list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
+                container: parent,
+
+                // Bug-55575: Dropdown indicator shown when hovering over folder symbol
+                viewport: { selector: '.io-ox-files-main .list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
             }).on('dispose', function () {
                 $(this).tooltip('destroy');
             });

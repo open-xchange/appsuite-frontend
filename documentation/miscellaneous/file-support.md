@@ -137,6 +137,24 @@ OX Spreadsheet is the first browser-based spreadsheet application that reads and
 - xlt (Microsoft Excel 97-2003 workbook template)
 - xla (Microsoft Excel 97-2003 add-in)
 
+# OX Presentation Documents
+
+OX Presentation is a cloud based presentation product that can work with Microsoft Powerpoint documents. 
+You can also edit shared presentation on various devices. 
+OX Presentation is the first browser-based presentation application that reads and writes native Microsoft Powerpoint files without loss of format or detail ("Round-trip editing").
+
+- pptx (Microsoft Office Powerpoint presentation)
+- pptm (Microsoft Office Powerpoint macro-enabled presentation)
+- potx (Microsoft Office Powerpoint presentation template)
+- potm (Microsoft Office Powerpoint macro-enabled presentation template)
+- ppsx (Microsoft Office Powerpoint self-starting presentation)
+- ppsm (Microsoft Office Powerpoint self-starting macro-enabled presentation)
+- ppt (Microsoft Powerpoint 97-2003 presentation)
+- pot (Microsoft Powerpoint 97-2003 presentation template)
+- pps (Microsoft Powerpoint 97-2003 self-starting presentation)
+- odp (OpenDocument presentation document)
+- otp (OpenDocument presentation document template)
+
 **OX Presenter**
 
 OX Presenter allows you to view presentations in a specialized user interface, where you also can give local presentations or presentations where remote participants can join.
