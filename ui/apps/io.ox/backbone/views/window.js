@@ -21,7 +21,9 @@ define('io.ox/backbone/views/window', [
 
     var collection = new Backbone.Collection(),
         // selector vor container
-        container = '#io-ox-screens';
+        container = '#io-ox-screens',
+        // used when dragging, prevents iframe event issues
+        backdrop = $('<div id="floating-window-backdrop">');
 
     var WindowModel = Backbone.Model.extend({
         defaults: {
@@ -97,7 +99,7 @@ define('io.ox/backbone/views/window', [
 
         keepInWindow: function () {
             // return when minimized or not attached
-            if (this.model.get('displayStyle') !== 'normal' || this.model.get('minimized') || this.$el.parent().length === 0) return;
+            if (this.model.get('minimized') || this.$el.parent().length === 0) return;
 
             // move window
             if (this.el.offsetLeft !== 0 || this.el.offsetTop !== 0) {
@@ -115,16 +117,19 @@ define('io.ox/backbone/views/window', [
                 if (this.model.get('initialWidth') === undefined) this.model.set('initialWidth', this.el.offsetWidth);
                 this.$el.css('width', Math.min($(container).width(), this.model.get('initialWidth')) + 'px');
             }
-            if (this.el.offsetTop === 0) {
+
+            // no height calculation for maximized windows
+            if (this.model.get('displayStyle') === 'normal' && this.el.offsetTop === 0) {
                 if (this.model.get('initialHeight') === undefined) this.model.set('initialHeight', this.el.offsetHeight);
                 this.$el.css('height', Math.min($(container).height(), this.model.get('initialHeight')) + 'px');
             }
         },
 
         startDrag: function (e) {
+            //only drag on left click
+            if (!e.which === 1) return;
             // needed for safari to stop selecting the whole UI
             e.preventDefault();
-            if (this.model.get('displayStyle') !== 'normal') return;
             // set starting Position
             // silent so the taskbar does not redraw
             this.model.set('offsetX', e.clientX - this.el.offsetLeft, { silent: true });
@@ -132,6 +137,8 @@ define('io.ox/backbone/views/window', [
             // register handlers
             $(document).on('mousemove', this.drag);
             $(document).on('mouseup', this.stopDrag);
+            // add backdrop to prevent iframe drag issues
+            $(container).append(backdrop);
         },
 
         drag: function (e) {
@@ -141,6 +148,8 @@ define('io.ox/backbone/views/window', [
                 top: e.clientY - this.model.get('offsetY') + 'px'
             });
             this.keepInWindow();
+            // failsafe, if the button is no longer pressed we stop the dragging
+            if (e.which !== 1) this.stopDrag();
         },
 
         stopDrag: function () {
@@ -151,6 +160,7 @@ define('io.ox/backbone/views/window', [
 
             $(document).off('mousemove', this.drag);
             $(document).off('mouseup', this.stopDrag);
+            backdrop.remove();
         },
 
         onQuit: function () {
@@ -190,20 +200,13 @@ define('io.ox/backbone/views/window', [
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('normal maximized sticky').addClass(style);
 
-            // clean up css
-            if (this.model.get('displayStyle') !== 'normal') {
-                this.$el.css({
-                    left: '',
-                    top: '',
-                    height: '',
-                    width: ''
-                });
-            } else {
-                this.$el.css({
-                    left: this.model.get('xPos') || '',
-                    top: this.model.get('yPos') || ''
-                });
-            }
+            // clean up css on display style change
+            this.$el.css({
+                height: '',
+                width: ''
+            });
+            this.model.set('initialWidth', this.el.offsetWidth);
+            this.model.set('initialHeight', this.el.offsetHeight);
 
             $(window).trigger('changefloatingstyle');
             _.defer(function () { $(window).trigger('resize'); });
