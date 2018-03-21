@@ -77,6 +77,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             if (type === 'load') {
                 complete = data.length < PAGE_SIZE;
             } else if (type === 'paginate') {
+                // the first data element is the last currently visible element
+                // in the list, therefore <=1 is already complete
                 complete = data.length <= 1;
             }
             if (complete !== collection.complete) {
