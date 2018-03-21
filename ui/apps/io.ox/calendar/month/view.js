@@ -36,12 +36,23 @@ define('io.ox/calendar/month/view', [
         type:           '',
         limit:          1000,
 
-        events: {
-            'click .appointment':      'onClickAppointment',
-            'dblclick .day':           'onCreateAppointment',
-            'mouseenter .appointment': 'onEnterAppointment',
-            'mouseleave .appointment': 'onLeaveAppointment'
-        },
+        events: (function () {
+            var events = {
+                'click .appointment':      'onClickAppointment',
+                'dblclick .day':           'onCreateAppointment',
+                'mouseenter .appointment': 'onEnterAppointment',
+                'mouseleave .appointment': 'onLeaveAppointment'
+            };
+
+            if (_.device('touch')) {
+                _.extend(events, {
+                    'swipeleft': 'onSwipe',
+                    'swiperight': 'onSwipe'
+                });
+            }
+
+            return events;
+        }()),
 
         initialize: function (options) {
             this.start = moment(options.start);
@@ -156,6 +167,13 @@ define('io.ox/calendar/month/view', [
             ox.ui.Perspective.show(this.app, 'week:day', { animation: 'slideleft' });
         },
 
+        onSwipe: function (e) {
+            e.preventDefault();
+            if (e.type === 'swipeleft') this.perspective.gotoMonth('next');
+            if (e.type === 'swiperight') this.perspective.gotoMonth('prev');
+            return false;
+        },
+
         render: (function () {
             function getRow(date) {
                 var row = $('<tr class="week">');
@@ -249,14 +267,14 @@ define('io.ox/calendar/month/view', [
                     .find('.week:last-child').addClass('no-border')
                     .find('> .day').addClass('borderbottom');
 
-                this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
-
                 if (_.device('smartphone')) {
                     // on mobile we switch to the day view after a tap
                     // on a day-cell was performed
                     this.$el.on('tap', '.day', function () {
                         self.changeToSelectedDay($(this).data('date'));
                     });
+                } else {
+                    this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
                 }
 
                 return this;
