@@ -566,10 +566,11 @@ define('io.ox/calendar/edit/extensions', [
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Visibility')),
                     new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
-                        { value: 'PUBLIC', label: gt('Public') },
+                        { value: 'PUBLIC', label: gt('Standard') },
                         { value: 'CONFIDENTIAL', label: gt('Private') },
                         { value: 'PRIVATE', label: gt('Secret') }]
-                    }).render().$el
+                    }).render().$el,
+                    new mini.ErrorView({ name: 'class', model: this.model }).render().$el
                 )
             );
 
@@ -591,12 +592,12 @@ define('io.ox/calendar/edit/extensions', [
             if (!folderAPI.pool.getModel(folder).is('private')) return;
             var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="left" data-content=" ">').append('<i class="fa fa-question-circle">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
-                    '<div class="ox-popover-title">' + gt('Public') + '</div>' +
+                    '<div class="ox-popover-title">' + gt('Standard') + '</div>' +
                     '<div>' + gt('The appointment is visible for all users in shared calendars.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
                     '<div>' + gt('In shared calendars, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
-                    '<div>' + gt('The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view.') + '</div>' +
+                    '<div>' + gt('The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view. This option cannot be used, if the appointment blocks resources.') + '</div>' +
                     '</div></div>')
                     .popover({
                         container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'

@@ -313,12 +313,22 @@ define('io.ox/calendar/model', [
         }
     });
 
-    ext.point('io.ox/calendar/model/validation').extend({
+    ext.point('io.ox/chronos/model/validation').extend({
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {
                 //#. %1$s is an upload limit like for example 10mb
                 this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
+            }
+        }
+    });
+
+    ext.point('io.ox/chronos/model/validation').extend({
+        id: 'secret-used-with-resource',
+        validate: function (attributes) {
+            if (attributes['class'] === 'PRIVATE' && _(_(attributes.attendees).pluck('cuType')).contains('RESOURCE')) {
+                //#. error text is displayed when an appointment is marked as secret but blocking a ressource (e.g. a conference room)
+                this.add('class', gt('You cannot mark the appointment as secret, when blocking a ressource.'));
             }
         }
     });
