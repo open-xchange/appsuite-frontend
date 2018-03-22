@@ -247,7 +247,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     this.$el.addClass('alarms-view-dialog');
                 })
                 .addCancelButton()
-                .addButton({ action: 'apply', label: gt('apply') })
+                .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
                     //set alarms back to previous value
                     self.model.set('alarms', alarmView.getAlarmsArray());
