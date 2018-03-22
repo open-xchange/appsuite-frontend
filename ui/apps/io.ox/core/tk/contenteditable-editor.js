@@ -219,8 +219,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         );
 
         opt = _.extend({
-            toolbar1: 'undo redo | bold italic | bullist numlist outdent indent',
-            advanced: 'styleselect | fontselect fontsizeselect | link image emoji | forecolor backcolor',
+            toolbar1: '*undo *redo | bold italic underline | bullist numlist outdent indent',
+            advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
@@ -239,11 +239,15 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         // remove unsupported stuff
         if (!capabilities.has('emoji')) {
-            opt.toolbar1 = opt.toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.toolbar2 = opt.toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.toolbar3 = opt.toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar1 = opt.toolbar1.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
+            opt.toolbar2 = opt.toolbar2.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
+            opt.toolbar3 = opt.toolbar3.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
             opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
         }
+
+        // store a copy of original toolbar to adjust toolbar in DOM later
+        var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
+        opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
         var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
 
@@ -331,7 +335,16 @@ define('io.ox/core/tk/contenteditable-editor', [
                     _.defer(function () {
                         // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                         toolbar.find('span.mce-txt').attr('tabindex', -1);
-                        toolbar.find('.mce-menubtn').closest('.mce-flow-layout-item').addClass('hidden-window-xs');
+                        // adjust toolbar
+                        var widgets = toolbar.find('.mce-widget');
+                        originalToolbarConfig.split(' ').forEach(function (id, index) {
+                            widgets.eq(index).attr('data-name', id);
+                            if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
+                        });
+                        // find empty groups
+                        toolbar.find('.mce-btn-group').each(function () {
+                            $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
+                        });
                     });
                 });
 
