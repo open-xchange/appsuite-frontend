@@ -138,3 +138,18 @@
 }
 
 .mce-grid.mce-colorbutton-grid td.mce-grid-cell div { line-height: 11px; }
+
+.mce-container [data-name="fontsizeselect"] button { width: 72px; }
+
+/* do not show toolbar separators in small windows */
+.floating-window.width-xs:not(.maximized) .mce-btn-group {
+    border-left: 0;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.floating-window.width-xs:not(.maximized) .mce-btn-group-visible-xs:not(:last-of-type) {
+    border-right: 1px solid #d9d9d9;
+    padding-right: 8px;
+    margin-right: 7px;
+}

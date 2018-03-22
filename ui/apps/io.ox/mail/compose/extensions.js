@@ -73,8 +73,8 @@ define('io.ox/mail/compose/extensions', [
         render: function () {
             // label
             this.$el.empty().append(
-                $('<label class="maillabel col-xs-1">').text(gt('From')),
-                $('<div class="mail-input col-xs-11">').append(
+                $('<label class="maillabel col-xs-2">').text(gt('From')),
+                $('<div class="mail-input col-xs-10">').append(
                     // label gets rendered by dropdown view, dropdown.$el is empty now
                     this.dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                 )
@@ -227,7 +227,7 @@ define('io.ox/mail/compose/extensions', [
 
             this.append(
                 $('<div class="row sender-realname" data-extension-id="sender-realname">').append(
-                    $('<div class="mail-input col-xs-11 col-xs-offset-1">')
+                    $('<div class="mail-input col-xs-10 col-xs-offset-2">')
                         .text(gt('This email just contains your email address as sender. Your real name is not used.'))
                 )
             );
@@ -313,7 +313,7 @@ define('io.ox/mail/compose/extensions', [
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
-                var node = $('<div class="mail-input col-xs-11">').append(tokenfieldView.$el);
+                var node = $('<div class="mail-input col-xs-10">').append(tokenfieldView.$el);
 
                 if (attr === 'to') {
                     ext.point(POINT + '/recipientActions').invoke('draw', node);
@@ -336,7 +336,7 @@ define('io.ox/mail/compose/extensions', [
                     .append(
                         usePicker ?
                             // with picker
-                            $('<div class="maillabel col-xs-1">').append(
+                            $('<div class="maillabel col-xs-2">').append(
                                 $('<a href="#" role="button">')
                                 .text(tokenfieldTranslations[attr])
                                 .attr({
@@ -348,7 +348,7 @@ define('io.ox/mail/compose/extensions', [
                                 .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
                             ) :
                             // without picker
-                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
+                            $('<label class="maillabel col-xs-2">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
                     .append(node)
                 );
@@ -434,8 +434,8 @@ define('io.ox/mail/compose/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div data-extension-id="subject" class="row subject">').append(
-                    $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr('for', guid),
-                    $('<div class="mail-input col-xs-12 col-sm-11">').append(
+                    $('<label class="maillabel hidden-xs col-sm-2">').text(gt('Subject')).attr('for', guid),
+                    $('<div class="mail-input col-xs-12 col-sm-10">').append(
                         new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )
