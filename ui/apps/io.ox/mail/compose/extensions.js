@@ -605,17 +605,7 @@ define('io.ox/mail/compose/extensions', [
 
             require(['io.ox/mail/compose/sharing'], function (SharingView) {
                 var view = baton.sharingView = new SharingView({
-                    collection: baton.model.get('attachments'),
-                    mailModel: baton.model,
-                    settings: {
-                        name:                settings.get('compose/shareAttachments/name'),
-                        defaultExpiryDate:   settings.get('compose/shareAttachments/defaultExpiryDate', ''),
-                        expiryDates:         settings.get('compose/shareAttachments/expiryDates', []),
-                        requiredExpiration:  settings.get('compose/shareAttachments/requiredExpiration', false),
-                        forceAutoDelete:     settings.get('compose/shareAttachments/forceAutoDelete', false),
-                        threshold:           settings.get('compose/shareAttachments/threshold', 0),
-                        enableNotifications: settings.get('compose/shareAttachments/enableNotifications', false)
-                    }
+                    model: baton.model
                 });
                 baton.attachmentsView.$header.find('.links').before(view.render().$el);
             });

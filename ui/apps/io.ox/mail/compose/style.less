@@ -289,44 +289,28 @@
 
         display: flex;
         align-items: center;
-        padding-left: 16px;
-
-        .toggle,
-        .expire.dropdown,
-        .notification.dropdown,
-        .password {
-            margin-right: 16px;
-            padding-bottom: 0;
-            margin-bottom: 0;
+        padding-left: 32px;
+        button {
+            margin-top: 2px;
         }
+    }
+}
 
-        .password.input-group {
-            width: 25%;
-            display: inline-table;
-        }
+.share-attachments-view-dialog {
+    select {
+        margin-top: 10px;
+    }
+    fieldset {
+        margin-bottom: 16px;
+    }
+    .password-wrapper {
+        display: flex;
+        margin-top: 10px;
+        align-items: center;
 
-        &.active {
-
-            .toggle {
-                text-decoration: none;
-                font-weight: bold;
-                color: #FF6E00;
-            }
-
-            .fa-fw:before {
-                // fa-check
-                content: '\f00c';
-                color: #FF6E00;
-            }
-        }
-
-
-        &:not(.active) {
-            .expire.dropdown,
-            .notification.dropdown,
-            .password.input-group {
-                display: none
-            }
+        .password-container {
+            flex-grow: 1;
+            margin-left: 16px
         }
     }
 }

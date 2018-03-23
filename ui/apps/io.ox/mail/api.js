@@ -1259,7 +1259,11 @@ define('io.ox/mail/api', [
         data.to = _(data.to).map(flatten);
         data.cc = _(data.cc).map(flatten);
         data.bcc = _(data.bcc).map(flatten);
-
+        if (data.share_attachments && data.share_attachments.expiry_date) {
+            debugger;
+            // expiry date should count from mail send
+            data.share_attachments.expiry_date = _.now() + data.share_attachments.expiry_date;
+        }
         function mapArgs(obj) {
             return {
                 'args': [{ 'com.openexchange.groupware.contact.pairs': [{ 'folder': obj.folder_id, 'id': obj.id }] }],
