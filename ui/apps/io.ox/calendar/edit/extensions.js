@@ -33,8 +33,9 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'io.ox/calendar/color-picker',
+    'io.ox/backbone/mini-views/dropdown',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker, Dropdown) {
 
     'use strict';
 
@@ -622,17 +623,31 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12 col-sm-6',
         render: function () {
 
-            var picker = new ColorPicker({
-                model: this.model,
-                attribute: 'color',
-                noColorOption: true,
-                additionalColor: this.model.get('color') ? { value: this.model.get('color') } : undefined
-            });
+            var self = this,
+                picker = new ColorPicker({
+                    model: this.model,
+                    attribute: 'color',
+                    noColorOption: true,
+                    additionalColor: this.model.get('color') ? { value: this.model.get('color') } : undefined
+                }),
+                toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Change color')),
+                menu = $('<ul class="dropdown-menu">'),
+                dropdown = new Dropdown({
+                    smart: false,
+                    className: 'color-picker-dropdown dropdown',
+                    $toggle: toggle,
+                    $ul: menu,
+                    margin: 24
+                }),
+                pickedColor = $('<span class="picked-color">');
+
+            menu.append($('<li role="presentation">').append(picker.render().$el));
 
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Color')),
-                    picker.render().$el
+                    pickedColor,
+                    dropdown.render().$el
                 )
             );
 
@@ -650,8 +665,20 @@ define('io.ox/calendar/edit/extensions', [
                     });
                 }
             }
+
+            function onChangeColor() {
+                if (!self.model.get('color')) {
+                    pickedColor.addClass('no-color').css('background-color', '#fff');
+                    return;
+                }
+                pickedColor.removeClass('no-color').css('background-color', self.model.get('color'));
+            }
+
+            this.model.on('change:color', onChangeColor);
+
             picker.listenTo(this.model, 'change:class', onChangeClass);
             onChangeClass();
+            onChangeColor();
         }
     }, {
         rowClass: 'collapsed'

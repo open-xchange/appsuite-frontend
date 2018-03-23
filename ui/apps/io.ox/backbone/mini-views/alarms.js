@@ -249,7 +249,6 @@ define('io.ox/backbone/mini-views/alarms', [
                 .addCancelButton()
                 .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
-                    //set alarms back to previous value
                     self.model.set('alarms', alarmView.getAlarmsArray());
                 })
                 .open();

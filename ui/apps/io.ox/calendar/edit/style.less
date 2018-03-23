@@ -39,9 +39,37 @@
     .hard-conflict { margin: 1em 0 0 0; }
 
     .io-ox-calendar-color-picker {
-        width: 356px;
+        width: 400px;
         label:nth-child(13n+15) {
             margin-left: 44px;
+        }
+    }
+
+    .color-picker-dropdown {
+        display: inline;
+    }
+
+    .picked-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        margin-right: 16px;
+        margin-bottom: 4px;
+        background-color: rgb(255, 255, 255);
+
+        &.no-color:before {
+            border: 1px solid #888;
+        }
+        &:before {
+            font-family: 'FontAwesome';
+            content: '\00a0';
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 20px;
         }
     }
 
