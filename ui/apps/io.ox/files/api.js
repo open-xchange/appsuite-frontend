@@ -1708,6 +1708,14 @@ define('io.ox/files/api', [
                     if ('description' in changes) api.propagate('description', file);  //Bug 51571
                     break;
 
+                case 'favorite:add':
+                    api.trigger('favorite:add', file);
+                    break;
+
+                case 'favorite:remove':
+                    api.trigger('favorite:remove', file);
+                    break;
+
                 case 'change:version':
                     api.trigger('change:version', file);
                     break;

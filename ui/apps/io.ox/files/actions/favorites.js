@@ -47,6 +47,7 @@ define('io.ox/files/actions/favorites', [
         // convert folder model into file model
         model = new api.Model(model.toJSON());
         model.set('index/' + collectionId, collection.length, { silent: false });
+        api.propagate('favorite:add', model);
         collection.add(model);
         collection.sort();
     }
@@ -78,6 +79,7 @@ define('io.ox/files/actions/favorites', [
         collectionId = 'virtual/favorites/' + module;
         collection = folderAPI.pool.getCollection(collectionId);
         model.set('index/' + collectionId, collection.length, { silent: false });
+        api.propagate('favorite:remove', model);
         collection.remove(model);
     }
 

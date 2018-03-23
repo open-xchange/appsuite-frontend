@@ -1041,38 +1041,34 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (isTrash(e.baton)) return false;
             if (capabilities.has('guest && anonymous')) return false;
-            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
-                if (Array.isArray(e.context)) {
-                    var result = true;
-                    _.each(e.context, function (element) {
-                        if (folderAPI.is('trash', element)) {
+            var favorites = false;
+            if (e.baton && e.baton.app && e.baton.app.listView) {
+                favorites = e.baton.app.listView.favorites || [];
+            } else if (e.baton) {
+                favorites = e.baton.favorites || [];
+            }
+            if (Array.isArray(favorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
+                }
+
+                var result = true;
+                _.each(e.context, function (element) {
+                    if (folderAPI.is('trash', element)) {
+                        result = false;
+                    }
+                    if (result) {
+                        var isFavorite = _.find(favorites, function (elem) {
+                            if (elem.id === element.id) {
+                                return true;
+                            }
+                        });
+                        if (isFavorite) {
                             result = false;
                         }
-                        if (result) {
-                            var favorites = e.baton.app.listView.favorites,
-                                isFavorite = _.find(favorites, function (elem) {
-                                    if (elem.id === element.id) {
-                                        return true;
-                                    }
-                                });
-                            if (isFavorite) {
-                                result = false;
-                            }
-                        }
-                    });
-                    return result;
-                }
-                if (folderAPI.is('trash', e.context)) return false;
-                var id = e.context.id,
-                    favorites = e.baton.app.listView.favorites,
-                    isFavorite = _.find(favorites, function (elem) {
-                        if (elem.id === id) {
-                            return true;
-                        }
-                    });
-                if (isFavorite) {
-                    return false;
-                }
+                    }
+                });
+                return result;
             }
             return true;
         },
@@ -1087,34 +1083,31 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/favorites/remove', {
         requires: function (e) {
             if (capabilities.has('guest && anonymous')) return false;
-            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
-                if (Array.isArray(e.context)) {
-                    var result = false;
-                    _.each(e.context, function (element) {
-                        if (!result) {
-                            var favorites = e.baton.app.listView.favorites,
-                                isFavorite = _.find(favorites, function (elem) {
-                                    if (elem.id === element.id) {
-                                        return true;
-                                    }
-                                });
-                            if (isFavorite) {
-                                result = true;
+            var favorites = false;
+            if (e.baton && e.baton.app && e.baton.app.listView) {
+                favorites = e.baton.app.listView.favorites || [];
+            } else if (e.baton) {
+                favorites = e.baton.favorites || [];
+            }
+            if (Array.isArray(favorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
+                }
+
+                var result = false;
+                _.each(e.context, function (element) {
+                    if (!result) {
+                        var isFavorite = _.find(favorites, function (elem) {
+                            if (elem.id === element.id) {
+                                return true;
                             }
+                        });
+                        if (isFavorite) {
+                            result = true;
                         }
-                    });
-                    return result;
-                }
-                var id = e.context.id,
-                    favorites = e.baton.app.listView.favorites,
-                    isFavorite = _.find(favorites, function (elem) {
-                        if (elem.id === id) {
-                            return true;
-                        }
-                    });
-                if (isFavorite) {
-                    return true;
-                }
+                    }
+                });
+                return result;
             }
             return false;
         },

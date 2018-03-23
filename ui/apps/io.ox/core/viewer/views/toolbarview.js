@@ -18,12 +18,13 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/mail/api',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, FolderAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -268,6 +269,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                     label: gt('Add to portal'),
                     section: 'share',
                     ref: 'io.ox/files/actions/add-to-portal'
+                },
+                'addtofavorites': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to favorites'),
+                    section: 'favorites',
+                    ref: 'io.ox/files/favorites/add'
+                },
+                'removefromfavorites': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Remove from favorites'),
+                    section: 'favorites',
+                    ref: 'io.ox/files/favorites/remove'
                 },
                 'uploadnewversion': {
                     prio: 'lo',
@@ -678,6 +693,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             } else {
                 this.currentlyDrawn = model;
                 // draw toolbar
+                var favoriteCollection = FolderAPI.pool.getCollection('virtual/favorites/infostore'),
+                    favorites = [];
+                if (favoriteCollection) {
+                    _.each(favoriteCollection.models, function (model) {
+                        favorites.push(_.extend(model.pick('folder_id', 'id'), { isFolder: model.isFolder() }));
+                    });
+                }
+
                 var origData = model.get('origData'),
                     toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
@@ -688,7 +711,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         model: model,
                         models: isDriveFile ? [model] : null,
                         data: isDriveFile ? model.toJSON() : origData,
-                        openedBy: this.openedBy
+                        openedBy: this.openedBy,
+                        favorites: favorites
                     }),
                     appName = model.get('source'),
                     self = this,
@@ -701,6 +725,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 // save current data as view model
                 this.model = model;
                 this.listenTo(this.model, 'change', this.onModelChange);
+
+                // listener for added/removed favorites
+                this.listenTo(FilesAPI, 'favorite:add favorite:remove', function (file) {
+                    if (file.id === _.cid(model.toJSON())) {
+                        self.onModelChange(FilesAPI.pool.get('detail').get(file.id));
+                    }
+                });
                 // set device type
                 Util.setDeviceClass(this.$el);
                 toolbar.empty().append(pageNavigation);
