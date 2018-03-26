@@ -13,8 +13,9 @@
 
 define('io.ox/oauth/backbone', [
     'io.ox/core/http',
+    'io.ox/core/yell',
     'less!io.ox/oauth/style'
-], function (http) {
+], function (http, yell) {
     'use strict';
 
     var generateId = function () {
@@ -82,14 +83,18 @@ define('io.ox/oauth/backbone', [
                 popupWindow.location = interaction.authUrl;
 
                 return def;
-            }).then(function () {
+            }).then(function (res) {
+                var def = $.Deferred();
                 delete window['callback_' + callbackName];
                 popupWindow.close();
+                if (res.error) return def.reject(res);
+                return def.resolve(res);
+            }).then(function () {
                 account.enableScopes(account.get('enabledScopes'));
                 account.set('enabledScopes', account.get('wantedScopes'));
                 account.unset('wantedScopes');
                 return account;
-            });
+            }, yell);
         },
         sync: function (method, model, options) {
             switch (method) {
