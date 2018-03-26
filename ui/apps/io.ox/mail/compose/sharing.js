@@ -128,7 +128,7 @@ define('io.ox/mail/compose/sharing', [
         id: 'notifications',
         index: 400,
         render: function () {
-            if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
+            //if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
 
             this.notificationModel = new Backbone.Model({
                 download: _(this.sharingModel.get('notifications')).contains('download'),
@@ -138,7 +138,7 @@ define('io.ox/mail/compose/sharing', [
 
             this.dialogNode.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(gt('Email notifications')),
+                    $('<legend>').append($('<h2>').text(gt('Email notifications'))),
                     new mini.CustomCheckboxView({
                         model: this.notificationModel,
                         name: 'download',
@@ -238,7 +238,7 @@ define('io.ox/mail/compose/sharing', [
             require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                 new ModalDialog({
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    title: gt('%1$s Options', mailSettings.get('compose/shareAttachments/name')),
+                    title: gt('%1$s options', mailSettings.get('compose/shareAttachments/name')),
                     width: 400
                 })
                 .build(function () {
