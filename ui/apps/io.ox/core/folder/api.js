@@ -203,6 +203,7 @@ define('io.ox/core/folder/api', [
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
             if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
+            if (this.is('calendar') && this.is('private')) return this.supportsShares();
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
             return capabilities.has('read_create_shared_folders');
