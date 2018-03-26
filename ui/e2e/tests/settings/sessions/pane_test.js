@@ -22,8 +22,10 @@ Scenario('lists all sessions', function (I) {
     I.see('You are currently signed in with the following devices');
 
     // web clients
-    I.see('Exchange ActiveSync(Mac)');
-    I.see('OX Mail(Android)');
+    I.see('Calendar(Mac)');
+    I.see('Addressbook(Mac)');
+    I.see('Exchange Active Sync(Mac)');
+    I.see('OXDrive(Android)');
     I.see('OX Mail(iOS)');
     I.see('Safari(iOS)');
     I.see('Firefox(Mac)');
