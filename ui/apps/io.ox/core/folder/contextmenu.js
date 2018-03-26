@@ -450,8 +450,7 @@ define('io.ox/core/folder/contextmenu', [
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: invite,
-                        // Using concat notation to avoid necessity for new translations right before the release
-                        text: showInvitePeople ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
+                        text: showInvitePeople ? gt('Permissions / Invite people') : gt('Permissions')
                     });
                 }
 
