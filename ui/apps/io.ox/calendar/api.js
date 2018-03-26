@@ -94,6 +94,14 @@ define('io.ox/calendar/api', [
                 api.trigger('update:' + util.cid(event), event);
             });
 
+
+            var errors = (response.failed || []).concat(response.error);
+            _(errors).each(function (error) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell(error);
+                });
+            });
+
             return response;
         },
 
