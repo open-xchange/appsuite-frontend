@@ -530,7 +530,7 @@ define('io.ox/calendar/edit/extensions', [
             });
 
             this.append(typeahead.$el);
-            typeahead.render().$el.addClass('col-md-6');
+            typeahead.render().$el.addClass('col-xs-12');
         }
     });
 
@@ -620,64 +620,47 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'color',
         index: 1200,
-        className: 'col-xs-12 col-sm-6',
+        className: 'col-xs-12 col-sm-6 color-container',
         render: function () {
 
             var self = this,
                 picker = new ColorPicker({
                     model: this.model,
                     attribute: 'color',
-                    noColorOption: true,
                     additionalColor: this.model.get('color') ? { value: this.model.get('color') } : undefined
                 }),
-                toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Change color')),
+                toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Appointment color')),
                 menu = $('<ul class="dropdown-menu">'),
                 dropdown = new Dropdown({
                     smart: false,
                     className: 'color-picker-dropdown dropdown',
                     $toggle: toggle,
                     $ul: menu,
-                    margin: 24
+                    margin: 24,
+                    model: this.model,
+                    carret: true,
+                    allowUndefined: true
                 }),
                 pickedColor = $('<span class="picked-color">');
-
+            dropdown.option('color', undefined, gt('No color'));
+            dropdown.divider();
             menu.append($('<li role="presentation">').append(picker.render().$el));
 
             this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Color')),
-                    pickedColor,
-                    dropdown.render().$el
-                )
+                pickedColor,
+                dropdown.render().$el
             );
-
-            function onChangeClass() {
-                var elem = picker.$('.no-color .box');
-                if (calendarUtil.isPrivate(picker.model)) {
-                    elem.css({
-                        'background-color': calendarUtil.PRIVATE_EVENT_COLOR,
-                        color: '#fff'
-                    });
-                } else {
-                    elem.css({
-                        'background-color': '#fff',
-                        color: '#000'
-                    });
-                }
-            }
 
             function onChangeColor() {
                 if (!self.model.get('color')) {
                     pickedColor.addClass('no-color').css('background-color', '#fff');
+                    picker.$el.find(':checked').prop('checked', false);
                     return;
                 }
                 pickedColor.removeClass('no-color').css('background-color', self.model.get('color'));
             }
 
             this.model.on('change:color', onChangeColor);
-
-            picker.listenTo(this.model, 'change:class', onChangeClass);
-            onChangeClass();
             onChangeColor();
         }
     }, {
@@ -687,7 +670,7 @@ define('io.ox/calendar/edit/extensions', [
     // shown as
     point.extend({
         id: 'shown_as',
-        className: 'col-md-6',
+        className: 'col-xs-12 col-md-6',
         index: 1300,
         render: function () {
             this.$el.append(
