@@ -423,7 +423,10 @@ define('io.ox/calendar/api', [
                         return params;
                     })
                 })
-                .then(processResponse)
+                .then(function (data) {
+                    data.forEach(processResponse);
+                    return data;
+                })
                 .then(function (data) {
                     api.getAlarms();
                     return data;
