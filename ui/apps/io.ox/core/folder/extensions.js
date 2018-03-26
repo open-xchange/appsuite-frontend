@@ -923,7 +923,7 @@ define('io.ox/core/folder/extensions', [
                 this.header(gt('Import calendar'));
                 this.link('import', gt('Upload file'), function () {
                     require(['io.ox/core/import/import'], function (importer) {
-                        importer.show('event');
+                        importer.show('calendar');
                     });
                 });
             }

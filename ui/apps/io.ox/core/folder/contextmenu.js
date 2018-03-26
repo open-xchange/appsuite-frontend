@@ -387,7 +387,6 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (_.device('ios || android')) return;
                 if (!api.can('import', baton.data)) return;
-                if (baton.data.module === 'calendar') return;
 
                 contextUtils.addLink(this, {
                     action: 'import',
