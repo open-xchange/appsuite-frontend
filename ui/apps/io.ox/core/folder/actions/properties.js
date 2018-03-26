@@ -183,7 +183,7 @@ define('io.ox/core/folder/actions/properties', [
         index: 800,
         render: (function () {
             var providerMapping = {
-                'ical': gt('iCal-Feed'),
+                'ical': gt('iCal feed'),
                 'google': gt('Google subscription'),
                 'schedjoules': gt('Calendars of interest')
             };
