@@ -47,14 +47,19 @@ define('plugins/halo/register', ['io.ox/core/extensions'], function (ext) {
         title: 'Halo Config'
     });
 
-    // use global click handler
-    $('body').on('click', '.halo-link', function (e) {
-        e.preventDefault();
-        ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
-    });
+    require(['io.ox/core/capabilities'], function (capabilities) {
+        // Halo is not available for Guests without contacts.
+        if (capabilities.has('guest') && !capabilities.has('contacts')) return;
 
-    $('body').on('click', '.halo-resource-link', function (e) {
-        e.preventDefault();
-        ext.point('io.ox/core/resource:action').invoke('action', this, $(this).data(), e);
+        // use global click handler
+        $('body').on('click', '.halo-link', function (e) {
+            e.preventDefault();
+            ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
+        });
+
+        $('body').on('click', '.halo-resource-link', function (e) {
+            e.preventDefault();
+            ext.point('io.ox/core/resource:action').invoke('action', this, $(this).data(), e);
+        });
     });
 });
