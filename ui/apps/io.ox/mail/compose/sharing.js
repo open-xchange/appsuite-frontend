@@ -67,18 +67,19 @@ define('io.ox/mail/compose/sharing', [
 
             // option: none
             if (!mailSettings.get('compose/shareAttachments/requiredExpiration') && !mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) {
-                options.push({ label: gt('never'), value: '' });
+                options.push({ label: gt('Never'), value: '' });
                 if (!this.sharingModel.get('expiry_date') && mailSettings.get('compose/shareAttachments/defaultExpiryDate', '') === '') this.sharingModel.set('expiry_date', '');
             }
 
             selectbox = new mini.SelectView({
                 model: this.sharingModel,
                 name: 'expiry_date',
-                list: options
+                list: options,
+                id: 'expiration-select-box'
             });
 
             //#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
-            this.dialogNode.append($('<label>').text(gt('Expiration')), selectbox.render().$el);
+            this.dialogNode.append($('<label for="expiration-select-box">').text(gt('Expiration')), selectbox.render().$el);
         }
     }, {
         index: 200,
@@ -116,7 +117,7 @@ define('io.ox/mail/compose/sharing', [
             this.dialogNode.append(
                 $('<div class="password-wrapper">').append(
                     //#. checkbox label to determine if a password should be used
-                    new mini.CustomCheckboxView({ name: 'usepassword', model: model, label: gt('Use Password') }).render().$el.addClass('use-password'),
+                    new mini.CustomCheckboxView({ name: 'usepassword', model: model, label: gt('Use password') }).render().$el.addClass('use-password'),
                     passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                 )
             );
@@ -127,7 +128,7 @@ define('io.ox/mail/compose/sharing', [
         id: 'notifications',
         index: 400,
         render: function () {
-            //if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
+            if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
 
             this.notificationModel = new Backbone.Model({
                 download: _(this.sharingModel.get('notifications')).contains('download'),
@@ -136,25 +137,27 @@ define('io.ox/mail/compose/sharing', [
             });
 
             this.dialogNode.append(
-                $('<label>').text(gt('Notification')),
-                new mini.CustomCheckboxView({
-                    model: this.notificationModel,
-                    name: 'download',
-                    //#. There is a label "Nofification" before this text
-                    label: gt('when the receivers have finished downloading the files')
-                }).render().$el,
-                new mini.CustomCheckboxView({
-                    model: this.notificationModel,
-                    name: 'expired',
-                    //#. There is a label "Nofification" before this text
-                    label: gt('when the link is expired')
-                }).render().$el,
-                new mini.CustomCheckboxView({
-                    model: this.notificationModel,
-                    name: 'visit',
-                    //#. There is a label "Nofification" before this text
-                    label: gt('when the receivers have accessed the files')
-                }).render().$el
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Email notifications')),
+                    new mini.CustomCheckboxView({
+                        model: this.notificationModel,
+                        name: 'download',
+                        //#. There is a label "Nofification" before this text
+                        label: gt('Receive notification when the someone finished downloading the file(s)')
+                    }).render().$el,
+                    new mini.CustomCheckboxView({
+                        model: this.notificationModel,
+                        name: 'expired',
+                        //#. There is a label "Nofification" before this text
+                        label: gt('Receive notification when the link expires')
+                    }).render().$el,
+                    new mini.CustomCheckboxView({
+                        model: this.notificationModel,
+                        name: 'visit',
+                        //#. There is a label "Nofification" before this text
+                        label: gt('Receive notification when someone accesses the file(s)')
+                    }).render().$el
+                )
             );
 
             this.listenTo(this.notificationModel, 'change', function () {
