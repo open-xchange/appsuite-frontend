@@ -38,7 +38,8 @@ define('io.ox/calendar/edit/main', [
             userContent: true,
             closable: true,
             floating: !_.device('smartphone'),
-            sendInternalNotifications: true
+            sendInternalNotifications: true,
+            size: 'width-sm'
         });
 
         _.extend(app, {

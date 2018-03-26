@@ -186,7 +186,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 $temp.replaceWith(node);
             }
 
-            if (value === undefined) return;
+            if (!this.options.allowUndefined && value === undefined) return;
             if (this.model) {
                 var nextValue = value;
                 if (toggle) {

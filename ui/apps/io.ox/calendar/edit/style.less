@@ -39,14 +39,17 @@
     .hard-conflict { margin: 1em 0 0 0; }
 
     .io-ox-calendar-color-picker {
-        width: 400px;
-        label:nth-child(13n+15) {
-            margin-left: 44px;
-        }
+        width: 352px;
     }
 
     .color-picker-dropdown {
-        display: inline;
+        display: inline-block;
+    }
+
+    .color-container {
+        display: flex;
+        margin-top: 7px;
+        align-items: center;
     }
 
     .picked-color {
@@ -54,8 +57,8 @@
         height: 20px;
         border-radius: 3px;
         margin-right: 16px;
-        margin-bottom: 4px;
         background-color: rgb(255, 255, 255);
+        display: inline-block;
 
         &.no-color:before {
             border: 1px solid #888;
@@ -67,9 +70,6 @@
             height: 20px;
             display: inline-block;
             border-radius: 3px;
-            text-align: center;
-            font-size: 14px;
-            line-height: 20px;
         }
     }
 
