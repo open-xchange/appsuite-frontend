@@ -253,7 +253,7 @@ define('io.ox/calendar/month/perspective', [
                 if (this.current.isSame(curMonth, 'month')) this.currentView = view;
 
             }
-            if (_.device('ie <= 11')) {
+            if (_.device('ie && ie <= 11')) {
                 this.calculateHeights();
             }
 
@@ -262,6 +262,8 @@ define('io.ox/calendar/month/perspective', [
 
         // IE 11 needs a fixed height or appointments are not displayed
         calculateHeights: _.debounce(function () {
+            // no calculation if invisible(all lists get 0 height)
+            if (this.pane.filter(':visible').length === 0) return;
             var height = (this.pane.height() * (1 / 7) - 26) + 'px';
             this.pane.find('.list').css('height', height);
         }, 100),
@@ -463,7 +465,7 @@ define('io.ox/calendar/month/perspective', [
                 this.gotoMonth(app.getDate());
             }.bind(this));
 
-            if (_.device('ie <= 11')) {
+            if (_.device('ie && ie <= 11')) {
                 $(window).on('resize', _(this.calculateHeights).bind(this));
             }
 
