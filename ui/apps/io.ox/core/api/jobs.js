@@ -12,9 +12,8 @@
  */
 
 define('io.ox/core/api/jobs', [
-    'io.ox/core/http',
-    'gettext!io.ox/core'
-], function (http, gt) {
+    'io.ox/core/http'
+], function (http) {
 
     'use strict';
 
@@ -57,6 +56,8 @@ define('io.ox/core/api/jobs', [
                             api.trigger('finished:' + job.id, result);
                             // used to trigger redraw of folderview
                             api.trigger('finished:' + job.showIn, result);
+                        }).fail(function (result) {
+                            doneJobs[job.id].failCallback(result);
                         });
                     });
                 });
@@ -104,8 +105,6 @@ define('io.ox/core/api/jobs', [
                     api.addJob(_.extend({
                         // only infostore for now
                         showIn: 'infostore',
-                        //#. %1$s: Folder name
-                        label: job.folder && job.folder.title ? gt('Moving "%1$s"', job.folder.title) : gt('Moving folder'),
                         // use generic fallback
                         successCallback: function () { ox.trigger('refresh.all'); },
                         failCallback: function () { ox.trigger('refresh.all'); }
