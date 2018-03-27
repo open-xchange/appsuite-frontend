@@ -241,21 +241,21 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     });
                     this.append(
                         li = $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
-                            $('<div>').addClass('col-sm-2 singleline').append(
+                            $('<div>').addClass('col-sm-3 singleline').append(
                                 $('<span>').addClass('list-title').text(baton.view.conditionsTranslation[condition.id])
                             ),
-                            $('<div>').addClass('col-sm-10').append(
+                            $('<div>').addClass('col-sm-9').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-sm-4').append(
                                         new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
                                     ),
-                                    $('<div>').addClass('col-sm-3').append(
+                                    $('<div>').addClass('col-sm-4').append(
                                         new mini.DropdownLinkView({ name: 'zone', model: cmodel, values: timezoneValues }).render().$el
                                     ),
-                                    $('<div class="col-sm-5">').append(
+                                    $('<div class="col-sm-4">').append(
                                         new ModifiedDatePicker({
                                             model: cmodel,
-                                            display: 'DATETIME',
+                                            display: 'DATE',
                                             attribute: 'datevalue',
                                             label: gt('datepicker')
                                         }).render().$el
@@ -368,21 +368,21 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
                     this.append(
                         li = $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
-                            $('<div>').addClass('col-sm-2 singleline').append(
+                            $('<div>').addClass('col-sm-3 singleline').append(
                                 $('<span>').addClass('list-title').text(baton.view.conditionsTranslation[condition.id])
                             ),
-                            $('<div>').addClass('col-sm-10').append(
+                            $('<div>').addClass('col-sm-9').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-sm-4').append(
                                         new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('date', timeValues) }).render().$el
                                     ),
-                                    $('<div>').addClass('col-sm-3').append(
+                                    $('<div>').addClass('col-sm-4').append(
                                         new mini.DropdownLinkView({ name: 'zone', model: cmodel, values: timezoneValues }).render().$el
                                     ),
-                                    $('<div class="col-sm-5">').append(
+                                    $('<div class="col-sm-4">').append(
                                         new ModifiedDatePicker({
                                             model: cmodel,
-                                            display: 'DATETIME',
+                                            display: 'DATE',
                                             attribute: 'datevalue',
                                             label: gt('datepicker'),
                                             timezoneButton: false
