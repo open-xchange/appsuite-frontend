@@ -128,7 +128,7 @@ define('io.ox/mail/compose/sharing', [
         id: 'notifications',
         index: 400,
         render: function () {
-            //if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
+            if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
 
             this.notificationModel = new Backbone.Model({
                 download: _(this.sharingModel.get('notifications')).contains('download'),
