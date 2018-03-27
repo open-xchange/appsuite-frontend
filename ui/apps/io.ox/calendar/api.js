@@ -64,16 +64,16 @@ define('io.ox/calendar/api', [
                         api.trigger('update:' + util.cid(evt), evt.attributes);
                     });
                     // make sure that appointents inside deleteExceptionDates do not exist
-                    var exceptions = [].concat(event.deleteExceptionDates).concat(event.changeExceptionDates);
-                    exceptions = _(exceptions).compact();
-                    exceptions.forEach(function (recurrenceId) {
-                        var model = api.pool.getModel(util.cid({ id: event.id, folder: event.folder, recurrenceId: recurrenceId }));
-                        if (model) {
-                            model.collection.remove(model);
-                            api.trigger('delete', model.attributes);
-                            api.trigger('delete:' + util.cid(model), model.attributes);
-                        }
-                    });
+                    // var exceptions = [].concat(event.deleteExceptionDates).concat(event.changeExceptionDates);
+                    // exceptions = _(exceptions).compact();
+                    // exceptions.forEach(function (recurrenceId) {
+                    //     var model = api.pool.getModel(util.cid({ id: event.id, folder: event.folder, recurrenceId: recurrenceId }));
+                    //     if (model) {
+                    //         model.collection.remove(model);
+                    //         api.trigger('delete', model.attributes);
+                    //         api.trigger('delete:' + util.cid(model), model.attributes);
+                    //     }
+                    // });
 
                 } else {
                     // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
@@ -107,8 +107,6 @@ define('io.ox/calendar/api', [
 
         defaultFields = ['color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
-        extendedFields = [defaultFields, 'deleteExceptionDates', 'changeExceptionDates'].join(','),
-
         api = {
             // used externally by itip updates in mail invites
             updatePoolData: processResponse,
@@ -117,8 +115,6 @@ define('io.ox/calendar/api', [
             cid: util.cid,
 
             defaultFields: defaultFields,
-
-            extendedFields: extendedFields,
 
             request: (function () {
                 function getParams(opt, start, end) {
@@ -291,7 +287,7 @@ define('io.ox/calendar/api', [
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
-                        fields: api.extendedFields
+                        fields: api.defaultFields
                     },
                     def;
 
@@ -351,7 +347,7 @@ define('io.ox/calendar/api', [
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
                         recurrenceRange: options.recurrenceRange,
-                        fields: api.extendedFields
+                        fields: api.defaultFields
                     };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
@@ -408,7 +404,7 @@ define('io.ox/calendar/api', [
                 var params = {
                     action: 'delete',
                     timestamp: _.now(),
-                    fields: api.extendedFields
+                    fields: api.defaultFields
                 };
 
                 if (options.expand) {
