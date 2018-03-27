@@ -42,7 +42,7 @@
 <div class="titlepage"><div><div><h3 class="title">8.1.7. Das Aufgabenbearbeitungsfenster</h3></div></div></div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.tasks.gui.create"></a><p id="ox.appsuite.user.reference.tasks.gui.create">
-        Dieses Fenster wird verwendet, wenn Sie eine neue Aufgabe anlegen, eine Aufgabe bearbeiten oder in der Liste eine Aufgabe doppelklicken.
+        Dieses Fenster wird verwendet, wenn Sie eine neue Aufgabe anlegen oder eine Aufgabe bearbeiten.
         </p>
 <p class="title">Inhalt</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.tasks.gui.create.entries" style="list-style-type: disc; ">
@@ -51,60 +51,68 @@
               </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Fenstertitel</p></li>
-<li class="listitem"><p role="presentation">Symbole zum Festlegen der Fensterposition.</p></li>
+<li class="listitem"><p role="presentation">Symbole zum Festlegen der Fensterposition, Symbol zum Abbrechen</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">Elemente, die sich je nach Konfiguration der Groupware oben oder unten befinden.
+<p role="presentation">Aufgabendaten
               </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Anlegen</strong></span>. Anklicken speichert die aktuellen Daten der Aufgabe und
-                    schließt die Bearbeitungsseite.</p></li>
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Verwerfen</strong></span>. Wenn Sie das Erstellen oder die Bearbeitung abbrechen
-                    möchten, klicken Sie auf diese Schaltfläche.</p></li>
+<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Betreff</strong></span>. Geben Sie hier den Betreff ein. Der Betreff wird als Aufgabentitel angezeigt.</p></li>
+<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Beschreibung</strong></span>. Geben Sie hier optional eine Beschreibung 
+                    der Aufgabe ein.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Formular erweitern</strong></span>. Zeigt weitere Eingabefelder an.</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Beginnt am</strong></span> und <span class="guibutton"><strong>Fälligkeitstermin</strong></span>. Bestimmt den 
+                    Beginn und den Fälligkeitstermin. Hineinklicken öffnet einen Auswahldialog zur Datumswahl.</p>
+<p role="presentation">Wenn <span class="guibutton"><strong>Ganztägig</strong></span> ausgeschaltet ist, können Sie Uhrzeiten für den Beginn 
+                    und die Fälligkeit festlegen.</p>
+</li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Ganztägig</strong></span>. Bestimmt, ob die Aufgabe ganze Tage dauern soll. 
+                   </p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Wiederholen</strong></span>. Bestimmt, ob die Aufgabe wiederholt werden soll.
+                    Beispiele zur Anwendung finden Sie bei den
+                    <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">Fragen zu Terminen und Aufgaben</a>.</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Betreff</strong></span>. Geben Sie hier den Betreff ein. Der Betreff wird in
-              den Ansichten als Aufgabentitel angezeigt.</p></li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Beschreibung</strong></span>. Geben Sie hier optional eine Beschreibung 
-              der Aufgabe ein.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Erinnerung</strong></span>. Bestimmt, wann und wie Sie an die Fälligkeit der Aufgabe 
+              erinnert werden. Alternativ können Sie in <span class="guibutton"><strong>Datum für Erinnerung</strong></span>
+              ein Datum und eine Uhrzeit für die Erinnerung festlegen. In diesem Fall wird in 
+              <span class="guibutton"><strong>Erinnerung</strong></span> der Wert <span class="guibutton"><strong>Manuelle Eingabe</strong></span> angezeigt.</p></li>
 <li class="listitem">
-<p role="presentation">Schaltfläche <span class="guibutton"><strong>Formular erweitern</strong></span>. Zeigt weitere Eingabefelder an.
-            </p>
+<p role="presentation">Aufgabendarstellung
+              </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem">
-<p role="presentation">Eingabefelder <span class="guibutton"><strong>Beginnt am</strong></span> und <span class="guibutton"><strong>Fälligkeitstermin</strong></span>. Bestimmt den 
-                  Beginn und den Fälligkeitstermin. Hineinklicken öffnet einen Auswahldialog zur Datumswahl.</p>
-<p role="presentation">Wenn das Kontrollfeld <span class="guibutton"><strong>Ganztägig</strong></span> ausgeschaltet ist, können Sie Uhrzeiten für den Beginn 
-                  und die Fälligkeit festlegen.</p>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Status</strong></span>. Bestimmt den Status der Aufgabenerledigung. Alternativ können 
+                    Sie in <span class="guibutton"><strong>Fortschritt</strong></span> einen prozentualen Wert für die Aufgabenerledigung eintragen.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Priorität</strong></span>. Bestimmt die Priorität der Aufgabe.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Privat</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn andere Benutzer den
+                    Betreff und die Beschreibung der Aufgabe nicht sehen sollen.</p></li>
+</ul>
+<p role="presentation">
+            </p>
 </li>
-<li class="listitem"><p role="presentation">Kontrollfeld <span class="guibutton"><strong>Ganztägig</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn die Aufgabe 
-                  ganze Tage dauern soll. 
-                 </p></li>
-<li class="listitem"><p role="presentation">Kontrollfeld <span class="guibutton"><strong>Wiederholen</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn die Aufgabe mehrmals 
-                  wiederholt werden soll. Weitere Bedienelemente zum Einstellen der Wiederholungsparameter werden angezeigt. 
-                  Beispiele zur Anwendung finden Sie bei den
-                  <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">Fragen zu Terminen und Aufgaben</a>.</p></li>
-<li class="listitem"><p role="presentation">Auswahlliste <span class="guibutton"><strong>Erinnerung</strong></span>. Bestimmt, wann Sie durch einen Eintrag im Infobereich
-                  an die Fälligkeit der Aufgabe erinnert werden. Alternativ können Sie in <span class="guibutton"><strong>Datum für Erinnerung</strong></span>
-                  ein Datum und eine Uhrzeit für die Erinnerung festlegen. In diesem Fall wird in 
-                  <span class="guibutton"><strong>Erinnerung</strong></span> der Wert <span class="guibutton"><strong>Manuelle Eingabe</strong></span> angezeigt.</p></li>
-<li class="listitem"><p role="presentation">Auswahlliste <span class="guibutton"><strong>Status</strong></span>. Bestimmt den Status der Aufgabenerledigung. Alternativ können 
-                  Sie in <span class="guibutton"><strong>Fortschritt</strong></span> einen prozentualen Wert für die Aufgabenerledigung eintragen.</p></li>
-<li class="listitem"><p role="presentation">Auswahlliste <span class="guibutton"><strong>Wichtigkeit</strong></span>. Bestimmt die Wichtigkeit der Aufgabe.</p></li>
-<li class="listitem"><p role="presentation">Kontrollfeld <span class="guibutton"><strong>Privat</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn andere Benutzer den
-                  Betreff und die Beschreibung der Aufgabe nicht sehen sollen.</p></li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Teilnehmer/Ressourcen hinzufügen</strong></span>. Geben Sie hier die Namen der Teilnehmer
-                  an, die an der Aufgabe teilnehmen sollen.</p></li>
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Anhänge hinzufügen</strong></span> unterhalb von <span class="guibutton"><strong>Anhänge</strong></span>. Klicken 
-                  Sie auf diese Schaltfläche, wenn Sie den Kontaktdaten eine Datei oder mehrere Dateien anhängen wollen.</p></li>
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Detail anzeigen</strong></span>. Anklicken zeigt zusätzliche Datenfelder, in die Sie 
-                  Abrechnungsinformationen wie Aufwandsschätzungen, tatsächliche Aufwände oder Rechnungsinformationen eingeben
-                  können.</p></li>
+<li class="listitem">
+<p role="presentation">Eingabefeld <span class="guibutton"><strong>Kontakt hinzufügen</strong></span>. Geben Sie hier die Namen der Teilnehmer
+              an, die an der Aufgabe teilnehmen sollen.</p>
+<p role="presentation">Symbol <span class="guibutton"><strong>Kontakte auswählen</strong></span>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.gui.create.addressbookpicker"><img src="../../images/appsuite_user_icon_addressbookpicker.png"></span>. Öffnet ein Fenster, in dem Sie Kontakte aus einer Liste wählen können.</p>
+</li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Anhänge hinzufügen</strong></span>. Fügt Dateien hinzu.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Details anzeigen</strong></span>. Zeigt zusätzliche Datenfelder, in die Sie 
+              Abrechnungsinformationen wie Aufwandsschätzungen, tatsächliche Aufwände oder Rechnungsinformationen eingeben
+              können.</p></li>
+<li class="listitem">
+<p role="presentation">Schaltflächenleiste
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Anlegen</strong></span>. Speichert die aktuellen Daten der Aufgabe.
+                    Schließt das Bearbeitungsfenster.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Verwerfen</strong></span>. Bricht das Anlegen oder die Bearbeitung der Aufgabe ab.</p></li>
 </ul>
 <p role="presentation">
             </p>
