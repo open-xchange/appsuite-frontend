@@ -173,7 +173,7 @@ define('io.ox/participants/chronos-views', [
                             data.callbacks = this.options.baton.callbacks;
                         }
                         var link = $('<a href="#">')
-                            .data(data)
+                            .data(data.resource ? data.resource : data)
                             .addClass('halo-resource-link');
                         this.nodes.$extra.replaceWith(link);
                         this.nodes.$extra = link;

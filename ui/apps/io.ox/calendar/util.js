@@ -1211,6 +1211,7 @@ define('io.ox/calendar/util', [
                 attendee.partStat = 'ACCEPTED';
                 if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
+                attendee.resource = user;
             }
 
             if (attendee.cuType === 'GROUP') {
