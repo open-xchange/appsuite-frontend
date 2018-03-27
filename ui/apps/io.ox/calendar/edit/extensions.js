@@ -633,7 +633,7 @@ define('io.ox/calendar/edit/extensions', [
                 menu = $('<ul class="dropdown-menu">'),
                 dropdown = new Dropdown({
                     smart: false,
-                    className: 'color-picker-dropdown dropdown',
+                    className: 'color-picker-dropdown dropup',
                     $toggle: toggle,
                     $ul: menu,
                     margin: 24,
