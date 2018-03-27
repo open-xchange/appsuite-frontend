@@ -552,8 +552,6 @@ define('io.ox/mail/util', [
             }
 
             function getAuthenticityStatus(data) {
-                var level = getAuthenticityLevel();
-                if (level === 'none') return;
                 if (!_.isObject(data)) return;
                 return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
             }
@@ -593,6 +591,7 @@ define('io.ox/mail/util', [
                 var status = getAuthenticityStatus(data),
                     level = getAuthenticityLevel();
 
+                if (level === 'none') return;
                 if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
 
                 return isRelevant(aspect, level, status) ? status : undefined;
