@@ -210,7 +210,7 @@ define('io.ox/mail/detail/view', [
             var data = baton.data, from = data.from || [],
                 status = util.authenticity('via', data);
 
-            if (status && baton.data.authenticity.from_dmain) {
+            if (status && baton.data.authenticity.domain_mismatch && baton.data.authenticity.from_domain) {
                 this.append(
                     $('<div class="sender">').append(
                         $('<span class="io-ox-label">').append(
@@ -218,7 +218,7 @@ define('io.ox/mail/detail/view', [
                             $.txt(gt('Via')),
                             $.txt('\u00A0\u00A0')
                         ),
-                        $('<span class="address">').text(baton.data.authenticity.from_dmain)
+                        $('<span class="address">').text(baton.data.authenticity.from_domain)
                     )
                 );
             }
