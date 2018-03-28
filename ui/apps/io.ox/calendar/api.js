@@ -291,7 +291,7 @@ define('io.ox/calendar/api', [
                     },
                     def;
 
-                if (options.expand && obj.rrule) {
+                if (options.expand) {
                     params.expand = true;
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
