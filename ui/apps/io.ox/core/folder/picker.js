@@ -240,6 +240,7 @@ define('io.ox/core/folder/picker', [
                 o.alternative(dialog, tree);
             })
             .on('cancel', o.cancel)
+            .on('close', o.close)
             .on('create', create)
             .renderTree()
             .open();

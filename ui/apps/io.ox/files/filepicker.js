@@ -657,7 +657,8 @@ define('io.ox/files/filepicker', [
                     $uploadButton.trigger('click');
                 }
             },
-            cancel: options.cancel
+            cancel: options.cancel,
+            close: options.close
         });
 
         return def.promise();
