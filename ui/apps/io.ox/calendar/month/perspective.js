@@ -367,7 +367,6 @@ define('io.ox/calendar/month/perspective', [
          * print current month
          */
         print: function () {
-            // TODO update print view
             print.request('io.ox/calendar/month/print', {
                 current: this.current,
                 start: moment(this.current).startOf('week').valueOf(),

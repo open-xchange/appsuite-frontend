@@ -518,7 +518,6 @@ define('io.ox/calendar/week/view', [
 
         /**
          * handler for single- and double-click events on appointments
-         * TODO check if this code is an exact duplication of the week-views onclick appointment
          * @param  { MouseEvent } e Mouse event
          */
         onClickAppointment: function (e) {

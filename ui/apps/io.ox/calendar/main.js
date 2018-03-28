@@ -895,7 +895,6 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        // TODO change core settings so the default folder isnt just a number
         var defaultFolder  = options.folder || folderAPI.getDefaultFolder('calendar');
         if (!options.folder && capabilities.has('guest')) {
             // try to select the first shared folder available

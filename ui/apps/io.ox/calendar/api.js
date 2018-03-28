@@ -748,7 +748,6 @@ define('io.ox/calendar/api', [
                 return true;
             }
             return function (data) {
-                // TODO if apppointment is in public folder and the current user participates, we also need to search for the allPublic folder
                 var model = data instanceof Backbone.Model ? data : new models.Model(data),
                     collections = this.getByFolder(model.get('folder')).filter(filter.bind(model)),
                     folder = folderApi.pool.getModel(model.get('folder'));

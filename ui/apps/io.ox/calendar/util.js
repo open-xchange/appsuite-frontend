@@ -1249,37 +1249,6 @@ define('io.ox/calendar/util', [
             return time && time.value && !time.tzid;
         },
 
-        // convenience function to convert old alarms into new chronos alarms
-        // TODO remove once migration process is implemented
-        convertAlarms: function (alarm) {
-            // already converted
-            if (_.isArray(alarm)) return alarm;
-            var alarmTime = alarm,
-                alarmUnit = 'M';
-
-            if (isNaN(parseInt(alarmTime, 10))) {
-                // ignore unparsable alarms
-                return [];
-            }
-
-            if (alarmTime >= 10080) {
-                alarmTime = alarmTime / 10080;
-                alarmUnit = 'W';
-            } else if (alarmTime >= 1440) {
-                alarmTime = alarmTime / 1440;
-                alarmUnit = 'D';
-            } else if (alarmTime >= 60) {
-                alarmTime = alarmTime / 60;
-                alarmUnit = 'H';
-            }
-
-            return [{
-                action: 'DISPLAY',
-                description: '',
-                trigger: { duration: '-PT' + alarmTime + alarmUnit, related: 'START' }
-            }];
-        },
-
         getMoment: function (date) {
             if (_.isObject(date)) return moment.tz(date.value, date.tzid || moment().tz());
             return moment(date);

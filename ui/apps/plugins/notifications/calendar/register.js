@@ -60,9 +60,6 @@ define('plugins/notifications/calendar/register', [
                             id: appointmentData.id,
                             folder: appointmentData.folder
                         };
-                        // convenience function to convert old alarms into new chronos alarms
-                        // TODO remove once migration process is implemented
-                        o.data.alarms = util.convertAlarms(o.data.alarms);
                         o.data.attendee.partStat = 'ACCEPTED';
 
                         var expand = util.getCurrentRangeOptions();
