@@ -682,7 +682,7 @@ define('io.ox/tasks/main', [
         // },
 
         'sidepanel': function (app) {
-
+            if (_.device('smartphone')) return;
             ext.point('io.ox/tasks/sidepanel').extend({
                 id: 'tree',
                 index: 100,
