@@ -84,6 +84,7 @@ define('io.ox/calendar/week/view', [
             var events = {
                 'click .control.next,.control.prev': 'onControlView',
                 'click .appointment': 'onClickAppointment',
+                'mousedown .appointment': 'onMousdownAppointment',
                 'click .weekday': 'onCreateAppointment',
                 'click .merge-split': 'onMergeSplit'
             };
@@ -507,6 +508,14 @@ define('io.ox/calendar/week/view', [
             }
         },
 
+        onMousdownAppointment: function (e) {
+            if ($(e.target).hasClass('ui-resizable-handle')) {
+                delete this.clicktarget;
+                return;
+            }
+            this.clicktarget = $(e.currentTarget).attr('data-cid');
+        },
+
         /**
          * handler for single- and double-click events on appointments
          * TODO check if this code is an exact duplication of the week-views onclick appointment
@@ -514,6 +523,7 @@ define('io.ox/calendar/week/view', [
          */
         onClickAppointment: function (e) {
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
+            if (cT.attr('data-cid') !== this.clicktarget) return;
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = util.cid(String(cT.data('cid')));
