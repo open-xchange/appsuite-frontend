@@ -38,8 +38,8 @@ define('io.ox/calendar/api', [
 
             _(response.created).each(function (event) {
                 if (!isRecurrenceMaster(event)) api.pool.propagateAdd(event);
-                api.trigger('create', event);
-                api.trigger('create:' + util.cid(event), event);
+                api.trigger('process:create', event);
+                api.trigger('process:create:' + util.cid(event), event);
             });
 
             _(response.deleted).each(function (event) {
@@ -327,6 +327,7 @@ define('io.ox/calendar/api', [
                         return data;
                     }
 
+                    if (data.created.length > 0) api.trigger('create', data.created[0]);
                     if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return api.pool.get('detail').add(data);
                     if (data.created.length > 0) return api.pool.getModel(data.created[0]);
                 });
