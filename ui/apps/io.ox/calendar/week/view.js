@@ -1250,7 +1250,7 @@ define('io.ox/calendar/week/view', [
                     cw: gt('CW %1$d', this.startDate.format('w')),
                     date: this.columns > 1
                         ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
-                        : this.startDate.format('l')
+                        : this.startDate.format('ddd, l')
                 };
                 // bubbling event to get it in page controller
                 this.trigger('change:navbar:date', this.navbarDates);
