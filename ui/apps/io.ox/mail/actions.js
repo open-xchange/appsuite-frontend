@@ -613,19 +613,6 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync',
-        requires: function () {
-            // use client onboarding here, since it is a setting and not a capability
-            return capabilities.has('client-onboarding');
-        },
-        action: function () {
-            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                wizard.run();
-            });
-        }
-    });
-
     // inline links
     var INDEX = 0;
 
@@ -910,11 +897,4 @@ define('io.ox/mail/actions', [
         classes: 'list-unstyled'
     }));
 
-    ext.point('io.ox/mail/links/premium-links').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'synchronize',
-        label: gt('Synchronize with Outlook'),
-        ref: 'io.ox/mail/premium/actions/synchronize'
-    }));
 });
