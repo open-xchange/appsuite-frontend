@@ -47,6 +47,8 @@ define('io.ox/core/api/apps', [
                 //dynamically translate the title
                 o.title = o.title ? /*#, dynamic*/gt.pgettext('app', o.title) : '';
                 o.svg = icons[o.id];
+                // apps need an index, default would be at the end
+                if (o.index === undefined) o.index = 1000000;
                 return o;
             }).filter(function (o) {
                 return o.hasLauncher;
