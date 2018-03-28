@@ -79,7 +79,6 @@ Scenario('compose new mail with signature below correctly placed initially', asy
 
     // discard mail
     I.click('Discard');
-    I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
 
     I.logout();
@@ -154,7 +153,6 @@ Scenario('reply to mail with signature below correctly placed initially', async 
 
     // discard mail
     I.click('Discard');
-    I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
 
     I.logout();
