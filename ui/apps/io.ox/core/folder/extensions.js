@@ -1088,7 +1088,7 @@ define('io.ox/core/folder/extensions', [
                             'background-color': folderColor,
                             'color': util.getForegroundColor(folderColor)
                         });
-                        target.off('click').on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
+                        target.off('click', toggleFolder).on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                         self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
                         folderLabel.prepend(target);
                     });

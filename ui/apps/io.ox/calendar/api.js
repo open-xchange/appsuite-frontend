@@ -741,23 +741,34 @@ define('io.ox/calendar/api', [
             return collections;
         },
 
-        getCollectionsByModel: function (data) {
-            var model = data instanceof Backbone.Model ? data : new models.Model(data),
-                collections = this.getByFolder(model.get('folder')).filter(function (collection) {
-                    var params = urlToHash(collection.cid),
-                        start = params.start,
-                        end = params.end;
-                    if (params.view === 'list') {
-                        start = moment().startOf('day').valueOf();
-                        end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
-                    }
-                    if (model.getTimestamp('endDate') <= start) return false;
-                    if (model.getTimestamp('startDate') >= end) return false;
-                    return true;
-                });
-            if (collections.length === 0) return [this.get('detail')];
-            return collections;
-        },
+        getCollectionsByModel: (function () {
+            function filter(collection) {
+                var params = urlToHash(collection.cid),
+                    start = params.start,
+                    end = params.end;
+                if (params.view === 'list') {
+                    start = moment().startOf('day').valueOf();
+                    end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
+                }
+                if (this.getTimestamp('endDate') <= start) return false;
+                if (this.getTimestamp('startDate') >= end) return false;
+                return true;
+            }
+            return function (data) {
+                // TODO if apppointment is in public folder and the current user participates, we also need to search for the allPublic folder
+                var model = data instanceof Backbone.Model ? data : new models.Model(data),
+                    collections = this.getByFolder(model.get('folder')).filter(filter.bind(model)),
+                    folder = folderApi.pool.getModel(model.get('folder'));
+                if (folder && folder.is('public') && model.hasFlag('attendee')) {
+                    collections.push.apply(
+                        collections,
+                        this.getByFolder('cal://0/allPublic').filter(filter.bind(model))
+                    );
+                }
+                if (collections.length === 0) return [this.get('detail')];
+                return collections;
+            };
+        }()),
 
         propagateAdd: function (data) {
             data.cid = util.cid(data);
