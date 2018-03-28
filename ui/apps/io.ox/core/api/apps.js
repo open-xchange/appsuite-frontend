@@ -50,7 +50,7 @@ define('io.ox/core/api/apps', [
                 return o;
             }).filter(function (o) {
                 return o.hasLauncher;
-            }).sort(function (a, b) { return a.index > b.index; });
+            }).sort(function (a, b) { return a.index - b.index; });
 
             return _.compact(apps.map(function (app) {
                 // return manifests in the order they have been specified in `io.ox/core//apps/order`
