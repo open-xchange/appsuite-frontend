@@ -24,8 +24,9 @@ define('plugins/portal/mail/register', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'io.ox/core/http',
+    'settings!io.ox/mail',
     'less!plugins/portal/mail/style'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities, http) {
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities, http, mailSettings) {
 
     'use strict';
 
@@ -155,7 +156,8 @@ define('plugins/portal/mail/register', [
                         columns: http.defaultColumns.mail.all,
                         sort: params.sort || '610',
                         order: params.order || 'desc',
-                        timezone: 'utc'
+                        timezone: 'utc',
+                        deleted: !mailSettings.get('features/ignoreDeleted', false)
                     };
                 }
             });

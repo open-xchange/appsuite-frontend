@@ -140,7 +140,8 @@ define('io.ox/core/boot/load', [
                 includeSent: true,
                 max: 300,
                 timezone: 'utc',
-                limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
+                limit: '0,' + mailSettings.get('listview/primaryPageSize', 50),
+                deleted: !mailSettings.get('features/ignoreDeleted', false)
             };
 
         // mail categories (aka tabbed inbox)

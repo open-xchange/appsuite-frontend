@@ -587,7 +587,6 @@ define('io.ox/mail/api', [
      * @return { deferred} returns array of threads
      */
     api.getAllThreads = function (options, useCache) {
-
         // request for brand new thread support
         options = options || {};
 
@@ -602,6 +601,7 @@ define('io.ox/mail/api', [
             includeSent: !accountAPI.is('sent|drafts', options.folder),
             // never use server cache
             cache: false,
+            deleted: showDeleted,
             // apply internal limit to build threads fast enough
             max: options.max || 500
         });
@@ -2005,6 +2005,7 @@ define('io.ox/mail/api', [
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
+                    deleted: showDeleted,
                     timezone: 'utc'
                 };
             }
@@ -2015,6 +2016,7 @@ define('io.ox/mail/api', [
                 columns: http.defaultColumns.mail.all,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
+                deleted: showDeleted,
                 timezone: 'utc'
             };
         },
