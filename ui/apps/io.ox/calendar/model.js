@@ -292,6 +292,7 @@ define('io.ox/calendar/model', [
             return this.getMoment(name).valueOf();
         },
         parse: function (res) {
+            if (res.folder && res.id) res.cid = res.cid = util.cid(res);
             return res;
         },
         getRruleMapModel: function () {

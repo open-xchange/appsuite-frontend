@@ -232,6 +232,11 @@ define('io.ox/calendar/list/listview', [
             return ListView.prototype.empty.apply(this, arguments);
         },
 
+        onAdd: function (model) {
+            if (this.$('[data-cid="' + $.escape(model.cid) + '"]').length > 0) return;
+            return ListView.prototype.onAdd.call(this, model);
+        },
+
         renderListItem: function (model) {
             if (model === this.collection.last()) _.defer(this.drawTail.bind(this));
             return ListView.prototype.renderListItem.apply(this, arguments);

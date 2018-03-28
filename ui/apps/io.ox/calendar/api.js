@@ -679,11 +679,15 @@ define('io.ox/calendar/api', [
 
     api.pool.get = _.wrap(api.pool.get, function (get, cid) {
         var hasCollection = !!this.getCollections()[cid],
-            hash = urlToHash(cid);
-        if (hasCollection || cid === 'detail' || !hash.folders || hash.folders.length === 0) return get.call(this, cid);
+            hash = urlToHash(cid),
+            collection = get.call(this, cid);
+        if (hasCollection || cid === 'detail' || !hash.folders || hash.folders.length === 0) {
+            // remove comparator in case of search
+            if (cid.indexOf('search/') === 0) collection.comparator = null;
+            return collection;
+        }
         // find models which should be in this collection
         var list = this.grep('start=' + hash.start, 'end=' + hash.end),
-            collection = get.call(this, cid),
             models = _(list)
                 .chain()
                 .pluck('models')
