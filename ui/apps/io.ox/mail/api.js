@@ -587,6 +587,7 @@ define('io.ox/mail/api', [
      * @return { deferred} returns array of threads
      */
     api.getAllThreads = function (options, useCache) {
+
         // request for brand new thread support
         options = options || {};
 
@@ -1433,7 +1434,7 @@ define('io.ox/mail/api', [
     api.fetchTextPreview = function (ids) {
         return http.fixList(ids, http.PUT({
             module: 'mail',
-            params: { action: 'list', columns: '600,601,663', timezone: 'utc' },
+            params: { action: 'list', columns: '600,601,663', timezone: 'utc', deleted: showDeleted },
             data: http.simplify(ids)
         }))
         .then(function (response) {
