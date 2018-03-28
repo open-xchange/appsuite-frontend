@@ -126,6 +126,7 @@ define('io.ox/calendar/week/perspective', [
                             });
                     });
                 }, function fail(error) {
+                    self.view.renderAppointments();
                     notifications.yell(error);
                 });
             };
