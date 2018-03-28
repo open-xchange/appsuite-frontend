@@ -93,7 +93,8 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             // listen to any changes on the path
             this.stopListening(api);
-            _(path).each(this.listenToFolderChange, this);
+            this.stopListeningModels();
+            _(path).each(this.listener, this);
 
             if (this.rootAlwaysVisible) {
                 this.$el.empty().append(
@@ -184,6 +185,25 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
         onFolderChange: function () {
             this.render();
+        },
+
+        listener: function (data) {
+            this.listenToFolderChange(data);
+            this.listenToModelChange(data);
+        },
+
+        stopListeningModels: function () {
+            var breadcrumb = this;
+            _.each(breadcrumb.models, function (model) {
+                breadcrumb.stopListening(model, 'change');
+            });
+            breadcrumb.models = [];
+        },
+
+        listenToModelChange: function (data) {
+            var model = api.pool.getModel(data.id);
+            this.models.push(model);
+            this.listenTo(model, 'change', this.onFolderChange.bind(this));
         },
 
         listenToFolderChange: function (data) {
