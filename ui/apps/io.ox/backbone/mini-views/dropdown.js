@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstract'], function (AbstractView) {
+define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstract', 'io.ox/core/a11y'], function (AbstractView, a11y) {
 
     'use strict';
 
@@ -41,7 +41,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         onReady: function () {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') && !this.options.dontProcessOnMobile) return;
             if (this.smart === false && !this.$overlay) return;
             if (!this.$el.hasClass('open')) return;
             this.$ul.css({ width: 'auto', height: 'auto' });
@@ -138,7 +138,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         onShown: function () {
             if (this.smart === false) return;
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') && !this.options.dontProcessOnMobile) return;
             this.setDropdownOverlay();
         },
 
@@ -146,14 +146,24 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // select first or last item, if already open
             if (!this.$el.hasClass('open') || !this.$overlay) return;
             // special focus handling, because the $ul is no longer a child of the view
-            if (e.which === 40) $('a[role^="menuitem"]', this.$ul).first(':visible').focus();
-            if (e.which === 38) $('a[role^="menuitem"]', this.$ul).last(':visible').focus();
+            var items = a11y.getTabbable(this.$ul);
+            if (e.which === 40) items.first(':visible').focus();
+            if (e.which === 38) items.last(':visible').focus();
             // special close handling on ESC
             if (e.which === 27) {
                 this.$toggle.trigger('click');
                 e.stopImmediatePropagation();
                 e.preventDefault();
             }
+        },
+
+        open: function () {
+            if (this.$el.hasClass('open') || this.$overlay) return;
+            this.$toggle.trigger('click');
+        },
+
+        close: function () {
+            if (this.$el.hasClass('open') || this.$overlay) this.$toggle.trigger('click');
         },
 
         onClick: function (e) {
@@ -213,6 +223,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
 
             if (this.model) this.listenTo(this.model, 'change', this.options.update || this.update);
+            if (this.options.dontProcessOnMobile) {
+                this.$el.attr('dontProcessOnMobile', true);
+                this.$ul.attr('dontProcessOnMobile', true);
+            }
         },
 
         update: function () {

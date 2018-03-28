@@ -12,259 +12,257 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-#io-ox-notifications {
+#io-ox-appcontrol #io-ox-toprightbar #io-ox-notifications-display {
 
-    position: absolute;
-    //over UI but under dropdowns
-    z-index: 11;
+    color: #333;
     font-size: 14px;
-    top: 64px;
     background-color: @notification-pane-background;
     background-clip: padding-box;
-    display: none;
+
+    right: 12px;
+    position: fixed;
+    top: @appcontrol-height;
+    max-height:  ~"calc(100% - @{appcontrol-height} - 8px)";
+    overflow: auto;
 
     min-height: 200px;
-    max-height: 80%;
-    -webkit-box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
-    box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
-    .overflow-x(hidden);
-    .overflow-y(auto);
 
     &:focus {
         outline: 0;
     }
 
-    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
-        //fill screen, looks weird otherwise
-        width: 100%;
-        max-height: 100%;
-        z-index: 30;
-        bottom: 0;
-        top: 40px;
-        position: fixed;
-        &.active {
-            display:block;
-        }
-    }
     // brackets needed or addition will not perform correctly. => Rule is ignored
     @media (min-width: (@smartphone-breakpoint + 1)) {
         width: 350px;
-        right: -350px;
-         &.active {
-            right: 20px;
-        }
-    }
-
-    &.active { display: block; }
-
-    #io-ox-notifications-display {
-
-        padding: 24px 14px;
-        list-style-type: none; //no dots here
-
-        // special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
-        .span-to-div {
-            display: block;
-            line-height: 24px;
-
-            &.location,&.title {
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        .items{
-            //prevent busy spinner from overlapping
-            min-height: 20px;
-            margin-bottom: 8px;
-        }
-
-        .desktop-notification-info {
-            padding: 5px 14px 10px 14px;
-            background-color: rgba(0, 0, 0, 0.05);
-
-            .button-wrapper {
-                display: flex;
-                justify-content: space-between;
-            }
-            .enable-button, .disable-button, .later-button {
-                // smaller padding so all buttons fit into one line
-                padding: 4px 8px;
-            }
-            &.clickable {
-                cursor: pointer;
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.08);
-                }
-            }
-        }
-        .notification-area-header {
-            margin: 0 0 9px 0;
-        }
-
-        .notification-area-title {
-            font-weight: 300;
-            font-size: 16px;
-            line-height: 20px;
-            margin: 0;
-            padding: 0 14px;
-            border: 0;
-            display: inline-block;
-        }
-
-        .clear-area-button {
-             float: right;
-             line-height: 20px;
-             margin: 0 14px 0 0;
-             padding: 0;
-             color: #767676;
-             font-size: 18px;
-        }
-
-        .hide-area-button {
-            padding: 3px 14px 0 14px;
-            display: block;
-            text-align: left;
-        }
-
-        .section-title {
-
-            font-family: @light-font-family;
-            font-weight: 300;
-            font-size: 16px;
-            line-height: 24px;
-            margin: 15px 0 1px 0;
-            padding: 0 14px;
-            border: 0;
-            display: inline-block;
-        }
-
-        .clear-button {
-             float: right;
-             line-height: 24px;
-             margin: 14px 14px 0 0;
-             padding: 0;
-             color: #767676;
-             font-size: 18px;
-        }
-
-        .notifications:first-child {
-            margin-top: 0;
-        }
-
-        .item {
-            .notification-info {
-                color: #767676;
-            }
-
-            .notification-item-actions {
-                height: 16px;
-
-                .clear-single-button {
-                    float: right;
-                    line-height: 13px;
-                    padding: 0;
-                    color: #767676;
-                    font-size: 14px;
-                    display: none;
-
-                    &:focus {
-                        display: inline-block;
-                        text-decoration: underline;
-                    }
-
-                    &:hover {
-                        display: inline-block;
-                        text-decoration: underline;
-                    }
-                }
-            }
-
-            color: #767676;
-            padding: 8px 14px;
-
-            &:last-child {
-                border-bottom: 0;
-            }
-
-            &.has-focus {
-                outline: 1px solid rgba(0, 0, 0, 0.30);
-                background-color: rgba(0, 0, 0, 0.05);
-                .clear-single-button {
-                    display: inline-block;
-                }
-            }
-
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.05);
-                .clear-single-button {
-                    display: inline-block;
-                }
-            }
-
-            .title {
-                color: #333;
-                pointer-events: none;
-                font-weight: bold;
-                .ellipsis();
-            }
-
-            .subject {
-                .ellipsis();
-                pointer-events: none;
-            }
-
-            .empty {
-                font-style: italic;
-                color: #aaa;
-            }
-
-            .content {
-                color: #aaa;
-                line-height: 16px;
-                max-height: 5 * 16px; /* 5 rows */
-                margin-top: 3px;
-                .ellipsis();
-            }
-
-            .time {
-                float: right;
-            }
-
-            .location {
-                color: #666;
-            }
-
-            .actions {
-                text-align: right;
-                margin: 5px 0;
-            }
-            .open-in-calendar {
-                padding: 0;
-            }
-        }
-
-        .open-app {
-            padding: 7px 14px;
-        }
     }
 
     @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
-        #io-ox-notifications-display {
-            padding: 8px 14px 14px 14px;
+        width: 100%;
+        right: 0;
+        bottom: 0;
+        top: @appcontrol-height-smartphone;
+        max-height: none;
+    }
 
-            .notification-area-title {
-                font-size: 20px;
+    padding: 24px 14px;
+    list-style-type: none; //no dots here
+
+    // special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
+    .span-to-div {
+        display: block;
+        line-height: 24px;
+
+        &.location,&.title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .items{
+        //prevent busy spinner from overlapping
+        min-height: 20px;
+        margin-bottom: 8px;
+    }
+
+    .desktop-notification-info {
+        padding: 5px 14px 10px 14px;
+        background-color: rgba(0, 0, 0, 0.05);
+
+        .button-wrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+        .enable-button, .disable-button, .later-button {
+            // smaller padding so all buttons fit into one line
+            padding: 4px 8px;
+        }
+        &.clickable {
+            cursor: pointer;
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.08);
             }
+        }
+    }
+    .notification-area-header {
+        margin: 0 0 9px 0;
+    }
 
-            .item {
-                background-color: rgba(0, 0, 0, 0.05);
+    .notification-area-title {
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 20px;
+        margin: 0;
+        padding: 0 14px;
+        border: 0;
+        display: inline-block;
+    }
+
+    .clear-area-button {
+         float: right;
+         line-height: 20px;
+         margin: 0 14px 0 0;
+         padding: 0;
+         color: #767676;
+         font-size: 18px;
+    }
+
+    .hide-area-button {
+        padding: 3px 14px 0 14px;
+        display: block;
+        text-align: left;
+    }
+
+    .section-title {
+
+        font-family: @light-font-family;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+        margin: 15px 0 1px 0;
+        padding: 0 14px;
+        border: 0;
+        display: inline-block;
+    }
+
+    .clear-button {
+         float: right;
+         line-height: 24px;
+         margin: 14px 14px 0 0;
+         padding: 0;
+         color: #767676;
+         font-size: 18px;
+    }
+
+    .notifications:first-child {
+        margin-top: 0;
+    }
+
+    .item {
+        .notification-info {
+            display: block;
+            color: #767676;
+        }
+
+        .notification-item-actions {
+            height: 16px;
+
+            .clear-single-button {
+                float: right;
+                width: 12px;
+                line-height: 13px;
+                padding: 0;
+                color: #767676;
+                font-size: 14px;
+                display: none;
+
+                &:focus {
+                    display: inline-block;
+                    text-decoration: underline;
+                }
+
+                &:hover {
+                    display: inline-block;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        color: #767676;
+        padding: 8px 14px;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        &.has-focus {
+            outline: 1px solid rgba(0, 0, 0, 0.30);
+            background-color: rgba(0, 0, 0, 0.05);
+            .clear-single-button {
+                display: inline-block;
+            }
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            .clear-single-button {
+                display: inline-block;
+            }
+        }
+
+        .title {
+            color: #333;
+            pointer-events: none;
+            font-weight: bold;
+            .ellipsis();
+        }
+
+        .subject {
+            .ellipsis();
+            pointer-events: none;
+        }
+
+        .empty {
+            font-style: italic;
+            color: #aaa;
+        }
+
+        .content {
+            color: #aaa;
+            line-height: 16px;
+            max-height: 5 * 16px; /* 5 rows */
+            margin-top: 3px;
+            .ellipsis();
+        }
+
+        .time {
+            float: right;
+        }
+
+        .location {
+            color: #666;
+        }
+
+        .actions {
+            text-align: right;
+            margin: 5px 0;
+        }
+        .open-in-calendar {
+            padding: 0;
+        }
+    }
+
+    .open-app {
+        padding: 7px 14px;
+    }
+}
+
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
+
+    #io-ox-notifications-sidepopup {
+        width: 100%;
+        bottom: 0;
+        top: @appcontrol-height-smartphone;
+        position: fixed;
+    }
+
+    #io-ox-notifications-display {
+        padding: 8px 14px 14px 14px;
+
+        .notification-area-title {
+            font-size: 20px;
+        }
+
+        .item {
+            background-color: rgba(0, 0, 0, 0.05);
+            margin-bottom: 8px;
+            .clear-single-button {
+                display: inline-block;
             }
         }
     }
 }
 
-.touch #io-ox-notifications #io-ox-notifications-display .item .clear-single-button {
+.touch #io-ox-notifications-display .item .clear-single-button {
      //no hover on touch devices, so always show single hide buttons
      display: inline-block;
 }
@@ -293,22 +291,6 @@
         margin-bottom: 0.5em;
         box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.80);
     }
-}
-
-@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
-    #io-ox-notifications-icon.launcher a.notifications-icon {
-        i {
-            display: none;
-        }
-
-        .badge {
-            top: initial;
-            left: initial;
-            vertical-align: initial;
-            padding: 2px 8px;
-        }
-    }
-    .notifications-open { display:none; } // To hide mobile portal when notifications area is open on mobile devices
 }
 
 // small screens (mobile)

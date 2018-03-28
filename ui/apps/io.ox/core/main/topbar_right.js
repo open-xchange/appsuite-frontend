@@ -82,11 +82,11 @@ define('io.ox/core/main/topbar_right', [
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness!
                 // only requests are delayed by 5s, the badge is drawn normally
-                self.append(notifications.attach(addLauncher, DELAY));
+                self.append(notifications.attach(DELAY));
             } else {
                 //lets wait till we are online
                 ox.once('connection:online', function () {
-                    self.append(notifications.attach(addLauncher, DELAY));
+                    self.append(notifications.attach(DELAY));
                 });
             }
         }

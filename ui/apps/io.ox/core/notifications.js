@@ -15,136 +15,129 @@
 
 define('io.ox/core/notifications', [
     'io.ox/core/extensions',
-    'io.ox/core/notifications/badgeview',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/yell',
     'io.ox/core/desktopNotifications',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/a11y'
-], function (ext, badgeview, yell, desktopNotifications, settings, gt, a11y) {
+], function (ext, Dropdown, yell, desktopNotifications, settings, gt, a11y) {
 
     'use strict';
 
     var NotificationsModel = Backbone.Model.extend({
         defaults: {
             subviews: {},
-            status: 'closed', //possible states 'closed', 'open', 'sidepopup'
             sidepopup: null,
             markedForRedraw: {}
         }
     });
+
     var NotificationsView = Backbone.View.extend({
-        tagName: 'div',
-        id: 'io-ox-notifications-display',
-        events: {
-            'click .clear-area-button': 'hide',
-            'click .hide-area-button': 'hideAll',
-            'keydown': 'onKeydown',
-            'focus *': 'focusHover'
-        },
+        tagName: 'a',
+        className: 'dropdown-toggle',
         initialize: function () {
-            var self = this;
-            self.bannerHeight = 0;
-            self.handledNotificationInfo = false;
-            this.badgeview = new badgeview.view({ model: new badgeview.model() });
 
-            this.badgeview.$el.on('keydown', function (e) {
-                // open on space key, up and down arrow, just like a dropdown
-                // if already open, focus first item (last on arrow up)
-                if (e.which === 32 || e.which === 40) {
-                    e.stopPropagation();
-                    if (self.isOpen()) {
-                        // try to focus first item
-                        var firstItem = a11y.getTabbable(self.nodes.main).first();
-                        if (firstItem.length > 0) firstItem.focus();
-                    }
-                    self.show();
-                } else if (e.which === 38) {
-                    e.stopPropagation();
-                    if (self.isOpen()) {
-                        // try to focus last item
-                        var lastItem = a11y.getTabbable(self.nodes.main).last();
-                        if (lastItem.length > 0) lastItem.focus();
-                    }
-                    self.show({ focus: 'last' });
-                }
-            });
-            //close when clicked outside, since we don't have the overlay anymore
-            //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
-            $(document.body).on('click', function (e) {
-                // don't check if notification area is closed
-                if (self.getStatus() !== 'closed') {
-                    var isInside = $(e.target)
-                        .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
+            this.$el.attr('role', 'menu');
+            this.$el.attr({
+                'data-toggle': 'dropdown',
+                href: '#'
+            }).append($('<span class="badge" aria-hidden="true">').append(
+                $('<span class="number">')
+            ));
+            this.listNode = $('<ul href="#" id="io-ox-notifications-display" class="dropdown-menu dropdown-menu-right">')
+                .on('focus', '*', this.focusHover.bind(this))
+                .on('keydown', this.onKeydown.bind(this))
+                .on('click blur focusout', this.keepOpen);
 
-                    if (!isInside) {
-                        self.hide({ refocus: document.body === document.activeElement });
-                    }
-                }
+            this.dropdown = new Dropdown({
+                tagName: 'li',
+                id: 'io-ox-notifications-icon',
+                className: 'launcher dropdown notifications-icon',
+                $ul: this.listNode,
+                $toggle: this.$el,
+                keep: true,
+                smart: false,
+                dontProcessOnMobile: true
             });
+
+            this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">').on('click', this.keepOpen);
+
+            this.delayedRender = _.debounce(this.render, 100);
         },
+
+        keepOpen: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        },
+
         registerSubview: function (subview) {
             var subviews = this.model.get('subviews'),
                 self = this;
-            //prevent overwriting of existing subviews
+            // prevent overwriting of existing subviews
             if (!subviews[subview.model.get('id')]) {
                 subviews[subview.model.get('id')] = subview;
 
-                //always draw at least one time (to keep the order )
-                self.model.get('markedForRedraw')[subview.model.get('id')] = true;
+                // always draw at least one time (to keep the order )
+                this.model.get('markedForRedraw')[subview.model.get('id')] = true;
 
                 subview.collection.on('add reset remove', function (collection) {
                     if (!collection.subviewId) {
-                        //sometimes the first parameter is a model and not a collection (add event)
+                        // sometimes the first parameter is a model and not a collection (add event)
                         collection = collection.collection;
                     }
                     self.model.get('markedForRedraw')[collection.subviewId] = true;
-                    self.delayedUpdate();
+                    self.delayedRender();
                 });
 
-                subview.on('autoopen', _.bind(self.show, self));
-                subview.on('responsive-remove', _.bind(function () {
-                    if (self.$el.children('.notifications').length === 0) {
-                        self.render();
-                    }
+                subview.on('autoopen', _.bind(function () {
+                    self.render();
+                    self.dropdown.open();
                 }, self));
-
-                this.badgeview.registerView(subview);
+                self.delayedRender();
             }
             return subview;
         },
+
         render: function () {
             var self = this,
                 subviews = this.model.get('subviews'),
+                count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
                 markedForRedraw = this.model.get('markedForRedraw');
 
+            //#. %1$d number of notifications in notification area
+            //#, c-format
+            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(count);
             this.model.set('markedForRedraw', {});
 
-            self.$el.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();
+            self.listNode.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();
             _(markedForRedraw).each(function (value, id) {
                 if (value) {
-                    subviews[id].render(self.$el);
+                    subviews[id].render(self.listNode);
                 }
             });
 
-            if (self.$el.children('.notifications').length === 0) {
-                self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
+            if (this.listNode.children('.notifications').length === 0) {
+                this.listNode.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
             } else {
                 //draw headline
-                self.$el.prepend(
+                this.listNode.prepend(
                     $('<div class=notification-area-header>').append(
                         $('<h1 class="notification-area-title">').text(gt('Notifications')),
-                        $('<button type="button" class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
+                        $('<button type="button" class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area'))
+                            .on('click', _(self.dropdown.close).bind(self.dropdown)),
                         //#. Hides all current notifications (invitations, reminder etc.) for half an hour.
-                        $('<button type="button" class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
+                        $('<button type="button" class="btn btn-link hide-area-button">').text(gt('Notify me again later')).on('click', _(self.hideAll).bind(self))
                     )
                 );
             }
             // add show desktopNotifications info
-            self.drawNotificationInfo();
-
-            return self;
+            this.drawNotificationInfo();
+            // only show when count is bigger than 0
+            this.$el.toggle(count !== 0);
+            return this;
         },
+
         drawNotificationInfo: function () {
 
             // only show if there was no decision yet
@@ -185,15 +178,13 @@ define('io.ox/core/notifications', [
                         laterButton.remove();
                         enableButton.remove();
                         disableButton.remove();
-                        self.hideNotificationInfo = true;
+                        self.dropdown.$el.one('hidden.bs.dropdown', function () {
+                            containerNode.remove();
+                        });
                     },
                     containerNode = $('<div class="desktop-notification-info clearfix">').append(textNode, $('<div class="button-wrapper">').append(enableButton, disableButton, laterButton));
 
-                if (self.hideNotificationInfo) {
-                    cleanup();
-                }
-
-                this.$el.prepend(containerNode);
+                this.listNode.prepend(containerNode);
             }
         },
 
@@ -205,11 +196,11 @@ define('io.ox/core/notifications', [
                 cont = function () {
                     // open dialog first to be visually responsive
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        self.nodes.sidepopup.attr('data-cid', cid).appendTo('#io-ox-windowmanager-pane');
+                        self.sidepopupNode.attr('data-cid', cid).appendTo(_.device('smartphone') ? 'body' : '#io-ox-windowmanager-pane');
                         // open SidePopup without arrow
                         var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
-                            .setTarget(self.nodes.sidepopup.empty())
-                            .show({ target: self.nodes.sidepopup.empty() }, function (popup) {
+                            .setTarget(self.sidepopupNode.empty())
+                            .show({ target: self.sidepopupNode.empty() }, function (popup) {
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
                                     node.css({
@@ -218,20 +209,16 @@ define('io.ox/core/notifications', [
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
                                 var cont = function (data) {
-                                    //work with real model view or just draw method with baton
+                                    // work with real model view or just draw method with baton
                                     if (renderer.View) {
                                         var view = new renderer.View({ data: data }, options);
                                         popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                                     } else {
                                         popup.idle().append(renderer.draw({ data: data }, options).addClass('no-padding'));
                                     }
-
-                                    if (_.device('smartphone')) {
-                                        self.nodes.main.removeClass('active');
-                                    }
                                     return data;
                                 };
-                                //check if data is deferred
+                                // check if data is deferred
                                 if (data.then) {
                                     // fetch proper item now
                                     popup.busy();
@@ -240,12 +227,11 @@ define('io.ox/core/notifications', [
                                     cont(data);
                                 }
                             });
-                        self.model.set('status', 'sidepopup');
                         self.model.set('sidepopup', popup);
                         popup.on('close', $.proxy(self.onCloseSidepopup, self));
                     });
                 };
-            //if there is a sidepopup that is about to close we wait for this to avoid sideeffects
+            // if there is a sidepopup that is about to close we wait for this to avoid sideeffects
             if (self.model.get('sidepopup') && self.sidepopupIsClosing) {
                 self.model.get('sidepopup').one('close', cont);
             } else {
@@ -260,8 +246,8 @@ define('io.ox/core/notifications', [
                 // left or up arrow
                 case 37:
                 case 38:
-                    items = this.nodes.main.find('.item');
-                    closest = $(e.target).closest('.item', this.nodes.main);
+                    items = this.listNode.find('.item');
+                    closest = $(e.target).closest('.item', this.listNode);
                     var prevIndex = items.length - 1;
                     if (closest.length) {
                         // add length once to avoid negative modulo operation, javascript has some issues with these
@@ -273,8 +259,8 @@ define('io.ox/core/notifications', [
                 // right or down arrow
                 case 39:
                 case 40:
-                    items = this.nodes.main.find('.item');
-                    closest = $(e.target).closest('.item', this.nodes.main);
+                    items = this.listNode.find('.item');
+                    closest = $(e.target).closest('.item', this.listNode);
                     var nextIndex = 0;
                     if (closest.length) {
                         nextIndex = (_(items).indexOf(closest[0]) + 1) % items.length;
@@ -284,7 +270,7 @@ define('io.ox/core/notifications', [
                 // tab
                 case 9:
                     // build a tabTrap so the menu behaves like a dropdown
-                    items = a11y.getTabbable(this.nodes.main);
+                    items = a11y.getTabbable(this.listNode);
                     if (e.shiftKey && items[0] === e.target) {
                         e.preventDefault();
                         items[items.length - 1].focus();
@@ -301,27 +287,22 @@ define('io.ox/core/notifications', [
 
         // focus on an element inside an item should highlight the item as if the mouse hovers over it
         focusHover: function (e) {
-            this.nodes.main.find('.item').removeClass('has-focus');
-            $(e.target).closest('.item', this.nodes.main).addClass('has-focus');
+            this.listNode.find('.item').removeClass('has-focus');
+            $(e.target).closest('.item', this.listNode).addClass('has-focus');
         },
 
         onCloseSidepopup: function () {
             this.sidepopupIsClosing = false;
-            // if the notification area is closed already we don't set the status back to open etc
-            if (this.model.get('status') !== 'closed') {
-                this.model.set('status', 'open');
-                if (_.device('smartphone')) {
-                    this.nodes.main.addClass('active');
-                }
-                //focus first for now
-                this.nodes.main.find('.item').first().focus();
+            if (this.listNode.find('.item:visible')) {
+                // focus first for now
+                this.listNode.find('.item').first().focus();
             }
 
             var self = this,
                 popup = this.model.get('sidepopup');
             if (popup) {
                 popup.off('close');
-                self.nodes.sidepopup.attr('data-cid', null).detach();
+                self.sidepopupNode.attr('data-cid', null).detach();
             }
             this.model.set('sidepopup', null);
         },
@@ -334,168 +315,40 @@ define('io.ox/core/notifications', [
 
         closeSidepopup: function () {
             if (this.model.get('sidepopup')) {
-                //popups close with a delay of 100ms, causes strange behavior if we open a new one during that time
+                // popups close with a delay of 100ms, causes strange behavior if we open a new one during that time
                 this.sidepopupIsClosing = true;
                 this.model.get('sidepopup').close();
             }
         },
 
-        getSidepopup: function () {
-            return this.model.get('sidepopup');
-        },
-
-        getStatus: function () {
-            return this.model.get('status');
-        },
-
-        isOpen: function () {
-            return this.model.get('status') !== 'closed';
-        },
-
-        toggle: function () {
-            if (this.isOpen()) this.hide(); else this.show();
-        },
-
-        show: function (options) {
-            options = options || {};
-            // if it's open already we're done
-            if (this.isOpen()) return;
-
-            if (_.device('smartphone')) {
-                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
-            }
-
-            this.nodes.main.addClass('active');
-            this.badgeview.onToggle(true);
-
-            $(document).on('keydown.notification', $.proxy(function (e) {
-                // if esc is pressed inside a dropdown menu we close the dropdown menu not the notificion are. Same goes for the sidepopup
-                if (e.which === 27 && !(this.model.get('sidepopup')) && !$(e.target).closest('.dropdown-menu', this.nodes.main).length) {
-                    this.hide();
-                }
-            }, this));
-
-            // set initial focus on first or last item; focus badge otherwise
-            var focusItem = a11y.getTabbable(this.nodes.main);
-            if (options.focus === 'last') {
-                focusItem = focusItem.last();
-            } else {
-                focusItem = focusItem.first();
-            }
-            if (focusItem.length > 0) focusItem.focus(); else this.badgeview.$el.focus();
-
-            this.model.set('status', 'open');
-            this.trigger('show');
-        },
-
-        hide: function (opt) {
-            opt = _.extend({ refocus: true }, opt || {});
-            $(document).off('keydown.notification');
-            var badgeview = this.badgeview;
-            // if it's closed already we're done
-            if (!this.isOpen()) return;
-
-            badgeview.setNotifier(false);
-
-            this.closeSidepopup();
-            this.nodes.main.removeClass('active');
-            badgeview.onToggle(false);
-
-            if (_.device('smartphone')) {
-                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
-            }
-            // disable refocus f.e. when triggerd by click on searchbox
-            if (opt.refocus) badgeview.$el.focus();
-
-            if (this.hideNotificationInfo) {
-                this.$el.find('.desktop-notification-info').remove();
-                this.hideNotificationInfo = false;
-                this.handledNotificationInfo = true;
-            }
-            this.model.set('status', 'closed');
-            this.trigger('hide');
-        },
-
-        nodes: {
-            main: $('<div>').attr({
-                tabindex: -1,
-                id: 'io-ox-notifications'
-            }),
-            sidepopup: $('<div>').attr({
-                id: 'io-ox-notifications-sidepopup'
-            })
-        },
-
         //delay only affects requests, not the drawing of the badge
         attach: function (addLauncher, delay) {
+            var self = this;
 
-            //view
-            var self = this,
-                badgeview = this.badgeview;
-
-            $('#io-ox-core').prepend(
-                self.nodes.main.append(this.el)
-            );
-
-            //close if count set to 0
-            badgeview.on('auto-close', function () {
-                //if there is an open popup, wait till this is closed
-                if (self.getStatus() === 'sidepopup') {
-                    self.model.get('sidepopup').one('close', _.bind(self.hide, self));
-                } else {
-                    self.hide();
-                }
-            });
-
-            //add initial no notifications message
-            self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
-            self.drawNotificationInfo();
+            this.drawNotificationInfo();
 
             // load and invoke plugins with delay
             setTimeout(function () {
                 ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
                     ext.point('io.ox/core/notifications/register').invoke('register', self, self);
                 });
+
+                // don't overlap ads
+                self.listNode.css({
+                    top: self.listNode.css('top') + $('#io-ox-appcontrol')[0].offsetTop,
+                    left: self.listNode.css('left') + window.outerWidth - $('#io-ox-appcontrol').outerWidth()
+                });
             }, delay || 5000);
 
-            return addLauncher(
-                'right',
-                badgeview.render().$el,
-                $.proxy(this.toggle, this)
-            ).attr('id', 'io-ox-notifications-icon');
-        },
-        delayedUpdate: function () {
-            //delays updating by 100ms (prevents updating the view multiple times in a row)
-            var self = this;
-            if (!this.updateTimer) {
-                this.updateTimer = setTimeout(function () {
-                    self.update();
-                    self.updateTimer = undefined;
-                }, 100);
-            }
-        },
-        updateNotification: function () {
-            this.badgeview.setNotifier(true);
-            this.delayedUpdate();
-        },
-        update: function () {
-
             this.render();
+
+            return this.dropdown.render().$el;
         },
 
         yell: yell
     });
 
     var view = new NotificationsView({ model: new NotificationsModel() });
-
-    // auto-close if other apps are started or app is changed see bug #32768
-    // users might open mails from notification area, open a contact halo, clicking edit
-    ox.on('app:start app:resume', function () {
-        if (view.badgeview) {
-            //don't trigger to early
-            view.hide();
-        }
-    });
 
     return view;
 });
