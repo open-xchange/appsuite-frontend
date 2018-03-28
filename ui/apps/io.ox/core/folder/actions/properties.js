@@ -84,22 +84,35 @@ define('io.ox/core/folder/actions/properties', [
     //     }
     // });
 
+    // ext.point('io.ox/core/folder/actions/properties').extend({
+    //     id: 'caldav-url',
+    //     index: 300,
+    //     render: function () {
+    //         if (!capabilities.has('caldav')) return;
+    //         var module = this.model.get('module');
+    //         // show CalDAV URL for calendar and task folders (tasks only supports private folders)
+    //         // users requires "caldav" capability
+    //         if (module !== 'calendar' && (module !== 'tasks' || this.model.is('private'))) return;
+    //         this.$body.append(
+    //             group(gt('CalDAV URL'),
+    //                 caldavConfig.get('url')
+    //                     .replace('[hostname]', location.host)
+    //                     .replace('[folderId]', this.model.get('id'))
+    //             )
+    //         );
+    //     }
+    // });
+
     ext.point('io.ox/core/folder/actions/properties').extend({
         id: 'caldav-url',
         index: 300,
         render: function () {
-            if (!capabilities.has('caldav')) return;
-            var module = this.model.get('module');
-            // show CalDAV URL for calendar and task folders (tasks only supports private folders)
-            // users requires "caldav" capability
-            if (module !== 'calendar' && (module !== 'tasks' || this.model.is('private'))) return;
-            this.$body.append(
-                group(gt('CalDAV URL'),
-                    caldavConfig.get('url')
-                        .replace('[hostname]', location.host)
-                        .replace('[folderId]', this.model.get('id'))
-                )
-            );
+            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties'),
+                usedForSync = extendedProperties.usedForSync || {};
+            if (!usedForSync || usedForSync.value !== 'true') return;
+            var url = this.model.get('com.openexchange.caldav.url');
+            if (!url) return;
+            this.$body.append(group(gt('CalDAV URL'), url));
         }
     });
 

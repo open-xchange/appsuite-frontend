@@ -516,6 +516,12 @@ define('io.ox/core/folder/contextmenu', [
                 if (_.device('smartphone')) return;
                 if (baton.module !== 'calendar') return;
 
+                // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
+                var provider = baton.data['com.openexchange.calendar.provider'],
+                    extendedProperties = baton.data['com.openexchange.calendar.extendedProperties'],
+                    usedForSync = extendedProperties.usedForSync || {};
+                if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
+
                 contextUtils.addLink(this, {
                     action: 'properties',
                     data: { baton: baton, id: String(baton.data.id) },
