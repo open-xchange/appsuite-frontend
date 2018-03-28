@@ -379,7 +379,7 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
 
-            var $content = $(content.get(baton.data).content), resizing = false;
+            var $content = $(content.get(baton.data).content), resizing = 0;
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -403,14 +403,15 @@ define('io.ox/mail/detail/view', [
 
             function onWindowResize(e) {
                 // avoid event-based recursion
-                if (!resizing) resizing = true; else return;
+                if (resizing <= 0) resizing = 2; else return;
                 // revert outer size to support shrinking
                 e.data.iframe.height('');
                 onImmediateResize.call(this, e);
                 // we need to wait until allowing further resize events
                 // setTimeout is bad because we don't know how long to wait exactly
                 // requestAnimationFrame seems to be the proper tool
-                requestAnimationFrame(function () { resizing = false; });
+                // we will have two events so we use a countdown to track this
+                this.requestAnimationFrame(function () { resizing--; });
             }
 
             // track images since they can change dimensions
