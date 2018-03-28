@@ -1274,6 +1274,21 @@ define('io.ox/files/main', [
             if (_.device('smartphone') || !capabilities.has('search')) return;
             if (!app.isFindSupported()) return;
             app.initFind();
+
+            function registerHandler(model, find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.listControl.$el.find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.listControl.$el.find('.grid-options:first').show();
+                    }
+                });
+            }
+
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
         },
 
         // respond to search results
