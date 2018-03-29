@@ -23,8 +23,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, FolderAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, FolderAPI, MailAPI, DocConverterUtils, Util, Settings, CoreSettings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -693,14 +694,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             } else {
                 this.currentlyDrawn = model;
                 // draw toolbar
-                var favoriteCollection = FolderAPI.pool.getCollection('virtual/favorites/infostore'),
-                    favorites = [];
-                if (favoriteCollection) {
-                    _.each(favoriteCollection.models, function (model) {
-                        favorites.push(_.extend(model.pick('folder_id', 'id'), { isFolder: model.isFolder() }));
-                    });
-                }
-
                 var origData = model.get('origData'),
                     toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
@@ -712,7 +705,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         models: isDriveFile ? [model] : null,
                         data: isDriveFile ? model.toJSON() : origData,
                         openedBy: this.openedBy,
-                        favorites: favorites
+                        favorites: CoreSettings.get('favorites/infostore', [])
                     }),
                     appName = model.get('source'),
                     self = this,
