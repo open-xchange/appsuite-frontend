@@ -344,8 +344,10 @@ define('io.ox/calendar/week/view', [
                         };
 
                         self.gridSize = 60 / settings.get('interval', 30);
+                        var timelineContainer = self.timeline.parent();
                         self.renderTimeslots();
                         self.applyTimeScale();
+                        timelineContainer.append(self.timeline);
 
                         // if this function is called while the calendar app is not visible we get wrong height measurements
                         // so wait until the next show event, to calculate correctly
