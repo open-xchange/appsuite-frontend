@@ -136,6 +136,10 @@
 
     $(window).resize(_.recheckDevice);
 
+    $(document).on('shown.bs.popover hide.bs.popover', function (e) {
+        $(e.target).toggleClass('popover-open', e.type === 'shown');
+    });
+
     //
     // Cookie handling
     //
