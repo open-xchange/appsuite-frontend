@@ -303,32 +303,30 @@ define('io.ox/calendar/edit/main', [
                     this.model.trigger('update');
                 }
 
-                // TODO can this be removed?
-                /*if (this.moveAfterSave) {
+                if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
-                        fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
-                        self = this;
+                        fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true });
                     //update last modified parameter not to run into a conflict error
-                    this.model.set('last_modified', data.last_modified, { silent: true });
-                    api.move(this.model.toJSON(), this.moveAfterSave).then(function () {
+                    // this.model.set('lastModified', data.lastModified, { silent: true });
+                    api.move(this.model, this.moveAfterSave).then(function () {
                         delete self.moveAfterSave;
                         save();
                     }, fail);
-                } else {*/
-                this.model.adjustEndDate = false;
-                this.considerSaved = true;
-                self.getWindow().idle();
-                this.quit();
-                //}
+                } else {
+                    this.model.adjustEndDate = false;
+                    this.considerSaved = true;
+                    self.getWindow().idle();
+                    this.quit();
+                }
             },
 
-            onError: function (error) {
+            onError: function (error, options) {
 
-                /*// restore state of model attributes for moving
+                // restore state of model attributes for moving
                 if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
                     this.model.set('folder', this.moveAfterSave, { silent: true });
                 }
-                delete this.moveAfterSave;*/
+                delete this.moveAfterSave;
                 this.getWindow().idle();
 
                 // restore times (we add a day before saving allday appointments)
@@ -339,8 +337,9 @@ define('io.ox/calendar/edit/main', [
                 }
                 // when to do what?
                 // show validation errors inline -> dont yell
+                // show server errors caused by move (whatever that might be) -> yell
                 // show server errors caused -> yell
-                if (error) notifications.yell(error);
+                if (error && (options && options.isMoveOperation)) notifications.yell(error);
             },
 
             failSave: function () {

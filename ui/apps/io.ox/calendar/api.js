@@ -527,7 +527,7 @@ define('io.ox/calendar/api', [
                             folder: model.get('folder'),
                             targetFolder: targetFolderId,
                             recurrenceId: model.get('recurrenceId'),
-                            timestamp: model.get('lastModified')
+                            timestamp: model.get('timestamp')
                         }
                     });
                 });
