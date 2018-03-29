@@ -622,7 +622,7 @@ define('io.ox/calendar/week/view', [
                 // switch mouse events
                 switch (e.type) {
                     case 'mousedown':
-                        if (self.lasso === false && $(e.target).hasClass('timeslot')) {
+                        if (e.which === 1 && self.lasso === false && $(e.target).hasClass('timeslot')) {
                             self.lasso = true;
                             self.mousedownAt = e.pageY + self.pane.scrollTop();
                         }
