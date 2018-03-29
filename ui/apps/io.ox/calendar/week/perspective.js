@@ -433,7 +433,7 @@ define('io.ox/calendar/week/perspective', [
             // watch for api refresh
             api
                 .on('refresh.all', reload)
-                .on('create update delete', _.debounce(function () {
+                .on('process:create update delete', _.debounce(function () {
                     var collection = self.view.collection;
                     // set all other collections to expired to trigger a fresh load on the next opening
                     api.pool.grep('view=week').forEach(function (c) {

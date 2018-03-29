@@ -175,7 +175,7 @@ define('io.ox/calendar/list/perspective', [
                 app.listView.reload();
             });
 
-            api.on('create', function (data) {
+            api.on('process:create', function (data) {
                 app.listView.collection.once('reload', function () {
                     app.listView.selection.set([util.cid(data)]);
                 });
