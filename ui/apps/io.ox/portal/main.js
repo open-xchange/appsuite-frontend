@@ -622,14 +622,16 @@ define('io.ox/portal/main', [
 
     // mail push, needs extra handling
     app.mailWidgetRefresh = function () {
-        _(widgets.getEnabled()).chain().filter(function (model) {
-            return model.get('type') === 'mail';
-        }).each(function (model, index) {
-            if (model.get('baton')) {
-                model.get('baton').collection.expired = true;
-            }
-            app.refreshWidget(model, index);
-        });
+        _(widgets.getEnabled()).chain()
+            .filter(function (model) {
+                return model.get('type') === 'mail';
+            })
+            .each(function (model, index) {
+                if (model.get('baton')) {
+                    model.get('baton').collection.expire();
+                }
+                app.refreshWidget(model, index);
+            });
     };
 
     ox.on('refresh^', function () {

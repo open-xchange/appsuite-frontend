@@ -613,7 +613,7 @@ define('io.ox/mail/main', [
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
-                    app.listView.collection.expired = true;
+                    app.listView.collection.expire();
                 }
                 app.listView.model.set('thread', !!value);
             });
@@ -1972,9 +1972,7 @@ define('io.ox/mail/main', [
                 folderAPI.reload(data.folder);
                 // push arries, other folder selected
                 if (data.folder !== app.folder.get(data.folder)) {
-                    _(api.pool.getByFolder(data.folder)).each(function (collection) {
-                        collection.expired = true;
-                    });
+                    _(api.pool.getByFolder(data.folder)).invoke('expire');
                 } else {
                     app.listView.reload();
                 }

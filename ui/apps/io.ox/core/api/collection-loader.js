@@ -133,7 +133,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             }
 
             this.loading = true;
-            collection.expired = false;
             _.defer(process.bind(this), params, 'load');
             return collection;
         };
@@ -150,7 +149,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             params.limit = offset + ',' + (collection.length + this.SECONDARY_PAGE_SIZE);
             this.loading = true;
 
-            collection.expired = false;
             _.defer(process.bind(this), params, 'paginate');
             return collection;
         };
@@ -165,7 +163,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             params.limit = '0,' + Math.max(collection.length + (tail || 0), this.PRIMARY_PAGE_SIZE);
             this.loading = true;
 
-            collection.expired = false;
             _.defer(process.bind(this), params, 'reload');
             return collection;
         };
