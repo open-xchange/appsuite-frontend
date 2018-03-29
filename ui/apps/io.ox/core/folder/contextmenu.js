@@ -174,7 +174,7 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
-                var folderId = baton.app.folder.get(),
+                var folderId = baton.data.id || baton.app.folder.get(),
                     model = api.pool.getModel(folderId);
 
                 if (!api.can('rename', baton.data)) return;
@@ -204,7 +204,7 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!api.can('remove:folder', baton.data)) return;
-                var folderId = baton.app.folder.get(),
+                var folderId = baton.data.id || baton.app.folder.get(),
                     model = api.pool.getModel(folderId);
                 contextUtils.addLink(this, {
                     action: 'delete',
