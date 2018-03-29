@@ -105,6 +105,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             $('<h4 id="dialog-title">').text(gt('Change confirmation status'))
                         );
                         this.getContentNode().append(
+                            confirmId !== ox.user_id ? $('<div class="alert alert-info">').text(gt('You are currently acting on behalf of the calendar owner.')) : '',
                             $('<p>').text(
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
                             ),
@@ -112,6 +113,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 description
                             ),
                             $('<div class="form-group">').css({ 'margin-top': '20px' }).append(
+                                //#. is in the same window as "You are about to change your confirmation status. Please leave a comment for other participants". So "comment" should be translated the same in both cases to not confuse users
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')).append(
                                     $('<span class="sr-only">').text((data.summary || data.title) + ' ' + gt('Please comment your confirmation status.'))
                                 ),
