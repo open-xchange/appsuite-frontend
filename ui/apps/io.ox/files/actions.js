@@ -202,8 +202,17 @@ define('io.ox/files/actions', [
             return isValid(e.baton.data);
         },
         multiple: function (list) {
-            ox.load(['io.ox/files/actions/download']).done(function (action) {
-                action(list);
+            var url = list.length === 1 ?
+                api.getUrl(_(list).first(), 'download') :
+                api.getUrl(list, 'zip');
+
+            // download via iframe or window open
+            require(['io.ox/core/download'], function (download) {
+                if (_.device('ios')) {
+                    download.window(url);
+                } else {
+                    download.url(url);
+                }
             });
         }
     });

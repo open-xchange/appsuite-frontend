@@ -413,9 +413,9 @@ bl@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
-blankshield@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/blankshield/-/blankshield-0.6.1.tgz#2947daa7c74f2d5da350cf6b225cc9a754fabc3d"
+blankshield@0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/blankshield/-/blankshield-0.6.2.tgz#1b60f3fc3e3fae939a4d1596c37406dd0024ee3e"
 
 blob@0.0.4:
   version "0.0.4"

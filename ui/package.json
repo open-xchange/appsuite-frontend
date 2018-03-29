@@ -62,7 +62,7 @@
     "backbone": "1.3.3",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
-    "blankshield": "0.6.1",
+    "blankshield": "0.6.2",
     "bootstrap": "3.3.7",
     "bootstrap-datepicker": "git://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
     "bootstrap-tokenfield": "git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07",
