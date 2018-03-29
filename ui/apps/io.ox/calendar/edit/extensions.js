@@ -556,41 +556,13 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'private_flag',
         index: 1100,
-        className: 'col-sm-5 col-xs-10',
+        className: 'col-sm-6 col-xs-12',
         render: function () {
 
             // visibility flag only works in private folders
             var folder = this.model.get('folder');
             if (!folderAPI.pool.getModel(folder).is('private')) return;
 
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Visibility')),
-                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
-                        { value: 'PUBLIC', label: gt('Standard') },
-                        { value: 'CONFIDENTIAL', label: gt('Private') },
-                        { value: 'PRIVATE', label: gt('Secret') }]
-                    }).render().$el,
-                    new mini.ErrorView({ name: 'class', model: this.model }).render().$el
-                )
-            );
-
-        }
-    }, {
-        nextTo: 'alarms',
-        rowClass: 'collapsed'
-    });
-
-    // visibility helper
-    point.extend({
-        id: 'visibility-helper',
-        index: 1150,
-        className: 'col-sm-1 col-xs-2',
-        render: function () {
-
-            // visibility flag only works in private folders
-            var folder = this.model.get('folder');
-            if (!folderAPI.pool.getModel(folder).is('private')) return;
             var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="left" data-content=" ">').append('<i class="fa fa-question-circle">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
                     '<div class="ox-popover-title">' + gt('Standard') + '</div>' +
@@ -606,7 +578,13 @@ define('io.ox/calendar/edit/extensions', [
 
             this.$el.append(
                 $('<fieldset>').append(
-                    helpNode
+                    $('<legend class="simple">').text(gt('Visibility')).append(helpNode),
+                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
+                        { value: 'PUBLIC', label: gt('Standard') },
+                        { value: 'CONFIDENTIAL', label: gt('Private') },
+                        { value: 'PRIVATE', label: gt('Secret') }]
+                    }).render().$el,
+                    new mini.ErrorView({ name: 'class', model: this.model }).render().$el
                 )
             );
 
