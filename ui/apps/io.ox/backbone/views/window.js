@@ -20,8 +20,8 @@ define('io.ox/backbone/views/window', [
     'use strict';
 
     var collection = new Backbone.Collection(),
-        // selector vor container
-        container = '#io-ox-screens',
+        // selector for window container for convenience purpose
+        container = '#io-ox-core',
         // used when dragging, prevents iframe event issues
         backdrop = $('<div id="floating-window-backdrop">');
 
@@ -224,6 +224,11 @@ define('io.ox/backbone/views/window', [
             collection.each(function (windowModel) { windowModel.trigger('deactivate'); });
             this.$el.addClass('active');
             this.model.set('active', true);
+
+            // if this window does not have the focus, focus it now
+            if (this.$el.has(document.activeElement).length === 0) {
+                a11y.getTabbable(this.$body).first().focus();
+            }
 
             if (this.model.get('lazy')) return this.model.set('lazy', false);
 

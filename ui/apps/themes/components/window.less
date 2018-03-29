@@ -480,12 +480,12 @@
 .floating-window {
 
     position: absolute;
-    // higher than sidepopup
-    z-index: 5;
+    // higher than taskbar
+    z-index: 12;
     background: transparent;
     outline: 0;
     &.active {
-        z-index: 7;
+        z-index: 14;
     }
     .floating-window-content {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -612,7 +612,7 @@
 
 // used to prevent iframe issues when dragging
 #floating-window-backdrop {
-    z-index: 6;
+    z-index: 13;
     height: 100%;
     width: 100%;
     top: 0;
