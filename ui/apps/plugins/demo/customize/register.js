@@ -34,7 +34,7 @@ define('plugins/demo/customize/register', [
         '    <div class="modal-content">' +
         '      <div class="modal-header">' +
         '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-        '        <h5 class="modal-title">Customization Wizard</h5>' +
+        '        <h5 class="modal-title">Branding Wizard</h5>' +
         '      </div>' +
         '      <div class="modal-body container-fluid">' +
         // top bar
@@ -57,6 +57,15 @@ define('plugins/demo/customize/register', [
         '          <div class="col-xs-6"><label>Selection</label><br><input type="color" data-name="selectionColor"></div>' +
         '          <div class="col-xs-6 text-right"><label>Links</label><br><input type="color" data-name="linkColor"></div>' +
         '        </div>' +
+        // folder tree
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-6"><label>Tree color</label><br><input type="color" data-name="treeFgColor"></div>' +
+        '          <div class="col-xs-6 text-right"><label>Tree background</label><br><input type="color" data-name="treeBgColor"></div>' +
+        '        </div>' +
+        // office bar
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-6"><label>Office bar</label><br><input type="color" data-name="officebarColor"></div>' +
+        '        </div>' +
         // logo
         '        <div class="row form-group">' +
         '          <div class="col-xs-12"><label><input type="checkbox" checked="checked" data-name="showLogo"> Show logo</label></div>' +
@@ -68,8 +77,10 @@ define('plugins/demo/customize/register', [
         '        <div class="row form-group">' +
         '          <div class="col-xs-6 text-left"><a href="#" class="apply-preset">Browse presets</a></div>' +
         '          <div class="col-xs-6 text-right">' +
-        '            <a href="#" class="store-model">Store</a> &bull; ' +
-        '            <a href="#" class="restore-model">Restore</a>' +
+        '            <a href="#" class="reset-model">Reset</a>' +
+        // hide these for the moment as the localStorage gets cleared regularly
+        // '            <a href="#" class="store-model">Store</a> &bull; ' +
+        // '            <a href="#" class="restore-model">Restore</a>' +
         '          </div>' +
         '        </div>' +
         '      </div>' +
@@ -89,7 +100,7 @@ define('plugins/demo/customize/register', [
 
     var fields = $('#customize-dialog input[data-name]'),
         defaults = {
-            topbarSize: 0, topbarGradient: 0, url: '', productName: '**OX** App Suite', showLogo: false
+            topbarSize: 3, topbarGradient: 0, url: '', productName: '**OX** App Suite', showLogo: false
         },
         presets = [
             { topbarColor1: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
@@ -115,8 +126,8 @@ define('plugins/demo/customize/register', [
 
     function gradient(model) {
         var type = model.get('topbarGradient'),
-            color1 = model.get('topbarColor1'),
-            color2 = model.get('topbarColor2');
+            color1 = model.get('topbarColor1') || '#000',
+            color2 = model.get('topbarColor2') || '#000';
         switch (type) {
             // two-color
             case 1: return gradientStr(180, color1, color2);
@@ -128,29 +139,28 @@ define('plugins/demo/customize/register', [
     }
 
     var updateStylesheet = _.debounce(function () {
-
         $('#customize-css').text(
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
             '#io-ox-appcontrol {\n' +
             '  color: white; background-color: ' + model.get('topbarColor1') + ';\n' +
-            '  background-image: ' + gradient(model) + ' !important; z-index: 0;\n' +
+            '  background-image: ' + gradient(model) + (model.has('topbarColor1') || gradient(model) !== 'none' ? '!important' : '') + ';\n' +
             '}\n' +
             '#io-ox-appcontrol:before { display: none; }\n' +
             '#io-ox-appcontrol .banner-logo {\n' +
             '  width: 60px; height: 100%;\n' +
             '  background-position: left center; background-origin: content-box; background-repeat: no-repeat;\n' +
             '}\n' +
+            '#io-ox-appcontrol > div { display: flex; align-items: center; }\n' +
             '#io-ox-top-productname { font-size: 24px; line-height: 32px; font-weight: 300; white-space: nowrap; margin: 0 16px; }\n' +
             '#io-ox-banner .banner-logo.left { background-position: left; left: 0; }\n' +
-            '.hide-small-logo #io-ox-top-logo-small { display: none; }\n' +
-            '#io-ox-core { z-index: 1; }\n' +
+            '.hide-small-logo #io-ox-top-logo { display: none; }\n' +
             // selection
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
             '.list-view.visible-selection.has-focus .list-item.selected:focus,\n' +
             '.list-view.visible-selection.has-focus .list-item.selected:hover,\n' +
             '.list-view.visible-selection.has-focus .list-item.selected:focus:hover,\n' +
-            '.folder-tree .folder .selectable:focus,\n' +
+            '.folder-tree.visible-selection .selectable:focus > .folder-node,\n' +
             '.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected {\n' +
             '  background-color: ' + model.get('selectionColor') + ';\n' +
             '}\n' +
@@ -160,20 +170,26 @@ define('plugins/demo/customize/register', [
             '.mail-item div.subject i.icon-unread, .mail-item.unread .unread-toggle {\n' +
             '  color: ' + model.get('linkColor') + ';\n' +
             '}\n' +
+            // folder tree
+            '.folder-tree { \n' +
+            '  background-color: ' + model.get('treeBgColor') + ';\n' +
+            '  color: ' + model.get('treeFgColor') + ';\n' +
+            '}\n' +
             // buttons
             '.btn-primary, .btn-primary:hover, .btn-primary:focus, .primary-action .btn.btn-primary, .feedback-button {\n' +
             '  background-color: ' + model.get('linkColor') + ' !important;\n' +
             '  border-color: ' + model.get('linkColor') + ';\n' +
             '}\n' +
             '.list-view.visible-selection .list-item.selected i.fa,\n' +
-            '.mail-item.visible-selection .selected .thread-size { color: rgba(255, 255, 255, 0.5); }'
+            '.mail-item.visible-selection .selected .thread-size { color: rgba(255, 255, 255, 0.5); }\n' +
+            '.io-ox-office-main.io-ox-office-edit-main>.view-pane.top-pane { background-color: ' + model.get('officebarColor') + '; }\n'
         );
     }, 50);
 
     //
     // Colors
     //
-    model.on('change:topbarColor1 change:topbarColor2 change:selectionColor change:linkColor change:topbarGradient', updateStylesheet);
+    model.on('change:topbarColor1 change:topbarColor2 change:selectionColor change:linkColor change:topbarGradient change:officebarColor change:treeFgColor change:treeBgColor', updateStylesheet);
 
     function applytopbarSize() {
         var value = 39 + model.get('topbarSize') * 8;
@@ -199,7 +215,7 @@ define('plugins/demo/customize/register', [
             .replace(/\|\|([^|]+)\|\|/g, '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
             .replace(/\|([^|]+)\|/g, '<span style="opacity: 0.5;">$1</span>');
         var $name = $('#io-ox-top-productname');
-        if (!$name.length) $name = $('<div id="io-ox-top-productname">').insertBefore('#io-ox-top-logo-small');
+        if (!$name.length) $name = $('<div id="io-ox-top-productname">').insertBefore('#io-ox-top-logo');
         $name.html(value);
     });
 
@@ -207,7 +223,7 @@ define('plugins/demo/customize/register', [
     // Show logo
     //
     model.on('change:showLogo', function (model, value) {
-        $('#io-ox-top-logo-small').toggle(value);
+        $('#io-ox-top-logo').toggle(value);
     });
 
     //
@@ -248,25 +264,21 @@ define('plugins/demo/customize/register', [
         applytopbarSize();
     };
 
-    var url = '';
+    var url = '',
+        defaultImage;
 
     function updateLogo() {
         if (url !== '') {
-            // create image instance to get dimensions
-            var img = new Image();
-            img.src = url;
             // apply logo
-            $('#io-ox-top-logo-small')
-                .css('height', 'auto')
-                .find('img').attr('src', url);
+            $('#io-ox-top-logo').find('img').attr('src', url);
             model.set('showLogo', true);
         } else {
-            $('#io-ox-top-logo-small')
-                .css('height', '22px')
-                .find('img').attr('src', 'apps/themes/default/logo-large.png');
+            var image = $('#io-ox-top-logo').find('img');
+            if (!defaultImage) defaultImage = image.attr('src');
+            else image.attr('src', defaultImage);
             $('#customize-dialog input[type="file"]').val('');
         }
-        $('#io-ox-top-logo-small > img').css('maxHeight', $('#io-ox-appcontrol').height());
+        $('#io-ox-top-logo > img').css('maxHeight', $('#io-ox-appcontrol').height());
     }
 
     // on change color
@@ -299,7 +311,6 @@ define('plugins/demo/customize/register', [
 
     // on select file
     $('#customize-dialog input[type="file"]').on('change', function () {
-
         var file = this.files[0];
 
         if (!file) return;
@@ -327,6 +338,13 @@ define('plugins/demo/customize/register', [
         var index = current + (e.shiftKey ? -1 : +1);
         index = (presets.length + index) % presets.length;
         applyPreset(index);
+    });
+
+    $('#customize-dialog .reset-model').on('click', function (e) {
+        e.preventDefault();
+        model.clear();
+        url = '';
+        updateLogo();
     });
 
     //
