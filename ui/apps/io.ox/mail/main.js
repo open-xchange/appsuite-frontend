@@ -137,6 +137,11 @@ define('io.ox/mail/main', [
                 })
             });
 
+            // destroy popovers
+            app.pages.getPage('detailView').on('pagebeforehide', function () {
+                $(this).find('.popover-open').popover('destroy');
+            });
+
             // important
             // tell page controller about special navigation rules
             app.pages.setBackbuttonRules({
