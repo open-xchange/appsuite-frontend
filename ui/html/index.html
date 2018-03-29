@@ -242,7 +242,6 @@
             <iframe src="javascript:false" name="store-credentials" width="0" height="0" tabindex="-1" title="empty" style="display:none"></iframe>
         </div>
         <script>
-            /* inject correct language here at the very start manually*/
           (function () {
             var language = (navigator.language || navigator.userLanguage).substr(0, 2),
               messages = {
@@ -252,7 +251,7 @@
               };
 
             var msg = messages[language] || messages['en'];
-            document.getElementById('timeout-error').innerHTML = '<span>' + msg[0] +'</span><a href="#" class="timeout-reload">' + msg[1] + '</a>';
+            document.getElementById('timeout-error').innerHTML = '<span>' + msg[0] +'</span><br><a href="#" class="timeout-reload">' + msg[1] + '</a>';
           }());
         </script>
         <script src="<%= base %>/boot.js"></script>
