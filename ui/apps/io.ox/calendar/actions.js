@@ -321,7 +321,8 @@ define('io.ox/calendar/actions', [
                     },
                     target: baton.target,
                     title: gt('Move'),
-                    type: 'move'
+                    type: 'move',
+                    all: util.getCurrentRangeOptions()
                 });
             });
         }

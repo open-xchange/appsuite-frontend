@@ -507,7 +507,8 @@ define('io.ox/calendar/api', [
                 return obj.pick('id', 'folder', 'recurrenceId');
             },
 
-            move: function (list, targetFolderId) {
+            move: function (list, targetFolderId, options) {
+                options = options || {};
                 list = [].concat(list);
                 var models = _(list).map(function (obj) {
                     var cid = util.cid(obj),
@@ -519,16 +520,23 @@ define('io.ox/calendar/api', [
 
                 http.pause();
                 _(models).map(function (model) {
+                    var params = {
+                        action: 'move',
+                        id: model.get('id'),
+                        folder: model.get('folder'),
+                        targetFolder: targetFolderId,
+                        recurrenceId: model.get('recurrenceId'),
+                        timestamp: model.get('timestamp'),
+                        fields: api.defaultFields
+                    };
+                    if (options.expand) {
+                        params.expand = true;
+                        params.rangeStart = options.rangeStart;
+                        params.rangeEnd = options.rangeEnd;
+                    }
                     return http.PUT({
                         module: 'chronos',
-                        params: {
-                            action: 'move',
-                            id: model.get('id'),
-                            folder: model.get('folder'),
-                            targetFolder: targetFolderId,
-                            recurrenceId: model.get('recurrenceId'),
-                            timestamp: model.get('timestamp')
-                        }
+                        params: params
                     });
                 });
                 return http.resume().then(function (data) {
@@ -546,7 +554,10 @@ define('io.ox/calendar/api', [
                         def.resolve(data);
                     }
                     return def;
-                }).then(processResponse).done(function (list) {
+                }).then(function (data) {
+                    data.forEach(processResponse);
+                    return data;
+                }).done(function (list) {
                     _(list).each(function (obj) {
                         api.trigger('move:' + util.cid(obj), targetFolderId);
                     });
@@ -774,7 +785,7 @@ define('io.ox/calendar/api', [
             var cid = _.cid(data),
                 model = this.getModel(cid);
             if (!model || (_.isEqual(data.startDate, model.get('startDate'))
-                && _.isEqual(data.endDate, model.get('endDate')))) return this.propagateAdd(data);
+                && _.isEqual(data.endDate, model.get('endDate')) && data.folder === model.get('folder'))) return this.propagateAdd(data);
             var oldCollections = this.getCollectionsByModel(model),
                 newCollections = this.getCollectionsByModel(data);
             // collections which formerly contained that model but won't contain it in the future

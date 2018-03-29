@@ -306,9 +306,7 @@ define('io.ox/calendar/edit/main', [
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true });
-                    //update last modified parameter not to run into a conflict error
-                    // this.model.set('lastModified', data.lastModified, { silent: true });
-                    api.move(this.model, this.moveAfterSave).then(function () {
+                    api.move(this.model, this.moveAfterSave, util.getCurrentRangeOptions()).then(function () {
                         delete self.moveAfterSave;
                         save();
                     }, fail);
