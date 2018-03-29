@@ -185,9 +185,12 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
 
             function cont(model) {
-                return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
+                var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
+                return $.when(def, util.isBossyAppointmentHandling({ app: e.baton.data, invert: true })).then(function (folder, isBossy) {
                     var attendees = model.get('attendees') || [],
-                        iamUser = !!_(attendees).findWhere({ entity: ox.user_id });
+                        user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                        iamUser = !!_(attendees).findWhere({ entity: user });
+
                     return e.collection.has('one') && iamUser && isBossy;
                 });
             }
@@ -506,16 +509,32 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
-            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'ACCEPTED';
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.attendees) return false;
+
+            var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
+            return def.then(function (folder) {
+                var attendees = e.baton.data.attendees || [],
+                    user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                    iamUser = !!_(attendees).findWhere({ entity: user });
+
+                return iamUser && _(attendees).findWhere({ entity: user }).partStat !== 'ACCEPTED';
+            });
         },
         action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
-            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'DECLINED';
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.attendees) return false;
+
+            var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
+            return def.then(function (folder) {
+                var attendees = e.baton.data.attendees || [],
+                    user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                    iamUser = !!_(attendees).findWhere({ entity: user });
+
+                return iamUser && _(attendees).findWhere({ entity: user }).partStat !== 'DECLINED';
+            });
         },
         action: acceptDecline
     });

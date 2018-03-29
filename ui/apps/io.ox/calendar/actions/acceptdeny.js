@@ -53,10 +53,13 @@ define('io.ox/calendar/actions/acceptdeny', [
                 }
 
                 folder = folderData;
-                message = util.getConfirmationMessage(o, !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                // check for which id the user wants to confirm (secretary function)
+                var confirmId = !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id;
+
+                message = util.getConfirmationMessage(o, confirmId);
 
                 var alarmsModel,
-                    previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: ox.user_id });
+                    previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: confirmId });
 
                 if (!options.taskmode) {
                     if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
