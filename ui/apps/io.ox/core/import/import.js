@@ -204,7 +204,7 @@ define('io.ox/core/import/import', [
                             }
                         });
                     if (invalid) return $.Deferred().reject();
-                    return folderAPI.create(folder, { title: $.trim(title), module: module })
+                    return folderAPI.create(folder, { title: $.trim(title), module: module === 'calendar' ? 'event' : module })
                         .fail(notifications.yell);
                 },
                 getFolder: function () {
@@ -243,7 +243,13 @@ define('io.ox/core/import/import', [
                     this.close();
                 },
                 onCompleteFail: function (data) {
-                    if (!id && this.tempFolder && this.model.get('module') === 'calendar') folderAPI.remove(this.tempFolder.id);
+                    if (!id && this.tempFolder && this.model.get('module') === 'calendar') {
+                        var parent = this.tempFolder.folder_id;
+                        folderAPI.remove(this.tempFolder.id).then(function () {
+                            folderAPI.pool.unfetch(parent);
+                            folderAPI.refresh();
+                        });
+                    }
                     this.onPartialFail(data);
                 }
             })
