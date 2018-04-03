@@ -194,7 +194,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/edit-copy', {
         requires: validDraft,
         action: function (baton) {
-            var data = baton.first();
+            var data = _.extend({}, baton.first());
 
             api.copy(data, data.folder_id).done(function (list) {
                 api.refresh();
