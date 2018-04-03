@@ -332,7 +332,7 @@ define('io.ox/core/main/topbar_right', [
             function updatePicture() {
                 a.empty().append(
                     contactAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden"true">')
+                        $('<div class="contact-picture" aria-hidden="true">')
                         .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }
