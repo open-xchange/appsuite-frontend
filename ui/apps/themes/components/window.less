@@ -539,6 +539,10 @@
         width: 1060px;
         height: ~"calc(100% - 72px)";
 
+        @media (max-height: 750px) {
+            height: 100%;
+        }
+
         .floating-header .controls button[data-action="maximized"] {
             display: none;
         }
