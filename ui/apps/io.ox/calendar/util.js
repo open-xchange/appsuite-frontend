@@ -718,6 +718,10 @@ define('io.ox/calendar/util', [
             return event;
         },
 
+        getAttendeeName: function (data) {
+            return data ? data.cn || data.mail || data.uri : '';
+        },
+
         getNote: function (data, prop) {
             // calendar: description, tasks: note
             prop = prop || 'description';
