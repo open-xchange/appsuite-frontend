@@ -343,7 +343,6 @@ define('io.ox/backbone/views/window', [
             this.model.trigger('lazyload');
         },
 
-
         onRemove: function () {
             var model = this.model;
             var siblings = this.$el.siblings();
@@ -361,7 +360,7 @@ define('io.ox/backbone/views/window', [
                         // Reset focus to foldertree of current App if visible
                         $('.folder-tree:visible .folder.selected').focus();
                     } else {
-                        a11y.getFirstFocusableListItem($('.window-container:visible').first()).visibleFocus();
+                        a11y.focusListSelection($('.window-container:visible').first());
                     }
                     collection.remove(model);
                 }
