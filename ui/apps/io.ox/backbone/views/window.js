@@ -231,7 +231,7 @@ define('io.ox/backbone/views/window', [
             }
 
             if (this.model.get('lazy')) return this.model.set('lazy', false);
-
+            this.keepInWindow();
             ox.trigger('change:document:title', this.model.get('title'));
         },
 
