@@ -85,6 +85,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                     var node = nodes[i], ai = 0, attr;
                     while (attr = node.attributes[ai++]) {
                         if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
+                        if (attr.name === 'data-toggle') { node.removeAttribute(attr.name); }
                     }
                 }
                 e.content = tmp.innerHTML;
