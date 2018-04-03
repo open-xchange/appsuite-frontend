@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-28 15:19+0200\n"
+"PO-Revision-Date: 2018-04-03 12:27+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -16,11 +16,11 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
-msgstr "Jaunas tikšanās izveide"
+msgstr "Jauna mītiņa izveide"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Jaunas tikšanās izveidošanai, rīkjoslā noklikšķiniet uz Jauns."
+msgstr "Jaunas mītiņa izveidošanai, rīkjoslā noklikšķiniet uz Jauns."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -31,8 +31,8 @@ msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
 msgstr ""
-"Ievadiet tikšanās tēmu, kā arī sākuma un beigu datumus. Pārējā informācija "
-"ir papildus un nav obligāta."
+"Ievadiet mītiņa tēmu, kā arī sākuma un beigu datumus. Pārējā informācija ir "
+"papildus un nav obligāta."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating recurring appointments"
@@ -43,8 +43,8 @@ msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"Atkārtotu tikšanās reižu izveidošanai aktivizējiet izvēlnes rūtiņu "
-"'Atkārtot', kā rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
+"Atkārtotu mītiņu izveidošanai aktivizējiet izvēlnes rūtiņu 'Atkārtot', kā "
+"rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Using the reminder function"
@@ -65,7 +65,7 @@ msgid ""
 "the upper right side."
 msgstr ""
 "Lai uzaicinātu citus dalībniekus ievadiet viņu vārdus laukā zem "
-"'Dalībnieki'. Lai izvairītos no tikšanās laiku konfliktiem noklikšķiniet uz "
+"'Dalībnieki'. Lai izvairītos no mītiņu laiku konfliktiem noklikšķiniet uz "
 "'Atrast brīvu laiku' augšējā labajā malā."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -75,7 +75,7 @@ msgstr "Pielikumu pievienošana"
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr ""
-"Zemāk jūs variet tikšanās informācijai pievienot atbilstošus pievienojumus."
+"Zemāk jūs variet mītiņu informācijai pievienot atbilstošus pievienojumus."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating the appointment"
@@ -109,7 +109,7 @@ msgid ""
 "selected time range."
 msgstr ""
 "Kalendāra skati parāda kalendāra lapu izvēlētajam laika apgabalam ar tajā "
-"atzīmētām tikšanās reizēm."
+"atzīmētiem mītiņiem."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -121,8 +121,8 @@ msgid ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 msgstr ""
-"Saraksta skatā tiek parādītas visas pašreizējā mapē esošās tikšanās. "
-"Noklikšķinot uz tikšanās ieraksta, detaļu skatā tiek parādīta tikšanās "
+"Saraksta skatā tiek parādīti visi pašreizējā mapē esošie mītiņi. "
+"Noklikšķinot uz mītiņa ieraksta, detaļu skatā tiek parādīta mītiņa "
 "informācija un būtiskākās pārvaldības funkcijas."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -656,8 +656,8 @@ msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
 msgstr ""
-"Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, tikšanās "
-"reizēm un sociālo tīklu jaunumiem."
+"Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, mītiņiem "
+"un sociālo tīklu jaunumiem."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
@@ -706,11 +706,11 @@ msgstr "Iestatījumu atvēršana"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
-"Lai atvērtu iestatījumus, noklikšķiniet uz sistēmas izvēlņu ikonas izvēlņu "
-"joslas augšējā labajā malā un izvēlieties iestatījumu izvēlni."
+"Lai atvērtu iestatījumus, noklikšķiniet uz lietotāja ikonas izvēļņu joslas "
+"augšējā labajā malā un izvēlieties iestatījumu izvēlni."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -742,15 +742,15 @@ msgstr "Palīga atvēršana"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Lai atvērtu palīgu, noklikšķiniet uz sistēmas ikonas izvēlņu joslas labajā "
+"Lai atvērtu palīgu, noklikšķiniet uz lietotāja ikonas izvēļņu joslas labajā "
 "malā un izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz izvēlētajai "
 "aplikācijai atbilstošā palīdzības informācija. Lai pārlūkotu visu palīdzības "
-"informāciju, noklikšķiniet uz sākuma lapas, vai arī uz satura izvēlnes loga "
+"informāciju, noklikšķiniet uz sākuma lapas, vai arī uz Satura izvēlnes loga "
 "augšējā daļā."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -764,6 +764,13 @@ msgid ""
 msgstr ""
 "Lai atslēgtos no sistēmas noklikšķiniet uzsistēmas izvēlņu ikonas izvēlņu "
 "joslas augšējā labajā malā un izvēlieties izvēlni 'Atslēgties'."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr ""
+"Lai atslēgtos, noklikšķiniet uz atslēgšanās ikonas izvēļņu joslas labajā "
+"malā."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -860,6 +867,25 @@ msgstr ""
 "Lai rediģētu vairākus uzdevumus vienlaicīgi aktivizējiet izvēles rūtiņas "
 "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, rīkjoslas labajā "
 "malā noklikšķiniet uz Skats > Izvēles rūtiņas."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Lai atvērtu iestatījumus, noklikšķiniet uz sistēmas izvēlņu ikonas "
+#~ "izvēlņu joslas augšējā labajā malā un izvēlieties iestatījumu izvēlni."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Lai atvērtu palīgu, noklikšķiniet uz sistēmas ikonas izvēlņu joslas "
+#~ "labajā malā un izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz "
+#~ "izvēlētajai aplikācijai atbilstošā palīdzības informācija. Lai pārlūkotu "
+#~ "visu palīdzības informāciju, noklikšķiniet uz sākuma lapas, vai arī uz "
+#~ "satura izvēlnes loga augšējā daļā."
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "
