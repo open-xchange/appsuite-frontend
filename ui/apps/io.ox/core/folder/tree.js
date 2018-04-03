@@ -110,6 +110,7 @@ define('io.ox/core/folder/tree', [
             this.onAppear(id, function () {
                 // defer selection; might be too fast otherwise
                 _.defer(this.selection.set.bind(this.selection, id));
+                this.trigger('afterAppear');
             });
         },
 
