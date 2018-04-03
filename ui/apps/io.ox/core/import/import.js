@@ -31,6 +31,7 @@ define('io.ox/core/import/import', [
         render: function (baton) {
             baton.module = this.model.get('module');
             if (!/^(calendar)$/.test(baton.module)) return;
+            if (baton.model.get('folderId')) return;
             this.$body.append(
                 $('<div class="form-group">').append(
                     mini.getInputWithLabel('folderName', gt('Folder name'), this.model)
