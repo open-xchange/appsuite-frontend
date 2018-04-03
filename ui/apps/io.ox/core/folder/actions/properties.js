@@ -147,8 +147,6 @@ define('io.ox/core/folder/actions/properties', [
         id: 'last-updated',
         index: 600,
         render: function () {
-            var provider = this.model.get('com.openexchange.calendar.provider');
-            if (provider !== 'ical') return;
             var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties');
             if (!extendedProperties || !extendedProperties.lastUpdate) return;
             this.$body.append(
