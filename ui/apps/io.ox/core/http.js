@@ -219,6 +219,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '401': 'full_time'
             },
             'folders': {
+                // please note: Any changes inside the folders must be communicated to the MW such that
+                // the rampup attribute folderList contains the correct columns and can be mapped
                 '1': 'id',
                 '2': 'created_by',
                 '3': 'modified_by',
