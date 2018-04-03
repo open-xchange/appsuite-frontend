@@ -259,6 +259,9 @@ define('io.ox/core/import/import', [
                     notifications.yell('error', gt('Please select a valid iCal File to import'));
                     this.idle();
                     return;
+                } else if (!id && !this.model.get('folderName')) {
+                    notifications.yell('error', gt('You must enter a folder name'));
+                    return this.idle();
                 }
                 this.getFolder().then(function (folder) {
                     self.tempFolder = folder;
@@ -269,7 +272,10 @@ define('io.ox/core/import/import', [
                         ignoreUIDs: self.model.get('ignoreUuids'),
                         folder: folder.id
                     });
+                }, function fail(error) {
+                    notifications.yell(error);
                 }).then(function (data) {
+                    if (!data) return self.idle();
                     // get failed records
                     var failed = _.filter(data, function (item) {
                             return item && item.error;
