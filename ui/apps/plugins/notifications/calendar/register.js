@@ -113,18 +113,16 @@ define('plugins/notifications/calendar/register', [
                             this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
                             var currentPage =  this.pages.getCurrentPage();
                             // resume calendar app
-                            if (currentPage && currentPage.perspective) {
+                            if (currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
                                 var e = $.Event('click', { target: currentPage.perspective.main });
                                 currentPage.perspective.setNewStart = true;
                                 currentPage.perspective.showAppointment(e, options, { arrow: false });
                             } else {
                                 // perspective is not initialized yet on newly launched calendar app
-                                var self = this;
-                                this.on('aftershow:done', function (perspective) {
+                                this.once('aftershow:done', function (perspective) {
                                     var e = $.Event('click', { target: perspective.main });
                                     perspective.setNewStart = true;
                                     perspective.showAppointment(e, options, { arrow: false });
-                                    self.off('aftershow:donw');
                                 });
                             }
                         });
