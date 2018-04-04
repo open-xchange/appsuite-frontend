@@ -490,7 +490,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         this.setPlainText = function (str) {
             // clean up
             str = trimEnd(str);
-            if (!str) return;
+            if (_.isUndefined(str)) return;
             require(['io.ox/mail/detail/content'], function (proc) {
                 set(proc.text2html(str));
                 ed.undoManager.clear();
