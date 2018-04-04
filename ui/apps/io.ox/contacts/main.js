@@ -415,10 +415,7 @@ define('io.ox/contacts/main', [
                     gt('Back')
                 );
 
-            // TODO restore last folder as starting point
-            app.pages.showPage('listView');
         },
-
         'toolbars-mobile': function () {
 
             if (!_.device('smartphone')) return;
