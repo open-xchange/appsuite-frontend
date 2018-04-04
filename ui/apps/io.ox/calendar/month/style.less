@@ -53,10 +53,13 @@
         .backface-visibility(hidden);
 
         .smartphone & {
-            overflow: hidden;
-
             .month {
-                height: ~"calc(100% - 100px)";
+                // 102 = caption-height (100) + border (2)
+                height: ~"calc(100% - 102px)";
+
+                .list.abs {
+                    overflow: hidden;
+                }
             }
         }
 

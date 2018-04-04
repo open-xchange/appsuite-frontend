@@ -268,6 +268,7 @@ define('io.ox/calendar/month/view', [
                     .find('> .day').addClass('borderbottom');
 
                 if (_.device('smartphone')) {
+                    this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
                     // on mobile we switch to the day view after a tap
                     // on a day-cell was performed
                     this.$el.on('tap', '.day', function () {
