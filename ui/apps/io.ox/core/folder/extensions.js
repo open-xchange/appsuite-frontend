@@ -870,9 +870,9 @@ define('io.ox/core/folder/extensions', [
             id: 'divider-1',
             index: 200,
             draw: function () {
-                if (!capabilities.has('calendar_schedjoules')) return;
-                if (!capabilities.has('calendar_google')) return;
-                if (!capabilities.has('calendar_ical')) return;
+                if (!capabilities.has('calendar_schedjoules') &&
+                    !capabilities.has('calendar_google') &&
+                    !capabilities.has('calendar_ical')) return;
 
                 this.divider();
                 this.header(gt('Subscribe to calendar'));
