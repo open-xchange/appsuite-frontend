@@ -24,10 +24,10 @@ define('io.ox/calendar/actions/subscribe-ical', [
 
     'use strict';
 
-    function iCalProbe(model, sendCredentials) {
+    function iCalProbe(model) {
         var config = { uri: model.get('uri') };
-        if (sendCredentials && model.get('ical-user')) config.login = model.get('ical-user');
-        if (sendCredentials && model.get('ical-pw')) config.password = model.get('ical-pw');
+        if (model.get('ical-user')) config.login = model.get('ical-user');
+        if (model.get('ical-pw')) config.password = model.get('ical-pw');
         return http.PUT({
             module: 'chronos/account',
             params: {
@@ -53,26 +53,59 @@ define('io.ox/calendar/actions/subscribe-ical', [
     });
 
     ext.point('io.ox/calendar/subscribe/ical').extend({
-        id: 'credentials',
+        id: 'hidden',
         index: 200,
         render: function () {
-            var guid;
             this.$body.append(
-                $('<form class="credential-wrapper" autocomplete="off">').hide().append(
-                    // prepend these to inputs to capture autofill in most browsers if the user has saved his credentials
-                    $('<input type="text">').hide(),
-                    $('<input type="password">').hide(),
-                    $('<div class="alert alert-warning">').text(
-                        gt('Authentication failed. Please fill in login and password.')
-                    ),
-                    $('<div class="form-group">').append(
-                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Login')),
-                        new mini.InputView({ name: 'ical-user', model: this.model, id: guid, autocomplete: false }).render().$el
-                    ),
-                    $('<div class="form-group">').append(
-                        $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Password')),
-                        new mini.PasswordView({ name: 'ical-pw', model: this.model, id: guid, autocomplete: false }).render().$el
-                    )
+                // prepend these to inputs to capture autofill in most browsers if the user has saved his credentials
+                $('<input type="text">').hide(),
+                $('<input type="password">').hide()
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/subscribe/ical').extend({
+        id: 'alert',
+        index: 300,
+        render: function (baton) {
+            if (!baton.data.type) return;
+            if (!baton.data.text) return;
+
+            this.$body.append(
+                $('<div class="alert">').addClass('alert-' + baton.data.type).text(
+                    baton.data.text
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/subscribe/ical').extend({
+        id: 'login',
+        index: 400,
+        render: function (baton) {
+            if (!baton.data.showLogin) return;
+
+            var guid = _.uniqueId('form-control-label-');
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label>').attr('for', guid).text(gt('Login')),
+                    new mini.InputView({ name: 'ical-user', model: this.model, id: guid, autocomplete: false }).render().$el
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/subscribe/ical').extend({
+        id: 'password',
+        index: 500,
+        render: function (baton) {
+            if (!baton.data.showPassword) return;
+
+            var guid = _.uniqueId('form-control-label-');
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label>').attr('for', guid).text(gt('Password')),
+                    new mini.PasswordView({ name: 'ical-pw', model: this.model, id: guid, autocomplete: false }).render().$el
                 )
             );
         }
@@ -87,19 +120,30 @@ define('io.ox/calendar/actions/subscribe-ical', [
             width: 500
         })
         .addCancelButton()
-        .addButton({ label: 'Subscribe', action: 'subscribe' })
+        .addButton({ label: gt('Subscribe'), action: 'subscribe' })
         .on('subscribe', function () {
-            var self = this,
-                sendCredentials = self.$('.credential-wrapper').is(':visible');
-            iCalProbe(this.model, sendCredentials).then(function (data) {
+            var self = this;
+            iCalProbe(this.model).then(function (data) {
                 data.module = 'event';
                 return folderAPI.create('1', data);
             }).then(function () {
-                notifications.yell('success', gt('iCal-feed has been imported successfully'));
+                notifications.yell('success', gt('iCal feed has been imported successfully'));
                 self.close();
             })['catch'](function (err) {
-                if (err.code === 'CAL-4010') self.$('.credential-wrapper').show();
-                else notifications.yell(err);
+                if (/^ICAL-PROV-401(0|1|2|3)$/.test(err.code)) {
+                    // trigger rerendering
+                    var data = {
+                            text: err.error,
+                            type: /^ICAL-PROV-401(0|2)$/.test(err.code) ? 'warning' : 'danger',
+                            showLogin: /^ICAL-PROV-401(0|1)$/.test(err.code),
+                            showPassword: true
+                        },
+                        baton = new ext.Baton({ view: self, model: self.model, data: data });
+                    self.$body.empty();
+                    self.point.invoke('render', self, baton);
+                } else {
+                    notifications.yell(err);
+                }
                 self.idle();
             });
         })

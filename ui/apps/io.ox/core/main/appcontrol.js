@@ -31,7 +31,7 @@ define('io.ox/core/main/appcontrol', [
     ox.on('launcher:toggleOverlay', toggleOverlay);
 
     var LauncherView = Backbone.View.extend({
-        tagName: 'button',
+        tagName: 'a',
         className: 'btn btn-link lcell',
         attributes: {
             type: 'button'
@@ -44,15 +44,35 @@ define('io.ox/core/main/appcontrol', [
             this.quicklaunch = options.quicklaunch;
             this.listenTo(this.model, 'change:hasBadge', this.toggleBadge);
             this.listenTo(this.model, 'change:tooltip', this.updateTooltip);
+            this.listenTo(this.model, 'change:title', this.updateTitle);
             this.listenTo(settings, 'change:coloredIcons', this.render);
         },
-        onClick: function () {
-            // used on mobile
-            if (this.model.get('state') === 'running' && this.model.get('closable')) {
-                this.model.launch();
-                return;
+        checkUpsell: function () {
+            var requires = this.model.get('requires');
+            if (!upsell.has(requires)) {
+                upsell.trigger({ type: 'app', id: this.model.get('id'), missing: upsell.missing(requires) });
+                return true;
             }
-            ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+            return false;
+        },
+        drawUpsellIcon: function (elem) {
+            if (this.checkUpsell()) {
+                elem.addClass('upsell').append(
+                    _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
+                        return $('<i class="fa" aria-hidden="true">').addClass(icon);
+                    })
+                );
+            }
+        },
+        onClick: function () {
+            if (!this.checkUpsell()) {
+                // used on mobile
+                if (this.model.get('state') === 'running' && this.model.get('closable')) {
+                    this.model.launch();
+                    return;
+                }
+                ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+            }
         },
         quitApp: function (e) {
             // used on mobile
@@ -61,7 +81,7 @@ define('io.ox/core/main/appcontrol', [
             this.model.quit();
         },
         drawCloser: function () {
-            var close = $('<button type="button" class="btn btn-link closer">').append(
+            var close = $('<a href="#" type="button" class="btn btn-link closer">').append(
                 $('<i class="fa fa-times" aria-hidden="true">'));
             this.$el.append(close);
             this.closer = close;
@@ -82,7 +102,8 @@ define('io.ox/core/main/appcontrol', [
 
             this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
-            if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
+            // reverted for 7.10
+            // if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
 
             if (id === 'io.ox/calendar' || this.model.options.name.match(/calendar/)) this.drawDate();
 
@@ -91,7 +112,8 @@ define('io.ox/core/main/appcontrol', [
                 $('<div class="svgwrap">').append(this.$svg),
                 $('<div class="title">').text(this.model.get('title'))
             );
-
+            // checks for upsell and append an icon if needed
+            this.drawUpsellIcon(cell.find('.title'));
             return cell;
         },
         toggleBadge: function () {
@@ -102,78 +124,86 @@ define('io.ox/core/main/appcontrol', [
             var tooltip = this.model.get('tooltip') ? ' (' + this.model.get('tooltip') + ')' : '';
             this.$el.attr(tooltipAttribute, this.model.get('title') + tooltip);
         },
+        updateTitle: function (model, newTitle) {
+            var $title = this.icon.find('.title');
+            $title.text(newTitle);
+            this.drawUpsellIcon($title);
+        },
         render: function () {
             this.$el.empty().attr({
                 'data-id': this.model.get('id'),
                 'data-app-name': this.model.get('name')
             }).append(this.icon = this.drawIcon());
             this.updateTooltip();
-            // used on mobile
-            if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
+            // used on mobile, reverted for 7.10
+            // if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
             return this;
         }
     });
 
-    var QuickLaunchersCollection = Backbone.Collection.extend({
-        initialize: function () {
-            var self = this;
-            this.reset(this.fetch());
-            settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
-        },
-        fetch: function () {
-            var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
-            return _(quicklaunch.map(function (o) {
-                return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
-            })).compact();
-        }
-    });
+    // reverted for 7.10
+    // var QuickLaunchersCollection = Backbone.Collection.extend({
+    //     initialize: function () {
+    //         var self = this;
+    //         this.reset(this.fetch());
+    //         settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
+    //     },
+    //     fetch: function () {
+    //         var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
+    //         return _(quicklaunch.map(function (o) {
+    //             return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
+    //         })).compact();
+    //     }
+    // });
 
-    var QuickLaunchersView = Backbone.View.extend({
-        attributes: {
-            'id': 'io-ox-quicklaunch'
-        },
-        events: {
-            'click button': 'onClick'
-        },
-        initialize: function () {
-            this.collection = new QuickLaunchersCollection();
-            this.listenTo(this.collection, { 'reset': this.render });
-        },
-        onClick: function () {
-            toggleOverlay(false);
-        },
-        render: function () {
-            this.$el.empty().append(
-                this.collection.map(function (model) {
-                    return new LauncherView({ model: model, quicklaunch: true }).render().$el;
-                })
-            );
-            return this;
-        }
-    });
+    // reverted for 7.10
+    // var QuickLaunchersView = Backbone.View.extend({
+    //     attributes: {
+    //         'id': 'io-ox-quicklaunch'
+    //     },
+    //     events: {
+    //         'click button': 'onClick'
+    //     },
+    //     initialize: function () {
+    //         this.collection = new QuickLaunchersCollection();
+    //         this.listenTo(this.collection, { 'reset': this.render });
+    //     },
+    //     onClick: function () {
+    //         toggleOverlay(false);
+    //     },
+    //     render: function () {
+    //         this.$el.empty().append(
+    //             this.collection.map(function (model) {
+    //                 return new LauncherView({ model: model, quicklaunch: true }).render().$el;
+    //             })
+    //         );
+    //         return this;
+    //     }
+    // });
 
     var LaunchersView = Backbone.View.extend({
-        attributes: {
-            id: 'io-ox-launcher'
-        },
-        events: {
-            'click button': 'onClick',
-            'click #io-ox-launchgrid-overlay-inner': 'onClick'
-        },
-        onClick: function (force) {
-            toggleOverlay(force);
+        className: 'dropdown',
+        id: 'io-ox-launcher',
+
+        initialize: function () {
+            this.listenTo(ox, 'launcher:toggleOverlay', function () {
+                this.$('[data-toggle="dropdown"]').dropdown('toggle');
+            });
+            this.listenTo(this.collection, 'add remove', function () {
+                this.$el.empty();
+                this.render();
+            });
         },
         render: function () {
             this.$el.append(
-                $('<button type="button" class="launcher-btn btn btn-link" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to:">').append(icons.launcher),
-                $('<div id="io-ox-launchgrid">').append(
-                    $('<div class="cflex">').append(
-                        this.collection.map(function (model) {
-                            return new LauncherView({ model: model }).render().$el;
-                        })
-                    )
-                ),
-                $('<div id="io-ox-launchgrid-overlay-inner">')
+                $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
+                    this.collection.where({ hasLauncher: true }).map(function (model) {
+                        return $('<li role="presentation">').append(
+                            new LauncherView({ model: model }).render().$el
+                        );
+                    })
+                )
             );
             return this;
         }
@@ -208,9 +238,24 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    // ext.point('io.ox/core/appcontrol').extend({
+    //     id: 'launcher',
+    //     index: 200,
+    //     draw: function () {
+    //         // possible setting here
+    //         var apps = ox.ui.apps.where({ hasLauncher: true });
+    //         // reverted for 7.10
+    //         //if (apps.length <= 1) return;
+    //         var launchers = window.launchers = new LaunchersView({
+    //             collection: apps
+    //         });
+    //         this.append(launchers.render().$el);
+    //     }
+    // });
+
     ext.point('io.ox/core/appcontrol').extend({
         id: 'logo',
-        index: 200,
+        index: 300,
         draw: function () {
             var logo, action = settings.get('logoAction', false);
             this.append(
@@ -239,26 +284,28 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol').extend({
+    // reverted for 7.10
+    // ext.point('io.ox/core/appcontrol').extend({
+    //     id: 'quicklauncher',
+    //     index: 400,
+    //     draw: function () {
+    //         var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
+    //         this.append(quicklaunchers.render().$el);
+    //     }
+    // });
+
+    // for 7.10
+    // move launcher to the right
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'launcher',
-        index: 300,
+        index: 120,
         draw: function () {
-            // possible setting here
-            var apps = ox.ui.apps.where({ hasLauncher: true });
-            if (apps.length <= 1) return;
+            // reverted for 7.10
+            //if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
-                collection: apps
+                collection: ox.ui.apps
             });
             this.append(launchers.render().$el);
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol').extend({
-        id: 'quicklauncher',
-        index: 400,
-        draw: function () {
-            var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
-            this.append(quicklaunchers.render().$el);
         }
     });
 
@@ -268,9 +315,10 @@ define('io.ox/core/main/appcontrol', [
         draw: function () {
             var search = $('<div id="io-ox-topsearch">');
             this.append(search);
-            ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
+            //ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
         }
     });
+
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'right',
@@ -283,20 +331,25 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol').extend({
-        id: 'mobile',
+        id: 'runningAppsMobile',
         index: 1000,
         draw: function () {
             if (_.device('!smartphone')) return;
-            var self = this;
 
+            // add running app to menu
             ox.ui.apps.on('add', function (model) {
                 if (model.get('closable')) {
-                    self.find('.cflex').append(new LauncherView({ model: model }).render().$el);
+                    $('.launcher-dropdown').append(
+                        $('<li role="presentation">').append(
+                            new LauncherView({ model: model }).render().$el
+                        )
+                    );
                 }
             });
 
+            // remove on close
             ox.ui.apps.on('remove', function (model) {
-                self.find('[data-id="' + model.get('id') + '"]').remove();
+                $('.launcher-dropdown').find('[data-id="' + model.get('id') + '"]').parent().remove();
             });
         }
     });
@@ -309,119 +362,119 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/search').extend({
-        id: 'default',
-        index: 100,
-        draw: function () {
-            // on mobile via ext 'io.ox/core/appcontrol/right'
-            if (!capabilities.has('search') || _.device('smartphone')) return;
+    // ext.point('io.ox/core/appcontrol/search').extend({
+    //     id: 'default',
+    //     index: 100,
+    //     draw: function () {
+    //         // on mobile via ext 'io.ox/core/appcontrol/right'
+    //         if (!capabilities.has('search') || _.device('smartphone')) return;
 
-            // append hidden node to container node
-            ox.ui.apps.on('launch', function append(app) {
-                if (!app.isFindSupported()) return;
+    //         // append hidden node to container node
+    //         ox.ui.apps.on('launch', function append(app) {
+    //             if (!app.isFindSupported()) return;
 
-                var label = gt('Search'),
-                    id = _.uniqueId('search-field'),
-                    guid = _.uniqueId('form-control-description-');
+    //             var label = gt('Search'),
+    //                 id = _.uniqueId('search-field'),
+    //                 guid = _.uniqueId('form-control-description-');
 
-                this.append(
-                    $('<div class="io-ox-find initial" role="search" style="display:none">').attr('data-app', app.id).append(
-                        $('<div class="sr-only arialive" role="status" aria-live="polite">'),
-                        // box
-                        $('<form class="search-box">').append(
-                            // group
-                            $('<div class="form-group">').append(
-                                $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
-                                    'id': id,
-                                    'placeholder': label + '...',
-                                    'aria-describedby': guid
-                                }),
-                                // search
-                                $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-                                    .attr({
-                                        'data-original-title': gt('Options'),
-                                        'aria-label': gt('Options')
-                                    }).append($('<i class="fa fa-caret-down" aria-hidden="true">'))
-                                    .tooltip(),
-                                $('<form class="dropdown" autocomplete="off">'),
-                                // cancel/reset
-                                $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-                                    .attr({
-                                        'data-original-title': gt('Cancel search'),
-                                        'aria-label': gt('Cancel search')
-                                    }).append($('<i class="fa fa-times" aria-hidden="true">'))
-                                    .tooltip(),
-                                // sr label
-                                $('<label class="sr-only">')
-                                    .attr('for', id)
-                                    .text(label),
-                                // sr description
-                                $('<p class="sr-only sr-description">').attr({ id: guid })
-                                    //#. search feature help text for screenreaders
-                                    .text(gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones'))
-                            )
-                        )
-                    )
-                );
-                app.initFind();
-            }.bind(this));
-        }
-    });
+    //             this.append(
+    //                 $('<div class="io-ox-find initial" role="search" style="display:none">').attr('data-app', app.id).append(
+    //                     $('<div class="sr-only arialive" role="status" aria-live="polite">'),
+    //                     // box
+    //                     $('<form class="search-box">').append(
+    //                         // group
+    //                         $('<div class="form-group">').append(
+    //                             $('<input type="text" class="form-control search-field tokenfield-placeholder f6-target">').attr({
+    //                                 'id': id,
+    //                                 'placeholder': label + '...',
+    //                                 'aria-describedby': guid
+    //                             }),
+    //                             // search
+    //                             $('<button type="button" class="dropdown-toggle btn btn-link form-control-feedback action action-options" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+    //                                 .attr({
+    //                                     'data-original-title': gt('Options'),
+    //                                     'aria-label': gt('Options')
+    //                                 }).append($('<i class="fa fa-caret-down" aria-hidden="true">'))
+    //                                 .tooltip(),
+    //                             $('<form class="dropdown" autocomplete="off">'),
+    //                             // cancel/reset
+    //                             $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+    //                                 .attr({
+    //                                     'data-original-title': gt('Cancel search'),
+    //                                     'aria-label': gt('Cancel search')
+    //                                 }).append($('<i class="fa fa-times" aria-hidden="true">'))
+    //                                 .tooltip(),
+    //                             // sr label
+    //                             $('<label class="sr-only">')
+    //                                 .attr('for', id)
+    //                                 .text(label),
+    //                             // sr description
+    //                             $('<p class="sr-only sr-description">').attr({ id: guid })
+    //                                 //#. search feature help text for screenreaders
+    //                                 .text(gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones'))
+    //                         )
+    //                     )
+    //                 )
+    //             );
+    //             app.initFind();
+    //         }.bind(this));
+    //     }
+    // });
 
-    ext.point('io.ox/core/appcontrol/search').extend({
-        id: 'resize',
-        index: 10000,
-        draw: function () {
-            // on mobile via ext 'io.ox/core/appcontrol/right'
-            if (!capabilities.has('search') || _.device('smartphone')) return;
-            var container = this,
-                MINWIDTH = 350,
-                MAXWIDTH = _.device('desktop') ? 750 : 550;
+    // ext.point('io.ox/core/appcontrol/search').extend({
+    //     id: 'resize',
+    //     index: 10000,
+    //     draw: function () {
+    //         // on mobile via ext 'io.ox/core/appcontrol/right'
+    //         if (!capabilities.has('search') || _.device('smartphone')) return;
+    //         var container = this,
+    //             MINWIDTH = 350,
+    //             MAXWIDTH = _.device('desktop') ? 750 : 550;
 
-            // hide inactive
-            function hidePaused() {
-                var app = ox.ui.App.getCurrentApp();
-                if (!app || !app.id) return;
-                container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
-            }
+    //         // hide inactive
+    //         function hidePaused() {
+    //             var app = ox.ui.App.getCurrentApp();
+    //             if (!app || !app.id) return;
+    //             container.children().not('[data-app="' + app.id + '"]').css('display', 'none');
+    //         }
 
-            function setVisibility() {
-                var app = ox.ui.App.getCurrentApp();
-                if (!app || !app.id) return;
-                // show field for current app
-                hidePaused();
-                container.find('[data-app="' + app.id + '"]').css('display', 'block');
-            }
+    //         function setVisibility() {
+    //             var app = ox.ui.App.getCurrentApp();
+    //             if (!app || !app.id) return;
+    //             // show field for current app
+    //             hidePaused();
+    //             container.find('[data-app="' + app.id + '"]').css('display', 'block');
+    //         }
 
-            var delay = 0;
-            ox.ui.windowManager.on('window.open', function () { delay = 100; });
-            ox.ui.windowManager.on('window.show', function () {
-                hidePaused();
-                if (!delay) return setVisibility();
-                // delay on first start
-                _.delay(function () {
-                    delay = 0;
-                    setVisibility();
-                }, delay);
-            });
+    //         var delay = 0;
+    //         ox.ui.windowManager.on('window.open', function () { delay = 100; });
+    //         ox.ui.windowManager.on('window.show', function () {
+    //             hidePaused();
+    //             if (!delay) return setVisibility();
+    //             // delay on first start
+    //             _.delay(function () {
+    //                 delay = 0;
+    //                 setVisibility();
+    //             }, delay);
+    //         });
 
-            // search is active (at least one token)
-            ox.ui.apps.on('change:search', function (name, app) {
-                if (!/^(running|paused)$/.test(name)) return;
-                var node = app.view.$el,
-                    isReset = name === 'paused';
+    //         // search is active (at least one token)
+    //         ox.ui.apps.on('change:search', function (name, app) {
+    //             if (!/^(running|paused)$/.test(name)) return;
+    //             var node = app.view.$el,
+    //                 isReset = name === 'paused';
 
-                node.toggleClass('has-tokens', !isReset)
-                    .css({
-                        // limit height to prevent jumping
-                        'height': isReset ? 'initial' : '32px',
-                        // expand field or restore min-width value
-                        'max-width': isReset ? MINWIDTH + 'px' : MAXWIDTH + 'px'
-                    });
+    //             node.toggleClass('has-tokens', !isReset)
+    //                 .css({
+    //                     // limit height to prevent jumping
+    //                     'height': isReset ? 'initial' : '32px',
+    //                     // expand field or restore min-width value
+    //                     'max-width': isReset ? MINWIDTH + 'px' : MAXWIDTH + 'px'
+    //                 });
 
-            });
-        }
-    });
+    //         });
+    //     }
+    // });
 
     function initRefreshAnimation() {
 
@@ -482,7 +535,6 @@ define('io.ox/core/main/appcontrol', [
 
     return {
         LauncherView: LauncherView,
-        LaunchersView: LaunchersView,
-        QuickLaunchersView: QuickLaunchersView
+        LaunchersView: LaunchersView
     };
 });

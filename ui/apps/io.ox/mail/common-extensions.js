@@ -217,6 +217,7 @@ define('io.ox/mail/common-extensions', [
                 if (status) {
                     $el.append(
                         $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').popover({
+                            placement: _.device('smartphone') ? 'auto' : 'right',
                             trigger: 'focus hover',
                             content: util.getAuthenticityMessage(status, email)
                         })

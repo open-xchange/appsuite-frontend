@@ -219,6 +219,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '401': 'full_time'
             },
             'folders': {
+                // please note: Any changes inside the folders must be communicated to the MW such that
+                // the rampup attribute folderList contains the correct columns and can be mapped
                 '1': 'id',
                 '2': 'created_by',
                 '3': 'modified_by',
@@ -255,6 +257,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3201': 'com.openexchange.calendar.extendedProperties',
                 '3203': 'com.openexchange.calendar.provider',
                 '3220': 'com.openexchange.caldav.url',
+                '3204': 'com.openexchange.calendar.accountError',
                 '3205': 'com.openexchange.calendar.config'
             },
             'user': {

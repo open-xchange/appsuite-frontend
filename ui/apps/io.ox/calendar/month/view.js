@@ -36,12 +36,23 @@ define('io.ox/calendar/month/view', [
         type:           '',
         limit:          1000,
 
-        events: {
-            'click .appointment':      'onClickAppointment',
-            'dblclick .day':           'onCreateAppointment',
-            'mouseenter .appointment': 'onEnterAppointment',
-            'mouseleave .appointment': 'onLeaveAppointment'
-        },
+        events: (function () {
+            var events = {
+                'click .appointment':      'onClickAppointment',
+                'dblclick .day':           'onCreateAppointment',
+                'mouseenter .appointment': 'onEnterAppointment',
+                'mouseleave .appointment': 'onLeaveAppointment'
+            };
+
+            if (_.device('touch')) {
+                _.extend(events, {
+                    'swipeleft': 'onSwipe',
+                    'swiperight': 'onSwipe'
+                });
+            }
+
+            return events;
+        }()),
 
         initialize: function (options) {
             this.start = moment(options.start);
@@ -134,7 +145,7 @@ define('io.ox/calendar/month/view', [
         onEnterAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
-                bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                bg = el.data('background-color');
             el.addClass('hover');
             if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
         },
@@ -143,7 +154,7 @@ define('io.ox/calendar/month/view', [
         onLeaveAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
-                bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                bg = el.data('background-color');
             el.removeClass('hover');
             if (bg) el.css('background-color', bg);
         },
@@ -154,6 +165,13 @@ define('io.ox/calendar/month/view', [
             // perspective afterwards
             this.app.setDate(timestamp);
             ox.ui.Perspective.show(this.app, 'week:day', { animation: 'slideleft' });
+        },
+
+        onSwipe: function (e) {
+            e.preventDefault();
+            if (e.type === 'swipeleft') this.perspective.gotoMonth('next');
+            if (e.type === 'swiperight') this.perspective.gotoMonth('prev');
+            return false;
         },
 
         render: (function () {
@@ -249,14 +267,15 @@ define('io.ox/calendar/month/view', [
                     .find('.week:last-child').addClass('no-border')
                     .find('> .day').addClass('borderbottom');
 
-                this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
-
                 if (_.device('smartphone')) {
+                    this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
                     // on mobile we switch to the day view after a tap
                     // on a day-cell was performed
                     this.$el.on('tap', '.day', function () {
                         self.changeToSelectedDay($(this).data('date'));
                     });
+                } else {
+                    this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
                 }
 
                 return this;
@@ -284,9 +303,7 @@ define('io.ox/calendar/month/view', [
         },
 
         renderAppointments: function () {
-            var self = this,
-                tempDate;
-            // clear first
+            var self = this;
             $('.appointment, .fa-circle', this.$el).remove();
 
             // loop over all appointments
@@ -308,15 +325,7 @@ define('io.ox/calendar/month/view', [
 
                 if (_.device('smartphone')) {
                     var cell = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el);
-                    if (tempDate === undefined) {
-                        // first run, draw
-                        this.renderAppointmentIndicator(cell);
-                    } else if (!startMoment.isSame(tempDate, 'day')) {
-                        // one mark per day is enough
-                        this.renderAppointmentIndicator(cell);
-                    }
-                    // remember for next run
-                    tempDate = startMoment.clone();
+                    this.renderAppointmentIndicator(cell.empty());
                 } else {
                     // draw across multiple days
                     while (maxCount >= 0) {
@@ -426,7 +435,7 @@ define('io.ox/calendar/month/view', [
         draw: function (baton) {
             var self = this,
                 a = baton.model,
-                folder = baton.folders[a.get('folder')],
+                folder = folderAPI.pool.getModel(a.get('folder')).toJSON(),
                 conf = 1,
                 confString = '%1$s',
                 classes = '';
@@ -439,7 +448,7 @@ define('io.ox/calendar/month/view', [
                     'color': util.getForegroundColor(color)
                 }).data('background-color', color);
 
-                self.addClass(util.getForegroundColor(color));
+                self.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
 
                 if (util.canAppointmentChangeColor(f, a)) {
                     self.attr('data-folder', f.id);
@@ -447,12 +456,10 @@ define('io.ox/calendar/month/view', [
             }
 
             var folderId = a.get('folder');
-            if (baton.app.props.get('colorScheme') === 'custom') {
-                if (String(folder.id) === String(folderId)) {
-                    addColors(folder);
-                } else if (folderId !== undefined) {
-                    folderAPI.get(folderId).done(addColors);
-                }
+            if (String(folder.id) === String(folderId)) {
+                addColors(folder);
+            } else if (folderId !== undefined) {
+                folderAPI.get(folderId).done(addColors);
             }
 
             if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {

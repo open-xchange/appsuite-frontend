@@ -54,7 +54,7 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
                 callback: function () {
                     require(['settings!io.ox/core'])
                     .then(function (settings) {
-                        settings.set('autoStart', '');
+                        settings.set('autoStart', 'none/main');
                         server.restore();
                         server = null;
                     })

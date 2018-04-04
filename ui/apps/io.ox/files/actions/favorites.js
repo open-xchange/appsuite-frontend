@@ -46,9 +46,23 @@ define('io.ox/files/actions/favorites', [
         collection = folderAPI.pool.getCollection(collectionId);
         // convert folder model into file model
         model = new api.Model(model.toJSON());
-        model.set('index/' + collectionId, collection.length, { silent: false });
-        collection.add(model);
-        collection.sort();
+
+        if (!collection.fetched || collection.expired) {
+            require(['settings!io.ox/core'], function (Settings) {
+                var favoriteSettings = Settings.get('favorites/infostore', []);
+                favoriteSettings.push({
+                    id: model.attributes.id,
+                    folder_id: model.attributes.folder_id,
+                    isFolder: model.attributes.folder_name !== undefined
+                });
+                Settings.set('favorites/infostore', favoriteSettings);
+            });
+        } else {
+            model.set('index/' + collectionId, collection.length, { silent: false });
+            collection.add(model);
+            collection.sort();
+        }
+        api.propagate('favorite:add', model);
     }
 
     /**
@@ -77,8 +91,20 @@ define('io.ox/files/actions/favorites', [
 
         collectionId = 'virtual/favorites/' + module;
         collection = folderAPI.pool.getCollection(collectionId);
-        model.set('index/' + collectionId, collection.length, { silent: false });
-        collection.remove(model);
+
+        if (!collection.fetched || collection.expired) {
+            require(['settings!io.ox/core'], function (Settings) {
+                var favoriteSettings = Settings.get('favorites/infostore', []);
+                favoriteSettings = _(favoriteSettings).filter(function (favorite) {
+                    return favorite.id !== model.get('id');
+                });
+                Settings.set('favorites/infostore', favoriteSettings);
+            });
+        } else {
+            model.set('index/' + collectionId, collection.length, { silent: false });
+            collection.remove(model);
+        }
+        api.propagate('favorite:remove', model);
     }
 
     return {

@@ -57,6 +57,8 @@ define('io.ox/mail/actions/delete', [
     function ignoreCurrentlyEdited(list) {
         var hash = {};
         _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
+            // ignore not fully initialised (minimized) restore point instances
+            if (!app.view) return;
             hash[app.view.model.get('msgref')] = true;
         });
         if (!Object.keys(hash).length) return list;

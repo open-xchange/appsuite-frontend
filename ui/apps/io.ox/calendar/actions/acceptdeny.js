@@ -53,10 +53,13 @@ define('io.ox/calendar/actions/acceptdeny', [
                 }
 
                 folder = folderData;
-                message = util.getConfirmationMessage(o, !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                // check for which id the user wants to confirm (secretary function)
+                var confirmId = !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id;
+
+                message = util.getConfirmationMessage(o, confirmId);
 
                 var alarmsModel,
-                    previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: ox.user_id });
+                    previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: confirmId });
 
                 if (!options.taskmode) {
                     if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
@@ -64,7 +67,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     }
                     // backbone model is fine. No need to require chronos model
                     alarmsModel = new Backbone.Model(appointmentData);
-                    alarmsView = new AlarmsView({ model: alarmsModel });
+                    alarmsView = new AlarmsView.linkView({ model: alarmsModel });
                     reminderSelect = $('<fieldset>').append(
                         $('<legend>').text(gt('Reminder')),
                         alarmsView.render().$el
@@ -102,6 +105,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             $('<h4 id="dialog-title">').text(gt('Change confirmation status'))
                         );
                         this.getContentNode().append(
+                            confirmId !== ox.user_id ? $('<div class="alert alert-info">').text(gt('You are currently acting on behalf of the calendar owner.')) : '',
                             $('<p>').text(
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
                             ),
@@ -109,6 +113,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 description
                             ),
                             $('<div class="form-group">').css({ 'margin-top': '20px' }).append(
+                                //#. is in the same window as "You are about to change your confirmation status. Please leave a comment for other participants". So "comment" should be translated the same in both cases to not confuse users
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')).append(
                                     $('<span class="sr-only">').text((data.summary || data.title) + ' ' + gt('Please comment your confirmation status.'))
                                 ),
@@ -174,7 +179,12 @@ define('io.ox/calendar/actions/acceptdeny', [
                             };
                             if (alarmsModel) requestData.alarms = alarmsModel.get('alarms');
                             requestData.attendee.partStat = action.toUpperCase();
-                            if (message) requestData.attendee.comment = message;
+                            if (message) {
+                                requestData.attendee.comment = message;
+                            } else if (requestData.attendee.comment) {
+                                // if there was a previous comment we send null to remove it
+                                requestData.attendee.comment = null;
+                            }
                             if (!series && o.recurrenceId) requestData.recurrenceId = o.recurrenceId;
                             // don't check if confirmation status did not change
                             // no conflicts possible if you decline the appointment
@@ -185,9 +195,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                         performConfirm(checkConflicts);
                     })
                     .show(function () {
-                        if (alarmsView) {
-                            alarmsView.reactToResize();
-                        }
                         // do not focus on mobiles. No, never, please. It does simply not work!
                         if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
                     });

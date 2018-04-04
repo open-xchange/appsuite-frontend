@@ -250,9 +250,8 @@
                 background-attachment: scroll;
 
                 .file-type-icon {
-                    position: absolute;
-                    bottom: 25px;
-                    margin-left: -50px;
+                    position: relative;
+                    top: 45px;
                     width: 100px;
                     font-size: 70px;
                     font-weight: 100;
@@ -430,6 +429,10 @@
         flex-direction: column;
         width: 100%;
         max-height: ~"calc(100vh - 48px)";
+
+        .ie11 & {
+            height: 100%;
+        }
     }
 
     .modal-title {

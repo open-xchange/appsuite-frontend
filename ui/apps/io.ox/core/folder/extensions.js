@@ -870,9 +870,9 @@ define('io.ox/core/folder/extensions', [
             id: 'divider-1',
             index: 200,
             draw: function () {
-                if (!capabilities.has('calendar_schedjoules')) return;
-                if (!capabilities.has('calendar_google')) return;
-                if (!capabilities.has('calendar_ical')) return;
+                if (!capabilities.has('calendar_schedjoules') &&
+                    !capabilities.has('calendar_google') &&
+                    !capabilities.has('calendar_ical')) return;
 
                 this.divider();
                 this.header(gt('Subscribe to calendar'));
@@ -923,7 +923,7 @@ define('io.ox/core/folder/extensions', [
                 this.header(gt('Import calendar'));
                 this.link('import', gt('Upload file'), function () {
                     require(['io.ox/core/import/import'], function (importer) {
-                        importer.show('event');
+                        importer.show('calendar');
                     });
                 });
             }
@@ -1088,10 +1088,24 @@ define('io.ox/core/folder/extensions', [
                             'background-color': folderColor,
                             'color': util.getForegroundColor(folderColor)
                         });
-                        target.off('click').on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
+                        target.off('click', toggleFolder).on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                         self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
                         folderLabel.prepend(target);
                     });
+                }
+            },
+            {
+                id: 'account-errors',
+                index: 500,
+                draw: function (baton) {
+                    if (!/^calendar$/.test(baton.data.module)) return;
+
+                    var accountError = baton.data['com.openexchange.calendar.accountError'];
+                    if (accountError) {
+                        baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                    } else {
+                        baton.view.hideStatusIcon();
+                    }
                 }
             }
         );

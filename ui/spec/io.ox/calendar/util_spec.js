@@ -620,7 +620,8 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 comment: 'Now with 20% more PEW PEW',
                 cuType: 'RESOURCE',
                 entity: 319,
-                partStat: 'ACCEPTED'
+                partStat: 'ACCEPTED',
+                resource: _.clone(testResource)
             },
             // test contact object
             testContact = {

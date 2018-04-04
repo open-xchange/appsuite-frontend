@@ -162,7 +162,6 @@ define('io.ox/calendar/freetime/main', [
                 var appointment = this.createAppointment();
 
                 if (appointment) {
-                    // TODO change core settings so the default folder isn't just a number
                     appointment.folder = folderAPI.getDefaultFolder('calendar');
                     ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                         edit.getApp().launch().done(function () {

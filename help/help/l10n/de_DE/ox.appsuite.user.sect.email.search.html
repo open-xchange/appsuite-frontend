@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.7. E-Mails suchen</title>
+<title>5.8. E-Mails suchen</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Kapitel 5. E-Mail">
-<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.examples.html" title="5.6.4. Anwendungsbeispiele für E-Mail-Filter">
-<link rel="next" href="ox.appsuite.user.sect.email.teamwork.html" title="5.8. E-Mails im Team">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.examples.html" title="5.7.4. Anwendungsbeispiele für E-Mail-Filter">
+<link rel="next" href="ox.appsuite.user.sect.email.teamwork.html" title="5.9. E-Mails im Team">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -36,13 +36,13 @@
         
   </h1>
 <div class="sect1" id="ox.appsuite.user.sect.email.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">5.7. E-Mails suchen</h2></div></div></div>
-<a class="indexterm" name="id-1.6.14.2"></a><a class="indexterm" name="id-1.6.14.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">5.8. E-Mails suchen</h2></div></div></div>
+<a class="indexterm" name="id-1.6.15.2"></a><a class="indexterm" name="id-1.6.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.search"></a><p id="ox.appsuite.user.concept.email.search">Um nach E-Mails zu suchen, können Sie 
       die folgenden Suchkriterien verwenden:
       </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Suchbegriffe für Betreff, E-Mail Text, Absender, Empfänger</p></li>
+<li class="listitem"><p role="presentation">Suchbegriffe für Betreff, E-Mail Text, Absender, Empfänger, Anhangsdateiname</p></li>
 <li class="listitem">
 <p role="presentation">Suchbegriffe für einen Zeitraum. Gesucht wird nach E-Mails, die Sie innerhalb des Zeitraums
             erhalten haben. Sie bestimmen einen gültigen Zeitraum durch die folgenden Angaben.
@@ -69,26 +69,7 @@
 <div class="task" id="ox.appsuite.user.task.email.search">
 <p class="title">So suchen Sie nach E-Mails:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">Klicken Sie in der Suchleiste auf das Symbol <span class="guibutton"><strong>Suche starten</strong></span>
-            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> oder in das Eingabefeld. Eine Ordner-Schaltfläche zeigt an, in welchen Ordnern gesucht wird.</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.email.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_click.png" alt="Das Eingabefeld"></div></div></div>
-</li>
-<li class="step"><p role="presentation">Um einen Ordner für die Suche auszuwählen, klicken Sie auf die Ordner-Schaltfläche.
-            <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p role="presentation">Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle Ordner und Unterordner des internen E-Mail-Kontos 
-                  durchsucht.</p>
-<p role="presentation"><span class="phrase"><strong>Hinweis:</strong></span> Je nach Eigenschaften des E-Mail-Servers ist diese Funktion nicht verfügbar.
-                In diesem Fall wird nur der aktuelle Ordner durchsucht, keine Unterordner.</p>
-</li>
-<li class="listitem"><p role="presentation">Wenn Sie den Ordner <span class="guibutton"><strong>Posteingang</strong></span> wählen, werden je nach Einstellung des Servers keine
-                  Unterordner durchsucht. in diesem Fall klicken Sie unterhalb des Suchergebnisses auf die entsprechende Schaltfläche, um 
-                  Unterordner zu durchsuchen.</p></li>
-<li class="listitem"><p role="presentation">Wenn Sie einen bestimmten Ordner oder den Ordner eines externen E-Mail-Accounts wählen, wird nur dieser  
-                  Ordner durchsucht, keine Unterordner.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Klicken Sie in das Eingabefeld <span class="guibutton"><strong>Suchen</strong></span>. Weitere Symbole werden angezeigt.</p></li>
 <li class="step">
 <p role="presentation">Tippen Sie einen Suchbegriff in das Eingabefeld. Das Suchmenü öffnet sich.</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.email.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_searchmenue.png" alt="Das Suchmenü"></div></div></div>
@@ -96,33 +77,43 @@
             <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Wenn Sie den Suchbegriff anklicken oder die Eingabetaste drücken, wird in den folgenden Daten gesucht: 
                   Absender, Empfänger, Betreff, E-Mail Text.</p></li>
+<li class="listitem"><p role="presentation">Um nur im Betreff zu suchen, klicken Sie auf <span class="guibutton"><strong>im Betreff</strong></span>.</p></li>
+<li class="listitem"><p role="presentation">Um nur im E-Mail-Text zu suchen, klicken Sie auf <span class="guibutton"><strong>im E-Mail-Text</strong></span>.</p></li>
+<li class="listitem"><p role="presentation">Um in den Dateinamen der Anhänge zu suchen, klicken Sie auf <span class="guibutton"><strong>in Anhangsdateinamen</strong></span>.</p></li>
+<li class="listitem">
+<p role="presentation">Um nach Absendern und Empfängern zu suchen, die zum Suchbegriff passen, klicken Sie auf einen Namen.</p>
+<p role="presentation">Sie können bestimmen, ob im Absender, im Empfänger oder in beiden gesucht werden soll.
+                  Dazu klicken Sie neben dem Namen auf das Symbol <span class="guibutton"><strong>Optionen</strong></span>
+                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.adaptfilter"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. 
+                </p>
+</li>
 <li class="listitem"><p role="presentation">Um nach E-Mails innerhalb eines bestimmten Zeitraums zu suchen, verwenden Sie als Suchbegriff einen gültigen 
                   Zeitraum. Sobald in Ihrer Eingabe ein gültiger Zeitraum erkannt wird, wird der Zeitraum im Suchmenü angezeigt. 
                   Klicken Sie auf den Zeitraum.</p></li>
-<li class="listitem"><p role="presentation">Um nur im Betreff zu suchen, klicken Sie auf <span class="guibutton"><strong>im Betreff</strong></span>.</p></li>
-<li class="listitem"><p role="presentation">Um nur im E-Mail-Text zu suchen, klicken Sie auf <span class="guibutton"><strong>im E-Mail-Text</strong></span>.</p></li>
-<li class="listitem"><p role="presentation">Um nach Absendern und Empfängern zu suchen, die zum Suchbegriff passen, klicken Sie auf einen Namen.</p></li>
 </ul>
           </p>
-<p role="presentation">Die gefundenen Objekte werden in der Liste im Anzeigebereich angezeigt. </p>
-<p role="presentation">Zu jedem gefundenen Objekt wird der Ordner angegeben, der das Objekt enthält. Um die Suche zu
-            beenden und den Inhalt des Ordners anzuzeigen, klicken Sie auf den Ordner.</p>
+<p role="presentation">Die gefundenen Objekte werden in der Liste im Anzeigebereich angezeigt. Zu jedem gefundenen Objekt wird der Ordner angegeben, der das Objekt enthält.</p>
 </li>
-<li class="step"><p role="presentation">Um das Suchergebnis anzupassen, verwenden Sie diese Methoden:
+<li class="step"><p role="presentation">Um einen Ordner für die Suche auszuwählen, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Optionen</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. Der aktuelle Ordner wird in einem Listenfeld angezeigt. Um einen anderen Ordner zu wählen,
+            öffnen Sie das Listenfeld.
             <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Wenn Sie den Namen einer Person als Suchbegriff verwenden, können Sie bestimmen, ob nach 
-                  diesem Namen im Absender, Empfänger oder in beiden gesucht werden soll.
-                  Dazu klicken Sie neben dem Namen auf das Symbol 
-                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.adaptfilter"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. 
-                </p></li>
-<li class="listitem"><p role="presentation">Um das Suchergebnis zu verfeinern, geben Sie weitere Suchbegriffe ein. Um einen Suchbegriff zu 
-                  entfernen, klicken Sie neben dem Suchbegriff auf das Symbol
-                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>. </p></li>
-<li class="listitem"><p role="presentation">Um die Suche in einem anderen Ordner auszuführen, klicken Sie auf die Ordner-Schaltfläche.</p></li>
+<li class="listitem">
+<p role="presentation">Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle Ordner und Unterordner des internen E-Mail-Kontos 
+                  durchsucht.</p>
+<p role="presentation"><span class="phrase"><strong>Hinweis:</strong></span> Je nach Eigenschaften des E-Mail-Servers ist diese Funktion nicht verfügbar.
+                  In diesem Fall wird nur der aktuelle Ordner durchsucht, keine Unterordner.</p>
+</li>
+<li class="listitem"><p role="presentation">Wenn Sie einen bestimmten Ordner oder den Ordner eines externen E-Mail-Accounts wählen, wird nur dieser  
+                  Ordner durchsucht, keine Unterordner.</p></li>
 </ul>
           </p></li>
-<li class="step"><p role="presentation">Um die Suche zu beenden, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Suche abbrechen</strong></span>
-            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
+<li class="step"><p role="presentation">Um das Suchergebnis zu verfeinern, geben Sie weitere Suchbegriffe ein. Um einen Suchbegriff zu 
+            entfernen, klicken Sie neben dem Suchbegriff auf das Symbol <span class="guibutton"><strong>Entfernen</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>.
+          </p></li>
+<li class="step"><p role="presentation">Um die Suche zu beenden, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Beenden</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.close"><img src="../../images/appsuite_user_icon_close.png"></span>.</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.concept.email.search.parent">Übergeordnetes Thema:

@@ -27,6 +27,9 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
     // simple iframe download (see bug 29276)
     // window.open(url); might leave open tabs or provoke popup-blocker
     // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
+    //
+    // Note: This does not work for iOS as Safari will show the content of the download in the iframe as a preview
+    // for the most known file types like MS Office, pictures, plain text, pdf, etc.!
     function iframe(url) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=yell';
         $('#tmp').append(
@@ -34,7 +37,7 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         );
     }
 
-    // works across all browsers for multiple items (see bug 29408)
+    // works across all browsers (except mobile safari) for multiple items (see bug 29408)
     function form(options) {
 
         options = options || {};
@@ -71,7 +74,11 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
                     file = _.extend(file, { filename: options.filename });
                 }
                 var url = api.getUrl(file, 'download', { params: options.params });
-                iframe(url);
+                if (_.device('ios')) {
+                    blankshield.open(url, '_blank');
+                } else {
+                    iframe(url);
+                }
             });
         },
 

@@ -55,11 +55,6 @@
     }
 }
 
-/* add some extra margins around delete icon to make it easier to click */
-.io-ox-mail-window .classic-toolbar .io-ox-action-link[data-action="delete"] {
-    margin: 0 24px;
-}
-
 .preview-bottom {
     .leftside {
         right: 0;
@@ -269,6 +264,13 @@
         &.loading { min-height: 80px; }
     }
 
+    .ios & {
+        section.body {
+            // special fix for ios iframe handling, keep this!
+            overflow-x: auto;
+        }
+    }
+
     section.attachments,
     section.notifications,
     section.error { display: none; }
@@ -283,7 +285,8 @@
         &.notifications,
         &.error { display: block; }
         // for proper overflow behavior (see bug 45248)
-        &.body { display: table; }
+        // 15.3.18: set to block. Works in Safari since iFrame. 45248 still fixed
+        &.body { display: block; }
         &.attachments:empty { display: none;  }
     }
 
@@ -987,8 +990,8 @@
 }
 
 .floating-quick-reply {
-    &.cornered, &.centered { max-width: 720px; min-height: auto; }
-    &.cornered { max-height: 320px; }
+    max-height: 320px;
+    top: ~"calc(50% - 160px)";
 }
 
 textarea.inplace-editor {

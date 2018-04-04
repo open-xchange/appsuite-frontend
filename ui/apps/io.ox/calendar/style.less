@@ -45,7 +45,7 @@
         display: inline-block;
         padding-top: 3px;
         width: @weekview-time-width;
-        text-align: center;
+        text-align: right;
 
         a {
             padding: 9px;
@@ -73,7 +73,7 @@
                 font-size: 13px;
                 line-height: 14px;
                 text-align: center;
-                padding: 1px 3px;
+                padding: 2px 3px;
                 .ellipsis();
 
                 &.today {
@@ -85,38 +85,9 @@
         }
     }
 
-    // dark colors (define first)
-    .dark-colors & .appointment {
-
-        .appointment-content { border-left: 0; }
-        .title { color: white; }
-        .location { color: rgba(255, 255, 255, 0.60); }
-
-        .background(@color) {
-            background-color: @color;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.50);
-            &.hover { background-color: darken(@color, 10%); }
-        }
-
-        &.reserved  { .background(@appointment-reserved); }
-        &.free    { .background(@appointment-free-dark); }
-        &.private { .background(@appointment-private);   }
-
-        &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
-
-        &.declined    { background-color: @appointment-declined;    }
-        &.needs-action { background-color: @appointment-unconfirmed; }
-
-        &.needs-action:not(.hover) {
-            .title { color: rgba(0, 0, 0, 0.7); }
-            .location { color: rgba(0, 0, 0, 0.5); }
-        }
-
-        &.io-ox-busy:before { color: white; opacity: 0.30; }
-    }
-
     .appointment {
         cursor: pointer;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
         &.io-ox-busy:before {
             color: inherit;
@@ -131,49 +102,6 @@
         }
 
         &.disabled { cursor: default; }
-
-        .common() {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-        }
-
-        &.reserved {
-            @r: #D0EAFF;
-
-            border-color: lighten(@appointment-reserved, 10%);
-            color: darken(@appointment-reserved, 5%);
-            background-color: @r;
-
-            &.hover:not(.disabled) {
-                background-color: darken(@r, @appointment-hover-pct);
-            }
-
-            .common();
-        }
-
-        &.free {
-            @f: lighten(@appointment-free, 30%);
-
-            border-color: darken(@appointment-free, 10%);
-            color: darken(@appointment-free, 30%);
-            background-color: @f;
-
-            &.hover:not(.disabled) { background-color: darken(@f, @appointment-hover-pct); }
-
-            .common();
-        }
-
-        &.private {
-            border-color: darken(@appointment-private, 10%);
-            color: @white;
-            background-color: @appointment-private;
-
-            &.hover:not(.disabled) {
-                background-color: darken(@appointment-private, @appointment-hover-pct);
-                color: @white;
-            }
-
-            .common();
-        }
 
         &.needs-action {
             color: @appointment-unconfirmed-font;
@@ -210,7 +138,7 @@
             z-index: 1;
     }
 
-    .custom-colors & .appointment {
+    .appointment {
 
         &.private { border-left-color: #222; }
 
@@ -251,8 +179,9 @@
 }
 
 .io-ox-calendar-main {
-    &:not(.custom-colors) .folder-tree .folder-node .folder-label .color-label {
-        background-color: transparent!important;
+    .folder-tree [data-id="cal://0/allPublic"] .folder-node .folder-label .color-label {
+        background-color: @foldertree-sidepanel-background!important;
+        color: #333!important;
     }
 
     .folder-tree .folder-node .folder-label {
@@ -266,6 +195,7 @@
             top: 4px;
             border: 1px solid rgba(0, 0, 0, 0.2);
             background-clip: border-box;
+            border-radius: @border-radius-small;
 
             &.selected:before {
                 display: block;
@@ -362,8 +292,6 @@
 
     .shown_as {
         &.reserved  { background-color: @appointment-reserved;  }
-        &.temporary { background-color: @appointment-temporary; }
-        &.absent    { background-color: @appointment-absent;    }
         &.free      { background-color: @appointment-free;      }
     }
 }
@@ -378,8 +306,6 @@
 
 .shown_as {
     &.reserved  { color: @appointment-reserved;  }
-    &.temporary { color: @appointment-temporary; }
-    &.absent    { color: @appointment-absent;    }
     &.free      { color: @appointment-free;      }
 }
 
@@ -561,8 +487,6 @@
 
         .shown_as {
             &.reserved  { color: @appointment-reserved; }
-            &.temporary { color: @appointment-temporary; }
-            &.absent    { color: @appointment-absent; }
             &.free      { color: @appointment-free; }
         }
     }
@@ -804,22 +728,6 @@ li {
     }
 }
 
-@media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
-    li {
-        .custom-colors {
-            max-width: 320px;
-
-            .color-label {
-                width: 40px;
-                height: 40px;
-                margin: 4px;
-                font-size: 28px;
-
-                .fa { width: 34px; }
-            }
-        }
-    }
-}
 //
 // Expandable section
 //

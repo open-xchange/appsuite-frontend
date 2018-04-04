@@ -119,12 +119,14 @@ define('io.ox/calendar/actions', [
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (distlist) {
-                ox.load(['io.ox/contacts/distrib/main', 'settings!io.ox/core']).done(function (m, coreSettings) {
-                    m.getApp().launch().done(function () {
-                        this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
-                        // trigger an empty remove just to get rid of unnecessary values in contacts
-                        if (!_.isEmpty(distlist)) this.view.baton.member.trigger('remove', {}, this.view.baton.member);
-                    });
+                require(['settings!io.ox/core'], function (coreSettings) {
+                    ox.launch('io.ox/contacts/distrib/main')
+                        .done(function () {
+                            this.create(coreSettings.get('folder/contacts'), {
+                                distribution_list: distlist,
+                                display_name: baton.data.summary
+                            });
+                        });
                 });
             });
         }
@@ -183,9 +185,12 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
 
             function cont(model) {
-                return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
+                var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
+                return $.when(def, util.isBossyAppointmentHandling({ app: e.baton.data, invert: true })).then(function (folder, isBossy) {
                     var attendees = model.get('attendees') || [],
-                        iamUser = !!_(attendees).findWhere({ entity: ox.user_id });
+                        user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                        iamUser = !!_(attendees).findWhere({ entity: user });
+
                     return e.collection.has('one') && iamUser && isBossy;
                 });
             }
@@ -319,7 +324,8 @@ define('io.ox/calendar/actions', [
                     },
                     target: baton.target,
                     title: gt('Move'),
-                    type: 'move'
+                    type: 'move',
+                    all: util.getCurrentRangeOptions()
                 });
             });
         }
@@ -372,6 +378,24 @@ define('io.ox/calendar/actions', [
     });
 
     // Actions mobile
+    new Action('io.ox/calendar/actions/monthview/showNext', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth('next');
+        }
+    });
+
+    new Action('io.ox/calendar/actions/monthview/showPrevious', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth('prev');
+        }
+    });
+
     new Action('io.ox/calendar/actions/dayview/showNext', {
         requires: true,
         action: function (baton) {
@@ -485,16 +509,32 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
-            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'ACCEPTED';
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.attendees) return false;
+
+            var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
+            return def.then(function (folder) {
+                var attendees = e.baton.data.attendees || [],
+                    user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                    iamUser = !!_(attendees).findWhere({ entity: user });
+
+                return iamUser && _(attendees).findWhere({ entity: user }).partStat !== 'ACCEPTED';
+            });
         },
         action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
-            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'DECLINED';
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.attendees) return false;
+
+            var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
+            return def.then(function (folder) {
+                var attendees = e.baton.data.attendees || [],
+                    user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                    iamUser = !!_(attendees).findWhere({ entity: user });
+
+                return iamUser && _(attendees).findWhere({ entity: user }).partStat !== 'DECLINED';
+            });
         },
         action: acceptDecline
     });

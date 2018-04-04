@@ -41,7 +41,19 @@ define('io.ox/settings/security/certificates/settings/pane', [
         });
     }
 
+    function handleEmptyNotice() {
+        var notice = gt('The certificate list is empty'),
+            hint = pane.find('.hint');
+
+        if (collection.length === 0) {
+            if (hint.length !== 0) hint.text(notice);
+        } else {
+            hint.empty();
+        }
+    }
+
     api.on('update', getAllStoredCertificates);
+    collection.on('remove add reset', handleEmptyNotice);
 
     ext.point(POINT).extend({
         index: 100,
@@ -51,6 +63,7 @@ define('io.ox/settings/security/certificates/settings/pane', [
             self.append(pane);
             getAllStoredCertificates().done(function () {
                 ext.point(POINT + '/pane').invoke('draw', pane);
+                handleEmptyNotice();
                 pane.idle();
             });
         }
@@ -63,7 +76,8 @@ define('io.ox/settings/security/certificates/settings/pane', [
             this.addClass('io-ox-certificate-settings').append(
                 $('<div class="row">').append(
                     $('<h1 class="col-md-8 col-xs-8">').text(gt('Certificates'))
-                )
+                ),
+                $('<div class="hint">')
             );
         }
     });

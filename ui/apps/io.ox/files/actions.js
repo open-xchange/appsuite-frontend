@@ -37,6 +37,18 @@ define('io.ox/files/actions', [
         allowedFileExtensions.push('pgp');
     }
 
+    function isTrash(baton) {
+        var model,
+            folderId;
+        if (baton.app) {
+            folderId = baton.app.folder.get();
+        } else if (baton.data) {
+            folderId = baton.data.folder_id;
+        }
+        model = folderAPI.pool.getModel(folderId);
+        return model ? folderAPI.is('trash', model.toJSON()) : false;
+    }
+
     // actions
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
@@ -83,6 +95,7 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
+                if (isTrash(e.baton)) return false;
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
                     var model = _.first(e.baton.models);
                     var isEncrypted = model && model.isEncrypted();
@@ -121,12 +134,13 @@ define('io.ox/files/actions', [
 
                 // Check if Guard file.  If so, do auth then call with parameters
                 // do not use endsWith because of IE11
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard')) {
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.toLowerCase().lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
                                 cryptoAction: 'Decrypt',
-                                cryptoAuth: auth
+                                cryptoAuth: auth,
+                                session: ox.session
                             };
                             launch(params);
                         });
@@ -188,8 +202,17 @@ define('io.ox/files/actions', [
             return isValid(e.baton.data);
         },
         multiple: function (list) {
-            ox.load(['io.ox/files/actions/download']).done(function (action) {
-                action(list);
+            var url = list.length === 1 ?
+                api.getUrl(_(list).first(), 'download') :
+                api.getUrl(list, 'zip');
+
+            // download via iframe or window open
+            require(['io.ox/core/download'], function (download) {
+                if (_.device('ios')) {
+                    download.window(url);
+                } else {
+                    download.url(url);
+                }
             });
         }
     });
@@ -348,7 +371,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -369,7 +392,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -432,6 +455,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             // one?
             if (!e.collection.has('one')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
@@ -465,6 +489,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/save-as-pdf', {
         capabilities: 'document_preview', // document converter.
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             // one?
             if (!e.collection.has('one')) return false;
 
@@ -495,6 +520,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             if (!e.collection.has('one', 'items')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
@@ -592,6 +618,7 @@ define('io.ox/files/actions', [
                         label: label,
                         success: success,
                         successCallback: function (response, apiInput) {
+                            // see file/api.js transfer(): in case of an error the callback returns a string
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
                                     itemsLeft = [];
@@ -601,7 +628,8 @@ define('io.ox/files/actions', [
                                 }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _.each(response, function (error) {
-                                    var errorResponse = error.error;
+                                    // check the error structure to prevent a nested error object
+                                    var errorResponse = _.isString(error.error) ? error : error.error;
 
                                     if (errorResponse) {
 
@@ -651,8 +679,28 @@ define('io.ox/files/actions', [
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
-                                                api[type](itemsLeft, baton.target || apiInput.target, true);
+                                                api[type](itemsLeft, baton.target || apiInput.target, true)
+                                                .always(function (response) {
 
+                                                    // see file/api.js transfer(): in case of an error the callback returns a string
+                                                    // important: only errors must be checked, conflicts can't happen here, since the
+                                                    // ignoreConflicts flag is 'true' at api.move
+                                                    var error = _.isString(response);
+
+                                                    if (error) {
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('error', response);
+                                                            api.trigger('reload:listview');
+                                                        });
+
+                                                    } else {
+                                                        //no error, must be success
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('success', itemsLeft.length > 1 ? success.multiple : success.single);
+                                                        });
+                                                    }
+
+                                                });
                                             },
                                             callbackCancel: function () {
                                                 // note: drag&drop and actions via menu use a different baton, see b53498
@@ -789,7 +837,7 @@ define('io.ox/files/actions', [
     // Action to revoke the sharing of the files.
     new Action('io.ox/files/share/revoke', {
         requires: function (e) {
-            console.log(e);
+
             return isShareable(e, 'link') || isShareable(e, 'invite');
         },
         action: function (baton) {
@@ -1000,39 +1048,36 @@ define('io.ox/files/actions', [
     // Action to add files/folders to favorites
     new Action('io.ox/files/favorites/add', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             if (capabilities.has('guest && anonymous')) return false;
-            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
-                if (Array.isArray(e.context)) {
-                    var result = true;
-                    _.each(e.context, function (element) {
-                        if (folderAPI.is('trash', element)) {
+            var favorites = false;
+            if (e.baton && e.baton.app && e.baton.app.listView) {
+                favorites = e.baton.app.listView.favorites || [];
+            } else if (e.baton) {
+                favorites = e.baton.favorites || [];
+            }
+            if (Array.isArray(favorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
+                }
+
+                var result = true;
+                _.each(e.context, function (element) {
+                    if (folderAPI.is('trash', element)) {
+                        result = false;
+                    }
+                    if (result) {
+                        var isFavorite = _.find(favorites, function (elem) {
+                            if (elem.id === element.id) {
+                                return true;
+                            }
+                        });
+                        if (isFavorite) {
                             result = false;
                         }
-                        if (result) {
-                            var favorites = e.baton.app.listView.favorites,
-                                isFavorite = _.find(favorites, function (elem) {
-                                    if (elem.id === element.id) {
-                                        return true;
-                                    }
-                                });
-                            if (isFavorite) {
-                                result = false;
-                            }
-                        }
-                    });
-                    return result;
-                }
-                if (folderAPI.is('trash', e.context)) return false;
-                var id = e.context.id,
-                    favorites = e.baton.app.listView.favorites,
-                    isFavorite = _.find(favorites, function (elem) {
-                        if (elem.id === id) {
-                            return true;
-                        }
-                    });
-                if (isFavorite) {
-                    return false;
-                }
+                    }
+                });
+                return result;
             }
             return true;
         },
@@ -1047,34 +1092,31 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/favorites/remove', {
         requires: function (e) {
             if (capabilities.has('guest && anonymous')) return false;
-            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
-                if (Array.isArray(e.context)) {
-                    var result = false;
-                    _.each(e.context, function (element) {
-                        if (!result) {
-                            var favorites = e.baton.app.listView.favorites,
-                                isFavorite = _.find(favorites, function (elem) {
-                                    if (elem.id === element.id) {
-                                        return true;
-                                    }
-                                });
-                            if (isFavorite) {
-                                result = true;
+            var favorites = false;
+            if (e.baton && e.baton.app && e.baton.app.listView) {
+                favorites = e.baton.app.listView.favorites || [];
+            } else if (e.baton) {
+                favorites = e.baton.favorites || [];
+            }
+            if (Array.isArray(favorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
+                }
+
+                var result = false;
+                _.each(e.context, function (element) {
+                    if (!result) {
+                        var isFavorite = _.find(favorites, function (elem) {
+                            if (elem.id === element.id) {
+                                return true;
                             }
+                        });
+                        if (isFavorite) {
+                            result = true;
                         }
-                    });
-                    return result;
-                }
-                var id = e.context.id,
-                    favorites = e.baton.app.listView.favorites,
-                    isFavorite = _.find(favorites, function (elem) {
-                        if (elem.id === id) {
-                            return true;
-                        }
-                    });
-                if (isFavorite) {
-                    return true;
-                }
+                    }
+                });
+                return result;
             }
             return false;
         },

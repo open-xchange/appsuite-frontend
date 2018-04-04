@@ -86,10 +86,7 @@ define('io.ox/calendar/common-extensions', [
         datetime: function (baton) {
             var data = baton.data.event || baton.data;
             this.append(
-                $('<div class="date-time">').append(
-                    $('<span class="date">').text(util.getDateInterval(data)),
-                    $('<span class="time">').text(util.getTimeInterval(data))
-                )
+                util.getDateTimeIntervalMarkup(data, { zone: moment().tz(), noTimezoneLabel: true })
             );
         },
 
@@ -161,19 +158,14 @@ define('io.ox/calendar/common-extensions', [
         organizer: function (baton) {
 
             // internal or external organizer?
-            // TODO check if internal and external organizers are still different, maybe we can get rid of the 2 options here
-            if (!baton.data.organizerId && !baton.data.organizer) return;
+            if (!baton.data.organizer) return;
 
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Organizer')),
                     $('<td class="detail organizer">').append(
                         coreUtil.renderPersonalName(
-                            baton.data.organizerId ? {
-                                $el: baton.organizerNode,
-                                html: userAPI.getTextNode(baton.data.organizerId),
-                                user_id: baton.data.organizerId
-                            } : {
+                            {
                                 $el: baton.organizerNode,
                                 name: baton.data.organizer.cn,
                                 email: baton.data.organizer.email,

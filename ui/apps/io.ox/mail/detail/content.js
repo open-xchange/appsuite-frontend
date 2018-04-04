@@ -197,6 +197,7 @@ define('io.ox/mail/detail/content', [
                 } else if (link.attr('href')) {
                     // other links
                     link.attr({ 'rel': 'noopener', 'target': '_blank' });
+                    link.attr('href', encodeURI(decodeURI(link.attr('href'))));
                 } else if (!href) {
                     // missing or broken href attribute
                     // remove href as it points to nowhere
@@ -548,7 +549,7 @@ define('io.ox/mail/detail/content', [
             $(this).hide().prev().show();
             // needed for FF to handle the resize
             _.delay(function () {
-                $(e.delegateTarget).trigger('resize');
+                $(e.delegateTarget).trigger('resize').trigger('toggle-blockquote');
             }, 20);
 
             $(this).remove();

@@ -169,9 +169,9 @@ define('io.ox/files/share/api', [
                     timezone: 'UTC'
                 },
                 data: _(data).pick('module', 'folder', 'item')
-            }).then(function (result) {
+            }).then(function (data, timestamp) {
                 api.trigger('new:link');
-                return result;
+                return { data: data, timestamp: timestamp };
             });
         },
 

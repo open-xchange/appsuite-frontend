@@ -212,15 +212,15 @@ define('io.ox/calendar/settings/pane', [
                         gt('New appointment'),
                         $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder')),
-                            new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDateTime' }).render().$el
+                            new AlarmsView.linkView({ model: settings, attribute: 'chronos/defaultAlarmDateTime' }).render().$el
                         ),
                         $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder for all-day appointments')),
-                            new AlarmsView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
+                            new AlarmsView.linkView({ model: settings, attribute: 'chronos/defaultAlarmDate' }).render().$el
                         ),
                         capabilities.has('calendar_birthdays') ? $('<div class="form-group">').append(
                             $('<label>').text(gt('Default reminder for appointments in birthday calendar')),
-                            new AlarmsView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
+                            new AlarmsView.linkView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
                         ) : '',
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)

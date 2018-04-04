@@ -30,7 +30,8 @@ define('io.ox/core/import/import', [
         index: 100,
         render: function (baton) {
             baton.module = this.model.get('module');
-            if (!/^(event)$/.test(baton.module)) return;
+            if (!/^(calendar)$/.test(baton.module)) return;
+            if (baton.model.get('folderId')) return;
             this.$body.append(
                 $('<div class="form-group">').append(
                     mini.getInputWithLabel('folderName', gt('Folder name'), this.model)
@@ -67,7 +68,7 @@ define('io.ox/core/import/import', [
         id: 'ical',
         index: 100,
         customize: function (baton) {
-            if (!/^(event|tasks)$/.test(baton.module)) return;
+            if (!/^(calendar|tasks)$/.test(baton.module)) return;
             this.push({ value: 'ICAL', label: gt('Calendar') });
         }
     });
@@ -104,7 +105,7 @@ define('io.ox/core/import/import', [
                 }).append(label)
             );
             var $input = this.$fileUploadInput = fileUpload.find('input[type="file"]');
-            if (baton.module === 'event') $input.attr('accept', '.ics,.ical');
+            if (baton.module === 'calendar') $input.attr('accept', '.ics,.ical');
             $input.on('change', function (e) {
                 e.preventDefault();
                 var buttonText = '';
@@ -122,12 +123,12 @@ define('io.ox/core/import/import', [
         render: function (baton) {
 
             // show option only for calendar and tasks
-            if (!(baton.module === 'event' || baton.module === 'tasks')) return;
+            if (!(baton.module === 'calendar' || baton.module === 'tasks')) return;
             this.$body.append(
                 new mini.CustomCheckboxView({
                     name: 'ignoreUuids',
                     model: this.model,
-                    label: baton.module === 'event' ?
+                    label: baton.module === 'calendar' ?
                         gt('Ignore existing appointments. Helpful to import public holiday calendars, for example.') :
                         gt('Ignore existing events')
                 }).render().$el
@@ -160,12 +161,27 @@ define('io.ox/core/import/import', [
         }
     });
 
+    ext.point('io.ox/core/import').extend({
+        id: 'calendar-import-hint',
+        index: 600,
+        render: function (baton) {
+
+            if (baton.module !== 'calendar') return;
+
+            this.$body.append(
+                $('<div class="help-block">').append(
+                    gt('Please note that other participants are removed on calendar import.')
+                )
+            );
+        }
+    });
+
     return {
 
         show: function (module, id) {
 
             new ModalDialog({
-                focus: module === 'event' ? 'input[name="folderName"]' : 'select[name="format"]',
+                focus: module === 'calendar' ? 'input[name="folderName"]' : 'select[name="format"]',
                 async: true,
                 help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
                 point: 'io.ox/core/import',
@@ -178,7 +194,7 @@ define('io.ox/core/import/import', [
             .inject({
                 createFolder: function (module, title) {
                     var invalid = false,
-                        folder = module === 'event' ? '1' : folderAPI.getDefaultFolder(module);
+                        folder = module === 'calendar' ? '1' : folderAPI.getDefaultFolder(module);
                     ext.point('io.ox/core/filename')
                         .invoke('validate', null, title, 'folder')
                         .find(function (result) {
@@ -188,7 +204,7 @@ define('io.ox/core/import/import', [
                             }
                         });
                     if (invalid) return $.Deferred().reject();
-                    return folderAPI.create(folder, { title: $.trim(title), module: module })
+                    return folderAPI.create(folder, { title: $.trim(title), module: module === 'calendar' ? 'event' : module })
                         .fail(notifications.yell);
                 },
                 getFolder: function () {
@@ -227,7 +243,13 @@ define('io.ox/core/import/import', [
                     this.close();
                 },
                 onCompleteFail: function (data) {
-                    if (this.tempFolder && this.model.get('module') === 'event') folderAPI.remove(this.tempFolder.id);
+                    if (!id && this.tempFolder && this.model.get('module') === 'calendar') {
+                        var parent = this.tempFolder.folder_id;
+                        folderAPI.remove(this.tempFolder.id).then(function () {
+                            folderAPI.pool.unfetch(parent);
+                            folderAPI.refresh();
+                        });
+                    }
                     this.onPartialFail(data);
                 }
             })
@@ -244,6 +266,9 @@ define('io.ox/core/import/import', [
                     notifications.yell('error', gt('Please select a valid iCal File to import'));
                     this.idle();
                     return;
+                } else if (!id && !this.model.get('folderName')) {
+                    notifications.yell('error', gt('You must enter a folder name'));
+                    return this.idle();
                 }
                 this.getFolder().then(function (folder) {
                     self.tempFolder = folder;
@@ -254,7 +279,10 @@ define('io.ox/core/import/import', [
                         ignoreUIDs: self.model.get('ignoreUuids'),
                         folder: folder.id
                     });
+                }, function fail(error) {
+                    notifications.yell(error);
                 }).then(function (data) {
+                    if (!data) return self.idle();
                     // get failed records
                     var failed = _.filter(data, function (item) {
                             return item && item.error;

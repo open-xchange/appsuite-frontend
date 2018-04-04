@@ -602,6 +602,7 @@ define('io.ox/mail/api', [
             includeSent: !accountAPI.is('sent|drafts', options.folder),
             // never use server cache
             cache: false,
+            deleted: showDeleted,
             // apply internal limit to build threads fast enough
             max: options.max || 500
         });
@@ -1259,7 +1260,10 @@ define('io.ox/mail/api', [
         data.to = _(data.to).map(flatten);
         data.cc = _(data.cc).map(flatten);
         data.bcc = _(data.bcc).map(flatten);
-
+        if (data.share_attachments && data.share_attachments.expiry_date) {
+            // expiry date should count from mail send
+            data.share_attachments.expiry_date = _.now() + data.share_attachments.expiry_date;
+        }
         function mapArgs(obj) {
             return {
                 'args': [{ 'com.openexchange.groupware.contact.pairs': [{ 'folder': obj.folder_id, 'id': obj.id }] }],
@@ -1430,7 +1434,7 @@ define('io.ox/mail/api', [
     api.fetchTextPreview = function (ids) {
         return http.fixList(ids, http.PUT({
             module: 'mail',
-            params: { action: 'list', columns: '600,601,663', timezone: 'utc' },
+            params: { action: 'list', columns: '600,601,663', timezone: 'utc', deleted: showDeleted },
             data: http.simplify(ids)
         }))
         .then(function (response) {
@@ -1547,7 +1551,8 @@ define('io.ox/mail/api', [
                 context: ox.context_id,
                 decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
-                sequence: 1
+                sequence: 1,
+                session: ox.session
             });
         switch (mode) {
             case 'view':
@@ -1995,22 +2000,24 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
+                    categoryid: params.category_id || params.categoryid,
                     columns: http.defaultColumns.mail.all,
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
-                    categoryid: params.category_id || params.categoryid,
+                    deleted: showDeleted,
                     timezone: 'utc'
                 };
             }
             return {
                 action: 'all',
                 folder: params.folder,
+                categoryid: params.category_id || params.categoryid,
                 columns: http.defaultColumns.mail.all,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
-                categoryid: params.category_id || params.categoryid,
+                deleted: showDeleted,
                 timezone: 'utc'
             };
         },
@@ -2070,7 +2077,8 @@ define('io.ox/mail/api', [
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
         // in the collection which is wanted behavior.
-        _.extend(obj, last);
+        // use most recent text preview
+        _.extend(obj, last, { text_preview: obj.text_preview || '' });
 
         // only store plain composite keys instead of full objects
         obj.thread = _(thread).map(_.cid);

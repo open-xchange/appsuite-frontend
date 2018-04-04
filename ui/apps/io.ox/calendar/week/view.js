@@ -84,6 +84,7 @@ define('io.ox/calendar/week/view', [
             var events = {
                 'click .control.next,.control.prev': 'onControlView',
                 'click .appointment': 'onClickAppointment',
+                'mousedown .appointment': 'onMousdownAppointment',
                 'click .weekday': 'onCreateAppointment',
                 'click .merge-split': 'onMergeSplit'
             };
@@ -343,8 +344,10 @@ define('io.ox/calendar/week/view', [
                         };
 
                         self.gridSize = 60 / settings.get('interval', 30);
+                        var timelineContainer = self.timeline.parent();
                         self.renderTimeslots();
                         self.applyTimeScale();
+                        timelineContainer.append(self.timeline);
 
                         // if this function is called while the calendar app is not visible we get wrong height measurements
                         // so wait until the next show event, to calculate correctly
@@ -374,7 +377,7 @@ define('io.ox/calendar/week/view', [
             if (!this.lasso) {
                 var cid = util.cid(String($(e.currentTarget).data('cid'))),
                     el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]', this.$el),
-                    bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                    bg = el.data('background-color');
                 switch (e.type) {
                     case 'mouseenter':
                         if (e.relatedTarget && e.relatedTarget.tagName !== 'TD') {
@@ -507,13 +510,21 @@ define('io.ox/calendar/week/view', [
             }
         },
 
+        onMousdownAppointment: function (e) {
+            if ($(e.target).hasClass('ui-resizable-handle')) {
+                delete this.clicktarget;
+                return;
+            }
+            this.clicktarget = $(e.currentTarget).attr('data-cid');
+        },
+
         /**
          * handler for single- and double-click events on appointments
-         * TODO check if this code is an exact duplication of the week-views onclick appointment
          * @param  { MouseEvent } e Mouse event
          */
         onClickAppointment: function (e) {
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
+            if (cT.attr('data-cid') !== this.clicktarget) return;
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = util.cid(String(cT.data('cid')));
@@ -611,7 +622,7 @@ define('io.ox/calendar/week/view', [
                 // switch mouse events
                 switch (e.type) {
                     case 'mousedown':
-                        if (self.lasso === false && $(e.target).hasClass('timeslot')) {
+                        if (e.which === 1 && self.lasso === false && $(e.target).hasClass('timeslot')) {
                             self.lasso = true;
                             self.mousedownAt = e.pageY + self.pane.scrollTop();
                         }
@@ -949,10 +960,16 @@ define('io.ox/calendar/week/view', [
             var renderTimeline = function () {
                 var d = moment();
                 self.timeline.css({ top: ((d.hours() / 24 + d.minutes() / 1440) * 100) + '%' });
+                // check, if the day changed
+                var now = _.now(),
+                    lastRendered = parseInt(self.timeline.attr('data-last') || now, 10);
+                self.timeline.attr('data-last', now);
+                if (moment(lastRendered).startOf('day').valueOf() !== moment(now).startOf('day').valueOf()) self.rerender();
             };
             // create and animate timeline
             renderTimeline();
-            setInterval(renderTimeline, 60000);
+            if (this.intervalId) clearInterval(this.intervalId);
+            this.intervalId = setInterval(renderTimeline, 60000);
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
@@ -1209,7 +1226,7 @@ define('io.ox/calendar/week/view', [
                     self.timeline.show();
                 }
                 days.push(day);
-                tmpDate.add(1, 'day');
+                if (!self.isMergeView) tmpDate.add(1, 'day');
             });
 
             this.dayLabel.empty().append(days);
@@ -1234,7 +1251,7 @@ define('io.ox/calendar/week/view', [
                     cw: gt('CW %1$d', this.startDate.format('w')),
                     date: this.columns > 1
                         ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
-                        : this.startDate.format('l')
+                        : this.startDate.format('ddd, l')
                 };
                 // bubbling event to get it in page controller
                 this.trigger('change:navbar:date', this.navbarDates);

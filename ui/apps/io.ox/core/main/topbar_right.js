@@ -82,11 +82,11 @@ define('io.ox/core/main/topbar_right', [
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness!
                 // only requests are delayed by 5s, the badge is drawn normally
-                self.append(notifications.attach(addLauncher, DELAY));
+                self.append(notifications.attach(DELAY));
             } else {
                 //lets wait till we are online
                 ox.once('connection:online', function () {
-                    self.append(notifications.attach(addLauncher, DELAY));
+                    self.append(notifications.attach(DELAY));
                 });
             }
         }
@@ -332,7 +332,7 @@ define('io.ox/core/main/topbar_right', [
             function updatePicture() {
                 a.empty().append(
                     contactAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden"true">')
+                        $('<div class="contact-picture" aria-hidden="true">')
                         .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }

@@ -5,7 +5,7 @@
     "refreshable": true,
     "searchable": true,
     "hasLauncher": true,
-    "index": 200
+    "index": 100
 }, {
     "namespace": "io.ox/mail/compose/editor/text",
     "path": "io.ox/core/tk/text-editor"

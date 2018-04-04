@@ -126,6 +126,7 @@ define('io.ox/calendar/week/perspective', [
                             });
                     });
                 }, function fail(error) {
+                    self.view.renderAppointments();
                     notifications.yell(error);
                 });
             };
@@ -264,35 +265,11 @@ define('io.ox/calendar/week/perspective', [
             }).data('background-color', color);
 
             container.removeClass('black white');
-            container.addClass(util.getForegroundColor(color));
+            container.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
 
             $('[data-folder="' + model.get('id') + '"]', this.view.dayLabel).css({
                 'border-color': color
             });
-        },
-
-        onChangeColorScheme: function () {
-            if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment', this.view.pane).css({ 'background-color': '', 'color':  '' });
-            } else {
-                $('.appointment', this.view.pane).each(function () {
-                    var $elem = $(this),
-                        cid = $elem.data('cid'),
-                        folder = util.cid(cid).folder,
-                        model = api.pool.getModel(cid),
-                        folderModel = folderAPI.pool.models[folder];
-                    if (!model || !folderModel) return;
-                    var color = util.getAppointmentColor(folderModel.attributes, model);
-                    if (!color) return;
-                    $elem.css({
-                        'background-color': color,
-                        'color': util.getForegroundColor(color)
-                    }).data('background-color', color);
-                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
-                        $elem.attr('data-folder', folder);
-                    }
-                });
-            }
         },
 
         /**
@@ -309,18 +286,6 @@ define('io.ox/calendar/week/perspective', [
                 self.view.folder(data);
                 // save folder data to view and update
                 self.getAppointments(useCache);
-
-                // register event to listen to color changes on current folder
-                if (self.folderModels) {
-                    self.folderModels.forEach(function (folderModel) {
-                        folderModel.off('change:com.openexchange.calendar.extendedProperties', self.updateColor);
-                    });
-                }
-                self.folderModels = _(folders).map(function (folder) {
-                    var model = folderAPI.pool.getModel(folder.id);
-                    model.on('change:com.openexchange.calendar.extendedProperties', self.updateColor, self);
-                    return model;
-                });
             });
         },
         /**
@@ -344,6 +309,8 @@ define('io.ox/calendar/week/perspective', [
          * @param  {object} opt options from perspective
          */
         afterShow: function (app, opt) {
+            var self = this;
+
             // hide current view
             if (this.view) {
                 this.view.$el.hide();
@@ -388,6 +355,12 @@ define('io.ox/calendar/week/perspective', [
                     .on('updateAppointment', this.updateAppointment, this)
                     .on('onRefresh', this.refresh, this)
                     .on('change:navbar:date', this.changeNavbarDate, this);
+
+                this.view.listenTo(folderAPI, 'before:update', function (id, model) {
+                    if (model.get('module') !== 'calendar') return;
+                    if (!model.changed['com.openexchange.calendar.extendedProperties']) return;
+                    self.updateColor(model);
+                });
 
                 this.views[opt.perspective] = this.view.render();
                 this.main.append(this.view.$el.show());
@@ -460,7 +433,7 @@ define('io.ox/calendar/week/perspective', [
             // watch for api refresh
             api
                 .on('refresh.all', reload)
-                .on('create update delete', _.debounce(function () {
+                .on('process:create update delete', _.debounce(function () {
                     var collection = self.view.collection;
                     // set all other collections to expired to trigger a fresh load on the next opening
                     api.pool.grep('view=week').forEach(function (c) {
@@ -501,8 +474,6 @@ define('io.ox/calendar/week/perspective', [
                 .on('keydown', function (e) {
                     self.view.fnKey(e);
                 });
-
-            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
 
             this.followDeepLink();
         },

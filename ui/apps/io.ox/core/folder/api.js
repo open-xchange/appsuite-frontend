@@ -99,6 +99,7 @@ define('io.ox/core/folder/api', [
     }
 
     function isVirtual(id) {
+        if (id === 'cal://0/allPublic') return true;
         return /^virtual/.test(id);
     }
 
@@ -202,6 +203,7 @@ define('io.ox/core/folder/api', [
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
             if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
+            if (this.is('calendar') && this.is('private')) return this.supportsShares();
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
             return capabilities.has('read_create_shared_folders');
@@ -459,6 +461,22 @@ define('io.ox/core/folder/api', [
             title: gt('Unread messages')
         });
     }
+
+    if (capabilities.has('edit_public_folders')) {
+        pool.addModel({
+            folder_id: '1',
+            id: 'cal://0/allPublic',
+            module: 'calendar',
+            permissions: [{ bits: 0, entity: ox.user_id, group: false }],
+            standard_folder: true,
+            supported_capabilities: [],
+            title: gt('All my public appointments'),
+            total: -1,
+            type: 1,
+            subscribed: true
+        });
+    }
+
 
     //
     // Propagate
@@ -826,6 +844,10 @@ define('io.ox/core/folder/api', [
             .value();
     }
 
+    function injectVirtualCalendarFolder(array) {
+        array.unshift(pool.getModel('cal://0/allPublic').toJSON());
+    }
+
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
@@ -906,6 +928,8 @@ define('io.ox/core/folder/api', [
                     // otherwise
                     return true;
                 });
+                // inject 'All my public appointments' for calender/public
+                if (module === 'event' && id === 'public') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -937,6 +961,8 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
         if (isVirtual(id)) return $.when();
+
+        if (!options.silent) api.trigger('before:update before:update:' + id, id, model);
 
         // build data object
         var data = { folder: changes },
@@ -1265,15 +1291,9 @@ define('io.ox/core/folder/api', [
         .done(function () {
             _(list).each(function (model) {
                 var id = model.get('id');
-                api.get(id, { cache: false }).done(function (folderModel) {
-                    api.path(folderModel.folder_id).done(function (folderModels) {
-                        api.pool.getModel(folderModel.folder_id).set('subscr_subflds', true);
-                        folderModels.push(folderModel);
-                        _.each(folderModels, function (tmp) {
-                            api.pool.getCollection(tmp.folder_id).add(tmp);
-                        });
-                        api.trigger('restore', model.toJSON());
-                    });
+                api.get(id, { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('restore', model.toJSON());
                 })
                 .fail(function (error) {
                     // folder does not exist

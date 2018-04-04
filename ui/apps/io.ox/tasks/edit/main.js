@@ -102,6 +102,7 @@ define('io.ox/tasks/edit/main', [
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
 
                     if (_.browser.IE === undefined || _.browser.IE > 9) {
+                        // use naming convention 'dropZone' to utilise global dropZone.remove on quit
                         self.dropZone = new dnd.UploadZone({
                             ref: 'io.ox/tasks/edit/dnd/actions'
                         }, taskView);
@@ -192,7 +193,6 @@ define('io.ox/tasks/edit/main', [
                 taskView.trigger('dispose');
                 //important so no events are executed on non existing models
                 taskModel.off();
-                if (app.dropZone) app.dropZone.remove();
                 app = win = taskModel = taskView = null;
             };
 

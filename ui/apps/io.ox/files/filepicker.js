@@ -299,6 +299,7 @@ define('io.ox/files/filepicker', [
             },
             acceptLocalFileType: '', //e.g.  '.jpg,.png,.doc', 'audio/*', 'image/*' see@ https://developer.mozilla.org/de/docs/Web/HTML/Element/Input#attr-accept
             cancel: $.noop,
+            close: $.noop,
             initialize: $.noop,
             createFolderButton: true,
             extension: 'io.ox/files/mobile/navbar'
@@ -657,7 +658,8 @@ define('io.ox/files/filepicker', [
                     $uploadButton.trigger('click');
                 }
             },
-            cancel: options.cancel
+            cancel: options.cancel,
+            close: options.close
         });
 
         return def.promise();

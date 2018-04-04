@@ -54,6 +54,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // ensure correct width on smartphone
             if (_.device('smartphone') && options.width >= 320) {
                 options.width = '95%';
+                options.maximize = '95%';
             }
             this.context = options.context;
             // the original constructor will call initialize()
@@ -81,7 +82,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
             this.$el.on('hidden.bs.modal', this.close);
             // apply max height if maximize is given as number
-            if (_.isNumber(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
+            if (_.isNumber(options.maximize) || _.isString(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
                 var helpPlaceholder = $('<a class="io-ox-context-help">');
@@ -241,7 +242,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 $('<div class="checkbox custom">').append(
                     $('<label>').attr('for', id).prepend(
                         $('<input type="checkbox" class="sr-only">')
-                            .attr({ 'id': id, 'data-action': o.action })
+                            .attr({ 'id': id, 'name': o.action })
                             .prop('checked', o.status),
                         $('<i class="toggle" aria-hidden="true">'),
                         $.txt(o.label || '\u00a0')

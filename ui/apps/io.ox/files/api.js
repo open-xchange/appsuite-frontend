@@ -172,7 +172,7 @@ define('io.ox/files/api', [
             return (
                 this.isPgp() ||
                 // check if file has "guard" file extension
-                (/\.(grd|grd2|pgp)$/).test(this.get('filename'))
+                (/\.(grd|grd2|pgp)$/i).test(this.get('filename'))
             );
         },
 
@@ -207,7 +207,7 @@ define('io.ox/files/api', [
 
             // If has extension .xyz.pgp, remove the pgp and return extension
             if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
-                extension = parts[parts.length - 1];
+                extension = parts[parts.length - 1].toLowerCase();
             } else {
                 extension = '';
             }
@@ -540,7 +540,7 @@ define('io.ox/files/api', [
         fetch: function (params) {
 
             var module = this.module,
-                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
+                key = module + '/' + _.cacheKey(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
                 noSelect = this.noSelect(params),
                 virtual = this.virtual(params),
@@ -940,7 +940,7 @@ define('io.ox/files/api', [
             }))
             .then(function (array) {
                 // add new items to the pool
-                _(array).each(mergeDetailInPool);
+                _(array.filter(Boolean)).each(mergeDetailInPool);
                 // reconstruct results
                 if (options.fullModels) {
                     return _(ids).map(has, collection);
@@ -1225,6 +1225,13 @@ define('io.ox/files/api', [
         var fn = type === 'move' ? move : copy,
             def = $.Deferred(),
             callback = function (response) {
+
+                // this needs refactoring: when moving a folder successful with larger files (long running job)
+                // the finished jobs have no 'multiple' response, therefore the input 'result' here is a String
+                // (see http.js/processResponse why). When a String is returned in this function, later functions
+                // detects that as an error, which is wrong. Therefore prevent that as an intermediate workaround.
+                response = _.isString(response) ? [] : response;
+
                 var errorText, i = 0, $i = response ? response.length : 0;
                 // look if anything went wrong
                 for (; i < $i; i++) {
@@ -1240,25 +1247,47 @@ define('io.ox/files/api', [
                 def.resolve(errorText || response);
             },
             failCallback = function (error) {
+                // if a job fails, check if this is a conflict thing, if it is use the successcallback
+                if (_.isArray(error)) {
+                    for (var i = 0; i < error.length; i++) {
+                        if (error[i].error.categories === 'CONFLICT') {
+                            callback(error);
+                            return;
+                        }
+                    }
+                } else if (error.categories === 'CONFLICT') {
+                    callback(error);
+                    return;
+                }
+
                 def.reject(error);
             };
 
         http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (result) {
-            if (type === 'move' && result && result[0] && result[0].data && result[0].data.job) {
-                // long running job. Add to jobs list and return here
-                //#. %1$s: Folder name
-                jobsAPI.addJob({
-                    module: 'folders',
-                    action: 'update',
-                    done: false,
-                    showIn: 'infostore',
-                    id: result[0].data.job,
-                    successCallback: callback,
-                    failCallback: failCallback });
-                return;
+            if (type === 'move' && result && result.length) {
+                result = _(result).map(function (res) {
+                    if (res.data && res.data.job) {
+                        // long running job. Add to jobs list
+                        jobsAPI.addJob({
+                            module: 'folders',
+                            action: 'update',
+                            done: false,
+                            showIn: 'infostore',
+                            id: res.data.job,
+                            successCallback: callback,
+                            failCallback: failCallback });
+                        return;
+                    }
+                    return res;
+                });
+                result = _(result).compact();
+                // if all responses in the multiple where long running jobs, we return here. Otherwise we continue with what already finished
+                if (result.length === 0) return;
             }
             callback(result);
-        }, failCallback);
+        }, function (error) {
+            def.reject(error);
+        });
         return def;
     }
 
@@ -1677,6 +1706,14 @@ define('io.ox/files/api', [
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
                     if ('object_permissions' in changes) api.propagate('permissions', file);
                     if ('description' in changes) api.propagate('description', file);  //Bug 51571
+                    break;
+
+                case 'favorite:add':
+                    api.trigger('favorite:add', file);
+                    break;
+
+                case 'favorite:remove':
+                    api.trigger('favorite:remove', file);
                     break;
 
                 case 'change:version':

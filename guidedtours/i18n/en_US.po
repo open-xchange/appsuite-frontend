@@ -263,6 +263,12 @@ msgid ""
 "also collaborate on a document and set different access rights."
 msgstr ""
 
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
 msgstr ""
@@ -275,6 +281,12 @@ msgstr ""
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
+msgstr ""
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"In case of new notifications, e.g. appointment invitations, the info area is "
+"opened."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -343,6 +355,10 @@ msgstr ""
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
+msgstr ""
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Restart Guided Tour"
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -422,6 +438,16 @@ msgid ""
 "displayed in the Detail view."
 msgstr ""
 
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The New objects icon"
+msgstr ""
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The New objects icon shows the number of appointment reminders or other "
+"notifications. If clicking the icon, the info area opens."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr ""
@@ -451,6 +477,10 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
+msgstr ""
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The info area"
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -573,9 +603,7 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -606,16 +634,16 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
-"bar. Select Help. The help for the currently selected app is displayed. To "
-"browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the System menu icon on the upper right side of the "
+"menu bar. Select Help. The help for the currently selected app is displayed. "
+"To browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
+"To open the settings, click the System menu icon on the upper right side of "
+"the menu bar. Select Settings."
 msgstr ""
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -652,11 +680,6 @@ msgstr ""
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
-msgstr ""
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours

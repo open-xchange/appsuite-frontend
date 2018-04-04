@@ -139,7 +139,7 @@ define('io.ox/calendar/model', [
             if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
-            else this.model.unset('rrule');
+            else this.model.set('rrule', null);
         },
 
         deserialize: function () {
@@ -258,23 +258,28 @@ define('io.ox/calendar/model', [
         },
 
         setDefaultAttendees: function (options) {
+            if (!options.create) return $.when();
             var self = this;
             return folderAPI.get(this.get('folder')).then(function (folder) {
-                if (!options.create) return;
-                var isPrivate = folderAPI.is('private', folder),
-                    isShared = folderAPI.is('shared', folder);
+                var isShared = folderAPI.is('shared', folder);
                 return require(['io.ox/core/api/user']).then(function (userAPI) {
                     return userAPI.get({ id: isShared ? folder.created_by : undefined });
                 }).then(function (user) {
-                    if (isPrivate) {
-                        self.set('organizer', {
-                            cn: user.display_name,
-                            email: user.email1,
-                            uri: 'mailto:' + user.email1,
-                            entity: ox.user_id
-                        });
+                    self.set('organizer', {
+                        cn: user.display_name,
+                        email: user.email1,
+                        uri: 'mailto:' + user.email1,
+                        entity: user.id
+                    });
+                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' });
+                    // Merge attributes or add (note add with merge option does not overwrite old values with new ones, so it cannot be used here)
+                    if (self.getAttendees().get(newAttendee)) {
+                        self.getAttendees().get(newAttendee).set(newAttendee);
+                        // trigger add manually to make sure the attendee attribute and collection are synced correctly -> see follow up events action
+                        self.getAttendees().trigger('add');
+                    } else {
+                        self.getAttendees().add(newAttendee);
                     }
-                    self.getAttendees().add(util.createAttendee(user, { partStat: 'ACCEPTED' }));
                 });
             });
         },
@@ -287,6 +292,7 @@ define('io.ox/calendar/model', [
             return this.getMoment(name).valueOf();
         },
         parse: function (res) {
+            if (res.folder && res.id) res.cid = res.cid = util.cid(res);
             return res;
         },
         getRruleMapModel: function () {
@@ -308,12 +314,22 @@ define('io.ox/calendar/model', [
         }
     });
 
-    ext.point('io.ox/calendar/model/validation').extend({
+    ext.point('io.ox/chronos/model/validation').extend({
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {
                 //#. %1$s is an upload limit like for example 10mb
                 this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
+            }
+        }
+    });
+
+    ext.point('io.ox/chronos/model/validation').extend({
+        id: 'secret-used-with-resource',
+        validate: function (attributes) {
+            if (attributes['class'] === 'PRIVATE' && _(_(attributes.attendees).pluck('cuType')).contains('RESOURCE')) {
+                //#. error text is displayed when an appointment is marked as secret but blocking a ressource (e.g. a conference room)
+                this.add('class', gt('You cannot mark the appointment as secret, when blocking a ressource.'));
             }
         }
     });

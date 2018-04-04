@@ -388,23 +388,25 @@ define('io.ox/core/desktop', [
             this.set('window', win);
             win.app = this;
             if (this.options.floating) {
-                var model = this.options.floatingWindowModel || new FloatingWindow.Model({
-                    title: this.options.title,
-                    closable: this.options.closable,
-                    displayStyle: this.options.displayStyle,
-                    taskbarIcon: this.options.taskbarIcon,
-                    win: win
-                });
-                win.floating = new FloatingWindow.View({
-                    el: win.nodes.outer,
-                    model: model
-                }).render();
+                var model = this.options.floatingWindowModel || new FloatingWindow.Model(
+                    _.extend(_(this.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'), { win: win })
+                );
+                win.floating = new FloatingWindow.View({ el: win.nodes.outer, model: model }).render();
 
                 win.floating.listenTo(model, 'quit', function () {
                     win.app.quit().done(function () {
                         model.trigger('close');
                     });
                 });
+
+                // handle dropzone
+                win.floating.listenTo(model, 'change:active change:minimized', function (model) {
+                    if (!win.app.dropZone) return;
+                    var active = model.get('active') && !model.get('minimized');
+                    if (!active) return win.app.dropZone.remove();
+                    win.app.dropZone.include();
+                });
+
                 win.app.once('quit', function () { model.trigger('close'); });
             }
             // add app name
@@ -622,6 +624,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
+                if (self.dropZone && self.dropZone.remove) self.dropZone.remove();
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
@@ -798,11 +801,13 @@ define('io.ox/core/desktop', [
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && app.options.floating) {
-                                var model = new FloatingWindow.Model({ id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon }),
+                                var model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon }),
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                 FloatingWindow.collection.add(model);
                                 win.listenToOnce(model, 'lazyload', function () {
                                     var oldId = obj.id;
+                                    // copy app options over to window model
+                                    model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
                                     app.launch({ floatingWindowModel: model }).then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
@@ -1193,24 +1198,6 @@ define('io.ox/core/desktop', [
                     }
                 });
 
-                ext.point(name + '/window-toolbar').extend({
-                    id: 'default',
-                    draw: function () {
-                        return $('<ul class="window-toolbar" class="f6-target" attr="toolbar">')
-                            .attr('aria-label', gt('Application Toolbar'));
-                    }
-                });
-
-                ext.point(name + '/window-head').extend({
-                    id: 'default',
-                    draw: function () {
-                        return this.head.append(
-                            this.toolbar = ext.point(name + '/window-toolbar')
-                                .invoke('draw', this).first().value() || $()
-                        );
-                    }
-                });
-
                 ext.point(name + '/window-body').extend({
                     id: 'default',
                     draw: function () {
@@ -1494,11 +1481,9 @@ define('io.ox/core/desktop', [
                 this.setChromeless = function (mode) {
                     if (mode) {
                         this.nodes.outer.addClass('chromeless-window');
-                        this.nodes.head.hide();
                         this.nodes.body.css('left', '0px');
                     } else {
                         this.nodes.outer.removeClass('chromeless-window');
-                        this.nodes.head.show();
                         this.nodes.body.css('left', '');
                     }
                 };
@@ -1555,9 +1540,6 @@ define('io.ox/core/desktop', [
                             $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
-                        // window HEAD
-                        // @deprecated
-                        win.nodes.head = $('<div class="window-head">'),
                         // window HEADER
                         win.nodes.header = $('<div class="window-header">'),
                         // window SIDEPANEL
@@ -1581,8 +1563,6 @@ define('io.ox/core/desktop', [
                     win.nodes.outer.addClass(opt.name.replace(/[./]/g, '-') + '-window');
                 }
 
-                // draw window head
-                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
                 ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             }
 
@@ -1597,103 +1577,103 @@ define('io.ox/core/desktop', [
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
             }
 
-            // if (opt.find && supportsFind(opt.name)) {
+            if (opt.find && supportsFind(opt.name)) {
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'view',
-            //         index: 100,
-            //         draw: function (baton) {
-            //             baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
+                ext.point('io.ox/find/view').extend({
+                    id: 'view',
+                    index: 100,
+                    draw: function (baton) {
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
 
-            //             // add nodes
-            //             this.nodes.sidepanel
-            //                 .append(baton.$.viewnode)
-            //                 .addClass('top-toolbar');
-            //         }
-            //     });
+                        // add nodes
+                        this.nodes.sidepanel
+                            .append(baton.$.viewnode)
+                            .addClass('top-toolbar');
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'subviews',
-            //         index: 200,
-            //         draw: function (baton) {
-            //             baton.$.viewnode.append(
-            //                 $('<div class="sr-only arialive" role="status" aria-live="polite">'),
-            //                 baton.$.box = $('<form class="search-box">'),
-            //                 baton.$.boxfilter = $('<div class="search-box-filter">')
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'subviews',
+                    index: 200,
+                    draw: function (baton) {
+                        baton.$.viewnode.append(
+                            $('<div class="sr-only arialive" role="status" aria-live="polite">'),
+                            baton.$.box = $('<form class="search-box">'),
+                            baton.$.boxfilter = $('<div class="search-box-filter">')
+                        );
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'form',
-            //         index: 300,
-            //         draw: function (baton) {
-            //             // share data
-            //             _.extend(baton.data, {
-            //                 label: gt('Search'),
-            //                 id:  _.uniqueId(win.name + '-search-field'),
-            //                 guid:  _.uniqueId('form-control-description-')
-            //             });
-            //             // search box form
-            //             baton.$.group = $('<div class="form-group has-feedback">').append(
-            //                 $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-            //                     id: baton.data.id,
-            //                     placeholder: baton.data.label + '...',
-            //                     'aria-describedby': baton.data.guid
-            //                 })
-            //             );
-            //             // add to searchbox area
-            //             baton.$.box.append(
-            //                 baton.$.group
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'form',
+                    index: 300,
+                    draw: function (baton) {
+                        // share data
+                        _.extend(baton.data, {
+                            label: gt('Search'),
+                            id:  _.uniqueId(win.name + '-search-field'),
+                            guid:  _.uniqueId('form-control-description-')
+                        });
+                        // search box form
+                        baton.$.group = $('<div class="form-group has-feedback">').append(
+                            $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+                                id: baton.data.id,
+                                placeholder: baton.data.label + '...',
+                                'aria-describedby': baton.data.guid
+                            })
+                        );
+                        // add to searchbox area
+                        baton.$.box.append(
+                            baton.$.group
+                        );
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'buttons',
-            //         index: 400,
-            //         draw: function (baton) {
-            //             baton.$.group.append(
-            //                 // search
-            //                 $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-            //                     .attr({
-            //                         'data-original-title': gt('Start search'),
-            //                         'aria-label': gt('Start search')
-            //                     }).append($('<i class="fa fa-search" aria-hidden="true">'))
-            //                     .tooltip(),
-            //                 // cancel/reset
-            //                 $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-            //                     .attr({
-            //                         'data-original-title': gt('Cancel search'),
-            //                         'aria-label': gt('Cancel search')
-            //                     }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
-            //                     .tooltip()
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'buttons',
+                    index: 400,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // search
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                .attr({
+                                    'data-original-title': gt('Start search'),
+                                    'aria-label': gt('Start search')
+                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
+                                .tooltip(),
+                            // cancel/reset
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                .attr({
+                                    'data-original-title': gt('Cancel search'),
+                                    'aria-label': gt('Cancel search')
+                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
+                                .tooltip()
+                        );
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'screenreader',
-            //         index: 500,
-            //         draw: function (baton) {
-            //             baton.$.group.append(
-            //                 // sr label
-            //                 $('<label class="sr-only">')
-            //                     .attr('for', baton.data.id)
-            //                     .text(baton.data.label),
-            //                 // sr description
-            //                 $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
-            //                     .text(
-            //                         //#. search feature help text for screenreaders
-            //                         gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-            //                     )
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'screenreader',
+                    index: 500,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // sr label
+                            $('<label class="sr-only">')
+                                .attr('for', baton.data.id)
+                                .text(baton.data.label),
+                            // sr description
+                            $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
+                                .text(
+                                    //#. search feature help text for screenreaders
+                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                )
+                        );
+                    }
+                });
 
-            //     // draw searchfield and attach lazy load listener
-            //     ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
-            // }
+                // draw searchfield and attach lazy load listener
+                ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
+            }
 
             // fix height/position/appearance
             if (opt.chromeless) {

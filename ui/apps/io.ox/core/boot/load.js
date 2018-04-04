@@ -105,17 +105,19 @@ define('io.ox/core/boot/load', [
 
         if (!capabilities.has('webmail')) return;
 
+        var columns = http.defaultColumns.mail;
+
         // always extend columns (we can do that now and if we start with mail with need this)
         if (mailSettings.get('features/textPreview', true)) {
-            http.defaultColumns.mail.unseen += ',662';
-            http.defaultColumns.mail.all += ',662';
-            http.defaultColumns.mail.search += ',662';
+            columns.unseen += ',662';
+            columns.all += ',662';
+            columns.search += ',662';
         }
 
         if (mailSettings.get('features/authenticity', false)) {
-            http.defaultColumns.mail.unseen += ',664';
-            http.defaultColumns.mail.all += ',664';
-            http.defaultColumns.mail.search += ',664';
+            columns.unseen += ',664';
+            columns.all += ',664';
+            columns.search += ',664';
         }
 
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
@@ -131,12 +133,15 @@ define('io.ox/core/boot/load', [
             params = {
                 action: action,
                 folder: folder,
-                columns: http.defaultColumns.mail.all,
+                categoryid: 'general',
+                columns: columns.all,
                 sort: sort,
                 order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
-                categoryid: 'general',
+                includeSent: true,
+                max: 300,
                 timezone: 'utc',
-                limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
+                limit: '0,' + mailSettings.get('listview/primaryPageSize', 50),
+                deleted: !mailSettings.get('features/ignoreDeleted', false)
             };
 
         // mail categories (aka tabbed inbox)
@@ -144,11 +149,15 @@ define('io.ox/core/boot/load', [
             delete params.categoryid;
         }
 
-        if (thread) _.extend(params, { includeSent: true, max: 300 });
+        if (!thread) {
+            // delete instead of adding to maintain proper order of parameters
+            delete params.includeSent;
+            delete params.max;
+        }
 
         http.GET({ module: 'mail', params: params }).done(function (data) {
             // the collection loader will check ox.rampup for this data
-            ox.rampup['mail/' + _.param(params)] = data;
+            ox.rampup['mail/' + _.cacheKey(params)] = data;
         });
     }
 

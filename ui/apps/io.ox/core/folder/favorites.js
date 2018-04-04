@@ -209,6 +209,15 @@ define('io.ox/core/folder/favorites', [
             });
 
             // Register listener for file changes
+            filesAPI.on('move', function (objects) {
+                _.each(objects, function (obj) {
+                    var id = obj;
+                    if (typeof obj === 'object') {
+                        id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
+                    }
+                    collection.remove(id);
+                });
+            });
             filesAPI.on('rename description add:version remove:version change:version', function (obj) {
                 var id = obj;
                 if (typeof obj === 'object') {

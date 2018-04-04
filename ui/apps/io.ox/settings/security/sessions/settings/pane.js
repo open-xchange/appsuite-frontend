@@ -69,94 +69,108 @@ define('io.ox/settings/security/sessions/settings/pane', [
     ext.point('io.ox/settings/sessions/operatingSystem').extend({
         id: 'os',
         index: 100,
-        customize: function () {
-            var os = this.getDeviceInfo('os').name || '';
-            if (os === 'os x') {
-                this.set('operatingSystem',
-                    //#. Context: Session Management. Active session on platform/os.
-                    gt('Mac')
-                );
-                this.set('os', 'apple');
-            } else if (os === 'windows') {
-                this.set('operatingSystem',
-                    //#. Context: Session Management. Active session on platform/os.
-                    gt('Windows')
-                );
-                this.set('os', 'windows');
-            } else if (os === 'android') {
-                this.set('operatingSystem',
-                    //#. Context: Session Management. Active session on platform/os.
-                    gt('Android')
-                );
-                this.set('os', 'android');
-            } else if (os === 'ios') {
-                this.set('operatingSystem',
-                    //#. Context: Session Management. Active session on platform/os.
-                    gt('iOS')
-                );
-                this.set('os', 'apple');
-            }
-        }
+        customize: (function () {
+            var mapping = {
+                //#. Context: Session Management. Active session on platform/os.
+                windows: gt('Windows'),
+                //#. Context: Session Management. Active session on platform/os.
+                linux: gt('Linux'),
+                //#. Context: Session Management. Active session on platform/os.
+                macos: gt('Mac'),
+                //#. Context: Session Management. Active session on platform/os.
+                ios: gt('iOS'),
+                //#. Context: Session Management. Active session on platform/os.
+                android: gt('Android')
+            };
+
+            return function () {
+                var os = this.getDeviceInfo('os').name || '';
+                this.set('operatingSystem', mapping[os]);
+            };
+        }())
     });
 
     ext.point('io.ox/settings/sessions/application').extend({
         id: 'browsers',
         index: 100,
-        customize: function () {
-            if (this.getDeviceInfo('client').type !== 'browser') return;
-            var clientName = (this.getDeviceInfo('client').name || '').toLowerCase();
-            if (clientName.indexOf('firefox') >= 0) this.set('application', gt('Firefox'));
-            else if (clientName.indexOf('chrome') >= 0) this.set('application', gt('Chrome'));
-            else if (clientName.indexOf('safari') >= 0) this.set('application', gt('Safari'));
-            else if (clientName.indexOf('internet explorer') >= 0) this.set('application', gt('Internet Explorer'));
-            else if (clientName.indexOf('edge') >= 0) this.set('application', gt('Edge'));
-        }
+        customize: (function () {
+            var mapping = {
+                chrome: gt('Chrome'),
+                safari: gt('Safari'),
+                firefox: gt('Firefox'),
+                edge: gt('Edge'),
+                msie: gt('Internet Explorer'),
+                opera: gt('Opera'),
+                chromium: gt('Chromium')
+            };
+            return function () {
+                if (this.getDeviceInfo('client').type !== 'browser') return;
+                var family = this.getDeviceInfo('client').family || '';
+                this.set('application', mapping[family]);
+            };
+        }())
     });
 
     ext.point('io.ox/settings/sessions/application').extend({
-        id: 'apps',
+        id: 'oxapp',
         index: 200,
-        customize: function () {
-            if (this.getDeviceInfo('client').type === 'browser') return;
-            switch (this.get('client')) {
-                case 'open-xchange-mailapp':
-                case 'open-xchange-mobile-api-facade':
-                    this.set('application', settings.get('productname/mailapp') || 'OX Mail');
-                    break;
-                case 'OpenXchange.iosClient.OXDrive':
-                case 'OpenXchange.Android.OXDrive':
-                case 'OpenXchange.HTTPClient.OXDrive':
-                case 'OXDrive':
-                case 'OSX.OXDrive':
-                    this.set('application', settings.get('productname/oxdrive') || 'OXDrive');
-                    break;
-                case 'USM-EAS':
-                    this.set('application', gt('CalDav/CardDav'));
-                    break;
-                case 'USM-JSON':
-                    this.set('application', settings.get('productname/oxtender') || 'OXtender');
-                    break;
-                default: // nothing
-            }
-        }
+        customize: (function () {
+            var mapping = {
+                oxdriveapp: settings.get('productname/oxdrive') || 'OXDrive',
+                oxmailapp: settings.get('productname/mailapp') || 'OX Mail',
+                oxsyncapp: settings.get('productname/oxtender') || 'OXtender'
+            };
+            return function () {
+                if (this.getDeviceInfo('client').type !== 'oxapp') return;
+                var family = this.getDeviceInfo('client').family || '';
+                this.set('application', mapping[family]);
+            };
+        }())
     });
 
     ext.point('io.ox/settings/sessions/application').extend({
         id: 'dav',
         index: 300,
-        customize: function () {
-            if (this.getDeviceInfo('client').type !== 'dav') return;
-            this.set('application', gt('CalDav/CardDav'));
-        }
+        customize: (function () {
+            var mapping = {
+                //#. Context: Session Management. Refers to the macos calendar
+                macos_calendar: gt('Calendar'),
+                //#. Context: Session Management. Refers to the macos addressbook
+                macos_addressbook: gt('Addressbook'),
+                //#. Context: Session Management. Refers to ios calendar and/or addressbook
+                'ios_calendar/addressbook': gt('Calendar/Addressbook'),
+                thunderbird_lightning: gt('Thunderbird Lightning'),
+                emclient: gt('eM Client'),
+                emclient_appsuite: gt('Appsuite eM Client'),
+                caldav_sync: gt('CalDav'),
+                carddav_sync: gt('CardDav'),
+                davdroid: gt('DAVdroid'),
+                windows_phone: gt('CalDav/CardDav'),
+                windows: gt('CalDav/CardDav'),
+                generic_caldav: gt('CalDav'),
+                generic_carddav: gt('CardDav')
+            };
+            return function () {
+                if (this.getDeviceInfo('client').type !== 'dav') return;
+                var family = this.getDeviceInfo('client').family || '';
+                this.set('application', mapping[family]);
+            };
+        }())
     });
 
     ext.point('io.ox/settings/sessions/application').extend({
-        id: 'dav',
-        index: 300,
-        customize: function () {
-            if (this.getDeviceInfo('client').type !== 'eas') return;
-            this.set('application', gt('Exchange Active Sync'));
-        }
+        id: 'eas',
+        index: 400,
+        customize: (function () {
+            var mapping = {
+                usmeasclient: gt('Exchange Active Sync')
+            };
+            return function () {
+                if (this.getDeviceInfo('client').type !== 'eas') return;
+                var family = this.getDeviceInfo('client').family || '';
+                this.set('application', mapping[family]);
+            };
+        }())
     });
 
     var SessionCollection = Backbone.Collection.extend({

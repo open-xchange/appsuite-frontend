@@ -258,7 +258,7 @@ define('io.ox/calendar/util', [
                     $('<span class="time">').append(
                         timeStr ? $.txt(timeStr) : '',
                         // Yep there are appointments without timezone. May not be all day appointmens either
-                        data.startDate.tzid ? this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel) : ''
+                        data.startDate.tzid && !options.noTimezoneLabel ? this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel) : ''
                     )
                 );
             }
@@ -370,16 +370,16 @@ define('io.ox/calendar/util', [
                 var i = item.value.match(/\d+/)[0];
                 switch (item.format) {
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', i), i);
                         break;
                     case 'hours':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d hour', '%1$d hours', i), i);
                         break;
                     case 'days':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d day', '%1$d days', i), i);
                         break;
                     case 'weeks':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
+                        options[item.value] = gt.format(gt.ngettext('%1$d week', '%1$d weeks', i), i);
                         break;
                     // no default
                 }
@@ -716,6 +716,10 @@ define('io.ox/calendar/util', [
             }
             rruleMapModel.serialize();
             return event;
+        },
+
+        getAttendeeName: function (data) {
+            return data ? data.cn || data.mail || data.uri : '';
         },
 
         getNote: function (data, prop) {
@@ -1211,6 +1215,7 @@ define('io.ox/calendar/util', [
                 attendee.partStat = 'ACCEPTED';
                 if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
+                attendee.resource = user;
             }
 
             if (attendee.cuType === 'GROUP') {
@@ -1246,37 +1251,6 @@ define('io.ox/calendar/util', [
             if (!app) return false;
             var time = app instanceof Backbone.Model ? app.get('startDate') : app.startDate;
             return time && time.value && !time.tzid;
-        },
-
-        // convenience function to convert old alarms into new chronos alarms
-        // TODO remove once migration process is implemented
-        convertAlarms: function (alarm) {
-            // already converted
-            if (_.isArray(alarm)) return alarm;
-            var alarmTime = alarm,
-                alarmUnit = 'M';
-
-            if (isNaN(parseInt(alarmTime, 10))) {
-                // ignore unparsable alarms
-                return [];
-            }
-
-            if (alarmTime >= 10080) {
-                alarmTime = alarmTime / 10080;
-                alarmUnit = 'W';
-            } else if (alarmTime >= 1440) {
-                alarmTime = alarmTime / 1440;
-                alarmUnit = 'D';
-            } else if (alarmTime >= 60) {
-                alarmTime = alarmTime / 60;
-                alarmUnit = 'H';
-            }
-
-            return [{
-                action: 'DISPLAY',
-                description: '',
-                trigger: { duration: '-PT' + alarmTime + alarmUnit, related: 'START' }
-            }];
         },
 
         getMoment: function (date) {

@@ -40,7 +40,7 @@ define('io.ox/calendar/month/perspective', [
         tops:           {},     // scrollTop positions of the shown weeks
         firstMonth:     null,   // moment of the first month
         lastMonth:      null,   // moment of the last month
-        updateLoad:     2,      // amount of months to be loaded on scroll events
+        updateLoad:     _.device('smartphone') ? 0 : 2,      // amount of months to be loaded on scroll events
         initLoad:       2,      // amount of initial called updates
         scrollOffset:   _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
         currentView:    $(),    // the view with the current month
@@ -253,7 +253,7 @@ define('io.ox/calendar/month/perspective', [
                 if (this.current.isSame(curMonth, 'month')) this.currentView = view;
 
             }
-            if (_.device('ie <= 11')) {
+            if (_.device('ie && ie <= 11')) {
                 this.calculateHeights();
             }
 
@@ -262,6 +262,8 @@ define('io.ox/calendar/month/perspective', [
 
         // IE 11 needs a fixed height or appointments are not displayed
         calculateHeights: _.debounce(function () {
+            // no calculation if invisible(all lists get 0 height)
+            if (this.pane.filter(':visible').length === 0) return;
             var height = (this.pane.height() * (1 / 7) - 26) + 'px';
             this.pane.find('.list').css('height', height);
         }, 100),
@@ -285,31 +287,7 @@ define('io.ox/calendar/month/perspective', [
                 'color': util.getForegroundColor(color)
             }).data('background-color', color);
             container.removeClass('black white');
-            container.addClass(util.getForegroundColor(color));
-        },
-
-        onChangeColorScheme: function () {
-            if (this.app.props.get('colorScheme') !== 'custom') {
-                $('.appointment', this.main).css({ 'background-color': '', 'color':  '' });
-            } else {
-                $('.appointment', this.main).each(function () {
-                    var $elem = $(this),
-                        cid = $elem.data('cid'),
-                        folder = util.cid(cid).folder,
-                        model = api.pool.getModel(cid),
-                        folderModel = folderAPI.pool.models[folder];
-                    if (!model || !folderModel) return;
-                    var color = util.getAppointmentColor(folderModel.attributes, model);
-                    if (!color) return;
-                    $elem.css({
-                        'background-color': color,
-                        'color': util.getForegroundColor(color)
-                    }).data('background-color', color);
-                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
-                        $elem.attr('data-folder', folder);
-                    }
-                });
-            }
+            container.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
         },
 
         update: function (useCache) {
@@ -344,6 +322,7 @@ define('io.ox/calendar/month/perspective', [
 
             var firstDay = $('#' + target.format('YYYY-MM'), self.pane),
                 scrollToDate = function () {
+                    if (_.device('smartphone')) return;
                     if (firstDay.length === 0) return;
                     firstDay.get(0).scrollIntoView();
                 };
@@ -353,7 +332,7 @@ define('io.ox/calendar/month/perspective', [
             scrollToDate();
 
             if (!this.current.isSame(previous, 'month')) {
-                this.app.setDate(this.current);
+                this.app.setDate(moment([this.current.year(), this.current.month()]));
             }
         },
 
@@ -370,17 +349,6 @@ define('io.ox/calendar/month/perspective', [
 
                 _(self.views).each(function (view) {
                     view.folders = folders;
-                });
-
-                if (self.folderModels) {
-                    self.folderModels.forEach(function (model) {
-                        model.off('change:com.openexchange.calendar.extendedProperties', self.updateColor);
-                    });
-                }
-                self.folderModels = _(self.folders).map(function (folder) {
-                    var model = folderAPI.pool.getModel(folder.id);
-                    model.on('change:com.openexchange.calendar.extendedProperties', self.updateColor, self);
-                    return model;
                 });
             });
         },
@@ -399,7 +367,6 @@ define('io.ox/calendar/month/perspective', [
          * print current month
          */
         print: function () {
-            // TODO update print view
             print.request('io.ox/calendar/month/print', {
                 current: this.current,
                 start: moment(this.current).startOf('week').valueOf(),
@@ -470,24 +437,26 @@ define('io.ox/calendar/month/perspective', [
                 this.scaffold.prepend(toolbarNode);
             }
 
-            this.pane
-                .css('right', -coreUtil.getScrollBarWidth() + 'px')
-                .on('scroll', $.proxy(function (e) {
-                    var $current = this.currentView.$el,
-                        current = $current.get(0),
-                        top = current.offsetTop,
-                        height = current.offsetHeight;
-                    if (top + height < e.target.scrollTop) {
-                        this.drawMonths({ down: true });
-                        e.target.scrollTop += $current.get(0).offsetTop - top;
-                    } else if (top > e.target.scrollTop + e.target.offsetHeight) {
-                        this.drawMonths({ up: true });
-                        e.target.scrollTop += $current.get(0).offsetTop - top;
-                    }
-                }, this))
-                .on('scrollend', $.proxy(function () {
-                    this.app.setDate(moment([this.current.year(), this.current.month()]));
-                }, this));
+            if (!_.device('smartphone')) {
+                this.pane
+                    .css('right', -coreUtil.getScrollBarWidth() + 'px')
+                    .on('scroll', $.proxy(function (e) {
+                        var $current = this.currentView.$el,
+                            current = $current.get(0),
+                            top = current.offsetTop,
+                            height = current.offsetHeight;
+                        if (top + height < e.target.scrollTop) {
+                            this.drawMonths({ down: true });
+                            e.target.scrollTop += $current.get(0).offsetTop - top;
+                        } else if (top > e.target.scrollTop + e.target.offsetHeight) {
+                            this.drawMonths({ up: true });
+                            e.target.scrollTop += $current.get(0).offsetTop - top;
+                        }
+                    }, this))
+                    .on('scrollend', $.proxy(function () {
+                        this.app.setDate(moment([this.current.year(), this.current.month()]), { silent: true });
+                    }, this));
+            }
 
             app.props.on('change:date', function (model, value) {
                 if (!this.pane.is(':visible')) return;
@@ -495,7 +464,7 @@ define('io.ox/calendar/month/perspective', [
                 this.gotoMonth(app.getDate());
             }.bind(this));
 
-            if (_.device('ie <= 11')) {
+            if (_.device('ie && ie <= 11')) {
                 $(window).on('resize', _(this.calculateHeights).bind(this));
             }
 
@@ -563,7 +532,11 @@ define('io.ox/calendar/month/perspective', [
                     self.dialog.close();
                 });
 
-            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
+            folderAPI.on('before:update', function (id, model) {
+                if (model.get('module') !== 'calendar') return;
+                if (!model.changed['com.openexchange.calendar.extendedProperties']) return;
+                self.updateColor(model);
+            });
 
             // adjust scrolltop manually on folderview change (see Bug 56691)
             var topToHeight;

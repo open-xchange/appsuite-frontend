@@ -115,7 +115,7 @@ define('io.ox/settings/security/certificates/settings/utils', [
             top: 60,
             width: 800,
             center: false,
-            maximize: true,
+            maximize: 500,
             async: true,
             point: 'io.ox/settings/certificates/examin',
             title: gt('Certificate details')

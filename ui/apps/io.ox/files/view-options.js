@@ -17,8 +17,9 @@ define('io.ox/files/view-options', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
     'io.ox/core/capabilities',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/files'
-], function (ext, Dropdown, BreadcrumbView, FolderAPI, Capabilities, gt) {
+], function (ext, Dropdown, BreadcrumbView, FolderAPI, Capabilities, FileStorage, gt) {
 
     'use strict';
 
@@ -138,6 +139,28 @@ define('io.ox/files/view-options', [
                     .option('filter', 'all', gt('All'), { radio: true });
             }
             this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
+
+            var self = this;
+            /**
+             * Show Filter only if a infostore folder is selected.
+             */
+            function toggleFilter() {
+                baton.app.folder.getData().done(function (folder) {
+                    if (FileStorage.isExternal(folder)) {
+                        self.data('view').$ul.children().slice(4).hide();
+                    } else {
+                        self.data('view').$ul.children().slice(4).show();
+                    }
+                });
+            }
+
+            this.data('view').$el.one('click', function () {
+                toggleFilter();
+            });
+
+            baton.app.on('folder:change', function () {
+                toggleFilter();
+            });
         }
     });
 

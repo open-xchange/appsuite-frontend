@@ -126,10 +126,19 @@
          */
         param: function (obj) {
             return this.serialize(obj, ' / ', _.identity);
+        },
+
+        // quite like param but also drop undefined values
+        cacheKey: function (obj) {
+            return this.param($.extend({}, obj));
         }
     });
 
     $(window).resize(_.recheckDevice);
+
+    $(document).on('shown.bs.popover hide.bs.popover', function (e) {
+        $(e.target).toggleClass('popover-open', e.type === 'shown');
+    });
 
     //
     // Cookie handling

@@ -38,8 +38,8 @@ define('io.ox/calendar/api', [
 
             _(response.created).each(function (event) {
                 if (!isRecurrenceMaster(event)) api.pool.propagateAdd(event);
-                api.trigger('create', event);
-                api.trigger('create:' + util.cid(event), event);
+                api.trigger('process:create', event);
+                api.trigger('process:create:' + util.cid(event), event);
             });
 
             _(response.deleted).each(function (event) {
@@ -63,17 +63,6 @@ define('io.ox/calendar/api', [
                         api.trigger('update', evt.attributes);
                         api.trigger('update:' + util.cid(evt), evt.attributes);
                     });
-                    // make sure that appointents inside deleteExceptionDates do not exist
-                    var exceptions = [].concat(event.deleteExceptionDates).concat(event.changeExceptionDates);
-                    exceptions = _(exceptions).compact();
-                    exceptions.forEach(function (recurrenceId) {
-                        var model = api.pool.getModel(util.cid({ id: event.id, folder: event.folder, recurrenceId: recurrenceId }));
-                        if (model) {
-                            model.collection.remove(model);
-                            api.trigger('delete', model.attributes);
-                            api.trigger('delete:' + util.cid(model), model.attributes);
-                        }
-                    });
 
                 } else {
                     // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
@@ -94,20 +83,27 @@ define('io.ox/calendar/api', [
                 api.trigger('update:' + util.cid(event), event);
             });
 
+
+            var errors = (response.failed || []).concat(response.error);
+            _(errors).each(function (error) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell(error);
+                });
+            });
+
             return response;
         },
 
         defaultFields = ['color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
-        extendedFields = [defaultFields, 'deleteExceptionDates', 'changeExceptionDates'].join(','),
-
         api = {
+            // used externally by itip updates in mail invites
+            updatePoolData: processResponse,
+
             // convenience function
             cid: util.cid,
 
             defaultFields: defaultFields,
-
-            extendedFields: extendedFields,
 
             request: (function () {
                 function getParams(opt, start, end) {
@@ -210,7 +206,8 @@ define('io.ox/calendar/api', [
                     return http.PUT({
                         module: 'chronos',
                         params: {
-                            action: 'list'
+                            action: 'list',
+                            extendedEntities: true
                         },
                         data: list
                     })['catch'](function (err) {
@@ -252,7 +249,14 @@ define('io.ox/calendar/api', [
                                 api.pool.propagateAdd(obj);
                             });
                         }
-                        return list.map(function (obj) {
+
+                        return list.map(function (obj, index) {
+                            // if we have full data use the full data, in list data recurrence ids might be missing
+                            // you can request exceptions without recurrence id because they have own ids, but in the reponse they still have a recurrence id, which is needed for the correct cid
+                            if (data && data[index]) {
+                                obj = data[index];
+                            }
+
                             if (isRecurrenceMaster(obj)) return api.pool.get('detail').add(data);
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
@@ -272,11 +276,11 @@ define('io.ox/calendar/api', [
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
-                        fields: api.extendedFields
+                        fields: api.defaultFields
                     },
                     def;
 
-                if (options.expand && obj.rrule) {
+                if (options.expand) {
                     params.expand = true;
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
@@ -312,6 +316,7 @@ define('io.ox/calendar/api', [
                         return data;
                     }
 
+                    if (data.created.length > 0) api.trigger('create', data.created[0]);
                     if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return api.pool.get('detail').add(data);
                     if (data.created.length > 0) return api.pool.getModel(data.created[0]);
                 });
@@ -332,7 +337,7 @@ define('io.ox/calendar/api', [
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
                         recurrenceRange: options.recurrenceRange,
-                        fields: api.extendedFields
+                        fields: api.defaultFields
                     };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
@@ -389,7 +394,7 @@ define('io.ox/calendar/api', [
                 var params = {
                     action: 'delete',
                     timestamp: _.now(),
-                    fields: api.extendedFields
+                    fields: api.defaultFields
                 };
 
                 if (options.expand) {
@@ -412,7 +417,10 @@ define('io.ox/calendar/api', [
                         return params;
                     })
                 })
-                .then(processResponse)
+                .then(function (data) {
+                    data.forEach(processResponse);
+                    return data;
+                })
                 .then(function (data) {
                     api.getAlarms();
                     return data;
@@ -499,7 +507,8 @@ define('io.ox/calendar/api', [
                 return obj.pick('id', 'folder', 'recurrenceId');
             },
 
-            move: function (list, targetFolderId) {
+            move: function (list, targetFolderId, options) {
+                options = options || {};
                 list = [].concat(list);
                 var models = _(list).map(function (obj) {
                     var cid = util.cid(obj),
@@ -511,16 +520,23 @@ define('io.ox/calendar/api', [
 
                 http.pause();
                 _(models).map(function (model) {
+                    var params = {
+                        action: 'move',
+                        id: model.get('id'),
+                        folder: model.get('folder'),
+                        targetFolder: targetFolderId,
+                        recurrenceId: model.get('recurrenceId'),
+                        timestamp: model.get('timestamp'),
+                        fields: api.defaultFields
+                    };
+                    if (options.expand) {
+                        params.expand = true;
+                        params.rangeStart = options.rangeStart;
+                        params.rangeEnd = options.rangeEnd;
+                    }
                     return http.PUT({
                         module: 'chronos',
-                        params: {
-                            action: 'move',
-                            id: model.get('id'),
-                            folder: model.get('folder'),
-                            targetFolder: targetFolderId,
-                            recurrenceId: model.get('recurrenceId'),
-                            timestamp: model.get('lastModified')
-                        }
+                        params: params
                     });
                 });
                 return http.resume().then(function (data) {
@@ -538,7 +554,10 @@ define('io.ox/calendar/api', [
                         def.resolve(data);
                     }
                     return def;
-                }).then(processResponse).done(function (list) {
+                }).then(function (data) {
+                    data.forEach(processResponse);
+                    return data;
+                }).done(function (list) {
                     _(list).each(function (obj) {
                         api.trigger('move:' + util.cid(obj), targetFolderId);
                     });
@@ -671,11 +690,15 @@ define('io.ox/calendar/api', [
 
     api.pool.get = _.wrap(api.pool.get, function (get, cid) {
         var hasCollection = !!this.getCollections()[cid],
-            hash = urlToHash(cid);
-        if (hasCollection || cid === 'detail' || !hash.folders || hash.folders.length === 0) return get.call(this, cid);
+            hash = urlToHash(cid),
+            collection = get.call(this, cid);
+        if (hasCollection || cid === 'detail' || !hash.folders || hash.folders.length === 0) {
+            // remove comparator in case of search
+            if (cid.indexOf('search/') === 0) collection.comparator = null;
+            return collection;
+        }
         // find models which should be in this collection
         var list = this.grep('start=' + hash.start, 'end=' + hash.end),
-            collection = get.call(this, cid),
             models = _(list)
                 .chain()
                 .pluck('models')
@@ -722,23 +745,33 @@ define('io.ox/calendar/api', [
             return collections;
         },
 
-        getCollectionsByModel: function (data) {
-            var model = data instanceof Backbone.Model ? data : new models.Model(data),
-                collections = this.getByFolder(model.get('folder')).filter(function (collection) {
-                    var params = urlToHash(collection.cid),
-                        start = params.start,
-                        end = params.end;
-                    if (params.view === 'list') {
-                        start = moment().startOf('day').valueOf();
-                        end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
-                    }
-                    if (model.getTimestamp('endDate') <= start) return false;
-                    if (model.getTimestamp('startDate') >= end) return false;
-                    return true;
-                });
-            if (collections.length === 0) return [this.get('detail')];
-            return collections;
-        },
+        getCollectionsByModel: (function () {
+            function filter(collection) {
+                var params = urlToHash(collection.cid),
+                    start = params.start,
+                    end = params.end;
+                if (params.view === 'list') {
+                    start = moment().startOf('day').valueOf();
+                    end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
+                }
+                if (this.getTimestamp('endDate') <= start) return false;
+                if (this.getTimestamp('startDate') >= end) return false;
+                return true;
+            }
+            return function (data) {
+                var model = data instanceof Backbone.Model ? data : new models.Model(data),
+                    collections = this.getByFolder(model.get('folder')).filter(filter.bind(model)),
+                    folder = folderApi.pool.getModel(model.get('folder'));
+                if (folder && folder.is('public') && model.hasFlag('attendee')) {
+                    collections.push.apply(
+                        collections,
+                        this.getByFolder('cal://0/allPublic').filter(filter.bind(model))
+                    );
+                }
+                if (collections.length === 0) return [this.get('detail')];
+                return collections;
+            };
+        }()),
 
         propagateAdd: function (data) {
             data.cid = util.cid(data);
@@ -752,7 +785,7 @@ define('io.ox/calendar/api', [
             var cid = _.cid(data),
                 model = this.getModel(cid);
             if (!model || (_.isEqual(data.startDate, model.get('startDate'))
-                && _.isEqual(data.endDate, model.get('endDate')))) return this.propagateAdd(data);
+                && _.isEqual(data.endDate, model.get('endDate')) && data.folder === model.get('folder'))) return this.propagateAdd(data);
             var oldCollections = this.getCollectionsByModel(model),
                 newCollections = this.getCollectionsByModel(data);
             // collections which formerly contained that model but won't contain it in the future

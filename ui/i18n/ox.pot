@@ -1588,16 +1588,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
-#: apps/plugins/portal/calendar/register.js
-#: module:plugins/portal
 msgid "All day"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
-msgid "Find a free time"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
@@ -1662,17 +1653,17 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-msgid "The appointment is visible for all users in shared calendars."
+msgid "The appointment is visible for all users in shared folders."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-msgid "In shared calendars, the appointment is displayed as a simple time slot for non-attending users."
+msgid "In shared folders, the appointment is displayed as a simple time slot for non-attending users."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-msgid "The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view."
+msgid "The appointment is not visible to non-attending users in shared folders at all. The appointment is not considered for conflicts and does not appear in the scheduling view."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
@@ -1680,7 +1671,6 @@ msgstr ""
 msgid "Notify all participants by email."
 msgstr ""
 
-#. Sort by messages that have attachments
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js
@@ -1690,7 +1680,6 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/view-options.js
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js
@@ -1721,6 +1710,13 @@ msgstr ""
 #: apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar
 msgid "Please select a time for the appointment"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/toolbar.js
+#: module:io.ox/calendar
+msgid "Find a free time"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/main.js
@@ -2247,7 +2243,6 @@ msgstr ""
 #: module:io.ox/tasks
 #: apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
-#: apps/plugins/portal/calendar/register.js
 msgid "Today"
 msgstr ""
 
@@ -2432,7 +2427,7 @@ msgstr ""
 #. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js
 #: module:io.ox/calendar
-msgid "Birthday calendar"
+msgid "Birthday"
 msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js
@@ -3021,7 +3016,6 @@ msgstr ""
 #: module:io.ox/tasks
 #: apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
-#: apps/plugins/portal/calendar/register.js
 msgid "Tomorrow"
 msgstr ""
 
@@ -4571,6 +4565,18 @@ msgstr ""
 msgid "Saved attachment"
 msgstr ""
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js
+#: module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js
+#: module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js
 #: module:io.ox/core
 msgid "Toggle preview"
@@ -5418,7 +5424,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
-msgid "Browse calendars of interest"
+msgid "List of public calendars and events"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
@@ -5550,7 +5556,7 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
-msgid "Ignore existing appointments. Helpful to import public holiday calendars, for example."
+msgid "Ignore existing events. Helpful to import public holiday calendars, for example."
 msgstr ""
 
 #: apps/io.ox/core/import/import.js
@@ -6334,6 +6340,7 @@ msgstr ""
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
+#: apps/io.ox/settings/security/settings/pane.js
 msgid "None"
 msgstr ""
 
@@ -6983,6 +6990,14 @@ msgstr ""
 #: module:io.ox/mail
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
+
+#. %1$s quota limit
+#: apps/io.ox/core/tk/upload.js
+#: module:io.ox/core
+msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+msgid_plural "The files cannot be uploaded because they exceed the quota limit of %1$s"
+msgstr[0] ""
+msgstr[1] ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
@@ -7696,6 +7711,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+#: apps/io.ox/files/share/toolbar.js
 msgid "Revoked access."
 msgstr ""
 
@@ -8132,16 +8148,16 @@ msgstr ""
 msgid "Need more space?"
 msgstr ""
 
-#. moving folders/files
+#. %1$s: folder name
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
-msgid "Move operation takes longer to finish"
+msgid " Moving folder \"%1$s\" takes longer to finish"
 msgstr ""
 
-#. %1$s: moving folders/files
+#. %1$s: folder name
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
-msgid "Finished moving"
+msgid " Finished moving folder \"%1$s\""
 msgstr ""
 
 #. toolbar with 'select all' and 'sort by'
@@ -8229,23 +8245,6 @@ msgstr ""
 
 #: apps/io.ox/files/share/listview.js
 #: module:io.ox/files
-#: apps/io.ox/files/share/permissions.js
-#: module:io.ox/core
-msgid "Public link"
-msgstr ""
-
-#: apps/io.ox/files/share/listview.js
-#: module:io.ox/files
-msgid "Internal & external users"
-msgstr ""
-
-#: apps/io.ox/files/share/listview.js
-#: module:io.ox/files
-msgid "External users"
-msgstr ""
-
-#: apps/io.ox/files/share/listview.js
-#: module:io.ox/files
 msgid "Internal users"
 msgstr ""
 
@@ -8264,6 +8263,11 @@ msgstr ""
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
 msgid "Reviewer"
+msgstr ""
+
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Public link"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
@@ -8650,6 +8654,8 @@ msgstr ""
 #: apps/io.ox/find/manager/value-model.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+#: apps/io.ox/settings/security/settings/pane.js
+#: module:io.ox/mail
 msgid "All"
 msgstr ""
 
@@ -9469,12 +9475,22 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
-msgid "Warning:"
+msgid "This message is from a trusted sender."
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
-msgid "Note:"
+msgid "This might be a phishing mail because we could not verify that this email is really from %1$s."
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "This mail has been sent from %1$s."
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "We could not verify that this email is really from %1$s."
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -11360,21 +11376,6 @@ msgstr ""
 
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
-msgid "This might be a phishing email because we could not verify that it is really from %1$s."
-msgstr ""
-
-#: apps/io.ox/mail/util.js
-#: module:io.ox/core
-msgid "We could not verify that this email is from %1$s."
-msgstr ""
-
-#: apps/io.ox/mail/util.js
-#: module:io.ox/core
-msgid "We could verify that this email is from %1$s."
-msgstr ""
-
-#: apps/io.ox/mail/util.js
-#: module:io.ox/core
 msgid "message"
 msgstr ""
 
@@ -11400,6 +11401,12 @@ msgstr ""
 msgid "Has attachments"
 msgstr ""
 
+#. Sort by messages that have attachments
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgid "Has Attachment"
+msgstr ""
+
 #. Sort by messages which are flagged, "Flag" is used in dropdown
 #: apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -11416,18 +11423,6 @@ msgstr ""
 #: module:io.ox/mail
 msgctxt "dropdown"
 msgid "Sort"
-msgstr ""
-
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgid "All messages in this folder"
-msgstr ""
-
-#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgctxt "dropdown"
-msgid "All"
 msgstr ""
 
 #: apps/io.ox/notes/mediator.js
@@ -12251,11 +12246,6 @@ msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr ""
-
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-#: module:io.ox/core
 msgid "Unknown device"
 msgstr ""
 
@@ -12296,37 +12286,17 @@ msgstr ""
 
 #: apps/io.ox/settings/security/settings/pane.js
 #: module:io.ox/mail
-msgid "Show email authenticity"
+msgid "Show message authenticity"
 msgstr ""
 
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
 #: apps/io.ox/settings/security/settings/pane.js
 #: module:io.ox/mail
-msgid "Disabled"
+msgid "Dangerous only"
 msgstr ""
 
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
 #: apps/io.ox/settings/security/settings/pane.js
 #: module:io.ox/mail
-msgid "Dangerous emails only"
-msgstr ""
-
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
-#: apps/io.ox/settings/security/settings/pane.js
-#: module:io.ox/mail
-msgid "Dangerous and trusted emails"
-msgstr ""
-
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
-#: apps/io.ox/settings/security/settings/pane.js
-#: module:io.ox/mail
-msgid "Dangerous, trusted and valid emails"
-msgstr ""
-
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
-#: apps/io.ox/settings/security/settings/pane.js
-#: module:io.ox/mail
-msgid "All emails"
+msgid "Dangerous and trusted"
 msgstr ""
 
 #: apps/io.ox/tasks/actions.js
@@ -12450,7 +12420,8 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js
-msgid "Create task"
+#: apps/io.ox/tasks/toolbar.js
+msgid "Edit task"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/main.js
@@ -12458,8 +12429,7 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js
-#: apps/io.ox/tasks/toolbar.js
-msgid "Edit task"
+msgid "Create task"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/util.js
@@ -12658,12 +12628,6 @@ msgstr ""
 
 #: apps/io.ox/tasks/main.js
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/toolbar.js
-msgid "New task"
-msgstr ""
-
-#: apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
 msgid "Tasks toolbar"
 msgstr ""
 
@@ -12775,6 +12739,11 @@ msgstr ""
 #: apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgid "Receive notifications when a participant accepted or declined a task in which you participate"
+msgstr ""
+
+#: apps/io.ox/tasks/toolbar.js
+#: module:io.ox/tasks
+msgid "New task"
 msgstr ""
 
 #. Task: Undone like in "Mark as undone"
@@ -13335,10 +13304,10 @@ msgid_plural "in %d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#. notification pane: action  to remove/acknowledge all reminders (they don't show up anymore)
+#. notification pane: action  to close/acknowledge all reminders (they don't show up anymore)
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-msgid "Remove all reminders"
+msgid "Acknowledge all reminders"
 msgstr ""
 
 #. Reminders (notifications) about appointments

@@ -34,7 +34,7 @@ define('io.ox/core/a11y', [], function () {
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
         if (/13|32/.test(e.which)) {
             e.preventDefault();
-            node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+            focusListSelection(node);
         }
     });
 
@@ -76,7 +76,7 @@ define('io.ox/core/a11y', [], function () {
         // ENTER/SPACE
         if (/^(13|32)$/.test(e.which)) {
             e.preventDefault();
-            return node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+            return focusListSelection(node);
         }
 
         // BACKSPACE/DELETE
@@ -191,6 +191,10 @@ define('io.ox/core/a11y', [], function () {
             } while (oldIndex !== newIndex);
         }
     });
+
+    function focusListSelection(node) {
+        return node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+    }
 
     //
     // Tab trap
@@ -334,6 +338,7 @@ define('io.ox/core/a11y', [], function () {
     return {
         collapse: collapse,
         dropdownTrapFocus: dropdownTrapFocus,
+        focusListSelection: focusListSelection,
         getTabbable: getTabbable,
         menubarKeydown: menubarKeydown,
         trapFocus: trapFocus

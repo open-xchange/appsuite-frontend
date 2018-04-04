@@ -360,7 +360,11 @@ define('io.ox/tasks/api', [
 
         //folder is only used by move operation, because here we need 2 folder attributes
         if (newFolder && arguments.length === 2) {
-            task.folder_id = newFolder;
+            // only minimal set for move operation needed
+            task = {
+                folder_id: newFolder,
+                id: task.id
+            };
             move = true;
         }
         //set always (OX6 does this too)

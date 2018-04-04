@@ -23,8 +23,10 @@ define('plugins/portal/mail/register', [
     'io.ox/backbone/disposable',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/http',
+    'settings!io.ox/mail',
     'less!plugins/portal/mail/style'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities) {
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities, http, mailSettings) {
 
     'use strict';
 
@@ -101,6 +103,7 @@ define('plugins/portal/mail/register', [
         },
 
         onExpire: function () {
+            // revert flag since this is an active collection (see bug 54111)
             this.collection.expired = false;
         },
 
@@ -128,6 +131,15 @@ define('plugins/portal/mail/register', [
         });
     }
 
+
+    function reload(baton) {
+        require(['io.ox/portal/main'], function (portal) {
+            // force refresh
+            baton.collection.expired = true;
+            portal.getApp().refreshWidget(baton.model, 0);
+        });
+    }
+
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
@@ -141,10 +153,11 @@ define('plugins/portal/mail/register', [
                     return {
                         action: 'all',
                         folder: params.folder,
-                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                        columns: http.defaultColumns.mail.all,
                         sort: params.sort || '610',
                         order: params.order || 'desc',
-                        timezone: 'utc'
+                        timezone: 'utc',
+                        deleted: !mailSettings.get('features/ignoreDeleted', false)
                     };
                 }
             });
@@ -172,12 +185,9 @@ define('plugins/portal/mail/register', [
             };
 
             return $.when(getFolderName(baton)).done(function (folderName) {
+                api.on('refresh.all', _.partial(reload, baton));
                 api.on('update', function (event, list, target) {
-                    if (target === folderName) {
-                        require(['io.ox/portal/main'], function (portal) {
-                            portal.getApp().refreshWidget(baton.model, 0);
-                        });
-                    }
+                    if (target === folderName) reload(baton);
                 });
             });
         },

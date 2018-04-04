@@ -265,7 +265,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-5 col-md-5 col-md-offset-1">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-2 col-xs-offset-2">');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -279,7 +279,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7 col-md-6">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-8">').append(node)
                 );
             }
         }
@@ -583,8 +583,8 @@ define('io.ox/mail/compose/view', [
                     } else {
                         // TODO
                         // In e.g. edit mode middleware wraps content in a div this should be solved in middleware!
-                        if (/^<div id="ox-\w+">/.test(content.trim())) {
-                            content = content.trim().replace(/^<div id="ox-\w+">/, '').replace(/<\/div>$/, '');
+                        if (/^<div id="ox-\w+"[^>]*>/.test(content.trim())) {
+                            content = content.trim().replace(/^<div id="ox-\w+"[^>]*>/, '').replace(/<\/div>$/, '');
                         }
                         def.resolve();
                     }

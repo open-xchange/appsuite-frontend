@@ -182,6 +182,11 @@ define('io.ox/core/folder/picker', [
             tree.on('change', function (id) {
                 o.settings.set(o.persistent + '/last', id).save();
             });
+            tree.on('afterAppear', function () {
+                _.defer(function () {
+                    tree.$('.tree-container .selectable.selected').focus().trigger('click');
+                });
+            });
         }
 
         // respond to invalid selection
@@ -222,8 +227,6 @@ define('io.ox/core/folder/picker', [
                     .always(function () {
                         dialog.idle();
                         dialog.$body.prepend(tree.render().$el);
-                        // focus and trigger click on first element for proper keyboard a11y
-                        tree.$('.tree-container .selectable:visible:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
                     return this;
@@ -240,6 +243,7 @@ define('io.ox/core/folder/picker', [
                 o.alternative(dialog, tree);
             })
             .on('cancel', o.cancel)
+            .on('close', o.close)
             .on('create', create)
             .renderTree()
             .open();

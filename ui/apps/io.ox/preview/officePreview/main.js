@@ -189,7 +189,6 @@ define('io.ox/preview/officePreview/main', [
             win.show(function () {
 
                 win.nodes.body.addClass('full-height-tablet full-height-phone');
-                win.nodes.head.addClass('hidden-tablet hidden-phone');
 
                 win.nodes.body.on('click', function (evt) {
 

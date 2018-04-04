@@ -15,11 +15,12 @@ define('io.ox/participants/chronos-detail', [
     'io.ox/calendar/util',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
+    'io.ox/calendar/util',
     'io.ox/mail/util',
     'io.ox/core/util',
     'gettext!io.ox/core',
     'less!io.ox/participants/style'
-], function (util, ext, contactsUtil, mailUtil, coreUtil, gt) {
+], function (util, ext, contactsUtil, calendarUtil, mailUtil, coreUtil, gt) {
 
     'use strict';
 
@@ -29,16 +30,17 @@ define('io.ox/participants/chronos-detail', [
         index: 100,
         id: 'resource',
         draw: function (baton) {
-            var data = baton.data;
+            var data = baton.data,
+                name = calendarUtil.getAttendeeName(data);
             if (data.cuType !== 'RESOURCE') return;
-            if (!baton.options.halo) return this.append($.txt(data.cn));
+            if (!baton.options.halo) return this.append($.txt(name));
             if (data.resource) data = data.resource;
             this.append(
                 $('<a href="#" role="button" class="halo-resource-link">')
-                    .attr('title', data.display_name || data.cn)
+                    .attr('title', data.display_name || name)
                     // 'looksLikeResource' duck check
                     .data(_.extend(data, { email1: data.mailaddress || data.email }))
-                    .append($.txt(data.display_name || data.cn))
+                    .append($.txt(data.display_name || name))
             );
         }
     });
@@ -55,7 +57,7 @@ define('io.ox/participants/chronos-detail', [
                 html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name);
                 opt = _.extend({ html: html }, baton.data);
             } else {
-                opt = _.extend({ html: $.txt(baton.data.cn) }, baton.data);
+                opt = _.extend({ html: $.txt(calendarUtil.getAttendeeName(baton.data)) }, baton.data);
             }
 
             if (!baton.options.halo) opt.$el = $('<span>');

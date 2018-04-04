@@ -21,7 +21,7 @@ define('io.ox/wizards/firstStart/main', [
 
     new Stage('io.ox/core/stages', {
         id: 'firstStartWizard',
-        index: 550,
+        index: 200,
         run: function () {
             if (ox.manifests.pluginsFor('io.ox/wizards/firstStart').length === 0 ||
                 settings.get('wizards/firstStart/finished', false)) {

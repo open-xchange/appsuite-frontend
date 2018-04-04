@@ -1,0 +1,33 @@
+#io-ox-core #io-ox-appcontrol {
+    background-color: @io-ox-dynamic-theme-topbarBackground;
+
+    #io-ox-top-logo img {
+        height: @io-ox-dynamic-theme-logoHeight;
+        width: @io-ox-dynamic-theme-logoWidth;
+    }
+
+    &.open #io-ox-launcher > button,
+    #io-ox-launcher > button,
+    #io-ox-quicklaunch > button,
+    #io-ox-toprightbar .launcher a {
+        &:hover, &:focus { background-color: @io-ox-dynamic-theme-topbarHover; }
+    }
+}
+
+.list-view .list-item:hover, .vgrid-cell:hover {
+    background-color: @io-ox-dynamic-theme-listHover;
+}
+
+.window-sidepanel { background-color: @io-ox-dynamic-theme-folderBackground; }
+
+.folder-tree.visible-selection {
+    .selectable > .folder-node:hover {
+        background-color: @io-ox-dynamic-theme-folderHover;
+    }
+    .selectable.selected > .folder-node:hover {
+        background-color: darken(@io-ox-dynamic-theme-folderSelected, 5%);
+    }
+    .selectable:focus > .folder-node:hover {
+        background-color: darken(@foldertree-selected-focus-background, 5%);
+    }
+}

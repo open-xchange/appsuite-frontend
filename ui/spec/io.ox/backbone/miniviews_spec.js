@@ -272,7 +272,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                         trigger: { duration: '-PT2H', related: 'START' }
                     }]
                 });
-                this.view = new AlarmsView({ model: this.model });
+                this.view = new AlarmsView.alarmsView({ model: this.model });
                 this.view.render();
             });
 

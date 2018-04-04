@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>6.8. Kontakte suchen</title>
+<title>6.9. Kontakte suchen</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.chap.contacts.html" title="Kapitel 6. Adressbuch">
-<link rel="prev" href="ox.appsuite.user.sect.contacts.manage.delete.html" title="6.7.11. Kontakte löschen">
-<link rel="next" href="ox.appsuite.user.sect.contacts.teamwork.html" title="6.9. Kontakte im Team">
+<link rel="prev" href="ox.appsuite.user.sect.contacts.manage.delete.html" title="6.8.11. Kontakte löschen">
+<link rel="next" href="ox.appsuite.user.sect.contacts.teamwork.html" title="6.10. Kontakte im Team">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -36,15 +36,17 @@
     
   </h1>
 <div class="sect1" id="ox.appsuite.user.sect.contacts.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">6.8. Kontakte suchen</h2></div></div></div>
-<a class="indexterm" name="id-1.7.14.2"></a><a class="indexterm" name="id-1.7.14.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">6.9. Kontakte suchen</h2></div></div></div>
+<a class="indexterm" name="id-1.7.15.2"></a><a class="indexterm" name="id-1.7.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.contacts.search"></a><p id="ox.appsuite.user.concept.contacts.search">Um nach Kontakten zu suchen, können Sie 
       die folgenden Suchkriterien verwenden:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Suchbegriffe für Name, E-Mail-Adresse, Telefonnummer, Abteilung, Adresse</p></li>
-<li class="listitem"><p role="presentation">Ordner, die durchsucht werden sollen</p></li>
+<li class="listitem">
+<p role="presentation">Suchbegriffe für Name, E-Mail-Adresse, Telefonnummer, Abteilung, Adresse</p>
+<p role="presentation">Je nach Konfiguration der Groupware können Sie Abteilung als Suchbegriff verwenden.</p>
+</li>
+<li class="listitem"><p role="presentation">Adressbücher, die durchsucht werden sollen</p></li>
 <li class="listitem"><p role="presentation">Typ: Alle, Kontakt, Verteilerliste</p></li>
-<li class="listitem"><p role="presentation">Ordnertyp: Alle, Privat, Öffentlich, Freigegeben</p></li>
 </ul>
 <p>
     </p>
@@ -52,24 +54,7 @@
 <div class="task" id="ox.appsuite.user.task.contacts.search">
 <p class="title">So suchen Sie nach Kontakten:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">Klicken Sie in der Suchleiste auf das Symbol <span class="guibutton"><strong>Suche starten</strong></span>
-            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.contacts.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> oder in das Eingabefeld. Eine Ordner-Schaltfläche zeigt an, in welchen Ordnern gesucht wird.  
-            Die Schaltfläche <span class="guibutton"><strong>Optionen</strong></span> enthält Möglichkeiten zum Eingrenzen der Suche.</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.contacts.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_contacts_search_click.png" alt="Das Eingabefeld"></div></div></div>
-</li>
-<li class="step"><p role="presentation">Um einen Ordner für die Suche auszuwählen, klicken Sie auf die Ordner-Schaltfläche.
-            <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p role="presentation">Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle private, öffentliche und freigegebene
-                  Ordner und Unterordner durchsucht.</p>
-<p role="presentation">Um die Suche auf private, öffentliche oder freigegebene Ordner zu beschränken, klicken Sie auf <span class="guibutton"><strong>Optionen</strong></span>. 
-                  Wählen Sie einen Ordnertyp.</p>
-</li>
-<li class="listitem"><p role="presentation">Wenn Sie einen bestimmten Ordner wählen, wird nur dieser Ordner durchsucht, 
-                  keine Unterordner.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Klicken Sie in das Eingabefeld <span class="guibutton"><strong>Suchen</strong></span>. Weitere Symbole werden angezeigt.</p></li>
 <li class="step">
 <p role="presentation">Tippen Sie einen Suchbegriff in das Eingabefeld. Das Suchmenü öffnet sich.</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.contacts.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_contacts_search_searchmenue.png" alt="Das Suchmenü"></div></div></div>
@@ -87,18 +72,22 @@
           </p>
 <p role="presentation">Die gefundenen Objekte werden in der Liste im Anzeigebereich angezeigt.</p>
 </li>
-<li class="step"><p role="presentation">Um das Suchergebnis anzupassen, verwenden Sie diese Methoden:
-            <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Um das Suchergebnis zu verfeinern, geben Sie weitere Suchbegriffe ein. Um einen Suchbegriff zu 
-                  entfernen, klicken Sie neben dem Suchbegriff auf das Symbol
-                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.contacts.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>. </p></li>
-<li class="listitem"><p role="presentation">Um die Suche in einem anderen Ordner auszuführen, klicken Sie auf die Ordner-Schaltfläche. Wählen 
-                  Sie einen Ordner.</p></li>
-<li class="listitem"><p role="presentation">Um die Suche auf Kontakte oder auf Verteilerlisten zu beschränken, klicken Sie auf <span class="guibutton"><strong>Optionen</strong></span>. 
-                  Wählen Sie einen Typ.</p></li>
-</ul>
+<li class="step">
+<p role="presentation">Um ein Adressbuch für die Suche auszuwählen, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Optionen</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.contacts.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. Das Adressbuch, das durchsucht wird, wird im Listenfeld <span class="guibutton"><strong>Ordner</strong></span> angezeigt. 
+            Um ein anderes Adressbuch zu wählen, öffnen Sie das Listenfeld.
+          </p>
+<p role="presentation">Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle privaten, öffentlichen und freigegebenen
+            Adressbücher durchsucht.</p>
+</li>
+<li class="step"><p role="presentation">Um die Suche auf Kontakte oder auf Verteilerlisten zu beschränken, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Optionen</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.contacts.search.changetype"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. Öffnen Sie das Listenfeld <span class="guibutton"><strong>Typ</strong></span>. Wählen Sie einen Typ.
           </p></li>
-<li class="step"><p role="presentation">Um die Suche zu beenden, klicken Sie auf das Symbol <span class="guibutton"><strong>Suche abbrechen</strong></span>
+<li class="step"><p role="presentation">Um das Suchergebnis zu verfeinern, geben Sie weitere Suchbegriffe ein. Um einen Suchbegriff zu 
+            entfernen, klicken Sie neben dem Suchbegriff auf das Symbol <span class="guibutton"><strong>Entfernen</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.contacts.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>. 
+          </p></li>
+<li class="step"><p role="presentation">Um die Suche zu beenden, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Beenden</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.contacts.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>

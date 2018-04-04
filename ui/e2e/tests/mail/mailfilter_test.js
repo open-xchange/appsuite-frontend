@@ -16,7 +16,7 @@ const expect = require('chai').expect;
 
 Feature('Mailfilter');
 
-Scenario('add and removes Mail Filter Rules', function* (I) {
+Scenario('add and removes Mail Filter Rules', async function (I) {
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
@@ -30,6 +30,16 @@ Scenario('add and removes Mail Filter Rules', function* (I) {
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
+
+    // initial cleanup
+    await I.executeAsyncScript(function (done) {
+        $('.io-ox-settings-window .settings-detail-pane li.settings-list-item a[data-action="delete"]').click();
+        $('.abs.io-ox-dialog-wrapper button[data-action="delete"]').click();
+        done();
+    });
+
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .hint');
+
     I.see('There is no rule defined');
 
     // create a test rule and check the inintial display
@@ -80,9 +90,9 @@ Scenario('add and removes Mail Filter Rules', function* (I) {
 
     // condition and all components visible?
     I.see('From', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .nested[data-test-id="1_0"] .list-title');
-    expect(yield I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).to.exist;
+    expect(await I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).to.exist;
     I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1_0"] input[name="values"]' }, 'Test Value');
-    expect(yield I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).not.to.exist;
+    expect(await I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).not.to.exist;
 
     // add an action which includes the folder picker
     I.click('Add action');

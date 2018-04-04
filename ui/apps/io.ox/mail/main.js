@@ -137,6 +137,11 @@ define('io.ox/mail/main', [
                 })
             });
 
+            // destroy popovers
+            app.pages.getPage('detailView').on('pagebeforehide', function () {
+                $(this).find('.popover-open').popover('destroy');
+            });
+
             // important
             // tell page controller about special navigation rules
             app.pages.setBackbuttonRules({
@@ -375,7 +380,10 @@ define('io.ox/mail/main', [
                             if (node) {
                                 if (obj[accountData.id].status === 'invalid_ssl') {
 
-                                    node.showStatusIcon(obj[accountData.id].message, modus, error);
+                                    var event = modus ? 'accountlink:sslexamine' : 'accountlink:ssl',
+                                        data = modus ? error : node.options.model_id;
+
+                                    node.showStatusIcon(obj[accountData.id].message, event, data);
 
                                 } else {
                                     node.hideStatusIcon();
@@ -978,7 +986,6 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             app.showMultiple = function (list) {
-
                 app.threadView.empty();
                 list = api.resolve(list, app.isThreaded());
 
@@ -1002,16 +1009,22 @@ define('io.ox/mail/main', [
                                 gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
                             ),
                             // inline actions
-                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
-                                $('<div class="inline-actions">').append(
+                            id && total > list.length && !search ?
+                                $('<div class="inline-actions selection-message">').append(
                                     gt('There are %1$d messages in this folder; not all messages are displayed in the list currently.', total)
-                                )
+                                ).hide()
                                 : $()
                         );
                 });
             };
-        },
 
+            app.showSelectionMessage = function () {
+                _.defer(function () {
+                    app.right.find('.selection-message').show();
+                });
+            };
+        },
+        // && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true'
         /*
          * Define function to reflect multiple selection
          */
@@ -1155,6 +1168,10 @@ define('io.ox/mail/main', [
                     app.right.find('.multi-selection-message div').attr('id', null);
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) react('action', list);
+                },
+                'selection:showHint': function () {
+                    // just enable the info text in rightside
+                    app.showSelectionMessage();
                 }
             });
         },
@@ -1653,6 +1670,10 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
             function registerPoolAdd(model, find) {
                 find.on('collectionLoader:created', function (loader) {
                     loader.each = function (obj) {
@@ -1797,15 +1818,16 @@ define('io.ox/mail/main', [
             });
         },
 
-        'primary-action': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
 
-            app.addPrimaryAction({
-                point: 'io.ox/mail/sidepanel',
-                label: gt('Compose'),
-                action: 'io.ox/mail/actions/compose',
-                toolbar: 'compose'
-            });
-        },
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/mail/sidepanel',
+        //         label: gt('Compose'),
+        //         action: 'io.ox/mail/actions/compose',
+        //         toolbar: 'compose'
+        //     });
+        // },
 
         'sidepanel': function (app) {
             if (_.device('smartphone')) return;

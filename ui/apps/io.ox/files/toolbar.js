@@ -20,9 +20,10 @@ define('io.ox/files/toolbar', [
     'io.ox/core/notifications',
     'gettext!io.ox/files',
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {
+], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api, folderApi) {
 
     'use strict';
 
@@ -163,7 +164,18 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-trash-o',
                 label: gt('Delete'),
-                ref: 'io.ox/files/actions/delete'
+                ref: 'io.ox/files/actions/delete',
+                customize: function (baton) {
+                    var folderId = baton.app.folder.get(),
+                        model = folderApi.pool.getModel(folderId);
+
+                    if (folderApi.is('trash', model.toJSON())) {
+                        this.attr({
+                            'aria-label': gt('Delete forever'),
+                            'data-original-title': gt('Delete forever')
+                        });
+                    }
+                }
             },
             //
             // --- LO ----
@@ -257,12 +269,27 @@ define('io.ox/files/toolbar', [
     // local dummy action
 
     new actions.Action('io.ox/files/dropdown/new', {
-        requires: function () { return true; },
+        requires: function (e) {
+            var folderId = e.baton.app.folder.get(),
+                model = folderApi.pool.getModel(folderId);
+
+            return !folderApi.is('trash', model.toJSON());
+        },
         action: $.noop
     });
 
     new actions.Action('io.ox/files/dropdown/share', {
-        requires: function () { return true; },
+        requires: function (e) {
+            var model,
+                folderId;
+            if (e.baton.app) {
+                folderId = e.baton.app.folder.get();
+            } else if (e.baton.data) {
+                folderId = e.baton.data.folder_id;
+            }
+            model = folderApi.pool.getModel(folderId);
+            return model ? !folderApi.is('trash', model.toJSON()) : false;
+        },
         action: $.noop
     });
 

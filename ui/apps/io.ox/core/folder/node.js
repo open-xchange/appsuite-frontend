@@ -161,9 +161,6 @@ define('io.ox/core/folder/node', [
                 this.onChangeSubFolders();
             }
 
-            // Bug 54793: Trigger for breadcrumb update
-            api.trigger('update:' + model.id, model.id, model.id, model.toJSON());
-
             this.repaint();
         },
 
@@ -336,10 +333,9 @@ define('io.ox/core/folder/node', [
             }, options);
 
             // also set: folder, parent, tree
-
             this.model = api.pool.getModel(o.model_id);
             this.noSelect = !this.model.can('read');
-            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder) || this.folder === 'cal://0/allPublic';
 
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
@@ -462,7 +458,7 @@ define('io.ox/core/folder/node', [
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
-        showStatusIcon: function (message, trigger, error) {
+        showStatusIcon: function (message, event, data) {
 
             var self = this;
 
@@ -477,7 +473,7 @@ define('io.ox/core/folder/node', [
 
             this.$.accountLink.on('click', function (e) {
                 e.preventDefault();
-                self.options.tree.trigger(trigger ? 'accountlink:sslexamine' : 'accountlink:ssl', trigger ? error : self.options.model_id);
+                self.options.tree.trigger(event, data);
             });
             if (message) {
                 this.$.accountLink.attr('title', message);

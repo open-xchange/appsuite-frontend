@@ -249,7 +249,7 @@ define('io.ox/mail/util', [
 
                 if (i < $i - 1) {
                     tmp.append(
-                        $('<span class="delimiter">').text(',\u00A0\u00A0\u00A0 ')
+                        $('<span class="delimiter">').text(',\u00A0\u00A0 ')
                     );
                 }
             }
@@ -552,8 +552,6 @@ define('io.ox/mail/util', [
             }
 
             function getAuthenticityStatus(data) {
-                var level = getAuthenticityLevel();
-                if (level === 'none') return;
                 if (!_.isObject(data)) return;
                 return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
             }
@@ -565,8 +563,9 @@ define('io.ox/mail/util', [
                         if (/fail/.test(level)) return status === 'fail';
                         if (level === 'all') return /(fail|neutral)/.test(status);
                         return false;
-                    // prepend in sender block (detail)
+                    // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
+                    case 'via':
                         switch (level) {
                             case 'fail': return status === 'fail';
                             case 'fail_trusted': return /(fail|trusted)/.test(status);
@@ -578,10 +577,8 @@ define('io.ox/mail/util', [
                     case 'box':
                         if (/fail/.test(level)) return status === 'fail';
                         return /(fail|trusted)/.test(status);
-                    // disable links, replace external images and 'via' hint for different mail server
+                    // disable links, replace external images
                     case 'block':
-                    case 'via':
-                        if (level === 'fail') return false;
                         return status === 'fail';
                     default:
                         return false;
@@ -593,6 +590,7 @@ define('io.ox/mail/util', [
                 var status = getAuthenticityStatus(data),
                     level = getAuthenticityLevel();
 
+                if (level === 'none') return;
                 if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
 
                 return isRelevant(aspect, level, status) ? status : undefined;
