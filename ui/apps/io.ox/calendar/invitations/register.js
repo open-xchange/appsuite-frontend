@@ -780,6 +780,7 @@ define('io.ox/calendar/invitations/register', [
                 yell = this.options && this.options.yell;
             imip.mail = { folder_id: this.model.get('folder_id'), id: this.model.get('id') };
             return this.analyzeIMIPAttachment(imip).done(function (list) {
+                if (self.disposed) return;
                 if (list.length === 0) return;
 
                 var model,
@@ -834,6 +835,8 @@ define('io.ox/calendar/invitations/register', [
                 yell = this.options && this.options.yell;
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
                 return api.resolve(cid.id, true).then(function (model) {
+                    if (self.disposed) return;
+
                     var intView = new InternalAppointmentView({
                         model: model,
                         module: 'calendar',
