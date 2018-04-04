@@ -189,12 +189,16 @@ define('io.ox/core/main/appcontrol', [
             this.listenTo(ox, 'launcher:toggleOverlay', function () {
                 this.$('[data-toggle="dropdown"]').dropdown('toggle');
             });
+            this.listenTo(this.collection, 'add remove', function () {
+                this.$el.empty();
+                this.render();
+            });
         },
         render: function () {
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
                 $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
-                    this.collection.map(function (model) {
+                    this.collection.where({ hasLauncher: true }).map(function (model) {
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model }).render().$el
                         );
@@ -296,12 +300,10 @@ define('io.ox/core/main/appcontrol', [
         id: 'launcher',
         index: 120,
         draw: function () {
-            // possible setting here
-            var apps = ox.ui.apps.where({ hasLauncher: true });
             // reverted for 7.10
             //if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
-                collection: apps
+                collection: ox.ui.apps
             });
             this.append(launchers.render().$el);
         }
