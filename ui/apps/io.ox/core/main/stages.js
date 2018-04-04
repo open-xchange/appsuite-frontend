@@ -207,6 +207,16 @@ define('io.ox/core/main/stages', [
         index: 500,
         run: function () {
             ext.point('io.ox/core/desktop').invoke('draw', $('#io-ox-desktop'), {});
+            ox.ui.windowManager.on('empty', function (e, isEmpty, win) {
+                if (isEmpty) {
+                    ext.point('io.ox/core/desktop').invoke('draw', $('#io-ox-desktop'), {});
+                    ox.ui.screens.show('desktop');
+                    var autoStart = getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app;
+                    if (autoStart !== 'none/main') ox.launch(autoStart);
+                } else {
+                    ox.ui.screens.show('windowmanager');
+                }
+            });
         }
     }, {
         id: 'load',
