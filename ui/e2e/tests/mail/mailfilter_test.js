@@ -30,6 +30,16 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
     I.see('Mail Filter Rules');
+
+    // initial cleanup
+    await I.executeAsyncScript(function (done) {
+        $('.io-ox-settings-window .settings-detail-pane li.settings-list-item a[data-action="delete"]').click();
+        $('.abs.io-ox-dialog-wrapper button[data-action="delete"]').click();
+        done();
+    });
+
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .hint');
+
     I.see('There is no rule defined');
 
     // create a test rule and check the inintial display
