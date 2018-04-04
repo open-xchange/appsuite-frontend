@@ -176,9 +176,9 @@ define('io.ox/calendar/freetime/timeView', [
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
                     var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p'),
-                        caluculatedWidth = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px';
+                        calculatedWidth = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px';
                     // edge needs the min-width or the cells are crushed together
-                    sections.push($('<span class="freetime-hour">').css({ 'width': caluculatedWidth, 'min-width': caluculatedWidth })
+                    sections.push($('<span class="freetime-hour">').css({ 'width': calculatedWidth, 'min-width': calculatedWidth })
                         .text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                         .addClass(i === start ? 'day-start' : '')
                         .addClass(i === start && counter === 0 ? 'first' : '')
@@ -484,7 +484,7 @@ define('io.ox/calendar/freetime/timeView', [
                     oldScrollPos = table.parent().scrollLeft(),
                     newWidth = BASEWIDTH * (parseInt(this.model.get('zoom'), 10) / 100);
 
-                this.headerNodeRow2.find('.freetime-hour').css('width', newWidth + 'px');
+                this.headerNodeRow2.find('.freetime-hour').css({ 'min-width':  newWidth + 'px', width: newWidth + 'px' });
                 table.find('.freetime-table-cell').css('width', newWidth + 'px');
                 table.css('width', nodes * newWidth + 'px').parent().scrollLeft((oldScrollPos / oldWidth) * nodes * newWidth);
             }
