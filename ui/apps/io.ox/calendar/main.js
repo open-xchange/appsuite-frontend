@@ -412,7 +412,10 @@ define('io.ox/calendar/main', [
                     .addCancelButton()
                     .addButton({ label: gt('Try again'), action: 'retry', className: 'btn-primary' })
                     .on('retry', function () {
-                        api.collectionLoader.load({ folders: [folder.id], sync: true });
+                        api.refreshCalendar(folder.id).then(function () {
+                            folderAPI.pool.unfetch(folder.id);
+                            folderAPI.refresh();
+                        });
                     })
                     .open();
                 });

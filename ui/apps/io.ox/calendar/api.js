@@ -649,6 +649,19 @@ define('io.ox/calendar/api', [
                 }
             },
 
+            refreshCalendar: function (folder) {
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'all',
+                        rangeStart: moment().utc().format(util.ZULU_FORMAT),
+                        rangeEnd: moment().add(10, 'seconds').utc().format(util.ZULU_FORMAT),
+                        updateCache: true,
+                        folder: folder
+                    }
+                });
+            },
+
             removeRecurrenceInformation: function (model) {
                 var data = model instanceof Backbone.Model ? model.toJSON() : _(model).clone();
                 delete data.rrule;
@@ -846,7 +859,7 @@ define('io.ox/calendar/api', [
                 end: collection.originalStart.clone().add(collection.range, 'months').valueOf(),
                 folders: params.folders || []
             });
-            collection.sync({ sync: params.sync }).then(function (data) {
+            collection.sync().then(function (data) {
                 // trigger reset when data comes from cache
                 if (!data || data.length === 0) collection.trigger('reset');
             });

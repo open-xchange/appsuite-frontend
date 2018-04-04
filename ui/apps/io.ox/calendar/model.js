@@ -370,10 +370,6 @@ define('io.ox/calendar/model', [
                     sort: 'startDate',
                     expand: true
                 };
-            // forces backend to fetch current data from external calendars
-            if (opt.sync) {
-                params.updateCache = true;
-            }
 
             this.expired = false;
             _.defer(this.trigger.bind(this, 'before:load'));

@@ -33,7 +33,10 @@ define('io.ox/core/folder/actions/common', [
 
         refreshCalendar: function (e) {
             require(['io.ox/calendar/api'], function (calendarApi) {
-                calendarApi.collectionLoader.load({ folders: [e.data.folder.id], sync: true });
+                calendarApi.refreshCalendar(e.data.folder.id).then(function () {
+                    folderAPI.pool.unfetch(e.data.folder.id);
+                    folderAPI.refresh();
+                });
             });
         },
 
