@@ -541,9 +541,14 @@ define('io.ox/mail/compose/extensions', [
                         this.renderList();
                         view.updateScrollControls();
                     }
-                    $(window).trigger('resize');
                 }
             }));
+
+            // tinymce resize
+            view.listenTo(view.collection, 'add remove reset', _.debounce(function () {
+                if (this.getValidModels().length <= 1) $(window).trigger('resize');
+            }));
+            view.on('change:expanded', function () { $(window).trigger('resize'); });
 
             view.render();
             if (view.getValidModels().length > 0) {
