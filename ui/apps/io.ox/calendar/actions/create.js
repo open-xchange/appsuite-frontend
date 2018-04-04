@@ -74,9 +74,34 @@ define('io.ox/calendar/actions/create', [
         if (obj && obj.startDate) {
             _.extend(params, obj);
         } else {
-            var refDate = baton.app.refDate ? moment(baton.app.refDate) : moment();
+            var refDate = moment().startOf('hour').add(1, 'hours'),
+                perspective = baton.app.getWindow().getPerspective(),
+                now = _.now(), range;
 
-            refDate.startOf('hour').add(1, 'hours');
+            switch (perspective.name) {
+                case 'week':
+                    range = calendarUtil.getCurrentRangeOptions();
+                    break;
+                case 'month':
+                    range = {
+                        rangeStart: perspective.current,
+                        rangeEnd: moment(perspective.current).endOf('month')
+                    };
+                    break;
+                case 'year':
+                    range = {
+                        rangeStart: moment({ year: perspective.year }),
+                        rangeEnd: moment({ year: perspective.year }).endOf('year')
+                    };
+                    break;
+                default:
+            }
+
+            if (range && moment(range.rangeStart).valueOf() > now || now > moment(range.rangeEnd).valueOf()) {
+                // use first visible date if today is not visible
+                refDate = moment(range.rangeStart).hours(10);
+            }
+
             params.startDate = { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() };
             params.endDate = { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() };
         }
