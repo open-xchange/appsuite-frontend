@@ -16,9 +16,8 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/folder/picker',
     'io.ox/core/notifications',
     'gettext!io.ox/core',
-    'io.ox/mail/api',
-    'io.ox/core/api/account'
-], function (api, picker, notifications, gt, mailAPI, accountAPI) {
+    'io.ox/mail/api'
+], function (api, picker, notifications, gt, mailAPI) {
 
     'use strict';
 
@@ -182,7 +181,6 @@ define('io.ox/core/folder/actions/move', [
                 root: module === 'infostore' ? '9' : '1',
                 title: gt('Move folder') + ': ' + model.get('title'),
                 context: context,
-                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX',
                 persistent: 'folderpopup',
                 settings: settings
             });
