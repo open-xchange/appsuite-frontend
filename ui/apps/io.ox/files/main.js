@@ -1528,6 +1528,8 @@ define('io.ox/files/main', [
         //  => Bug 56943: error handling on external folder delete
         // FLD-0003 -> permission denied
         //  => Bug 57149: error handling on permission denied
+        // FILE_STORAGE-0055
+        //  => Bug 54793 : error handling when folder does not exists anymore
         'special-error-handling': function (app) {
             var process = _.debounce(function (error) {
                 var model = folderAPI.pool.getModel(app.folder.get());
@@ -1535,7 +1537,7 @@ define('io.ox/files/main', [
                 app.folder.setDefault();
                 notifications.yell(error);
             }, 1000, true);
-            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003', function (error, request) {
+            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003 http:error:FILE_STORAGE-0055', function (error, request) {
                 var folder = request.params.parent || request.data.parent;
                 if (!folder || folder !== this.folder.get()) return;
                 if (folderAPI.isBeingDeleted(folder)) return;
