@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-26 16:42+0200\n"
+"PO-Revision-Date: 2018-03-29 00:20+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -626,9 +626,9 @@ msgstr "開啟選項"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr "若要開啟設定，點擊選單列右上角的使用者圖片，然後選擇設定。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -656,13 +656,13 @@ msgstr "開啟說明"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"要開啟說明，點擊選單列右上角的系統選單圖示。選擇說明，將顯示目前選擇程式的說"
-"明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
+"若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的應"
+"用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -673,6 +673,11 @@ msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr "要登出，點選選單列右上角的系統選單，點選登出。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr "若要登出，點擊選單列右上角的登出圖示。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -764,6 +769,20 @@ msgid ""
 msgstr ""
 "要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "要開啟說明，點擊選單列右上角的系統選單圖示。選擇說明，將顯示目前選擇程式的"
+#~ "說明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "

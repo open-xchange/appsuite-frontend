@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-01 21:39+1000\n"
+"PO-Revision-Date: 2018-04-02 02:27+0800\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -628,9 +628,9 @@ msgstr "打开设定"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr "要打开设置，单击菜单条右上方的用户图像。选择设置。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -658,13 +658,13 @@ msgstr "打开帮助"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应用"
-"程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
+"要打开帮助，单击在菜单条右上方上的用户图像。选择帮助，会显示当前选择应用程序"
+"的帮助。要浏览完整帮助，单击在窗口上部的开始页或目录。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -675,6 +675,11 @@ msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr "要注销，请单击菜单条右上方的系统菜单图标。选择注销。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr "要注销, 请单击菜单栏右上角的注销图标。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -766,6 +771,20 @@ msgid ""
 msgstr ""
 "要一次编辑多个任务，请勾选任务左边的选择框。如果选择框没有显示，请单击工具条"
 "右边的视图 > 选择框。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应"
+#~ "用程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "
