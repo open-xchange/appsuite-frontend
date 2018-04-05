@@ -14,9 +14,9 @@
 Feature('Mail compose');
 
 // https://testrail.open-xchange.com/index.php?/cases/view/7382
-Scenario('Compose plain text mail', function (I) {
+Scenario('Compose plain text mail', async function (I) {
     // 0) log in to settings and set compose mode to html
-    I.login('app=io.ox/settings');
+    await I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
 
     // open mail settings
@@ -78,5 +78,5 @@ Scenario('Compose plain text mail', function (I) {
     I.see('Test text');
     I.switchTo();
 
-    I.logout();
+    await I.logout();
 });
