@@ -87,13 +87,11 @@ Scenario.skip('Create appointment with all fields', async function (I) {
 });
 
 Scenario('fullday appointments', async function (I) {
-    I.login('app=io.ox/calendar');
+    await I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
     I.clickToolbar('View');
     I.click('Week');
-
-    await I.removeAllAppointments();
 
     I.clickToolbar('New');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
@@ -120,12 +118,12 @@ Scenario('fullday appointments', async function (I) {
     });
     I.wait(0.5);
 
-    I.click('Fullday test', '.appointment');
+    I.click('Fullday test', '.weekview .appointment');
 
     I.see('5 days', '.io-ox-sidepopup .calendar-detail');
 
     I.click('Delete', '.io-ox-sidepopup .calendar-detail');
     I.click('Delete', '.io-ox-dialog-popup');
 
-    I.logout();
+    await I.logout();
 });
