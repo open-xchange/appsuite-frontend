@@ -316,24 +316,6 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
-        remoteSingleAccount: function (tree) {
-            var self = this;
-            api.get(tree.options.folderBase).done(function (folderObj) {
-                self.append(
-                    new TreeNodeView({
-                        folder: folderObj.folder_id,
-                        headless: false,
-                        open: true,
-                        icons: tree.options.icons,
-                        tree: tree,
-                        parent: tree,
-                        isRemote: true
-                    })
-                    .render().$el.addClass('remote-folders')
-                );
-            });
-        },
-
         fileStorageAccounts: function (tree) {
             this.append(
                 new TreeNodeView({
@@ -616,13 +598,6 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'remote-accounts',
             draw: extensions.remoteAccounts
-        }
-    );
-
-    ext.point('io.ox/core/foldertree/mail/dsc').extend(
-        {
-            id: 'remote-accounts',
-            draw: extensions.remoteSingleAccount
         }
     );
 
