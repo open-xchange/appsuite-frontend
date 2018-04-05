@@ -70,9 +70,9 @@ define('io.ox/core/dropzone', [], function () {
                     ox.trigger('drag:start', this.cid);
                     this.stop(e);
                     this.leaving = false;
+                    if (!this.isScope(e)) return this.hide();
                     if (!this.checked) this.checked = true; else return;
                     if (!this.isValid(e)) return;
-                    if (!this.isScope(e)) return;
                     if (!this.visible) this.show();
                     return false;
                 case 'dragleave':
@@ -101,6 +101,7 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = true;
             this.$el.show();
             this.trigger('show');
+            $(window).trigger('resize');
         },
 
         hide: function () {
@@ -116,7 +117,7 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
-            this.floating = undefined;
+            this.window = undefined;
 
             $(document).on(EVENTS, this.onDrag.bind(this));
             // firefox does not fire dragleave correct when leaving the window.
@@ -134,9 +135,8 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         isScope: function (e) {
-            if (_.isUndefined(this.floating)) this.floating = !!this.$el.closest('.floating-window').length;
-            var isTargetFloating = !!$(e.target).closest('.floating-window').length;
-            return (this.floating && isTargetFloating) || (!this.floating && !isTargetFloating);
+            if (_.isUndefined(this.window)) this.window = this.$el.closest('.window-container');
+            return $(e.target).closest('.window-container').is(this.window);
         },
 
         // overwrite for custom checks
