@@ -17,6 +17,32 @@ define('io.ox/core/dropzone', [], function () {
 
     var EVENTS = 'dragenter dragover dragleave drop';
 
+    // iframe overlay during dnd
+    ox.on('drag:start', _.partial(toggleDndMask, true));
+    ox.on('drag:stop', _.partial(toggleDndMask, false));
+    function toggleDndMask(state) {
+        var active = $('html').hasClass('dndmask-enabled');
+
+        if (active === state) return;
+
+        $('html').toggleClass('dndmask-enabled', state);
+        if (!state) return $('.dndmask').remove();
+
+        $('iframe:visible').each(function () {
+            var id = _.uniqueId('overlay-'),
+                iframe = $(this)
+                    .attr('data-overlay', id)
+                    .before(
+                        // overlay
+                        $('<div id="' + id + '" class="dndmask">')
+                        .on(EVENTS, function (e) {
+                            var event = $.Event(e.type, { 'offsetX': e.offsetX, 'offsetY': e.offsetY });
+                            $('body', iframe.contents()).trigger(event);
+                        })
+                    );
+        });
+    }
+
     // Backbone Dropzone
     var InplaceDropzone = Backbone.View.extend({
 
@@ -30,7 +56,9 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         onLeave: function (e) {
-            if (this.leaving) this.hide(e);
+            if (!this.leaving) return;
+            ox.trigger('drag:stop', this.cid);
+            this.hide(e);
         },
 
         onDrag: function (e) {
@@ -39,6 +67,7 @@ define('io.ox/core/dropzone', [], function () {
             switch (e.type) {
                 case 'dragenter':
                 case 'dragover':
+                    ox.trigger('drag:start', this.cid);
                     this.stop(e);
                     this.leaving = false;
                     if (!this.checked) this.checked = true; else return;
@@ -52,6 +81,7 @@ define('io.ox/core/dropzone', [], function () {
                     this.timeout = setTimeout(this.onLeave.bind(this), 100, e);
                     break;
                 case 'drop':
+                    ox.trigger('drag:stop', this.cid);
                     this.stop(e);
                     this.hide();
                     return false;
