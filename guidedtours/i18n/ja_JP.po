@@ -3,7 +3,7 @@
 msgid ""
 msgstr "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-21 09:28+0100\n"
+"PO-Revision-Date: 2018-03-26 17:13+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -581,9 +581,9 @@ msgstr "設定を開く"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr "設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリックします。設定 を選択します。"
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr "設定を表示するには、メニューバーの右上のユーザイメージをクリックします。設定 を選択します。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -611,11 +611,11 @@ msgstr "ヘルプを開く"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
-msgstr "ヘルプを表示するには、メニューバーの右上のシステムメニューアイコンをクリックします。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示します。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をクリックします。"
+msgstr "ヘルプを表示するには、メニューバーの右上のユーザイメージをクリックします。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示します。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -626,6 +626,11 @@ msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr "サインアウトするには、メニューバーの右上のシステムメニューアイコンをクリックします。サインアウトを選択します。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr "サインアウトするには、メニューバーの右上のサインアウトアイコンをクリックします。サインアウトを選択します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -713,6 +718,24 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "複数の仕事を一度に編集するには、メールの左側にあるチェックボックスを有効にします。チェックボックスが表示されていない場合は、ツールバーの右側にある [ビュー] → [チェックボックス] の順にクリックします。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリック"
+#~ "します。設定 を選択します。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "ヘルプを表示するには、メニューバーの右上のシステムメニューアイコンをクリッ"
+#~ "クします。ヘルプを選択します。現在選択されているアプリケーションのヘルプを"
+#~ "表示します。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページ"
+#~ "または目次をクリックします。"
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "
