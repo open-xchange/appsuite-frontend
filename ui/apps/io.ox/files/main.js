@@ -603,6 +603,7 @@ define('io.ox/files/main', [
                                     models: models,
                                     app: this,
                                     allIds: [],
+                                    favorite: true,
                                     collection: app.myFavoriteListView.collection
                                 }),
                                 // draw toolbar
