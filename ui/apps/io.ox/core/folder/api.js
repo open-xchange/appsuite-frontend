@@ -768,12 +768,20 @@ define('io.ox/core/folder/api', [
         // be robust
         if (id === undefined) return $.when([]);
 
+        function checkCircularReference(array, current) {
+            return _.find(array, function (elem) { return elem.id === current; });
+        }
+
         // try to resolve via pool
         do {
             result.push(data = pool.getModel(current).toJSON());
             current = data.folder_id;
             done = String(current) === '1';
-        } while (current && !done);
+
+        // info for the checkCircularReference() condition: when a folder is moved into an
+        // own child we get an error from the backend, but in the meantime there is
+        // a short moment were we have a circular reference in the model that can cause a endless loop
+        } while (current && !done && !checkCircularReference(result, current));
 
         // resolve in reverse order (root > folder)
         if (done) return $.when(result.reverse());
