@@ -127,7 +127,7 @@ define('io.ox/backbone/views/window', [
 
         startDrag: function (e) {
             //only drag on left click
-            if (!e.which === 1) return;
+            if (e.which !== 1) return;
             // needed for safari to stop selecting the whole UI
             e.preventDefault();
             // set starting Position
