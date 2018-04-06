@@ -377,7 +377,7 @@ define('io.ox/core/notifications/subview', [
                 return;
             }
             items = this.checkHidden(items);
-            var newModels = this.checkNew(items, this.collenction);
+            var newModels = this.checkNew(items, this.collection);
             this.collection.add(items, { silent: silent });
             if (newModels && !_.device('smartphone') && this.model.get('autoOpen')) {
                 this.trigger('autoopen');
