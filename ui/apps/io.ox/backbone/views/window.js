@@ -253,7 +253,7 @@ define('io.ox/backbone/views/window', [
 
         minimize: function () {
             var app = ox.ui.App.getCurrentApp();
-            if (app && app.get('title')) ox.trigger('change:document:title', app && app.get('title') ? app.get('title') : null);
+            if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
             this.model.set('minimized', true);
             this.$el.css({
                 left: this.model.get('xPos'),
