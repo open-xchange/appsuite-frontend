@@ -46,9 +46,9 @@ define('io.ox/contacts/view-detail', [
 
     function getDescription(data) {
 
-        function single(index, value, translated) {
+        function single(index, value) {
             var params = new Array(index);
-            params[index - 1] = translated ? value : value;
+            params[index - 1] = value;
             return { format: '%' + index + '$s', params: params };
         }
 
