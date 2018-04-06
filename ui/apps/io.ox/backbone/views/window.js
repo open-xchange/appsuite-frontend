@@ -261,9 +261,8 @@ define('io.ox/backbone/views/window', [
             });
         },
 
-        onMinimize: function (e) {
+        onMinimize: function () {
             var self = this;
-            if (!e && !e.type === 'click') this.minimize();
 
             var taskBarEl = $('#io-ox-taskbar').find('[data-cid="' + this.model.cid + '"]');
             // minimizing a window moves it to the last position
