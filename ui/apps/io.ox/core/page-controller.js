@@ -67,6 +67,7 @@ define('io.ox/core/page-controller', [], function () {
 
             if (opt.startPage) {
                 self.setCurrentPage(opt.name);
+
             }
         }
         /*

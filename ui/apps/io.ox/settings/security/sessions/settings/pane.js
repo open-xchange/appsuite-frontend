@@ -153,7 +153,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
             return function () {
                 if (this.getDeviceInfo('client').type !== 'dav') return;
                 var family = this.getDeviceInfo('client').family || '';
-                this.set('application', mapping[family]);
+                this.set('application', mapping[family] || gt('CalDav/CardDav'));
             };
         }())
     });

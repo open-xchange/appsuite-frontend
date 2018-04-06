@@ -1670,7 +1670,8 @@ define('io.ox/calendar/week/view', [
             print.request('io.ox/calendar/week/print', {
                 start: moment(this.startDate).valueOf(),
                 end: moment(this.startDate).add(this.columns, 'days').valueOf(),
-                folders: this.folders
+                folders: this.folders,
+                title: _(this.folders).keys().length === 1 ? this.folders[_(this.folders).keys()[0]].display_title || this.folders[_(this.folders).keys()[0]].title : gt('Appointments')
             });
         }
     });

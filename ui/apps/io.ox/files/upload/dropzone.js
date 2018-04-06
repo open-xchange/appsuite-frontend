@@ -56,7 +56,6 @@ define('io.ox/files/upload/dropzone', [
             // desktop only
             if (!_.device('desktop')) return;
 
-
             var baton = new ext.Baton({
                 app: app,
                 dropZones: []

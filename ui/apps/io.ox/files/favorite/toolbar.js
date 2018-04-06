@@ -26,13 +26,6 @@ define('io.ox/files/favorite/toolbar', [
     // define links for classic toolbar
     var point = ext.point('io.ox/files/favorite/classic-toolbar/links'),
         meta = {
-            'removeFromFavorites': {
-                prio: 'hi',
-                mobile: 'lo',
-                label: gt('Remove from favorites'),
-                drawDisabled: true,
-                ref: 'io.ox/files/favorites/remove'
-            },
             'edit': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -132,6 +125,20 @@ define('io.ox/files/favorite/toolbar', [
             //
             // --- LO ----
             //
+            'removeFromFavorites': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Remove from favorites'),
+                drawDisabled: true,
+                ref: 'io.ox/files/favorites/remove'
+            },
+            'showInDrive': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Show in Drive'),
+                drawDisabled: true,
+                ref: 'io.ox/files/actions/show-in-folder'
+            },
             'rename': {
                 prio: 'lo',
                 mobile: 'lo',

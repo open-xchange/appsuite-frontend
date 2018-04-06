@@ -46,11 +46,7 @@ define('io.ox/files/mediasupport', ['settings!io.ox/files'], function (settings)
             if (!mediatype) return [];
             var str = this.supportedExtensions(mediatype);
             if (!str || !str.length) return [];
-            if (str.indexOf('|') >= 0) {
-                return str.split('|');
-            } else if (str) {
-                return [str];
-            }
+            return str.split('|');
         },
         supportedExtensions: function (mediatype) {
 

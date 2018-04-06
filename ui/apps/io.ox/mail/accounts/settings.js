@@ -136,23 +136,6 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/preselect').extend({
-        id: 'dsc',
-        before: 'oauth',
-        draw: function (baton) {
-            if (!mailSettings.get('dsc/enabled')) {
-                // normal mode for all setups not using DSC
-                return;
-            }
-            // show classic wizard for DSC setups, bypass oauth accounts
-            ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
-            _.defer(function () {
-                baton.popup.getFooter().find('[data-action="add"]').show();
-            }, 1000);
-
-            baton.stopPropagation();
-        }
-
-    }, {
         id: 'oauth',
         index: 100,
         draw: function (baton) {

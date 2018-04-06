@@ -127,7 +127,7 @@ define('io.ox/backbone/views/window', [
 
         startDrag: function (e) {
             //only drag on left click
-            if (!e.which === 1) return;
+            if (e.which !== 1) return;
             // needed for safari to stop selecting the whole UI
             e.preventDefault();
             // set starting Position
@@ -253,7 +253,7 @@ define('io.ox/backbone/views/window', [
 
         minimize: function () {
             var app = ox.ui.App.getCurrentApp();
-            if (app && app.get('title')) ox.trigger('change:document:title', app && app.get('title') ? app.get('title') : null);
+            if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
             this.model.set('minimized', true);
             this.$el.css({
                 left: this.model.get('xPos'),
@@ -261,9 +261,8 @@ define('io.ox/backbone/views/window', [
             });
         },
 
-        onMinimize: function (e) {
+        onMinimize: function () {
             var self = this;
-            if (!e && !e.type === 'click') this.minimize();
 
             var taskBarEl = $('#io-ox-taskbar').find('[data-cid="' + this.model.cid + '"]');
             // minimizing a window moves it to the last position

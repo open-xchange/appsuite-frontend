@@ -685,7 +685,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             }
         } else {
             // e.g. plain text
-            deferred.resolve(response || '');
+            deferred.resolve(response);
         }
     };
 

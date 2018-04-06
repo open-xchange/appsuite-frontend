@@ -114,11 +114,7 @@ define('io.ox/settings/security/settings/pane', [
                             //#. Status for mail authenticity features. Defines a verbosity level for displaying information
                             { label: gt('Disabled'), value: 'none' },
                             //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous emails only'), value: 'fail' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous and trusted emails'), value: 'fail_trusted' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous, trusted and valid emails'), value: 'fail_trusted_pass' },
+                            { label: gt('Dangerous and inconclusive emails only'), value: 'fail_neutral' },
                             //#. Status for mail authenticity features. Defines a verbosity level for displaying information
                             { label: gt('All emails'), value: 'all' }
                         ])

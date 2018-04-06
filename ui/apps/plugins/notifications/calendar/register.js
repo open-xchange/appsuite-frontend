@@ -170,13 +170,13 @@ define('plugins/notifications/calendar/register', [
                     calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     baton.view.collection.remove(baton.requestedModel.attributes);
                 });
-                node.find('[data-action="reminder"]').on('click change', function (e) {
+                node.find('[data-action="selector"]').on('click change', function (e) {
                     //if we do this on smartphones the dropdown does not close correctly
                     if (!_.device('smartphone')) {
                         e.stopPropagation();
                     }
 
-                    var min = $(e.target).data('value') || $(e.target).val();
+                    var min = $(e.target).val();
                     //0 means 'pick a time here' was selected. Do nothing.
                     if (min !== '0') {
                         calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {

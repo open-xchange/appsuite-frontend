@@ -605,8 +605,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 // Convert the matches on the page controller into the
                 // match format
                 // used for the textLayer.
-                this.matches = this.convertMatches(this.findController === null ? []
-                    : (this.findController.pageMatches[this.pageIdx] || []));
+                this.matches = this.convertMatches(this.findController.pageMatches[this.pageIdx] || []);
                 this.renderMatches(this.matches);
             }
         };

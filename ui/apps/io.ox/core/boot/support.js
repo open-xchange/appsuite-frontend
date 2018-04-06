@@ -57,7 +57,7 @@ define('io.ox/core/boot/support', [
                 util.feedback('info', function () {
                     return $('<div data-error="outdated-platform">').text(
                         //#. %n in the lowest version of Android
-                        gt('You need to use Android %n or higher.', _.plaformSupport.Android)
+                        gt('You need to use Android %n or higher.', _.platformSupport.Android)
                     );
                 });
 

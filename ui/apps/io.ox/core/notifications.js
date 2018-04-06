@@ -18,10 +18,11 @@ define('io.ox/core/notifications', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/yell',
     'io.ox/core/desktopNotifications',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/a11y'
-], function (ext, Dropdown, yell, desktopNotifications, settings, gt, a11y) {
+], function (ext, Dropdown, yell, desktopNotifications, capabilities, settings, gt, a11y) {
 
     'use strict';
 
@@ -64,6 +65,20 @@ define('io.ox/core/notifications', [
             this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">').on('click', this.keepOpen);
 
             this.delayedRender = _.debounce(this.render, 100);
+
+            // we stop event bubbling in the sidepopup to keep the dropdown open.
+            // we must add a new listener to make halos work again since the global handler is not triggered
+            // Halo is not available for Guests without contacts.
+            if (capabilities.has('guest') && !capabilities.has('contacts')) return;
+
+            this.sidepopupNode.on('click', '.halo-link', function (e) {
+                e.preventDefault();
+                ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
+            });
+            this.sidepopupNode.on('click', '.halo-resource-link', function (e) {
+                e.preventDefault();
+                ext.point('io.ox/core/resource:action').invoke('action', this, $(this).data(), e);
+            });
         },
 
         keepOpen: function (e) {
@@ -90,6 +105,21 @@ define('io.ox/core/notifications', [
                     self.delayedRender();
                 });
 
+                subview.on('responsive-remove', function () {
+                    var count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
+                        cappedCount = Math.min(count, 99),
+                        prevCount = parseInt(this.$el.find('.number').text(), 10);
+
+                    // no change? nothing to do
+                    if (cappedCount === prevCount) return;
+                    // invoke render when count is set to 0 to clean up the view
+                    if (count === 0) return self.render();
+
+                    //#. %1$d number of notifications in notification area
+                    //#, c-format
+                    this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
+                });
+
                 subview.on('autoopen', _.bind(function () {
                     self.render();
                     self.dropdown.open();
@@ -103,11 +133,12 @@ define('io.ox/core/notifications', [
             var self = this,
                 subviews = this.model.get('subviews'),
                 count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
+                cappedCount = Math.min(count, 99),
                 markedForRedraw = this.model.get('markedForRedraw');
 
             //#. %1$d number of notifications in notification area
             //#, c-format
-            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(count);
+            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
             this.model.set('markedForRedraw', {});
 
             self.listNode.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();

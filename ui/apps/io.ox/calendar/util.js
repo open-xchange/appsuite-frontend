@@ -591,8 +591,6 @@ define('io.ox/calendar/util', [
                         //#. recurrence string
                         //#. %1$d: numeric
                         str = gt.npgettext('weekly', 'Every weekend.', 'Every %1$d weeks on weekends.', interval, interval);
-                    } else if (days === 0) { // special case when no day is selected
-                        str = gt('Never.');
                     } else {
                         //#. recurrence string
                         //#. %1$d: numeric
