@@ -97,7 +97,7 @@ define('io.ox/calendar/actions/create', [
                 default:
             }
 
-            if (range && moment(range.rangeStart).valueOf() > now || now > moment(range.rangeEnd).valueOf()) {
+            if (range && (moment(range.rangeStart).valueOf() > now || now > moment(range.rangeEnd).valueOf())) {
                 // use first visible date if today is not visible
                 refDate = moment(range.rangeStart).hours(10);
             }
