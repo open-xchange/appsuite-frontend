@@ -214,7 +214,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
-                    .css('margin-bottom', '32px')
+                    //.css('margin-bottom', '32px')
                     .toggleClass('simple-linebreaks', mailSettings.get('compose/simpleLineBreaks', false))
             )
         );
@@ -388,7 +388,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             var h = $(window).height(),
                 top = editor.offset().top,
                 container = el.closest('.io-ox-mail-compose-window, .floating-window-content, .modal-content'),
-                bottomMargin = container.hasClass('header-top') ? 39 : 120,
+                bottomMargin = container.hasClass('header-top') ? 39 : 80,
                 bottomOffset = h - container.height() - container.offset().top;
 
             editor.css('min-height', h - top - bottomMargin - bottomOffset + 'px');
