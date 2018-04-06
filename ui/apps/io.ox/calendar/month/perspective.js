@@ -440,19 +440,20 @@ define('io.ox/calendar/month/perspective', [
             if (!_.device('smartphone')) {
                 this.pane
                     .css('right', -coreUtil.getScrollBarWidth() + 'px')
-                    .on('scroll', $.proxy(function (e) {
+                    .on('scroll', _.throttle($.proxy(function (e) {
                         var $current = this.currentView.$el,
                             current = $current.get(0),
                             top = current.offsetTop,
-                            height = current.offsetHeight;
-                        if (top + height < e.target.scrollTop) {
+                            height = current.offsetHeight,
+                            scrollTop = e.target.scrollTop;
+                        if (top + height < scrollTop) {
                             this.drawMonths({ down: true });
-                            e.target.scrollTop += $current.get(0).offsetTop - top;
-                        } else if (top > e.target.scrollTop + e.target.offsetHeight) {
+                            e.target.scrollTop = scrollTop + current.offsetTop - top;
+                        } else if (top > scrollTop + e.target.offsetHeight) {
                             this.drawMonths({ up: true });
-                            e.target.scrollTop += $current.get(0).offsetTop - top;
+                            e.target.scrollTop = scrollTop + current.offsetTop - top;
                         }
-                    }, this))
+                    }, this), 20))
                     .on('scrollend', $.proxy(function () {
                         this.app.setDate(moment([this.current.year(), this.current.month()]), { silent: true });
                     }, this));
