@@ -560,22 +560,18 @@ define('io.ox/mail/util', [
                 switch (aspect) {
                     // contact image
                     case 'image':
-                        if (/fail/.test(level)) return status === 'fail';
-                        if (level === 'all') return /(fail|neutral)/.test(status);
-                        return false;
+                        return /(fail|neutral)/.test(status);
                     // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
                     case 'via':
+                        if (status === 'trusted') return true;
                         switch (level) {
-                            case 'fail': return status === 'fail';
-                            case 'fail_trusted': return /(fail|trusted)/.test(status);
-                            case 'fail_trusted_pass': return /(fail|pass|trusted)/.test(status);
+                            case 'fail_neutral': return /(fail|neutral)/.test(status);
                             case 'all': return true;
                             default: return false;
                         }
                     // info box wihtin mail detail
                     case 'box':
-                        if (/fail/.test(level)) return status === 'fail';
                         return /(fail|trusted)/.test(status);
                     // disable links, replace external images
                     case 'block':
@@ -590,7 +586,8 @@ define('io.ox/mail/util', [
                 var status = getAuthenticityStatus(data),
                     level = getAuthenticityLevel();
 
-                if (level === 'none') return;
+                // always show trusted
+                if (level === 'none' && status !== 'trusted') return;
                 if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
 
                 return isRelevant(aspect, level, status) ? status : undefined;
