@@ -90,6 +90,21 @@ define('io.ox/core/notifications', [
                     self.delayedRender();
                 });
 
+                subview.on('responsive-remove', function () {
+                    var count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
+                        cappedCount = Math.min(count, 99),
+                        prevCount = parseInt(this.$el.find('.number').text(), 10);
+
+                    // no change? nothing to do
+                    if (cappedCount === prevCount) return;
+                    // invoke render when count is set to 0 to clean up the view
+                    if (count === 0) return self.render();
+
+                    //#. %1$d number of notifications in notification area
+                    //#, c-format
+                    this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
+                });
+
                 subview.on('autoopen', _.bind(function () {
                     self.render();
                     self.dropdown.open();
@@ -103,11 +118,12 @@ define('io.ox/core/notifications', [
             var self = this,
                 subviews = this.model.get('subviews'),
                 count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
+                cappedCount = Math.min(count, 99),
                 markedForRedraw = this.model.get('markedForRedraw');
 
             //#. %1$d number of notifications in notification area
             //#, c-format
-            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(count);
+            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
             this.model.set('markedForRedraw', {});
 
             self.listNode.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();
