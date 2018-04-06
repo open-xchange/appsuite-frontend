@@ -18,10 +18,11 @@ define('io.ox/core/notifications', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/yell',
     'io.ox/core/desktopNotifications',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/a11y'
-], function (ext, Dropdown, yell, desktopNotifications, settings, gt, a11y) {
+], function (ext, Dropdown, yell, desktopNotifications, capabilities, settings, gt, a11y) {
 
     'use strict';
 
@@ -64,6 +65,20 @@ define('io.ox/core/notifications', [
             this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">').on('click', this.keepOpen);
 
             this.delayedRender = _.debounce(this.render, 100);
+
+            // we stop event bubbling in the sidepopup to keep the dropdown open.
+            // we must add a new listener to make halos work again since the global handler is not triggered
+            // Halo is not available for Guests without contacts.
+            if (capabilities.has('guest') && !capabilities.has('contacts')) return;
+
+            this.sidepopupNode.on('click', '.halo-link', function (e) {
+                e.preventDefault();
+                ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
+            });
+            this.sidepopupNode.on('click', '.halo-resource-link', function (e) {
+                e.preventDefault();
+                ext.point('io.ox/core/resource:action').invoke('action', this, $(this).data(), e);
+            });
         },
 
         keepOpen: function (e) {
