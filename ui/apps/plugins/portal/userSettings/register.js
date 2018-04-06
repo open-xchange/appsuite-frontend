@@ -220,15 +220,13 @@ define('plugins/portal/userSettings/register', [
         title: gt('User data'),
 
         preview: function () {
-            var content;
+            var content = $('<div class="content">');
             if (internalUserEdit) {
-                this.append(
-                    content = $('<div class="content">').append(
-                        // user data
-                        $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
-                        .on('click keypress', { fn: changeUserData }, keyClickFilter)
+                content.append(
+                    // user data
+                    $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
+                    .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
-                    )
                 );
             }
             // password
@@ -239,6 +237,7 @@ define('plugins/portal/userSettings/register', [
                     .on('click keypress', { fn: changePassword }, keyClickFilter)
                 );
             }
+            this.append(content);
         }
     });
 
