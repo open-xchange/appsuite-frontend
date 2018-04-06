@@ -306,7 +306,7 @@ define('io.ox/core/wizard/registry', [
             if (!isNextEnabled()) {
                 return;
             }
-            var def = null;
+            var def = $.when();
             if (this.currentPage) {
                 def = callMethod(this.currentPage, 'finish', this.index) || $.when();
             }
