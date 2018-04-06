@@ -371,8 +371,8 @@ define('io.ox/calendar/month/perspective', [
                 current: this.current,
                 start: moment(this.current).startOf('week').valueOf(),
                 end: moment(this.current).endOf('month').endOf('week').valueOf(),
-                folders: _(this.folders).pluck('id'),
-                title: this.folder.title
+                folders: this.folders,
+                title: _(this.folders).keys().length === 1 ? this.folders[_(this.folders).keys()[0]].display_title || this.folders[_(this.folders).keys()[0]].title : gt('Appointments')
             });
         },
 

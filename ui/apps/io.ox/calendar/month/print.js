@@ -35,10 +35,15 @@ define('io.ox/calendar/month/print', [
         return util.isAllday(event) ? -1 : util.getMoment(event.get('startDate')).valueOf();
     }
 
-    function map(event) {
+    function map(event, folders) {
+        // if declined use base grey color
+        var color = util.getAppointmentColor(folders[event.get('folder')], event) || '#e8e8e8';
+
         return {
             time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
-            title: event.get('summary')
+            title: event.get('summary'),
+            color: util.getForegroundColor(color),
+            backgroundColor: color
         };
     }
 
@@ -47,13 +52,13 @@ define('io.ox/calendar/month/print', [
         open: function (selection, win) {
 
             print.smart({
-                selection: [selection.folders],
+                selection: [_(selection.folders).pluck('id')],
 
                 get: function () {
                     var collection = api.getCollection({
                         start: selection.start,
                         end: selection.end,
-                        folders: selection.folders,
+                        folders: _(selection.folders).pluck('id'),
                         view: 'month'
                     });
                     return collection.sync().then(function () {
@@ -78,7 +83,9 @@ define('io.ox/calendar/month/print', [
                                         .chain()
                                         .filter(getFilter(dayStart, dayEnd))
                                         .sortBy(sortBy)
-                                        .map(map)
+                                        .map(function (event) {
+                                            return map(event, selection.folders);
+                                        })
                                         .value(),
                                     className: start.month() === currentMonth ? 'in' : 'out'
                                 });
