@@ -327,6 +327,8 @@ define('io.ox/core/settings/pane', [
                 // don't offer for IE11 as some design don't work technically
                 if (_.device('ie <= 11')) return;
                 if (!settings.get('features/designs', true)) return;
+                // works only for default theme
+                if (this.hasMoreThanOneTheme()) return;
 
                 baton.$el.append(
                     util.compactSelect('design', gt('Design'), this.model, this.getDesigns(), { groups: true })
