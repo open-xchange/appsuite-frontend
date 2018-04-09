@@ -25,57 +25,37 @@ module.exports = actor({
     },
     // TODO move login and logout to external library when we have some experience with it
 
-    createRandomUser: function () {
-        const user = {
-            username: 'test.user-' + (Math.random() * 0xFFFFFF << 0).toString(16),
-            password: 'secret'
-        };
-
+    createUser: function (user) {
         return this.executeSOAPRequest('OXUserService', 'create', {
-            ctx: { id: 10 },
-            usrdata: {
-                primaryEmail: user.username + '@ox-e2e-backend.novalocal',
-                display_name: user.username,
-                sur_name: 'Test',
-                given_name: 'User',
-                name: user.username,
-                email1: user.username + '@ox-e2e-backend.novalocal',
-                password: 'secret',
-                imapLogin: user.username
-            },
+            ctx: user.ctx,
+            usrdata: user.data,
             auth: { login: 'oxadmin', password: 'secret' }
-        }).then(function () {
-            global.users = (global.users || []);
-            global.users.push(user);
-            return user;
+        }).then(function (data) {
+            return data.return;
         });
     },
 
-    removeAllRandomUsers: async function () {
-        if (!global.users) return;
-        for (let user of global.users) {
+    removeUsers: async function (users) {
+        for (let user of users) {
             await this.executeSOAPRequest('OXUserService', 'delete', {
                 ctx: { id: 10 },
-                user: {
-                    name: user.username
-                },
+                user,
                 auth: { login: 'oxadmin', password: 'secret' }
             });
         }
-        delete global.users;
+        users.splice(0);
     },
 
     login: function (params, options) {
         params = [].concat(params);
         options = _.extend({
-            userIndex: 0,
+            user: {},
             prefix: ''
         }, options);
 
         const config = codecept.config.get(),
             webDriver = config.helpers['WebDriverIO'],
-            users = global.users || config.helpers['OpenXchange'].users,
-            user = users[options.userIndex];
+            user = options.user;
 
         var launchURL = webDriver.url;
         if (launchURL.search('appsuite\\/?$') >= 0) launchURL = launchURL.substring(0, launchURL.search('appsuite\\/?$'));
@@ -86,7 +66,7 @@ module.exports = actor({
 
         this.amOnPage(launchURL + '#' + params.join('&'));
         this.waitForFocus('input[name="username"]');
-        this.fillField('username', user.username);
+        this.fillField('username', user.name);
         this.fillField('password', user.password);
         this.waitToHide('.busy');
         this.click('Sign in');

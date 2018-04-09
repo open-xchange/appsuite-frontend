@@ -15,16 +15,16 @@ const expect = require('chai').expect;
 
 Feature('Portal widgets');
 
-BeforeSuite(async function (I) {
-    await I.createRandomUser();
+BeforeSuite(async function (I, users) {
+    users.push(await I.createUser(users.create()));
 });
 
-AfterSuite(async function (I) {
-    await I.removeAllRandomUsers();
+AfterSuite(async function (I, users) {
+    await I.removeUsers(users);
 });
 
-Scenario('add and remove Inbox widget', async function (I) {
-    I.login('app=io.ox/portal');
+Scenario('add and remove Inbox widget', async function (I, users) {
+    I.login('app=io.ox/portal', { user: users[0] });
     I.waitForElement('[data-app-name="io.ox/portal"] .header', 20);
     let [oldWidgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
     I.click('Add widget');

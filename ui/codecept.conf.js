@@ -39,7 +39,8 @@ module.exports.config = {
         }
     },
     'include': {
-        'I': './e2e/actor'
+        'I': './e2e/actor',
+        'users': './e2e/users'
     },
     'bootstrap': function (done) {
         var chai = require('chai');

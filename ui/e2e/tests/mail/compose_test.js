@@ -13,18 +13,19 @@
 
 Feature('Mail compose');
 
-BeforeSuite(async function (I) {
-    await I.createRandomUser();
+BeforeSuite(async function (I, users) {
+    users.push(await I.createUser(users.create()));
 });
 
-AfterSuite(async function (I) {
-    await I.removeAllRandomUsers();
+AfterSuite(async function (I, users) {
+    await I.removeUsers(users);
 });
 
 // https://testrail.open-xchange.com/index.php?/cases/view/7382
-Scenario('Compose plain text mail', function (I) {
+Scenario('Compose plain text mail', function (I, users) {
+    const [user] = users;
     // 0) log in to settings and set compose mode to html
-    I.login('app=io.ox/settings');
+    I.login('app=io.ox/settings', { user });
     I.waitForVisible('.io-ox-settings-main');
 
     // open mail settings
@@ -58,7 +59,7 @@ Scenario('Compose plain text mail', function (I) {
     I.waitForInvisible('.io-ox-mail-compose .editable-toolbar');
 
     // 3) Set a recipient, add a subject and mail text
-    I.insertMailaddress('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 0);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');

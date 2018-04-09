@@ -15,16 +15,16 @@ const expect = require('chai').expect;
 
 Feature('Mail Portal widgets');
 
-BeforeSuite(async function (I) {
-    await I.createRandomUser();
+BeforeSuite(async function (I, users) {
+    users.push(await I.createUser(users.create()));
 });
 
-AfterSuite(async function (I) {
-    await I.removeAllRandomUsers();
+AfterSuite(async function (I, users) {
+    await I.removeUsers(users);
 });
 
-Scenario('adding a mail containing XSS code', async function (I) {
-    I.login('app=io.ox/mail', { prefix: 'io.ox/portal/xss_mail' });
+Scenario('adding a mail containing XSS code', async function (I, users) {
+    I.login('app=io.ox/mail', { prefix: 'io.ox/portal/xss_mail', user: users[0] });
     I.waitForElement({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.click('Add to portal', '.dropdown.open .dropdown-menu');

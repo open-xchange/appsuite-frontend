@@ -13,16 +13,16 @@
 
 Feature('Contacts: Create new contact');
 
-BeforeSuite(async function (I) {
-    await I.createRandomUser();
+BeforeSuite(async function (I, users) {
+    users.push(await I.createUser(users.create()));
 });
 
-AfterSuite(async function (I) {
-    await I.removeAllRandomUsers();
+AfterSuite(async function (I, users) {
+    await I.removeUsers(users);
 });
 
-Scenario('adds a contact with all fields', function (I) {
-    I.login('app=io.ox/contacts');
+Scenario('adds a contact with all fields', function (I, users) {
+    I.login('app=io.ox/contacts', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
     I.waitForVisible('.classic-toolbar [data-action]');
