@@ -15,9 +15,17 @@
 
 Feature('Sessions settings');
 
-Scenario('lists all sessions', async function (I) {
+BeforeSuite(async function (I) {
+    await I.createRandomUser();
+});
 
-    await I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);
+AfterSuite(async function (I) {
+    await I.removeAllRandomUsers();
+});
+
+Scenario('lists all sessions', function (I) {
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);
     I.waitForVisible('.io-ox-session-settings');
     I.see('You are currently signed in with the following devices');
 
@@ -31,5 +39,5 @@ Scenario('lists all sessions', async function (I) {
     I.see('Firefox(Mac)');
     I.see('Chrome(Mac)');
 
-    await I.logout();
+    I.logout();
 });

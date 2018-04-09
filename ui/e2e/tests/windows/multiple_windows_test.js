@@ -13,10 +13,18 @@
 
 Feature('Floating windows');
 
+BeforeSuite(async function (I) {
+    await I.createRandomUser();
+});
+
+AfterSuite(async function (I) {
+    await I.removeAllRandomUsers();
+});
+
 const { expect } = require('chai');
 
 Scenario('Opening multiple windows', async function (I) {
-    await I.login();
+    I.login();
     I.click('#io-ox-launcher');
     I.click('Calendar', '#io-ox-launcher');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
@@ -51,5 +59,5 @@ Scenario('Opening multiple windows', async function (I) {
 
     I.click('Discard');
 
-    await I.logout();
+    I.logout();
 });

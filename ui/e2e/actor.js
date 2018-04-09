@@ -24,33 +24,57 @@ module.exports = actor({
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
     },
     // TODO move login and logout to external library when we have some experience with it
-    login: async function (params, options) {
+
+    createRandomUser: function () {
+        const user = {
+            username: 'test.user-' + (Math.random() * 0xFFFFFF << 0).toString(16),
+            password: 'secret'
+        };
+
+        return this.executeSOAPRequest('OXUserService', 'create', {
+            ctx: { id: 10 },
+            usrdata: {
+                primaryEmail: user.username + '@ox-e2e-backend.novalocal',
+                display_name: user.username,
+                sur_name: 'Test',
+                given_name: 'User',
+                name: user.username,
+                email1: user.username + '@ox-e2e-backend.novalocal',
+                password: 'secret',
+                imapLogin: user.username
+            },
+            auth: { login: 'oxadmin', password: 'secret' }
+        }).then(function () {
+            global.users = (global.users || []);
+            global.users.push(user);
+            return user;
+        });
+    },
+
+    removeAllRandomUsers: async function () {
+        if (!global.users) return;
+        for (let user of global.users) {
+            await this.executeSOAPRequest('OXUserService', 'delete', {
+                ctx: { id: 10 },
+                user: {
+                    name: user.username
+                },
+                auth: { login: 'oxadmin', password: 'secret' }
+            });
+        }
+    },
+
+    login: function (params, options) {
         params = [].concat(params);
         options = _.extend({
+            userIndex: 0,
             prefix: ''
         }, options);
 
         const config = codecept.config.get(),
             webDriver = config.helpers['WebDriverIO'],
-            user = {
-                name: 'test.user-' + (Math.random() * 0xFFFFFF << 0).toString(16),
-                password: 'secret'
-            };
-
-        await this.have('user', 'create', {
-            ctx: { id: 10 },
-            usrdata: {
-                primaryEmail: user.name + '@ox-e2e-backend.novalocal',
-                display_name: user.name,
-                sur_name: 'Test',
-                given_name: 'User',
-                name: user.name,
-                email1: user.name + '@ox-e2e-backend.novalocal',
-                password: 'secret',
-                imapLogin: user.name
-            },
-            auth: { login: 'oxadmin', password: 'secret' }
-        });
+            users = global.users || config.helpers['OpenXchange'].users,
+            user = users[options.userIndex];
 
         var launchURL = webDriver.url;
         if (launchURL.search('appsuite\\/?$') >= 0) launchURL = launchURL.substring(0, launchURL.search('appsuite\\/?$'));
@@ -61,26 +85,11 @@ module.exports = actor({
 
         this.amOnPage(launchURL + '#' + params.join('&'));
         this.waitForFocus('input[name="username"]');
-        this.fillField('username', user.name);
+        this.fillField('username', user.username);
         this.fillField('password', user.password);
         this.waitToHide('.busy');
         this.click('Sign in');
         this.waitForElement('#io-ox-launcher', 20);
-
-        // TODO store this in a clever way :)
-        global.user = user;
-    },
-    logout: async function () {
-        this.click('#io-ox-topbar-dropdown-icon > a.dropdown-toggle');
-        this.click('Sign out', { css: '.smart-dropdown-container' });
-        this.waitForElement('#io-ox-login-username');
-
-        await this.have('user', 'delete', {
-            ctx: { id: 10 },
-            user: {
-                name: global.user.name
-            },
-            auth: { login: 'oxadmin', password: 'secret' }
-        });
     }
+
 });

@@ -16,9 +16,17 @@ const expect = require('chai').expect;
 
 Feature('Mailfilter');
 
+BeforeSuite(async function (I) {
+    await I.createRandomUser();
+});
+
+AfterSuite(async function (I) {
+    await I.removeAllRandomUsers();
+});
+
 Scenario('add and removes Mail Filter Rules', async function (I) {
 
-    await I.login('app=io.ox/settings');
+    I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
@@ -268,11 +276,11 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .hint');
 
-    await I.logout();
+    I.logout();
 });
 
-Scenario('adds and removes Mail Filter Rules with modified config', async function (I) {
-    await I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' });
+Scenario('adds and removes Mail Filter Rules with modified config', function (I) {
+    I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' });
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
@@ -382,5 +390,5 @@ Scenario('adds and removes Mail Filter Rules with modified config', async functi
 
     I.click('Cancel');
 
-    await I.logout();
+    I.logout();
 });

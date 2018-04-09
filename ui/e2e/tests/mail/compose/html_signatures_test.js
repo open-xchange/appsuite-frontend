@@ -15,6 +15,14 @@ const expect = require('chai').expect;
 
 Feature('Mail compose: HTML signatures');
 
+BeforeSuite(async function (I) {
+    await I.createRandomUser();
+});
+
+AfterSuite(async function (I) {
+    await I.removeAllRandomUsers();
+});
+
 const signatures = [
     'The content of the first signature',
     'The content of the second signature',
@@ -32,7 +40,7 @@ async function selectAndAssertSignature(I, name, compare) {
 }
 
 Scenario('compose new mail with signature above correctly placed and changed', async function (I) {
-    await I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
+    I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultSignature', '0');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
@@ -70,11 +78,11 @@ Scenario('compose new mail with signature above correctly placed and changed', a
     I.waitForVisible('.io-ox-mail-window');
 
     // client.logout();
-    await I.logout();
+    I.logout();
 });
 
 Scenario('compose new mail with signature below correctly placed initially', async function (I) {
-    await I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
+    I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultSignature', '2');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
@@ -91,11 +99,11 @@ Scenario('compose new mail with signature below correctly placed initially', asy
     I.click('Discard');
     I.waitForVisible('.io-ox-mail-window');
 
-    await I.logout();
+    I.logout();
 });
 
 Scenario('Reply to mail with signature above correctly placed and changed', async function (I) {
-    await I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
+    I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultReplyForwardSignature', '0');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
@@ -136,11 +144,11 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     I.click('Discard message');
     I.waitForVisible('.io-ox-mail-window');
 
-    await I.logout();
+    I.logout();
 });
 
 Scenario('Reply to mail with signature below correctly placed initially', async function (I) {
-    await I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
+    I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
     I.setSetting('io.ox/mail', 'defaultReplyForwardSignature', '2');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
@@ -162,5 +170,5 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     I.click('Discard');
     I.waitForVisible('.io-ox-mail-window');
 
-    await I.logout();
+    I.logout();
 });

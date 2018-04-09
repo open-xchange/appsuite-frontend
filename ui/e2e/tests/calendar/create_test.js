@@ -15,9 +15,17 @@ const expect = require('chai').expect;
 
 Feature('Calendar: Create new appointment');
 
+BeforeSuite(async function (I) {
+    await I.createRandomUser();
+});
+
+AfterSuite(async function (I) {
+    await I.removeAllRandomUsers();
+});
+
 Scenario.skip('Create appointment with all fields', async function (I) {
 
-    await I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
     I.setSetting('io.ox/core', 'autoOpenNotification', false);
@@ -82,12 +90,12 @@ Scenario.skip('Create appointment with all fields', async function (I) {
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
 
-    await I.logout();
+    I.logout();
 
 });
 
 Scenario('fullday appointments', async function (I) {
-    await I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
     I.clickToolbar('View');
@@ -125,5 +133,5 @@ Scenario('fullday appointments', async function (I) {
     I.click('Delete', '.io-ox-sidepopup .calendar-detail');
     I.click('Delete', '.io-ox-dialog-popup');
 
-    await I.logout();
+    I.logout();
 });

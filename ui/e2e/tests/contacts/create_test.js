@@ -13,8 +13,16 @@
 
 Feature('Contacts: Create new contact');
 
-Scenario('adds a contact with all fields', async function (I) {
-    await I.login('app=io.ox/contacts');
+BeforeSuite(async function (I) {
+    await I.createRandomUser();
+});
+
+AfterSuite(async function (I) {
+    await I.removeAllRandomUsers();
+});
+
+Scenario('adds a contact with all fields', function (I) {
+    I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
     I.waitForVisible('.classic-toolbar [data-action]');
@@ -137,5 +145,5 @@ Scenario('adds a contact with all fields', async function (I) {
     // comment
     I.see('a comment in the comment field');
 
-    await I.logout();
+    I.logout();
 });

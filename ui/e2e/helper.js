@@ -3,19 +3,17 @@ const Helper = require('@open-xchange/codecept-helper').helper,
     codecept = require('codeceptjs');
 class MyHelper extends Helper {
 
-    have(type, action, data) {
+    executeSOAPRequest(type, action, data) {
 
-        const mapping = {
-                user: 'OXUserService'
-            },
-            config = codecept.config.get(),
+        const config = codecept.config.get(),
             webDriver = config.helpers['WebDriverIO'];
 
         let url = webDriver.url;
+        // remove /appsuite if appended to url
         if (url.search('appsuite\\/?$') >= 0) url = url.substring(0, url.search('appsuite\\/?$'));
         if (!/\/$/.test(url)) url += '/';
 
-        url = `${url}webservices/${mapping[type]}?wsdl`;
+        url = `${url}webservices/${type}?wsdl`;
 
         return SOAP.createClientAsync(url).then(client => {
             return client[`${action}Async`](data);
