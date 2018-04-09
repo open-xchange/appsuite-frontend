@@ -23,7 +23,7 @@ users.create = async function createUser(user = users.getRandom(), ctx = { id: 1
         password: user.password,
         imapLogin: user.name
     };
-    const data = await I.executeSOAPRequest('OXUserService', 'create', {
+    const data = await I.executeSoapRequest('OXUserService', 'create', {
         ctx: ctx,
         usrdata: usrdata
     });
@@ -32,7 +32,7 @@ users.create = async function createUser(user = users.getRandom(), ctx = { id: 1
 };
 users.removeAll = async function removeAllUsers() {
     for (let user of users) {
-        await I.executeSOAPRequest('OXUserService', 'delete', {
+        await I.executeSoapRequest('OXUserService', 'delete', {
             ctx: { id: 10 },
             user
         });

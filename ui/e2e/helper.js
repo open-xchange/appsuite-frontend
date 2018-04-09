@@ -3,7 +3,7 @@ const Helper = require('@open-xchange/codecept-helper').helper,
     codecept = require('codeceptjs');
 class MyHelper extends Helper {
 
-    executeSOAPRequest(type, action, data) {
+    executeSoapRequest(type, action, data) {
 
         const config = codecept.config.get(),
             webDriver = config.helpers['WebDriverIO'];
