@@ -1335,14 +1335,10 @@ body.dragging .categories-toolbar-container {
         color: #fff;
         padding: 16px 40px;
         line-height: 16px;
+        .smartphone & { padding: 16px; }
     }
-    .fail {
-        background-color: @a-color-fail;
-    }
-    .trusted {
-        background-color: @a-color-trusted;
-    }
-
+    .fail { background-color: @a-color-fail; }
+    .trusted {background-color: @a-color-trusted; }
 }
 
 .touch {
@@ -1497,7 +1493,7 @@ body.dragging .categories-toolbar-container {
         }
 
         section.authenticity {
-            padding: 16px;
+            padding: 0;
             border-bottom: 1px solid #ddd;
         }
     }

@@ -155,12 +155,6 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail').extend({
-        id: 'authenticity',
-        index: INDEX += 100,
-        draw: extensions.authenticity
-    });
-
-    ext.point('io.ox/mail/mobile/detail').extend({
         id: 'body',
         index: INDEX += 100,
         draw: function () {
