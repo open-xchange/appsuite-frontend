@@ -733,18 +733,22 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
-                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
+                        $('<button type="button" class="close">&times;</button>')
                     )
                 );
             }
 
             return function (baton) {
                 draw.call(this, baton.model);
-                this.on('click', '.external-images', { view: baton.view }, function (e) {
+                this.on('click', '.external-images > .btn-default', { view: baton.view }, function (e) {
                     ext.point('io.ox/mail/externalImages').cascade(this, baton)
                     .then(function () {
                         loadImages(e);
                     });
+                });
+                this.on('click', '.external-images > .close', function (e) {
+                    $(e.target).closest('.external-images').remove();
                 });
                 baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
