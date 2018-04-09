@@ -62,6 +62,7 @@ module.exports = actor({
                 auth: { login: 'oxadmin', password: 'secret' }
             });
         }
+        delete global.users;
     },
 
     login: function (params, options) {
