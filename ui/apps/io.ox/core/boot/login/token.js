@@ -14,15 +14,27 @@
 define('io.ox/core/boot/login/token', [
     'io.ox/core/boot/util',
     'io.ox/core/boot/config',
+    'io.ox/core/extensions',
     'io.ox/core/session',
     'io.ox/core/http'
-], function (util, config, session, http) {
+], function (util, config, ext, session, http) {
 
     'use strict';
 
+    ext.point('io.ox/core/boot/login').extend({
+        id: 'token',
+        index: 200,
+        login: function (baton) {
+            if (baton.hash.tokenSession || baton.hash.session) {
+                baton.stopPropagation();
+                return tokenLogin();
+            }
+        }
+    });
+
     var hash = {};
 
-    return function tokenLogin() {
+    function tokenLogin() {
 
         hash = _.url.hash();
 
@@ -42,7 +54,7 @@ define('io.ox/core/boot/login/token', [
             util.debug('Session-based login ...', hash.session);
             success({ session: hash.session });
         }
-    };
+    }
 
     function success(data) {
 
@@ -108,4 +120,6 @@ define('io.ox/core/boot/login/token', [
 
         ox.trigger('login:success');
     }
+
+    return tokenLogin;
 });

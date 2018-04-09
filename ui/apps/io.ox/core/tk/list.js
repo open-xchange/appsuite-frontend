@@ -604,6 +604,7 @@ define('io.ox/core/tk/list', [
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
             this.toggleComplete(false);
+            this.toggleExpired(false);
             this.listenTo(collection, {
                 // forward events
                 'all': this.forwardCollectionEvents,
@@ -624,7 +625,8 @@ define('io.ox/core/tk/list', [
                 'paginate:fail': this.idle,
                 'complete': this.onComplete,
                 // reload
-                'reload': this.idle
+                'reload': this.idle,
+                'expire': this.onExpire
             });
             this.listenTo(collection, {
                 // backbone
@@ -635,6 +637,16 @@ define('io.ox/core/tk/list', [
             if (this.selection) this.selection.reset();
             this.trigger('collection:set');
             return this;
+        },
+
+        // respond to expire event (usually triggered by the GC)
+        onExpire: function () {
+            // revert flag since this is an active collection (see bug 54111)
+            this.toggleExpired(false);
+        },
+
+        toggleExpired: function (flag) {
+            this.collection.expired = flag;
         },
 
         // if true current collection is regarded complete

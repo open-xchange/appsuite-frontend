@@ -1,5 +1,5 @@
 define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
-    function RedirectHandler (options) {
+    function RedirectHandler(options) {
         options = options || {};
 
         _.extend(this, options, {
@@ -9,8 +9,8 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
                 if (uri) {
                     if ((/^http/i).test(uri)) {
                         window.location = uri;
-                        _.defer(function() {
-                            if (window.location != uri) return;
+                        _.defer(function () {
+                            if (window.location !== uri) return;
                             window.location.reload();
                         });
                     } else {
@@ -23,8 +23,8 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
 
                         var l = location;
                         window.location = l.protocol + '//' + l.host + path;
-                        _.defer(function() {
-                            if (window.location != uri) return;
+                        _.defer(function () {
+                            if (window.location !== uri) return;
                             window.location.reload();
                         });
                     }

@@ -23,7 +23,7 @@ define('io.ox/mail/categories/api', [
          // flag collections as expired
         var rCategory = new RegExp('categoryid=' + options.target);
         _.each(mailAPI.pool.getCollections(), function (collection, id) {
-            if (rCategory.test(id)) collection.expired = true;
+            if (rCategory.test(id)) collection.expire();
         });
         // TODO: investigate why we have to call gc manually to get it work
         mailAPI.pool.gc();

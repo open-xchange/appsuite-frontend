@@ -1,0 +1,10 @@
+[{
+    "namespace": "signin",
+    "path": "io.ox/core/boot/login/auto"
+}, {
+    "namespace": "signin",
+    "path": "io.ox/core/boot/login/openid"
+}, {
+    "namespace": "signin",
+    "path": "io.ox/core/boot/login/token"
+}]
