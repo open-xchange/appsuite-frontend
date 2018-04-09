@@ -23,8 +23,8 @@ AfterSuite(async function (users) {
 
 const { expect } = require('chai');
 
-Scenario('Opening multiple windows', async function (I, users) {
-    I.login('', { user: users[0] });
+Scenario('Opening multiple windows', async function (I) {
+    I.login();
     I.click('#io-ox-launcher');
     I.click('Calendar', '#io-ox-launcher');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');

@@ -21,8 +21,8 @@ AfterSuite(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds a contact with all fields', function (I, users) {
-    I.login('app=io.ox/contacts', { user: users[0] });
+Scenario('adds a contact with all fields', function (I) {
+    I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
     I.waitForVisible('.classic-toolbar [data-action]');

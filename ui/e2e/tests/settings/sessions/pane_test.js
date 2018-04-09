@@ -23,9 +23,9 @@ AfterSuite(async function (users) {
     await users.removeAll();
 });
 
-Scenario('lists all sessions', function (I, users) {
+Scenario('lists all sessions', function (I) {
 
-    I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions'], { user: users[0] });
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);
     I.waitForVisible('.io-ox-session-settings');
     I.see('You are currently signed in with the following devices');
 

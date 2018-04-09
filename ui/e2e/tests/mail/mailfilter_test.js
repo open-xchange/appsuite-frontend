@@ -25,8 +25,8 @@ AfterSuite(async function (users) {
 });
 
 
-Scenario('add and removes Mail Filter Rules', async function (I, users) {
-    I.login('app=io.ox/settings', { user: users[0] });
+Scenario('add and removes Mail Filter Rules', async function (I) {
+    I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
@@ -279,8 +279,8 @@ Scenario('add and removes Mail Filter Rules', async function (I, users) {
     I.logout();
 });
 
-Scenario('adds and removes Mail Filter Rules with modified config', function (I, users) {
-    I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter', user: users[0] });
+Scenario('adds and removes Mail Filter Rules with modified config', function (I) {
+    I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' });
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');

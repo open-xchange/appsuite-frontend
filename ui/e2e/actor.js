@@ -28,13 +28,12 @@ module.exports = actor({
     login: function (params, options) {
         params = [].concat(params);
         options = _.extend({
-            user: {},
             prefix: ''
         }, options);
 
         const config = codecept.config.get(),
             webDriver = config.helpers['WebDriverIO'],
-            user = options.user;
+            user = options.user || require('./users')[0];
 
         var launchURL = webDriver.url;
         if (launchURL.search('appsuite\\/?$') >= 0) launchURL = launchURL.substring(0, launchURL.search('appsuite\\/?$'));

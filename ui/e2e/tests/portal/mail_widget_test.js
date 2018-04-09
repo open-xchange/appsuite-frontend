@@ -24,8 +24,8 @@ AfterSuite(async function (users) {
 });
 
 
-Scenario('adding a mail containing XSS code', async function (I, users) {
-    I.login('app=io.ox/mail', { prefix: 'io.ox/portal/xss_mail', user: users[0] });
+Scenario('adding a mail containing XSS code', async function (I) {
+    I.login('app=io.ox/mail', { prefix: 'io.ox/portal/xss_mail' });
     I.waitForElement({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.click('Add to portal', '.dropdown.open .dropdown-menu');

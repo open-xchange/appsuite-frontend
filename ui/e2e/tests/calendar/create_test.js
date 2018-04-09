@@ -23,9 +23,9 @@ AfterSuite(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('Create appointment with all fields', async function (I, users) {
+Scenario.skip('Create appointment with all fields', async function (I) {
 
-    I.login('app=io.ox/calendar', { user: users[0] });
+    I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
     I.setSetting('io.ox/core', 'autoOpenNotification', false);
