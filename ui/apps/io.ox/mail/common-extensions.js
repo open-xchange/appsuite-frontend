@@ -710,6 +710,46 @@ define('io.ox/mail/common-extensions', [
             };
         }()),
 
+        disabledLinks: (function () {
+
+            function disableExt(view, point, ext) {
+                view.options.disable = view.options.disable || {};
+                var value = view.options.disable[point];
+                if (_.isString(value)) view.options.disable[point] = [].concat(value);
+                view.options.disable[point] = (view.options.disable[point] || []).concat(ext);
+            }
+
+            function loadLinks(e) {
+                e.preventDefault();
+                var view = e.data.view;
+                view.trigger('load');
+                view.$el.find('.disabled-links').remove();
+                disableExt(view, 'io.ox/mail/detail/source', 'disable-links');
+                disableExt(view, 'io.ox/mail/detail/content-general', 'disable-links');
+                disableExt(view, 'io.ox/mail/detail/notifications', 'disabled-links');
+                view.redraw();
+            }
+
+            function draw() {
+                this.append(
+                    $('<div class="notification-item disabled-links">').append(
+                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show Links')),
+                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
+                        $('<button type="button" class="close">&times;</button>')
+                    )
+                );
+            }
+
+            return function (baton) {
+                if (!util.isMalicious(baton.data)) return;
+                draw.call(this, baton.model);
+                this.on('click', '.disabled-links > .btn-default', { view: baton.view }, loadLinks);
+                this.on('click', '.disabled-links > .close', function (e) {
+                    $(e.target).closest('.disabled-links').remove();
+                });
+            };
+        }()),
+
         externalImages: (function () {
 
             function loadImages(e) {

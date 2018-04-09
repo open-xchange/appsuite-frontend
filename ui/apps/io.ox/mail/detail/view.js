@@ -342,6 +342,12 @@ define('io.ox/mail/detail/view', [
         draw: extensions.externalImages
     });
 
+    ext.point('io.ox/mail/detail/notifications').extend({
+        id: 'disabled-links',
+        index: INDEX_notifications += 100,
+        draw: extensions.disabledLinks
+    });
+
     ext.point('io.ox/mail/detail').extend({
         id: 'error',
         index: INDEX += 100,
