@@ -15,13 +15,14 @@ const expect = require('chai').expect;
 
 Feature('Mail Portal widgets');
 
-BeforeSuite(async function (I, users) {
-    users.push(await I.createUser(users.create()));
+BeforeSuite(async function (users) {
+    await users.create();
 });
 
-AfterSuite(async function (I, users) {
-    await I.removeUsers(users);
+AfterSuite(async function (users) {
+    await users.removeAll();
 });
+
 
 Scenario('adding a mail containing XSS code', async function (I, users) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/portal/xss_mail', user: users[0] });

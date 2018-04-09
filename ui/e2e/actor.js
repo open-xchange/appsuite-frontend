@@ -25,27 +25,6 @@ module.exports = actor({
     },
     // TODO move login and logout to external library when we have some experience with it
 
-    createUser: function (user) {
-        return this.executeSOAPRequest('OXUserService', 'create', {
-            ctx: user.ctx,
-            usrdata: user.data,
-            auth: { login: 'oxadmin', password: 'secret' }
-        }).then(function (data) {
-            return data.return;
-        });
-    },
-
-    removeUsers: async function (users) {
-        for (let user of users) {
-            await this.executeSOAPRequest('OXUserService', 'delete', {
-                ctx: { id: 10 },
-                user,
-                auth: { login: 'oxadmin', password: 'secret' }
-            });
-        }
-        users.splice(0);
-    },
-
     login: function (params, options) {
         params = [].concat(params);
         options = _.extend({

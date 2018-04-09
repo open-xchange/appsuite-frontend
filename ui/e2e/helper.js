@@ -15,6 +15,8 @@ class MyHelper extends Helper {
 
         url = `${url}webservices/${type}?wsdl`;
 
+        data.auth = { login: 'oxadmin', password: 'secret' };
+
         return SOAP.createClientAsync(url).then(client => {
             return client[`${action}Async`](data);
         }).then(result => {

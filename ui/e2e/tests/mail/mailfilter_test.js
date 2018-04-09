@@ -16,13 +16,14 @@ const expect = require('chai').expect;
 
 Feature('Mailfilter');
 
-BeforeSuite(async function (I, users) {
-    users.push(await I.createUser(users.create()));
+BeforeSuite(async function (users) {
+    await users.create();
 });
 
-AfterSuite(async function (I, users) {
-    await I.removeUsers(users);
+AfterSuite(async function (users) {
+    await users.removeAll();
 });
+
 
 Scenario('add and removes Mail Filter Rules', async function (I, users) {
     I.login('app=io.ox/settings', { user: users[0] });

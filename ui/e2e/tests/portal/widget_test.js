@@ -15,12 +15,12 @@ const expect = require('chai').expect;
 
 Feature('Portal widgets');
 
-BeforeSuite(async function (I, users) {
-    users.push(await I.createUser(users.create()));
+BeforeSuite(async function (users) {
+    await users.create();
 });
 
-AfterSuite(async function (I, users) {
-    await I.removeUsers(users);
+AfterSuite(async function (users) {
+    await users.removeAll();
 });
 
 Scenario('add and remove Inbox widget', async function (I, users) {
