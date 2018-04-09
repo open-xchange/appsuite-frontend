@@ -838,15 +838,15 @@ define('io.ox/mail/common-extensions', [
                 if (account.is('drafts', model.get('folder_id'))) return;
 
                 this.append(
-                    $('<div class="alert alert-info disposition-notification">').append(
-                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
+                    $('<div class="alert alert-info disposition-notification notification-item">').append(
                         $('<button type="button" class="btn btn-primary btn-sm">').text(
                             //#. Respond to a read receipt request; German "Lesebestätigung senden"
                             gt('Send a read receipt')
                         ),
                         $('<div class="comment">').text(
                             gt('The sender wants to get notified when you have read this email')
-                        )
+                        ),
+                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>')
                     )
                 );
             }

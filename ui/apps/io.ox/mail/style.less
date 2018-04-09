@@ -417,15 +417,6 @@
         margin-left: 0.5em;
     }
 
-    .external-images, .disposition-notification {
-        display: table;
-        width: 100%;
-
-        .btn { float: left; margin-right: @default-padding; }
-        .comment { display: table; }
-        .close { position: relative; right: -10px; }
-    }
-
     .priority {
         float: right;
         font-size: @icon-size;
@@ -540,16 +531,24 @@
 
     &.expanded .detail-view-header { border-bottom: 1px solid #ddd; }
 
-    .notifications { cursor: default; }
+    .notification-item,
+    .notification-item.disposition-notification {
+        display: flex;
+        align-items: flex-start;
 
-    .notification-item {
         padding: @default-padding;
         padding-left: 40px;
         border-bottom: 1px solid #ddd;
+
+        .btn { margin-right: @default-padding; }
+        .comment { flex: 1; align-self: center; }
+        .close { height: 29px; }
+        .smartphone & { padding: @default-padding; }
     }
 
     .notification-item + .notification-item { border-top: none; }
 
+    .notifications { cursor: default; }
 
     .alert, .well {
         margin: 0;
