@@ -154,7 +154,7 @@ define('io.ox/find/view-facets', [
                     module: module,
                     root: type === 'files' ? '9' : '1',
                     flat: api.isFlat(module),
-                    done: function (target) {
+                    done: function (target, dialog) {
                         //get folder data
                         api.get(target)
                             .always(function (data) {
@@ -165,6 +165,7 @@ define('io.ox/find/view-facets', [
                                     id: target,
                                     name: label
                                 });
+                                dialog.close();
                             });
                     },
                     disable: function (data) {

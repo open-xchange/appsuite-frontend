@@ -158,9 +158,13 @@ define('io.ox/core/folder/actions/move', [
             picker({
                 async: true,
                 addClass: 'zero-padding',
-                done: function (target, dialog) {
+                done: function (target, dialog, tree) {
                     if (!!virtualMapping[target]) target = virtualMapping[target];
-                    api.move(id, target, { enqueue: true }).then(dialog.close, dialog.idle).fail(notifications.yell);
+                    function preselect() {
+                        tree.preselect(target);
+                    }
+                    api.move(id, target, { enqueue: true }).done(dialog.close).fail([dialog.idle, preselect, notifications.yell]);
+
                 },
                 customize: function (baton) {
 

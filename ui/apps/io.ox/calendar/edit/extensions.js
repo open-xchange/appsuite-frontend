@@ -210,8 +210,9 @@ define('io.ox/calendar/edit/extensions', [
                 createFolderText: gt('Create new calendar'),
                 folder: this.model.get('folder'),
 
-                done: function (id) {
+                done: function (id, dialog) {
                     self.model.set('folder', id);
+                    dialog.close();
                 },
 
                 disable: function (data, options) {
