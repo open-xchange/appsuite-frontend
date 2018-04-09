@@ -273,6 +273,7 @@ define('io.ox/mail/detail/mobileView', [
                     attachments: util.getAttachments(data)
                 }),
                 node = this.getEmptyBodyNode();
+            baton.disable(this.options.disable);
             // draw mail body
             ext.point('io.ox/mail/mobile/detail/body').invoke('draw', node, baton);
         },
