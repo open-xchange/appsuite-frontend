@@ -409,6 +409,7 @@ define('io.ox/core/notifications/subview', [
                     this.render(this.$el.parent());
                 }
                 this.trigger('responsive-remove');
+                return;
             }
             this.collection.remove(items, { silent: silent });
         },

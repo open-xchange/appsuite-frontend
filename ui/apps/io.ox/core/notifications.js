@@ -108,7 +108,7 @@ define('io.ox/core/notifications', [
                 subview.on('responsive-remove', function () {
                     var count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
                         cappedCount = Math.min(count, 99),
-                        prevCount = parseInt(this.$el.find('.number').text(), 10);
+                        prevCount = parseInt(self.$el.find('.number').text(), 10);
 
                     // no change? nothing to do
                     if (cappedCount === prevCount) return;
@@ -117,7 +117,7 @@ define('io.ox/core/notifications', [
 
                     //#. %1$d number of notifications in notification area
                     //#, c-format
-                    this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
+                    self.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
                 });
 
                 subview.on('autoopen', _.bind(function () {
