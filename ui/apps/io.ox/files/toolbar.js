@@ -382,6 +382,12 @@ define('io.ox/files/toolbar', [
             app.listView.on('selection:change change', function () {
                 app.updateToolbar(app.listView.selection.get());
             });
+            api.on('favorite:add favorite:remove', function () {
+                app.updateToolbar(app.listView.selection.get());
+            });
+            folderApi.on('favorite:add favorite:remove', function () {
+                app.updateToolbar(app.listView.selection.get());
+            });
         }
     });
 });

@@ -614,7 +614,7 @@ define('io.ox/files/main', [
 
                         app.updateMyFavoritesToolbar();
                         // update toolbar on selection change as well as any model change
-                        app.myFavoriteListView.on('selection:change change', function () {
+                        app.myFavoriteListView.on('selection:change change favorite:add favorite:remove', function () {
                             app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
                         });
 
