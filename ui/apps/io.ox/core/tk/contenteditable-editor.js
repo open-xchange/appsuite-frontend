@@ -185,6 +185,16 @@ define('io.ox/core/tk/contenteditable-editor', [
         ed.focus();
     }
 
+    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
+    function scrollOnCursorUp(ed) {
+        var scrollable = $(ed).closest('.scrollable'), bottom = scrollable.offset().top + 80;
+        var range = window.getSelection().getRangeAt(0);
+        range = range.cloneRange();
+        range.setStart(range.startContainer, 0);
+        var rect = range.getBoundingClientRect();
+        if (rect.top > 0 && (rect.top - rect.height) < bottom) scrollable[0].scrollTop -= rect.height + 2;
+    }
+
     function lookupTinyMCELanguage() {
         var lookup_lang = ox.language,
             tinymce_langpacks = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
@@ -728,6 +738,9 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
+
+        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) scrollOnCursorUp(this); });
+
     }
 
     return Editor;
