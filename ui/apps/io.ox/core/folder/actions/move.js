@@ -132,8 +132,9 @@ define('io.ox/core/folder/actions/move', [
                 initialize: options.pickerInit || $.noop,
                 close: options.pickerClose || $.noop,
 
-                done: function (id) {
+                done: function (id, dialog) {
                     if (type === 'copy' || id !== current) commit(id);
+                    if (dialog) dialog.close();
                 },
 
                 disable: function (data, options) {
