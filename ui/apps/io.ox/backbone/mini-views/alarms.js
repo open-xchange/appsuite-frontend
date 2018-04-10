@@ -92,7 +92,8 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm) {
-            if (!alarm || !alarm.trigger) return;
+            // don't show acknowledged alarms
+            if (!alarm || !alarm.trigger || alarm.acknowledged) return;
 
             var row, container;
 
@@ -140,7 +141,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         getAlarmsArray: function () {
             var self = this;
-            return _(this.list.children()).map(function (item) {
+            return _(this.model.get(this.attribute) || []).filter(function (alarm) { return alarm.acknowledged; }).concat(_(this.list.children()).map(function (item) {
                 var alarm = { action: $(item).find('.alarm-action').val() },
                     time = $(item).find('.alarm-time').val(),
                     related = $(item).find('.alarm-related').val();
@@ -166,7 +167,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     // no default
                 }
                 return alarm;
-            });
+            }));
         }
     });
 
@@ -184,14 +185,15 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         render: function () {
             this.$el.empty().append(
-                (this.model.get(this.attribute) || []).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
+                _(this.model.get(this.attribute) || []).filter(function (alarm) { return !alarm.acknowledged; }).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
             );
             return this;
         },
         drawList: function () {
             var node = $('<ul class="list-unstyled alarm--link-list">');
             _(this.model.get(this.attribute)).each(function (alarm) {
-                if (!alarm || !alarm.trigger) return;
+                // don't show acknowledged alarms
+                if (!alarm || !alarm.trigger || alarm.acknowledged) return;
                 var type, duration, related, text;
 
                 if (_(standardTypes).indexOf(alarm.action) === -1) {
