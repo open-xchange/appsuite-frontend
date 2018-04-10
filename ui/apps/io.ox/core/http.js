@@ -57,7 +57,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // they both add the same property; never use simultaneously!
                 '662': 'text_preview',
                 '663': 'text_preview',
-                '664': 'authenticity'
+                '664': 'authenticity_preview'
             },
             'contacts': {
                 '500': 'display_name',
