@@ -305,7 +305,7 @@ define('io.ox/calendar/edit/main', [
 
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
-                        fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true });
+                        fail = _.bind(this.onError, this);
                     api.move(this.model, this.moveAfterSave, util.getCurrentRangeOptions()).then(function () {
                         delete self.moveAfterSave;
                         save();
@@ -318,7 +318,7 @@ define('io.ox/calendar/edit/main', [
                 }
             },
 
-            onError: function (error, options) {
+            onError: function (error) {
 
                 // restore state of model attributes for moving
                 if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
@@ -335,9 +335,8 @@ define('io.ox/calendar/edit/main', [
                 }
                 // when to do what?
                 // show validation errors inline -> dont yell
-                // show server errors caused by move (whatever that might be) -> yell
                 // show server errors caused -> yell
-                if (error && (options && options.isMoveOperation)) notifications.yell(error);
+                if (error) notifications.yell(error);
             },
 
             failSave: function () {
