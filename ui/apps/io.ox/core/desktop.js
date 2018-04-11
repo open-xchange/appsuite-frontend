@@ -45,11 +45,12 @@ define('io.ox/core/desktop', [
     function supportsFind(name) {
         // enabled apps
         var list = coreSettings.get('search/modules') || [];
-        var searchable = ox.ui.apps.get(name) && ox.ui.apps.get(name).get('searchable');
+        //var searchable = ox.ui.apps.get(name) && ox.ui.apps.get(name).get('searchable');
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
-        return list.indexOf(name) > -1 && searchable;
+        //return list.indexOf(name) > -1 && searchable;
+        return list.indexOf(name) > -1;
     }
 
     var AbstractApp = Backbone.Model.extend({
