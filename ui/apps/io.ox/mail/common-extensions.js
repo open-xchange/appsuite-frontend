@@ -696,7 +696,7 @@ define('io.ox/mail/common-extensions', [
                 view.trigger('load');
                 view.$el.find('.external-images').remove();
                 // get unmodified mail
-                api.getUnmodified(_.cid(view.model.cid)).done(function (data) {
+                api.getUnmodified(view.model.pick('id', 'folder', 'folder_id', 'parent', 'security')).done(function (data) {
                     view.trigger('load:done');
                     view.model.set(data);
                 });
@@ -722,7 +722,12 @@ define('io.ox/mail/common-extensions', [
 
             return function (baton) {
                 draw.call(this, baton.model);
-                this.on('click', '.external-images', { view: baton.view }, loadImages);
+                this.on('click', '.external-images', { view: baton.view }, function (e) {
+                    ext.point('io.ox/mail/externalImages').cascade(baton)
+                    .then(function () {
+                        loadImages(e);
+                    });
+                });
                 baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
 
