@@ -186,13 +186,20 @@ define('io.ox/core/tk/contenteditable-editor', [
     }
 
     // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
+    // See Bug #56677
     function scrollOnCursorUp(ed) {
-        var scrollable = $(ed).closest('.scrollable'), bottom = scrollable.offset().top + 80;
-        var range = window.getSelection().getRangeAt(0);
-        range = range.cloneRange();
-        range.setStart(range.startContainer, 0);
-        var rect = range.getBoundingClientRect();
-        if (rect.top > 0 && (rect.top - rect.height) < bottom) scrollable[0].scrollTop -= rect.height + 2;
+        var node, rng, scrollable = $(ed).closest('.scrollable'), bottom = scrollable.offset().top + 40,
+            range = window.getSelection().getRangeAt(0);
+        node = rng = range.commonAncestorContainer;
+        if (node.nodeType === 3) { // Textnode
+            range = range.cloneRange(); // FF
+            range.setStart(range.startContainer, 0); // FF
+            rng = range;
+            node = node.parentNode;
+        }
+        var rect = rng.getBoundingClientRect(),
+            h = node.clientHeight;
+        if (rect.top > 0 && (rect.top - h) < bottom) scrollable[0].scrollTop -= h;
     }
 
     function lookupTinyMCELanguage() {
