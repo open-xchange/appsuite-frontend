@@ -254,6 +254,7 @@ define('io.ox/core/boot/form', [
         manifests.reset();
 
         return $.when(
+            manifests.manager.loadPluginsFor('signin'),
             // use browser language
             language.setDefaultLanguage()
         )

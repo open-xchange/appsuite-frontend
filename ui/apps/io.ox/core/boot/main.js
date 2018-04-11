@@ -202,7 +202,7 @@ define.async('io.ox/core/boot/main', [
     });
 
     return config.server().then(function () {
-        return ox.manifests.loadPluginsFor('signin');
+        return ox.manifests.loadPluginsFor('login');
     }, function serverConfigFail(error) {
         util.debug('Error while loading config from server', error);
         ox.trigger('server:down', error);
