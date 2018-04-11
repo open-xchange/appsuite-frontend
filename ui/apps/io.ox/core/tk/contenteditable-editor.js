@@ -188,18 +188,21 @@ define('io.ox/core/tk/contenteditable-editor', [
     // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
     // See Bug #56677
     function scrollOnCursorUp(ed) {
-        var node, rng, scrollable = $(ed).closest('.scrollable'), bottom = scrollable.offset().top + 40,
-            range = window.getSelection().getRangeAt(0);
-        node = rng = range.commonAncestorContainer;
-        if (node.nodeType === 3) { // Textnode
-            range = range.cloneRange(); // FF
-            range.setStart(range.startContainer, 0); // FF
-            rng = range;
-            node = node.parentNode;
+        var scrollable = $(ed).closest('.scrollable'),
+            bottom = scrollable.offset().top + 40,
+            range = window.getSelection().getRangeAt(0),
+            rect = range.getBoundingClientRect(),
+            top = rect.top,
+            height = rect.height,
+            container = height === 0 && range.commonAncestorContainer,
+            diff = bottom - top;
+        // for empty lines we get no valid rect
+        if (container) {
+            top = $(container).offset().top + container.clientHeight;
+            height = container.clientHeight;
+            diff = bottom - top;
         }
-        var rect = rng.getBoundingClientRect(),
-            h = node.clientHeight;
-        if (rect.top > 0 && (rect.top - h) < bottom) scrollable[0].scrollTop -= h;
+        if (top > 0 && diff > 0) scrollable[0].scrollTop -= diff + height;
     }
 
     function lookupTinyMCELanguage() {
@@ -746,7 +749,8 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
 
-        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) scrollOnCursorUp(this); });
+        // track cursor up; needs to be done via setTimeout otherwise the selection is not yet updated
+        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) setTimeout(scrollOnCursorUp, 0, this); });
 
     }
 
