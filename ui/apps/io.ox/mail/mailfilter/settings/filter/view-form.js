@@ -495,7 +495,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 this.trigger('invalid:values');
                                 return 'values';
                             }
-                            this.trigger('valid::values');
+                            this.trigger('valid:values');
+                        }
+
+                        // check for empty nested tests
+                        if (_.has(attrs, 'tests')) {
+                            if (_.isEmpty(attrs.tests)) {
+                                this.trigger('invalid:tests');
+                                return 'tests';
+                            }
                         }
 
                     }
@@ -555,6 +563,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 if (!cmodel.isValid()) {
                     _.each(cmodel.validationError.split(' '), function (name) {
                         conditionList.find('[data-test-id=' + conditionKey + '] input[name="' + name + '"]').closest('.row').addClass('has-error');
+                        if (name === 'tests') conditionList.find('[data-test-id=' + conditionKey + ']').addClass('has-error');
                     });
                 }
             });
