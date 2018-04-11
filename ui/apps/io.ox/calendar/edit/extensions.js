@@ -442,20 +442,16 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    // move recurrence view to collapsible area on mobile devices
-    var recurrenceIndex = _.device('smartphone') ? 950 : 650;
     // recurrence
     point.extend({
         id: 'recurrence',
         className: 'col-xs-12',
-        index: recurrenceIndex,
+        index: 650,
         render: function () {
             this.$el.append(new RecurrenceView({
                 model: this.model
             }).render().$el);
         }
-    }, {
-        rowClass: 'collapsed'
     });
 
     // note
