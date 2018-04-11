@@ -1093,8 +1093,8 @@ define('io.ox/core/folder/api', [
             function fail(error) {
                 // re-add folder
                 pool.getModel(folderId).set('subscr_subflds', true);
-                virtual.refresh();
                 pool.getCollection(folderId).add(model);
+                virtual.refresh();
                 throw error;
             }
         );
