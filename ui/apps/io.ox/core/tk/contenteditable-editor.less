@@ -115,11 +115,10 @@
 }
 .mce-window-head, .mce-foot { border-color: #e5e5e5; }
 
-// all the menu hover and active/selected states
-.mce-container *:not(.emoji){
-    /* emoji plugin */
-    *:not(.mce-i-backcolor) { background:transparent; }
 
+// all the menu hover and active/selected states
+.mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }
+.mce-container *:not(.emoji) {
     .mce-menu-item {
         &:hover, &:focus, &:active,
         &.mce-selected {
