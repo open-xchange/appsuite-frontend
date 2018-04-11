@@ -115,14 +115,13 @@ define('plugins/portal/calendar/register', [
             if (this.find('.summary').length) return;
 
             this.addClass('with-summary show-summary');
+            var sum = $('<div>').addClass('summary'),
+                model = baton.collection && baton.collection.first();
 
-            var sum = $('<div>').addClass('summary');
-
-            if (baton.data.length === 0) {
+            if (!model) {
                 sum.text(gt('You don\'t have any appointments in the near future.'));
             } else {
-                var model = _(baton.data).first();
-
+                util.getEvenSmarterDate(model, true);
                 sum.append(
                     $('<span class="normal accent">').text(util.getEvenSmarterDate(model, true)), $.txt('\u00A0'),
                     $('<span class="bold">').text(model.get('summary') || ''), $.txt('\u00A0'),
