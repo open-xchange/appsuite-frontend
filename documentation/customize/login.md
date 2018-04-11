@@ -8,14 +8,14 @@ This articles covers how to write a plugin integrating a custom way to gain a se
 
 ## Registering the extension
 
-As all plugins, signin plugins need to be defined in a namespace.
+As all plugins, login plugins need to be defined in a namespace.
 This modules for this namespace are loaded very early in the boot process.
 
 manifest.json:
 
 ```JSON
     {
-        "namespace": "signin"
+        "namespace": "login"
     }
 ```
 
