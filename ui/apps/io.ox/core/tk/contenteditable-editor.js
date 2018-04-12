@@ -190,19 +190,25 @@ define('io.ox/core/tk/contenteditable-editor', [
     function scrollOnCursorUp(ed) {
         var scrollable = $(ed).closest('.scrollable'),
             bottom = scrollable.offset().top + 40,
-            range = window.getSelection().getRangeAt(0),
+            selection = window.getSelection(),
+            range = selection.getRangeAt(0),
             rect = range.getBoundingClientRect(),
             top = rect.top,
-            height = rect.height,
-            container = height === 0 && range.commonAncestorContainer,
-            diff = bottom - top;
+            container;
         // for empty lines we get no valid rect
-        if (container) {
-            top = $(container).offset().top + container.clientHeight;
-            height = container.clientHeight;
-            diff = bottom - top;
+        if (top === 0) {
+            if (selection.modify) {
+                selection.modify('extend', 'backward', 'character');
+                range = selection.getRangeAt(0);
+                rect = range.getBoundingClientRect();
+                range.collapse();
+                top = rect.top + rect.height;
+            } else {
+                container = range.commonAncestorContainer;
+                top = $(container).offset().top + container.clientHeight;
+            }
         }
-        if (top > 0 && diff > 0) scrollable[0].scrollTop -= diff + height;
+        if (top > 0 && top < bottom) scrollable[0].scrollTop += top - scrollable.offset().top - 40;
     }
 
     function lookupTinyMCELanguage() {
