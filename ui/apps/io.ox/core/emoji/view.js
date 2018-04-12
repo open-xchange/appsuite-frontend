@@ -44,13 +44,19 @@ define('io.ox/core/emoji/view', [
 
         // when user clicks on emoji. inserts emoji into editor
         onInsertEmoji: function (e) {
-            if (!_.isFunction(this.onInsertEmojiCustom)) {
-                console.warn('Implementation missing: onInsertEmoji!');
-                return;
-            }
             var icon = $(e.target).data('icon');
             this.emoji.recent(icon.unicode);
-            this.onInsertEmojiCustom.apply(this, arguments);
+            if (!_.isFunction(this.onInsertEmojiCustom)) {
+                e.preventDefault();
+
+                var html = '<img src="apps/themes/login/1x1.gif" rel="0" ' +
+                        'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '" ' +
+                        'data-mce-resize="false">';
+
+                this.editor.execCommand('mceInsertContent', false, html);
+            } else {
+                this.onInsertEmojiCustom.apply(this, arguments);
+            }
         },
 
         // when user clicks on emoji category
