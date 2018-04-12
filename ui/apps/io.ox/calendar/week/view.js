@@ -1134,6 +1134,12 @@ define('io.ox/calendar/week/view', [
                 Math.max(this.paneHeight / (cells * this.gridSize), this.minCellHeight)
             );
 
+            // app window is not visible we need to postpone height calculation to avoid side effects (happens when scheduling view is restored)
+            if (!this.pane.is(':visible') && !this.app.getWindow().state.visible) {
+                this.app.getWindow().one('show', _(this.adjustCellHeight).bind(this));
+                return;
+            }
+
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
                 var timeslots = $('.timeslot', this.pane),
