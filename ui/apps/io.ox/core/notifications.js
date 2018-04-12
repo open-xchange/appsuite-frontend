@@ -57,28 +57,13 @@ define('io.ox/core/notifications', [
                 className: 'launcher dropdown notifications-icon',
                 $ul: this.listNode,
                 $toggle: this.$el,
-                keep: true,
                 smart: false,
                 dontProcessOnMobile: true
             });
 
-            this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">').on('click', this.keepOpen);
+            this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">');
 
             this.delayedRender = _.debounce(this.render, 100);
-
-            // we stop event bubbling in the sidepopup to keep the dropdown open.
-            // we must add a new listener to make halos work again since the global handler is not triggered
-            // Halo is not available for Guests without contacts.
-            if (capabilities.has('guest') && !capabilities.has('contacts')) return;
-
-            this.sidepopupNode.on('click', '.halo-link', function (e) {
-                e.preventDefault();
-                ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
-            });
-            this.sidepopupNode.on('click', '.halo-resource-link', function (e) {
-                e.preventDefault();
-                ext.point('io.ox/core/resource:action').invoke('action', this, $(this).data(), e);
-            });
         },
 
         keepOpen: function (e) {
@@ -228,6 +213,8 @@ define('io.ox/core/notifications', [
                     // open dialog first to be visually responsive
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         self.sidepopupNode.attr('data-cid', cid).appendTo(_.device('smartphone') ? 'body' : '#io-ox-windowmanager-pane');
+                        // prevent the dropdown from closing as long as the sidepopup is open
+                        self.dropdown.forceOpen(true);
                         // open SidePopup without arrow
                         var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
                             .setTarget(self.sidepopupNode.empty())
@@ -323,6 +310,7 @@ define('io.ox/core/notifications', [
         },
 
         onCloseSidepopup: function () {
+            this.dropdown.forceOpen(false);
             this.sidepopupIsClosing = false;
             if (this.listNode.find('.item:visible')) {
                 // focus first for now

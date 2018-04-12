@@ -295,6 +295,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             );
         },
 
+        // used to manually prevent the popup from closing. Make sure to reset this or the popup stays open all the time
+        forceOpen: function (state) {
+            this.$el.attr('forceOpen', state);
+        },
+
         link: function (name, text, callback, options) {
             options = options || {};
             var link = $('<a href="#" draggable="false" role="menuitem">')

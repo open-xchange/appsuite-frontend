@@ -63,7 +63,9 @@
 
             $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget));
 
-            if (e.isDefaultPrevented()) return;
+            // dropdowns can be manually prevented from closing.
+            // used by special dropdowns, like notification area (should not close when a sidepopup is opened or the user clicks within it)
+            if (e.isDefaultPrevented() || $parent.attr('forceOpen') === 'true') return;
 
             // if the user clicked on a focusable inputfield we focus that instead of the dropdown root element
             var focusableElement = $(document.activeElement).filter('.editable, input[type="text"], input[type="textarea"], input[type="email"]');
