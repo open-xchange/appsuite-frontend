@@ -40,10 +40,11 @@ async function selectAndAssertSignature(I, name, compare) {
 }
 
 Scenario('compose new mail with signature above correctly placed and changed', async function (I) {
+    await I.haveSetting('io.ox/mail//defaultSignature', '0');
+    await I.haveSetting('io.ox/mail//messageFormat', 'html');
+
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
-    I.setSetting('io.ox/mail', 'defaultSignature', '0');
-    I.setSetting('io.ox/mail', 'messageFormat', 'html');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
