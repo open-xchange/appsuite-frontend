@@ -94,8 +94,8 @@ Scenario.skip('Create appointment with all fields', async function (I) {
 
 });
 
-Scenario('fullday appointments', async function (I, users) {
-    I.login('app=io.ox/calendar', { user: users[0] });
+Scenario('fullday appointments', async function (I) {
+    I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
     I.clickToolbar('View');

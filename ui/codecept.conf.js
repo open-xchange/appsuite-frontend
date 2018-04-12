@@ -31,11 +31,7 @@ module.exports.config = {
         }, localConf.e2e.helpers.WebDriverIO || {}),
         OpenXchange: {
             require: './e2e/helper',
-            users: localConf.e2e.users || [{
-                username: 'tthamm',
-                password: 'secret',
-                mail: 'tthamm@ox-e2e-backend.novalocal'
-            }]
+            users: localConf.e2e.users
         }
     },
     'include': {

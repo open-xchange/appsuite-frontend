@@ -1,7 +1,7 @@
 
 const actor = require('@open-xchange/codecept-helper').actor,
-    codecept = require('codeceptjs'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    util = require('./util');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -31,18 +31,12 @@ module.exports = actor({
             prefix: ''
         }, options);
 
-        const config = codecept.config.get(),
-            webDriver = config.helpers['WebDriverIO'],
-            user = options.user || require('./users')[0];
+        const user = options.user || require('./users')[0],
+            baseURL = util.getURLRoot(),
+            prefix = options.prefix ? `${options.prefix}/` : '',
+            url = `${baseURL}/${prefix}appsuite/`;
 
-        var launchURL = webDriver.url;
-        if (launchURL.search('appsuite\\/?$') >= 0) launchURL = launchURL.substring(0, launchURL.search('appsuite\\/?$'));
-        if (!/\/$/.test(launchURL)) launchURL += '/';
-        launchURL += options.prefix;
-        if (!/\/$/.test(launchURL)) launchURL += '/';
-        launchURL += 'appsuite/';
-
-        this.amOnPage(launchURL + '#' + params.join('&'));
+        this.amOnPage(url + '#' + params.join('&'));
         this.waitForFocus('input[name="username"]');
         this.fillField('username', user.name);
         this.fillField('password', user.password);
