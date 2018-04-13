@@ -185,6 +185,32 @@ define('io.ox/core/tk/contenteditable-editor', [
         ed.focus();
     }
 
+    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
+    // See Bug #56677
+    function scrollOnCursorUp(ed) {
+        var scrollable = $(ed).closest('.scrollable'),
+            bottom = scrollable.offset().top + 40,
+            selection = window.getSelection(),
+            range = selection.getRangeAt(0),
+            rect = range.getBoundingClientRect(),
+            top = rect.top,
+            container;
+        // for empty lines we get no valid rect
+        if (top === 0) {
+            if (selection.modify) {
+                selection.modify('extend', 'backward', 'character');
+                range = selection.getRangeAt(0);
+                rect = range.getBoundingClientRect();
+                range.collapse();
+                top = rect.top + rect.height;
+            } else {
+                container = range.commonAncestorContainer;
+                top = $(container).offset().top + container.clientHeight;
+            }
+        }
+        if (top > 0 && top < bottom) scrollable[0].scrollTop += top - scrollable.offset().top - 40;
+    }
+
     function lookupTinyMCELanguage() {
         var lookup_lang = ox.language,
             tinymce_langpacks = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
@@ -728,6 +754,10 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
+
+        // track cursor up; needs to be done via setTimeout otherwise the selection is not yet updated
+        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) setTimeout(scrollOnCursorUp, 0, this); });
+
     }
 
     return Editor;

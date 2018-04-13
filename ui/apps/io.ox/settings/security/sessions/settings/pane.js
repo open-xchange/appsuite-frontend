@@ -97,6 +97,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
             var mapping = {
                 chrome: gt('Chrome'),
                 safari: gt('Safari'),
+                'mobile safari': gt('Safari'),
                 firefox: gt('Firefox'),
                 edge: gt('Edge'),
                 msie: gt('Internet Explorer'),
@@ -104,9 +105,11 @@ define('io.ox/settings/security/sessions/settings/pane', [
                 chromium: gt('Chromium')
             };
             return function () {
-                if (this.getDeviceInfo('client').type !== 'browser') return;
-                var family = this.getDeviceInfo('client').family || '';
-                this.set('application', mapping[family]);
+                var deviceInfo = this.getDeviceInfo('client');
+                if (deviceInfo.type !== 'browser') return;
+                var family = deviceInfo.family || '',
+                    name = deviceInfo.name || '';
+                this.set('application', mapping[family] || mapping[name]);
             };
         }())
     });
@@ -121,9 +124,11 @@ define('io.ox/settings/security/sessions/settings/pane', [
                 oxsyncapp: settings.get('productname/oxtender') || 'OXtender'
             };
             return function () {
-                if (this.getDeviceInfo('client').type !== 'oxapp') return;
-                var family = this.getDeviceInfo('client').family || '';
-                this.set('application', mapping[family]);
+                var deviceInfo = this.getDeviceInfo('client');
+                if (deviceInfo.type !== 'oxapp') return;
+                var family = deviceInfo.family || deviceInfo.name || '',
+                    name = deviceInfo.name || '';
+                this.set('application', mapping[family] || mapping[name]);
             };
         }())
     });
@@ -151,9 +156,11 @@ define('io.ox/settings/security/sessions/settings/pane', [
                 generic_carddav: gt('CardDav')
             };
             return function () {
-                if (this.getDeviceInfo('client').type !== 'dav') return;
-                var family = this.getDeviceInfo('client').family || '';
-                this.set('application', mapping[family] || gt('CalDav/CardDav'));
+                var deviceInfo = this.getDeviceInfo('client');
+                if (deviceInfo.type !== 'dav') return;
+                var family = deviceInfo.family || deviceInfo.name || '',
+                    name = deviceInfo.name || '';
+                this.set('application', mapping[family] || mapping[name] || gt('CalDav/CardDav'));
             };
         }())
     });
@@ -166,9 +173,11 @@ define('io.ox/settings/security/sessions/settings/pane', [
                 usmeasclient: gt('Exchange Active Sync')
             };
             return function () {
-                if (this.getDeviceInfo('client').type !== 'eas') return;
-                var family = this.getDeviceInfo('client').family || '';
-                this.set('application', mapping[family]);
+                var deviceInfo = this.getDeviceInfo('client');
+                if (deviceInfo.type !== 'eas') return;
+                var family = deviceInfo.family || '',
+                    name = deviceInfo.name || '';
+                this.set('application', mapping[family] || mapping[name] || gt('Exchange Active Sync'));
             };
         }())
     });
@@ -218,7 +227,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
                         $('<i class="fa fa-stack-1x os" aria-hidden="true">')
                     ),
                     $('<div class="primary">').append(
-                        $('<span>').text(this.model.get('application')),
+                        $('<span>').text(this.model.get('application') || gt('Unknown application')),
                         $('<span>').text('(' + (this.model.get('operatingSystem') || gt('Unknown device')) + ')')
                     ),
                     $('<div class="secondary">').append(

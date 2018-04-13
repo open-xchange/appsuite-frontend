@@ -29,11 +29,12 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/attachments/backbone',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
+    'io.ox/mail/sanitizer',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
 
     'use strict';
 
@@ -405,6 +406,7 @@ define('io.ox/mail/compose/view', [
                 if (params.cc) { this.model.set('cc', parseRecipients(params.cc), { silent: true }); }
                 if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
 
+                params.body = sanitizer.sanitize({ content: params.body, content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content;
                 this.setSubject(params.subject || '');
                 this.model.setContent(params.body || '');
                 // clear hash

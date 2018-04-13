@@ -619,8 +619,8 @@ define('io.ox/core/tk/dialogs', [
         }
 
         if (popups.length === 0) return;
-        //check if we are inside a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
-        if (target.closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer').length > 0) return;
+        //check if we are inside a floating-window, amodal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
+        if (target.closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer, .floating-window').length > 0) return;
         // see bug 41822
         if (target.closest('.io-ox-dialog-sidepopup-toggle').length > 0) return;
 

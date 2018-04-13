@@ -31,6 +31,74 @@ define('io.ox/backbone/mini-views/alarms', [
             'END-': gt.format('before end'),
             //#. Used in a selectbox when the reminder for an appointment is after the end time
             'END': gt.format('after end')
+        },
+        predefinedSentences = {
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYSTART-': gt('Notify %1$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYSTART': gt('Notify %1$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYEND-': gt('Notify %1$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYEND': gt('Notify %1$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'DISPLAYABS': gt('Notify at %1$s.'),
+            //#. Used to display reminders for appointments
+            'DISPLAYSTART0': gt('Notify at start.'),
+            //#. Used to display reminders for appointments
+            'DISPLAYEND0': gt('Notify at end.'),
+
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOSTART-': gt('Play sound %1$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOSTART': gt('Play sound %1$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOEND-': gt('Play sound %1$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOEND': gt('Play sound %1$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'AUDIOABS': gt('Play sound at %1$s.'),
+            //#. Used to display reminders for appointments
+            'AUDIOSTART0': gt('Play sound at start.'),
+            //#. Used to display reminders for appointments
+            'AUDIOEND0': gt('Play sound at end.'),
+
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICSTART-': gt('%1$s %2$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICSTART': gt('%1$s %2$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICEND-': gt('%1$s %2$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICEND': gt('%1$s %2$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'GENERICABS': gt('%1$s at %2$s.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            'GENERICSTART0': gt('%1$s at start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            'GENERICEND0': gt('%1$s at end.')
         };
 
     var alarmsView = DisposableView.extend({
@@ -92,7 +160,8 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm) {
-            if (!alarm || !alarm.trigger) return;
+            // don't show acknowledged alarms
+            if (!alarm || !alarm.trigger || alarm.acknowledged) return;
 
             var row, container;
 
@@ -140,7 +209,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         getAlarmsArray: function () {
             var self = this;
-            return _(this.list.children()).map(function (item) {
+            return _(this.model.get(this.attribute) || []).filter(function (alarm) { return alarm.acknowledged; }).concat(_(this.list.children()).map(function (item) {
                 var alarm = { action: $(item).find('.alarm-action').val() },
                     time = $(item).find('.alarm-time').val(),
                     related = $(item).find('.alarm-related').val();
@@ -166,7 +235,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     // no default
                 }
                 return alarm;
-            });
+            }));
         }
     });
 
@@ -184,50 +253,35 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         render: function () {
             this.$el.empty().append(
-                (this.model.get(this.attribute) || []).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
+                _(this.model.get(this.attribute) || []).filter(function (alarm) { return !alarm.acknowledged; }).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
             );
             return this;
         },
         drawList: function () {
             var node = $('<ul class="list-unstyled alarm--link-list">');
             _(this.model.get(this.attribute)).each(function (alarm) {
-                if (!alarm || !alarm.trigger) return;
-                var type, duration, related, text;
+                // don't show acknowledged alarms
+                if (!alarm || !alarm.trigger || alarm.acknowledged) return;
+                var options = [], key;
 
                 if (_(standardTypes).indexOf(alarm.action) === -1) {
                     // unknown type
-                    type = alarm.action;
+                    options.push(alarm.action);
+                    key = 'GENERIC';
                 } else {
-                    switch (alarm.action) {
-                        case 'DISPLAY':
-                            type = gt('Notification');
-                            break;
-                        case 'AUDIO':
-                            type = gt('Audio');
-                            break;
-                            //no default
-                    }
+                    key = alarm.action;
                 }
 
                 if (alarm.trigger.duration) {
-                    duration = util.getReminderOptions()[alarm.trigger.duration.replace('-', '')] || new moment.duration(alarm.trigger.duration).humanize();
-                    related = relatedLabels[(alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, '')];
-                    //#. string to describe reminders for appointments,
-                    //#. %1$s: the reminder type, audio/email/notification etc
-                    //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
-                    //#. %3$s: describes how this reminder is related to the appointment: before start, after start, before end, after end
-                    //#. This should produces sentences like: Notification 15 minutes before start.
-                    text = gt.format('%1$s %2$s %3$s.', type, duration, related);
+                    options.push(util.getReminderOptions()[alarm.trigger.duration.replace('-', '')] || new moment.duration(alarm.trigger.duration).humanize());
+                    key = key + (alarm.trigger.related || 'START') + (alarm.trigger.duration.indexOf('PT0') === -1 ? alarm.trigger.duration.replace(/\w*/g, '') : '0');
                 } else {
-                    duration = new moment(alarm.trigger.dateTime).format('LLL');
-                    //#. string to describe reminders for appointments,
-                    //#. %1$s: the reminder type, audio/email/notification etc
-                    //#. %2$s: the time the reminder should pop up. absolute date: something like September 4, 1986 8:30 PM
-                    //#. This should produces sentences like: Notification September 4, 1986 8:30 PM.
-                    text = gt.format('%1$s %2$s', type, duration);
+                    options.push(new moment(alarm.trigger.dateTime).format('LLL'));
+                    key = key + 'ABS';
                 }
 
-                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(text)));
+                options.unshift(predefinedSentences[key]);
+                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(gt.format.apply(undefined, options))));
             });
             return node;
         },

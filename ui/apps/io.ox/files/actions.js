@@ -1051,16 +1051,19 @@ define('io.ox/files/actions', [
             if (isTrash(e.baton)) return false;
             if (capabilities.has('guest && anonymous')) return false;
             var favorites = false;
+            if (!Array.isArray(e.context)) {
+                e.context = [e.context];
+            }
             if (e.baton && e.baton.app && e.baton.app.listView) {
                 favorites = e.baton.app.listView.favorites || [];
+                if (!e.context.length) {
+                    var folderModel = folderAPI.pool.getModel(e.baton.app.listView.model.attributes.folder);
+                    e.context = [folderModel];
+                }
             } else if (e.baton) {
                 favorites = e.baton.favorites || [];
             }
             if (Array.isArray(favorites)) {
-                if (!Array.isArray(e.context)) {
-                    e.context = [e.context];
-                }
-
                 var result = true;
                 _.each(e.context, function (element) {
                     if (folderAPI.is('trash', element)) {
@@ -1081,7 +1084,13 @@ define('io.ox/files/actions', [
             }
             return true;
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
+            if (!Array.isArray(list) || !list.length) {
+                if (baton.app) {
+                    var model = folderAPI.pool.getModel(baton.app.folder.get());
+                    list = [model.toJSON()];
+                }
+            }
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
                 action.add(list);
             });
@@ -1093,16 +1102,19 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (capabilities.has('guest && anonymous')) return false;
             var favorites = false;
+            if (!Array.isArray(e.context)) {
+                e.context = [e.context];
+            }
             if (e.baton && e.baton.app && e.baton.app.listView) {
                 favorites = e.baton.app.listView.favorites || [];
+                if (!e.context.length) {
+                    var folderModel = folderAPI.pool.getModel(e.baton.app.listView.model.attributes.folder);
+                    e.context = [folderModel];
+                }
             } else if (e.baton) {
                 favorites = e.baton.favorites || [];
             }
             if (Array.isArray(favorites)) {
-                if (!Array.isArray(e.context)) {
-                    e.context = [e.context];
-                }
-
                 var result = false;
                 _.each(e.context, function (element) {
                     if (!result) {
@@ -1120,7 +1132,13 @@ define('io.ox/files/actions', [
             }
             return false;
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
+            if (!Array.isArray(list) || !list.length) {
+                if (baton.app) {
+                    var model = folderAPI.pool.getModel(baton.app.folder.get());
+                    list = [model.toJSON()];
+                }
+            }
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
                 action.remove(list);
             });

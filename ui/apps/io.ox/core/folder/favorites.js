@@ -304,6 +304,7 @@ define('io.ox/core/folder/favorites', [
 
         collection = api.pool.getCollection(collectionId);
         collection.remove(model);
+        api.trigger('favorite:remove');
     }
 
     /**
@@ -324,6 +325,7 @@ define('io.ox/core/folder/favorites', [
         model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
+        api.trigger('favorite:add');
     }
 
     //

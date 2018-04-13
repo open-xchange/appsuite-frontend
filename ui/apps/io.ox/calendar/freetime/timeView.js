@@ -177,8 +177,8 @@ define('io.ox/calendar/freetime/timeView', [
                     time.hours(i);
                     var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p'),
                         calculatedWidth = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px';
-                    // edge needs the min-width or the cells are crushed together
-                    sections.push($('<span class="freetime-hour">').css({ 'width': calculatedWidth, 'min-width': calculatedWidth })
+                    // edge needs the min-width and max width or the cells are crushed together or much to wide... WHY U NEVER WORK EDGE!
+                    sections.push($('<span class="freetime-hour">').css({ 'width': calculatedWidth, 'min-width': calculatedWidth, 'max-width': calculatedWidth })
                         .text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                         .addClass(i === start ? 'day-start' : '')
                         .addClass(i === start && counter === 0 ? 'first' : '')
@@ -283,9 +283,9 @@ define('io.ox/calendar/freetime/timeView', [
                 tooltipContainer = baton.view.headerNodeRow1.parent().parent().parent();
 
             _(baton.model.get('attendees').models).each(function (attendee) {
-                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity')).appendTo(table);
+                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity') || attendee.get('uri')).appendTo(table);
 
-                _(baton.model.get('timeSlots')[attendee.get('entity')]).each(function (timeSlot, index) {
+                _(baton.model.get('timeSlots')[attendee.get('entity') || attendee.get('uri')]).each(function (timeSlot, index) {
                     var event;
                     // analyze the timeslot to see if there is an event, and if so check the start dates
                     if (timeSlot.event) {
@@ -484,7 +484,8 @@ define('io.ox/calendar/freetime/timeView', [
                     oldScrollPos = table.parent().scrollLeft(),
                     newWidth = BASEWIDTH * (parseInt(this.model.get('zoom'), 10) / 100);
 
-                this.headerNodeRow2.find('.freetime-hour').css({ 'min-width':  newWidth + 'px', width: newWidth + 'px' });
+                // edge needs the min-width and max width or the cells are crushed together or much to wide... WHY U NEVER WORK EDGE!
+                this.headerNodeRow2.find('.freetime-hour').css({ 'min-width':  newWidth + 'px', width: newWidth + 'px', 'max-width':  newWidth + 'px' });
                 table.find('.freetime-table-cell').css('width', newWidth + 'px');
                 table.css('width', nodes * newWidth + 'px').parent().scrollLeft((oldScrollPos / oldWidth) * nodes * newWidth);
             }
@@ -501,7 +502,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.onChangeWorkingHours();
         },
 
-        onChangeWorkingHours: function (fullrender) {
+        onChangeWorkingHours: function () {
             var numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth();
             this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 + numberOfDays);
             // correct lasso positions
@@ -519,7 +520,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100, true);
             }
 
-            this.renderHeader(!fullrender);
+            this.renderHeader(true);
             this.getAppointmentsInstant();
         },
 
@@ -569,7 +570,7 @@ define('io.ox/calendar/freetime/timeView', [
             if (addOnly === true) {
                 var keys = _(self.model.get('timeSlots')).keys();
                 attendees = _(attendees).filter(function (attendee) {
-                    return _(keys).indexOf(String(attendee.entity)) === -1;
+                    return _(keys).indexOf(String(attendee.entity || attendee.uri)) === -1;
                 });
             }
 
@@ -596,7 +597,7 @@ define('io.ox/calendar/freetime/timeView', [
 
                 for (var i = 0; i < attendees.length; i++) {
                     // only events for now
-                    timeSlots[attendees[i].entity] = _.compact(items[i].freeBusyTime);
+                    timeSlots[attendees[i].entity || attendees[i].uri] = _.compact(items[i].freeBusyTime);
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
@@ -606,7 +607,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         removeParticipant: function (model) {
-            var node = this.bodyNode.find('.appointment-table[data-value="' + model.get('entity') + '"]'),
+            var node = this.bodyNode.find('.appointment-table[data-value="' + (model.get('entity') || model.get('uri')) + '"]'),
                 timeSlots = this.model.get('timeSlots');
             if (node.length) {
                 node.remove();
@@ -616,7 +617,7 @@ define('io.ox/calendar/freetime/timeView', [
                 // trigger scroll for lazyload
                 this.parentView.participantsSubview.bodyNode.trigger('scroll');
             }
-            delete timeSlots[model.get('id')];
+            delete timeSlots[model.get('entity') || model.get('uri')];
             // silent or we would trigger a redraw
             this.model.set('timeSlots', timeSlots, { silent: true });
         },

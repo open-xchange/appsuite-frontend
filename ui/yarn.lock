@@ -16,9 +16,9 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@open-xchange/moment-interval/-/moment-interval-0.0.1.tgz#293778b2e4fe1605c9949692f9f8259ce11a3c33"
 
-"@open-xchange/tinymce@4.6.3-7":
-  version "4.6.3-7"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-7.tgz#e91c957d9957d27833307de9290200c1fabb918f"
+"@open-xchange/tinymce@4.6.3-8":
+  version "4.6.3-8"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-8.tgz#84f1cc891de0acf33fb143e16266af3a8e08e102"
   dependencies:
     tinymce "^4.6.3"
 

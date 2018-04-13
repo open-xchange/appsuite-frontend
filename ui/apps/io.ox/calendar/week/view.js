@@ -250,6 +250,7 @@ define('io.ox/calendar/week/view', [
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
 
+            this.$('.merge-split').toggleClass('hidden', this.mode !== 'day' || this.app.folders.list().length <= 1);
             this.renderAppointments();
 
             this
@@ -936,7 +937,8 @@ define('io.ox/calendar/week/view', [
             settings.on('change:renderTimezones', update);
             settings.on('change:favoriteTimezones', updateAndDrawDropdown);
 
-            this.timeLabelBar = $('<div class="time-label-bar">');
+            this.timeLabelBar = this.weekViewCon.find('.time-label-bar');
+            if (this.timeLabelBar.length === 0) this.timeLabelBar = $('<div class="time-label-bar">');
             drawDropdown();
             drawTimezoneLabels();
         },
@@ -1016,11 +1018,14 @@ define('io.ox/calendar/week/view', [
                         .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
                     this.kwInfo,
-                    this.mode === 'day' && this.app.folders.list().length > 1 ? $('<a href="#" class="merge-split">').tooltip({
-                        placement: 'bottom',
-                        title: settings.get('mergeview') ? gt('Click to merge all folders into one column') : gt('Click to split all folders into separate columns')
+                    $('<a href="#" class="merge-split">')
+                        .toggleClass('hidden', this.mode !== 'day' || this.app.folders.list().length <= 1)
                         //#. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
-                    }).text(settings.get('mergeview') ? gt('Merge') : gt('Split')) : ''
+                        .text(settings.get('mergeview') ? gt('Merge') : gt('Split'))
+                        .tooltip({
+                            placement: 'bottom',
+                            title: settings.get('mergeview') ? gt('Click to merge all folders into one column') : gt('Click to split all folders into separate columns')
+                        })
                 ),
                 $('<div class="footer-container">').append(
                     this.dayLabel
@@ -1129,6 +1134,12 @@ define('io.ox/calendar/week/view', [
             this.cellHeight = Math.floor(
                 Math.max(this.paneHeight / (cells * this.gridSize), this.minCellHeight)
             );
+
+            // app window is not visible we need to postpone height calculation to avoid side effects (happens when scheduling view is restored)
+            if (!this.pane.is(':visible') && !this.app.getWindow().state.visible) {
+                this.app.getWindow().one('show', _(this.adjustCellHeight).bind(this));
+                return;
+            }
 
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {

@@ -561,13 +561,13 @@ define('io.ox/mail/detail/content', [
 
         extensions: extensions,
 
-        get: function (data, options) {
+        get: function (data, options, flow) {
 
             if (!data || !data.attachments) {
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }), content,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 

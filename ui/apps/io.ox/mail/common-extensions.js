@@ -710,6 +710,46 @@ define('io.ox/mail/common-extensions', [
             };
         }()),
 
+        disabledLinks: (function () {
+
+            function disableExt(view, point, ext) {
+                view.options.disable = view.options.disable || {};
+                var value = view.options.disable[point];
+                if (_.isString(value)) view.options.disable[point] = [].concat(value);
+                view.options.disable[point] = (view.options.disable[point] || []).concat(ext);
+            }
+
+            function loadLinks(e) {
+                e.preventDefault();
+                var view = e.data.view;
+                view.trigger('load');
+                view.$el.find('.disabled-links').remove();
+                disableExt(view, 'io.ox/mail/detail/source', 'disable-links');
+                disableExt(view, 'io.ox/mail/detail/content-general', 'disable-links');
+                disableExt(view, 'io.ox/mail/detail/notifications', 'disabled-links');
+                view.redraw();
+            }
+
+            function draw() {
+                this.append(
+                    $('<div class="notification-item disabled-links">').append(
+                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show Links')),
+                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
+                        $('<button type="button" class="close">&times;</button>')
+                    )
+                );
+            }
+
+            return function (baton) {
+                if (!util.isMalicious(baton.data)) return;
+                draw.call(this, baton.model);
+                this.on('click', '.disabled-links > .btn-default', { view: baton.view }, loadLinks);
+                this.on('click', '.disabled-links > .close', function (e) {
+                    $(e.target).closest('.disabled-links').remove();
+                });
+            };
+        }()),
+
         externalImages: (function () {
 
             function loadImages(e) {
@@ -733,18 +773,22 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
-                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
+                        $('<button type="button" class="close">&times;</button>')
                     )
                 );
             }
 
             return function (baton) {
                 draw.call(this, baton.model);
-                this.on('click', '.external-images', { view: baton.view }, function (e) {
+                this.on('click', '.external-images > .btn-default', { view: baton.view }, function (e) {
                     ext.point('io.ox/mail/externalImages').cascade(this, baton)
                     .then(function () {
                         loadImages(e);
                     });
+                });
+                this.on('click', '.external-images > .close', function (e) {
+                    $(e.target).closest('.external-images').remove();
                 });
                 baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
@@ -838,15 +882,15 @@ define('io.ox/mail/common-extensions', [
                 if (account.is('drafts', model.get('folder_id'))) return;
 
                 this.append(
-                    $('<div class="alert alert-info disposition-notification">').append(
-                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
+                    $('<div class="alert alert-info disposition-notification notification-item">').append(
                         $('<button type="button" class="btn btn-primary btn-sm">').text(
                             //#. Respond to a read receipt request; German "Lesebestätigung senden"
                             gt('Send a read receipt')
                         ),
                         $('<div class="comment">').text(
                             gt('The sender wants to get notified when you have read this email')
-                        )
+                        ),
+                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>')
                     )
                 );
             }

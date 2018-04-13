@@ -916,6 +916,9 @@ define('io.ox/core/folder/api', [
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
 
+            // inject public section if not presend
+            if (module === 'event' && !data['public']) data['public'] = [];
+
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
                 var array = _(section).filter(function (folder) {
@@ -1093,8 +1096,8 @@ define('io.ox/core/folder/api', [
             function fail(error) {
                 // re-add folder
                 pool.getModel(folderId).set('subscr_subflds', true);
-                virtual.refresh();
                 pool.getCollection(folderId).add(model);
+                virtual.refresh();
                 throw error;
             }
         );

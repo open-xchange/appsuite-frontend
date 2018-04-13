@@ -210,7 +210,7 @@ define('io.ox/mail/detail/view', [
             var data = baton.data, from = data.from || [],
                 status = util.authenticity('via', data);
 
-            if (status && baton.data.authenticity.domain_mismatch && baton.data.authenticity.from_domain) {
+            if (status && baton.data.authenticity && baton.data.authenticity.domain_mismatch && baton.data.authenticity.from_domain) {
                 this.append(
                     $('<div class="sender">').append(
                         $('<span class="io-ox-label">').append(
@@ -342,6 +342,12 @@ define('io.ox/mail/detail/view', [
         draw: extensions.externalImages
     });
 
+    ext.point('io.ox/mail/detail/notifications').extend({
+        id: 'disabled-links',
+        index: INDEX_notifications += 100,
+        draw: extensions.disabledLinks
+    });
+
     ext.point('io.ox/mail/detail').extend({
         id: 'error',
         index: INDEX += 100,
@@ -379,7 +385,7 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
 
-            var $content = $(content.get(baton.data).content), resizing = 0;
+            var $content = $(content.get(baton.data, {}, baton.flow).content), resizing = 0;
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -561,6 +567,7 @@ define('io.ox/mail/detail/view', [
                 body = this.$el.find('section.body'),
                 node = this.getEmptyBodyNode(),
                 view = this;
+            baton.disable(this.options.disable);
             // set outer height & clear content
             body.css('min-height', this.model.get('visualHeight') || null);
             // draw
@@ -747,15 +754,7 @@ define('io.ox/mail/detail/view', [
                 baton = ext.Baton({ data: data, model: this.model, view: this });
 
             // disable extensions?
-            _(this.options.disable).each(function (extension, point) {
-                if (_.isArray(extension)) {
-                    _(extension).each(function (ext) {
-                        baton.disable(point, ext);
-                    });
-                } else {
-                    baton.disable(point, extension);
-                }
-            });
+            baton.disable(this.options.disable);
 
             this.$el.attr({
                 'data-cid': this.model.cid,

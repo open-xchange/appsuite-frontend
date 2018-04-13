@@ -210,8 +210,9 @@ define('io.ox/calendar/edit/extensions', [
                 createFolderText: gt('Create new calendar'),
                 folder: this.model.get('folder'),
 
-                done: function (id) {
+                done: function (id, dialog) {
                     self.model.set('folder', id);
+                    dialog.close();
                 },
 
                 disable: function (data, options) {
@@ -441,20 +442,16 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    // move recurrence view to collapsible area on mobile devices
-    var recurrenceIndex = _.device('smartphone') ? 950 : 650;
     // recurrence
     point.extend({
         id: 'recurrence',
         className: 'col-xs-12',
-        index: recurrenceIndex,
+        index: 650,
         render: function () {
             this.$el.append(new RecurrenceView({
                 model: this.model
             }).render().$el);
         }
-    }, {
-        rowClass: 'collapsed'
     });
 
     // note

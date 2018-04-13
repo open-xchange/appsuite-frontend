@@ -79,7 +79,7 @@ define('io.ox/files/actions/favorites', [
             collection,
             module = 'infostore';
 
-        if (element.folder_id === 'folder') {
+        if (element.folder_name) {
             model = model || folderAPI.pool.getModel(element.id);
             module = model.get('module');
             if (!module) {

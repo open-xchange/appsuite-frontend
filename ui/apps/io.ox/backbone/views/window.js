@@ -98,8 +98,8 @@ define('io.ox/backbone/views/window', [
         },
 
         keepInWindow: function () {
-            // return when minimized or not attached
-            if (this.model.get('minimized') || this.$el.parent().length === 0) return;
+            // return when minimized, the minimizing animation is playing or if not attached
+            if (this.model.get('minimized') || this.minimizing || this.$el.parent().length === 0) return;
 
             // move window
             if (this.el.offsetLeft !== 0 || this.el.offsetTop !== 0) {
@@ -126,6 +126,9 @@ define('io.ox/backbone/views/window', [
         },
 
         startDrag: function (e) {
+            // do nothing if the minimizing animation is playing
+            if (this.minimizing) return;
+
             //only drag on left click
             if (e.which !== 1) return;
             // needed for safari to stop selecting the whole UI
@@ -193,6 +196,9 @@ define('io.ox/backbone/views/window', [
         },
 
         changeDisplayStyle: function (model, style) {
+            // do nothing if the minimizing animation is playing
+            if (this.minimizing) return;
+
             var isNormal = style === 'normal';
             this.$displayStyleToggle.attr('data-view', isNormal ? 'maximized' : 'normal')
                 .find('i').toggleClass('fa-expand', isNormal).toggleClass('fa-compress', !isNormal);
@@ -213,6 +219,8 @@ define('io.ox/backbone/views/window', [
         },
 
         toggleDisplaystyle: function (e) {
+            // do nothing if the minimizing animation is playing
+            if (this.minimizing) return;
             if (e.type === 'dblclick') return this.model.set('displayStyle', this.$displayStyleToggle.attr('data-view'));
             if (e && e.currentTarget && e.type === 'click') return this.model.set('displayStyle', $(e.currentTarget).attr('data-view'));
             if (!this.model.get('minimized') || this.model.get('displayStyle') === 'sticky') return;
@@ -255,6 +263,7 @@ define('io.ox/backbone/views/window', [
             var app = ox.ui.App.getCurrentApp();
             if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
             this.model.set('minimized', true);
+            this.minimizing = false;
             this.$el.css({
                 left: this.model.get('xPos'),
                 top: this.model.get('yPos')
@@ -262,6 +271,8 @@ define('io.ox/backbone/views/window', [
         },
 
         onMinimize: function () {
+            // don't animate multiple times
+            if (this.minimizing) return;
             var self = this;
 
             var taskBarEl = $('#io-ox-taskbar').find('[data-cid="' + this.model.cid + '"]');
@@ -272,12 +283,14 @@ define('io.ox/backbone/views/window', [
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
 
+            this.minimizing = true;
             this.$el.velocity({ translateZ: 0, left: left + 'px', top: top + 'px', scale: 0.2, opacity: 0 }, {
                 complete: function (el) {
                     var c = $(el).data('velocity');
                     c.transformCache = {};
                     $(el).removeAttr('style').data('velocity', c);
                     self.minimize();
+                    self.minimizing = false;
                 }
             });
         },

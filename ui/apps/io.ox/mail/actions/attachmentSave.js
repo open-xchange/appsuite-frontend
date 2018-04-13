@@ -76,8 +76,9 @@ define('io.ox/mail/actions/attachmentSave', [
                 title: gt('Save attachment'),
                 hideTrashfolder: true,
 
-                done: function (target) {
+                done: function (target, dialog) {
                     commit(list, target);
+                    dialog.close();
                 },
 
                 disable: function (data) {

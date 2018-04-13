@@ -583,6 +583,9 @@ define('io.ox/mail/util', [
             }
 
             return function (aspect, data) {
+                // support incomplete data (only 'status'), provided by all request
+                if (data.authenticity_preview) data = _.extend({}, { authenticity: data.authenticity_preview }, data);
+
                 var status = getAuthenticityStatus(data),
                     level = getAuthenticityLevel();
 

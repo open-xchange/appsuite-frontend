@@ -26,23 +26,8 @@ define('io.ox/core/import/import', [
     'use strict';
 
     ext.point('io.ox/core/import').extend({
-        id: 'foldername',
-        index: 100,
-        render: function (baton) {
-            baton.module = this.model.get('module');
-            if (!/^(calendar)$/.test(baton.module)) return;
-            if (baton.model.get('folderId')) return;
-            this.$body.append(
-                $('<div class="form-group">').append(
-                    mini.getInputWithLabel('folderName', gt('Folder name'), this.model)
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/core/import').extend({
         id: 'select',
-        index: 200,
+        index: 100,
         render: function (baton) {
             var list = [],
                 guid = _.uniqueId('select-');
@@ -94,7 +79,7 @@ define('io.ox/core/import/import', [
 
     ext.point('io.ox/core/import').extend({
         id: 'file',
-        index: 300,
+        index: 200,
         render: function (baton) {
             var label = $('<span class="filename">').css('margin-left', '7px'),
                 fileUpload;
@@ -102,7 +87,7 @@ define('io.ox/core/import/import', [
                 fileUpload = attachments.fileUploadWidget({
                     multi: false,
                     buttontext: gt('Upload file')
-                }).append(label)
+                }).append(label).addClass('form-group')
             );
             var $input = this.$fileUploadInput = fileUpload.find('input[type="file"]');
             if (baton.module === 'calendar') $input.attr('accept', '.ics,.ical');
@@ -118,6 +103,22 @@ define('io.ox/core/import/import', [
     });
 
     ext.point('io.ox/core/import').extend({
+        id: 'foldername',
+        index: 300,
+        render: function (baton) {
+            baton.module = this.model.get('module');
+            if (!/^(calendar)$/.test(baton.module)) return;
+            if (baton.model.get('folderId')) return;
+            this.model.set('folderName', gt('Imported calendar'));
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    mini.getInputWithLabel('folderName', gt('New calendar name'), this.model)
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/core/import').extend({
         id: 'checkbox',
         index: 400,
         render: function (baton) {
@@ -129,7 +130,7 @@ define('io.ox/core/import/import', [
                     name: 'ignoreUuids',
                     model: this.model,
                     label: baton.module === 'calendar' ?
-                        gt('Ignore existing appointments. Helpful to import public holiday calendars, for example.') :
+                        gt('Ignore existing appointments') :
                         gt('Ignore existing events')
                 }).render().$el
             );
@@ -162,7 +163,7 @@ define('io.ox/core/import/import', [
     });
 
     ext.point('io.ox/core/import').extend({
-        id: 'calendar-import-hint',
+        id: 'calendar-help-block',
         index: 600,
         render: function (baton) {
 
@@ -170,6 +171,7 @@ define('io.ox/core/import/import', [
 
             this.$body.append(
                 $('<div class="help-block">').append(
+                    gt('Ignoring existing appointments is helpful to import public holiday calendars, for example.'),
                     gt('Please note that other participants are removed on calendar import.')
                 )
             );
@@ -181,7 +183,7 @@ define('io.ox/core/import/import', [
         show: function (module, id) {
 
             new ModalDialog({
-                focus: module === 'calendar' ? 'input[name="folderName"]' : 'select[name="format"]',
+                focus: module === 'calendar' ? 'input[name="file"]' : 'select[name="format"]',
                 async: true,
                 help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
                 point: 'io.ox/core/import',

@@ -401,11 +401,9 @@ define.async('io.ox/mail/accounts/view-form', [
                 picker({
                     async: true,
                     context: 'account',
-                    done: function (target) {
+                    done: function (target, dialog) {
                         self.model.set(property, target, { validate: true });
-                    },
-                    close: function () {
-                        self.dialog.resume();
+                        dialog.close();
                     },
                     folder: id,
                     module: 'mail',

@@ -36,7 +36,7 @@ define('io.ox/core/settings/pane', [
                 label: /*#, dynamic*/gt.pgettext('app', o.title),
                 value: o.path
             };
-        }).concat([{ label: gt('None'), value: '' }]);
+        }).concat([{ label: gt('None'), value: 'none' }]);
 
     // reverted for 7.10
     // // Check that the app exists in available applications

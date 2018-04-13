@@ -57,28 +57,13 @@ define('io.ox/core/notifications', [
                 className: 'launcher dropdown notifications-icon',
                 $ul: this.listNode,
                 $toggle: this.$el,
-                keep: true,
                 smart: false,
                 dontProcessOnMobile: true
             });
 
-            this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">').on('click', this.keepOpen);
+            this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">');
 
             this.delayedRender = _.debounce(this.render, 100);
-
-            // we stop event bubbling in the sidepopup to keep the dropdown open.
-            // we must add a new listener to make halos work again since the global handler is not triggered
-            // Halo is not available for Guests without contacts.
-            if (capabilities.has('guest') && !capabilities.has('contacts')) return;
-
-            this.sidepopupNode.on('click', '.halo-link', function (e) {
-                e.preventDefault();
-                ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
-            });
-            this.sidepopupNode.on('click', '.halo-resource-link', function (e) {
-                e.preventDefault();
-                ext.point('io.ox/core/resource:action').invoke('action', this, $(this).data(), e);
-            });
         },
 
         keepOpen: function (e) {
@@ -108,7 +93,7 @@ define('io.ox/core/notifications', [
                 subview.on('responsive-remove', function () {
                     var count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
                         cappedCount = Math.min(count, 99),
-                        prevCount = parseInt(this.$el.find('.number').text(), 10);
+                        prevCount = parseInt(self.$el.find('.number').text(), 10);
 
                     // no change? nothing to do
                     if (cappedCount === prevCount) return;
@@ -117,7 +102,7 @@ define('io.ox/core/notifications', [
 
                     //#. %1$d number of notifications in notification area
                     //#, c-format
-                    this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
+                    self.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
                 });
 
                 subview.on('autoopen', _.bind(function () {
@@ -228,6 +213,8 @@ define('io.ox/core/notifications', [
                     // open dialog first to be visually responsive
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         self.sidepopupNode.attr('data-cid', cid).appendTo(_.device('smartphone') ? 'body' : '#io-ox-windowmanager-pane');
+                        // prevent the dropdown from closing as long as the sidepopup is open
+                        self.dropdown.forceOpen(true);
                         // open SidePopup without arrow
                         var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
                             .setTarget(self.sidepopupNode.empty())
@@ -323,6 +310,7 @@ define('io.ox/core/notifications', [
         },
 
         onCloseSidepopup: function () {
+            this.dropdown.forceOpen(false);
             this.sidepopupIsClosing = false;
             if (this.listNode.find('.item:visible')) {
                 // focus first for now

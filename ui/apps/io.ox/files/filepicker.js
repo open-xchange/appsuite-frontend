@@ -584,12 +584,13 @@ define('io.ox/files/filepicker', [
             hideTrashfolder: options.hideTrashfolder || undefined,
             createFolderButton: options.createFolderButton,
 
-            done: function () {
+            done: function (id, dialog) {
                 def.resolve(
                     _(filesPane.find('li.selected input')).map(function (node) {
                         return $(node).data('file');
                     })
                 );
+                dialog.close();
             },
 
             filter: options.tree.filter,

@@ -432,6 +432,18 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
     function returnFalse() { return false; }
     function returnTrue() { return true; }
 
+    function disable(baton, disabled) {
+        _(disabled).each(function (extension, point) {
+            if (_.isArray(extension)) {
+                _(extension).each(function (ext) {
+                    baton.disable(point, ext);
+                });
+            } else {
+                baton.disable(point, extension);
+            }
+        });
+    }
+
     function Baton(obj) {
         // bypass?
         if (obj instanceof Baton) return obj;
@@ -514,6 +526,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         },
 
         disable: function (pointId, extensionId) {
+            if (_.isObject(pointId) || !pointId) return disable(this, pointId);
             // typical developer mistake (forget pointId actually)
             if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');
             var hash = this.flow.disable;
