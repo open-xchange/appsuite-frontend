@@ -90,7 +90,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
 
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle']).then(function () {
-                        if (type !== 'compose' && settings.get('features/fixContentType', false)) {
+                        if (settings.get('features/fixContentType', false) && type !== 'compose' && !_.isArray(obj)) {
                             // mitigate Bug#56496, force a get request to make sure content_type is correctly set
                             // in most cases, this should return the mail from pool ('detail')
                             // need circumvent caching, here, because all requests always break data again and we can
