@@ -315,6 +315,8 @@ define('io.ox/mail/util', [
                 display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
             }
 
+            // vul: see bug 56407
+            if (/@|<|>|"/.test(display_name)) display_name = '';
             if (options.showMailAddress && display_name && email) {
                 display_name += ' <' + email + '>';
             }
