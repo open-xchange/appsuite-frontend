@@ -502,7 +502,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.onChangeWorkingHours();
         },
 
-        onChangeWorkingHours: function (fullrender) {
+        onChangeWorkingHours: function () {
             var numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth();
             this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 + numberOfDays);
             // correct lasso positions
@@ -520,7 +520,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100, true);
             }
 
-            this.renderHeader(!fullrender);
+            this.renderHeader(true);
             this.getAppointmentsInstant();
         },
 
