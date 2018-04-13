@@ -45,8 +45,10 @@ define('plugins/portal/calendar/register', [
                 .each(function (model) {
                     var declined = util.getConfirmationStatus(model) === 'DECLINED';
                     if (declined && !settings.get('showDeclinedAppointments', false)) return;
-                    var start = model.getMoment('startDate'),
-                        end = model.getMoment('endDate'),
+
+                    // show in user's timezone
+                    var start = model.getMoment('startDate').tz(moment().tz()),
+                        end = model.getMoment('endDate').tz(moment().tz()),
                         date = start.calendar(null, { sameDay: '[' + gt('Today') + ']', nextDay: '[' + gt('Tomorrow') + ']', nextWeek: 'dddd', sameElse: 'L' }),
                         startTime = start.format('LT'),
                         endTime = end.format('LT'),
