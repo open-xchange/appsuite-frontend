@@ -161,7 +161,7 @@ define('io.ox/mail/detail/view', [
 
                     $el.append(
                         $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
-                            .data({ email: email })
+                            .data({ email: email, email1: email })
                             .text(name)
                     );
 
