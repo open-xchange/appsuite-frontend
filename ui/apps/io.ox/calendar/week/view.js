@@ -937,7 +937,8 @@ define('io.ox/calendar/week/view', [
             settings.on('change:renderTimezones', update);
             settings.on('change:favoriteTimezones', updateAndDrawDropdown);
 
-            this.timeLabelBar = $('<div class="time-label-bar">');
+            this.timeLabelBar = this.weekViewCon.find('.time-label-bar');
+            if (this.timeLabelBar.length === 0) this.timeLabelBar = $('<div class="time-label-bar">');
             drawDropdown();
             drawTimezoneLabels();
         },
