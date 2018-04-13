@@ -34,7 +34,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 userContent: true,
                 closable: true,
                 floating: !_.device('smartphone'),
-                size: 'width-xs'
+                size: 'width-xs height-md'
             }),
             win;
 
