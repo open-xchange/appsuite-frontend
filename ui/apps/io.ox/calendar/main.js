@@ -395,7 +395,7 @@ define('io.ox/calendar/main', [
             app.treeView.on('click:account-error', function (folder) {
                 var accountError = folder['com.openexchange.calendar.accountError'];
                 if (!accountError) return;
-                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog, notifications) {
                     new ModalDialog({
                         point: 'io.ox/calendar/account-errors',
                         title: gt('Calendar account error')
@@ -412,10 +412,12 @@ define('io.ox/calendar/main', [
                     .addCancelButton()
                     .addButton({ label: gt('Try again'), action: 'retry', className: 'btn-primary' })
                     .on('retry', function () {
+                        notifications.yell('warning', gt('Refreshing calendar might take some time...'));
                         api.refreshCalendar(folder.id).then(function () {
                             folderAPI.pool.unfetch(folder.id);
                             folderAPI.refresh();
-                        });
+                            notifications.yell('success', gt('Successfully refreshed calendar'));
+                        }, notifications.yell);
                     })
                     .open();
                 });

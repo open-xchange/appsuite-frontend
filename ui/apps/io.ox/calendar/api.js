@@ -649,16 +649,21 @@ define('io.ox/calendar/api', [
                 }
             },
 
-            refreshCalendar: function (folder) {
+            refreshCalendar: function (folder, options) {
+                options = _.extend(util.getCurrentRangeOptions(), options);
                 return http.GET({
                     module: 'chronos',
                     params: {
                         action: 'all',
-                        rangeStart: moment().utc().format(util.ZULU_FORMAT),
-                        rangeEnd: moment().add(10, 'seconds').utc().format(util.ZULU_FORMAT),
+                        rangeStart: options.rangeStart,
+                        rangeEnd: options.rangeEnd,
                         updateCache: true,
                         folder: folder
                     }
+                }).then(function (list) {
+                    list.forEach(function (model) {
+                        api.pool.propagateUpdate(model);
+                    });
                 });
             },
 
