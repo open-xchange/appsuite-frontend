@@ -1,10 +1,10 @@
 [{
-    "namespace": "signin",
+    "namespace": "login",
     "path": "io.ox/core/boot/login/auto"
 }, {
-    "namespace": "signin",
+    "namespace": "login",
     "path": "io.ox/core/boot/login/openid"
 }, {
-    "namespace": "signin",
+    "namespace": "login",
     "path": "io.ox/core/boot/login/token"
 }]
