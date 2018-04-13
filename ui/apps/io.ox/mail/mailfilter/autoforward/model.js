@@ -65,7 +65,6 @@ define('io.ox/mail/mailfilter/autoforward/model', [
         toJSON: function () {
 
             var attr = this.attributes;
-            if (!attr.to) return {};
 
             var json = {
                 actioncmds: [{ id: 'redirect', to: attr.to }],
@@ -86,11 +85,13 @@ define('io.ox/mail/mailfilter/autoforward/model', [
 
         sync: function (method, module, options) {
 
-            // IF model.attributes.forwardmail === '' then delete()
+            if (this.attributes.to === '' && this.attributes.id) method = 'delete';
 
             switch (method) {
                 case 'create':
-                    return api.create(this.toJSON()).done(options.success).fail(options.error);
+                    return api.create(this.toJSON())
+                        .done(this.onUpdate.bind(this))
+                        .done(options.success).fail(options.error);
                 case 'read':
                     return $.when(
                         api.getRules('autoforward'),
@@ -107,7 +108,9 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                         .done(this.onUpdate.bind(this))
                         .done(options.success).fail(options.error);
                 case 'delete':
-                    return api.deleteRule(this.get('id')).done(options.success).fail(options.error);
+                    return api.deleteRule(this.get('id'))
+                        .done(this.onUpdate.bind(this))
+                        .done(options.success).fail(options.error);
                 // no default
             }
         },
