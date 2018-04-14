@@ -22,6 +22,154 @@ msgstr ""
 msgid "Server unreachable"
 msgstr ""
 
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify %1$s before start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify %1$s after start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify %1$s before end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify %1$s after end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify at %1$s."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify at start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notify at end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound %1$s before start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound %1$s after start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound %1$s before end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound %1$s after end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound at %1$s."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound at start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Play sound at end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s %2$s before start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s %2$s after start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s %2$s before end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s %2$s after end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s at %2$s."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s at start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "%1$s at end."
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "Add reminder"
@@ -2225,6 +2373,20 @@ msgstr ""
 
 #: apps/io.ox/calendar/main.js
 #: module:io.ox/calendar
+#: apps/io.ox/core/folder/actions/common.js
+#: module:io.ox/core
+msgid "Refreshing calendar might take some time..."
+msgstr ""
+
+#: apps/io.ox/calendar/main.js
+#: module:io.ox/calendar
+#: apps/io.ox/core/folder/actions/common.js
+#: module:io.ox/core
+msgid "Successfully refreshed calendar"
+msgstr ""
+
+#: apps/io.ox/calendar/main.js
+#: module:io.ox/calendar
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/view.js
 #: apps/plugins/portal/calendar/register.js
@@ -3350,16 +3512,6 @@ msgstr ""
 msgid "Previous Week"
 msgstr ""
 
-#: apps/io.ox/calendar/week/view.js
-#: module:io.ox/calendar
-msgid "Click to merge all folders into one column"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js
-#: module:io.ox/calendar
-msgid "Click to split all folders into separate columns"
-msgstr ""
-
 #. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
 #: apps/io.ox/calendar/week/view.js
 #: module:io.ox/calendar
@@ -3370,6 +3522,16 @@ msgstr ""
 #: apps/io.ox/calendar/week/view.js
 #: module:io.ox/calendar
 msgid "Split"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js
+#: module:io.ox/calendar
+msgid "Click to merge all folders into one column"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js
+#: module:io.ox/calendar
+msgid "Click to split all folders into separate columns"
 msgstr ""
 
 #: apps/io.ox/calendar/week/view.js
@@ -5031,7 +5193,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/import/import.js
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Folder name"
@@ -5647,7 +5808,17 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
-msgid "Ignore existing appointments. Helpful to import public holiday calendars, for example."
+msgid "Imported calendar"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "New calendar name"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "Ignore existing appointments"
 msgstr ""
 
 #: apps/io.ox/core/import/import.js
@@ -5668,6 +5839,11 @@ msgstr ""
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
 msgid "Learn more"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "Ignoring existing appointments is helpful to import public holiday calendars, for example."
 msgstr ""
 
 #: apps/io.ox/core/import/import.js
@@ -9540,6 +9716,16 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
+msgid "Show Links"
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "Links have been disabled to protect you against potential spam!"
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
 msgid "Show images"
 msgstr ""
 
@@ -12036,11 +12222,6 @@ msgstr ""
 
 #: apps/io.ox/search/view-template.js
 #: module:io.ox/core
-msgid "in"
-msgstr ""
-
-#: apps/io.ox/search/view-template.js
-#: module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""
 
@@ -12356,6 +12537,11 @@ msgstr ""
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 #: module:io.ox/core
 msgid "Exchange Active Sync"
+msgstr ""
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Unknown application"
 msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js

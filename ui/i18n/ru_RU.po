@@ -249,6 +249,42 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s."
+msgid "%1$s %2$s after end."
+msgstr "%1$s %2$s."
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s %3$s."
+msgid "%1$s %2$s after start."
+msgstr "%1$s %2$s %3$s."
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s."
+msgid "%1$s %2$s before end."
+msgstr "%1$s %2$s."
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s %3$s."
+msgid "%1$s %2$s before start."
+msgstr "%1$s %2$s %3$s."
+
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
@@ -269,6 +305,31 @@ msgstr "Выбрано встреч: %1$s"
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "%1$s at %2$s"
+msgstr "%1$s, %2$s"
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s at %2$s"
+msgid "%1$s at %2$s."
+msgstr "%1$s, %2$s"
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s at %2$s"
+msgid "%1$s at end."
+msgstr "%1$s, %2$s"
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS/EMAIL etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s at %2$s"
+msgid "%1$s at start."
 msgstr "%1$s, %2$s"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
@@ -4342,8 +4403,8 @@ msgid "Folder"
 msgstr "Папка"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/import/import.js
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgid "Folder name"
 msgstr "Имя папки"
 
@@ -4900,12 +4961,10 @@ msgid "Ignore conflicts"
 msgstr "Игнорировать конфликты"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-msgid ""
-"Ignore existing appointments. Helpful to import public holiday calendars, "
-"for example."
-msgstr ""
-"Игнорировать существующие встречи. Подходит для импорта календаря "
-"праздничных дней и т.п."
+#, fuzzy
+#| msgid "Ignore existing events"
+msgid "Ignore existing appointments"
+msgstr "Игнорировать существующие события"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Ignore existing events"
@@ -4914,6 +4973,18 @@ msgstr "Игнорировать существующие события"
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Ignore warnings"
 msgstr "Игнорировать предупреждения"
+
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Ignore existing appointments. Helpful to import public holiday calendars, "
+#| "for example."
+msgid ""
+"Ignoring existing appointments is helpful to import public holiday "
+"calendars, for example."
+msgstr ""
+"Игнорировать существующие встречи. Подходит для импорта календаря "
+"праздничных дней и т.п."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
@@ -4940,6 +5011,12 @@ msgstr "Импорт файла"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Import signatures"
 msgstr "Импорт подписей"
+
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "Import calendar"
+msgid "Imported calendar"
+msgstr "Импорт календаря"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "In %1$d days"
@@ -5376,6 +5453,13 @@ msgstr "Привязывать почтовые адреса к сервису �
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Links"
 msgstr "Ссылки"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "External images have been blocked to protect you against potential spam!"
+msgid "Links have been disabled to protect you against potential spam!"
+msgstr "Внешние изображения были заблокированы с целью защиты от спама."
 
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
@@ -6149,6 +6233,12 @@ msgstr "Новые напоминания о встречах"
 msgid "New calendar"
 msgstr "Новый календарь"
 
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "New calendar"
+msgid "New calendar name"
+msgstr "Новый календарь"
+
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "New contact"
 msgstr "Новый контакт"
@@ -6498,6 +6588,53 @@ msgstr "Звуки уведомлений"
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
 msgstr "Уведомления"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Notify %1$s after end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Notify %1$s after start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Notify %1$s before end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Notify %1$s before start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgctxt "a11y"
+#| msgid "at %1$s"
+msgid "Notify at %1$s."
+msgstr "расположение: %1$s"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notification"
+msgid "Notify at end."
+msgstr "Уведомление"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Not started"
+msgid "Notify at start."
+msgstr "Не началось"
 
 #. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -7042,6 +7179,48 @@ msgstr "Текст"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Plain text"
 msgstr "Текст"
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Play sound %1$s after end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Play sound %1$s after start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Play sound %1$s before end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Play sound %1$s before start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Draft saved at %1$s"
+msgid "Play sound at %1$s."
+msgstr "Черновик сохранен в %1$s"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Play sound at end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Play sound at start."
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Play sound on incoming mail"
@@ -7827,6 +8006,13 @@ msgstr "Частота обновления (мин.)"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Refresh this calendar"
 msgstr "Обновить календарь"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "Load all mails. This might take some time."
+msgid "Refreshing calendar might take some time..."
+msgstr "Загрузить все сообщения. Это может занять некоторое время."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8774,6 +8960,12 @@ msgstr "Корзина"
 msgid "Show"
 msgstr "Показать"
 
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show icons"
+msgid "Show Links"
+msgstr "Показать значки"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show all calendars"
 msgstr "Показать все календари"
@@ -9263,6 +9455,11 @@ msgstr "Успех"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Successfully reauthorized your %s account"
 msgstr "Учетная запись %s авторизована повторно."
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+msgid "Successfully refreshed calendar"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
@@ -10454,6 +10651,12 @@ msgstr "Неизвестно"
 #: apps/io.ox/core/media-devices.js module:io.ox/core
 msgid "Unknown %1$s"
 msgstr "Неизвестное устройство %1$s"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Running applications"
+msgid "Unknown application"
+msgstr "Работающие приложения"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Unknown device"
@@ -11674,10 +11877,6 @@ msgstr "iCalendar"
 msgid "iOS"
 msgstr "iOS"
 
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "в"
-
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 msgctxt "in"
@@ -12080,12 +12279,6 @@ msgstr "вашей платформы"
 
 #~ msgid "%1$s %2$s %3$s %4$s."
 #~ msgstr "%1$s %2$s %3$s %4$s."
-
-#~ msgid "%1$s %2$s %3$s."
-#~ msgstr "%1$s %2$s %3$s."
-
-#~ msgid "%1$s %2$s."
-#~ msgstr "%1$s %2$s."
 
 #, fuzzy
 #~| msgid "%1$s of %2$s"
@@ -13686,9 +13879,6 @@ msgstr "вашей платформы"
 #~ msgid "Load Error"
 #~ msgstr "Ошибка загрузки"
 
-#~ msgid "Load all mails. This might take some time."
-#~ msgstr "Загрузить все сообщения. Это может занять некоторое время."
-
 #~ msgid "Login must not be empty."
 #~ msgstr "Имя пользователя не может быть пустым."
 
@@ -14226,9 +14416,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Rule applies until"
 #~ msgstr "Правило применяется до"
-
-#~ msgid "Running applications"
-#~ msgstr "Работающие приложения"
 
 #~ msgid "SMTP Login"
 #~ msgstr "Логин SMTP"
@@ -15751,6 +15938,9 @@ msgstr "вашей платформы"
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Телефон"
+
+#~ msgid "in"
+#~ msgstr "в"
 
 #~ msgid "in blind copy"
 #~ msgstr "в скрытой копии"
