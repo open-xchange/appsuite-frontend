@@ -391,6 +391,11 @@ define('io.ox/mail/detail/view', [
             this.on('load', function () {
                 // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
                 _.defer(function () {
+
+                    // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
+                    var html = $(this.contentDocument).find('html');
+                    if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
+
                     $(this.contentDocument)
                         .find('head').append('<style>' + contentStyle + '</style>').end()
                         .find('body').append($content);
