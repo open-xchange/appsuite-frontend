@@ -10,4 +10,5 @@
 /node_modules
 local.conf*
 npm-debug.log
+package-lock.json
 /bower_components
