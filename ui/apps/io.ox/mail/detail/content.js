@@ -117,7 +117,7 @@ define('io.ox/mail/detail/content', [
         },
 
         disableLinks: function (baton) {
-            if (!util.isMalicious(baton.data)) return;
+            if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
             $(this).addClass('disable-links').on('click', function () { return false; });
         },
 
@@ -309,7 +309,7 @@ define('io.ox/mail/detail/content', [
         index: 700,
         enabled: settings.get('maliciousCheck'),
         process: function (baton) {
-            if (!util.isMalicious(baton.data)) return;
+            if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
             baton.source = baton.source
                 .replace(/.*/g, extensions.linkDisable)
                 .replace(/.*/g, extensions.linkRemoveRef)

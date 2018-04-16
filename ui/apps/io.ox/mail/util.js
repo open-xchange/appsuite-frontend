@@ -613,7 +613,6 @@ define('io.ox/mail/util', [
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
-                if (that.authenticity('block', data)) return true;
                 // nested mails don't have their own folder id. So use the parent mails folder id
                 return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };
