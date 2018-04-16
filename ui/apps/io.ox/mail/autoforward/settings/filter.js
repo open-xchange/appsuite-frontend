@@ -63,7 +63,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                     _.extend(autoForwardData, {
                         id: data[0].id,
                         active: data[0].active,
-                        keep: false,
+                        keep: data[0].actioncmds[0].copy,
                         processSub: true
                     });
 
@@ -71,9 +71,6 @@ define('io.ox/mail/autoforward/settings/filter', [
                         switch (value.id) {
                             case 'redirect':
                                 autoForwardData.forwardmail = value.to;
-                                break;
-                            case 'keep':
-                                autoForwardData.keep = true;
                                 break;
                             case 'stop':
                                 autoForwardData.processSub = false;
