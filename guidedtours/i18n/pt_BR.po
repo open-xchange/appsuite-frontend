@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-01 13:43-0300\n"
+"PO-Revision-Date: 2018-03-27 13:55-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
 "Language-Team: Portuguese <pt@workshop-chapina.com>\n"
 "Language: pt_BR\n"
@@ -85,7 +85,7 @@ msgstr "Criando o compromisso"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr "Para criar um compromisso, clique em Criar no canto inferior esquerdo."
+msgstr "Para criar um compromisso, clique em Criar no lado inferior esquerdo."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
@@ -712,11 +712,11 @@ msgstr "Abrindo as configurações"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
-"Para abrir as configurações, clique no ícone do menu Sistema no canto "
-"superior direito da barra de menu. Selecione Configurações."
+"Para abrir as configurações, clique na imagem do usuário no lado superior "
+"direito da barra de menu. Selecione Configurações."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -748,15 +748,15 @@ msgstr "Abrindo a ajuda"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Para abrir a ajuda, clique no ícone do Menu do sistema no canto superior "
-"direito da barra de menu. Selecione Ajuda. A ajuda para o aplicativo "
-"atualmente selecionado é exibida. Para navegar na ajuda completa, clique em "
-"Página inicial ou Tabela de conteúdo na parte superior da janela."
+"Para abrir a ajuda, clique na imagem do usuário no lado superior direito da "
+"barra de menu. Selecione Ajuda. A ajuda para o aplicativo atualmente "
+"selecionado é exibida. Para navegar em toda a ajuda, clique na Página "
+"inicial ou Tabela de conteúdos na parte superior da janela."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -769,6 +769,13 @@ msgid ""
 msgstr ""
 "Para encerrar a sessão, clique no ícone Sistema do menu no lado superior "
 "direito ba barra de menu. Selecione Encerrar sessão."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr ""
+"Para encerrar a sessão, clique no ícone de encerrar sessão no lado superior "
+"direito da barra de menu."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -866,6 +873,24 @@ msgstr ""
 "lado esquerdo das tarefas. Se as caixas de seleção não forem exibidas, "
 "clique em Visualizar > Caixas de seleção no lado direito da barra de "
 "ferramentas."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Para abrir as configurações, clique no ícone do menu Sistema no canto "
+#~ "superior direito da barra de menu. Selecione Configurações."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Para abrir a ajuda, clique no ícone do Menu do sistema no canto superior "
+#~ "direito da barra de menu. Selecione Ajuda. A ajuda para o aplicativo "
+#~ "atualmente selecionado é exibida. Para navegar na ajuda completa, clique "
+#~ "em Página inicial ou Tabela de conteúdo na parte superior da janela."
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "

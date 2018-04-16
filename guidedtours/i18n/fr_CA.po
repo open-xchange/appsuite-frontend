@@ -1,21 +1,21 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
 # Éric Bischoff <eric@workshop-chapina.com>, 2010, 2012, 2013, 2014.
-# Sandrine Burriel <sandrine@workshop-chapina.com>, 2014, 2016.
+# Sandrine Burriel <sandrine@workshop-chapina.com>, 2014, 2016, 2018.
 # Nicolas Ternisien <nicolas@workshop-chapina.com>, 2015, 2016, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-04 22:34+0100\n"
-"Last-Translator: Nicolas Ternisien <nicolas@workshop-chapina.com>\n"
-"Language-Team: French <>\n"
+"PO-Revision-Date: 2018-04-01 22:41+0900\n"
+"Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
+"Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -405,9 +405,9 @@ msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"Pour lancer une app, utilisez les icônes de lancement rapide sur le côté"
-" gauche de la barre de menus, ou cliquez sur une entrée du menu du lanceur"
-" d'apps."
+"Pour lancer une app, utilisez les icônes de lancement rapide sur le côté "
+"gauche de la barre de menus, ou cliquez sur une entrée du menu du lanceur "
+"d'apps."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -725,11 +725,11 @@ msgstr "Accéder aux réglages"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
-"Pour ouvrir les réglages, cliquez sur l'icône « Menu système » en haut à "
-"droite de la barre de menu. Choisissez « Réglages »."
+"Pour ouvrir les réglages, cliquez sur l'icône de l'utilisateur en haut à "
+"droite de la barre de menu. Choisissez Réglages."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -761,16 +761,15 @@ msgstr "Accéder à l'aide"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Pour ouvrir l'aide, cliquez sur l'icône « Menu système » en haut à droite de "
-"la barre de menu. Choisissez « Aide ». L'aide correspondant à l'application "
-"actuellement sélectionnée s'affiche alors. Pour consulter l'aide complète, "
-"cliquez sur « Page d'accueil » ou « Table des matières » dans la partie "
-"supérieure de la fenêtre."
+"Pour ouvrir l'aide, cliquez sur l'icône de l'utilisateur en haut à droite de "
+"la barre de menu. Choisissez Aide. L'aide correspondant à l'application "
+"actuellement utilisée s'affiche alors. Pour parcourir l'aide complète, "
+"cliquez sur Page de démarrage ou Table des matières en haut de la fenêtre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -783,6 +782,13 @@ msgid ""
 msgstr ""
 "Pour  vous déconnecter, cliquez sur l'icône « Menu système » en haut à "
 "droite de la barre de menus. Choisissez « Se déconnecter »."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr ""
+"Pour vous déconnecter, cliquez sur l'icône de déconnexion en haut à droite de "
+"la barre de menu."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -884,6 +890,25 @@ msgstr ""
 "Pour modifier plusieurs tâches à la fois, cochez les cases figurant à gauche "
 "de chaque tâche. Si les cases à cocher ne sont pas affichées, cliquez sur « "
 "Vue > Cases à cocher » à droite de la barre d'outils."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Pour ouvrir les réglages, cliquez sur l'icône « Menu système » en haut à "
+#~ "droite de la barre de menu. Choisissez « Réglages »."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Pour ouvrir l'aide, cliquez sur l'icône « Menu système » en haut à droite "
+#~ "de la barre de menu. Choisissez « Aide ». L'aide correspondant à "
+#~ "l'application actuellement sélectionnée s'affiche alors. Pour consulter "
+#~ "l'aide complète, cliquez sur « Page d'accueil » ou « Table des matières » "
+#~ "dans la partie supérieure de la fenêtre."
 
 #~ msgid "Restart Guided Tour"
 #~ msgstr "Redémarrer la visite guidée"

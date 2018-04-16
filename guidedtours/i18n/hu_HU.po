@@ -1,12 +1,11 @@
-
 # Gabor Kelemen <gabor@workshop-chapina.com>, 2012, 2013, 2014.
-# Kálmán Kéménczy <kalman@workshop-chapina.com>, 2013, 2014, 2015, 2016.
+# Kálmán Kéménczy <kalman@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-21 09:28+0100\n"
+"PO-Revision-Date: 2018-03-26 14:23+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -583,9 +582,9 @@ msgstr "Beállítások megnyitása"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr "A beállítások megnyitásához kattintson a menüsor jobb felső részében található Rendszer menü ikonra és válassza ki a Beállításokat."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr "A beállítások megnyitásához kattintson a menüsor jobb felső részében található felhasználó képre és válassza ki a Beállításokat."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -613,11 +612,11 @@ msgstr "Súgó megnyitása"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the System menu icon on the upper right side of the "
-"menu bar. Select Help. The help for the currently selected app is displayed. "
-"To browse the complete help, click on Start Page or Table Of Contents at the "
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
-msgstr "A súgó megnyitásához kattintson a menüsor jobb felső részén található Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
+msgstr "A súgó megnyitásához kattintson a menüsor jobb felső részén található felhasználó képre. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -628,6 +627,11 @@ msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr "A kijelentkezéshez kattintson a menüsor jobb felső részében található Rendszer menü ikonra és válassza ki a Kijelentkezést."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr "A kijelentkezéshez kattintson a menüsor jobb felső részében található kijelentkezés ikonra."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -715,6 +719,24 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "Több feladat egyszerre történő szerkesztéséhez használja a feladatok bal oldalán található jelölőnégyzetet Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
+#~ "található Rendszer menü ikonra és válassza ki a Beállításokat."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
+#~ "Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a "
+#~ "kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson "
+#~ "az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "
