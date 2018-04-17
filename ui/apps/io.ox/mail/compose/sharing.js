@@ -143,7 +143,7 @@ define('io.ox/mail/compose/sharing', [
                         model: this.notificationModel,
                         name: 'download',
                         //#. There is a label "Nofification" before this text
-                        label: gt('Receive notification when the someone finished downloading the file(s)')
+                        label: gt('Receive notification when someone finished downloading the file(s)')
                     }).render().$el,
                     new mini.CustomCheckboxView({
                         model: this.notificationModel,
