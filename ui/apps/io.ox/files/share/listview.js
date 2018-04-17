@@ -437,7 +437,7 @@ define('io.ox/files/share/listview', [
                     iconTitle = gt('Public link');
                 if (hasGuests(baton) && hasUser(baton)) {
                     iconClass = 'fa-user-plus';
-                    iconTitle = gt('Internal & external users');
+                    iconTitle = gt('Internal and external users');
                 } else if (hasGuests(baton)) {
                     iconClass = 'fa-user-plus';
                     iconTitle = gt('External users');

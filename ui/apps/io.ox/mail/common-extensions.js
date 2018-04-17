@@ -734,7 +734,7 @@ define('io.ox/mail/common-extensions', [
                     $('<div class="notification-item disabled-links">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show Links')),
                         $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
-                        $('<button type="button" class="close">').attr('title', gt('Dismiss')).append('<i class="fa fa-times" aria-hidden="true">')
+                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }
@@ -774,7 +774,7 @@ define('io.ox/mail/common-extensions', [
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
-                        $('<button type="button" class="close">').attr('title', gt('Dismiss')).append('<i class="fa fa-times" aria-hidden="true">')
+                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }
@@ -886,7 +886,7 @@ define('io.ox/mail/common-extensions', [
                         //#. Respond to a read receipt request; German "Lesebestätigung senden"
                         $('<button type="button" class="btn btn-primary btn-sm">').text(gt('Send a read receipt')),
                         $('<div class="comment">').text(gt('The sender wants to get notified when you have read this email')),
-                        $('<button type="button" class="close" data-dismiss="alert">').attr('title', gt('Dismiss')).append('<i class="fa fa-times" aria-hidden="true">')
+                        $('<button type="button" class="close" data-dismiss="alert">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }
