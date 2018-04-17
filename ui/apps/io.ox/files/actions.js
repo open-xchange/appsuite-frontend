@@ -278,12 +278,10 @@ define('io.ox/files/actions', [
             if (_(e.baton.data).has('internal_userid')) return false;
             // locally added but not yet uploaded
             if (e.baton.data.group === 'localFile') { return false; }
-            if (e.baton.data.file_mimetype) {
-                // no 'open' menu entry for office documents, PDF and plain text
-                if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
-            }
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.isOffice(e.baton.data)) return false;
+            if (api.isPDF(e.baton.data)) return false;
+            if (api.isText(e.baton.data)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
