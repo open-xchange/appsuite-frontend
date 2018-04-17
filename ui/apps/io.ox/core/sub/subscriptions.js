@@ -122,7 +122,8 @@ define('io.ox/core/sub/subscriptions', [
                     popup = new dialogs.ModalDialog({
                         async: true,
                         help: 'ox.appsuite.user.sect.dataorganisation.subscribe.data.html',
-                        width: 570
+                        // 130 * 4 + 8 * 3 + 30, Button.width * ButtonsPerRow + Button.rightMargin * (ButtonsPerRow - 1) + leftAndRightPaddingOfDialog
+                        width: 574
                     }),
                     title = gt('Subscribe');
 
