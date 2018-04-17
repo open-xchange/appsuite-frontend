@@ -630,7 +630,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'lo',
+        prio: 'hi',
         id: 'reply',
         mobile: 'lo',
         label: gt('Reply'),
