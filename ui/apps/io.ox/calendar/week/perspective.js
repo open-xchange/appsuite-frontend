@@ -210,7 +210,7 @@ define('io.ox/calendar/week/perspective', [
             // // set manually to expired to trigger reload on next opening
             if (useCache === false) {
                 api.pool.grep('view=week').forEach(function (c) {
-                    if (c !== collection) c.expired = true;
+                    c.expired = true;
                 });
             }
 
@@ -288,6 +288,7 @@ define('io.ox/calendar/week/perspective', [
                 self.getAppointments(useCache);
             });
         },
+
         /**
          * receives an event from the nested Backbone view
          * and passes it up to the page controller for mobile use
