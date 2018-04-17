@@ -41,7 +41,7 @@ define('io.ox/core/attachments/backbone',
         };
     };
 
-    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
+    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?|ppsx?)$/i,
         regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
     var previewFetcher = {
