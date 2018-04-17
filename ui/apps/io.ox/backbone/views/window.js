@@ -31,7 +31,7 @@ define('io.ox/backbone/views/window', [
             active: true,
             floating: true,
             lazy: false,
-            displayStyle: 'normal',
+            mode: 'normal',
             title: '',
             showInTaskbar: true,
             size: 'width-md' // -xs, -sm, -md, -lg
@@ -46,8 +46,8 @@ define('io.ox/backbone/views/window', [
             'mousedown :not(.controls)':      'activate',
             'mousedown .floating-header':     'startDrag',
             'keydown':                        'onKeydown',
-            'dblclick .floating-header':      'toggleDisplaystyle',
-            'click button[data-view]':        'toggleDisplaystyle'
+            'dblclick .floating-header':      'toggleMode',
+            'click button[data-mode]':        'toggleMode'
         },
 
         initialize: function (options) {
@@ -65,7 +65,7 @@ define('io.ox/backbone/views/window', [
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'deactivate': this.deactivate,
-                'change:displayStyle': this.changeDisplayStyle,
+                'change:mode': this.changeMode,
                 'change:minimized': this.toggle,
                 'change:count': this.onChangeCount,
                 'close': function () { this.$el.remove(); }
@@ -83,14 +83,14 @@ define('io.ox/backbone/views/window', [
         },
 
         renderWindowControls: function () {
-            var isNormal = this.model.get('displayStyle') === 'normal';
-            this.$displayStyleToggle =
-                $('<button type="button" class="btn btn-link">').attr('data-view', isNormal ? 'maximized' : 'normal').append(
+            var isNormal = this.model.get('mode') === 'normal';
+            this.$modeToggle =
+                $('<button type="button" class="btn btn-link">').attr('data-mode', isNormal ? 'maximized' : 'normal').append(
                     $('<i class="fa" aria-hidden="true">').addClass(isNormal ? 'fa-expand' : 'fa-compress')
                 );
             return $('<div class="controls">').append(
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
-                this.$displayStyleToggle,
+                this.$modeToggle,
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
@@ -117,7 +117,7 @@ define('io.ox/backbone/views/window', [
             }
 
             // no height calculation for maximized windows
-            if (this.model.get('displayStyle') === 'normal' && this.el.offsetTop === 0) {
+            if (this.model.get('mode') === 'normal' && this.el.offsetTop === 0) {
                 if (this.model.get('initialHeight') === undefined) this.model.set('initialHeight', this.el.offsetHeight);
                 this.$el.css('height', Math.min($(container).height(), this.model.get('initialHeight')) + 'px');
             }
@@ -193,12 +193,12 @@ define('io.ox/backbone/views/window', [
             return this;
         },
 
-        changeDisplayStyle: function (model, style) {
+        changeMode: function (model, style) {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
 
             var isNormal = style === 'normal';
-            this.$displayStyleToggle.attr('data-view', isNormal ? 'maximized' : 'normal')
+            this.$modeToggle.attr('data-mode', isNormal ? 'maximized' : 'normal')
                 .find('i').toggleClass('fa-expand', isNormal).toggleClass('fa-compress', !isNormal);
             this.$el.removeClass('normal maximized').addClass(style);
 
@@ -214,13 +214,13 @@ define('io.ox/backbone/views/window', [
             _.defer(function () { $(window).trigger('resize'); });
         },
 
-        toggleDisplaystyle: function (e) {
+        toggleMode: function (e) {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
-            if (e.type === 'dblclick') return this.model.set('displayStyle', this.$displayStyleToggle.attr('data-view'));
-            if (e && e.currentTarget && e.type === 'click') return this.model.set('displayStyle', $(e.currentTarget).attr('data-view'));
+            if (e.type === 'dblclick') return this.model.set('mode', this.$modeToggle.attr('data-mode'));
+            if (e && e.currentTarget && e.type === 'click') return this.model.set('mode', $(e.currentTarget).attr('data-mode'));
             if (!this.model.get('minimized')) return;
-            this.model.set('displayStyle', this.model.get('displayStyle') === 'normal' ? 'maximized' : 'normal');
+            this.model.set('mode', this.model.get('mode') === 'normal' ? 'maximized' : 'normal');
         },
 
         activate: function () {
@@ -275,7 +275,7 @@ define('io.ox/backbone/views/window', [
             // minimizing a window moves it to the last position
             $('#io-ox-taskbar').append(taskBarEl);
             taskBarEl.show();
-            var windowWidth = this.model.get('displayStyle') === 'normal' ? this.$el.width() : $('body').width();
+            var windowWidth = this.model.get('mode') === 'normal' ? this.$el.width() : $('body').width();
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
 
@@ -303,7 +303,7 @@ define('io.ox/backbone/views/window', [
         render: function () {
             var title_id = _.uniqueId('title');
             this.$el.addClass('floating-window window-container')
-                .addClass(this.model.get('displayStyle'))
+                .addClass(this.model.get('mode'))
                 .addClass(this.model.get('size'))
                 .attr({ 'aria-labelledby': title_id, tabindex: -1, role: 'dialog' })
                 .append(
