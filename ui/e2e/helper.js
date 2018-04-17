@@ -59,6 +59,22 @@ class MyHelper extends Helper {
         });
     }
 
+    haveSnippet(snippet, options) {
+        return util.getSessionForUser(options).then((data) => {
+            return data.httpClient.put('/appsuite/api/snippet', snippet, {
+                params: {
+                    action: 'new',
+                    session: data.session
+                }
+            });
+        }).then(response => {
+            return response.data;
+        }, err => {
+            console.error(err);
+            throw err;
+        });
+    }
+
 }
 
 module.exports = MyHelper;
