@@ -438,7 +438,8 @@ define('io.ox/calendar/api', [
                         id: obj.id,
                         folder: obj.folder,
                         checkConflicts: options.checkConflicts,
-                        timestamp: _.now()
+                        timestamp: _.now(),
+                        fields: api.defaultFields
                     },
                     data = {
                         attendee: obj.attendee
