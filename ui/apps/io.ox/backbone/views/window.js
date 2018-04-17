@@ -31,7 +31,7 @@ define('io.ox/backbone/views/window', [
             active: true,
             floating: true,
             lazy: false,
-            mode: 'normal',
+            mode: 'normal', // normal, maximized
             title: '',
             showInTaskbar: true,
             size: 'width-md' // -xs, -sm, -md, -lg
@@ -41,13 +41,14 @@ define('io.ox/backbone/views/window', [
     var WindowView = DisposableView.extend({
 
         events: {
-            'click [data-action="minimize"]': 'onMinimize',
-            'click [data-action="close"]':    'onQuit',
-            'mousedown :not(.controls)':      'activate',
-            'mousedown .floating-header':     'startDrag',
-            'keydown':                        'onKeydown',
-            'dblclick .floating-header':      'toggleMode',
-            'click button[data-mode]':        'toggleMode'
+            'click [data-action="minimize"]':    'onMinimize',
+            'click [data-action="close"]':       'onQuit',
+            'click [data-action="normalize"]':   'toggleMode',
+            'click [data-action="maximize"]':    'toggleMode',
+            'dblclick .floating-header':         'toggleMode',
+            'mousedown :not(.controls)':         'activate',
+            'mousedown .floating-header':        'startDrag',
+            'keydown':                           'onKeydown'
         },
 
         initialize: function (options) {
@@ -65,7 +66,7 @@ define('io.ox/backbone/views/window', [
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'deactivate': this.deactivate,
-                'change:mode': this.changeMode,
+                'change:mode': this.onChangeMode,
                 'change:minimized': this.toggle,
                 'change:count': this.onChangeCount,
                 'close': function () { this.$el.remove(); }
@@ -82,15 +83,12 @@ define('io.ox/backbone/views/window', [
             this.listenTo(this, 'dispose', function () { $(window).off('resize', this.keepInWindow); });
         },
 
-        renderWindowControls: function () {
+        renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
-            this.$modeToggle =
-                $('<button type="button" class="btn btn-link">').attr('data-mode', isNormal ? 'maximized' : 'normal').append(
-                    $('<i class="fa" aria-hidden="true">').addClass(isNormal ? 'fa-expand' : 'fa-compress')
-                );
             return $('<div class="controls">').append(
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
-                this.$modeToggle,
+                $('<button type="button" class="btn btn-link" data-action="normalize">').attr('title', gt('Normalize')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', !isNormal),
+                $('<button type="button" class="btn btn-link" data-action="maximize">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', isNormal),
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
@@ -126,8 +124,7 @@ define('io.ox/backbone/views/window', [
         startDrag: function (e) {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
-
-            //only drag on left click
+            // only drag on left click
             if (e.which !== 1) return;
             // needed for safari to stop selecting the whole UI
             e.preventDefault();
@@ -193,34 +190,26 @@ define('io.ox/backbone/views/window', [
             return this;
         },
 
-        changeMode: function (model, style) {
+        onChangeMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
 
-            var isNormal = style === 'normal';
-            this.$modeToggle.attr('data-mode', isNormal ? 'maximized' : 'normal')
-                .find('i').toggleClass('fa-expand', isNormal).toggleClass('fa-compress', !isNormal);
-            this.$el.removeClass('normal maximized').addClass(style);
+            var isNormal = this.model.get('mode') === 'normal';
 
-            // clean up css on display style change
-            this.$el.css({
-                height: '',
-                width: ''
-            });
-            this.model.set('initialWidth', this.el.offsetWidth);
-            this.model.set('initialHeight', this.el.offsetHeight);
+            this.$('[data-action="normalize"]').toggleClass('hidden', !isNormal);
+            this.$('[data-action="maximize"]').toggleClass('hidden', isNormal);
+            this.$el.removeClass('normal maximized').addClass(this.model.get('mode'));
+            this.$el.css({ height: '', width: '' });
 
+            this.model.set({ 'initialWidth': this.el.offsetWidth, 'initialHeight': this.el.offsetHeight });
             $(window).trigger('changefloatingstyle');
             _.defer(function () { $(window).trigger('resize'); });
         },
 
-        toggleMode: function (e) {
+        toggleMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
-            if (e.type === 'dblclick') return this.model.set('mode', this.$modeToggle.attr('data-mode'));
-            if (e && e.currentTarget && e.type === 'click') return this.model.set('mode', $(e.currentTarget).attr('data-mode'));
-            if (!this.model.get('minimized')) return;
-            this.model.set('mode', this.model.get('mode') === 'normal' ? 'maximized' : 'normal');
+            this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 
         activate: function () {
@@ -293,10 +282,7 @@ define('io.ox/backbone/views/window', [
 
         toggle: function (model, minimized) {
             this.$el.toggle(!minimized);
-            if (minimized) {
-                this.deactivate();
-                return;
-            }
+            if (minimized) return this.deactivate();
             this.activate();
         },
 
@@ -313,7 +299,7 @@ define('io.ox/backbone/views/window', [
                                 $('<span class="title">').attr('id', title_id).text(this.model.get('title') || '\u00A0'),
                                 $('<span class="count label label-danger">').toggle(this.model.get('count') > 0).text(this.model.get('count'))
                             ),
-                            this.renderWindowControls()
+                            this.renderControls()
                         ),
                         $('<div class="floating-body abs">').append(this.$body)
                     )
