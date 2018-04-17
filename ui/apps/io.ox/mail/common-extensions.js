@@ -197,7 +197,6 @@ define('io.ox/mail/common-extensions', [
                 var email = String(item[1] || '').toLowerCase(),
                     name = util.getDisplayName(item);
                 if (!email) return;
-
                 $el.append(
                     $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
                         .data({ email: email, email1: email })
