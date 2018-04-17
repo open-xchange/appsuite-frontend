@@ -198,7 +198,7 @@ define('io.ox/core/main/appcontrol', [
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
                 $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
-                    this.collection.where({ hasLauncher: true }).map(function (model) {
+                    this.collection.forLauncher().map(function (model) {
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model }).render().$el
                         );

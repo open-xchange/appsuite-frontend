@@ -21,18 +21,33 @@ define('io.ox/core/api/apps', [
 ], function (ext, manifests, capabilities, icons, settings, gt) {
 
     'use strict';
+    var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
+        'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
+        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
+        'io.ox/notes'
+    ];
 
-    // Apps collection
-    ox.ui.apps = new Backbone.Collection();
+    function createIndexMap() {
+        var list = settings.get('apps/list', defaultList.join(',')).split(','),
+            blacklist = settings.get('apps/blacklist', '').split(',');
+        return list.reduce(function (acc, id, index) {
+            acc[id] = _(blacklist).contains(id) ? -1 : index;
+            return acc;
+        }, {});
+    }
 
-    var api = {
+    var AppsCollection = Backbone.Collection.extend({
+        initialize: function () {
+            this._indexMap = createIndexMap();
+        },
+        forLauncher: function getAppsForLauncher() {
+            return this.filter(function (a) {
+                return this._indexOf(a) >= 0;
+            }.bind(this));
+        },
 
         getApps: function () {
-            var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
-                'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
-                'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation',
-                'io.ox/notes'];
-            var apps =  settings.get('apps/order', '').split(',');
+            var apps =  settings.get('apps/list', '').split(',');
             var blacklist = settings.get('apps/blacklist', '').split(',');
             // Construct App Data
             // seems to do nothign, ox.manifest.apps is already cleaned up
@@ -66,7 +81,7 @@ define('io.ox/core/api/apps', [
             });
         },
         getAppsWithSettings: function () {
-            return _.filter(api.getApps(), function (item) {
+            return _.filter(this.getApps(), function (item) {
                 if (!item.settings) return false;
                 if (item.device && !_.device(item.device)) return false;
                 // check for dedicated requirements for settings (usually !guest)
@@ -79,8 +94,17 @@ define('io.ox/core/api/apps', [
                 if (item.id === 'io.ox/tasks') return capabilities.has('delegate_tasks');
                 return true;
             });
+        },
+        _indexOf: function indexOf(app) {
+            var index = this._indexMap[app.id];
+            return typeof index === 'number' ? index : -1;
+        },
+        comparator: function (a, b) {
+            return this._indexOf(a) - this._indexOf(b);
         }
-    };
+    });
 
-    return api;
+    ox.ui.apps = new AppsCollection();
+
+    return ox.ui.apps;
 });
