@@ -26,9 +26,6 @@
 
 #io-ox-windowmanager {
     overflow: hidden;
-    &.has-sticky-window {
-        right: 920px;
-    }
 }
 
 #io-ox-windowmanager-pane {
@@ -549,22 +546,6 @@
 
         .floating-header .controls button[data-action="maximized"] {
             display: none;
-        }
-    }
-
-    &.sticky {
-        width: 920px;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        left: auto;
-
-        .floating-header .controls button[data-action="sticky"] {
-            display: none;
-        }
-
-        .floating-window-content {
-            box-shadow: none;
         }
     }
 

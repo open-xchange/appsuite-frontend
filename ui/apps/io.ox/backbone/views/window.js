@@ -33,7 +33,6 @@ define('io.ox/backbone/views/window', [
             lazy: false,
             displayStyle: 'normal',
             title: '',
-            showStickybutton: false,
             showInTaskbar: true,
             size: 'width-md' // -xs, -sm, -md, -lg
         }
@@ -57,7 +56,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(options).pick('title', 'minimized', 'active', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
+                    _(options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
                 );
             }
 
@@ -92,7 +91,6 @@ define('io.ox/backbone/views/window', [
             return $('<div class="controls">').append(
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
                 this.$displayStyleToggle,
-                this.model.get('showStickybutton') ? $('<button type="button" class="btn btn-link" data-view="sticky">').append('<i class="fa fa-thumb-tack" aria-hidden="true">') : '',
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
@@ -202,9 +200,7 @@ define('io.ox/backbone/views/window', [
             var isNormal = style === 'normal';
             this.$displayStyleToggle.attr('data-view', isNormal ? 'maximized' : 'normal')
                 .find('i').toggleClass('fa-expand', isNormal).toggleClass('fa-compress', !isNormal);
-            // sticky windows push the rest of appsuite to the left. So an indicator class is needed
-            $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
-            this.$el.removeClass('normal maximized sticky').addClass(style);
+            this.$el.removeClass('normal maximized').addClass(style);
 
             // clean up css on display style change
             this.$el.css({
@@ -223,7 +219,7 @@ define('io.ox/backbone/views/window', [
             if (this.minimizing) return;
             if (e.type === 'dblclick') return this.model.set('displayStyle', this.$displayStyleToggle.attr('data-view'));
             if (e && e.currentTarget && e.type === 'click') return this.model.set('displayStyle', $(e.currentTarget).attr('data-view'));
-            if (!this.model.get('minimized') || this.model.get('displayStyle') === 'sticky') return;
+            if (!this.model.get('minimized')) return;
             this.model.set('displayStyle', this.model.get('displayStyle') === 'normal' ? 'maximized' : 'normal');
         },
 
@@ -418,16 +414,7 @@ define('io.ox/backbone/views/window', [
     var TaskbarView = DisposableView.extend({
         el: '#io-ox-taskbar',
         initialize: function () {
-            this.listenTo(collection, {
-                'add remove change': this.toggle
-            });
             this.listenTo(ox.ui.apps, 'launch resume', this.onLaunchResume);
-        },
-
-        toggle: function () {
-            var hasStickyWindow = collection.where({ displayStyle: 'sticky' }).length > 0;
-
-            $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindow);
         },
         onLaunchResume: function (app) {
             var model = app && app.get('window') && app.get('window').floating && app.get('window').floating.model;
