@@ -561,8 +561,10 @@ define('io.ox/mail/util', [
                     // contact image
                     case 'image':
                         return /(fail|neutral)/.test(status);
-                    // prepend in sender block (detail), 'via' hint for different mail server
+                    // append icon with info hover next to the frin field
                     case 'icon':
+                        return status === 'neutral' && /(fail_neutral|all)/.test(level);
+                    // prepend in sender block (detail), 'via' hint for different mail server
                     case 'via':
                         if (status === 'trusted') return true;
                         switch (level) {

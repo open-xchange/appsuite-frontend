@@ -223,7 +223,7 @@ define('io.ox/mail/common-extensions', [
                         .append(
                             $('<i class="fa">').addClass(function () {
                                 if (status === 'neutral') return 'fa-question'; //fa-question
-                                if (status === 'fail') return '';
+                                if (status === 'fail') return 'fa-exclamation';
                                 return 'fa-check';
                             })
                             .addClass(status ? 'authenticity-icon-' + status : '')
