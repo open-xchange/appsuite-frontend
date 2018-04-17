@@ -87,8 +87,8 @@ define('io.ox/backbone/views/window', [
             var isNormal = this.model.get('mode') === 'normal';
             return $('<div class="controls">').append(
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
-                $('<button type="button" class="btn btn-link" data-action="normalize">').attr('title', gt('Normalize')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', !isNormal),
-                $('<button type="button" class="btn btn-link" data-action="maximize">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', isNormal),
+                $('<button type="button" class="btn btn-link" data-action="normalize">').attr('title', gt('Normalize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', !isNormal),
+                $('<button type="button" class="btn btn-link" data-action="maximize">').attr('title', gt('Maximize')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', isNormal),
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
