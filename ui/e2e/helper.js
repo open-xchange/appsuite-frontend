@@ -75,6 +75,23 @@ class MyHelper extends Helper {
         });
     }
 
+    haveMail(mail, options) {
+        return util.getSessionForUser(options).then(data => {
+            let form = util.jsonToForm({ json_0: mail });
+            return data.httpClient.post('/appsuite/api/mail', form, {
+                params: {
+                    action: 'new',
+                    force_json_response: true,
+                    lineWrapAfter: 0,
+                    session: data.session
+                },
+                headers: form.getHeaders()
+            });
+        }).catch(err => {
+            console.error('error', err);
+        });
+    }
+
 }
 
 module.exports = MyHelper;

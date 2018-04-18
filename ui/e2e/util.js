@@ -1,5 +1,6 @@
 const codecept = require('codeceptjs'),
-    axios = require('axios');
+    axios = require('axios'),
+    FormData = require('form-data');
 
 let util = module.exports = {
 
@@ -61,6 +62,15 @@ let util = module.exports = {
                 target = target[key] = target[key] || {};
             }
         });
+    },
+
+    jsonToForm(json) {
+        let form = new FormData();
+        for (let key in json) {
+            if (json[key] instanceof Object) form.append(key, JSON.stringify(json[key]));
+            else form.append(key, json[key]);
+        }
+        return form;
     }
 
 };
