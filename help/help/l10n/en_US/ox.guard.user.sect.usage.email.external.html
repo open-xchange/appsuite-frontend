@@ -33,15 +33,12 @@
 <h2 class="sr-only">Encrypting E-Mail Conversations</h2>
 <div class="sect2" id="ox.guard.user.sect.usage.email.external">
 <div class="titlepage"><div><div><h3 class="title">12.2.3. How can external recipients read an encrypted E-Mail?</h3></div></div></div>
-<a class="indexterm" name="id-1.13.7.8.2"></a><div class="concept">
-<a name="ox.guard.user.concept.usage.email.external"></a><p id="ox.guard.user.concept.usage.email.external">You can also send encrypted E-Mails to external recipients who are no groupware users. When adding an external recipient, Guard checks whether a public key is available for this recipient. Depending on the result, Guard uses different procedures for sending the encrypted E-Mail.</p>
+<a class="indexterm" name="id-1.13.7.9.2"></a><div class="concept">
+<a name="ox.guard.user.concept.usage.email.external"></a><p id="ox.guard.user.concept.usage.email.external">You can also send encrypted E-Mails to external recipients who are no groupware users. When adding an external recipient, Guard checks whether a public key is available for this E-Mail address. Depending on the result, Guard uses different procedures for sending the encrypted E-Mail.</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">If there is a public key for the recipient:</p>
-<ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">The message is sent encrypted with this key. The recipient can read the message with his/her private key.</p></li>
-<li class="listitem"><p role="presentation">To enable the recipient to send an encrypted reply, your public key is sent as attachment. The attachment is called public.asc. The recipient can import this key to his/her E-Mail client.</p></li>
-</ul>
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p role="presentation">The message is sent encrypted with this key. The recipient can read the message with his/her private key.</p></li></ul>
 <p role="presentation">
             </p>
 </li>
@@ -53,7 +50,7 @@
 <p role="presentation">If there is no guest account, a guest account will be created. The external recipient receives an E-Mail with a link to a guest page and an automatically created password. The user logs in to the guest page. Then he/she can create an own password.</p>
 <p role="presentation">Depending on the configuration, the automatically created password and the link to the guest page are sent in separate E-Mails.</p>
 </li>
-<li class="listitem"><p role="presentation">Depending on the groupware configuration, guest account E-Mails are deleted after a specific number of days. To still make those E-Mails available, the E-Mail with the link to the guest page contains an attachment with the encrypted E-Mail. The attachment is called encrypted.asc. This attachment can be uploaded and read on the guest page. </p></li>
+<li class="listitem"><p role="presentation">Depending on the groupware configuration, guest account E-Mails are deleted after a specific number of days.</p></li>
 </ul>
 <p role="presentation">The external recipient can send an encrypted reply to the encrypted E-Mail. It is not possible to add additional recipients though.</p>
 </li>
