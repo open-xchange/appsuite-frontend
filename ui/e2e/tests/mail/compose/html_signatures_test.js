@@ -15,12 +15,13 @@ const expect = require('chai').expect;
 
 Feature('Mail compose: HTML signatures');
 
-BeforeSuite(async function (users) {
+Before(async function (users) {
     await users.create();
 });
 
-AfterSuite(async function (users) {
+After(async function (users) {
     await users.removeAll();
+    signatures.forEach(signature => delete signature.id);
 });
 
 const signaturesOld = [
