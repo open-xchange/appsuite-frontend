@@ -27,7 +27,7 @@ define('io.ox/metrics/main', [
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        userhash = util.getUserHash(),
+        userhash,
         metrics;
 
     function isEnabled() {
@@ -87,6 +87,7 @@ define('io.ox/metrics/main', [
         },
         // util
         getUserHash: function () {
+            userhash = userhash || util.getUserHash();
             return userhash;
         },
         getFolderFlags: util.getFolderFlags,
