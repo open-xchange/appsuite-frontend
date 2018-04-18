@@ -395,6 +395,10 @@ define('io.ox/mail/detail/view', [
                     // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
+                    // trigger click on body when theres a click in the iframe -> to close dropdownscorrectly etc
+                    html.on('click', function () {
+                        $('body').trigger('click');
+                    });
 
                     $(this.contentDocument)
                         .find('head').append('<style>' + contentStyle + '</style>').end()
