@@ -47,7 +47,7 @@ define('plugins/core/feedback/register', [
 
     function getAppOptions(useWhitelist) {
         var currentApp,
-            apps = _(appApi.getApps()).map(function (app) {
+            apps = appApi.forLauncher().map(function (app) {
                 app.id = app.id.replace(/io\.ox\/(office\/portal\/|office\/)?/, '');
 
                 if (useWhitelist && !_(appWhiteList).contains(app.id)) return;
@@ -55,7 +55,7 @@ define('plugins/core/feedback/register', [
                 if (ox.ui.App.getCurrentApp() && ox.ui.App.getCurrentApp().get('name').replace(/io\.ox\/(office\/portal\/|office\/)?/, '').indexOf(app.id) === 0) {
                     currentApp = app;
                 }
-                return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
+                return $('<option>').val(app.id).text(app.title);
             });
         apps = _(apps).compact();
         return { currentApp: currentApp, apps: apps };

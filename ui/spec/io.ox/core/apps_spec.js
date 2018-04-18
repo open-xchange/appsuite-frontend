@@ -4,6 +4,14 @@ define([
     'settings!io.ox/core'
 ], function (apps, appcontrol, coreSettings) {
     describe('Apps', function () {
+        let oldApps;
+        before(function () {
+            oldApps = apps.models;
+            apps.reset();
+        });
+        after(function () {
+            apps.reset(oldApps);
+        });
         describe('defining App for launcher', function () {
             let app;
             beforeEach(function () {
@@ -133,6 +141,61 @@ define([
 
                 apps.reset(oldApps, { silent: true });
                 stub.restore();
+            });
+        });
+
+        describe('Models', function () {
+            it('should be Backbone models', function () {
+                const app = new ox.ui.App({
+                    name: 'io.ox/test'
+                });
+                expect(app.get).to.be.a('function');
+                expect(app.set).to.be.a('function');
+            });
+            it('should automatically generate an id', function () {
+                const app = new ox.ui.App({
+                    name: 'io.ox/test'
+                });
+                expect(app.id).to.match(/^app-\d+/);
+            });
+            it('should automatically generate the path to the main module', function () {
+                const app = new ox.ui.App({
+                    name: 'io.ox/test'
+                });
+                expect(app.get('path')).to.equal('io.ox/test/main');
+            });
+            it('should not override specified path to the main module', function () {
+                const app = new ox.ui.App({
+                    name: 'io.ox/test',
+                    path: 'custom/path'
+                });
+                expect(app.get('path')).to.equal('custom/path');
+            });
+            it('should be possible to provide a custom launcher function', function () {
+                const app = new ox.ui.App({ name: 'io.ox/test' });
+                const spy = sinon.spy();
+                app.setLauncher(spy);
+                return app.launch().then(function () {
+                    expect(spy.calledOnce).to.equal(true);
+                });
+            });
+
+            describe('state management', function () {
+                it('should start in "ready" state', function () {
+                    const app = new ox.ui.App({
+                        name: 'io.ox/test'
+                    });
+                    expect(app.get('state')).to.equal('ready');
+                });
+                it('should change state during launch process', function () {
+                    const app = new ox.ui.App({ name: 'io.ox/test' });
+                    expect(app.get('state')).to.equal('ready');
+                    const def = app.launch();
+                    expect(app.get('state')).to.equal('initializing');
+                    return def.then(function () {
+                        expect(app.get('state')).to.equal('running');
+                    });
+                });
             });
         });
     });

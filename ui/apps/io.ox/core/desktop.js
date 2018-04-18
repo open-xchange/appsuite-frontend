@@ -26,10 +26,9 @@ define('io.ox/core/desktop', [
     'io.ox/core/folder/api',
     'io.ox/find/main',
     'io.ox/core/main/icons',
-    'io.ox/core/api/apps',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, appApi, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -62,8 +61,9 @@ define('io.ox/core/desktop', [
         initialize: function (options) {
             var self = this;
             this.options = options || {};
-            this.guid = options.guid;
+            this.guid = options.guid || appGuid++;
             this.id = this.id || 'app-' + this.guid;
+            this.set('path', options.path ? options.path : this.getName() + '/main');
             this.set('id', this.id);
             this.getInstance = function () {
                 return self;
@@ -907,8 +907,6 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
-        options.guid = appGuid++;
-        if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
         return ox.ui.apps.add(new ox.ui.App(options));
     };
 
@@ -1809,12 +1807,6 @@ define('io.ox/core/desktop', [
     ox.ui.apps.on('resume', function (app) {
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
-    });
-
-    _(appApi.getApps()).each(function (obj) {
-        if (upsell.visible(obj.requires) && _.device(obj.device)) {
-            ox.ui.apps.add(new ox.ui.App(_.extend({ name: obj.id }, obj)));
-        }
     });
 
     return {};

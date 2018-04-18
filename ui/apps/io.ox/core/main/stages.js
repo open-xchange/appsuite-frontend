@@ -21,7 +21,7 @@ define('io.ox/core/main/stages', [
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'gettext!io.ox/core'
-], function (ext, notifications, capabilities, appAPI, folderAPI, debug, settings, contactsSettings, gt) {
+], function (ext, notifications, capabilities, apps, folderAPI, debug, settings, contactsSettings, gt) {
 
     var topbar = $('#io-ox-appcontrol');
 
@@ -45,7 +45,7 @@ define('io.ox/core/main/stages', [
         if (settings.get('autoStart') === 'none') {
             autoStart = [];
         } else {
-            var favoritePaths = _(appAPI.getApps()).pluck('path');
+            var favoritePaths = apps.pluck('path');
 
             autoStart = _([].concat(settings.get('autoStart'), 'io.ox/mail', favoritePaths))
                 .chain()
@@ -70,8 +70,14 @@ define('io.ox/core/main/stages', [
             debug('Stage "first"');
         }
     }, {
+        id: 'app_register',
+        index: 105,
+        run: function () {
+            return require(['io.ox/core/main/apps']);
+        }
+    }, {
         id: 'appcheck',
-        index: 101,
+        index: 110,
         run: function (baton) {
             debug('Stage "appcheck"');
             // checks url which app to launch, needed to handle direct links
@@ -149,7 +155,7 @@ define('io.ox/core/main/stages', [
         }
     }, {
         id: 'autoLaunchApps',
-        index: 102,
+        index: 120,
         run: function (baton) {
             debug('Stage "autoLaunchApps"');
             baton.autoLaunchApps = _(baton.autoLaunch).chain().map(function (m) {
@@ -162,7 +168,7 @@ define('io.ox/core/main/stages', [
         }
     }, {
         id: 'startLoad',
-        index: 103,
+        index: 130,
         run: function (baton) {
             debug('Stage "startLoad"');
             function fail(type) {
