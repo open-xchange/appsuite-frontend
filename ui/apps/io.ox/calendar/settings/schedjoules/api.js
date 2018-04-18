@@ -50,7 +50,8 @@ define('io.ox/calendar/settings/schedjoules/api', [
                 'com.openexchange.calendar.provider': 'schedjoules',
                 'com.openexchange.calendar.config': {
                     'itemId': obj.itemId,
-                    'refreshInterval': 10080
+                    'refreshInterval': 10080,
+                    'locale': obj.locale
                 }
             });
         }
