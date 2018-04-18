@@ -794,7 +794,7 @@ define('io.ox/calendar/util', [
                 if (_.isNumber(c.status)) {
                     ret[c.status].count++;
                     ret.count++;
-                // don't count groups or ressources, ignore unknown states (the spec allows custom partstats)
+                // don't count groups or resources, ignore unknown states (the spec allows custom partstats)
                 } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && c.cuType === 'INDIVIDUAL') {
                     ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())].count++;
                     ret.count++;
