@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-17 11:43+0200\n"
+"PO-Revision-Date: 2018-04-18 10:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -684,7 +684,8 @@ msgstr "OK"
 #: apps/io.ox/files/actions/share.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/autoforward/indicator.js
+#: module:io.ox/mail apps/io.ox/mail/common-extensions.js
+#: apps/io.ox/mail/mailfilter/autoforward/indicator.js
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
@@ -876,6 +877,15 @@ msgstr "Suchen"
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Minimize"
 msgstr "Minimieren"
+
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+msgid "Normalize"
+msgstr "Normalisieren"
+
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+msgid "Maximize"
+msgstr "Maximieren"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
@@ -4641,7 +4651,6 @@ msgid "select format"
 msgstr "Format wählen"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-#, fuzzy
 msgid "Imported calendar"
 msgstr "Importierter Kalender"
 
@@ -6935,8 +6944,7 @@ msgid "Public link"
 msgstr "Öffentlicher Link"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
-#, fuzzy
-msgid "Internal & external users"
+msgid "Internal and external users"
 msgstr "Interne & externe Benutzer"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
@@ -7660,11 +7668,6 @@ msgstr "E-Mails wurden kopiert"
 msgid "Mail has been copied"
 msgstr "E-Mail wurde kopiert"
 
-#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Quick reply"
-msgstr "Schnellantwort"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
 #: module:plugins/portal
@@ -8026,11 +8029,6 @@ msgid "Links have been disabled to protect you against potential spam!"
 msgstr "Links sind deaktiviert, um Sie vor möglichem Spam zu schützen."
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
-msgid "Dismiss"
-msgstr "Verwerfen"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Show images"
 msgstr "Bilder anzeigen"
 
@@ -8325,10 +8323,9 @@ msgstr "Passwort verwenden"
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-msgid "Receive notification when the someone finished downloading the file(s)"
+msgid "Receive notification when someone finished downloading file(s)"
 msgstr ""
-"Benachrichtigung beim Beenden des Herunterladens der Datei(en) durch andere "
-"Benutzer"
+"Benachrichtigung nach Beenden des Herunterladens einer oder mehrerer Dateien"
 
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -8337,11 +8334,8 @@ msgstr "Benachrichtigung bei Ablauf des Links"
 
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, fuzzy
 msgid "Receive notification when someone accesses the file(s)"
-msgstr ""
-"Benachrichtigung beim Zugriff auf eine oder mehrere Dateien durch andere "
-"Benutzer"
+msgstr "Benachrichtigung beim Zugriff auf eine oder mehrere Dateien"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -8532,9 +8526,8 @@ msgstr "E-Mail von %1$s: %2$s"
 
 #. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
-#, fuzzy
 msgid "Via"
-msgstr "Absender"
+msgstr "Via"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -10562,17 +10555,17 @@ msgstr "Laden extern verlinkter Bilder erlauben"
 msgid "Show email authenticity"
 msgstr "E-Mail-Authentizität anzeigen"
 
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
+#. Status for mail authenticity features. Do not show any information at all
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
+#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
-msgid "Dangerous and inconclusive emails only"
+msgid "Dangerous and unclassified emails only"
 msgstr "Nur gefährliche und nicht klassifizierte E-Mails"
 
-#. Status for mail authenticity features. Defines a verbosity level for displaying information
+#. Status for mail authenticity features. Show information for any mail
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Alle E-Mails"
@@ -12188,6 +12181,27 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid "Internal & external users"
+#~ msgstr "Interne & externe Benutzer"
+
+#~ msgid "Quick reply"
+#~ msgstr "Schnellantwort"
+
+#, fuzzy
+#~ msgid "Dismiss"
+#~ msgstr "Schließen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Receive notification when the someone finished downloading the file(s)"
+#~ msgstr ""
+#~ "Benachrichtigung beim Beenden des Herunterladens der Datei(en) durch "
+#~ "andere Benutzer"
+
+#~ msgid "Dangerous and inconclusive emails only"
+#~ msgstr "Nur gefährliche und nicht klassifizierte E-Mails"
 
 #~ msgid "Never."
 #~ msgstr "Nie."
