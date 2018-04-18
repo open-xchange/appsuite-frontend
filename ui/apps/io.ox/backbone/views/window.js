@@ -331,8 +331,7 @@ define('io.ox/backbone/views/window', [
                 this.model.get('win').app.launch();
                 return;
             }
-            var initialState = this.model.get('minimized');
-            this.model.set('minimized', !initialState);
+            this.model.set('minimized', false);
             ox.trigger('change:document:title', this.model.get('title'));
             this.model.trigger('lazyload');
         },
@@ -372,8 +371,11 @@ define('io.ox/backbone/views/window', [
             this.$count.toggle(this.model.get('count') > 0).text(this.model.get('count'));
         },
 
-        onChangeMinimized: function () {
+        onChangeMinimized: function (options) {
+            options = options || {};
             this.$el.toggle(this.model.get('minimized'));
+            // don't grab the focus if this is just called from the render function (savepoints start minimized but shouldn't grab the focus when drawn for the first time)
+            if (!options.isRender && this.model.get('minimized')) this.$el.find('[data-action="restore"]').focus();
         },
 
         render: function () {
@@ -390,7 +392,7 @@ define('io.ox/backbone/views/window', [
 
             this.onChangeTitle();
             this.onChangeCount();
-            this.onChangeMinimized();
+            this.onChangeMinimized({ isRender: true });
 
             $('#io-ox-taskbar').append(this.$el);
             return this;
