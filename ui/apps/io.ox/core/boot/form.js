@@ -128,13 +128,12 @@ define('io.ox/core/boot/form', [
             // remove form for sharing
             $('#io-ox-password-forget-form').remove();
 
-            var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
-            if (!forgotPassword) {
+            if (!sc.forgotPassword) {
                 // either not configured or guest user
                 $('#io-ox-forgot-password').remove();
                 $('#io-ox-login-store').toggleClass('col-sm-6 col-sm-12');
             } else {
-                $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
+                $('#io-ox-forgot-password').find('a').attr('href', sc.forgotPassword);
             }
         }
 
