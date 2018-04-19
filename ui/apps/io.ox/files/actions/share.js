@@ -28,7 +28,7 @@ define('io.ox/files/actions/share', [
         var header = '',
             count = array.length,
             first = array[0],
-            filler = (count === 1) ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
+            filler = (count === 1) ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : '',
             view = new ShareWizard({ files: array });
 
         function toggleButtons(sendVisible) {
@@ -38,10 +38,21 @@ define('io.ox/files/actions/share', [
 
         // build header
         if (first.isFile()) {
-            //#. if only one item -> insert filename / on more than one item -> item count
-            header = gt.format(gt.ngettext('Sharing link created for file "%1$d"', 'Sharing link created for %1$d items', count), filler);
+            header = gt.format(
+                //#. informs user about the consequences when creating a rule for selected mails ()
+                //#. %1$s single file name or empty string (non-essential information: can be left out)
+                //#. %2$d number of items (files or folders)
+                //#, c-format
+                gt.ngettext('Sharing link created for file "%1$s"', 'Sharing link created for %2$d items', count), filler, count
+            );
         } else if (first.isFolder()) {
-            header = gt.format(gt.ngettext('Sharing link created for folder "%1$d"', 'Sharing link created for %1$d items', count), filler);
+            header = gt.format(
+                //#. informs user about the consequences when creating a rule for selected mails ()
+                //#. %1$s single folder name or empty string (non-essential information: can be left out)
+                //#. %2$d number of items (files or folders)
+                //#, c-format
+                gt.ngettext('Sharing link created for folder "%1$s"', 'Sharing link created for %2$d items', count), filler, count
+            );
         }
 
         // create dialog
