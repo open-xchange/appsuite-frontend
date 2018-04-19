@@ -32,7 +32,16 @@ define('io.ox/tours/tasks', [
             .title(gt('Creating a new task'))
             .content(gt('To create a new task, click on New in the toolbar.'))
             .spotlight('.io-ox-tasks-window .primary-action .btn:visible, [data-ref="io.ox/tasks/actions/create"]:visible')
+            .on('before:show', function () {
+                if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
+                    createApp.getWindow().floating.onMinimize();
+                }
+            })
             .on('next', function () {
+                if (createApp) {
+                    if (createApp.getWindow().floating.model.get('minimized')) createApp.getWindow().floating.model.set('minimized', false);
+                    return;
+                }
                 ox.load(['io.ox/tasks/edit/main']).then(function (edit) {
                     var app = edit.getApp();
                     createApp = app;
@@ -45,11 +54,21 @@ define('io.ox/tours/tasks', [
             .content(gt('Enter the subject, the start date, and a description.'))
             .waitFor('.io-ox-tasks-edit [data-extension-id="title"]')
             .spotlight('.io-ox-tasks-edit [data-extension-id="title"]')
+            .on('before:show', function () {
+                if ($('.io-ox-tasks-edit [data-extension-id="title"]').length === 0) return;
+                $('.io-ox-tasks-edit [data-extension-id="title"]')[0].scrollIntoView();
+            })
+            .on('show', function () {
+                $('.io-ox-tasks-edit [data-extension-id="title"]')[0].scrollIntoView();
+            })
             .end()
         .step()
             .title(gt('Adding further details'))
             .content(gt('To add further details, click on Expand form.'))
             .spotlight('.io-ox-tasks-edit .expand-link')
+            .on('before:show', function () {
+                $('.io-ox-tasks-edit .expand-link')[0].scrollIntoView();
+            })
             .on('next', function () {
                 $('.expand-link[aria-expanded=false]').click();
             })
@@ -58,24 +77,33 @@ define('io.ox/tours/tasks', [
             .title(gt('Creating recurring tasks'))
             .content(gt('To create recurring tasks, enable Repeat. Functions for setting the recurrence parameters are shown.'))
             .spotlight('[data-extension-id="recurrence"]')
+            .on('before:show', function () {
+                $('[data-extension-id="recurrence"]')[0].scrollIntoView();
+            })
             .end()
         .step()
             .title(gt('Using the reminder function'))
             .content(gt('To not miss the task, use the reminder function.'))
             .spotlight('[for="task-edit-reminder-select"]')
+            .on('before:show', function () {
+                $('[for="task-edit-reminder-select"]')[0].scrollIntoView();
+            })
             .end()
         .step()
             .title(gt('Tracking the editing status'))
             .content(gt('To track the editing status, enter the current progress.'))
             .spotlight('[data-extension-id="status"]')
-            .on('next', function () {
-                $('.add-participant.task-participant-input-field:last')[0].scrollIntoView();
+            .on('before:show', function () {
+                $('[data-extension-id="status"]:last')[0].scrollIntoView();
             })
             .end()
         .step()
             .title(gt('Inviting other participants'))
             .content(gt('To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task.'))
             .spotlight('.add-participant.task-participant-input-field')
+            .on('before:show', function () {
+                $('.add-participant.task-participant-input-field:last')[0].scrollIntoView();
+            })
             .on('next', function () {
                 $('.expand-details-link')[0].scrollIntoView();
             })
@@ -84,11 +112,19 @@ define('io.ox/tours/tasks', [
             .title(gt('Entering billing information'))
             .content(gt('To enter billing information, click on Show details.'))
             .spotlight('.expand-details-link')
+            .on('before:show', function () {
+                $('.expand-details-link')[0].scrollIntoView();
+            })
             .end()
         .step()
             .title(gt('Creating the task'))
             .content(gt('To create the task, click on Create.'))
             .spotlight('.btn.task-edit-save')
+            .on('before:show', function () {
+                if (createApp && createApp.getWindow().floating.model.get('minimized')) {
+                    createApp.getWindow().floating.model.set('minimized', false);
+                }
+            })
             .end()
         .step()
             .title(gt('Sorting tasks'))
@@ -96,6 +132,11 @@ define('io.ox/tours/tasks', [
             .navigateTo('io.ox/tasks/main')
             .waitFor('.grid-options.dropdown')
             .spotlight('.grid-options.dropdown')
+            .on('wait', function () {
+                if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
+                    createApp.getWindow().floating.onMinimize();
+                }
+            })
             .end()
         .step()
             .title(gt('Editing multiple tasks'))
@@ -113,6 +154,7 @@ define('io.ox/tours/tasks', [
         .on('stop', function () {
             if (createApp) {
                 createApp.quit();
+                createApp = null;
             }
         })
         .start();

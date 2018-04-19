@@ -34,7 +34,16 @@ define('io.ox/tours/calendar', [
                 .title(gt('Creating a new appointment'))
                 .content(gt('To create a new appointment, click on New in the toolbar.'))
                 .spotlight('.io-ox-calendar-window .primary-action .btn:visible, [data-ref="io.ox/calendar/detail/actions/create"]:visible')
+                .on('before:show', function () {
+                    if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
+                        createApp.getWindow().floating.onMinimize();
+                    }
+                })
                 .on('next', function () {
+                    if (createApp) {
+                        if (createApp.getWindow().floating.model.get('minimized')) createApp.getWindow().floating.model.set('minimized', false);
+                        return;
+                    }
                     ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/model']).then(function (edit, models) {
                         var app = edit.getApp();
                         createApp = app;
@@ -55,38 +64,56 @@ define('io.ox/tours/calendar', [
                 .content(gt('Enter the subject, the start and the end date of the appointment. Other details are optional.'))
                 .waitFor('[data-extension-id="title"] > label')
                 .spotlight('[data-extension-id="title"] > label')
+                .on('before:show', function () {
+                    if ($('[data-extension-id="title"] > label').length === 0) return;
+                    $('[data-extension-id="title"] > label')[0].scrollIntoView();
+                })
+                .on('show', function () {
+                    $('[data-extension-id="title"] > label')[0].scrollIntoView();
+                })
                 .end()
             .step()
                 .title(gt('Creating recurring appointments'))
                 .content(gt('To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown.'))
                 .spotlight('[data-extension-id="recurrence"]')
-                .end()
-            .step()
-                .title(gt('Using the reminder function'))
-                .content(gt('To not miss the appointment, use the reminder function.'))
-                .spotlight('[data-extension-id="alarms"]')
-                .on('next', function () {
-                    $('.add-participant:last')[0].scrollIntoView();
+                .on('before:show', function () {
+                    $('[data-extension-id="recurrence"]')[0].scrollIntoView();
                 })
                 .end()
             .step()
                 .title(gt('Inviting other participants'))
                 .content(gt('To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.'))
                 .spotlight('.add-participant')
-                .on('next', function () {
-                    $('[data-extension-id="attachments_legend"]:last')[0].scrollIntoView();
+                .on('before:show', function () {
+                    $('.add-participant:last')[0].scrollIntoView();
+                })
+                .end()
+            .step()
+                .title(gt('Using the reminder function'))
+                .content(gt('To not miss the appointment, use the reminder function.'))
+                .spotlight('[data-extension-id="alarms"]')
+                .on('before:show', function () {
+                    $('[data-extension-id="alarms"]')[0].scrollIntoView();
                 })
                 .end()
             .step()
                 .title(gt('Adding attachments'))
                 .content(gt('Further down you can add documents as attachments to the appointment.'))
                 .hotspot('[data-extension-id="attachments_legend"]')
+                .on('before:show', function () {
+                    $('[data-extension-id="attachments_legend"]:last')[0].scrollIntoView();
+                })
                 .end()
             .step()
                 .title(gt('Creating the appointment'))
                 .content(gt('To create the appointment, click on Create at the lower left side.'))
                 .referTo('[data-action="save"]')
                 .hotspot('[data-action="save"]')
+                .on('before:show', function () {
+                    if (createApp && createApp.getWindow().floating.model.get('minimized')) {
+                        createApp.getWindow().floating.model.set('minimized', false);
+                    }
+                })
                 .end()
             .step()
                 .title(gt('Selecting a view'))
@@ -96,6 +123,9 @@ define('io.ox/tours/calendar', [
                 .referTo('.classic-toolbar [data-dropdown="view"] ul')
                 .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
                 .on('wait', function () {
+                    if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
+                        createApp.getWindow().floating.onMinimize();
+                    }
                     $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
                 })
                 .on('hide', function () {
@@ -130,8 +160,8 @@ define('io.ox/tours/calendar', [
                 .end()
             .on('stop', function () {
                 if (createApp) {
-                    //prevent app from asking about changed content
                     createApp.quit();
+                    createApp = null;
                 }
             })
             .start();
