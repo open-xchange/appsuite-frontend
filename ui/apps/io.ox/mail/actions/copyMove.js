@@ -79,8 +79,8 @@ define('io.ox/mail/actions/copyMove', [
                 .value();
 
                 var infoText = gt.format(
-                    //#. informs user about the consequences when creating a rule for selected mails
-                    //#. %1$s represents a email address
+                    //#. informs user about the consequences when creating a rule for selected mails ()
+                    //#. %1$s represents a single email address (non-plural languages: not an essential information and can be left out)
                     gt.ngettext(
                         'All future messages from %1$s will be moved to the selected folder.',
                         'All future messages from the senders of the selected mails will be moved to the selected folder.',
