@@ -22,7 +22,6 @@ define('io.ox/tours/whats-new', [
     'use strict';
 
     var composeApp,
-        shouldQuit,
         point = ext.point('io.ox/tours/whats_new');
 
     ext.point('io.ox/tours/whats_new').extend({
@@ -69,16 +68,19 @@ define('io.ox/tours/whats-new', [
             baton.tour.step()
                 .title(gt('New Windows'))
                 .waitFor('.io-ox-mail-compose-window:first')
+                .on('back', function () {
+                    if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
+                        composeApp.getWindow().floating.onMinimize();
+                    }
+                })
                 .on('wait', function () {
-                    shouldQuit = false;
+                    if (composeApp) {
+                        if (composeApp.getWindow().floating.model.get('minimized')) composeApp.getWindow().floating.model.set('minimized', false);
+                        return;
+                    }
                     ox.launch('io.ox/mail/main').done(function () {
                         ox.registry.call('mail-compose', 'compose').then(function (result) {
                             composeApp = result.app;
-                            // the compose app may load very slow, if the user didn't wait and continued with the tour, we just close it again
-                            if (shouldQuit) {
-                                shouldQuit = false;
-                                composeApp.quit();
-                            }
                         });
                     });
                 })
@@ -97,18 +99,20 @@ define('io.ox/tours/whats-new', [
                 .title(gt('New Windows'))
                 .waitFor('.taskbar-button:first')
                 .on('wait', function () {
+                    if (composeApp && composeApp.getWindow().floating.model.get('minimized')) return;
                     $('.io-ox-mail-compose-window:first [data-action="minimize"]').click();
                 })
                 .content(gt('Windows you have minimized will appear in all applications for easy access. You can maximize a window again by clicking on it.'))
                 .spotlight('.taskbar-button:first')
-                .on('hide', function () {
-                    if (composeApp) {
-                        composeApp.quit();
-                    } else {
-                        shouldQuit = true;
-                    }
-                })
-            .end();
+            .end()
+            .on('stop', function () {
+                if (composeApp) {
+                    //prevent app from asking about changed content
+                    composeApp.model.dirty(false);
+                    composeApp.quit();
+                    composeApp = null;
+                }
+            });
         }
     });
 
@@ -131,8 +135,6 @@ define('io.ox/tours/whats-new', [
     }, function () {
         var tour = new Tour(),
             baton = new ext.Baton({ tour: tour });
-        // only forward for now
-        tour.hasBack = function () { return false; };
         point.invoke('steps', this, baton);
 
         tour.on('stop', function () {
