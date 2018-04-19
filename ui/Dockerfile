@@ -1,4 +1,4 @@
-FROM gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+FROM gitlab.open-xchange.com:4567/frontend/dev_env:0.0.3
 
 MAINTAINER Julian Bäume <julian.baeume@open-xchange.com>
 
