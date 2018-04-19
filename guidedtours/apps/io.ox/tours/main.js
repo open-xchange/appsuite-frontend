@@ -18,8 +18,9 @@ define('io.ox/tours/main', [
     'io.ox/core/extPatterns/stage',
     'settings!io.ox/tours',
     'io.ox/core/capabilities',
+    'io.ox/tours/whats-new',
     'gettext!io.ox/tours'
-], function (ext, notifications, Stage, tourSettings, capabilities, gt) {
+], function (ext, notifications, Stage, tourSettings, capabilities, whatsNewTour, gt) {
 
     'use strict';
 
@@ -35,15 +36,20 @@ define('io.ox/tours/main', [
 
             var disableTour = tourSettings.get('server/disableTours'),
                 startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
-                tourVersion = tourSettings.get('server/version', 0),
                 tourVersionSeen = tourSettings.get('user/alreadySeenVersion', -1);
 
-            if (!disableTour && startOnFirstLogin && tourVersion > tourVersionSeen) {
-                tourSettings.set('user/alreadySeenVersion', tourVersion).save();
+            if (!disableTour && startOnFirstLogin && tourVersionSeen === -1) {
+                tourSettings.set('user/alreadySeenVersion', 1).save();
+                // don't show first start wizard and what's new tour at the same time
+                tourSettings.set('whatsNew/autoShow', 0).save();
+
                 require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
                     Tour.registry.run('default/io.ox/intro');
                 });
+            } else if (!tourSettings.get('whatsNew/neverShowAgain', false) && tourSettings.get('whatsNew/autoShow', 1) > 0) {
+                whatsNewTour.run();
             }
+
             return $.when();
         }
     });
