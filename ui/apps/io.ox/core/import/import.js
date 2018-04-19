@@ -29,6 +29,8 @@ define('io.ox/core/import/import', [
         id: 'select',
         index: 100,
         render: function (baton) {
+            baton.module = this.model.get('module');
+
             var list = [],
                 guid = _.uniqueId('select-');
 
@@ -106,7 +108,6 @@ define('io.ox/core/import/import', [
         id: 'foldername',
         index: 300,
         render: function (baton) {
-            baton.module = this.model.get('module');
             if (!/^(calendar)$/.test(baton.module)) return;
             if (baton.model.get('folderId')) return;
             this.model.set('folderName', gt('Imported calendar'));

@@ -366,13 +366,13 @@ define('io.ox/core/main/topbar_right', [
 
     // TODO: APPCONTROL
 
-    /* (function logoutHint() {
+    (function logoutHint() {
 
         var data = _.clone(settings.get('features/logoutButtonHint', {}));
 
         if (!data.enabled) return;
 
-        ext.point('io.ox/core/topbar/right').extend({
+        ext.point('io.ox/core/appcontrol/right').extend({
             id: 'logout-button-hint',
             index: 2100,
             draw: function () {
@@ -385,12 +385,13 @@ define('io.ox/core/main/topbar_right', [
                 if (_.device('reload') && session.isAutoLogin()) return;
 
                 // topbar action, dropdown action
-                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a');
+                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a').first();
                 // popover
                 link.popover({
                     content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
                     template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
-                    placement: 'bottom'
+                    placement: 'bottom',
+                    container: 'body'
                 });
                 // prevent logout action when clicking hint
                 this.get(0).addEventListener('click', function (e) {
@@ -405,7 +406,7 @@ define('io.ox/core/main/topbar_right', [
         });
     })();
 
-    ext.point('io.ox/core/topbar/right').extend({
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'client-onboarding-hint',
         index: 2200,
         draw: function () {
@@ -421,9 +422,12 @@ define('io.ox/core/main/topbar_right', [
             var link = this.find('#io-ox-topbar-dropdown-icon > a');
             // popover
             link.popover({
-                content: gt("Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                //#. %1$s is the product name
+                //#, c-format
+                content: gt("Did you know that you can take %1$s with you? Just click this icon and choose 'Connect your device' from the menu.", ox.serverConfig.productName),
                 template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
-                placement: 'bottom'
+                placement: 'bottom',
+                container: 'body'
             });
             // show
             _.defer(link.popover.bind(link, 'show'));
@@ -436,6 +440,5 @@ define('io.ox/core/main/topbar_right', [
             }
         }
     });
-    */
 
 });

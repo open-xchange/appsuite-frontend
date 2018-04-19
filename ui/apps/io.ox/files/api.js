@@ -395,6 +395,64 @@ define('io.ox/files/api', [
         'pps':  'application/vnd.ms-powerpoint'
     };
 
+    //
+    // Helper functions based on file extension.
+    //
+
+    // Returns the file extension, removes pgp from .xyz.pgp if present
+    api.getExtension = function (file) {
+        var filename = file && (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title);
+        var parts = String(filename || '').split('.');
+        var extension;
+
+        // if extension is .xyz.pgp, remove the pgp and return extension
+        if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+            extension = parts[parts.length - 1].toLowerCase();
+        } else if (parts.length > 1) {
+            extension = parts.pop().toLowerCase();
+        } else {
+            extension = '';
+        }
+
+        return extension;
+    };
+
+    api.isText = function (file) {
+        return api.Model.prototype.types.txt.test(api.getExtension(file));
+    };
+
+    api.isPDF = function (file) {
+        return api.Model.prototype.types.pdf.test(api.getExtension(file));
+    };
+
+    api.isWordprocessing = function (file) {
+        return api.Model.prototype.types.doc.test(api.getExtension(file));
+    };
+
+    api.isPresentation = function (file) {
+        return api.Model.prototype.types.ppt.test(api.getExtension(file));
+    };
+
+    api.isSpreadsheet = function (file) {
+        return api.Model.prototype.types.xls.test(api.getExtension(file));
+    };
+
+    api.isOffice = function (file) {
+        return (api.isWordprocessing(file) || api.isPresentation(file) || api.isSpreadsheet(file));
+    };
+
+    api.isImage = function (file) {
+        return api.Model.prototype.types.image.test(api.getExtension(file));
+    };
+
+    api.isAudio = function (file) {
+        return api.Model.prototype.types.audio.test(api.getExtension(file));
+    };
+
+    api.isVideo = function (file) {
+        return api.Model.prototype.types.video.test(api.getExtension(file));
+    };
+
     // get URL to open, download, or preview a file
     // options:
     // - scaleType: contain or cover or auto

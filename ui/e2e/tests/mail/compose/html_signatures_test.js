@@ -106,7 +106,6 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     // reply to that mail
-    I.click('.io-ox-mail-window .window-content a[data-action="more"]');
     I.click('Reply');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
@@ -152,7 +151,6 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     //     // reply to that mail
-    I.click('.io-ox-mail-window .window-content a[data-action="more"]');
     I.click('Reply');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);

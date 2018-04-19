@@ -78,13 +78,15 @@ define('io.ox/mail/actions/copyMove', [
                 .uniq()
                 .value();
 
-                // split up strings to support languages without plural forms (see bug 54545)
-                var infoText = senderList.length <= 1 ?
-                    //#. informs user about the consequences when creating a rule for a selected mail
-                    //#. %1$s represents a email address
-                    gt('All future messages from %1$s will be moved to the selected folder.', _.escape(senderList[0])) :
-                    //#. informs user about the consequences when creating a rule for selected mails
-                    gt('All future messages from the senders of the selected mails will be moved to the selected folder.');
+                var infoText = gt.format(
+                    //#. informs user about the consequences when creating a rule for selected mails ()
+                    //#. %1$s represents a single email address (non-essential information: can be left out)
+                    //#, c-format
+                    gt.ngettext(
+                        'All future messages from %1$s will be moved to the selected folder.',
+                        'All future messages from the senders of the selected mails will be moved to the selected folder.',
+                        senderList.length
+                    ), _.escape(senderList[0]));
 
                 move.item({
                     all: o.list,

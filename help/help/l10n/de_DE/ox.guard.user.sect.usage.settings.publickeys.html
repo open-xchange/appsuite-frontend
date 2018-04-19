@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="ox.guard.user.sect.usage.settings.html" title="12.6. Guard-Sicherheitseinstellungen">
+<link rel="up" href="ox.guard.user.sect.usage.settings.html" title="12.6. Guard-Einstellungen">
 <link rel="prev" href="ox.guard.user.sect.usage.settings.yourkeys.html" title="12.6.2. Eigene Schlüssel verwalten">
 <link rel="next" href="ox.appsuite.user.chap.bestpractices.html" title="Kapitel 13. Fragen und Antworten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
@@ -31,11 +31,11 @@
 <div class="oxhelp-content">
   <h1 class="sr-only">Datenverschlüsselung</h1>
 <h2 class="sr-only">
-      <span class="phrase">Guard</span>-Sicherheitseinstellungen
+      <span class="phrase">Guard</span>-Einstellungen
     </h2>
 <div class="sect2" id="ox.guard.user.sect.usage.settings.publickeys">
 <div class="titlepage"><div><div><h3 class="title">12.6.3. Öffentliche Schlüssel verwalten</h3></div></div></div>
-<a class="indexterm" name="id-1.13.11.12.2"></a><div class="concept">
+<a class="indexterm" name="id-1.13.11.13.2"></a><div class="concept">
 <a name="ox.guard.user.concept.usage.settings.publickeys"></a><p id="ox.guard.user.concept.usage.settings.publickeys">
         Sie haben die folgenden Möglichkeiten:
         </p>
@@ -52,32 +52,33 @@
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
 <p role="presentation">Aktivieren Sie unter <span class="guilabel"><strong>Erweitert</strong></span> das Kontrollfeld <span class="guibutton"><strong>Show Advanced Settings</strong></span>.</p>
-<p role="presentation">Klicken Sie unterhalb von <span class="guilabel"><strong>Schlüssel</strong></span> auf <span class="guibutton"><strong>Public keys</strong></span>. 
+<p role="presentation">Klicken Sie unterhalb von <span class="guilabel"><strong>Schlüssel</strong></span> auf <span class="guibutton"><strong>Public keys of recipients</strong></span>. 
               Das Fenster <span class="guilabel"><strong>Öffentliche Schlüssel</strong></span> wird geöffnet.</p>
 <p role="presentation">
              Die öffentlichen Schlüssel, die Sie oder andere Benutzer freigegeben haben werden angezeigt. Wenn der öffentliche Schlüssel eines Benutzers 
-             in dieser Liste erscheint, können Sie annehmen, dass dieser Benutzer die E-Mails entschlüsseln kann, die Sie dem Benutzer verschlüsselt senden.    
+             in dieser Liste erscheint, können Sie diesem Benutzer eine verschlüsselte E-Mail senden sowie signierte E-Mails verifizieren, die Ihnen 
+             dieser Benutzer gesendet hat.    
             </p>
 </li>
 <li class="step">
 <p role="presentation">Um Details zu einem Schlüssel anzuzeigen, klicken Sie neben einem Schlüssel auf das Symbol <span class="guibutton"><strong>Details</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.usage.settings.publickeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. Das Fenster <span class="guilabel"><strong>Public Keys Detail</strong></span> wird geöffnet.
             </p>
-<p role="presentation">Sie können eigene öffentliche Schlüssel freigeben, indem Sie <span class="guibutton"><strong>Schlüssel freigeben</strong></span> aktivieren. Andere Benutzer können
-            Ihre freigegebenen Schlüssel sehen und bei Bedarf herunterladen.</p>
+<p role="presentation">Sie können öffentliche Schlüssel freigeben, indem Sie <span class="guibutton"><strong>Schlüssel freigeben</strong></span> aktivieren. Andere Benutzer können
+            Ihre freigegebenen Schlüssel sehen und bei Bedarf herunterladen. Öffentliche Schlüssel sind nur für Benutzer der Groupware verfügbar.</p>
 </li>
 </ol></div>
 </div>
 <div class="task" id="ox.guard.user.task.usage.settings.publickeys.upload">
-<p class="title">So laden Sie im Fenster <span class="guilabel"><strong>Öffentliche Schlüssel</strong></span> den öffentlichen Schlüssel eines externen Partners hoch:</p>
+<p class="title">So laden Sie im Fenster <span class="guilabel"><strong>Öffentliche Schlüssel</strong></span> den öffentlichen Schlüssel eines Empfängers hoch:</p>
 <div class="procedure"><ul class="procedure"><li class="step"><p role="presentation">Klicken Sie neben <span class="guilabel"><strong>Liste der öffentlichen PGP-Schlüssel</strong></span>
               auf das Symbol <span class="guibutton"><strong>Hinzufügen</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.usage.settings.publickeys.upload.add"><img src="../../images/guard_user_icon_add.png"></span>. Wählen Sie eine Datei, die einen öffentlichen Schlüssel enthält.</p></li></ul></div>
 </div>
 <div class="task" id="ox.guard.user.task.usage.settings.publickeys.delete">
-<p class="title">So löschen Sie im Fenster <span class="guilabel"><strong>Öffentliche Schlüssel</strong></span> den eigenen öffentlichen Schlüssel:</p>
+<p class="title">So löschen Sie im Fenster <span class="guilabel"><strong>Öffentliche Schlüssel</strong></span> einen öffentlichen Schlüssel:</p>
 <div class="procedure"><ul class="procedure"><li class="step">
-<p role="presentation">Klicken Sie neben einem eigenen öffentlichen Schlüssel auf das Symbol <span class="guibutton"><strong>Löschen</strong></span>
+<p role="presentation">Klicken Sie neben einem öffentlichen Schlüssel auf das Symbol <span class="guibutton"><strong>Löschen</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.usage.settings.publickeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>.</p>
 <p role="presentation">Bestätigen Sie , dass Sie den öffentlichen Schlüssel löschen wollen.</p>
 </li></ul></div>
@@ -89,7 +90,7 @@
 </li></ul>
 <p id="ox.guard.user.concept.usage.settings.publickeys.parent">Übergeordnetes Thema:
         <a class="xref" href="ox.guard.user.sect.usage.settings.html">
-      <span class="phrase">Guard</span>-Sicherheitseinstellungen
+      <span class="phrase">Guard</span>-Einstellungen
     </a>
       </p>
 </div>

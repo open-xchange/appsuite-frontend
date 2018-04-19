@@ -26,9 +26,6 @@
 
 #io-ox-windowmanager {
     overflow: hidden;
-    &.has-sticky-window {
-        right: 920px;
-    }
 }
 
 #io-ox-windowmanager-pane {
@@ -60,23 +57,28 @@
             overflow: hidden;
             display: flex;
             height: 32px;
-            line-height: 32px;
+            line-height: 26px;
 
             i {
                 margin-right: 8px;
             }
 
             .taskbar-button {
+                border: 3px solid #464646;
+                padding: 0 4px 0px 13px;
                 border-radius: 0;
-                border: 0;
                 color: white;
                 text-align: left;
                 width: 100%;
                 overflow: hidden;
                 background-color: #464646;
-                padding-left: 16px;
                 display: flex;
                 align-items: center;
+
+                &:focus {
+                    border-color: #00c7ff;
+                    font-weight: bold;
+                }
 
                 &.io-ox-busy:before {
                     color: white;
@@ -549,22 +551,6 @@
 
         .floating-header .controls button[data-action="maximized"] {
             display: none;
-        }
-    }
-
-    &.sticky {
-        width: 920px;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        left: auto;
-
-        .floating-header .controls button[data-action="sticky"] {
-            display: none;
-        }
-
-        .floating-window-content {
-            box-shadow: none;
         }
     }
 

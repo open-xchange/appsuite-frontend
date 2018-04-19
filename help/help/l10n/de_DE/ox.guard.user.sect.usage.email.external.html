@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="ox.guard.user.sect.usage.email.html" title="12.2. E-Mail Kommunikation verschlüsseln">
+<link rel="up" href="ox.guard.user.sect.usage.email.html" title="12.2. E-Mail-Kommunikation verschlüsseln">
 <link rel="prev" href="ox.guard.user.sect.usage.email.send.html" title="12.2.2. Verschlüsselte E-Mails senden">
 <link rel="next" href="ox.guard.user.sect.usage.files.html" title="12.3. Dateien verschlüsseln">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
@@ -30,13 +30,13 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">Datenverschlüsselung</h1>
-<h2 class="sr-only">E-Mail Kommunikation verschlüsseln</h2>
+<h2 class="sr-only">E-Mail-Kommunikation verschlüsseln</h2>
 <div class="sect2" id="ox.guard.user.sect.usage.email.external">
 <div class="titlepage"><div><div><h3 class="title">12.2.3. Wie lesen externe Empfänger eine verschlüsselte E-Mail?</h3></div></div></div>
-<a class="indexterm" name="id-1.13.7.8.2"></a><div class="concept">
+<a class="indexterm" name="id-1.13.7.9.2"></a><div class="concept">
 <a name="ox.guard.user.concept.usage.email.external"></a><p id="ox.guard.user.concept.usage.email.external">
-        Sie können verschlüsselte E-Mails auch an externe Empfänger senden, die keine Benutzer der Group-
-        ware sind. Beim Hinzufügen eines externen Empfängers prüft Guard, ob für diesen Empfänger ein öffentlicher
+        Sie können verschlüsselte E-Mails auch an externe Empfänger senden, die keine Benutzer der Groupware sind. 
+        Beim Hinzufügen eines externen Empfängers prüft Guard, ob für diese E-Mail-Adresse ein öffentlicher
         Schlüssel verfügbar ist. Je nach Resultat verwendet Guard unterschiedliche Verfahren zum Senden
         der verschlüsselten E-Mail.
         </p>
@@ -44,13 +44,8 @@
 <li class="listitem">
 <p role="presentation">Wenn ein öffentlicher Schlüssel des Empfängers gefunden wird:
               </p>
-<ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">Die Nachricht wird mit diesem Schlüssel verschlüsselt gesendet. Der Empfänger kann die Nachricht mit Hilfe
-                    seines privaten Schlüssels lesen.</p></li>
-<li class="listitem"><p role="presentation">Damit Ihnen der Empfänger verschlüsselt antworten kann, wird Ihr öffentlicher Schlüssel
-                    als Anhang mitgesendet. Der Anhang heißt public.asc. Der Empfänger kann diesen Schlüssel in seinen
-                    E-Mail Client importieren.</p></li>
-</ul>
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p role="presentation">Die Nachricht wird mit diesem Schlüssel verschlüsselt gesendet. Der Empfänger kann die Nachricht mit Hilfe
+                    seines privaten Schlüssels lesen.</p></li></ul>
 <p role="presentation">
             </p>
 </li>
@@ -69,9 +64,7 @@
                   separaten E-Mail gesendet.</p>
 </li>
 <li class="listitem"><p role="presentation">Je nach Konfiguration der Groupware werden die E-Mails von Gastkonten nach einer bestimmten Anzahl von Tagen
-                    vom Server gelöscht. Damit diese E-Mails weiterhin gelesen werden können, enthält die E-Mail mit dem Link zur Gastseite 
-                    im Anhang die verschlüsselte E-Mail. Der Anhang heißt encrypted.asc. Dieser Anhang kann auf der Gastseite 
-                    hochgeladen und gelesen werden. </p></li>
+                    vom Server gelöscht.</p></li>
 </ul>
 <p role="presentation">
               Ein externer Empfänger kann die verschlüsselte E-Mail verschlüsselt beantworten. Er kann dabei aber
@@ -88,7 +81,7 @@
 <p role="presentation"><a class="xref" href="ox.guard.user.sect.usage.email.send.html">Verschlüsselte E-Mails senden</a></p>
 </li></ul>
 <p id="ox.guard.user.concept.usage.email.external.parent">Übergeordnetes Thema:
-        <a class="xref" href="ox.guard.user.sect.usage.email.html">E-Mail Kommunikation verschlüsseln</a>
+        <a class="xref" href="ox.guard.user.sect.usage.email.html">E-Mail-Kommunikation verschlüsseln</a>
       </p>
 </div>
           </div>

@@ -36,7 +36,7 @@ define('io.ox/backbone/views/edit-picture', [
     }
 
     function getButton(opt) {
-        return $('<button class="btn btn-default" data-action="rotate">')
+        return $('<button type="button" class="btn btn-default" data-action="rotate">')
             .attr({
                 'aria-label': opt.label,
                 'title': opt.label,

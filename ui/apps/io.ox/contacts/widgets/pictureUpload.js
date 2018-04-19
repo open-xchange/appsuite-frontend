@@ -180,8 +180,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
                 this.$el.append(
                     this.imgCon = $('<div class="picture-uploader thumbnail">').append(
-                        this.closeBtn = $('<div class="reset close">')
-                            .html('&times;'),
+                        this.closeBtn = $('<button type="button" class="reset close">').attr('title', gt('Remove'))
+                            .append('<i class="fa fa-times" aria-hidden="true">'),
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
                                 $('<span>').text(gt('Upload image'))

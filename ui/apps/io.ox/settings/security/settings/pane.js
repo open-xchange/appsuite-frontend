@@ -111,11 +111,11 @@ define('io.ox/settings/security/settings/pane', [
                     // mail authenticity
                     !mailSettings.get('features/authenticity', false) ? $() :
                         util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            //#. Status for mail authenticity features. Do not show any information at all
                             { label: gt('Disabled'), value: 'none' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous and inconclusive emails only'), value: 'fail_neutral' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            //#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
+                            { label: gt('Dangerous and unclassified emails only'), value: 'fail_neutral' },
+                            //#. Status for mail authenticity features. Show information for any mail
                             { label: gt('All emails'), value: 'all' }
                         ])
                 )

@@ -561,8 +561,10 @@ define('io.ox/mail/util', [
                     // contact image
                     case 'image':
                         return /(fail|neutral)/.test(status);
-                    // prepend in sender block (detail), 'via' hint for different mail server
+                    // append icon with info hover next to the frin field
                     case 'icon':
+                        return status === 'neutral' && /(fail_neutral|all)/.test(level);
+                    // prepend in sender block (detail), 'via' hint for different mail server
                     case 'via':
                         if (status === 'trusted') return true;
                         switch (level) {
@@ -613,7 +615,6 @@ define('io.ox/mail/util', [
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
-                if (that.authenticity('block', data)) return true;
                 // nested mails don't have their own folder id. So use the parent mails folder id
                 return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };

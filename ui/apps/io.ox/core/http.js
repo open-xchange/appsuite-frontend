@@ -819,7 +819,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // process response
                 if (r.o.processData) {
                     processResponse(r.def, response, r.o, r.o.type);
-                } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
+                } else if (r.xhr.dataType === 'json' && response.error !== undefined && response.category !== 13) {
                     // error handling if JSON (e.g. for UPLOAD)
                     response.folder = r.o.data.folder;
                     ox.trigger('http:error:' + response.code, response, r.o);

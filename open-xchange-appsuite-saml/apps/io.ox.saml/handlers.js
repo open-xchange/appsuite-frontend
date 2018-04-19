@@ -7,6 +7,7 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
             handle: function (baton) {
                 var uri = baton.data.redirect_uri;
                 if (uri) {
+                    baton.handled = $.Deferred();
                     if ((/^http/i).test(uri)) {
                         window.location = uri;
                         _.defer(function () {

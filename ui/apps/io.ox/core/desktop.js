@@ -1339,7 +1339,7 @@ define('io.ox/core/desktop', [
                 this.preQuit = function () {
                     if (!window.cordova) this.hide();
                     this.state.open = false;
-                    this.trigger('pre-quit');
+                    if (this.floating) this.floating.minimize();
                     ox.ui.windowManager.trigger('window.pre-quit', this);
                     return this;
                 };

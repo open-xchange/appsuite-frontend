@@ -31,9 +31,8 @@ define('io.ox/backbone/views/window', [
             active: true,
             floating: true,
             lazy: false,
-            displayStyle: 'normal',
+            mode: 'normal', // normal, maximized
             title: '',
-            showStickybutton: false,
             showInTaskbar: true,
             size: 'width-md' // -xs, -sm, -md, -lg
         }
@@ -42,13 +41,14 @@ define('io.ox/backbone/views/window', [
     var WindowView = DisposableView.extend({
 
         events: {
-            'click [data-action="minimize"]': 'onMinimize',
-            'click [data-action="close"]':    'onQuit',
-            'mousedown :not(.controls)':      'activate',
-            'mousedown .floating-header':     'startDrag',
-            'keydown':                        'onKeydown',
-            'dblclick .floating-header':      'toggleDisplaystyle',
-            'click button[data-view]':        'toggleDisplaystyle'
+            'click [data-action="minimize"]':    'onMinimize',
+            'click [data-action="close"]':       'onQuit',
+            'click [data-action="normalize"]':   'toggleMode',
+            'click [data-action="maximize"]':    'toggleMode',
+            'dblclick .floating-header':         'toggleMode',
+            'mousedown :not(.controls)':         'activate',
+            'mousedown .floating-header':        'startDrag',
+            'keydown':                           'onKeydown'
         },
 
         initialize: function (options) {
@@ -57,7 +57,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(options).pick('title', 'minimized', 'active', 'closable', 'win', 'showStickybutton', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
+                    _(options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
                 );
             }
 
@@ -66,7 +66,7 @@ define('io.ox/backbone/views/window', [
             this.listenTo(this.model, {
                 'activate': this.activate,
                 'deactivate': this.deactivate,
-                'change:displayStyle': this.changeDisplayStyle,
+                'change:mode': this.onChangeMode,
                 'change:minimized': this.toggle,
                 'change:count': this.onChangeCount,
                 'close': function () { this.$el.remove(); }
@@ -83,16 +83,15 @@ define('io.ox/backbone/views/window', [
             this.listenTo(this, 'dispose', function () { $(window).off('resize', this.keepInWindow); });
         },
 
-        renderWindowControls: function () {
-            var isNormal = this.model.get('displayStyle') === 'normal';
-            this.$displayStyleToggle =
-                $('<button type="button" class="btn btn-link">').attr('data-view', isNormal ? 'maximized' : 'normal').append(
-                    $('<i class="fa" aria-hidden="true">').addClass(isNormal ? 'fa-expand' : 'fa-compress')
-                );
+        renderControls: function () {
+            var isNormal = this.model.get('mode') === 'normal';
             return $('<div class="controls">').append(
+                //#. window resize
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
-                this.$displayStyleToggle,
-                this.model.get('showStickybutton') ? $('<button type="button" class="btn btn-link" data-view="sticky">').append('<i class="fa fa-thumb-tack" aria-hidden="true">') : '',
+                //#. window resize
+                $('<button type="button" class="btn btn-link" data-action="normalize">').attr('title', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', isNormal),
+                //#. window resize
+                $('<button type="button" class="btn btn-link" data-action="maximize">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', !isNormal),
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
@@ -119,7 +118,7 @@ define('io.ox/backbone/views/window', [
             }
 
             // no height calculation for maximized windows
-            if (this.model.get('displayStyle') === 'normal' && this.el.offsetTop === 0) {
+            if (this.model.get('mode') === 'normal' && this.el.offsetTop === 0) {
                 if (this.model.get('initialHeight') === undefined) this.model.set('initialHeight', this.el.offsetHeight);
                 this.$el.css('height', Math.min($(container).height(), this.model.get('initialHeight')) + 'px');
             }
@@ -128,8 +127,7 @@ define('io.ox/backbone/views/window', [
         startDrag: function (e) {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
-
-            //only drag on left click
+            // only drag on left click
             if (e.which !== 1) return;
             // needed for safari to stop selecting the whole UI
             e.preventDefault();
@@ -195,36 +193,26 @@ define('io.ox/backbone/views/window', [
             return this;
         },
 
-        changeDisplayStyle: function (model, style) {
+        onChangeMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
 
-            var isNormal = style === 'normal';
-            this.$displayStyleToggle.attr('data-view', isNormal ? 'maximized' : 'normal')
-                .find('i').toggleClass('fa-expand', isNormal).toggleClass('fa-compress', !isNormal);
-            // sticky windows push the rest of appsuite to the left. So an indicator class is needed
-            $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
-            this.$el.removeClass('normal maximized sticky').addClass(style);
+            var isNormal = this.model.get('mode') === 'normal';
 
-            // clean up css on display style change
-            this.$el.css({
-                height: '',
-                width: ''
-            });
-            this.model.set('initialWidth', this.el.offsetWidth);
-            this.model.set('initialHeight', this.el.offsetHeight);
+            this.$('[data-action="normalize"]').toggleClass('hidden', isNormal);
+            this.$('[data-action="maximize"]').toggleClass('hidden', !isNormal);
+            this.$el.removeClass('normal maximized').addClass(this.model.get('mode'));
+            this.$el.css({ height: '', width: '' });
 
+            this.model.set({ 'initialWidth': this.el.offsetWidth, 'initialHeight': this.el.offsetHeight });
             $(window).trigger('changefloatingstyle');
             _.defer(function () { $(window).trigger('resize'); });
         },
 
-        toggleDisplaystyle: function (e) {
+        toggleMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
-            if (e.type === 'dblclick') return this.model.set('displayStyle', this.$displayStyleToggle.attr('data-view'));
-            if (e && e.currentTarget && e.type === 'click') return this.model.set('displayStyle', $(e.currentTarget).attr('data-view'));
-            if (!this.model.get('minimized') || this.model.get('displayStyle') === 'sticky') return;
-            this.model.set('displayStyle', this.model.get('displayStyle') === 'normal' ? 'maximized' : 'normal');
+            this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 
         activate: function () {
@@ -279,7 +267,7 @@ define('io.ox/backbone/views/window', [
             // minimizing a window moves it to the last position
             $('#io-ox-taskbar').append(taskBarEl);
             taskBarEl.show();
-            var windowWidth = this.model.get('displayStyle') === 'normal' ? this.$el.width() : $('body').width();
+            var windowWidth = this.model.get('mode') === 'normal' ? this.$el.width() : $('body').width();
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
 
@@ -297,17 +285,14 @@ define('io.ox/backbone/views/window', [
 
         toggle: function (model, minimized) {
             this.$el.toggle(!minimized);
-            if (minimized) {
-                this.deactivate();
-                return;
-            }
+            if (minimized) return this.deactivate();
             this.activate();
         },
 
         render: function () {
             var title_id = _.uniqueId('title');
             this.$el.addClass('floating-window window-container')
-                .addClass(this.model.get('displayStyle'))
+                .addClass(this.model.get('mode'))
                 .addClass(this.model.get('size'))
                 .attr({ 'aria-labelledby': title_id, tabindex: -1, role: 'dialog' })
                 .append(
@@ -317,7 +302,7 @@ define('io.ox/backbone/views/window', [
                                 $('<span class="title">').attr('id', title_id).text(this.model.get('title') || '\u00A0'),
                                 $('<span class="count label label-danger">').toggle(this.model.get('count') > 0).text(this.model.get('count'))
                             ),
-                            this.renderWindowControls()
+                            this.renderControls()
                         ),
                         $('<div class="floating-body abs">').append(this.$body)
                     )
@@ -349,8 +334,7 @@ define('io.ox/backbone/views/window', [
                 this.model.get('win').app.launch();
                 return;
             }
-            var initialState = this.model.get('minimized');
-            this.model.set('minimized', !initialState);
+            this.model.set('minimized', false);
             ox.trigger('change:document:title', this.model.get('title'));
             this.model.trigger('lazyload');
         },
@@ -390,8 +374,11 @@ define('io.ox/backbone/views/window', [
             this.$count.toggle(this.model.get('count') > 0).text(this.model.get('count'));
         },
 
-        onChangeMinimized: function () {
+        onChangeMinimized: function (options) {
+            options = options || {};
             this.$el.toggle(this.model.get('minimized'));
+            // don't grab the focus if this is just called from the render function (savepoints start minimized but shouldn't grab the focus when drawn for the first time)
+            if (!options.isRender && this.model.get('minimized')) this.$el.find('[data-action="restore"]').focus();
         },
 
         render: function () {
@@ -408,7 +395,7 @@ define('io.ox/backbone/views/window', [
 
             this.onChangeTitle();
             this.onChangeCount();
-            this.onChangeMinimized();
+            this.onChangeMinimized({ isRender: true });
 
             $('#io-ox-taskbar').append(this.$el);
             return this;
@@ -418,16 +405,7 @@ define('io.ox/backbone/views/window', [
     var TaskbarView = DisposableView.extend({
         el: '#io-ox-taskbar',
         initialize: function () {
-            this.listenTo(collection, {
-                'add remove change': this.toggle
-            });
             this.listenTo(ox.ui.apps, 'launch resume', this.onLaunchResume);
-        },
-
-        toggle: function () {
-            var hasStickyWindow = collection.where({ displayStyle: 'sticky' }).length > 0;
-
-            $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindow);
         },
         onLaunchResume: function (app) {
             var model = app && app.get('window') && app.get('window').floating && app.get('window').floating.model;

@@ -99,9 +99,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     new LinksPattern.Action('io.ox/files/actions/viewer/display-version', {
         capabilities: 'infostore',
         requires: function (e) {
-            var isText = FilesAPI.Model.prototype.isText.call(this, e.baton.data.file_mimetype);
-            var isPDF = FilesAPI.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype);
-            var isOffice = FilesAPI.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype);
+            var isText = FilesAPI.isText(e.baton.data);
+            var isPDF = FilesAPI.isPDF(e.baton.data);
+            var isOffice = FilesAPI.isOffice(e.baton.data);
 
             return (e.baton.isViewer && (isText || isPDF || isOffice));
         },

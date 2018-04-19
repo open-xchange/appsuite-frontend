@@ -61,7 +61,7 @@ define('io.ox/files/common-extensions', [
                 isWrapFilename = false;
 
             // add suffix for locked files
-            if (baton.model.isLocked()) {
+            if (baton.model && _.isFunction(baton.model.isLocked) && baton.model.isLocked()) {
 
                 filename += ' (' + gt('Locked') + ')';
             }
@@ -144,7 +144,9 @@ define('io.ox/files/common-extensions', [
         },
 
         locked: function (baton) {
-            this.toggleClass('locked', baton.model.isLocked());
+            if (baton.model && baton.model.isLocked) {
+                this.toggleClass('locked', baton.model.isLocked());
+            }
         },
 
         fileTypeIcon: function () {

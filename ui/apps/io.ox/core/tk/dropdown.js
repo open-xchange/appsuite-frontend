@@ -65,6 +65,7 @@
 
             // dropdowns can be manually prevented from closing.
             // used by special dropdowns, like notification area (should not close when a sidepopup is opened or the user clicks within it)
+            // also used by tours
             if (e.isDefaultPrevented() || $parent.attr('forceOpen') === 'true') return;
 
             // if the user clicked on a focusable inputfield we focus that instead of the dropdown root element

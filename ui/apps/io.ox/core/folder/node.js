@@ -553,7 +553,8 @@ define('io.ox/core/folder/node', [
             this.$el.attr({
                 'data-id': this.folder,
                 'data-model': this.options.model_id,
-                'data-contextmenu-id': this.options.contextmenu_id
+                'data-contextmenu-id': this.options.contextmenu_id,
+                'data-favorite': this.options.inFavorites
             });
         },
 

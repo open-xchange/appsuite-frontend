@@ -414,10 +414,11 @@ define('io.ox/calendar/main', [
                     .on('retry', function () {
                         notifications.yell('warning', gt('Refreshing calendar might take some time...'));
                         api.refreshCalendar(folder.id).then(function () {
+                            notifications.yell('success', gt('Successfully refreshed calendar'));
+                        }, notifications.yell).always(function () {
                             folderAPI.pool.unfetch(folder.id);
                             folderAPI.refresh();
-                            notifications.yell('success', gt('Successfully refreshed calendar'));
-                        }, notifications.yell);
+                        });
                     })
                     .open();
                 });

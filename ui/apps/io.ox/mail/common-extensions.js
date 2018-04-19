@@ -197,7 +197,6 @@ define('io.ox/mail/common-extensions', [
                 var email = String(item[1] || '').toLowerCase(),
                     name = util.getDisplayName(item);
                 if (!email) return;
-
                 $el.append(
                     $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
                         .data({ email: email, email1: email })
@@ -224,7 +223,7 @@ define('io.ox/mail/common-extensions', [
                         .append(
                             $('<i class="fa">').addClass(function () {
                                 if (status === 'neutral') return 'fa-question'; //fa-question
-                                if (status === 'fail') return '';
+                                if (status === 'fail') return 'fa-exclamation';
                                 return 'fa-check';
                             })
                             .addClass(status ? 'authenticity-icon-' + status : '')
@@ -735,13 +734,14 @@ define('io.ox/mail/common-extensions', [
                     $('<div class="notification-item disabled-links">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show Links')),
                         $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
-                        $('<button type="button" class="close">&times;</button>')
+                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }
 
             return function (baton) {
-                if (!util.isMalicious(baton.data)) return;
+                // malicious mails are filtered by middlewarea already
+                if (!util.authenticity('block', baton.data) || util.isMalicious(baton.data)) return;
                 draw.call(this, baton.model);
                 this.on('click', '.disabled-links > .btn-default', { view: baton.view }, loadLinks);
                 this.on('click', '.disabled-links > .close', function (e) {
@@ -774,7 +774,7 @@ define('io.ox/mail/common-extensions', [
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
-                        $('<button type="button" class="close">&times;</button>')
+                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }
@@ -883,14 +883,10 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<div class="alert alert-info disposition-notification notification-item">').append(
-                        $('<button type="button" class="btn btn-primary btn-sm">').text(
-                            //#. Respond to a read receipt request; German "Lesebestätigung senden"
-                            gt('Send a read receipt')
-                        ),
-                        $('<div class="comment">').text(
-                            gt('The sender wants to get notified when you have read this email')
-                        ),
-                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>')
+                        //#. Respond to a read receipt request; German "Lesebestätigung senden"
+                        $('<button type="button" class="btn btn-primary btn-sm">').text(gt('Send a read receipt')),
+                        $('<div class="comment">').text(gt('The sender wants to get notified when you have read this email')),
+                        $('<button type="button" class="close" data-dismiss="alert">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }

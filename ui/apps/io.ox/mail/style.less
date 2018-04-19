@@ -542,7 +542,11 @@
 
         .btn { margin-right: @default-padding; }
         .comment { flex: 1; align-self: center; }
-        .close { height: 29px; }
+        .close {
+            height: 30px;
+            padding: 5px 0;
+            font-size: 16px;
+        }
         .smartphone & { padding: @default-padding; }
     }
 
@@ -612,7 +616,7 @@
         max-height: 20px;
         span.person {
             color: inherit;
-            .fontWeight(700);
+            //.fontWeight(700);
         }
     }
 
@@ -1582,8 +1586,8 @@ body.dragging .categories-toolbar-container {
                     }
 
                     .unread-toggle {
-                        left: 8px;
-                        top: 7px;
+                        left: 15px;
+                        top: 18px;
                         padding: 0;
                         position: absolute;
                     }
@@ -1607,6 +1611,7 @@ body.dragging .categories-toolbar-container {
                         margin-bottom: -1px;
                         border-bottom: 0;
                     }
+                    .person-from { flex: 1 }
                 }
                 // do not show recipients
                 &:not(.expanded) .recipients { max-height: initial; }

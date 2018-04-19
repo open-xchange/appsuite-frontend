@@ -278,12 +278,10 @@ define('io.ox/files/actions', [
             if (_(e.baton.data).has('internal_userid')) return false;
             // locally added but not yet uploaded
             if (e.baton.data.group === 'localFile') { return false; }
-            if (e.baton.data.file_mimetype) {
-                // no 'open' menu entry for office documents, PDF and plain text
-                if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
-            }
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.isOffice(e.baton.data)) return false;
+            if (api.isPDF(e.baton.data)) return false;
+            if (api.isText(e.baton.data)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -491,6 +489,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (isTrash(e.baton)) return false;
             // one?
+            if (e.baton.favorite) return false;
             if (!e.collection.has('one')) return false;
 
             // hide in mail compose preview
@@ -601,7 +600,7 @@ define('io.ox/files/actions', [
             requires:  function (e) {
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
-                if (e.baton.favorite) return false;
+                if (type === 'move' && e.baton.favorite) return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
                 // anonymous guests just have one folder so no valid target folder (see bug 42621)
                 if (capabilities.has('guest && anonymous')) return false;
@@ -1063,6 +1062,7 @@ define('io.ox/files/actions', [
             } else if (e.baton) {
                 favorites = e.baton.favorites || [];
             }
+            if (e.context.length === 1 && _.first(e.context).attributes && _.first(e.context).attributes.id === 'virtual/favorites/infostore') return false;
             if (Array.isArray(favorites)) {
                 var result = true;
                 _.each(e.context, function (element) {
@@ -1114,6 +1114,7 @@ define('io.ox/files/actions', [
             } else if (e.baton) {
                 favorites = e.baton.favorites || [];
             }
+            if (e.context.length === 1 && _.first(e.context).attributes && _.first(e.context).attributes.id === 'virtual/favorites/infostore') return false;
             if (Array.isArray(favorites)) {
                 var result = false;
                 _.each(e.context, function (element) {

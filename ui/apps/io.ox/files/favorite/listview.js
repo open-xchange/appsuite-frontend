@@ -187,11 +187,13 @@ define('io.ox/files/favorite/listview', [
             id: 'file-type',
             index: 10,
             draw: function (baton) {
-                var filetype = baton.model.getFileType();
-                this.closest('.list-item')
-                    .addClass('file-type-' + filetype)
-                    .attr('data-is-favorite-view', true)
-                    .attr('data-is-file', filetype !== 'folder');
+                if (baton && baton.model) {
+                    var filetype = baton.model.getFileType ? baton.model.getFileType() : false;
+                    this.closest('.list-item')
+                        .addClass('file-type-' + filetype)
+                        .attr('data-is-favorite-view', true)
+                        .attr('data-is-file', filetype !== 'folder');
+                }
             }
         },
         {

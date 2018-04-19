@@ -34,6 +34,10 @@ define('io.ox/tours/mail', [
             .content(gt('To compose a new E-Mail, click on Compose in the toolbar.'))
             .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
             .on('next', function () {
+                if (composeApp) {
+                    if (composeApp.getWindow().floating.model.get('minimized')) composeApp.getWindow().floating.model.set('minimized', false);
+                    return;
+                }
                 ox.registry.call('mail-compose', 'compose').then(function (result) {
                     composeApp = result.app;
                 });
@@ -48,10 +52,10 @@ define('io.ox/tours/mail', [
             .content(gt('Enter the recipient\'s name into the recipients field. As soon as you typed the first letters, suggestions from the address books are displayed. To accept a recipient suggestion, click on it.'))
             .waitFor('.io-ox-mail-compose-window.ready')
             .hotspot('[data-extension-id=to] .tokenfield.to')
-            .on('ready', function () {
-                //clean up
-                //HACK: add ready class, to have some class to waitFor
-                $('.io-ox-mail-compose-window').removeClass('ready');
+            .on('back', function () {
+                if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
+                    composeApp.getWindow().floating.onMinimize();
+                }
             })
             .end()
         .step()
@@ -75,8 +79,18 @@ define('io.ox/tours/mail', [
             .title(gt('Sending the E-Mail'))
             .content(gt('To send the E-Mail, click on Send'))
             .hotspot('.io-ox-mail-compose-window button[data-action=send]')
+            .on('before:show', function () {
+                if (composeApp && composeApp.getWindow().floating.model.get('minimized')) {
+                    composeApp.getWindow().floating.model.set('minimized', false);
+                }
+            })
             .end()
         .step()
+            .on('before:show', function () {
+                if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
+                    composeApp.getWindow().floating.onMinimize();
+                }
+            })
             .title(gt('Sorting your E-Mails'))
             .content(gt('To sort the E-Mails, click on Sort by. Select a sort criteria.'))
             .waitFor('.io-ox-mail-window')
@@ -135,6 +149,7 @@ define('io.ox/tours/mail', [
                 //prevent app from asking about changed content
                 composeApp.model.dirty(false);
                 composeApp.quit();
+                composeApp = null;
             }
         })
         .start();

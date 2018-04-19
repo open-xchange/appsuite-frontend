@@ -616,7 +616,8 @@ define('io.ox/mail/actions', [
     // inline links
     var INDEX = 0;
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+    // disabled quick reply for 7.10.0
+    /*ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
@@ -625,11 +626,11 @@ define('io.ox/mail/actions', [
         label: gt('Quick reply'),
         ref: 'io.ox/mail/actions/inplace-reply',
         section: 'standard'
-    }));
+    }));*/
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'lo',
+        prio: 'hi',
         id: 'reply',
         mobile: 'lo',
         label: gt('Reply'),

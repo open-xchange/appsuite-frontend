@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="ox.guard.user.sect.usage.settings.html" title="12.6. Guard-Sicherheitseinstellungen">
+<link rel="up" href="ox.guard.user.sect.usage.settings.html" title="12.6. Guard-Einstellungen">
 <link rel="prev" href="ox.guard.user.sect.usage.settings.password.html" title="12.6.1. Passwort-Management">
 <link rel="next" href="ox.guard.user.sect.usage.settings.publickeys.html" title="12.6.3. Öffentliche Schlüssel verwalten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
@@ -31,20 +31,23 @@
 <div class="oxhelp-content">
   <h1 class="sr-only">Datenverschlüsselung</h1>
 <h2 class="sr-only">
-      <span class="phrase">Guard</span>-Sicherheitseinstellungen
+      <span class="phrase">Guard</span>-Einstellungen
     </h2>
 <div class="sect2" id="ox.guard.user.sect.usage.settings.yourkeys">
 <div class="titlepage"><div><div><h3 class="title">12.6.2. Eigene Schlüssel verwalten</h3></div></div></div>
-<a class="indexterm" name="id-1.13.11.11.2"></a><div class="concept">
+<a class="indexterm" name="id-1.13.11.12.2"></a><div class="concept">
 <a name="ox.guard.user.concept.usage.settings.yourkeys"></a><p id="ox.guard.user.concept.usage.settings.yourkeys">
         Sie haben die folgenden Möglichkeiten:
         </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Eigene Schlüssel anzeigen, Details anzeigen, Schlüssel aktuell machen</p></li>
+<li class="listitem">
+<p role="presentation">Eigene Schlüssel anzeigen, Details anzeigen</p>
+<p role="presentation">Einen Schlüssel aktuell machen. Andere können diesen Schlüssel verwenden, um Daten zu verschlüsseln.</p>
+</li>
 <li class="listitem"><p role="presentation">Neue Schlüssel hinzufügen</p></li>
 <li class="listitem">
-<p role="presentation">E-Mail Konto hinzufügen</p>
-<p role="presentation">Wenn Sie einem Schlüssel weitere Benutzer-ID's hinzufügen, können Sie den Schlüssel für mehrere E-Mail Konten verwenden.</p>
+<p role="presentation">Benutzer-IDs hinzufügen</p>
+<p role="presentation">Wenn Sie einem Schlüssel weitere Benutzer-IDs hinzufügen, können Sie den Schlüssel für mehrere E-Mail Konten verwenden.</p>
 </li>
 <li class="listitem"><p role="presentation">Schlüssel herunterladen</p></li>
 <li class="listitem"><p role="presentation">Schlüssel löschen</p></li>
@@ -77,14 +80,10 @@
               Dazu aktivieren Sie neben dem Schlüssel das Kontrollfeld <span class="guibutton"><strong>Aktuell</strong></span>. 
               Der aktuelle Schlüssel wird künftig zur Verschlüsselung verwendet. 
             </p></li>
-<li class="step">
-<p role="presentation">Um Details zu einem Schlüssel anzuzeigen, klicken Sie neben einem Schlüssel auf das Symbol <span class="guibutton"><strong>Details</strong></span>
+<li class="step"><p role="presentation">Um Details zu einem Schlüssel anzuzeigen, klicken Sie neben einem Schlüssel auf das Symbol <span class="guibutton"><strong>Details</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.usage.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. Das Fenster <span class="guilabel"><strong>Schlüssel-Details</strong></span> wird geöffnet. Um die
               Signaturen des Schlüssels anzuzeigen, klicken Sie auf <span class="guibutton"><strong>Signaturen</strong></span>.
-            </p>
-<p role="presentation">Um Schlüssel auf dem Server und lokal gespeicherte Schlüssel separat anzuzeigen, aktivieren Sie 
-              <span class="guibutton"><strong>Enable local key management</strong></span>.</p>
-</li>
+            </p></li>
 </ol></div>
 </div>
 <div class="task" id="ox.guard.user.task.usage.settings.yourkeys.addkey">
@@ -125,7 +124,7 @@
 </ol></div>
 </div>
 <div class="task" id="ox.guard.user.task.usage.settings.yourkeys.addaccount">
-<p class="title">So fügen Sie im Fenster <span class="guilabel"><strong>Ihre Schlüssel</strong></span> ein weiteres E-Mail Konto hinzu:</p>
+<p class="title">So fügen Sie im Fenster <span class="guilabel"><strong>Ihre Schlüssel</strong></span> eine weitere Benutzer-ID hinzu:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">Klicken Sie neben einem Schlüssel auf das Symbol <span class="guibutton"><strong>Bearbeiten</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.usage.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>. Das Fenster <span class="guilabel"><strong>Benutzer-ID hinzufügen</strong></span> öffnet sich.</p></li>
@@ -145,14 +144,21 @@
             </p></li>
 <li class="step">
 <p role="presentation">Bestimmen Sie, ob Sie nur Ihren privaten Schlüssel, nur Ihren öffentlichen Schlüssel oder beide Schlüssel herunterladen.</p>
-<p role="presentation"><span class="phrase"><strong>Vorsicht:</strong></span> Das Herunterladen eines privaten Schlüssels auf Ihren
-              Arbeitsplatzrechner kann ein Sicherheitsrisiko darstellen. Stellen Sie sicher, dass sich niemand Zugang zu 
-              Ihrem privaten Schlüssel verschaffen kann.</p>
+<p role="presentation"><span class="phrase"><strong>Vorsicht:</strong></span> Ihr privater Schlüssel wird verschlüsselt heruntergeladen. Trotzdem sollten Sie
+              Ihren privaten Schlüssel nicht auf ein System herunterladen, das öffentlich zugänglich ist.</p>
 </li>
 </ol></div>
 </div>
 <div class="task" id="ox.guard.user.task.usage.settings.yourkeys.delete">
 <p class="title">So löschen Sie im Fenster <span class="guilabel"><strong>Ihre Schlüssel</strong></span> einen Schlüssel:</p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Achtung:</strong></span> Wenn Sie einen privaten Schlüssel löschen, können Sie
+          keine Objekte mehr entschlüsseln, die mit diesem Schlüssel verschlüsselt wurden. Wenn Sie unsicher sind, 
+          sollten Sie den Schlüssel nicht löschen, sondern widerrufen. Einen widerrufenen Schlüssel können Sie nicht mehr 
+          zur Verschlüsselung verwenden. Sie können jedoch weiterhin Objekte entschlüsseln, die mit diesem Schlüssel 
+          verschlüsselt wurden.
+          </p>
+        </div>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">Klicken Sie neben einem Schlüssel auf das Symbol <span class="guibutton"><strong>Löschen</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.usage.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>. Das Fenster <span class="guilabel"><strong>Privaten Schlüssel löschen</strong></span> öffnet sich.</p></li>
@@ -161,13 +167,18 @@
 <li class="listitem">
 <p role="presentation">Um einen privaten Schlüssel zu widerrufen, klicken Sie auf 
                     <span class="guibutton"><strong>Widerrufen</strong></span>. </p>
-<p role="presentation">Geben Sie das Passwort für den privaten Schlüssel ein. Bei Bedarf wählen eine Grund
+<p role="presentation">Wenn Sie einen Schlüssel widerrufen, wird dieser Schlüssel künftig nicht mehr verwendet. Sie können jedoch
+                  weiterhin Objekte entschlüsseln, die mit diesem Schlüssel verschlüsselt wurden. Aus diesem Grund ist das Widerrufen 
+                  empfehlenswerter als das Löschen eines Schlüssels.</p>
+<p role="presentation">Geben Sie das Passwort für den privaten Schlüssel ein. Bei Bedarf wählen Sie einen Grund
                     für das Widerrufen des Schlüssels.</p>
 <p role="presentation">Klicken Sie auf <span class="guibutton"><strong>Widerrufen</strong></span>.</p>
 </li>
 <li class="listitem">
 <p role="presentation">Um einen privaten Schlüssel zu löschen, klicken Sie auf 
                     <span class="guibutton"><strong>Löschen</strong></span>. </p>
+<p role="presentation"><span class="phrase"><strong>Achtung:</strong></span> Wenn Sie einen privaten Schlüssel löschen, können Sie
+                    keine Objekte mehr entschlüsseln, die mit diesem Schlüssel verschlüsselt wurden.</p>
 <p role="presentation">Geben Sie das Passwort für den privaten Schlüssel ein.</p>
 <p role="presentation">Klicken Sie auf <span class="guibutton"><strong>Löschen</strong></span>.</p>
 </li>
@@ -183,7 +194,7 @@
 </li></ul>
 <p id="ox.guard.user.concept.usage.settings.yourkeys.parent">Übergeordnetes Thema:
         <a class="xref" href="ox.guard.user.sect.usage.settings.html">
-      <span class="phrase">Guard</span>-Sicherheitseinstellungen
+      <span class="phrase">Guard</span>-Einstellungen
     </a>
       </p>
 </div>

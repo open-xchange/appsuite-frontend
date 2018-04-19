@@ -216,6 +216,7 @@ define('io.ox/core/tk/wizard', [
             this.trigger('stop');
             this.off();
             this.closed = true;
+            $('body').removeClass('wizard-open');
             return this;
         },
 
@@ -250,7 +251,8 @@ define('io.ox/core/tk/wizard', [
                 this.showFirst();
                 this.trigger('start');
             }
-
+            // needed to stop dropdowns from closing
+            $('body').addClass('wizard-open');
             // for debugging
             window.wizard = this;
 

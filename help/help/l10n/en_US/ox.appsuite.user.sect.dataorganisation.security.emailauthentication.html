@@ -33,7 +33,7 @@
 <h2 class="sr-only">Security</h2>
 <div class="sect2" id="ox.appsuite.user.sect.dataorganisation.security.emailauthentication">
 <div class="titlepage"><div><div><h3 class="title">10.5.3. Show email authenticity</h3></div></div></div>
-<a class="indexterm" name="id-1.11.9.8.2"></a><div class="concept">
+<a class="indexterm" name="id-1.11.9.8.2"></a><a class="indexterm" name="id-1.11.9.8.3"></a><a class="indexterm" name="id-1.11.9.8.4"></a><div class="concept">
 <a name="ox.appsuite.user.concept.dataorganisation.security.emailauthentication"></a><p id="ox.appsuite.user.concept.dataorganisation.security.emailauthentication">For incoming E-Mails, the server checks whether the E-Mail actually originates from the provided sender address. The check is run to identify illegitimate E-Mails. The E-Mail authenticity check provides one of the following results.</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Dangerous</strong></span>. The E-Mail is classified as potentially dangerous. In the detail view, the sender is displayed in red font color.</p></li>
@@ -50,20 +50,13 @@
 <li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Settings</strong></span> icon on the right side of the menu bar. Click the <span class="guibutton"><strong>Settings</strong></span> menu item. </p></li>
 <li class="step"><p role="presentation">In the sidebar, click on <span class="guibutton"><strong>Security</strong></span>.</p></li>
 <li class="step"><p role="presentation">Select an entry from the <span class="guibutton"><strong>Show email authenticity</strong></span> drop-down in the display area.<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Disabled</strong></span>. No authenticity is displayed.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Dangerous emails only</strong></span>. The authenticity is only displayed for E-Mails that are classified as potentially dangerous.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Dangerous and trusted emails</strong></span>. Displays the authenticity for the following E-Mails:<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Disabled</strong></span>. No authenticity is displayed. If a hoster marks the E-Mail sent from the hoster's address as trustworthy though, this authenticity will be displayed.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Dangerous and inconclusive emails only</strong></span>. Displays the authenticity for the following E-Mails:<ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">E-Mails that are classified as potentially dangerous.</p></li>
-<li class="listitem"><p role="presentation">E-Mails that originate from a trustworthy address.</p></li>
+<li class="listitem"><p role="presentation">E-Mails which authenticity can not definitely be verified</p></li>
 </ul>
                   </p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Dangerous, trusted and valid emails</strong></span>. Displays the authenticity for the following E-Mails:<ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">E-Mails that are classified as potentially dangerous.</p></li>
-<li class="listitem"><p role="presentation">E-Mails with a verified authenticity.</p></li>
-<li class="listitem"><p role="presentation">E-Mails that originate from a trustworthy address.</p></li>
-</ul>
-                   </p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>All emails</strong></span>. Displays the authenticity for all E-Mails. This also includes E-Mails which authenticity can not definitely be verified.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Alle E-Mails</strong></span>. Displays the authenticity for all E-Mails.</p></li>
 </ul>
             </p></li>
 </ol></div>

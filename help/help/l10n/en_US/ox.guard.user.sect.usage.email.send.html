@@ -33,13 +33,10 @@
 <h2 class="sr-only">Encrypting E-Mail Conversations</h2>
 <div class="sect2" id="ox.guard.user.sect.usage.email.send">
 <div class="titlepage"><div><div><h3 class="title">12.2.2. Sending encrypted E-Mails</h3></div></div></div>
-<a class="indexterm" name="id-1.13.7.7.2"></a><a class="indexterm" name="id-1.13.7.7.3"></a><div class="concept">
+<a class="indexterm" name="id-1.13.7.8.2"></a><a class="indexterm" name="id-1.13.7.8.3"></a><div class="concept">
 <a name="ox.guard.user.concept.usage.email.send"></a><p id="ox.guard.user.concept.usage.email.send">The following options exist:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p role="presentation">Sending an encrypted E-Mail. Only you and the recipients can read the E-Mail content.</p>
-<p role="presentation"><span class="phrase"><strong>Warning:</strong></span> When sending an encrypted E-Mail draft, the draft will be deleted when being sent from the <span class="guilabel"><strong>Drafts</strong></span> folder.</p>
-</li>
+<li class="listitem"><p role="presentation">Sending an encrypted E-Mail. Only you and the recipients can read the E-Mail content.</p></li>
 <li class="listitem"><p role="presentation">Sending an E-Mail with a signature. The signature ensures that the recipient is able to recognize whether the E-Mail content has been changed on the transport.</p></li>
 <li class="listitem"><p role="presentation">Sending an encrypted E-Mail with a signature.</p></li>
 </ul>
@@ -51,31 +48,37 @@
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
 <p role="presentation">Compose an E-Mail in the <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> app as usual.</p>
-<p role="presentation">In the <span class="guilabel"><strong>Compose</strong></span> page, click the <span class="guibutton"><strong>Encrypt</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.email.send"><img src="../../images/guard_user_icon_encrypt.png"></span> on the upper right side.</p>
-<p role="presentation">You can also click on <span class="guibutton"><strong>Security</strong></span> below the subject. Enable <span class="guibutton"><strong>Encrypt</strong></span>.</p>
+<p role="presentation">In the <span class="guilabel"><strong>Compose</strong></span> page, click the <span class="guibutton"><strong>Encrypt</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.guard.user.fig.email.send"><img src="../../images/guard_user_icon_encrypt.png"></span>on the upper right side.</p>
+<p role="presentation">You can also click on <span class="guibutton"><strong>Security</strong></span> below the subject. Depending on the configuration of the <span class="phrase">Guard</span> security settings, the menu contains different entries.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">If <span class="guibutton"><strong>Show advanced settings</strong></span> is disabled, click on <span class="guibutton"><strong>Secure</strong></span>.</p></li>
+<li class="listitem"><p role="presentation">If <span class="guibutton"><strong>Show advanced settings</strong></span> is enabled, click on <span class="guibutton"><strong>encrypt</strong></span>.</p></li>
+</ul>
+            </p>
 <p role="presentation">Icons next to the recipients indicate whether the message can be encrypted for this recipient. If hovering over an icon, a description will be displayed.</p>
 </li>
-<li class="step"><p role="presentation">In order to show further options, click on <span class="guibutton"><strong>Security</strong></span>. You can activate the following options.<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">In order to additionally sign the E-Mail, enable <span class="guibutton"><strong>Sign</strong></span>.</p></li>
+<li class="step"><p role="presentation">In order to additionally sign the E-Mail, click on <span class="guibutton"><strong>Security</strong></span>. Enable <span class="guibutton"><strong>Sign</strong></span>.</p></li>
+<li class="step"><p role="presentation">If <span class="guibutton"><strong>Show advanced settings</strong></span> is enabled in the <span class="phrase">Guard</span> security settings, you can use further options. To do so, click on <span class="guibutton"><strong>Security</strong></span>. You can activate the following options.<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">Per default, encrypted E-Mails are sent in <span class="guibutton"><strong>PGP Mime</strong></span> format.</p>
-<p role="presentation">In case the recipient's E-Mail client does not support PGP, the message should be readable though, enable <span class="guibutton"><strong>PGP Inline</strong></span>. If you use this setting, you can not send E-Mails in html format.</p>
+<p role="presentation">Per default, encrypted E-Mails are sent in <span class="guibutton"><strong>PGP Mime</strong></span> format. Some older clients only support PGP Inline. If the recipient uses such a client, enable <span class="guibutton"><strong>PGP Inline</strong></span>.</p>
+<p role="presentation">If you use <span class="guibutton"><strong>PGP Inline</strong></span>, you can not send E-Mails in html format.</p>
 </li>
 <li class="listitem"><p role="presentation">To enable The E-Mail recipient to send an encrypted reply, the recipient needs to have your public key. You can send your public key as attachment. To do so, enable <span class="guibutton"><strong>Attach my key</strong></span>.</p></li>
 </ul>
             </p></li>
 <li class="step">
 <p role="presentation">Click on <span class="guibutton"><strong>Send encrypted</strong></span>.</p>
-<p role="presentation">When sending to external recipients, a window is displayed that allows to send <a class="link" href="ox.guard.user.sect.usage.email.external.html#ox.guard.user.concept.usage.email.external">notes for opening the encrypted E-Mail</a> to the external recipients.</p>
-<p role="presentation">When initially sending an encrypted E-Mail to an external recipient, the latter receives an E-Mail attachment with your public key.</p>
+<p role="presentation">When sending to new recipients, a window is displayed that allows to send <a class="link" href="ox.guard.user.sect.usage.email.external.html#ox.guard.user.concept.usage.email.external">notes for opening the encrypted E-Mail</a> to the recipients.</p>
 </li>
 </ol></div>
 </div>
 <p class="title">Also see</p>
-<ul class="itemizedlist" id="ox.guard.user.concept.usage.email.send.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<ul class="itemizedlist" id="ox.guard.user.concept.usage.email.send.related" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.guard.user.sect.usage.settings.html"><span class="phrase">Guard</span>Settings</a></p></li>
+<li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.guard.user.sect.usage.email.read.html">Reading encrypted E-Mails</a></p>
 <p role="presentation"><a class="xref" href="ox.guard.user.sect.usage.email.external.html">How can external recipients read an encrypted E-Mail?</a></p>
-</li></ul>
+</li>
+</ul>
 <p id="ox.guard.user.concept.usage.email.send.parent">Parent topic: <a class="xref" href="ox.guard.user.sect.usage.email.html">Encrypting E-Mail Conversations</a></p>
 </div>
           </div>

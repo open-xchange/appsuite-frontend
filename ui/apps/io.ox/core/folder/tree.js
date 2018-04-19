@@ -181,6 +181,9 @@ define('io.ox/core/folder/tree', [
             if (options.parent.folder === 'virtual/standard') {
                 options.icons = true;
             }
+            if (options.parent.folder === 'virtual/favorites/infostore') {
+                options.inFavorites = true;
+            }
 
             return options;
         },
@@ -257,10 +260,11 @@ define('io.ox/core/folder/tree', [
                 module = this.module,
                 ul = this.$dropdownMenu.empty(),
                 point = this.getContextMenuId(contextmenu),
-                view = this;
+                view = this,
+                favorite = this.selection.get('data-favorite');
             // get folder data and redraw
             api.get(id).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
+                var baton = new ext.Baton({ app: app, data: data, view: view, module: module, favorite: favorite });
                 ext.point(point).invoke('draw', ul, baton);
                 if (_.device('smartphone')) {
                     ul.append(

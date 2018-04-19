@@ -35,10 +35,11 @@ define('io.ox/core/folder/actions/common', [
             notifications.yell('warning', gt('Refreshing calendar might take some time...'));
             require(['io.ox/calendar/api'], function (calendarApi) {
                 calendarApi.refreshCalendar(e.data.folder.id).then(function () {
+                    notifications.yell('success', gt('Successfully refreshed calendar'));
+                }, notifications.yell).always(function () {
                     folderAPI.pool.unfetch(e.data.folder.id);
                     folderAPI.refresh();
-                    notifications.yell('success', gt('Successfully refreshed calendar'));
-                }, notifications.yell);
+                });
             });
         },
 
