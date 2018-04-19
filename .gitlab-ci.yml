@@ -115,7 +115,7 @@ build documentation:
 
 build ui docker image:
   script:
-    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
     - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_COMMIT_REF_SLUG}
   stage: test
