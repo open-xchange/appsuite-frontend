@@ -547,6 +547,7 @@ define('io.ox/files/main', [
                     app.folder.unset();
                     app.getWindow().setTitle(gt('Favorites'));
                     if (app.myFavoritesListViewControl) {
+                        app.myFavoriteListView.trigger('selection:change');
                         app.myFavoritesListViewControl.$el.show().siblings().hide();
                         return;
                     }
@@ -587,7 +588,6 @@ define('io.ox/files/main', [
                         }
 
                         app.updateMyFavoritesToolbar = _.debounce(function (cidList) {
-                            if (!cidList) return;
                             // var folder = api.pool.getModel(_.cid(folder));
                             toolbar.disableButtons();
                             var // turn cids into proper objects

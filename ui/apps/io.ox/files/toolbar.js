@@ -293,6 +293,21 @@ define('io.ox/files/toolbar', [
         action: $.noop
     });
 
+    new actions.Action('io.ox/files/dropdown/shareFavorites', {
+        requires: function (e) {
+            var elemId;
+            if (e.baton.data) {
+                if (!_.isArray(e.baton.data)) {
+                    elemId = e.baton.data.id;
+                } else if (e.baton.data.length) {
+                    elemId = _.first(e.baton.data).id;
+                }
+            }
+            return !!elemId;
+        },
+        action: $.noop
+    });
+
     // transform into extensions
 
     var index = 0;

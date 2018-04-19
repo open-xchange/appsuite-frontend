@@ -489,6 +489,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (isTrash(e.baton)) return false;
             // one?
+            if (e.baton.favorite) return false;
             if (!e.collection.has('one')) return false;
 
             // hide in mail compose preview
@@ -599,7 +600,7 @@ define('io.ox/files/actions', [
             requires:  function (e) {
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
-                if (e.baton.favorite) return false;
+                if (type === 'move' && e.baton.favorite) return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
                 // anonymous guests just have one folder so no valid target folder (see bug 42621)
                 if (capabilities.has('guest && anonymous')) return false;
@@ -1061,6 +1062,7 @@ define('io.ox/files/actions', [
             } else if (e.baton) {
                 favorites = e.baton.favorites || [];
             }
+            if (e.context.length === 1 && _.first(e.context).attributes && _.first(e.context).attributes.id === 'virtual/favorites/infostore') return false;
             if (Array.isArray(favorites)) {
                 var result = true;
                 _.each(e.context, function (element) {
@@ -1112,6 +1114,7 @@ define('io.ox/files/actions', [
             } else if (e.baton) {
                 favorites = e.baton.favorites || [];
             }
+            if (e.context.length === 1 && _.first(e.context).attributes && _.first(e.context).attributes.id === 'virtual/favorites/infostore') return false;
             if (Array.isArray(favorites)) {
                 var result = false;
                 _.each(e.context, function (element) {
