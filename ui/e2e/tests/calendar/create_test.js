@@ -15,21 +15,20 @@ const expect = require('chai').expect;
 
 Feature('Calendar: Create new appointment');
 
-BeforeSuite(async function (users) {
+Before(async function (users) {
     await users.create();
 });
 
-AfterSuite(async function (users) {
+After(async function (users) {
     await users.removeAll();
 });
 
 Scenario.skip('Create appointment with all fields', async function (I) {
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
-
-    I.setSetting('io.ox/core', 'autoOpenNotification', false);
-    I.setSetting('io.ox/core', 'showDesktopNotifications', false);
 
     I.selectFolder('All my appointments');
     I.clickToolbar('New');

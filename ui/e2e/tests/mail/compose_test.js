@@ -13,11 +13,11 @@
 
 Feature('Mail compose');
 
-BeforeSuite(async function (users) {
+Before(async function (users) {
     await users.create();
 });
 
-AfterSuite(async function (users) {
+After(async function (users) {
     await users.removeAll();
 });
 
