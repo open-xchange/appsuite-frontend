@@ -27,7 +27,7 @@ define('io.ox/core/main/stages', [
 
     var getAutoLaunchDetails = function (str) {
         var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
-        return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
+        return { app: (/\/main$/).test(app) ? app : app + '/main', method: method, name: app.replace(/\/main$/, '') };
     };
 
     var mobileAutoLaunchArray = function () {
@@ -137,11 +137,11 @@ define('io.ox/core/main/stages', [
             if (_.device('smartphone')) mobileAutoLaunchArray();
 
             var appURL = _.url.hash('app'),
-                manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
+                app = appURL && ox.ui.apps.get(getAutoLaunchDetails(appURL).name),
+                deeplink = looksLikeDeepLink && app && app.get('deeplink'),
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose') + ':compose');
 
-            if (manifest && (manifest.refreshable || deeplink)) {
+            if (app && (app.get('refreshable') || deeplink)) {
                 baton.autoLaunch = appURL.split(/,/);
                 // no manifest for mail compose, capabilities check is sufficient
             } else if (capabilities.has('webmail') && mailto) {
@@ -149,7 +149,7 @@ define('io.ox/core/main/stages', [
                 baton.autoLaunch = ['io.ox/mail/main'];
             } else {
                 // clear typical parameter?
-                if (manifest) _.url.hash({ app: null, folder: null, id: null });
+                if (app) _.url.hash({ app: null, folder: null, id: null });
                 baton.autoLaunch = autoLaunchArray();
             }
         }
@@ -160,10 +160,6 @@ define('io.ox/core/main/stages', [
             debug('Stage "autoLaunchApps"');
             baton.autoLaunchApps = _(baton.autoLaunch).chain().map(function (m) {
                 return getAutoLaunchDetails(m).app;
-            }).filter(function (m) {
-                //don’t autoload without manifest
-                //don’t autoload disabled apps
-                return ox.manifests.apps[m] !== undefined && !ox.manifests.isDisabled(m);
             }).compact().value();
         }
     }, {
@@ -274,11 +270,6 @@ define('io.ox/core/main/stages', [
             .chain()
             .map(function (id) {
                 return getAutoLaunchDetails(id);
-            })
-            .filter(function (details) {
-                //don’t autoload without manifest
-                //don’t autoload disabled apps
-                return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
             })
             .each(function (details, index) {
                 //only load first app on small devices

@@ -29,10 +29,10 @@ define('io.ox/core/viewer/util', [
         presentationKey = 'io.ox/office/presentation/main',
         // key to recognize the spreadsheet application
         spreadsheetKey = 'io.ox/office/spreadsheet/main',
-        // an object with all registered applications in the app suite
-        installedApps = ox && ox.manifests && ox.manifests.apps,
+        // global apps collection
+        apps = ox && ox.ui && ox.ui.apps,
         // whether at least one office application is installed
-        officeInstalled = !!(installedApps && (installedApps[textKey] || installedApps[presentationKey] || installedApps[spreadsheetKey]));
+        officeInstalled = !!(apps && (apps.has(textKey) || apps.has(presentationKey) || apps.has(spreadsheetKey)));
 
     var Util = {};
 

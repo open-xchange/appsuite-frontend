@@ -34,19 +34,10 @@ define('io.ox/core/main/topbar_right', [
 
         if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
 
-        var currentType = currentApp && currentApp.getName(),
-            manifest = _.defaults(
-                ox.manifests.apps[currentType] || {},
-                ox.manifests.apps[currentType + '/main'] || {},
-                {
-                    help: {
-                        base: 'help',
-                        target: 'index.html'
-                    }
-                }
-            ).help;
-
-        return manifest;
+        return {
+            base: 'help',
+            target: 'index.html'
+        };
     }
 
     ext.point('io.ox/core/topbar/right').extend({

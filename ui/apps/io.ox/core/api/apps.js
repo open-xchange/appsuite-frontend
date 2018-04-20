@@ -43,21 +43,6 @@ define('io.ox/core/api/apps', [
                 return this._indexOf(a) >= 0;
             }.bind(this));
         },
-        withSettings: function getAppsWithSettings() {
-            return this.filter(function (item) {
-                if (!item.settings) return false;
-                if (item.device && !_.device(item.device)) return false;
-                // check for dedicated requirements for settings (usually !guest)
-                if (item.settingsRequires && !capabilities.has(item.settingsRequires)) return false;
-                // check for device requirements for settings
-                if (item.settingsDevice && !_.device(item.settingsDevice)) return false;
-                // special code for tasks because here settings depend on a capability
-                // could have been done in manifest, but I did not want to change the general structure
-                // because of one special case, that might even disappear in the future
-                if (item.id === 'io.ox/tasks') return capabilities.has('delegate_tasks');
-                return true;
-            });
-        },
         _indexOf: function indexOf(app) {
             var index = this._indexMap[app.id];
             return typeof index === 'number' ? index : -1;

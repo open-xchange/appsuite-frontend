@@ -1,9 +1,0 @@
-{
-    "title": "Tasks",
-    "settings": true,
-    "requires": "tasks",
-    "refreshable": true,
-    "searchable": true,
-    "hasLauncher": true,
-    "index": 600
-}

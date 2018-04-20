@@ -1,12 +1,4 @@
 [{
-    "title": "Mail",
-    "settings": true,
-    "requires": "webmail",
-    "refreshable": true,
-    "searchable": true,
-    "hasLauncher": true,
-    "index": 100
-}, {
     "namespace": "io.ox/mail/compose/editor/text",
     "path": "io.ox/core/tk/text-editor"
 }, {

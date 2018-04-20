@@ -532,8 +532,7 @@ define('io.ox/core/desktop', [
         launch: function (options) {
             var deferred = $.when(),
                 self = this,
-                name = this.getName(),
-                isDisabled = ox.manifests.isDisabled(name + '/main');
+                name = this.getName();
 
             // update hash
             if (!this.options.floating && name !== _.url.hash('app')) {
@@ -546,19 +545,15 @@ define('io.ox/core/desktop', [
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
                 ox.trigger('app:init', this);
-                if (isDisabled) {
-                    deferred = $.Deferred().reject();
-                } else {
-                    _.extend(this.options, options);
-                    if (name) {
-                        ext.point(name + '/main').invoke('launch', this, this.options);
-                    }
-                    try {
-                        var fn = this.get('launch');
-                        deferred = fn.call(this, this.options) || $.when();
-                    } catch (e) {
-                        console.error('Error while launching application:', e.message, e, this);
-                    }
+                _.extend(this.options, options);
+                if (name) {
+                    ext.point(name + '/main').invoke('launch', this, this.options);
+                }
+                try {
+                    var fn = this.get('launch');
+                    deferred = fn.call(this, this.options) || $.when();
+                } catch (e) {
+                    console.error('Error while launching application:', e.message, e, this);
                 }
                 deferred.then(
                     function success() {

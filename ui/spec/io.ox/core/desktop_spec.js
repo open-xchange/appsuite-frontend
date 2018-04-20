@@ -35,11 +35,6 @@ define(['io.ox/core/desktop'], function () {
                         app = new ox.ui.App({
                             name: 'io.ox/testApp'
                         });
-
-                        ox.manifests.apps['io.ox/testApp/main'] = {
-                            path: 'spec/io.ox/testApp',
-                            category: 'tests'
-                        };
                     });
                     it('should define global ox.ui.App object', function () {
                         expect(ox.ui.App).to.exist;
@@ -50,17 +45,6 @@ define(['io.ox/core/desktop'], function () {
                         return app.launch().then(function () {
                             expect(ox.ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
-                        });
-                    });
-
-                    it.skip('should not launch an unregistered app', function () {
-                        ox.manifests.disabled['io.ox/testApp/main'] = true;
-
-                        return app.launch().then(function () {
-                            throw new Error('expected to fail');
-                        }).catch(function () {
-                            ox.manifests.disabled = {};
-                            expect(ox.ui.apps.models).not.to.contain(app);
                         });
                     });
                 });

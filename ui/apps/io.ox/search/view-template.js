@@ -28,18 +28,6 @@ define('io.ox/search/view-template', [
 
     var point = ext.point('io.ox/search/view');
 
-    // same stupid solution like in core/main until we get translated apps from backend
-    gt.pgettext('app', 'Portal');
-    gt.pgettext('app', 'Mail');
-    gt.pgettext('app', 'Address Book');
-    gt.pgettext('app', 'Calendar');
-    gt.pgettext('app', 'Scheduling');
-    gt.pgettext('app', 'Tasks');
-    gt.pgettext('app', 'Drive');
-    gt.pgettext('app', 'Conversations');
-    gt.pgettext('app', 'Settings');
-    gt.pgettext('app', 'Documents');
-
     // input field
     point.extend({
         id: 'query',
@@ -96,8 +84,9 @@ define('io.ox/search/view-template', [
 
             // create dropdown menu entries
             _(apps).each(function (id) {
-                var title = (ox.manifests.apps[id + '/main'] || {}).title;
-                title = titles[id] = /*#, dynamic*/gt.pgettext('app', title);
+                var app = ox.ui.apps.get(id),
+                    title = app ? app.get('title') : '';
+
                 items.push(
                     $('<li>').append(
                         $('<a href="#" role="button" tabindex="-1">')
