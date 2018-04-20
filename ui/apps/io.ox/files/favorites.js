@@ -170,13 +170,15 @@ define('io.ox/files/favorites', [
         if (typeof obj === 'object') {
             id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
         }
-        var newModel = filesAPI.pool.get('detail').get(id).toJSON();
-        var changedModel = collection.get(id);
-        if (changedModel) {
-            changedModel.set('com.openexchange.file.sanitizedFilename', newModel.filename);
-            changedModel.set('title', newModel.filename);
-            storeCollection();
-        }
+
+        filesAPI.get(obj).done(function (file) {
+            var changedModel = collection.get(id);
+            if (changedModel) {
+                changedModel.set('com.openexchange.file.sanitizedFilename', file.filename);
+                changedModel.set('title', file.filename);
+                storeCollection();
+            }
+        });
     });
     filesAPI.on('remove:file', function (list) {
         _.each(list, function (model) {
