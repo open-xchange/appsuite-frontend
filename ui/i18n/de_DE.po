@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-18 13:12+0200\n"
+"PO-Revision-Date: 2018-04-20 08:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -874,15 +874,17 @@ msgstr "Vor"
 msgid "Search"
 msgstr "Suchen"
 
+#. window resize
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Minimize"
 msgstr "Minimieren"
 
+#. window resize
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
-#, fuzzy
-msgid "Normalize"
-msgstr "Normalisieren"
+msgid "Shrink"
+msgstr "Verkleinern"
 
+#. window resize
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Maximize"
 msgstr "Maximieren"
@@ -909,10 +911,10 @@ msgstr "Kompakt"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
 msgid "Move"
@@ -1550,7 +1552,7 @@ msgid "Name"
 msgstr "Name"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain ressources."
+msgid "Please note that distribution lists cannot contain resources."
 msgstr ""
 "Bitte beachten Sie, dass Verteilerlisten keine Ressourcen enthalten können."
 
@@ -1803,9 +1805,9 @@ msgstr "Ordneransicht öffnen"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 #: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Ordner"
 
@@ -1945,7 +1947,8 @@ msgstr "Zurück"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-#: apps/io.ox/wizards/upsell.js module:io.ox/wizards
+#: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
+#: module:io.ox/wizards
 msgid "Next"
 msgstr "Weiter"
 
@@ -3193,7 +3196,8 @@ msgid "Postcode"
 msgstr "PLZ"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Town"
+#: apps/io.ox/contacts/print.js
+msgid "City"
 msgstr "Stadt"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -3569,10 +3573,6 @@ msgstr "Weitere"
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Messenger"
-
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
-msgid "City"
-msgstr "Stadt"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -4408,6 +4408,7 @@ msgid "Restore"
 msgstr "Wiederherstellen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/contextmenu.js
 msgid "Download entire folder"
 msgstr "Gesamten Ordner herunterladen"
 
@@ -4422,6 +4423,7 @@ msgid "Sharing"
 msgstr "Freigaben"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/contextmenu.js
 msgid "Permissions / Invite people"
 msgstr "Berechtigungen / Personen einladen"
 
@@ -4905,6 +4907,24 @@ msgstr "Über"
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Sign out"
 msgstr "Abmelden"
+
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Sie haben letztes Mal vergessen, sich abzumelden. Verwenden Sie immer die "
+"Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
+
+#. %1$s is the product name
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#, c-format
+msgid ""
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
+msgstr ""
+"Wussten Sie, dass Sie %1$s mitnehmen können? Klicken Sie einfach auf dieses "
+"Symbol und wählen Sie im Menü 'Ihr Gerät verbinden'."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
@@ -5910,7 +5930,7 @@ msgctxt "tour"
 msgid "Finish"
 msgstr "Beenden"
 
-#: apps/io.ox/core/tk/wizard.js module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js module:io.ox/core apps/io.ox/tours/whats-new.js
 msgid "Start tour"
 msgstr "Tour starten"
 
@@ -6003,10 +6023,10 @@ msgstr "Größe"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
-#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
+#: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
+#: module:io.ox/search
 msgid "Folder"
 msgstr "Ordner"
 
@@ -6190,7 +6210,6 @@ msgstr "Diese Datei freigeben"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js
 msgid "Invite people"
 msgstr "Personen einladen"
 
@@ -6627,18 +6646,25 @@ msgstr "Als PDF speichern"
 msgid "Send link"
 msgstr "Link senden"
 
-#. if only one item -> insert filename / on more than one item -> item count
+#. informs user about the consequences when creating a rule for selected mails ()
+#. %1$s single file name or empty string (non-essential information: can be left out)
+#. %2$d number of items (files or folders)
 #: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Sharing link created for file \"%1$d\""
-msgid_plural "Sharing link created for %1$d items"
-msgstr[0] "Freigabelink für Datei \"%1$d\" wurde erstellt"
-msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
+#, c-format
+msgid "Sharing link created for file \"%1$s\""
+msgid_plural "Sharing link created for %2$d items"
+msgstr[0] "Freigabelink für Datei \"%1$s\" erstellt"
+msgstr[1] "Freigabelink für %2$d Objekte erstellt"
 
+#. informs user about the consequences when creating a rule for selected mails ()
+#. %1$s single folder name or empty string (non-essential information: can be left out)
+#. %2$d number of items (files or folders)
 #: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Sharing link created for folder \"%1$d\""
-msgid_plural "Sharing link created for %1$d items"
-msgstr[0] "Freigabelink für Ordner \"%1$d\" wurde erstellt"
-msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
+#, c-format
+msgid "Sharing link created for folder \"%1$s\""
+msgid_plural "Sharing link created for %2$d items"
+msgstr[0] "Freigabelink für Ordner \"%1$s\" erstellt"
+msgstr[1] "Freigabelink für %2$d Objekte erstellt"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Remove link"
@@ -6726,6 +6752,10 @@ msgstr[1] "Markierte Dateien freigeben"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
 msgstr "Aktuellen Ordner freigeben"
+
+#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+msgid "Encrypt"
+msgstr "Verschlüsseln"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -7804,22 +7834,20 @@ msgstr "Anhang speichern"
 msgid "unknown sender"
 msgstr "unbekannter Absender"
 
-#. informs user about the consequences when creating a rule for a selected mail
-#. %1$s represents a email address
+#. informs user about the consequences when creating a rule for selected mails ()
+#. %1$s represents a single email address (non-essential information: can be left out)
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, c-format
 msgid "All future messages from %1$s will be moved to the selected folder."
-msgstr ""
-"Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
-"verschoben."
-
-#. informs user about the consequences when creating a rule for selected mails
-#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-msgid ""
+msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr ""
-"Alle zukünftigen Nachrichten von den Absendern der ausgewählten E-Mails "
-"werden in den ausgewählten Ordner verschoben."
+msgstr[0] ""
+"Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
+"verschoben."
+msgstr[1] ""
+"Alle zukünftigen Nachrichten der Sender der gewählten Nachrichten werden in "
+"den ausgewählten Ordner verschoben."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7957,7 +7985,7 @@ msgid "Drop here!"
 msgstr "Hier ablegen"
 
 #. successfully moved a message via drag&drop to another mail category (tab)
-#. %1$s represents the name if the target category
+#. %1$s represents the name if the target category (non-essential information: can be left out)
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
@@ -7965,7 +7993,7 @@ msgstr[0] "Nachricht in Kategorie \"%1$s\" verschoben."
 msgstr[1] "Nachrichten in Kategorie \"%1$s\" verschoben."
 
 #. ask user to move all messages from the same sender to the mail category (tab)
-#. %1$s represents a email address
+#. %1$s represents a single email address (non-essential information: can be left out)
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
@@ -8322,7 +8350,6 @@ msgstr "Passwort verwenden"
 
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, fuzzy
 msgid "Receive notification when someone finished downloading file(s)"
 msgstr ""
 "Benachrichtigung nach Beenden des Herunterladens einer oder mehrerer Dateien"
@@ -11053,6 +11080,77 @@ msgstr "Privat"
 msgid "Guided tour for this app"
 msgstr "Guided Tour für diese App"
 
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "App Launcher"
+msgstr ""
+
+#. %1$s is the product name, e.g. OX App Suite
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+#, fuzzy
+msgid ""
+"To navigate between the %1$s applications, just click on the new App "
+"Launcher icon."
+msgstr ""
+"Zum Navigieren zwischen den %1$s-Applikationen klicken Sie einfach auf das "
+"neue App Launcher Symbol ."
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "Click on the application that you would like to use."
+msgstr "Klicken Sie auf die Applikation, die Sie verwenden möchten."
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "New Windows"
+msgstr "Neue Fenster"
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"Emails will appear in a new window. These windows can be maximized, "
+"minimized and closed."
+msgstr ""
+"E-Mails erscheinen in einem neuen Fenster. Diese Fenster können maximiert, "
+"minimiert und geschlossen werden."
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+#, fuzzy
+msgid ""
+"Windows you have minimized will appear in all applications for easy access. "
+"You can maximize a window again by clicking on it."
+msgstr ""
+"Fenster, die Sie minimiert haben, erscheinen für einen einfachen Zugang in "
+"allen Anwendungen. Sie können ein Fenster wieder maximieren, indem Sie "
+"darauf klicken."
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "What's new"
+msgstr "Was ist neu"
+
+#. this is followed by a link to the help page
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "To learn more about the new and improved features you can visit "
+msgstr ""
+"Wenn Sie mehr über die neuen und verbesserten Funktionen erfahren möchten, "
+"besuchen Sie "
+
+#. %1$s is the product name, e.g. OX App Suite
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "What‘s New in %1$s 7.10.0"
+msgstr "Was ist neu in %1$s 7.10.0"
+
+#. %1$s is the product name, e.g. OX App Suite
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"Welcome to %1$s.\n"
+"We've made some exciting changes to %1$s. This quick tour will guide you "
+"through some of the new and improved features."
+msgstr ""
+"Willkommen bei %1$s.\n"
+"Wir haben einige spannende Änderungen an %1$s vorgenommen. Diese kurze Tour "
+"führt Sie durch einige der neuen und verbesserten Funktionen."
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "Never show again"
+msgstr "Nicht mehr anzeigen"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Upgrade to premium edition"
 msgstr "Upgrade auf Premium-Ausgabe"
@@ -12182,6 +12280,35 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid "Town"
+#~ msgstr "Stadt"
+
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Freigabelink für Datei \"%1$d\" wurde erstellt"
+#~ msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Freigabelink für Ordner \"%1$d\" wurde erstellt"
+#~ msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Alle zukünftigen Nachrichten von den Absendern der ausgewählten E-Mails "
+#~ "werden in den ausgewählten Ordner verschoben."
+
+#, fuzzy
+#~ msgid "Normalize"
+#~ msgstr "Normalisieren"
+
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr ""
+#~ "Bitte beachten Sie, dass Verteilerlisten keine Ressourcen enthalten "
+#~ "können."
+
 #, fuzzy
 #~ msgid "Internal & external users"
 #~ msgstr "Interne & externe Benutzer"
@@ -12679,13 +12806,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "(current app)"
 #~ msgstr "(aktuelle App)"
-
-#~ msgid ""
-#~ "You forgot to sign out last time. Always use the sign-out button when you "
-#~ "finished your work."
-#~ msgstr ""
-#~ "Sie haben letztes Mal vergessen, sich abzumelden. Verwenden Sie immer die "
-#~ "Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
 
 #~ msgid ""
 #~ "Did you know that you can take OX App Suite with you? Just click this "
