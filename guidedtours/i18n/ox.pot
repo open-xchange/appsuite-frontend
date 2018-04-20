@@ -42,23 +42,23 @@ msgstr ""
 #: apps/io.ox/tours/calendar.js
 #: module:io.ox/tours
 #: apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr ""
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr ""
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-#: apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr ""
 
 #: apps/io.ox/tours/calendar.js
 #: module:io.ox/tours
 msgid "To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side."
+msgstr ""
+
+#: apps/io.ox/tours/calendar.js
+#: module:io.ox/tours
+#: apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr ""
+
+#: apps/io.ox/tours/calendar.js
+#: module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
 msgstr ""
 
 #: apps/io.ox/tours/calendar.js
@@ -314,7 +314,7 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
-msgid "To launch an app, use the quicklaunch icons on the left side of the menu bar or click on an entry inside the app launcher menu."
+msgid "To launch an app, use the quick launch icons on the left side of the menu bar or click on an entry inside the app launcher menu."
 msgstr ""
 
 #: apps/io.ox/tours/intro.js
@@ -595,7 +595,7 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js
 #: module:io.ox/tours
-msgid "To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings."
+msgid "To open the settings, click the user image on the upper right side of the menu bar. Select Settings."
 msgstr ""
 
 #: apps/io.ox/tours/settings.js
@@ -625,7 +625,7 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js
 #: module:io.ox/tours
-msgid "To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window."
+msgid "To open the help, click the user image on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window."
 msgstr ""
 
 #: apps/io.ox/tours/settings.js
@@ -636,6 +636,11 @@ msgstr ""
 #: apps/io.ox/tours/settings.js
 #: module:io.ox/tours
 msgid "To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out."
+msgstr ""
+
+#: apps/io.ox/tours/settings.js
+#: module:io.ox/tours
+msgid "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 
 #: apps/io.ox/tours/tasks.js
