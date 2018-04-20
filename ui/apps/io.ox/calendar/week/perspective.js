@@ -149,7 +149,7 @@ define('io.ox/calendar/week/perspective', [
                         case 'thisandfuture':
                             var master;
                             if (action === 'series') master = api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false);
-                            else master = $.when(model.clone());
+                            else master = api.get({ id: model.get('seriesId'), folder: model.get('folder'), recurrenceId: model.get('recurrenceId') }, false);
                             // get recurrence master object
                             master.done(function (masterModel) {
                                 // calculate new dates if old dates are available
