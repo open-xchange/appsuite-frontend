@@ -14,139 +14,51 @@
 define('io.ox/core/folder/favorites', [
     'io.ox/core/folder/node',
     'io.ox/core/folder/api',
-    'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/core/upsell',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (TreeNodeView, api, filesAPI, ext, upsell, settings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/files/favorites'
+], function (TreeNodeView, api, ext, upsell, settings, gt) {
 
     'use strict';
 
-    _('mail contacts calendar tasks infostore'.split(' ')).each(function (module) {
+    _('mail contacts calendar tasks'.split(' ')).each(function (module) {
 
         // skip if no capability (use capabilities from upsell to work in demo mode)
         if (module === 'mail' && !upsell.has('webmail')) return;
         if (module !== 'mail' && !upsell.has(module)) return;
 
-        var // register collection
-            id = 'virtual/favorites/' + module,
+        // register collection
+        var id = 'virtual/favorites/' + module,
             model = api.pool.getModel(id),
             collection = api.pool.getCollection(id),
             // track folders without permission or that no longer exist
             invalid = {};
 
-        /**
-         * Stores given elements into setting (favorites/[module])
-         * @param elements {Object[]} Element to store
-         *  Needed parameters
-         *  @param {Integer} [elements.id]
-         *      modelId to store
-         *  @param {Integer} [elements.folder_id]
-         *      in which folder the element is located
-         *  @param {Boolean} [elements.isFolder]
-         *      element is folder or not
-         */
-        function store(elements) {
-            settings.set('favorites/' + module, elements).save();
+        function store(ids) {
+            settings.set('favorites/' + module, ids).save();
         }
 
-        /**
-         * Reads all models from folder collection (virtual/favorties/[module])
-         * and pushes them into store function
-         */
         function storeCollection() {
-            var elements = [];
-
-            _.each(collection.models, function (model) {
-                if (model.attributes.id) {
-                    var id,
-                        folder_id;
-                    if (model.attributes) {
-                        id = model.attributes.id;
-                        folder_id = model.attributes.folder_id;
-                    }
-                    elements.push({
-                        id: id,
-                        folder_id: folder_id,
-                        isFolder: model.attributes.folder_name !== undefined
-                    });
-                }
+            var ids = _(collection.pluck('id')).filter(function (id) {
+                return !invalid[id];
             });
-            // trigger to update sorting in myFavoriteListView (drive)
-            collection.trigger('update:collection');
-            store(elements);
+            store(ids);
         }
 
-        /**
-         * Definition for virtual folder
-         */
+        // define virtual folder
         api.virtual.add(id, function () {
             var cache = !collection.expired && collection.fetched;
-
-            // get saved favorites from setting
-            var favorites = settings.get('favorites/' + module, []);
-            if (typeof favorites[0] === 'object') {
-                var files = [];
-                var folders = [];
-                _.each(favorites, function (element) {
-                    if (element.isFolder) {
-                        folders.push(element.id);
-                    } else {
-                        files.push(element);
-                    }
-                });
-
-                /**
-                 * Creates an array with all models for files/folders from the setting and
-                 * removes special folders.
-                 * Stores the files/folders into the collection and back into the setting
-                 */
-                return filesAPI.getList(files, { errors: true, cache: cache, fullModels: true }).then(function (favoriteFiles) {
-                    return api.multiple(folders, { errors: true, cache: cache }).then(function (favoriteFolders) {
-                        var folderList = _(favoriteFolders).filter(function (item) {
-                            // FLD-0008 -> not found
-                            // FLD-0003 -> permission denied
-                            // ACC-0002 -> account not found (see bug 46481)
-                            // FLD-1004 -> folder storage service no longer available (see bug 47089)
-                            // IMAP-1002 -> mail folder "..." could not be found on mail server (see bug 47847)
-                            // FILE_STORAGE-0004 -> The associated (infostore) account no longer exists
-                            if (item.error && /^(FLD-0008|FLD-0003|ACC-0002|FLD-1004|IMAP-1002|FILE_STORAGE-0004)$/.test(item.code)) {
-                                invalid[item.id] = true;
-                                return false;
-                            }
-                            delete invalid[item.id];
-                            return true;
-                        });
-
-                        var returnList = [];
-                        _.each(folderList, function (folder) {
-                            api.injectIndex.bind(api, folder);
-                            var model = api.pool.getModel(folder.id);
-                            // convert folder model into file model
-                            model = new filesAPI.Model(model.toJSON());
-                            filesAPI.pool.add('detail', model.toJSON());
-                            returnList.push(model);
-                        });
-                        _.each(favoriteFiles, function (file) {
-                            api.injectIndex.bind(api, file);
-                            returnList.push(file);
-                        });
-                        collection.add(returnList);
-                        model.set('subscr_subflds', folderList.length > 0 && favoriteFiles.length > 0);
-                        storeCollection();
-
-                        return returnList;
-                    });
-                });
-            }
-
-            /**
-             * Fallback for old favorite settings (only for folders)
-             */
             return api.multiple(settings.get('favorites/' + module, []), { errors: true, cache: cache }).then(function (response) {
                 // remove non-existent entries
                 var list = _(response).filter(function (item) {
+                    // FLD-0008 -> not found
+                    // FLD-0003 -> permission denied
+                    // ACC-0002 -> account not found (see bug 46481)
+                    // FLD-1004 -> folder storage service no longer available (see bug 47089)
+                    // IMAP-1002 -> mail folder "..." could not be found on mail server (see bug 47847)
+                    // FILE_STORAGE-0004 -> The associated (infostore) account no longer exists
                     if (item.error && /^(FLD-0008|FLD-0003|ACC-0002|FLD-1004|IMAP-1002|FILE_STORAGE-0004)$/.test(item.code)) {
                         invalid[item.id] = true;
                         return false;
@@ -192,51 +104,6 @@ define('io.ox/core/folder/favorites', [
             model.set('folder_id', '9');
             model.set('own_rights', 1);
             model.set('standard_folder', true);
-
-            // Register listener for folder changes
-            api.on('rename', function (id, data) {
-                if (data.module === 'mail') return;
-                var changedModel = collection.get(_.cid(data));
-                if (changedModel) {
-                    changedModel.set('title', data.title);
-                    storeCollection();
-                }
-            });
-            api.on('remove', function (id, data) {
-                if (data.module === 'mail') return;
-                collection.remove(_.cid(data));
-                storeCollection();
-            });
-
-            // Register listener for file changes
-            filesAPI.on('move', function (objects) {
-                _.each(objects, function (obj) {
-                    var id = obj;
-                    if (typeof obj === 'object') {
-                        id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
-                    }
-                    collection.remove(id);
-                });
-            });
-            filesAPI.on('rename description add:version remove:version change:version', function (obj) {
-                var id = obj;
-                if (typeof obj === 'object') {
-                    id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
-                }
-                var newModel = filesAPI.pool.get('detail').get(id).toJSON();
-                var changedModel = collection.get(id);
-                if (changedModel) {
-                    changedModel.set('com.openexchange.file.sanitizedFilename', newModel.filename);
-                    changedModel.set('title', newModel.filename);
-                    storeCollection();
-                }
-            });
-            filesAPI.on('remove:file', function (list) {
-                _.each(list, function (model) {
-                    collection.remove(model.id);
-                });
-                storeCollection();
-            });
         }
 
         var extension = {
@@ -256,7 +123,7 @@ define('io.ox/core/folder/favorites', [
                         tree: tree,
                         icons: tree.options.icons
                     })
-                    .render().$el.addClass('favorites')
+                        .render().$el.addClass('favorites')
                 );
 
                 // store new order
@@ -276,52 +143,20 @@ define('io.ox/core/folder/favorites', [
         });
     }
 
-    /**
-     * Removes specified model from collection
-     * @param {Integer} id
-     *  folder id or file cid
-     * @param {Boolean} isFile
-     *  if the element is a file
-     *
-     * Additional parameters
-     * @param {File|Folder|false} model
-     *  Folder or File model
-     */
-    function remove(id, isFile, model) {
-        var collectionId,
-            collection;
-
-        // Load file/folder model from pool
-        if (!model) {
-            if (isFile) {
-                model = filesAPI.pool.get('detail').get(id);
-                collectionId = 'virtual/favorites/infostore';
-            } else {
-                model = api.pool.getModel(id);
-                collectionId = 'virtual/favorites/' + model.get('module');
-            }
-        }
-
-        collection = api.pool.getCollection(collectionId);
+    function remove(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
+            collection = api.pool.getCollection(collectionId);
         collection.remove(model);
         api.trigger('favorite:remove');
     }
 
-    /**
-     * Adds folder to the collection
-     * @param {Integer} id
-     *
-     * Additional parameters
-     * @param {Folder|false} model
-     *  Folder model
-     */
     function add(id, model) {
         model = model || api.pool.getModel(id);
         if (!model.get('module')) return;
         var collectionId = 'virtual/favorites/' + model.get('module'),
             collection = api.pool.getCollection(collectionId);
-        // convert folder model into file model
-        model = new filesAPI.Model(model.toJSON());
         model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
@@ -332,22 +167,20 @@ define('io.ox/core/folder/favorites', [
     // Folder API listeners
     //
 
-    api.on('collection:remove', remove);
+    api.on('collection:remove', function (id, model) {
+        remove(id, model);
+    });
 
-    /**
-     * Function for add listener
-     * @param {Event} e
-     */
+    //
+    // Add to contextmenu
+    //
+
     function onAdd(e) {
         add(e.data.id);
     }
 
-    /**
-     * Function for remove listener
-     * @param {Event} e
-     */
     function onRemove(e) {
-        remove(e.data.id, e.data.isFile);
+        remove(e.data.id);
     }
 
     function a(action, text) {
@@ -362,6 +195,7 @@ define('io.ox/core/folder/favorites', [
     }
 
     function addLink(node, options) {
+        if (options.data.module === 'infostore') return;
         var link = a(options.action, options.text);
         if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
         node.append($('<li role="presentation">').append(link));
@@ -376,16 +210,9 @@ define('io.ox/core/folder/favorites', [
 
             var id = baton.data.id,
                 module = baton.module,
-
-                // stored favorites from settings
                 favorites = settings.get('favorites/' + module, []),
+                isFavorite = _(favorites).indexOf(id) > -1;
 
-                // checks if given element is in the favorite setting
-                isFavorite = _.find(favorites, function (elem) {
-                    if (elem.id === id) {
-                        return true;
-                    }
-                });
             // don't offer for trash folders
             if (api.is('trash', baton.data)) return;
 

@@ -32,7 +32,7 @@ define('io.ox/files/actions/favorites', [
             collection,
             module = 'infostore';
 
-        if (element.folder_name) {
+        if (element.folder_id === 'folder') {
             model = model || folderAPI.pool.getModel(element.id);
             module = model.get('module');
             if (!module) {
@@ -49,13 +49,18 @@ define('io.ox/files/actions/favorites', [
 
         if (!collection.fetched || collection.expired) {
             require(['settings!io.ox/core'], function (Settings) {
-                var favoriteSettings = Settings.get('favorites/infostore', []);
-                favoriteSettings.push({
-                    id: model.attributes.id,
-                    folder_id: model.attributes.folder_id,
-                    isFolder: model.attributes.folder_name !== undefined
-                });
-                Settings.set('favorites/infostore', favoriteSettings);
+                var settingsId = 'favorites/infostore',
+                    setting = model.id;
+                if (model.isFile()) {
+                    settingsId = 'favoriteFiles/infostore';
+                    setting = {
+                        id: model.attributes.id,
+                        folder_id: model.attributes.folder_id
+                    };
+                }
+                var favoriteSettings = Settings.get(settingsId, []);
+                favoriteSettings.push(setting);
+                Settings.set(settingsId, favoriteSettings);
             });
         } else {
             model.set('index/' + collectionId, collection.length, { silent: false });
@@ -79,7 +84,7 @@ define('io.ox/files/actions/favorites', [
             collection,
             module = 'infostore';
 
-        if (element.folder_name) {
+        if (element.folder_id === 'folder') {
             model = model || folderAPI.pool.getModel(element.id);
             module = model.get('module');
             if (!module) {
@@ -94,10 +99,20 @@ define('io.ox/files/actions/favorites', [
 
         if (!collection.fetched || collection.expired) {
             require(['settings!io.ox/core'], function (Settings) {
-                var favoriteSettings = Settings.get('favorites/infostore', []);
-                favoriteSettings = _(favoriteSettings).filter(function (favorite) {
-                    return favorite.id !== model.get('id');
-                });
+                var favoriteSettings;
+
+                if (model.isFile()) {
+                    favoriteSettings = Settings.get('favoriteFiles/infostore', []);
+                    favoriteSettings = _(favoriteSettings).filter(function (favorite) {
+                        return favorite.id !== model.get('id');
+                    });
+                } else {
+                    favoriteSettings = Settings.get('favorites/infostore', []);
+                    favoriteSettings = _(favoriteSettings).filter(function (favoriteId) {
+                        return favoriteId !== model.get('id');
+                    });
+                }
+
                 Settings.set('favorites/infostore', favoriteSettings);
             });
         } else {

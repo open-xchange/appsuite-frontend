@@ -22,6 +22,7 @@ define('io.ox/core/folder/tree', [
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
+    'io.ox/files/favorites',
     'io.ox/core/folder/extensions'
 ], function (DisposableView, Dropdown, ContextMenuUtils, Selection, api, ext, a11y, settings, gt) {
 
