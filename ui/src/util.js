@@ -909,7 +909,7 @@
 
     _.sanitize = {
         option: function (value) {
-            return (value || '').replace(/[^a-z0-9._-]/ig, '').trim();
+            return (value || '').replace(/[^a-z0-9:._-]/ig, '').trim();
         }
     };
 
