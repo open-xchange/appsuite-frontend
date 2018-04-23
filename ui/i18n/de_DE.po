@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-20 08:49+0200\n"
+"PO-Revision-Date: 2018-04-23 12:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -11082,17 +11082,16 @@ msgstr "Guided Tour für diese App"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "App Launcher"
-msgstr ""
+msgstr "App-Startprogramm"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
-#, fuzzy
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
 msgstr ""
 "Zum Navigieren zwischen den %1$s-Applikationen klicken Sie einfach auf das "
-"neue App Launcher Symbol ."
+"neue App-Startprogramm-Symbol ."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
@@ -11111,7 +11110,6 @@ msgstr ""
 "minimiert und geschlossen werden."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
-#, fuzzy
 msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
