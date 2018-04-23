@@ -108,6 +108,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.nodes.a11yDate = $('<p class="sr-only">').attr('id', ariaID)
                             .text(gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.'));
 
+                        self.toggleTimeInput(!self.isFullTime());
+
                         return [
                             self.nodes.dayField,
                             dayFieldLabel,
