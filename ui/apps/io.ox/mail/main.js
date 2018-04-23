@@ -2042,7 +2042,7 @@ define('io.ox/mail/main', [
             find: capabilities.has('search')
         });
 
-        if (_.url.hash().mailto) ox.registry.call('mail-compose', 'compose');
+        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'compose');
 
         app.setWindow(win);
         app.settings = settings;
