@@ -323,7 +323,7 @@ $(window).load(function () {
                     }
                 }
 
-                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
+                var theme = _.sanitize.option(_.url.hash('theme')) || settings.get('theme') || 'default';
 
                 $('html').toggleClass('high-contrast', settings.get('highcontrast', false));
 
@@ -630,7 +630,7 @@ $(window).load(function () {
                                 $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
                             // theme
-                            themes.set(_.url.hash('theme') || ox.serverConfig.signinTheme || 'login').then(function () {
+                            themes.set(_.sanitize.option(_.url.hash('theme')) || ox.serverConfig.signinTheme || 'login').then(function () {
                                 // continue
                                 gettext.setLanguage('en_US');
                                 return require(['io.ox/core/login-i18n']);
