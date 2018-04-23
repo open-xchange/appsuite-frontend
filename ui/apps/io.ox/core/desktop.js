@@ -24,11 +24,12 @@ define('io.ox/core/desktop', [
     'io.ox/core/upsell',
     'io.ox/core/adaptiveLoader',
     'io.ox/core/folder/api',
+    'io.ox/core/api/apps',
     'io.ox/find/main',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -44,7 +45,7 @@ define('io.ox/core/desktop', [
     function supportsFind(name) {
         // enabled apps
         var list = coreSettings.get('search/modules') || [];
-        //var searchable = ox.ui.apps.get(name) && ox.ui.apps.get(name).get('searchable');
+        //var searchable = apps.get(name) && apps.get(name).get('searchable');
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
@@ -203,7 +204,7 @@ define('io.ox/core/desktop', [
                                     grid.busy().prop('folder', folder);
                                     grid.refresh();
                                     // load fresh folder & trigger update event
-                                    api.reload(id);
+                                    folderAPI.reload(id);
                                 }
                                 // update hash
                                 _.url.hash('folder', folder);
@@ -221,13 +222,13 @@ define('io.ox/core/desktop', [
                             if (id !== undefined && id !== null && String(id) !== folder) {
 
                                 var app = _.url.hash('app'),
-                                    model = api.pool.getModel(id),
+                                    model = folderAPI.pool.getModel(id),
                                     data = model.toJSON();
 
                                 if (model.has('title')) {
                                     change(id, data, app, def, favorite);
                                 } else {
-                                    api.get(id).then(
+                                    folderAPI.get(id).then(
                                         function success(data) {
                                             change(id, data, app, def, favorite);
                                         },
@@ -239,7 +240,7 @@ define('io.ox/core/desktop', [
                                 }
                             } else if (String(id) === folder) {
                                 // see Bug 34927 - [L3] unexpected application error when clicking on "show all messages in inbox" in notification area
-                                def.resolve(api.pool.getModel(id).toJSON(), false);
+                                def.resolve(folderAPI.pool.getModel(id).toJSON(), false);
                             } else {
                                 def.reject();
                             }
@@ -254,11 +255,11 @@ define('io.ox/core/desktop', [
 
                     setDefault: function () {
                         return $.when().then(function () {
-                            var defaultFolder = api.getDefaultFolder(type);
+                            var defaultFolder = folderAPI.getDefaultFolder(type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
                             }
-                            return api.getExistingFolder(type).then(
+                            return folderAPI.getExistingFolder(type).then(
                                 function (id) {
                                     return that.set(id);
                                 },
@@ -271,7 +272,7 @@ define('io.ox/core/desktop', [
 
                     isDefault: function () {
                         return $.when().then(function () {
-                            var defaultFolder = api.getDefaultFolder(type);
+                            var defaultFolder = folderAPI.getDefaultFolder(type);
                             return String(folder) === String(defaultFolder);
                         });
                     },
@@ -284,7 +285,7 @@ define('io.ox/core/desktop', [
 
                         if (folder === null) return $.Deferred().resolve({});
 
-                        var model = api.pool.getModel(folder);
+                        var model = folderAPI.pool.getModel(folder);
                         return $.Deferred().resolve(model.toJSON());
                     },
 
@@ -317,8 +318,8 @@ define('io.ox/core/desktop', [
 
                         var process = _.debounce(function (error) {
                             // refresh parent folder or if flat all
-                            var model = api.pool.getModel(self.folder.get());
-                            if (model) api.list(model.get('folder_id'), { cache: false });
+                            var model = folderAPI.pool.getModel(self.folder.get());
+                            if (model) folderAPI.list(model.get('folder_id'), { cache: false });
                             self.folder.setDefault();
                             notifications.yell(error);
                         }, 1000, true);
@@ -355,10 +356,10 @@ define('io.ox/core/desktop', [
                                 var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
                                 if (folder !== self.folder.get()) return;
                                 // don't show expected errors see Bug 56276
-                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && api.isBeingDeleted(folder)) return;
+                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && folderAPI.isBeingDeleted(folder)) return;
                                 if (!regex.test(error.code)) return;
                                 // special handling for no permission. if api.get fails, 'http-error' is triggered again
-                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return api.get(self.folder.get(), { cache: false });
+                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return folderAPI.get(self.folder.get(), { cache: false });
                                 process(error);
                             });
                         };
@@ -557,7 +558,7 @@ define('io.ox/core/desktop', [
                 }
                 deferred.then(
                     function success() {
-                        ox.ui.apps.add(self);
+                        apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
                         ox.trigger('app:start', self);
@@ -622,7 +623,7 @@ define('io.ox/core/desktop', [
                 }
                 if (self.dropZone && self.dropZone.remove) self.dropZone.remove();
                 // remove from list
-                ox.ui.apps.remove(self);
+                apps.remove(self);
                 // mark as not running
                 self.trigger('quit');
                 ox.trigger('app:stop', self);
@@ -843,19 +844,15 @@ define('io.ox/core/desktop', [
         },
 
         get: function (name) {
-            return ox.ui.apps.filter(function (app) {
-                return app.getName() === name;
-            });
+            return apps.where({ name: name });
         },
 
         getByCid: function (cid) {
-            return ox.ui.apps.chain().filter(function (app) {
-                return app.cid === cid;
-            }).first().value();
+            return apps.get(cid);
         },
 
         reuse: function (cid) {
-            var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
+            var app = apps.get(cid);
             if (app) {
                 app.launch();
                 return true;
@@ -886,7 +883,7 @@ define('io.ox/core/desktop', [
     window.onbeforeunload = function () {
 
         // find all applications with unsaved changes
-        var dirtyApps = ox.ui.apps.filter(function (app) {
+        var dirtyApps = apps.filter(function (app) {
             return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
         });
 
@@ -902,7 +899,7 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
-        return ox.ui.apps.add(new ox.ui.App(options));
+        return apps.add(new ox.ui.App(options));
     };
 
     ox.ui.screens = (function () {
@@ -1294,7 +1291,7 @@ define('io.ox/core/desktop', [
                             firstShow = false;
                         }
                         ox.ui.windowManager.trigger('window.show', self);
-                        ox.ui.apps.trigger('resume', self.app);
+                        apps.trigger('resume', self.app);
 
                     } else {
                         _.call(cont);
@@ -1799,10 +1796,10 @@ define('io.ox/core/desktop', [
         return def;
     };
 
-    ox.ui.apps.on('resume', function (app) {
+    apps.on('resume', function (app) {
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
     });
 
-    return {};
+    return ox.ui;
 });

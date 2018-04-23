@@ -187,7 +187,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/main/appcontrol.js',
                             'apps/io.ox/core/main/autologout.js',
                             'apps/io.ox/core/main/debug.js',
-                            'apps/io.ox/core/main/i18n.js',
+                            'apps/io.ox/core/main/apps.js',
                             'apps/io.ox/core/main/logout.js',
                             'apps/io.ox/core/main/offline.js',
                             'apps/io.ox/core/main/refresh.js',

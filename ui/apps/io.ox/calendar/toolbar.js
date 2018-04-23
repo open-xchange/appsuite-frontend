@@ -49,7 +49,7 @@ define('io.ox/calendar/toolbar', [
         'schedule': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Scheduling'),
+            label: gt.pgettext('app', 'Scheduling'),
             title: gt('Find a free time'),
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
