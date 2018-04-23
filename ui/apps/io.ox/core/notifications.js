@@ -164,7 +164,6 @@ define('io.ox/core/notifications', [
         },
 
         onChangeCount: function () {
-            console.log('on change count');
             // only show badge when count is bigger than 0
             this.$el.toggle(this.model.get('count') !== 0);
             // autoclose dropdown when count is set to 0
