@@ -21,7 +21,7 @@ define('io.ox/tasks/util', [
     // global handler for cross-app links
     $(document).on('click', '.ox-internal-mail-link', function (e) {
         e.preventDefault();
-        var cid = $(this).attr('data-cid');
+        var cid = decodeURIComponent($(this).attr('data-cid').replace(/:/g, '.'));
         ox.launch('io.ox/mail/detail/main', { cid: cid });
     });
 
@@ -192,12 +192,9 @@ define('io.ox/tasks/util', [
                 return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
             },
 
-            // looks in the task note for 'mail:' + _.cid(maildata), removes that from the note and returns the mail link as a button that opens the mailapp
-            // currently only looks for one link at the end of the note. Used by mail reminders.
+            // looks in the task note for 'mail:' + _.ecid(maildata), removes that from the note and returns the mail link as a button that opens the mailapp
             checkMailLinks: function (note) {
-
-                // find the link (note using .+ and not \w+ as folders might contain spaces)
-                var links = note.match(/mail:\/\/.+?\.\w+/g),
+                var links = note.match(/mail:\/\/\S*/g),
                     link;
 
                 if (links && links[0] && capabilities.has('webmail')) {

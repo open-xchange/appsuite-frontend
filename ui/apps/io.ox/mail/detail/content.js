@@ -209,7 +209,12 @@ define('io.ox/mail/detail/content', [
                     }
                 } else if (link.attr('href')) {
                     // other links
-                    link.attr('rel', 'noopener');
+                    link.attr({ 'rel': 'noopener', 'target': '_blank' });
+                    link.attr('href', encodeURI(decodeURI(link.attr('href'))));
+                } else if (!href) {
+                    // missing or broken href attribute
+                    // remove href as it points to nowhere
+                    link.removeAttr('href');
                 }
             });
         },
@@ -721,30 +726,6 @@ define('io.ox/mail/detail/content', [
             return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
         },
 
-        // convert pseudo-plain-text to real plain text
-        adjustPlainText: (function () {
-
-            var div;
-
-            return function (str) {
-
-                return String(str || '')
-                    // convert <br> into newline
-                    .replace(/<br\s?\/?>/gi, '\n')
-                    // simply remove tags
-                    .replace(/<[a-z\/].*?>/gi, '')
-                    // replace entities
-                    .replace(/&.*?;/g, decodeEntity);
-            };
-
-            function decodeEntity(str) {
-                div = div || document.createElement('div');
-                div.innerHTML = str;
-                return div.textContent;
-            }
-
-        }()),
-
         beautifyPlainText: function (str) {
             var baton = ext.Baton({ data: str });
             ext.point('io.ox/mail/detail/beautify').invoke('process', this, baton);
@@ -752,8 +733,7 @@ define('io.ox/mail/detail/content', [
         },
 
         transformForHTMLEditor: function (str) {
-            var plain = this.adjustPlainText(str);
-            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+            return this.text2html(str, { blockquotes: true, links: true, lists: true, rulers: true });
         },
 
         // convert plain text to html

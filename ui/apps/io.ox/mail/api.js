@@ -1049,7 +1049,8 @@ define('io.ox/mail/api', [
                 csid: csid,
                 embedded: obj.embedded,
                 max_size: obj.max_size,
-                decrypt: (obj.security && obj.security.decrypted)
+                decrypt: (obj.security && obj.security.decrypted),
+                process_plain_text: false
             }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);
@@ -1110,7 +1111,8 @@ define('io.ox/mail/api', [
                 action: 'get',
                 id: obj.id,
                 folder: obj.folder || obj.folder_id,
-                view: 'html'
+                view: 'html',
+                decrypt: obj.security && obj.security.decrypted
             }, false);
         } else if ('parent' in obj) {
             // nested message!?
@@ -1119,7 +1121,8 @@ define('io.ox/mail/api', [
                 action: 'get',
                 id: obj.parent.id,
                 folder: obj.parent.folder || obj.parent.folder_id,
-                view: 'html'
+                view: 'html',
+                decrypt: obj.security && obj.security.decrypted
             }, false)
             .pipe(function (data) {
                 return _.chain(data.nested_msgs)
