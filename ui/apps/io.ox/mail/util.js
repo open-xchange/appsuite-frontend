@@ -601,7 +601,7 @@ define('io.ox/mail/util', [
 
         getAuthenticityMessage: function (status, email) {
             switch (status) {
-                case 'fail': return gt('This might be a phishing email because we could not verify that it is really from %1$s.', email);
+                case 'fail': return gt('This is a suspicious email because we could not verify that it is really from %1$s.', email);
                 case 'neutral': return gt('We could not verify that this email is from %1$s.', email);
                 case 'pass':
                 case 'trusted': return gt('We could verify that this email is from %1$s.', email);
