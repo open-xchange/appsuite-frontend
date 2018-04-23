@@ -872,6 +872,13 @@ define('io.ox/core/desktop', [
             return currentWindow !== null ? currentWindow.app : null;
         },
 
+        getCurrentFloatingApp: function () {
+            return _.chain(ox.ui.apps.pluck('window')).compact()
+                .map(function (win) {
+                    return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
+                }).compact().first().value();
+        },
+
         getCurrentWindow: function () {
             return currentWindow;
         }

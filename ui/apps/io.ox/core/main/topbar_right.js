@@ -30,7 +30,7 @@ define('io.ox/core/main/topbar_right', [
 ], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
 
     function getHelp() {
-        var currentApp = ox.ui.App.getCurrentApp();
+        var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
 
         if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
 
