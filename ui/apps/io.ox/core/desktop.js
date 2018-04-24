@@ -390,7 +390,7 @@ define('io.ox/core/desktop', [
             win.app = this;
             if (this.options.floating) {
                 var model = this.options.floatingWindowModel || new FloatingWindow.Model(
-                    _.extend(_(this.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'), { win: win })
+                    _.extend(_(this.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title', 'name'), { win: win })
                 );
                 win.floating = new FloatingWindow.View({ el: win.nodes.outer, model: model }).render();
 
@@ -802,7 +802,7 @@ define('io.ox/core/desktop', [
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && app.options.floating) {
-                                var model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon }),
+                                var model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name }),
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                 FloatingWindow.collection.add(model);
                                 win.listenToOnce(model, 'lazyload', function () {

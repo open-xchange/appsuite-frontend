@@ -14,8 +14,9 @@
 define('io.ox/backbone/views/window', [
     'io.ox/backbone/views/disposable',
     'io.ox/core/a11y',
-    'gettext!io.ox/core'
-], function (DisposableView, a11y, gt) {
+    'gettext!io.ox/core',
+    'settings!io.ox/core'
+], function (DisposableView, a11y, gt, settings) {
 
     'use strict';
 
@@ -35,6 +36,14 @@ define('io.ox/backbone/views/window', [
             title: '',
             showInTaskbar: true,
             size: 'width-md' // -xs, -sm, -md, -lg
+        },
+
+        initialize: function (options) {
+            options = options || {};
+            // if not given via options try to get the last used display mode for the app
+            if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && !options.mode && options.name && settings.get('features/floatingWindows/preferredMode/apps', {})[options.name]) {
+                this.set('mode', settings.get('features/floatingWindows/preferredMode/apps', {})[options.name]);
+            }
         }
     });
 
@@ -57,7 +66,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size')
+                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode')
                 );
             }
 
@@ -206,6 +215,14 @@ define('io.ox/backbone/views/window', [
 
             this.model.set({ 'initialWidth': this.el.offsetWidth, 'initialHeight': this.el.offsetHeight });
             $(window).trigger('changefloatingstyle');
+
+            // save value as new preferrence for this app
+            if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
+                var preferences = settings.get('features/floatingWindows/preferredMode/apps', {});
+                preferences[this.model.get('name')] = this.model.get('mode');
+                settings.set('features/floatingWindows/preferredMode/apps', preferences).save();
+            }
+
             _.defer(function () { $(window).trigger('resize'); });
         },
 
