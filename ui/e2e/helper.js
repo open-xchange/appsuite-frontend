@@ -92,6 +92,19 @@ class MyHelper extends Helper {
         });
     }
 
+    haveMailFilterRule(rule, options) {
+        return util.getSessionForUser(options).then(data => {
+            return data.httpClient.put('/appsuite/api/mailfilter/v2', rule, {
+                params: {
+                    action: 'new',
+                    session: data.session
+                }
+            });
+        }).then(response => {
+            return response.data;
+        });
+    }
+
 }
 
 module.exports = MyHelper;

@@ -279,8 +279,22 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.logout();
 });
 
-Scenario('adds and removes Mail Filter Rules with modified config', function (I) {
-    I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' });
+Scenario('adds and removes Mail Filter Rules with modified config', function (I, users) {
+    let [user] = users;
+    user.hasConfig('com.openexchange.mail.filter.blacklist.actions', 'keep');
+    user.hasConfig('com.openexchange.mail.filter.blacklist.tests.from.comparisons', 'contains');
+    user.hasConfig('com.openexchange.mail.filter.blacklist.tests.header.comparisons', 'matches');
+
+    I.haveMailFilterRule({ rulename: 'rule with keep', active: true, flags: [], test: { id: 'from', comparison: 'contains', values: ['test'] }, actioncmds: [{ id: 'keep' }] });
+    I.haveMailFilterRule({ rulename: 'rule with discard', active: true, flags: [], test: { id: 'from', comparison: 'contains', values: ['test'] }, actioncmds: [{ id: 'discard' }, { id: 'stop' }] });
+    I.haveMailFilterRule({
+        rulename: 'New rule', active: true, flags: [], test: { id: 'allof', tests: [
+            { id: 'from', comparison: 'contains', values: ['test value'] },
+            { id: 'header', comparison: 'matches', headers: ['test name'], values: ['test value'] }
+        ] }, actioncmds: [{ id: 'discard' }]
+    });
+
+    I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
@@ -295,14 +309,14 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I)
 
     // two rules with all components should be pressent
 
-    I.see('This rule contains unsupported properties.', '.io-ox-mailfilter-settings li[data-id="25"] .warning-message');
-    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="edit"]');
-    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="toggle"]');
-    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="toggle-process-subsequent"]');
-    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="delete"]');
+    I.see('This rule contains unsupported properties.', '.io-ox-mailfilter-settings li[data-id="0"] .warning-message');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="1"] [data-action="edit"]');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="1"] [data-action="toggle"]');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="1"] [data-action="toggle-process-subsequent"]');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="1"] [data-action="delete"]');
 
     // open the second rule
-    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="26"]');
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="1"]');
     I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
     I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with discard');
 
@@ -371,8 +385,8 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I)
     I.click('Cancel');
 
     // open the second rule
-    I.waitForVisible('.io-ox-mailfilter-settings li[data-id="27"] [data-action="edit"]');
-    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="27"]');
+    I.waitForVisible('.io-ox-mailfilter-settings li[data-id="2"] [data-action="edit"]');
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="2"]');
     I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
     I.seeInField('rulename', 'New rule');
 
