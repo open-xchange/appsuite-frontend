@@ -15,7 +15,7 @@ define('io.ox/core/main/apps', [
             refreshable: true,
             searchable: true,
             settings: true,
-            svg: icons['io.ox/mail']
+            icon: icons['io.ox/mail']
         });
         ui.createApp({
             name: 'io.ox/mail/datail',
@@ -29,7 +29,7 @@ define('io.ox/core/main/apps', [
             title: gt.pgettext('app', 'Calendar'),
             searchable: true,
             refreshable: true,
-            svg: icons['io.ox/calendar']
+            icon: icons['io.ox/calendar']
         });
         ui.createApp({
             name: 'io.ox/calendar/detail',
@@ -48,7 +48,7 @@ define('io.ox/core/main/apps', [
             refreshable: true,
             searchable: true,
             settings: true,
-            svg: icons['io.ox/contacts']
+            icon: icons['io.ox/contacts']
         });
         ui.createApp({
             name: 'io.ox/contacts/edit',
@@ -66,7 +66,7 @@ define('io.ox/core/main/apps', [
             title: gt.pgettext('app', 'Portal'),
             refreshable: true,
             settings: true,
-            svg: icons['io.ox/portal']
+            icon: icons['io.ox/portal']
         });
     }
     if (capabilities.has('infostore')) {
@@ -77,7 +77,7 @@ define('io.ox/core/main/apps', [
             refreshable: true,
             searchable: true,
             settings: capabilities.has('!guest'),
-            svg: icons['io.ox/files']
+            icon: icons['io.ox/files']
         });
         ui.createApp({
             name: 'io.ox/files/detail',
@@ -92,7 +92,7 @@ define('io.ox/core/main/apps', [
             refreshable: true,
             searchable: true,
             settings: capabilities.has('delegate_tasks'),
-            svg: icons['io.ox/tasks']
+            icon: icons['io.ox/tasks']
         });
         ui.createApp({
             name: 'io.ox/tasks/edit',

@@ -142,6 +142,34 @@ define([
                 apps.reset(oldApps, { silent: true });
                 stub.restore();
             });
+
+            it('should render app icons that look like html', function () {
+                const model = new ox.ui.App({
+                    id: 'io.ox/test',
+                    name: 'test',
+                    title: 'Testanwendung',
+                    icon: '<img src="test.png" />'
+                });
+                const view = new appcontrol.LauncherView({
+                    model
+                });
+                const el = view.render().$el;
+                expect(el.find('.icon img').attr('src')).to.equal('test.png');
+            });
+
+            it('should render fallback icon', function () {
+                const model = new ox.ui.App({
+                    id: 'io.ox/test',
+                    name: 'test',
+                    title: 'Testanwendung',
+                    icon: 'something broken that we don\'t want to show'
+                });
+                const view = new appcontrol.LauncherView({
+                    model
+                });
+                const el = view.render().$el;
+                expect(el.find('.icon i.fa-question').length, 'number of font-awesome questionmark icons').to.equal(1);
+            });
         });
 
         describe('Models', function () {

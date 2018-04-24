@@ -87,29 +87,31 @@ define('io.ox/core/main/appcontrol', [
             this.closer = close;
         },
         drawDate: function () {
-            this.$svg.find('tspan:first').text(moment().format('D'));
+            this.$icon.find('tspan:first').text(moment().format('D'));
         },
         drawIcon: function () {
-            var svg = this.model.get('svg'),
+            var icon = this.model.get('icon'),
                 id = this.model.get('id'),
                 title = this.model.get('title'),
                 firstLetter = _.isString(title) ? title[0] : '?';
 
+            // expect icon to look like HTML
+            icon = /^<.*>$/.test(icon) ? icon : '';
             // check for compose apps
             if (this.model.get('closable') && _.device('smartphone')) {
-                svg = ox.ui.appIcons[this.model.options.name];
+                icon = ox.ui.appIcons[this.model.options.name];
             }
 
-            this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
+            this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
             // reverted for 7.10
-            // if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
+            // if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
 
             if (id === 'io.ox/calendar' || this.model.options.name.match(/calendar/)) this.drawDate();
 
             var cell = $('<div class="lcell" aria-hidden="true">').append(
                 this.badge = $('<div class="indicator">').toggle(this.model.get('hasBadge')),
-                $('<div class="svgwrap">').append(this.$svg),
+                $('<div class="icon">').append(this.$icon),
                 $('<div class="title">').text(this.model.get('title'))
             );
             // checks for upsell and append an icon if needed
