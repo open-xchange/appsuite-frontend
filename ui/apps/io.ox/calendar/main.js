@@ -923,7 +923,6 @@ define('io.ox/calendar/main', [
                     win.show();
                 })
                 .done(function () {
-
                     // app perspective
                     var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
 
@@ -933,8 +932,12 @@ define('io.ox/calendar/main', [
                         // corrupt data fix
                         lastPerspective = 'week:workweek';
                     }
-                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                    app.props.set('layout', lastPerspective);
+
+                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true })
+                        .then(undefined, function applyFallback() {
+                            lastPerspective = 'week:workweek';
+                            return ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
+                        }).done(function () { app.props.set('layout', lastPerspective); });
                 });
         }
     });
