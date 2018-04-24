@@ -1613,7 +1613,7 @@ define('io.ox/mail/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.sect.email.gui';
+                return 'ox.appsuite.user.sect.email.gui.html';
             };
         },
 
