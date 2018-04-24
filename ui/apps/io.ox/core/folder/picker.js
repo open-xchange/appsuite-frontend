@@ -36,6 +36,7 @@ define('io.ox/core/folder/picker', [
     //     flat         {bool}      use flat tree (e.g. for contacts)
     //     folder       {string}    Current folder (for preselection)
     //     height       {number}    dialog height in px
+    //     help         {string}    contextual help reference
     //     indent       {bool}      indent first level (default is true; also needed for flat trees)
     //     last         {bool}      Prefer last folder used (needs settings and persistent)
     //     list         {array}     list of items, use first to determine first folder
@@ -126,7 +127,8 @@ define('io.ox/core/folder/picker', [
             async: o.async,
             width: o.width,
             title: o.title,
-            point: 'io.ox/core/folder/picker'
+            point: 'io.ox/core/folder/picker',
+            help: o.help
         })
             .build(function () {
                 this.$el.addClass('folder-picker-dialog ' + o.addClass);

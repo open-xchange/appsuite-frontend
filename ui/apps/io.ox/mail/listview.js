@@ -83,10 +83,9 @@ define('io.ox/mail/listview', [
         {
             id: 'col1',
             index: 100,
-            draw: function () {
+            draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
-                // disabled for 7.10.0
-                //extensions.envelope.call(column, baton);
+                extensions.envelope.call(column, baton);
                 this.append(column);
             }
         },
@@ -356,8 +355,7 @@ define('io.ox/mail/listview', [
             draw: function (baton) {
                 extensions.subject.call(this, baton);
                 var node = this.find('.flags');
-                // disabled for 7.10.0
-                //extensions.unread.call(node, baton);
+                extensions.unread.call(node, baton);
                 extensions.answered.call(node, baton);
                 extensions.forwarded.call(node, baton);
             }

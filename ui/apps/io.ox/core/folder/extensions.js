@@ -28,7 +28,8 @@ define('io.ox/core/folder/extensions', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/core/http',
-    'io.ox/core/folder/favorites'
+    'io.ox/core/folder/favorites',
+    'io.ox/files/favorites'
 ], function (TreeNodeView, api, account, ext, capabilities, upsell, contactUtil, userAPI, mailAPI, gt, UpsellView, DropdownView, blacklist, settings, mailSettings, http) {
 
     'use strict';

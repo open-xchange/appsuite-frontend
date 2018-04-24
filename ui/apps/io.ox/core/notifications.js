@@ -30,7 +30,8 @@ define('io.ox/core/notifications', [
         defaults: {
             subviews: {},
             sidepopup: null,
-            markedForRedraw: {}
+            markedForRedraw: {},
+            count: 0
         }
     });
 
@@ -38,6 +39,7 @@ define('io.ox/core/notifications', [
         tagName: 'a',
         className: 'dropdown-toggle',
         initialize: function () {
+            var self = this;
 
             this.$el.attr('role', 'menu');
             this.$el.attr({
@@ -61,9 +63,16 @@ define('io.ox/core/notifications', [
                 dontProcessOnMobile: true
             });
 
+            // focus applauncher when closed and counter is 0 (notifcation icon is not there when counter is 0)
+            this.dropdown.$el.on('hidden.bs.dropdown', function () {
+                if (self.model.get('count') === 0) $('#io-ox-launcher .launcher-btn').focus();
+            });
+
             this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">');
 
             this.delayedRender = _.debounce(this.render, 100);
+            this.model.on('change:count', _(this.onChangeCount).bind(this));
+            this.onChangeCount();
         },
 
         keepOpen: function (e) {
@@ -86,6 +95,8 @@ define('io.ox/core/notifications', [
                         // sometimes the first parameter is a model and not a collection (add event)
                         collection = collection.collection;
                     }
+
+                    self.model.set('count', _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0));
                     self.model.get('markedForRedraw')[collection.subviewId] = true;
                     self.delayedRender();
                 });
@@ -94,6 +105,7 @@ define('io.ox/core/notifications', [
                     var count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
                         cappedCount = Math.min(count, 99),
                         prevCount = parseInt(self.$el.find('.number').text(), 10);
+                    self.model.set('count', count);
 
                     // no change? nothing to do
                     if (cappedCount === prevCount) return;
@@ -117,13 +129,12 @@ define('io.ox/core/notifications', [
         render: function () {
             var self = this,
                 subviews = this.model.get('subviews'),
-                count = _(subviews).reduce(function (sum, view) { return sum + view.collection.length; }, 0),
-                cappedCount = Math.min(count, 99),
+                cappedCount = Math.min(this.model.get('count'), 99),
                 markedForRedraw = this.model.get('markedForRedraw');
 
             //#. %1$d number of notifications in notification area
             //#, c-format
-            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
+            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', this.model.get('count')), this.model.get('count'))).find('.number').text(cappedCount + (this.model.get('count') > 100 ? '+' : ''));
             this.model.set('markedForRedraw', {});
 
             self.listNode.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();
@@ -134,7 +145,13 @@ define('io.ox/core/notifications', [
             });
 
             if (this.listNode.children('.notifications').length === 0) {
-                this.listNode.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
+                this.listNode.prepend(
+                    $('<div class=notification-area-header>').append(
+                        $('<h1 class="section-title no-news-message">').text(gt('No notifications')),
+                        $('<button type="button" class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area'))
+                            .on('click', _(self.dropdown.close).bind(self.dropdown))
+                    )
+                );
             } else {
                 //draw headline
                 this.listNode.prepend(
@@ -149,9 +166,14 @@ define('io.ox/core/notifications', [
             }
             // add show desktopNotifications info
             this.drawNotificationInfo();
-            // only show when count is bigger than 0
-            this.$el.toggle(count !== 0);
             return this;
+        },
+
+        onChangeCount: function () {
+            // only show badge when count is bigger than 0
+            this.$el.toggle(this.model.get('count') !== 0);
+            // autoclose dropdown when count is set to 0
+            if (this.model.get('count') === 0) this.dropdown.close();
         },
 
         drawNotificationInfo: function () {

@@ -22,9 +22,10 @@ define('io.ox/files/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
     'settings!io.ox/files',
+    'settings!io.ox/core',
     'gettext!io.ox/files',
     'io.ox/core/yell'
-], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, links, capabilities, settings, gt, yell) {
+], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, links, capabilities, settings, coreSettings, gt, yell) {
 
     'use strict';
 
@@ -1049,38 +1050,34 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (isTrash(e.baton)) return false;
             if (capabilities.has('guest && anonymous')) return false;
-            var favorites = false;
-            if (!Array.isArray(e.context)) {
-                e.context = [e.context];
-            }
-            if (e.baton && e.baton.app && e.baton.app.listView) {
-                favorites = e.baton.app.listView.favorites || [];
-                if (!e.context.length) {
-                    var folderModel = folderAPI.pool.getModel(e.baton.app.listView.model.attributes.folder);
-                    e.context = [folderModel];
+
+            var favorites = coreSettings.get('favorites/infostore', []);
+            var favoriteFiles = coreSettings.get('favoriteFiles/infostore', []);
+
+            var allFavorites = favorites;
+            _.each(favoriteFiles, function (file) {
+                allFavorites.push(file.id);
+            });
+
+            if (Array.isArray(allFavorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
                 }
-            } else if (e.baton) {
-                favorites = e.baton.favorites || [];
-            }
-            if (e.context.length === 1 && _.first(e.context).attributes && _.first(e.context).attributes.id === 'virtual/favorites/infostore') return false;
-            if (Array.isArray(favorites)) {
-                var result = true;
-                _.each(e.context, function (element) {
-                    if (folderAPI.is('trash', element)) {
-                        result = false;
-                    }
-                    if (result) {
-                        var isFavorite = _.find(favorites, function (elem) {
-                            if (elem.id === element.id) {
-                                return true;
-                            }
-                        });
-                        if (isFavorite) {
-                            result = false;
+
+                if (!e.context.length) {
+                    e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
+                }
+
+                // returns false if one file/folder of the selection is in favorites
+                var result =  _.some(e.context, function (element) {
+                    var isFavorite = _.find(favorites, function (elemId) {
+                        if (elemId === element.id) {
+                            return true;
                         }
-                    }
+                    });
+                    return folderAPI.is('trash', element) || isFavorite;
                 });
-                return result;
+                return !result;
             }
             return true;
         },
@@ -1101,33 +1098,31 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/favorites/remove', {
         requires: function (e) {
             if (capabilities.has('guest && anonymous')) return false;
-            var favorites = false;
-            if (!Array.isArray(e.context)) {
-                e.context = [e.context];
-            }
-            if (e.baton && e.baton.app && e.baton.app.listView) {
-                favorites = e.baton.app.listView.favorites || [];
-                if (!e.context.length) {
-                    var folderModel = folderAPI.pool.getModel(e.baton.app.listView.model.attributes.folder);
-                    e.context = [folderModel];
+            var favorites = coreSettings.get('favorites/infostore', []);
+            var favoriteFiles = coreSettings.get('favoriteFiles/infostore', []);
+
+            var allFavorites = favorites;
+            _.each(favoriteFiles, function (file) {
+                allFavorites.push(file.id);
+            });
+
+            if (Array.isArray(allFavorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
                 }
-            } else if (e.baton) {
-                favorites = e.baton.favorites || [];
-            }
-            if (e.context.length === 1 && _.first(e.context).attributes && _.first(e.context).attributes.id === 'virtual/favorites/infostore') return false;
-            if (Array.isArray(favorites)) {
-                var result = false;
-                _.each(e.context, function (element) {
-                    if (!result) {
-                        var isFavorite = _.find(favorites, function (elem) {
-                            if (elem.id === element.id) {
-                                return true;
-                            }
-                        });
-                        if (isFavorite) {
-                            result = true;
+
+                if (!e.context.length) {
+                    e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
+                }
+
+                // returns true if one file/folder of the selection is in favorites
+                var result =  _.some(e.context, function (element) {
+                    var isFavorite = _.find(favorites, function (elemId) {
+                        if (elemId === element.id) {
+                            return true;
                         }
-                    }
+                    });
+                    return isFavorite;
                 });
                 return result;
             }

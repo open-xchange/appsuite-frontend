@@ -69,8 +69,10 @@ define('io.ox/files/listview', [
             view.$el.addClass('file-list-view');
 
             view.favorites = settings.get('favorites/infostore', []);
+            view.favoriteFiles = settings.get('favoriteFiles/infostore', []);
             settings.on('change:favorites/infostore', function () {
                 view.favorites = settings.get('favorites/infostore', []);
+                view.favoriteFiles = settings.get('favoriteFiles/infostore', []);
             });
         },
 

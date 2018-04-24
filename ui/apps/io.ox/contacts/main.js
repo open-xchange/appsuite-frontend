@@ -858,7 +858,7 @@ define('io.ox/contacts/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
+                return 'ox.appsuite.user.sect.contacts.gui.html';
             };
         },
 

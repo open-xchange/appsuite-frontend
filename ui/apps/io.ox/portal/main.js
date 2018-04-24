@@ -676,7 +676,7 @@ define('io.ox/portal/main', [
     ox.on('socket:mail:new', app.mailWidgetRefresh);
 
     app.getContextualHelp = function () {
-        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.sect.portal.gui';
+        return 'ox.appsuite.user.sect.portal.gui.html';
     };
 
     // launcher

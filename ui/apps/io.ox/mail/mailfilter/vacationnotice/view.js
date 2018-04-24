@@ -56,6 +56,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             model: data.model,
             point: POINT,
             title: gt('Vacation notice'),
+            help: 'ox.appsuite.user.sect.email.send.vacationnotice.html',
             width: 640
         })
         .inject({

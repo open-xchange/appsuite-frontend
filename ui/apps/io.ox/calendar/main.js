@@ -598,6 +598,7 @@ define('io.ox/calendar/main', [
                 var folder = folderAPI.pool.getModel(event.folder);
                 // do not select public folder if allPublic is selected
                 if (app.folders.isSelected('cal://0/allPublic') && folder && folder.is('public')) return;
+                if (app.folders.isSingleSelection()) return;
                 app.folders.add(event.folder);
                 var model = folderAPI.pool.getModel(event.folder);
                 model.trigger('change', model);
@@ -645,7 +646,7 @@ define('io.ox/calendar/main', [
                 find.on({
                     'find:query': function () {
                         // switch to supported perspective
-                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                        lastPerspective = lastPerspective || app.props.get('layout') || _.sanitize.option(_.url.hash('perspective'));
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
                             // fluent option: do not write to user settings
                             app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
@@ -655,7 +656,7 @@ define('io.ox/calendar/main', [
                     },
                     'find:cancel': function () {
                         // switch back to perspective used before
-                        var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                        var currentPerspective = _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
                         if (lastPerspective && lastPerspective !== currentPerspective) {
                             app.props.set('layout', lastPerspective);
                         }
@@ -715,7 +716,7 @@ define('io.ox/calendar/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
+                return 'ox.appsuite.user.sect.calendar.gui.html';
             };
         },
 
@@ -923,9 +924,8 @@ define('io.ox/calendar/main', [
                     win.show();
                 })
                 .done(function () {
-
                     // app perspective
-                    var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+                    var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
 
                     if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
                         lastPerspective = 'week:day';
@@ -933,8 +933,12 @@ define('io.ox/calendar/main', [
                         // corrupt data fix
                         lastPerspective = 'week:workweek';
                     }
-                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                    app.props.set('layout', lastPerspective);
+
+                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true })
+                        .then(undefined, function applyFallback() {
+                            lastPerspective = 'week:workweek';
+                            return ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
+                        }).done(function () { app.props.set('layout', lastPerspective); });
                 });
         }
     });

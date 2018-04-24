@@ -667,7 +667,7 @@ define('io.ox/tasks/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.sect.tasks.gui';
+                return 'ox.appsuite.user.sect.tasks.gui.html';
             };
         },
 

@@ -467,6 +467,9 @@ define('io.ox/mail/detail/view', [
                 baton.view.attachmentView.renderInlineLinks();
             } else {
                 baton.view.attachmentView = extensions.attachmentList.call(this, baton);
+                baton.view.listenTo(baton.view.attachmentView, 'dispose', function () {
+                    delete baton.view.attachmentView;
+                });
             }
         }
     });

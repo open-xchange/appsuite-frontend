@@ -124,7 +124,10 @@ define('io.ox/tours/whats-new', [
             baton.tour.step()
                 .title(gt('What\'s new'))
                 //#. this is followed by a link to the help page
-                .content([gt('To learn more about the new and improved features you can visit '), $('<a>').text(settings.get('whatsNew/helpUrl', 'https://www.open-xchange.com/whats-new-7-10')).attr('href', settings.get('whatsNew/helpUrl', 'https://www.open-xchange.com/whats-new-7-10'))])
+                .content([
+                    gt('To learn more about the new and improved features you can visit '),
+                    $('<a target="_blank" rel="noopener">').text(settings.get('whatsNew/helpUrl', 'https://www.open-xchange.com/whats-new-7-10')).attr('href', settings.get('whatsNew/helpUrl', 'https://www.open-xchange.com/whats-new-7-10'))
+                ])
             .end();
         }
     });

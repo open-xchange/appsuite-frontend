@@ -49,6 +49,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             model: data.model,
             point: POINT,
             title: gt('Auto forward'),
+            help: 'ox.appsuite.user.sect.email.send.autoforward.html',
             width: 640
         })
         .inject({

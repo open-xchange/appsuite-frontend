@@ -217,7 +217,7 @@ define('io.ox/files/share/wizard', [
             var guid, elmCheckbox;
             this.append(
                 $('<div class="form-group">').append(
-                    $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
+                    $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Share with subfolders')).prepend(
                         new miniViews.CheckboxView({ id: guid, name: 'includeSubfolders', model: baton.model }).render().$el
                         .on('click', function (/* e */) {
                             baton.model.set('includeSubfolders', elmCheckbox.checked);

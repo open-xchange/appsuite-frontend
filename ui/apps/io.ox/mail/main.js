@@ -592,7 +592,9 @@ define('io.ox/mail/main', [
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
-                    app.listView.collection.expire();
+                    // Bug 58207: manual gc, delay to avoid visual distractions for the user
+                    var collection = app.listView.collection;
+                    setTimeout(collection.reset.bind(collection), 0);
                 }
                 app.listView.model.set('thread', !!value);
             });
@@ -1611,7 +1613,7 @@ define('io.ox/mail/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.sect.email.gui';
+                return 'ox.appsuite.user.sect.email.gui.html';
             };
         },
 
@@ -2040,7 +2042,7 @@ define('io.ox/mail/main', [
             find: capabilities.has('search')
         });
 
-        if (_.url.hash().mailto) ox.registry.call('mail-compose', 'compose');
+        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'compose');
 
         app.setWindow(win);
         app.settings = settings;
