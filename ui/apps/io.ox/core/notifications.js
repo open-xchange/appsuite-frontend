@@ -39,6 +39,7 @@ define('io.ox/core/notifications', [
         tagName: 'a',
         className: 'dropdown-toggle',
         initialize: function () {
+            var self = this;
 
             this.$el.attr('role', 'menu');
             this.$el.attr({
@@ -60,6 +61,11 @@ define('io.ox/core/notifications', [
                 $toggle: this.$el,
                 smart: false,
                 dontProcessOnMobile: true
+            });
+
+            // focus applauncher when closed and counter is 0 (notifcation icon is not there when counter is 0)
+            this.dropdown.$el.on('hidden.bs.dropdown', function () {
+                if (self.model.get('count') === 0) $('#io-ox-launcher .launcher-btn').focus();
             });
 
             this.sidepopupNode = $('<div id="io-ox-notifications-sidepopup">');
