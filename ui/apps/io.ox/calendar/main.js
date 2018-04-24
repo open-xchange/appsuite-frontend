@@ -598,6 +598,7 @@ define('io.ox/calendar/main', [
                 var folder = folderAPI.pool.getModel(event.folder);
                 // do not select public folder if allPublic is selected
                 if (app.folders.isSelected('cal://0/allPublic') && folder && folder.is('public')) return;
+                if (app.folders.isSingleSelection()) return;
                 app.folders.add(event.folder);
                 var model = folderAPI.pool.getModel(event.folder);
                 model.trigger('change', model);
