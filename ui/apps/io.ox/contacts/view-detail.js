@@ -25,8 +25,9 @@ define('io.ox/contacts/view-detail',
      'io.ox/core/capabilities',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
+     'static/3rd.party/purify.min.js',
      'less!io.ox/contacts/style'
-    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, capabilities, gt, settings) {
+    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, capabilities, gt, settings, DOMPurify) {
 
     'use strict';
 
@@ -472,7 +473,8 @@ define('io.ox/contacts/view-detail',
                             var url = $.trim(baton.data.url);
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
-                            return $('<a target="_blank" rel="noopener">').attr('href', url).text(url);
+                            var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
                         })
                     )
                     .attr('data-block', 'personal')
