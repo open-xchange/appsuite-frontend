@@ -70,6 +70,15 @@ module.exports = function (grunt) {
                         dest: 'build/static/3rd.party/'
                     },
                     {
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'dompurify/dist/purify.min.js'
+                        ],
+                        cwd: 'bower_components',
+                        dest: 'build/static/3rd.party/'
+                    },
+                    {
                         // static bower_components
                         expand: true,
                         flatten: true,
