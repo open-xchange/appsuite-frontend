@@ -179,6 +179,12 @@ define('io.ox/core/import/import', [
         }
     });
 
+    var references = {
+        'calendar': 'ox.appsuite.user.sect.calendar.folder.import.html',
+        'contacts': 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
+        'tasks':    'ox.appsuite.user.sect.datainterchange.import.ical.html'
+    };
+
     return {
 
         show: function (module, id) {
@@ -186,7 +192,7 @@ define('io.ox/core/import/import', [
             new ModalDialog({
                 focus: module === 'calendar' ? 'input[name="file"]' : 'select[name="format"]',
                 async: true,
-                help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
+                help: references[module],
                 point: 'io.ox/core/import',
                 title: gt('Import from file'),
                 model: new Backbone.Model({

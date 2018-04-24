@@ -36,6 +36,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             width: 600,
             center: false,
             maximize: true,
+            help: 'ox.appsuite.user.sect.calendar.folder.subscribe.html',
             async: true,
             point: 'io.ox/core/folder/add-schedjoules-calendar',
             title: gt('Add calendar'),

@@ -121,7 +121,7 @@ define('io.ox/core/sub/subscriptions', [
                 var self = this,
                     popup = new dialogs.ModalDialog({
                         async: true,
-                        help: 'ox.appsuite.user.sect.dataorganisation.subscribe.data.html',
+                        help: 'ox.appsuite.user.sect.contacts.folder.subscribe.html',
                         // 130 * 4 + 8 * 3 + 30, Button.width * ButtonsPerRow + Button.rightMargin * (ButtonsPerRow - 1) + leftAndRightPaddingOfDialog
                         width: 574
                     }),
