@@ -33,10 +33,10 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
             raw: true,
             disp: 'inline'
         }],
-        from: [[user.displayname, user.primaryEmail]],
+        from: [[user.get('displayname'), user.get('primaryEmail')]],
         sendtype: 0,
         subject: 'Test subject <img src="x" onerror="alert(666);">',
-        to: [[user.displayname, user.primaryEmail]]
+        to: [[user.get('displayname'), user.get('primaryEmail')]]
     });
 
     I.login('app=io.ox/mail');

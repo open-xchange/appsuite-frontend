@@ -59,7 +59,7 @@ Scenario('Compose plain text mail', function (I, users) {
     I.waitForInvisible('.io-ox-mail-compose .editable-toolbar');
 
     // 3) Set a recipient, add a subject and mail text
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.primaryEmail);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'Test subject');
     I.fillField({ css: 'textarea.plain-text' }, 'Test text');
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');

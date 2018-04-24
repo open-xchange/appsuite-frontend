@@ -30,8 +30,9 @@ let util = module.exports = {
         }
         return function (options) {
             options = options || {};
-            const user = options.user || require('./users')[0];
+            let user = options.user || require('./users')[0];
 
+            if (user.toJSON) user = user.toJSON();
             if (cache[user.name]) return Promise.resolve(cache[user.name]);
 
             const httpClient = axios.create({

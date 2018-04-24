@@ -31,10 +31,12 @@ module.exports = actor({
             prefix: ''
         }, options);
 
-        const user = options.user || require('./users')[0],
-            baseURL = util.getURLRoot(),
+        let user = options.user || require('./users')[0];
+        const baseURL = util.getURLRoot(),
             prefix = options.prefix ? `${options.prefix}/` : '',
             url = `${baseURL}/${prefix}appsuite/`;
+
+        if (user.toJSON) user = user.toJSON();
 
         this.amOnPage(url + '#' + params.join('&'));
         this.waitForFocus('input[name="username"]');
