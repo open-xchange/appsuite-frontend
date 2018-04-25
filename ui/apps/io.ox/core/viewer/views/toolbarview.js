@@ -777,7 +777,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),
                 group = $('<li class="viewer-toolbar-navigation" role="presentation">'),
+                // #58229 - sidebar closed by default for shared files
+                sidebarState = (this.isSharing) ? false : Settings.getSidebarOpenState(),
                 self = this;
+
             function setButtonState(nodes, state) {
                 if (state) {
                     $(nodes).removeClass('disabled').removeAttr('aria-disabled');
@@ -834,7 +837,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             prev.on('click', onPrevPage);
             next.on('click', onNextPage);
             group.append(prev, next, pageInputWrapper, totalPage)
-                .toggleClass('sidebar-offset', Settings.getSidebarOpenState());
+                .toggleClass('sidebar-offset', sidebarState);
             this.$el.prepend(group);
         },
 

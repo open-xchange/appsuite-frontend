@@ -14,8 +14,9 @@
 
 define('io.ox/core/viewer/main', [
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'io.ox/core/viewer/util'
-], function (ext, Util) {
+], function (ext, Capabilities, Util) {
 
     'use strict';
 
@@ -78,7 +79,7 @@ define('io.ox/core/viewer/main', [
                         self.fileCollection.setStartIndex(data.selection);
                     }
                     // create main view and append main view to core
-                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {}, openedBy: data.openedBy });
+                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {}, openedBy: data.openedBy, isSharing: isSharing() });
 
                     self.mainView.on('dispose', close);
 
@@ -106,6 +107,17 @@ define('io.ox/core/viewer/main', [
                     data.restoreFocus.focus();
                 }
 
+            }
+
+            // whether the files to diplay are shared
+            function isSharing() {
+                // check if the user is guest or anonymous guest
+                if (Capabilities.has('guest')) { return true; }
+                // check for sharing folder
+                if (data.folder === '10') { return true; }
+                if (self.fileCollection.first() && self.fileCollection.first().get('folder_id')) { return true; }
+
+                return false;
             }
 
             // Call extension point for any required performs
