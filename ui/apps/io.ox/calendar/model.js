@@ -59,28 +59,56 @@ define('io.ox/calendar/model', [
             },
 
             // special add function that allows resolving of groups
-            // is used when option resolveGroups is active (used by scheduling view)
             addAsync: function (models, options) {
                 var usersToResolve  = [],
+                    groupsToResolve = [],
+                    groups = [],
                     modelsToAdd = [],
                     self = this,
                     def = $.Deferred();
                 models = [].concat(models);
                 _(models).each(function (model) {
+
+                    // try to resolve groups if possible
                     if (model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
-                        usersToResolve = _.uniq(usersToResolve.concat(model instanceof Backbone.Model ? model.get('members') : model.members));
+                        var users = model instanceof Backbone.Model ? model.get('members') : model.members,
+                            entity = model instanceof Backbone.Model ? model.get('entity') : model.entity;
+
+                        if (users) {
+                            // we have user ids
+                            usersToResolve = _.uniq(usersToResolve.concat(users));
+                        } else if (entity) {
+                            // we don't have user ids but it's an internal group
+                            groupsToResolve = _.uniq(groupsToResolve.concat({ id: entity }));
+                            groups.push(model);
+                        } else {
+                            // we cannot resolve this group, so we just add it to the collection
+                            modelsToAdd.push(model);
+                        }
                     } else {
                         modelsToAdd.push(model);
                     }
                 });
-                require(['io.ox/core/api/user'], function (userAPI) {
-                    userAPI.getList(usersToResolve).done(function (users) {
-                        modelsToAdd = _.uniq(_.union(modelsToAdd, _(users).map(function (user) {
-                            return util.createAttendee(user);
-                        })));
-                        // no merge here or we would overwrite the confirm status
-                        def.resolve(self.oldAdd(modelsToAdd, options));
-                    }).fail(def.reject);
+                require(['io.ox/core/api/user', 'io.ox/core/api/group'], function (userAPI, groupAPI) {
+                    groupAPI.getList(groupsToResolve).then(function (data) {
+                        // add to user list
+                        usersToResolve = _.uniq(usersToResolve.concat(_(_(data).pluck('members')).flatten()));
+                    }, function () {
+                        // something went wrong, just add the group as a whole
+                        modelsToAdd = modelsToAdd.concat(groups);
+                    }).always(function () {
+                        // no need to resolve users that are already attendees
+                        usersToResolve = _(usersToResolve).reject(function (user) {
+                            return _(modelsToAdd).findWhere({ entity: user });
+                        });
+                        userAPI.getList(usersToResolve).done(function (users) {
+                            modelsToAdd = _.uniq(_.union(modelsToAdd, _(users).map(function (user) {
+                                return util.createAttendee(user);
+                            })));
+                            // no merge here or we would overwrite the confirm status
+                            def.resolve(self.oldAdd(modelsToAdd, options));
+                        }).fail(def.reject);
+                    });
                 });
 
                 return def;
