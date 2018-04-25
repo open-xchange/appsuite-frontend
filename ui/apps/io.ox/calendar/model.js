@@ -271,7 +271,7 @@ define('io.ox/calendar/model', [
                         uri: 'mailto:' + user.email1,
                         entity: user.id
                     });
-                    var newAttendee = util.createAttendee(user);
+                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' });
                     // Merge attributes or add (note add with merge option does not overwrite old values with new ones, so it cannot be used here)
                     if (self.getAttendees().get(newAttendee)) {
                         self.getAttendees().get(newAttendee).set(newAttendee);
