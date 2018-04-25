@@ -105,16 +105,40 @@ define('io.ox/backbone/views/window', [
             );
         },
 
-        keepInWindow: function () {
+        keepInWindow: function (usePadding) {
+            // maybe an event, never use padding if that's the case
+            if (!_.isBoolean(usePadding)) usePadding = false;
+
             // return when minimized, the minimizing animation is playing or if not attached
             if (this.model.get('minimized') || this.minimizing || this.$el.parent().length === 0) return;
 
             // move window
             if (this.el.offsetLeft !== 0 || this.el.offsetTop !== 0) {
+                var left = Math.max(0, Math.min($(container).width() - this.el.offsetWidth, this.el.offsetLeft)),
+                    top = Math.max(0, Math.min($(container).height() - this.el.offsetHeight, this.el.offsetTop));
+
+                if (usePadding) {
+                    debugger;
+                    var spaceLeftX = $(container).width() - this.el.offsetWidth,
+                        spaceLeftY = $(container).height() - this.el.offsetHeight;
+
+                    if (spaceLeftX) {
+                        // uncomment if padding is also desired on the left
+                        // if (left < 16) left = Math.min(Math.floor(spaceLeftX / 2), 16);
+                        if (left > spaceLeftX - 16) left = Math.max(0, spaceLeftX - 16);
+                    }
+                    if (spaceLeftY) {
+                        // uncomment if padding is also desired on the top
+                        // if (top < 16) top = Math.min(Math.floor(spaceLeftY / 2), 16);
+                        if (top > spaceLeftY - 16) top = Math.max(0, spaceLeftY - 16);
+                    }
+                }
+
                 this.$el.css({
-                    left: Math.max(0, Math.min($(container).width() - this.el.offsetWidth, this.el.offsetLeft)) + 'px',
-                    top: Math.max(0, Math.min($(container).height() - this.el.offsetHeight, this.el.offsetTop)) + 'px'
+                    left: left + 'px',
+                    top: top + 'px'
                 });
+
                 // used by tinymce to calculate the topbar position
                 this.trigger('move');
             }
@@ -222,7 +246,7 @@ define('io.ox/backbone/views/window', [
                 preferences[this.model.get('name')] = this.model.get('mode');
                 settings.set('features/floatingWindows/preferredMode/apps', preferences).save();
             }
-
+            this.keepInWindow(this.model.get('mode') === 'maximized');
             _.defer(function () { $(window).trigger('resize'); });
         },
 
