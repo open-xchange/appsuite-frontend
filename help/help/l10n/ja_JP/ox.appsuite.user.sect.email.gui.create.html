@@ -1,12 +1,12 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.1.9. 作成または編集のメール表示</title>
+<title>5.1.9. メール編集ウィンドウ</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="ox.appsuite.user.sect.email.gui.html" title="5.1. メールの画面構成">
-<link rel="prev" href="ox.appsuite.user.sect.email.gui.popup.html" title="5.1.8. メールポップアップ">
+<link rel="prev" href="ox.appsuite.user.sect.email.gui.popup.html" title="5.1.8. ポップアップ">
 <link rel="next" href="ox.appsuite.user.sect.email.view.html" title="5.2. メールの表示">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -33,51 +33,79 @@
 <h2 class="sr-only">
 <span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>の画面構成</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.gui.create">
-<div class="titlepage"><div><div><h3 class="title">5.1.9. 作成または編集の<span class="phrase">メール</span>表示</h3></div></div></div>
+<div class="titlepage"><div><div><h3 class="title">5.1.9. メール編集ウィンドウ</h3></div></div></div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.create"></a><p id="ox.appsuite.user.reference.email.gui.create">このビューは新規メールを作成したり、メールの下書きを編集するときに使用されます。</p>
+<a name="ox.appsuite.user.reference.email.gui.create"></a><p id="ox.appsuite.user.reference.email.gui.create">このウィンドウは新規メールを作成したり、メールの下書きを編集するときに使用されます。</p>
 <p class="title">コンテンツ</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.create.entries" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">グループウェアの構成によっては、その要素は画面の上または下にあります。</p>
+<p role="presentation">タイトルバーには、次の要素が表示されます。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>送信</strong></span>必要な入力項目が完了したら、このボタンをクリックして、メールを送信します。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>保存</strong></span>このボタンをクリックすると、現在のメールの内容が<span class="guilabel"><strong>下書き</strong></span>フォルダに保存されます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>キャンセル</strong></span>処理をキャンセルするには、このボタンをクリックしてください。次のダイアログウィンドウで、オプションの選択が可能です。</p></li>
+<li class="listitem"><p role="presentation">ウィンドウタイトル</p></li>
+<li class="listitem"><p role="presentation">ウィンドウ位置を調整するアイコン、キャンセルアイコン</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
-<li class="listitem"><p role="presentation">差出人のアドレスは、<span class="guibutton"><strong>差出人</strong></span>の横に表示されます。グループウェアアカウントの設定によって、様々な差出人アドレスが選択可能です。差出人のアドレスを選択するには、アドレスをクリックします。</p></li>
 <li class="listitem">
-<p role="presentation"><span class="guibutton"><strong>宛先</strong></span>入力フィールドこのフィールドで１つまたは複数の宛先を入力してください。宛先を入力しているときに、宛先の候補が表示されます。候補を選択するには、その候補をクリックしてください。</p>
-<p role="presentation">他の宛先にコピーを送るには、入力フィールド右側の<span class="guibutton"><strong>CC</strong></span>または<span class="guibutton"><strong>BCC</strong></span>をクリックします。候補の入力フィールドのコピーまたはブラインドコピーの宛先アドレスを入力します。</p>
-<p role="presentation"><span class="guibutton"><strong>宛先</strong></span>または<span class="guibutton"><strong>CC</strong></span>、<span class="guibutton"><strong>BCC</strong></span>のいずれかをクリックすると、宛先を選択できるリストが表示されます。</p>
+<p role="presentation">アドレス</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>差出人</strong></span>差出人アドレスを表示します。差出人のアドレスを選択するには、アドレスをクリックします。</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>宛先</strong></span>入力フィールドこのフィールドで１つまたは複数の宛先を入力してください。</p>
+<p role="presentation">宛先を入力しているときに、宛先の候補が表示されます。候補を選択するには、その候補をクリックしてください。</p>
+<p role="presentation"><span class="guibutton"><strong>連絡先の選択</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.create.to.addressbookpicker"><img src="../../images/appsuite_user_icon_addressbookpicker.png"></span>一覧から連絡先を選択するウィンドウを開きます。</p>
 </li>
+<li class="listitem"><p role="presentation">他の宛先にコピーを送るには、入力フィールド右側の<span class="guibutton"><strong>CC</strong></span>または<span class="guibutton"><strong>BCC</strong></span>をクリックします。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>宛先</strong></span>または<span class="guibutton"><strong>CC</strong></span>、<span class="guibutton"><strong>BCC</strong></span>のいずれかをクリックすると、連絡先を選択できるリストが表示されます。</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">メールの内容</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>件名</strong></span>入力フィールド。このフィールドにメールの件名を入力します。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>添付ファイル</strong></span>ボタンこのボタンをクリックして、ローカルファイルまたは<span class="phrase"><span class="guilabel"><strong>ドライブ</strong></span></span>アプリケーションに保存されたファイルを追加します。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>署名</strong></span>ボタンメール本文に署名を追加するかを指定できます。ボタンをクリックして、署名を選択、または削除してください。メール設定で、署名を作成、または編集できます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>オプション</strong></span>ボタンこのボタンをクリックして、メールの本文形式、優先順位、宛先の読み込みのオプションを設定します。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>添付ファイル</strong></span>ローカルファイルまたは<span class="phrase"><span class="guilabel"><strong></strong></span></span>アプリケーションに保存されたファイルを追加します。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>署名</strong></span>メール本文に署名を追加するかを指定できます。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>オプション</strong></span>次のオプションが表示されます：メールのテキスト形式の指定、優先度の設定、vCardの添付、開封確認の要求。</p></li>
 <li class="listitem">
 <p role="presentation">構成によっては、暗号化形式でメールを送信する機能があります。</p>
-<ul class="itemizedlist" style="list-style-type: circle; ">
+<ul class="itemizedlist" style="list-style-type: square; ">
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>暗号化</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.create.encrypt"><img src="../../images/guard_user_icon_encrypt.png"></span></p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>セキュリティ</strong></span>ボタン</p></li>
 </ul>
 <p role="presentation">
-            </p>
-<p role="presentation">暗号化の情報は<span class="phrase"><span class="guilabel"><strong>ガード</strong></span></span>&lt;ユーザガイドを参照してください。</p>
+                  </p>
+<p role="presentation">暗号化の詳細は、<a class="xref" href="ox.guard.user.chap.usage.html"><i>データの暗号化</i></a>を参照してください。</p>
 </li>
 <li class="listitem"><p role="presentation">メール本文の入力フィールドフィールドに本文を入力します。<span class="guibutton"><strong>オプション</strong></span>でHTML形式を選択した場合、テキストの初期化または画像の追加が可能です。</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">ボタンバー</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>送信</strong></span>メールの送信書式ウィンドウを閉じます。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>保存</strong></span>現在のメールの内容を<span class="guilabel"><strong>下書き</strong></span>フォルダに保存します。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>キャンセル</strong></span>メールの作成をキャンセルします。</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
 </ul>
 <p>
       </p>
 </div>
 <p class="title">詳細は、次のページを参照してください。</p>
-<ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.create.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.create.related" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.create.html">編集ウィンドウ</a></p></li>
+<li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html">新規メールの送信</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html">メールの下書きの作成</a></p>
-</li></ul>
+</li>
+</ul>
 <p id="ox.appsuite.user.reference.email.gui.create.parent">親記事：<a class="xref" href="ox.appsuite.user.sect.email.gui.html"><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>の画面構成</a></p>
 </div>
           </div>

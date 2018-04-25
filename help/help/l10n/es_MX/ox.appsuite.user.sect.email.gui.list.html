@@ -39,41 +39,49 @@
 <a name="ox.appsuite.user.reference.email.gui.list"></a><p id="ox.appsuite.user.reference.email.gui.list">Muestra una lista de correos de la carpeta actual. Si usa <a class="link" href="ox.appsuite.user.sect.email.gui.tabs.html">categorías</a>, los correos de la categoría seleccionada se muestran en la bandeja de entrada.</p>
 <p class="title">Contenido</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.entries" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Los siguientes detalles se muestran por cada correo electrónico: remitente, asunto, fecha u hora de recepción, y tamaño del correo. Los correos no leídos se marcan con el icono <span class="guilabel"><strong>No leído</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.unread"><img src="../../images/appsuite_user_icon_email_unread.png"></span> .</p></li>
-<li class="listitem"><p role="presentation">Si está disponible, se muestra la siguiente información: iconos de adjuntos, etiqueta coloreada, marca, número de correos de la conversación, prioridad.</p></li>
-<li class="listitem"><p role="presentation">Los correos cifrados se marcan con el icono <span class="guilabel"><strong>Cifrado</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.encrypted"><img src="../../images/appsuite_user_icon_encrypted.png"></span> . Se puede encontrar información sobre cifrado en la guía del usuario de <span class="phrase"><span class="guilabel"><strong>Guard</strong></span></span>.</p></li>
+<li class="listitem">
+<p role="presentation">Si un aviso de ausencia está activo, se muestra una notificación encima de la lista.</p>
+<p role="presentation">Si cierra la notificación, el aviso de ausencia permanece activo.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Los siguientes detalles se muestran por cada correo electrónico: remitente, asunto, fecha u hora de recepción, y tamaño del correo. Los correos no leídos se marcan con el icono <span class="guilabel"><strong>No leído</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.unread"><img src="../../images/appsuite_user_icon_email_unread.png"></span> .</p>
+<p role="presentation">Dependiendo de la configuración del servidor, se muestra una previsualización del contenido del correo debajo del asunto.</p>
+</li>
+<li class="listitem"><p role="presentation">Si está disponible, se muestra información adicional: iconos de adjuntos, etiqueta coloreada, marca, número de correos de la <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.mailthread">conversación</a>, prioridad.</p></li>
+<li class="listitem"><p role="presentation">Los correos electrónicos cifrados se marcan con el icono <span class="guilabel"><strong>Cifrado</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.encrypted"><img src="../../images/appsuite_user_icon_encrypted.png"></span> . Puede encontrar información sobre cómo cifrar correos electrónicos en <a class="xref" href="ox.guard.user.chap.usage.html"><i>Cifrado de datos</i></a></p></li>
 </ul>
 <p>
         </p>
 <p class="title">Funciones</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.functions" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Para mostrar la dirección de correo del remitente en vez de su nombre, sitúe el cursor sobre el nombre del remitente. La dirección de correo original aparece en un elemento emergente.</p></li>
 <li class="listitem">
 <p role="presentation">Para seleccionar múltiples correos, marque la opción <span class="guibutton"><strong>Casillas de verificación</strong></span> en el desplegable <span class="guibutton"><strong>Vista</strong></span> de la barra de herramientas. </p>
 <p role="presentation">También puede utilizar las funciones de selección múltiple de su sistema.</p>
 </li>
-<li class="listitem">
-<p role="presentation">Para seleccionar todos los correos visibles de la carpeta, marque la casilla de verificación <span class="guibutton"><strong>Seleccionar todo</strong></span> situada encima de la lista.</p>
-<p role="presentation"><span class="phrase"><strong>Nota:</strong></span> La casilla de verificación <span class="guibutton"><strong>Seleccionar todo</strong></span> sólo selecciona todos los correos visibles de una carpeta. Para reducir la latencia, sólo se cargan desde el servidor un porcentaje determinado de correos electrónicos si su número supera un límite establecido. Para mostrar todos los correos de la carpeta, desplácese al final de la lista. Espere hasta que se hayan cargado todos los correos del servidor.</p>
-</li>
+<li class="listitem"><p role="presentation">Si se presiona el botón <span class="guibutton"><strong>Todos</strong></span> situado encima de la lista, se abre un menú desplegable. Permite ejecutar las siguientes funciones para todos los correos electrónicos de la carpeta de correo electrónico actual: marcar como leído, mover, archivar, borrar.</p></li>
 <li class="listitem">
 <p role="presentation">Si se presiona el botón <span class="guibutton"><strong>Ordenar por</strong></span> situado encima de la lista, se abre un menú que le ayuda a ordenar sus correos.</p>
 <p role="presentation">Para combinar todos los correos electrónicos de una conversación en una única lista, marque la casilla de verificación <span class="guibutton"><strong>Conversaciones</strong></span> en <span class="guibutton"><strong>Ordenar por</strong></span>.</p>
 <p role="presentation">El ajuste de ordenación se aplicará a la carpeta de correo seleccionada. Puede usar ajustes diferentes para distintas carpetas.</p>
 </li>
+<li class="listitem"><p role="presentation">Para mostrar la dirección de correo del remitente en vez de su nombre, sitúe el cursor sobre el nombre del remitente. La dirección de correo original aparece en un elemento emergente.</p></li>
 <li class="listitem"><p role="presentation">Si se presiona en un correo, su contenido se muestra en el <a class="link" href="ox.appsuite.user.sect.email.gui.detailview.html">área de visualización</a>.</p></li>
+<li class="listitem"><p role="presentation">Para habilitar las funciones de uso frecuente, puede usar el menú contextual para un correo electrónico o para varios.</p></li>
 <li class="listitem"><p role="presentation">Para ajustar el ancho de la lista, sitúe el puntero del ratón en la línea que hay entre la lista y la vista de detalle. Arrastre el borde a la izquierda o a la derecha.</p></li>
 </ul>
 <p>
       </p>
 </div>
 <p class="title">Vea también</p>
-<ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.related" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">Visualización de correos electrónicos</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.reply.html">Respuesta a correos electrónicos</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.forward.html">Reenvío de correos electrónicos</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.forward.html">reenvío de correos electrónicos</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.manage.html">Organización de correos electrónicos</a></p>
-</li></ul>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.vacationnotice.html">Envío de un aviso de ausencia automático</a></p></li>
+</ul>
 <p id="ox.appsuite.user.reference.email.gui.list.parent">Tema superior: <a class="xref" href="ox.appsuite.user.sect.email.gui.html">Los componentes de <span class="phrase"><span class="guilabel"><strong>Correo electrónico</strong></span></span></a></p>
 </div>
           </div>

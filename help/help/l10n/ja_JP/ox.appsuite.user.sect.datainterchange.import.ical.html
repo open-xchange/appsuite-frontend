@@ -1,13 +1,13 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>12.1.1. iCal フォーマットのアポイントや仕事のインポート</title>
+<title>11.1.1. iCal フォーマットの予定や仕事のインポート</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.datainterchange.import.html" title="12.1. データのインポート">
-<link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.html" title="12.1. データのインポート">
-<link rel="next" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html" title="12.1.2. vCard フォーマットの連絡先のインポート">
+<link rel="up" href="ox.appsuite.user.sect.datainterchange.import.html" title="11.1. データのインポート">
+<link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.html" title="11.1. データのインポート">
+<link rel="next" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html" title="11.1.2. vCard フォーマットの連絡先のインポート">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -32,9 +32,9 @@
   <h1 class="sr-only">データの連携</h1>
 <h2 class="sr-only">データのインポート</h2>
 <div class="sect2" id="ox.appsuite.user.sect.datainterchange.import.ical">
-<div class="titlepage"><div><div><h3 class="title">12.1.1. iCal フォーマットのアポイントや仕事のインポート</h3></div></div></div>
-<a class="indexterm" name="id-1.13.4.5.2"></a><a class="indexterm" name="id-1.13.4.5.3"></a><a class="indexterm" name="id-1.13.4.5.4"></a><a class="indexterm" name="id-1.13.4.5.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.datainterchange.import.ical"></a><p id="ox.appsuite.user.concept.datainterchange.import.ical">インポートされる iCal オブジェクトとインポートされない iCal オブジェクトを次の表に示します。「アポイント」の列と「仕事」の列に表示されている情報には次の意味があります。</p>
+<div class="titlepage"><div><div><h3 class="title">11.1.1. iCal フォーマットの予定や仕事のインポート</h3></div></div></div>
+<a class="indexterm" name="id-1.12.4.5.2"></a><a class="indexterm" name="id-1.12.4.5.3"></a><a class="indexterm" name="id-1.12.4.5.4"></a><a class="indexterm" name="id-1.12.4.5.5"></a><div class="concept">
+<a name="ox.appsuite.user.concept.datainterchange.import.ical"></a><p id="ox.appsuite.user.concept.datainterchange.import.ical">インポートされる iCal オブジェクトとインポートされない iCal オブジェクトを次の表に示します。「予定」の列と「仕事」の列に表示されている情報には次の意味があります。</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">「X」は、対象のオブジェクトがインポートされることを意味します。オブジェクトの値は RFC2445 に従って設定されます。</p></li>
 <li class="listitem"><p role="presentation">「255」のような数字も、対象のオブジェクトがインポートされることを意味します。数字は、インポートの最大文字数を表します。</p></li>
@@ -488,27 +488,27 @@
 <div class="concept">
 <a name="ox.appsuite.user.concept.datainterchange.import.ical.restrictions"></a><p id="ox.appsuite.user.concept.datainterchange.import.ical.restrictions">次の制限があることにご注意ください。</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">「月の最後の日曜日」のようなアポイントにサポートします。月の最終日からカウントされた日付のアポイントはサポートされません。例: ある月の最後から 2 番目の日曜日このような情報がアポイントに含まれている場合、そのアポイントはサポートされません。</p></li>
-<li class="listitem"><p role="presentation">アラームの繰り返しはサポートされていません。例：「アラームを４回通知」。このような情報がアポイントに含まれている場合、その情報は無視されます。</p></li>
+<li class="listitem"><p role="presentation">「月の最後の日曜日」のような予定にサポートします。月の最終日からカウントされた日付の予定はサポートされません。例: ある月の最後から 2 番目の日曜日このような情報が予定に含まれている場合、その予定はサポートされません。</p></li>
+<li class="listitem"><p role="presentation">アラームの繰り返しはサポートされていません。例：「アラームを４回通知」。このような情報が予定に含まれている場合、その情報は無視されます。</p></li>
 <li class="listitem"><p role="presentation">インポートするファイルに正しい iCal データが含まれていることを確認</p></li>
 </ul>
 <p>
       </p>
 </div>
 <div class="task" id="ox.appsuite.user.task.datainterchange.import.ical">
-<p class="title">iCal フォーマットのアポイントや仕事をインポートする</p>
+<p class="title">iCal フォーマットの予定や仕事をインポートする</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span> または <span class="phrase"><span class="guilabel"><strong>仕事</strong></span></span> アプリケーションを起動する。</p></li>
-<li class="step"><p role="presentation">アポイントや仕事をインポートする先のフォルダをフォルダ ツリーから <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select">選択</a> します。</p></li>
-<li class="step"><p role="presentation">フォルダ名の隣にある <span class="guibutton"><strong>フォルダ アクション</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.import.ical"><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>インポート</strong></span> をクリックします。</p></li>
+<li class="step"><p role="presentation">予定や仕事をインポートする先の予定表やフォルダをフォルダツリーから <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select">選択</a> します。</p></li>
+<li class="step"><p role="presentation">予定表またはフォルダの隣の<span class="guibutton"><strong>アクション</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.import.ical"><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>をクリックします。<span class="guibutton"><strong>インポート</strong></span> をクリックします。</p></li>
 <li class="step"><p role="presentation"><span class="guibutton"><strong>インポート先:</strong></span> ウィンドウで、<span class="guilabel"><strong>ファイルを選択</strong></span> をクリックします。iCal フォーマットのファイルを選択します。</p></li>
 <li class="step"><p role="presentation"><span class="guibutton"><strong>インポート</strong></span> をクリックします。</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>結果: </strong></span> 目的のフォルダにアポイントや仕事が追加されます。</p>
+          <p><span class="phrase"><strong>結果: </strong></span> 目的の予定表やフォルダに予定や仕事が追加されます。</p>
         </div>
 </div>
-<p class="title">詳細は、 を参照してください。</p>
+<p class="title">詳細は、次のページを参照してください。</p>
 <ul class="itemizedlist" id="ox.appsuite.user.concept.datainterchange.import.ical.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">vCard フォーマットの連絡先のインポート</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">CSV フォーマットの連絡先のインポート</a></p>
