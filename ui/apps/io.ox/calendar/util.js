@@ -265,7 +265,7 @@ define('io.ox/calendar/util', [
             return '';
         },
 
-        getDateInterval: function (data, a11y) {
+        getDateInterval: function (data, zone, a11y) {
             if (data && data.startDate && data.endDate) {
                 var startDate, endDate,
                     fmtstr = a11y ? 'dddd, l' : 'ddd, l';
@@ -278,6 +278,10 @@ define('io.ox/calendar/util', [
                 } else {
                     startDate = that.getMoment(data.startDate);
                     endDate = that.getMoment(data.endDate);
+                    if (zone) {
+                        startDate.tz(zone);
+                        endDate.tz(zone);
+                    }
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
@@ -295,8 +299,8 @@ define('io.ox/calendar/util', [
             return '';
         },
 
-        getDateIntervalA11y: function (data) {
-            return this.getDateInterval(data, true);
+        getDateIntervalA11y: function (data, zone) {
+            return this.getDateInterval(data, zone, true);
         },
 
         getTimeInterval: function (data, zone, a11y) {

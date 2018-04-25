@@ -81,7 +81,7 @@ define('plugins/notifications/calendar/register', [
                 };
 
             var cid = _.cid(model.attributes),
-                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' }),
+                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() }),
                 recurrenceString = util.getRecurrenceString(model.attributes);
 
             node.attr({
@@ -92,8 +92,8 @@ define('plugins/notifications/calendar/register', [
                 'aria-label': gt('Invitation for %1$s.', model.get('title'))
             }).append(
                 $('<a class="notification-info" role="button">').append(
-                    $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
-                    $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
+                    $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes, moment().tz())),
+                    $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes, moment().tz())),
                     recurrenceString === '' ? [] : $('<span class="span-to-div recurrence">').text(recurrenceString),
                     $('<span class="span-to-div title">').text(model.get('summary')),
                     $('<span class="span-to-div location">').text(model.get('location')),
