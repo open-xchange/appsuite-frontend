@@ -99,6 +99,9 @@ define('io.ox/backbone/mini-views/alarms', [
             //#. Used to display reminders for appointments
             //#. %1$s: the reminder type, SMS/EMAIL etc
             'GENERICEND0': gt('%1$s at end.')
+        },
+        isAcknowledged = function (alarm) {
+            return alarm.acknowledged && alarm.acknowledged < _.now();
         };
 
     var alarmsView = DisposableView.extend({
@@ -161,7 +164,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         createNodeFromAlarm: function (alarm) {
             // don't show acknowledged alarms
-            if (!alarm || !alarm.trigger || alarm.acknowledged) return;
+            if (!alarm || !alarm.trigger || isAcknowledged(alarm)) return;
 
             var row, container;
 
@@ -209,7 +212,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         getAlarmsArray: function () {
             var self = this;
-            return _(this.model.get(this.attribute) || []).filter(function (alarm) { return alarm.acknowledged; }).concat(_(this.list.children()).map(function (item) {
+            return _(this.model.get(this.attribute) || []).reject(isAcknowledged).concat(_(this.list.children()).map(function (item) {
                 var alarm = { action: $(item).find('.alarm-action').val() },
                     time = $(item).find('.alarm-time').val(),
                     related = $(item).find('.alarm-related').val();
@@ -253,7 +256,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         render: function () {
             this.$el.empty().append(
-                _(this.model.get(this.attribute) || []).filter(function (alarm) { return !alarm.acknowledged; }).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
+                _(this.model.get(this.attribute) || []).reject(isAcknowledged).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
             );
             return this;
         },
@@ -261,7 +264,7 @@ define('io.ox/backbone/mini-views/alarms', [
             var node = $('<ul class="list-unstyled alarm--link-list">');
             _(this.model.get(this.attribute)).each(function (alarm) {
                 // don't show acknowledged alarms
-                if (!alarm || !alarm.trigger || alarm.acknowledged) return;
+                if (!alarm || !alarm.trigger || isAcknowledged(alarm)) return;
                 var options = [], key;
 
                 if (_(standardTypes).indexOf(alarm.action) === -1) {
