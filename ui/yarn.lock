@@ -3478,10 +3478,6 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-open-sans-fontface@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/open-sans-fontface/-/open-sans-fontface-1.4.0.tgz#03cc6d1bf5e6a8b5b47910888562f722c5dd3428"
-
 open-xchange-shared-grunt-config@^0.15.0-pre2:
   version "0.15.0-pre3"
   resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.15.0-pre3.tgz#84f7279502236b1107a0000c96e669eb703b5762"
