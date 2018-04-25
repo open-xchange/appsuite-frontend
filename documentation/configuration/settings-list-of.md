@@ -50,9 +50,6 @@ settings!io.ox/core
 **features/folderIcons**
 > show icons in the folder tree (true/false)
 
-**features/hideAddressBook**
-> hide address book e.g. for drive standalone (true/false)
-
 **features/logoutButtonHint**
 > shows little reminder tooltip when user didn't logged out last time  (true/false)
 
