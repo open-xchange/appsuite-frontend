@@ -193,7 +193,6 @@ define('plugins/demo/customize/register', [
 
     function applytopbarSize() {
         var value = 39 + model.get('topbarSize') * 8;
-        console.log('here we go', value);
         $('#io-ox-screens').css('top', value);
         $('#io-ox-appcontrol, #io-ox-appcontrol #io-ox-launcher>button').css('height', value);
         // maybe we need to toggle the header logo
