@@ -212,7 +212,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         getAlarmsArray: function () {
             var self = this;
-            return _(this.model.get(this.attribute) || []).reject(isAcknowledged).concat(_(this.list.children()).map(function (item) {
+            return _(this.model.get(this.attribute) || []).filter(isAcknowledged).concat(_(this.list.children()).map(function (item) {
                 var alarm = { action: $(item).find('.alarm-action').val() },
                     time = $(item).find('.alarm-time').val(),
                     related = $(item).find('.alarm-related').val();
