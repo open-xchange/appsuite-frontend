@@ -234,12 +234,17 @@ define('io.ox/participants/chronos-views', [
         },
 
         renderLabel: function () {
-            var count = this.collection.length,
+            var count = this.collection.length - (this.options.hideInternalGroups ? this.collection.filter(function (attendee) {
+                    return attendee.get('cuType') === 'GROUP' && attendee.get('entity');
+                }).length : 0),
                 label = this.options.label || (this.isDistributionList ? gt('Members (%1$d)', count) : gt('Participants (%1$d)', count));
             this.$('fieldset > legend').text(label);
         },
 
         renderParticipant: function (participant) {
+            // hide internal groups if options are set. Users are individually in the event too, so there is no need
+            if (this.options.hideInternalGroups && participant.get('cuType') === 'GROUP' && participant.get('entity')) return;
+
             var view = new ParticipantEntryView({
                 tagName: 'li',
                 model: participant,

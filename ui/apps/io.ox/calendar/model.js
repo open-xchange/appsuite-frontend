@@ -268,7 +268,7 @@ define('io.ox/calendar/model', [
                 attendees = this.get('attendees') || [],
                 changeAttendeesUpdate = false;
 
-            // there is always one attendee (organizer/calendar owner, so we check > 1)
+            // you want to skip resolving groups when first creating the attendeeCollection. Otherwise the model would be dirty without any change
             this._attendees = new AttendeeCollection(attendees, { resolveGroups: true, silent: false, noInitialResolve: attendees.length > 1 });
 
             this._attendees.on('add remove reset', function () {

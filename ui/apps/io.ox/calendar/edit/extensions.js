@@ -130,6 +130,15 @@ define('io.ox/calendar/edit/extensions', [
 
                     if (!baton.model.isValid({ isSave: true })) return;
 
+                    // do some cleanup
+                    // remove groups with entity. Those are not needed, as the attendees are also added individually.
+                    // we only remove them if there where changes to the attendees, as we don't want to create a false dirty status
+                    if (!_.isEqual(baton.app.initialModelData.attendees, baton.model.get('attendees'))) {
+                        baton.model._attendees.remove(baton.model._attendees.filter(function (attendee) {
+                            return attendee.get('cuType') === 'GROUP' && attendee.get('entity');
+                        }));
+                    }
+
                     baton.app.getWindow().busy();
                     // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
                     baton.app.attachmentsFormData = attachments;
@@ -500,7 +509,8 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getAttendees(),
-                baton: baton
+                baton: baton,
+                hideInternalGroups: true
             }).render().$el);
         }
     });
