@@ -1,8 +1,9 @@
 define([
+    'io.ox/core/desktop',
     'io.ox/core/api/apps',
     'io.ox/core/main/appcontrol',
     'settings!io.ox/core'
-], function (apps, appcontrol, coreSettings) {
+], function (ui, apps, appcontrol, coreSettings) {
     describe('Apps', function () {
         let oldApps;
         before(function () {
@@ -15,7 +16,7 @@ define([
         describe('defining App for launcher', function () {
             let app;
             beforeEach(function () {
-                app = new ox.ui.App({
+                app = new ui.App({
                     id: 'io.ox/test',
                     name: 'io.ox/test',
                     title: 'Testanwendung'
@@ -43,12 +44,12 @@ define([
             it('should respect order defined in jslob', function () {
                 coreSettings.set('apps/list', 'io.ox/test,io.ox/test3,io.ox/test2');
                 apps.initialize();
-                const app2 = new ox.ui.App({
+                const app2 = new ui.App({
                     id: 'io.ox/test2',
                     name: 'io.ox/test2',
                     title: 'Testanwendung 2'
                 });
-                const app3 = new ox.ui.App({
+                const app3 = new ui.App({
                     id: 'io.ox/test3',
                     name: 'io.ox/test3',
                     title: 'Testanwendung 3'
@@ -65,12 +66,12 @@ define([
             it('should create sort order independent of apps not in jslob list', function () {
                 coreSettings.set('apps/list', 'io.ox/test3,io.ox/test');
                 apps.initialize();
-                const app2 = new ox.ui.App({
+                const app2 = new ui.App({
                     id: 'io.ox/test2',
                     name: 'io.ox/test2',
                     title: 'Testanwendung 2'
                 });
-                const app3 = new ox.ui.App({
+                const app3 = new ui.App({
                     id: 'io.ox/test3',
                     name: 'io.ox/test3',
                     title: 'Testanwendung 3'
@@ -97,9 +98,9 @@ define([
             it('should draw launcher items for apps', function () {
                 var stub = sinon.stub(apps, 'forLauncher');
                 stub.returns([
-                    new ox.ui.App({ id: 'io.ox/test', name: 'test', title: 'Testanwendung' }),
-                    new ox.ui.App({ id: 'io.ox/test2', name: 'test2', title: 'Testanwendung 2' }),
-                    new ox.ui.App({ id: 'io.ox/test3', name: 'test3', title: 'Testanwendung 3' })
+                    new ui.App({ id: 'io.ox/test', name: 'test', title: 'Testanwendung' }),
+                    new ui.App({ id: 'io.ox/test2', name: 'test2', title: 'Testanwendung 2' }),
+                    new ui.App({ id: 'io.ox/test3', name: 'test3', title: 'Testanwendung 3' })
                 ]);
                 let view = new appcontrol.LaunchersView({
                     collection: apps
@@ -116,9 +117,9 @@ define([
                 const oldApps = apps.models;
                 let app;
                 apps.add([
-                    app = new ox.ui.App({ id: 'io.ox/test', name: 'test', title: 'Testanwendung' }),
-                    new ox.ui.App({ id: 'io.ox/test2', name: 'test2', title: 'Testanwendung 2' }),
-                    new ox.ui.App({ id: 'io.ox/test3', name: 'test3', title: 'Testanwendung 3' })
+                    app = new ui.App({ id: 'io.ox/test', name: 'test', title: 'Testanwendung' }),
+                    new ui.App({ id: 'io.ox/test2', name: 'test2', title: 'Testanwendung 2' }),
+                    new ui.App({ id: 'io.ox/test3', name: 'test3', title: 'Testanwendung 3' })
                 ], { silent: true });
                 stub.returns(apps.models);
                 let view = new appcontrol.LaunchersView({
@@ -144,7 +145,7 @@ define([
             });
 
             it('should render app icons that look like html', function () {
-                const model = new ox.ui.App({
+                const model = new ui.App({
                     id: 'io.ox/test',
                     name: 'test',
                     title: 'Testanwendung',
@@ -158,7 +159,7 @@ define([
             });
 
             it('should render fallback icon', function () {
-                const model = new ox.ui.App({
+                const model = new ui.App({
                     id: 'io.ox/test',
                     name: 'test',
                     title: 'Testanwendung',
@@ -170,37 +171,66 @@ define([
                 const el = view.render().$el;
                 expect(el.find('.icon i.fa-question').length, 'number of font-awesome questionmark icons').to.equal(1);
             });
+
+            it('should call ox.launch for apps "path" attribute', function () {
+                const model = new ui.App({
+                    path: 'custom/module/apps/test/main',
+                    title: 'Testanwendung'
+                });
+                const spy = sinon.spy(),
+                    def = $.Deferred();
+                model.on('launch', def.resolve);
+                // eslint-disable-next-line requirejs/no-invalid-define
+                define('custom/module/apps/test/main', function () {
+                    return {
+                        getApp() {
+                            spy();
+                            return model;
+                        }
+                    };
+                });
+                expect(spy.called).to.equal(false);
+                const view = new appcontrol.LauncherView({
+                    model
+                });
+                const el = view.render().$el;
+                el.click();
+                return def.then(function () {
+                    expect(spy.called).to.equal(true);
+                    requirejs.undef('custom/module/apps/test/main');
+                });
+            });
         });
 
         describe('Models', function () {
             it('should be Backbone models', function () {
-                const app = new ox.ui.App({
+                const app = new ui.App({
                     name: 'io.ox/test'
                 });
                 expect(app.get).to.be.a('function');
                 expect(app.set).to.be.a('function');
             });
             it('should automatically generate an id', function () {
-                const app = new ox.ui.App({
+                const app = new ui.App({
                     name: 'io.ox/test'
                 });
                 expect(app.id).to.match(/^app-\d+/);
             });
             it('should automatically generate the path to the main module', function () {
-                const app = new ox.ui.App({
+                const app = new ui.App({
                     name: 'io.ox/test'
                 });
                 expect(app.get('path')).to.equal('io.ox/test/main');
             });
             it('should not override specified path to the main module', function () {
-                const app = new ox.ui.App({
+                const app = new ui.App({
                     name: 'io.ox/test',
                     path: 'custom/path'
                 });
                 expect(app.get('path')).to.equal('custom/path');
             });
             it('should be possible to provide a custom launcher function', function () {
-                const app = new ox.ui.App({ name: 'io.ox/test' });
+                const app = new ui.App({ name: 'io.ox/test' });
                 const spy = sinon.spy();
                 app.setLauncher(spy);
                 return app.launch().then(function () {
@@ -210,13 +240,13 @@ define([
 
             describe('state management', function () {
                 it('should start in "ready" state', function () {
-                    const app = new ox.ui.App({
+                    const app = new ui.App({
                         name: 'io.ox/test'
                     });
                     expect(app.get('state')).to.equal('ready');
                 });
                 it('should change state during launch process', function () {
-                    const app = new ox.ui.App({ name: 'io.ox/test' });
+                    const app = new ui.App({ name: 'io.ox/test' });
                     expect(app.get('state')).to.equal('ready');
                     const def = app.launch();
                     expect(app.get('state')).to.equal('initializing');

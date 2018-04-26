@@ -62,9 +62,9 @@ define('io.ox/core/desktop', [
         initialize: function (options) {
             var self = this;
             this.options = options || {};
-            this.guid = options.guid || appGuid++;
+            this.guid = this.options.guid || appGuid++;
             this.id = this.id || 'app-' + this.guid;
-            this.set('path', options.path ? options.path : this.getName() + '/main');
+            this.set('path', this.options.path ? this.options.path : this.getName() + '/main');
             this.set('id', this.id);
             this.getInstance = function () {
                 return self;

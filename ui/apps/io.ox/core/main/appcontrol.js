@@ -71,7 +71,7 @@ define('io.ox/core/main/appcontrol', [
                     this.model.launch();
                     return;
                 }
-                ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+                ox.launch(this.model.get('path'));
             }
         },
         quitApp: function (e) {
@@ -107,7 +107,7 @@ define('io.ox/core/main/appcontrol', [
             // reverted for 7.10
             // if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
 
-            if (id === 'io.ox/calendar' || this.model.options.name.match(/calendar/)) this.drawDate();
+            if (id === 'io.ox/calendar' || /calendar/.test(this.model.getName())) this.drawDate();
 
             var cell = $('<div class="lcell" aria-hidden="true">').append(
                 this.badge = $('<div class="indicator">').toggle(this.model.get('hasBadge')),

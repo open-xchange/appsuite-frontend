@@ -11,7 +11,9 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(['io.ox/core/desktop'], function () {
+define([
+    'io.ox/core/desktop'
+], function (ui) {
     'use strict';
 
     describe('Core', function () {
@@ -32,18 +34,18 @@ define(['io.ox/core/desktop'], function () {
 
                 describe('has simple applications', function () {
                     beforeEach(function () {
-                        app = new ox.ui.App({
+                        app = new ui.App({
                             name: 'io.ox/testApp'
                         });
                     });
-                    it('should define global ox.ui.App object', function () {
-                        expect(ox.ui.App).to.exist;
+                    it('should define global App object', function () {
+                        expect(ui.App).to.exist;
                     });
 
                     it('should launch a test app', function () {
                         expect(app.get('state')).to.equal('ready');
                         return app.launch().then(function () {
-                            expect(ox.ui.apps.models).to.contain(app);
+                            expect(ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
                         });
                     });
@@ -61,7 +63,7 @@ define(['io.ox/core/desktop'], function () {
                         }, callback;
 
                     beforeEach(function () {
-                        app = new ox.ui.App({
+                        app = new ui.App({
                             name: 'io.ox/testApp',
                             launch: launcher
                         });
@@ -75,7 +77,7 @@ define(['io.ox/core/desktop'], function () {
 
                         expect(app.get('state')).to.equal('ready');
                         var def = app.launch({ callback: callback }).then(function () {
-                            expect(ox.ui.apps.models).to.contain(app);
+                            expect(ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
                             callback();
                         });
