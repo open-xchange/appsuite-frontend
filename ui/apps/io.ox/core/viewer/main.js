@@ -115,7 +115,7 @@ define('io.ox/core/viewer/main', [
                 if (Capabilities.has('guest')) { return true; }
                 // check for sharing folder
                 if (data.folder === '10') { return true; }
-                if (self.fileCollection.first() && self.fileCollection.first().get('folder_id')) { return true; }
+                if (self.fileCollection.first() && self.fileCollection.first().get('folder_id') === '10') { return true; }
 
                 return false;
             }
