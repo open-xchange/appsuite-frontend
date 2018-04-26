@@ -265,9 +265,11 @@ define('io.ox/calendar/model', [
 
             var self = this,
                 resetListUpdate = false,
+                attendees = this.get('attendees') || [],
                 changeAttendeesUpdate = false;
+
             // there is always one attendee (organizer/calendar owner, so we check > 1)
-            this._attendees = new AttendeeCollection(this.get('attendees'), { resolveGroups: true, silent: false, noInitialResolve: this.get('attendees').length > 1 });
+            this._attendees = new AttendeeCollection(attendees, { resolveGroups: true, silent: false, noInitialResolve: attendees.length > 1 });
 
             this._attendees.on('add remove reset', function () {
                 if (changeAttendeesUpdate) return;
