@@ -76,6 +76,7 @@ define('io.ox/core/relogin', [
                 gotoLoginLocation();
             })
             .on('open', function () {
+                $('html').addClass('relogin-required');
                 $('#io-ox-core').addClass('blur');
             })
             .open();
@@ -147,6 +148,7 @@ define('io.ox/core/relogin', [
                             pending = false;
                             ox.trigger('relogin:success');
                             $blocker.css('z-index', '');
+                            $('html').removeClass('relogin-required');
                             $('#io-ox-core').removeClass('blur');
                         },
                         function fail(e) {
@@ -166,6 +168,7 @@ define('io.ox/core/relogin', [
                     );
                 })
                 .on('open', function () {
+                    $('html').addClass('relogin-required');
                     $('#io-ox-core').addClass('blur');
                 })
                 .open();
