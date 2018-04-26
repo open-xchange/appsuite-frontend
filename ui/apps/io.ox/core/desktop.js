@@ -899,7 +899,9 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
-        return apps.add(new ox.ui.App(options));
+        if (upsell.visible(options.requires) && _.device(options.device)) {
+            return apps.add(new ox.ui.App(options));
+        }
     };
 
     ox.ui.screens = (function () {

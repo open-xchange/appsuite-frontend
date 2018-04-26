@@ -23,13 +23,18 @@ define([
             });
 
             describe('provides the App API which', function () {
-                var app;
+                var app, oldApps = [];
+                beforeEach(function () {
+                    ui.apps.forEach((a) => oldApps.push(a));
+                });
 
                 afterEach(function () {
                     //clean up
                     if (app && app.get('state') === 'running') {
                         return app.quit();
                     }
+                    ui.apps.reset([]);
+                    oldApps.forEach((a) => ui.apps.push(a));
                 });
 
                 describe('has simple applications', function () {
@@ -48,6 +53,24 @@ define([
                             expect(ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
                         });
+                    });
+                });
+
+                describe('createApp convenience function', function () {
+                    it('should creates a new app and adds it to the gobal collection', function () {
+                        app = ui.createApp({
+                            id: 'io.ox/testApp'
+                        });
+                        expect(app).to.exist;
+                        expect(ui.apps.get('io.ox/testApp')).to.exist;
+                    });
+                    it('should do checks using "requires" attribute of the app', function () {
+                        app = ui.createApp({
+                            id: 'io.ox/testApp',
+                            requires: 'upsell stuff'
+                        });
+                        expect(app).not.to.exist;
+                        expect(ui.apps.get('io.ox/testApp')).not.to.exist;
                     });
                 });
 
