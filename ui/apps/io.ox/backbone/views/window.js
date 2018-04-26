@@ -118,7 +118,6 @@ define('io.ox/backbone/views/window', [
                     top = Math.max(0, Math.min($(container).height() - this.el.offsetHeight, this.el.offsetTop));
 
                 if (usePadding) {
-                    debugger;
                     var spaceLeftX = $(container).width() - this.el.offsetWidth,
                         spaceLeftY = $(container).height() - this.el.offsetHeight;
 
