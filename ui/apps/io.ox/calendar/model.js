@@ -70,7 +70,7 @@ define('io.ox/calendar/model', [
                 _(models).each(function (model) {
 
                     // try to resolve groups if possible
-                    if (model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
+                    if (!self.options.noInitialResolve && model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
                         var users = model instanceof Backbone.Model ? model.get('members') : model.members,
                             entity = model instanceof Backbone.Model ? model.get('entity') : model.entity;
 
@@ -97,6 +97,7 @@ define('io.ox/calendar/model', [
                         // something went wrong, just add the group as a whole
                         modelsToAdd = modelsToAdd.concat(groups);
                     }).always(function () {
+                        self.options.noInitialResolve = false;
                         // no need to resolve users that are already attendees
                         usersToResolve = _(usersToResolve).reject(function (user) {
                             return _(modelsToAdd).findWhere({ entity: user });
@@ -261,11 +262,12 @@ define('io.ox/calendar/model', [
         },
         getAttendees: function () {
             if (this._attendees) return this._attendees;
+
             var self = this,
                 resetListUpdate = false,
                 changeAttendeesUpdate = false;
-
-            this._attendees = new AttendeeCollection(this.get('attendees'), { resolveGroups: true, silent: false });
+            // there is always one attendee (organizer/calendar owner, so we check > 1)
+            this._attendees = new AttendeeCollection(this.get('attendees'), { resolveGroups: true, silent: false, noInitialResolve: this.get('attendees').length > 1 });
 
             this._attendees.on('add remove reset', function () {
                 if (changeAttendeesUpdate) return;
