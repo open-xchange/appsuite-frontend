@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:14+0100\n"
+"PO-Revision-Date: 2018-04-27 16:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -977,11 +977,11 @@ msgstr "开始于"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Start time"
-msgstr ""
+msgstr "开始时间"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "结束时间"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1538,12 +1538,12 @@ msgstr "下一个"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "空白表单单元格"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "已选定 - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2350,7 +2350,7 @@ msgstr[1] "已选定 %1$d 个项目"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "选定的项目。按下后退键或删除键以删除。"
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2361,7 +2361,7 @@ msgstr[1] "已选定 %1$d 个地址"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "选定的地址，按下后退键或删除键以移除。"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3138,19 +3138,9 @@ msgstr "保存联系人附件"
 msgid "Saved attachment"
 msgstr "保存附件"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "切换预览"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3231,11 +3221,11 @@ msgstr "您需要使用 %n 或更新版本。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "您的平台暂不支持！"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "当前不支持此平台。"
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3246,11 +3236,11 @@ msgstr "支持 Chrome %1$d、Firefox %2$d、IE %3$d、和 Safari %4$d 以后的�
 #. 'Google Chrome' is a brand and should not be translated
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
-msgstr ""
+msgstr "为更好的结果，安卓我们建议使用谷歌 Chrome 浏览器。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "获取最新版本的"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3290,7 +3280,7 @@ msgstr "您的浏览器停用 cookie 功能，请您启用它。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
-msgstr ""
+msgstr "连接超时。请尝试重新加载该页。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3587,11 +3577,11 @@ msgstr "新文件夹"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "日历名称"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "地址簿名称"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4186,15 +4176,15 @@ msgstr "您确定吗？"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "强制注销可能会导致数据丢失。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "强制注销"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "注销失败。"
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4236,13 +4226,14 @@ msgid ""
 "finished your work."
 msgstr "你上一次忘了注销。当你完成工作时始终使用注销按钮。"
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"你知道你可以随身携带OX App Suite吗？只需点击此图标，然后从菜单中选择“连接您的"
-"设备”。"
+"你知道你可以随身携带%1$s吗？只需点击此图标，然后从菜单中选择“连接您的设备”。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5206,14 +5197,6 @@ msgstr "不支持上载文件夹。"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "没有导入邮件，只支持 .eml 文件。"
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "因为文件超出限额 %1$s，所以未能上载。"
-msgstr[1] "因为文件超出限额 %1$s，所以未能上载。"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6116,15 +6099,15 @@ msgstr "文件限额"
 msgid "Need more space?"
 msgstr "需要更多空间？"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "移动操作需要更长的时间才能完成"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "完成移动"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7714,9 +7697,14 @@ msgstr "显示整篇消息"
 msgid "Email from %1$s: %2$s"
 msgstr "来自 %1$s 的电子邮件：%2$d"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "通过"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "显示整个消息，包括所有外部图像"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -7867,7 +7855,7 @@ msgstr "如果满足所有这些条件就继续"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "如果满足所有这些条件就继续"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8085,7 +8073,7 @@ msgstr "存在"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "不存在"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8748,11 +8736,6 @@ msgstr "消息大小"
 msgid "Statistics"
 msgstr "统计"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "经由"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "未知发送人"
@@ -9307,10 +9290,6 @@ msgstr "文档"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "清除字段"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "在"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11043,6 +11022,26 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "你知道你可以随身携带OX App Suite吗？只需点击此图标，然后从菜单中选择“连接"
+#~ "您的设备”。"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "因为文件超出限额 %1$s，所以未能上载。"
+#~ msgstr[1] "因为文件超出限额 %1$s，所以未能上载。"
+
+#~ msgid "via"
+#~ msgstr "经由"
+
+#~ msgid "in"
+#~ msgstr "在"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

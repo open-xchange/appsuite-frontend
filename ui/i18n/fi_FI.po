@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:09+0100\n"
+"PO-Revision-Date: 2018-04-27 15:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -984,11 +984,11 @@ msgstr "Alkaa"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Start time"
-msgstr ""
+msgstr "Aloitusaika"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "Lopetusaika"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1556,12 +1556,12 @@ msgstr "Seuraava"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "Tyhjennä taulukon solu"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "Valittu - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2380,7 +2380,7 @@ msgstr[1] "%1$d valittuna"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Valitut kohteet. Poista painamalla Backspace- tai Delete-näppäintä. "
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2391,7 +2391,7 @@ msgstr[1] "%1$d viestiä valittuna"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Valitut osoitteet. Poista painamalla Backspace- tai Delete-näppäintä."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3171,19 +3171,9 @@ msgstr "Tallennettu yhteystietoliite"
 msgid "Saved attachment"
 msgstr "Tallennettu liite"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "Vaihtele esikatselua"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3265,11 +3255,11 @@ msgstr "Sinun tulee käyttää iOS versiota %n tai uudempaa."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Alustaasi ei tueta!"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "Tätä alustaa ei tällä hetkellä tueta."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3282,10 +3272,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr ""
+"Parhaat tulokset saat käyttämällä Androidille tarkoitettua Google Chromea."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Hanki uusin versio "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3328,7 +3319,7 @@ msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
-msgstr ""
+msgstr "Yhteys katkesi. Yritä ladata sivu uudestaan."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3631,11 +3622,11 @@ msgstr "Uusi kansio"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "Kalenterinimi"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "Osoitekirjan nimi"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4234,19 +4225,19 @@ msgstr "Kirjaudu heti ulos"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Are you sure?"
-msgstr ""
+msgstr "Oletko varma?"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "Uloskirjautumisen pakottaminen voi johtaa tietojen menettämiseen."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "Pakota  uloskirjautuminen"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "Uloskirjautuminen epäonnistui"
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4290,13 +4281,15 @@ msgstr ""
 "Unohdit viimeksi kirjautua ulos. Käytä aina uloskirjautumispainiketta kun "
 "työsi on valmis."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Tiesitkö, että voi ottaa OX App Suiten mukaasi? Napauta tätä kuvaketta ja "
-"valitse valikosta 'Yhdistä laitteesi'."
+"Tiesitkö, että voi ottaa %1$s mukaasi? Napauta tätä kuvaketta ja valitse "
+"valikosta 'Yhdistä laitteesi'."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5280,14 +5273,6 @@ msgstr "Kansioiden lataamista ei tueta."
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Viestiä ei voitu tuoda. Vain .eml-tiedostot ovat tuettuja."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "Tiedostoa ei voida ladata, koska se ylittää  %1$s kiintiön"
-msgstr[1] "Tiedostoja ei voida ladata, koska ne ylittävät %1$s kiintiön"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6212,15 +6197,15 @@ msgstr "Tiedostokiintiö"
 msgid "Need more space?"
 msgstr "Tarvitsetko lisää tilaa?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "Siirron toteuttaminen kestää pitempään"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "Siirto päättyi"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7842,9 +7827,14 @@ msgstr "Näytä koko viesti"
 msgid "Email from %1$s: %2$s"
 msgstr "Viesti lähettäjältä %1$s: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "kautta"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "Näytä koko viesti, mukaan lukien ulkoset kuvat"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -7995,7 +7985,7 @@ msgstr "jatka jos kaikki nämä ehdot täyttyvät"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "jatka jos yksikin  näistä ehdoista täyttyy "
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8213,7 +8203,7 @@ msgstr "On olemassa"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "Ei ole olemassa"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8885,11 +8875,6 @@ msgstr "Viestikoko"
 msgid "Statistics"
 msgstr "Tilastot"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "kautta"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Tuntematon lähettäjä"
@@ -9447,10 +9432,6 @@ msgstr "Asiakirjat"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Tyhjennä kenttä"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "mukana"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11217,6 +11198,26 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Tiesitkö, että voi ottaa OX App Suiten mukaasi? Napauta tätä kuvaketta ja "
+#~ "valitse valikosta 'Yhdistä laitteesi'."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "Tiedostoa ei voida ladata, koska se ylittää  %1$s kiintiön"
+#~ msgstr[1] "Tiedostoja ei voida ladata, koska ne ylittävät %1$s kiintiön"
+
+#~ msgid "via"
+#~ msgstr "kautta"
+
+#~ msgid "in"
+#~ msgstr "mukana"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

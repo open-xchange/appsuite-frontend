@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:12+0100\n"
+"PO-Revision-Date: 2018-04-27 15:57+0200\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "Language: pl_PL\n"
@@ -989,11 +989,11 @@ msgstr "Data rozpoczęcia"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Start time"
-msgstr ""
+msgstr "Godzina rozpoczęcia"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "Godzina zakończenia"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1566,12 +1566,12 @@ msgstr "Dalej"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "Pusta komórka tabeli"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "Wybrano: %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2403,7 +2403,7 @@ msgstr[2] "Wybrano %1$s elementów"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Wybrane pozycje. Naciśnij Backspace lub Delete, aby usunąć."
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2415,7 +2415,7 @@ msgstr[2] "Wybrano %1$d adresów"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Wybrane adresy. Naciśnij Backspace lub Delete, aby usunąć."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3198,19 +3198,9 @@ msgstr "Załącznik z kontaktem został zapisany"
 msgid "Saved attachment"
 msgstr "Załącznik został zapisany"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "Przełącz podgląd"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3294,11 +3284,11 @@ msgstr "Wymagany jest system iOS w wersji %n lub wyższej."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Twoja platforma nie jest obsługiwana!"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "Ta platforma nie jest obecnie obsługiwana."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3312,10 +3302,12 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr ""
+"Aby uzyskać najlepsze wyniki, zalecamy używanie przeglądarki Google Chrome w "
+"systemie Android."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Pobierz najnowszą wersję z "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3357,6 +3349,7 @@ msgstr "W przeglądarce jest wyłączona obsługa plików cookie. Włącz ją."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr ""
+"Przekroczono limit czasu połączenia. Spróbuj ponownie załadować stronę."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3671,11 +3664,11 @@ msgstr "Nowy folder"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "Nazwa kalendarza"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "Nazwa książki adresowej"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4285,15 +4278,15 @@ msgstr "Na pewno chcesz to zrobić?"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "Wymuszenie wylogowania może spowodować utratę danych."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "Wymuś wylogowanie"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "Wylogowanie nieudane."
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4337,13 +4330,15 @@ msgstr ""
 "Ostatnim razem nie nastąpiło wylogowanie. Po zakończeniu pracy zawsze używaj "
 "przycisku wylogowania."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Czy wiesz, że możesz zabrać ze sobą pakiet OX App Suite? Wystarczy, że "
-"klikniesz tę ikonę i wybierzesz z menu polecenie Połącz urządzenie."
+"Czy wiesz, że możesz zabrać ze sobą pakiet %1$s? Wystarczy, że klikniesz tę "
+"ikonę i wybierzesz z menu polecenie Połącz urządzenie."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5338,21 +5333,6 @@ msgstr "Przesyłanie folderów nie jest obsługiwane."
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Poczta nie została zaimportowana. Obsługiwane są tylko pliki .eml."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"Nie można przesłać pliku, ponieważ jego rozmiar przekracza limit  przydziału "
-"miejsca wynoszący %1$s"
-msgstr[1] ""
-"Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
-"przydziału miejsca wynoszący %2$s"
-msgstr[2] ""
-"Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
-"przydziału miejsca wynoszący %2$s"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6296,15 +6276,15 @@ msgstr "Ograniczenie miejsca na pliki"
 msgid "Need more space?"
 msgstr "Potrzebujesz więcej miejsca?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "Operacja przenoszenia jest bardziej czasochłonna"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "Zakończono przenoszenie"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7960,9 +7940,14 @@ msgstr "Pokaż całą wiadomość"
 msgid "Email from %1$s: %2$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "Przez"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "Pokaż całą wiadomość ze wszystkimi obrazami zewnętrznymi"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -8113,7 +8098,7 @@ msgstr "kontynuuj, jeśli spełnione zostały wszystkie warunki"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "kontynuuj, jeśli spełniono którykolwiek z tych warunków"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8331,7 +8316,7 @@ msgstr "Istnieje"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "Nie istnieje"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -9007,11 +8992,6 @@ msgstr "Rozmiar wiadomości"
 msgid "Statistics"
 msgstr "Statystyki"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "przez "
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Nieznany nadawca"
@@ -9573,10 +9553,6 @@ msgstr "Dokumenty"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Wyczyść pole"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "w"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11356,6 +11332,33 @@ msgstr "Zaproś na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Dodaj w serwisie %s"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Czy wiesz, że możesz zabrać ze sobą pakiet OX App Suite? Wystarczy, że "
+#~ "klikniesz tę ikonę i wybierzesz z menu polecenie Połącz urządzenie."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Nie można przesłać pliku, ponieważ jego rozmiar przekracza limit  "
+#~ "przydziału miejsca wynoszący %1$s"
+#~ msgstr[1] ""
+#~ "Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
+#~ "przydziału miejsca wynoszący %2$s"
+#~ msgstr[2] ""
+#~ "Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
+#~ "przydziału miejsca wynoszący %2$s"
+
+#~ msgid "via"
+#~ msgstr "przez "
+
+#~ msgid "in"
+#~ msgstr "w"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

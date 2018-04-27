@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:07+0100\n"
+"PO-Revision-Date: 2018-04-27 15:27+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3202,18 +3202,6 @@ msgstr "Kontakt-Anhang wurde gespeichert"
 msgid "Saved attachment"
 msgstr "Anhang wurde gespeichert"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
-msgid "Moving \"%1$s\""
-msgstr "\"%1$s\" verschieben"
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
-msgid "Moving folder"
-msgstr "Ordner verschieben"
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
 msgstr "Vorschau umschalten"
@@ -3299,7 +3287,7 @@ msgstr "Sie benötigen mindestens iOS %n."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Ihre Plattform wird nicht unterstützt."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
@@ -3319,7 +3307,7 @@ msgstr "Für beste Ergebnisse empfehlen wir Google Chrome für Android."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Holen Sie sich die neueste Version vom "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -4336,13 +4324,15 @@ msgstr ""
 "Sie haben letztes Mal vergessen, sich abzumelden. Verwenden Sie immer die "
 "Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Wussten Sie, dass Sie OX App Suite mitnehmen können? Klicken Sie einfach auf "
-"dieses Symbol und wählen Sie im Menü 'Ihr Gerät verbinden'."
+"Wussten Sie, dass Sie %1$s mitnehmen können? Klicken Sie einfach auf dieses "
+"Symbol und wählen Sie im Menü 'Ihr Gerät verbinden'."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5338,18 +5328,6 @@ msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
 "Die E-Mail wurde nicht importiert. Es werden nur .eml-Dateien unterstützt."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"Die Datei kann nicht hochgeladen werden, da sie das Quota-Limit  von %1$s "
-"überschreitet."
-msgstr[1] ""
-"Die Dateien können nicht hochgeladen werden, da sie das Quota-Limit  von "
-"%1$s überschreiten."
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6294,15 +6272,15 @@ msgstr "Datei-Speicherplatz"
 msgid "Need more space?"
 msgstr "Sie brauchen mehr Speicher?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr " Verschieben des Ordners \"%1$s\" benötigt länger"
+msgid "Move operation takes longer to finish"
+msgstr "Verschiebevorgang dauert länger"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr " Verschieben des Ordners \"%1$s\" beendet"
+msgid "Finished moving"
+msgstr "Verschieben abgeschlossen"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7956,6 +7934,11 @@ msgstr "Gesamte Nachricht anzeigen"
 msgid "Email from %1$s: %2$s"
 msgstr "E-Mail von %1$s: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "Via"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
 msgstr "Gesamte Nachricht einschließlich aller externen Bilder anzeigen"
@@ -9001,11 +8984,6 @@ msgstr "Nachrichtengröße"
 msgid "Statistics"
 msgstr "Statistiken"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "über"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Unbekannter Absender"
@@ -9574,10 +9552,6 @@ msgstr "Dokumente"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Feldeintrag löschen"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "in"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11354,6 +11328,44 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid "Moving \"%1$s\""
+#~ msgstr "\"%1$s\" verschieben"
+
+#, fuzzy
+#~ msgid "Moving folder"
+#~ msgstr "Ordner verschieben"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Wussten Sie, dass Sie OX App Suite mitnehmen können? Klicken Sie einfach "
+#~ "auf dieses Symbol und wählen Sie im Menü 'Ihr Gerät verbinden'."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Die Datei kann nicht hochgeladen werden, da sie das Quota-Limit  von %1$s "
+#~ "überschreitet."
+#~ msgstr[1] ""
+#~ "Die Dateien können nicht hochgeladen werden, da sie das Quota-Limit  von "
+#~ "%1$s überschreiten."
+
+#~ msgid " Moving folder \"%1$s\" takes longer to finish"
+#~ msgstr " Verschieben des Ordners \"%1$s\" benötigt länger"
+
+#~ msgid " Finished moving folder \"%1$s\""
+#~ msgstr " Verschieben des Ordners \"%1$s\" beendet"
+
+#~ msgid "via"
+#~ msgstr "über"
+
+#~ msgid "in"
+#~ msgstr "in"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "
