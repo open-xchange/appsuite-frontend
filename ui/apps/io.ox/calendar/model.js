@@ -303,12 +303,14 @@ define('io.ox/calendar/model', [
                         uri: 'mailto:' + user.email1,
                         entity: user.id
                     });
-                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' });
-                    // Merge attributes or add (note add with merge option does not overwrite old values with new ones, so it cannot be used here)
-                    if (self.getAttendees().get(newAttendee)) {
-                        self.getAttendees().get(newAttendee).set(newAttendee);
+                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' }),
+                        id = newAttendee.email ? { email:  newAttendee.email } : { entity: newAttendee.entity };
+
+                    // Merge attributes or add
+                    if (_(self.get('attendees')).findWhere(id)) {
+                        _(self.get('attendees')).findWhere(id).partStat = 'ACCEPTED';
                         // trigger add manually to make sure the attendee attribute and collection are synced correctly -> see follow up events action
-                        self.getAttendees().trigger('add');
+                        self.trigger('change:attendees');
                     } else {
                         self.getAttendees().add(newAttendee);
                     }

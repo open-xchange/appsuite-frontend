@@ -44,7 +44,7 @@ define('io.ox/calendar/actions/follow-up', [
 
         // clean up attendees (remove confirmation status comments etc)
         copy.attendees = _(copy.attendees).map(function (attendee) {
-            var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity');
+            var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
             // resources are always set to accepted
             if (temp.cn === 'RESOURCE') {
                 temp.partStat = 'ACCEPTED';
