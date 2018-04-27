@@ -145,7 +145,7 @@ define('io.ox/core/folder/picker', [
         }
         dialog.$body.css({ height: o.height });
 
-        var id = o.folder;
+        var id = o.folder || api.getDefaultFolder(o.module);
 
         if (id === undefined && o.settings && _.isString(o.persistent)) {
             id = o.settings.get(o.persistent + '/last');
