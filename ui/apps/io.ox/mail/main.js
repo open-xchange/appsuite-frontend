@@ -1569,6 +1569,9 @@ define('io.ox/mail/main', [
                 toggleClasses();
             });
 
+            // update classes on folder change, e.g. text preview is not available for external accounts
+            app.on('folder:change', toggleClasses);
+
             toggleClasses();
 
             function toggleClasses() {
