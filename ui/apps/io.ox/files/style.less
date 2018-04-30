@@ -98,8 +98,7 @@
 
     &:before {
         content: '\f016';                                             // default: fa-file-o
-        color: #afafaf;
-      //color: #767676;
+        color: #767676;
     }
     .file-type-image  &:before { content: '\f03e'; }                  // fa-image
     .file-type-audio  &:before { content: '\f028'; }                  // fa-volume-up
@@ -112,7 +111,7 @@
     .file-type-svg    &:before { content: '\f1c9'; color: #F4502A; }  // fa-file-code-o
     .file-type-txt    &:before { content: '\f0f6'; }                  // fa-edit
     .file-type-guard  &:before { content: '\f023'; }                  // fa-lock
-    .file-type-folder &:before { content: '\f07b'; }                  // fa-folder
+    .file-type-folder &:before { content: '\f07b'; color: #808080; }  // fa-folder - 4% reduced luminance compared to the file-type-icon to compensate the percived grey value (filled vs. outline) a bit
 }
 
 .file-list-view, .myshares-list, .myfavorites-list {
