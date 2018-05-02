@@ -137,6 +137,9 @@ settings!io.ox/core
 **properties/infostoreUsage**
 > current summarized file size of all inforstore files
 
+**properties/contactImageMaxWidth**
+> max target image width when croping contact/user images (default: 500)
+
 ## Feedback
 
 **feedback/supportlink**
