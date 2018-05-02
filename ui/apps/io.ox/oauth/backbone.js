@@ -144,6 +144,11 @@ define('io.ox/oauth/backbone', [
                             model.set(res);
                             return res;
                         });
+                    }).then(function (res) {
+                        return require(['io.ox/oauth/keychain']).then(function (oauthAPI) {
+                            oauthAPI.accounts.add(model);
+                            return res;
+                        });
                     }).done(options.success).fail(options.error);
                 case 'update':
                     return model.reauthorize({ force: false }).then(function () {

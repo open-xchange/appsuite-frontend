@@ -315,10 +315,7 @@ define('io.ox/core/sub/subscriptions', [
                 displayName: oauthAPI.chooseDisplayName(service)
             });
 
-        return account.enableScopes(scope).save().then(function (account) {
-            oauthAPI.accounts.add(account, { merge: true });
-            return account;
-        });
+        return account.enableScopes(scope).save();
     }
     ext.point(POINT + '/oauth').extend({
         id: 'oauth',
