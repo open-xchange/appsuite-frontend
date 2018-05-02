@@ -44,7 +44,7 @@ define('io.ox/contacts/actions/invite', [
                 if (!single.mark_as_distributionlist) {
                     cleaned.push(single);
                 } else {
-                    distLists = distLists.concat(single.distribution_list);
+                    distLists = distLists.concat(single.distribution_list || []);
                 }
             });
             return cleaned;
