@@ -548,7 +548,7 @@ define('io.ox/mail/util', [
 
             function getAuthenticityLevel() {
                 if (!settings.get('features/authenticity', false)) return 'none';
-                return settings.get('authenticity/level');
+                return settings.get('authenticity/level', 'none');
             }
 
             function getAuthenticityStatus(data) {

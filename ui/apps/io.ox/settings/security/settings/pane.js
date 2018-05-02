@@ -103,6 +103,9 @@ define('io.ox/settings/security/settings/pane', [
         id: 'mail',
         index: 100,
         render: function () {
+            // fallback default value
+            if (mailSettings.get('features/authenticity', false) && !this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
+
             this.$el.append(
                 util.fieldset(
                     gt.pgettext('app', 'Mail'),

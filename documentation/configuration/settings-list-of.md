@@ -727,6 +727,12 @@ settings!io.ox/mail
 **features/anonymousAliases**
 > ...
 
+**features/authenticity**
+> when enabled (default: false) email authentication status gets highlighted
+
+**authenticity/level**
+> user setting which statuses are highlighted (default: false, values: none/fail_neutral/all)
+
 **features/autoCollapseBlockquotes**
 > when enabled the limit of 300 chars is applied
 
