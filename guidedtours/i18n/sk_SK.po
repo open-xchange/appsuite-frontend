@@ -2,13 +2,14 @@
 # Copyright (C) 2011 Open-Xchange.
 # This file is distributed under the same license as the Open-Xchange package.
 # Antje Faber, 2013.
+# Ivan Masár <helix84@centrum.sk>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-28 23:14+0200\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2018-05-02 13:07+0200\n"
+"Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -375,9 +376,8 @@ msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
 msgstr ""
-"Tento prehliadka vám stručne predstaví tento produkt. Podrobnejšie "
-"informácie získate v prehliadkach jednotlivých aplikácií alebo v Pomocníkovi "
-"online."
+"Táto prehliadka vám stručne predstaví tento produkt. Podrobnejšie informácie "
+"získate v prehliadkach jednotlivých aplikácií alebo v Pomocníkovi online."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Launching an app"
