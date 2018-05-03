@@ -100,20 +100,6 @@ define('io.ox/calendar/edit/extensions', [
                         baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
 
-                    // save attachment data to model
-                    if (attachments.length) {
-                        var attachmentData = [];
-                        _(attachments).each(function (attachment) {
-                            attachmentData.push({
-                                filename: attachment.filename,
-                                fmtType: attachment.file.type,
-                                uri: 'cid:' + 'file_' + attachment.cid
-                            });
-                        });
-                        // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
-                        attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
-                        baton.model.set('attachments', attachmentData, { silent: true });
-                    }
 
                     // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
@@ -129,6 +115,21 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                     if (!baton.model.isValid({ isSave: true })) return;
+
+                    // save attachment data to model
+                    if (attachments.length) {
+                        var attachmentData = [];
+                        _(attachments).each(function (attachment) {
+                            attachmentData.push({
+                                filename: attachment.filename,
+                                fmtType: attachment.file.type,
+                                uri: 'cid:' + 'file_' + attachment.cid
+                            });
+                        });
+                        // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
+                        attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
+                        baton.model.set('attachments', attachmentData, { silent: true });
+                    }
 
                     // do some cleanup
                     // remove groups with entity. Those are not needed, as the attendees are also added individually.
