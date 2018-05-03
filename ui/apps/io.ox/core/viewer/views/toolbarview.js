@@ -656,7 +656,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onModelChange: function (changedModel) {
             // ignore events that require no render
-            if (!_.isString(this.model.previous('description')) && changedModel.get('description') === '') {
+            if (!changedModel.changed.description && !_.isString(this.model.previous('description')) && changedModel.get('description') === '') {
                 return;
             }
             this.render(changedModel);
@@ -716,9 +716,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
                 // save current data as view model
                 this.model = model;
+                this.stopListening(this.model);
                 this.listenTo(this.model, 'change', this.onModelChange);
 
                 // listener for added/removed favorites
+                this.stopListening(FilesAPI);
                 this.listenTo(FilesAPI, 'favorite:add favorite:remove', function (file) {
                     if (file.id === _.cid(model.toJSON())) {
                         self.onModelChange(FilesAPI.pool.get('detail').get(file.id));
