@@ -28,6 +28,7 @@ define('io.ox/core/main/apps', [
         name: 'io.ox/calendar',
         title: gt.pgettext('app', 'Calendar'),
         searchable: true,
+        settings: true,
         requires: 'calendar',
         refreshable: true,
         icon: icons['io.ox/calendar']
