@@ -277,7 +277,7 @@ define('plugins/notifications/calendar/register', [
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
-                            if (alarm.time > now) {
+                            if (alarm.time <= now) {
                                 if (alarm.action === 'AUDIO') {
                                     playAlarm(alarm);
                                 } else {
@@ -294,7 +294,7 @@ define('plugins/notifications/calendar/register', [
                         });
                         alarmsToShow = temp;
                         if (nextAlarm) {
-                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm).utc().valueOf() - new moment(now).utc().valueOf());
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).utc().valueOf() - new moment(now).utc().valueOf());
                         }
                     };
 
