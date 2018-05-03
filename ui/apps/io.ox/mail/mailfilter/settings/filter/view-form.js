@@ -69,7 +69,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     _(options.sort).map(function (value) {
                         if (value === options.skip) return;
                         return $('<li>').append(
-                            $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
+                            $('<a href="#" data-action="change-dropdown-value" role="menuitemradio">').attr('data-value', value).data(options).append(
                                 $.txt(values[value])
                             )
                         );
