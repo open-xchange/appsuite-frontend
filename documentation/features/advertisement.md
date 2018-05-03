@@ -12,7 +12,7 @@ actually run the campaigns by the provider.
 
 # Configuration
 
-Configuration for the `io.ox/ads` framework must be provided by a plugin in the [namespace](components/plugins/01_create-plugins#namespace)
+Configuration for the `io.ox/ads` framework must be provided by a plugin in the namespace
 `io.ox/ads`.
 
 All registered plugins for `io.ox/ads` will get loaded and the return values of their modules will be handed as
@@ -29,18 +29,18 @@ The `config` object can contain arbitrary data.
 The `changeModule` method of the `io.ox/ads` extension point will be invoked with the app name as first parameter
 and a [Baton](../extension-points/04-baton.html) containing a reference to the app and the `config` object.
 
-The default implementation expects the `config` object to contain one key for each [space](advertisment#spaces).
+The default implementation expects the `config` object to contain one key for each [space](#Spaces).
 Values for these keys used in the default implementation should be an object defining:
 
 - `space` - a String which defines the desired target space for this ad
-- `html` - a String which is appended to the corresponding [space](advertisment#spaces)
+- `html` - a String which is appended to the corresponding [space](#Spaces)
 - `reloadAfter` - a number value, representing the time until the next refresh operation for an area is invoked
 - `showInModules` - `falsy` value (always active) OR an array with app names to match against (e.g. `'io.ox/mail'`, …)
 
 For every defined area, the `cleanup` method of the corresponding extension point will be invoked.
 Active spaces are determined by filtering using `showInModules` options in the area configuration.
 By extending `io.ox/ads` extension point implementing the `filter` method, the filtering behaviour can be customized.
-For every active area, the `draw` method of the extension point will be invoked. (See [Spaces section](advertisment#spaces))
+For every active area, the `draw` method of the extension point will be invoked. (See [Spaces section](#Spaces))
 The `reload` method of the area extension point will be invoked in a regular interval defined by the value of `reloadAfter`.
 The configuration object will be passed to each method invocation.
 
@@ -61,11 +61,11 @@ The provided methods are:
 - `load`: store a given configuration. No need to call this manually, the framework uses this internally.
     In case you need to add configuration later, this function can be used.
 - `get`: get all configuration values in an Array
-- `forSpace`: only return configuration for a given [space name](advertisment#spaces)
+- `forSpace`: only return configuration for a given [space name](#Spaces)
 
 # Spaces
 
-There is a list of [extension points](extension-points/01_general) defined, which can be used to place banners.
+There is a list of extension points defined, which can be used to place banners.
 All points share a similar API:
 
 ```javascript
@@ -90,7 +90,7 @@ The following ad spaces are pre-defined and can be used to serve ads:
 - io.ox/ads/mailSentOverlay
 - io.ox/ads/logout
 
-In order to activate one of these spaces, a [custom plugin](components/plugins/01_create-plugins) is needed, shipping a
+In order to activate one of these spaces, a custom plugin is needed, shipping a
 configuration as described [above](#Configuration).
 
 ## Default values
@@ -106,7 +106,7 @@ These sizes contain tested values, which are known to work quite well in AppSuit
 
 Usage example:
 
-```
+```JavaScript
 var defaults = ext.Baton.ensure({
     sizes: [],
     sizeMappings: []
@@ -183,7 +183,7 @@ The main purpose is to use it in the configuration:
 
 # Customization
 
-The default behavior can be completely customized using well-known methods, [extension points](extension-points).
+The default behavior can be completely customized using well-known methods, extension points.
 Despite the special points for the [spaces](#Spaces) as described above, it is possible to extend the general point `io.ox/ads`.
 The API for this point looks like this:
 
@@ -196,7 +196,8 @@ ext.point('io.ox/ads').extend({
 });
 ```
 
-As a reference implementation and a starting point, [this](https://github.com/Open-Xchange-Frontend/adexample) project can be used.
+As a reference implementation and a starting point, [this](https://gitlab.open-xchange.com/frontend/ads/tree/develop/open-xchange-ads-demo)
+project can be used.
 The implementation is used to demonstrate the integration of a few [spaces](#Spaces) using a little more than just a minimal configuration.
 
 # Google Publisher Tag
