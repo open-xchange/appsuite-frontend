@@ -29,18 +29,18 @@ The `config` object can contain arbitrary data.
 The `changeModule` method of the `io.ox/ads` extension point will be invoked with the app name as first parameter
 and a [Baton](../extension-points/04-baton.html) containing a reference to the app and the `config` object.
 
-The default implementation expects the `config` object to contain one key for each [space](#Spaces).
+The default implementation expects the `config` object to contain one key for each [space](#spaces).
 Values for these keys used in the default implementation should be an object defining:
 
 - `space` - a String which defines the desired target space for this ad
-- `html` - a String which is appended to the corresponding [space](#Spaces)
+- `html` - a String which is appended to the corresponding [space](#spaces)
 - `reloadAfter` - a number value, representing the time until the next refresh operation for an area is invoked
 - `showInModules` - `falsy` value (always active) OR an array with app names to match against (e.g. `'io.ox/mail'`, …)
 
 For every defined area, the `cleanup` method of the corresponding extension point will be invoked.
 Active spaces are determined by filtering using `showInModules` options in the area configuration.
 By extending `io.ox/ads` extension point implementing the `filter` method, the filtering behaviour can be customized.
-For every active area, the `draw` method of the extension point will be invoked. (See [Spaces section](#Spaces))
+For every active area, the `draw` method of the extension point will be invoked. (See [Spaces section](#spaces))
 The `reload` method of the area extension point will be invoked in a regular interval defined by the value of `reloadAfter`.
 The configuration object will be passed to each method invocation.
 
@@ -61,7 +61,7 @@ The provided methods are:
 - `load`: store a given configuration. No need to call this manually, the framework uses this internally.
     In case you need to add configuration later, this function can be used.
 - `get`: get all configuration values in an Array
-- `forSpace`: only return configuration for a given [space name](#Spaces)
+- `forSpace`: only return configuration for a given [space name](#spaces)
 
 # Spaces
 
@@ -91,7 +91,7 @@ The following ad spaces are pre-defined and can be used to serve ads:
 - io.ox/ads/logout
 
 In order to activate one of these spaces, a custom plugin is needed, shipping a
-configuration as described [above](#Configuration).
+configuration as described [above](#configuration).
 
 ## Default values
 
@@ -184,7 +184,7 @@ The main purpose is to use it in the configuration:
 # Customization
 
 The default behavior can be completely customized using well-known methods, extension points.
-Despite the special points for the [spaces](#Spaces) as described above, it is possible to extend the general point `io.ox/ads`.
+Despite the special points for the [spaces](#spaces) as described above, it is possible to extend the general point `io.ox/ads`.
 The API for this point looks like this:
 
 ```javascript
@@ -198,14 +198,14 @@ ext.point('io.ox/ads').extend({
 
 As a reference implementation and a starting point, [this](https://gitlab.open-xchange.com/frontend/ads/tree/develop/open-xchange-ads-demo)
 project can be used.
-The implementation is used to demonstrate the integration of a few [spaces](#Spaces) using a little more than just a minimal configuration.
+The implementation is used to demonstrate the integration of a few [spaces](#spaces) using a little more than just a minimal configuration.
 
 # Google Publisher Tag
 
 The io.ox/ads API natively supports using Doubleclick GPT as a provider for ad space content.
 Implementing a campaign should be possible without any JavaScript code, by just providing configuration
 for the desired slots.
-This is achieved using the [default values](#Default values) feature.
+This is achieved using the [default values](#default-values) feature.
 
 A minimal configuration for the `io.ox/ads/leaderboard` ad space might look like this:
 
@@ -220,7 +220,7 @@ A minimal configuration for the `io.ox/ads/leaderboard` ad space might look like
 }]
 ```
 
-This will setup an automatic reload after 30s and installing a [cooldown](#Cooldown) timer to not refresh before 5s have past since
+This will setup an automatic reload after 30s and installing a [cooldown](#cooldown) timer to not refresh before 5s have past since
 the last reload event.
 Banners will be served from the ad unit `/1234567/test_ads`, which needs to be defined within GPT.
 
