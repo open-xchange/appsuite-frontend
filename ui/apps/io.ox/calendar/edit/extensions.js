@@ -721,22 +721,21 @@ define('io.ox/calendar/edit/extensions', [
                     //in file picker dialog - other browsers still seem to work)
                     $input[0].value = '';
                     $input.trigger('reset.fileupload');
-                    // look if the quota is exceeded
-                    baton.model.on('invalid:quota_exceeded', function (messages) {
-                        require(['io.ox/core/yell'], function (yell) {
-                            yell('error', messages[0]);
-                        });
-                    });
                     baton.model.validate();
-                    // turn of again to prevent double yells on save
-                    baton.model.off('invalid:quota_exceeded');
                 };
+
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
             $node.append($('<div>').addClass('col-md-12').append($inputWrap));
+
+            baton.model.on('invalid:quota_exceeded', function (messages) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', messages[0]);
+                });
+            });
         }
     });
 
