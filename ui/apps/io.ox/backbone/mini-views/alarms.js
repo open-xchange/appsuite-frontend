@@ -301,7 +301,8 @@ define('io.ox/backbone/mini-views/alarms', [
                 .addCancelButton()
                 .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
-                    self.model.set(self.attribute, alarmView.getAlarmsArray());
+                    // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
+                    self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
                 })
                 .open();
             });
