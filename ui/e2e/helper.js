@@ -5,7 +5,7 @@ class MyHelper extends Helper {
 
     executeSoapRequest(type, action, data) {
 
-        let baseURL = util.getURLRoot(),
+        let baseURL = util.getClientURLRoot(),
             url = `${baseURL}/webservices/${type}?wsdl`;
 
         data.auth = { login: 'oxadmin', password: 'secret' };

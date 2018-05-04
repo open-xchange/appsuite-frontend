@@ -13,6 +13,16 @@ let util = module.exports = {
             host = pathArray[2];
         return `${protocol}//${host}`;
     },
+    getClientURLRoot: function () {
+        const config = codecept.config.get(),
+            webDriver = config.helpers['WebDriverIO'],
+            ox = config.helpers['OpenXchange'],
+            url = ox.clientUrlRoot || webDriver.url,
+            pathArray = url.split('/'),
+            protocol = pathArray[0],
+            host = pathArray[2];
+        return `${protocol}//${host}`;
+    },
 
     getSessionForUser: (function () {
         var cache = {};
@@ -36,7 +46,7 @@ let util = module.exports = {
             if (cache[user.name]) return Promise.resolve(cache[user.name]);
 
             const httpClient = axios.create({
-                baseURL: util.getURLRoot(),
+                baseURL: util.getClientURLRoot(),
                 withCredentials: true
             });
 
