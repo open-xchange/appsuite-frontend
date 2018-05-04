@@ -131,33 +131,6 @@ define('io.ox/calendar/util', [
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
         ZULU_FORMAT_DAY_ONLY: 'YYYYMMDD',
 
-        isBossyAppointmentHandling: function (opt) {
-
-            opt = _.extend({
-                app: {},
-                invert: false,
-                folderData: null
-            }, opt);
-
-            if (!settings.get('bossyAppointmentHandling', false)) return $.when(true);
-
-            var check = function (data) {
-                if (folderAPI.is('private', data)) {
-                    var isOrganizer = that.hasFlag(opt.app, 'organizer');
-                    return opt.invert ? !isOrganizer : isOrganizer;
-                }
-                return true;
-            };
-
-            if (opt.folderData) return $.when(check(opt.folderData));
-
-            if (!opt.app.folder) return $.when(false);
-
-            return folderAPI.get(opt.app.folder).then(function (data) {
-                return check(data);
-            });
-        },
-
         getFirstWeekDay: function () {
             // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
             return moment.localeData().firstDayOfWeek();
@@ -1276,6 +1249,49 @@ define('io.ox/calendar/util', [
                 description: '',
                 trigger: { duration: '-PT12H', related: 'START' }
             }]);
+        },
+
+        // checks if the user is allowed to edit an event
+        // can be used in synced or deferred mode(deferred is default) by setting options.synced
+        // If synced mode is used make sure to give the folder data in the options.folderData attribute
+        allowedToEdit: function (event, options) {
+            options = options || {};
+            var result = function (val) { return options.synced ? val : $.when(val); };
+
+            // no event
+            if (!event) return result(false);
+
+            // support objects and models
+            var data = event.attributes || event,
+                folder = data.folder;
+            // no id or folder
+            if (!data.id || !data.folder) return result(false);
+
+            // organizer is allowed to edit
+            if (this.hasFlag(data, 'organizer')) return result(true);
+
+            // if user is neither organizer nor attendee editing is not allowed
+            if (!this.hasFlag(data, 'attendee')) return result(false);
+
+            // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
+            if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
+
+            // synced mode needs folderData at this point. Stop if not given
+            if (options.synced && !options.folderData) return result(false);
+            if (options.synced) {
+                // public folder
+                if (folderAPI.is('public', options.folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
+                // no public folder
+                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
+            }
+
+            // check if this is a public or non public folder
+            return folderAPI.get(folder).then(function (folderData) {
+                // public folder
+                if (folderAPI.is('public', folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
+                // no public folder
+                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
+            });
         },
 
         hasFlag: function (data, flag) {
