@@ -1262,7 +1262,7 @@ define('io.ox/mail/api', [
         data.bcc = _(data.bcc).map(flatten);
         if (data.share_attachments && data.share_attachments.expiry_date) {
             // expiry date should count from mail send
-            data.share_attachments.expiry_date = _.now() + data.share_attachments.expiry_date;
+            data.share_attachments.expiry_date = _.now() + parseInt(data.share_attachments.expiry_date, 10);
         }
         function mapArgs(obj) {
             return {
