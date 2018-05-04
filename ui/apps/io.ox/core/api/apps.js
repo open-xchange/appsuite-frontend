@@ -44,7 +44,7 @@ define('io.ox/core/api/apps', [
             }.bind(this));
         },
         _indexOf: function indexOf(app) {
-            var index = this._indexMap[app.id];
+            var index = this._indexMap[_.isString(app) ? app : app.id];
             return typeof index === 'number' ? index : -1;
         },
         comparator: function (a, b) {
