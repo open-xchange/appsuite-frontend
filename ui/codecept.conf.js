@@ -29,10 +29,10 @@ module.exports.config = {
                 'acceptSslCerts': true
             }
         }, localConf.e2e.helpers.WebDriverIO || {}),
-        OpenXchange: {
+        OpenXchange: _.extend({}, {
             require: './e2e/helper',
             users: localConf.e2e.users
-        }
+        }, localConf.e2e.helpers.OpenXchange || {})
     },
     'include': {
         'I': './e2e/actor',
