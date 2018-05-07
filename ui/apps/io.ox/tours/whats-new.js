@@ -67,7 +67,7 @@ define('io.ox/tours/whats-new', [
             if (!baton.tour) return;
             baton.tour.step()
                 .title(gt('New Windows'))
-                .waitFor('.io-ox-mail-compose-window:first')
+                .waitFor('.io-ox-mail-compose-window:visible:last')
                 .on('back', function () {
                     if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
                         composeApp.getWindow().floating.onMinimize();
@@ -85,7 +85,7 @@ define('io.ox/tours/whats-new', [
                     });
                 })
                 .content(gt('Emails will appear in a new window. These windows can be maximized, minimized and closed.'))
-                .spotlight('.io-ox-mail-compose-window:first')
+                .spotlight('.io-ox-mail-compose-window:visible:last')
             .end();
         }
     });
@@ -97,13 +97,13 @@ define('io.ox/tours/whats-new', [
             if (!baton.tour) return;
             baton.tour.step()
                 .title(gt('New Windows'))
-                .waitFor('.taskbar-button:first')
+                .waitFor('.taskbar-button:visible:last')
                 .on('wait', function () {
                     if (composeApp && composeApp.getWindow().floating.model.get('minimized')) return;
-                    $('.io-ox-mail-compose-window:first [data-action="minimize"]').click();
+                    $('.io-ox-mail-compose-window:last [data-action="minimize"]').click();
                 })
                 .content(gt('Windows you have minimized will appear in all applications for easy access. You can maximize a window again by clicking on it.'))
-                .spotlight('.taskbar-button:first')
+                .spotlight('.taskbar-button:visible:last')
             .end()
             .on('stop', function () {
                 if (composeApp) {
