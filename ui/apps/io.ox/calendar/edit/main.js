@@ -285,7 +285,12 @@ define('io.ox/calendar/edit/main', [
                                 } else {
                                     api.update(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), {
+                                            attachments: self.attachmentsFormData || [],
+                                            sendInternalNotifications: sendNotifications,
+                                            checkConflicts: false,
+                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                        })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
                             });
