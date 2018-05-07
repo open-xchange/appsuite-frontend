@@ -421,10 +421,11 @@ define('io.ox/mail/listview', [
 
             this.$el.on('scrollend', this.fetchTextPreview.bind(this));
             this.on('collection:load collection:reload', this.fetchTextPreview);
-
-            this.selection.resolve = function () {
-                return api.resolve(this.get(), this.view.app.isThreaded());
-            };
+            if (this.selection) {
+                this.selection.resolve = function () {
+                    return api.resolve(this.get(), this.view.app.isThreaded());
+                };
+            }
         },
 
         fetchTextPreview: function () {
