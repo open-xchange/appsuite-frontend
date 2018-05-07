@@ -1141,7 +1141,7 @@ define('io.ox/files/api', [
                     affectedFolders.push(folderId);
                 }
 
-                api.trigger('reload:listview');
+                api.trigger('refresh:listviews');
             });
         })
         .fail(function () {
@@ -1183,7 +1183,7 @@ define('io.ox/files/api', [
             collection.remove(collection.get(cid));
         },
         'restore': function () {
-            api.trigger('reload:listview');
+            api.trigger('refresh:listviews');
         }
     });
 

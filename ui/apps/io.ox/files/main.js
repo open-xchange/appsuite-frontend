@@ -963,6 +963,9 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
+            api.on('refresh:listviews', _.debounce(function () {
+                ox.trigger('refresh^');
+            }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
