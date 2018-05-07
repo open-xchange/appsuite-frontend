@@ -80,7 +80,6 @@ define('io.ox/files/share/listview', [
         load: function () {
             var self = this;
             return api.all().then(function (data) {
-                console.log('sharingBug: load', data);
                 self.collection.reset(data);
             });
         },
@@ -309,7 +308,7 @@ define('io.ox/files/share/listview', [
             permissionList = model.getPermissions().filter(function (item/*, idx, arr*/) {
                 return (item.type !== 'anonymous');
             });
-        console.log('sharingBug: permissionList invites', { permissions: permissionList, model: model });
+
         model.setPermissions(permissionList);
 
         return model;
@@ -319,12 +318,12 @@ define('io.ox/files/share/listview', [
         // new 'io.ox/files/share/api' model
         model = (new api.Model(model.toJSON()));
         var permissionList = model.getPermissions().filter(function (item) {
-            return (item.type === 'anonymous' && item.isInherited !== true);
+            return (item.type === 'anonymous');
         });
-        console.log('sharingBug: permissionList link', { permissions: permissionList, model: model });
+
         model.setPermissions(permissionList);
 
-        return permissionList.length ? model : false;
+        return model;
     }
 
     function collectListItemsFromSharingModel(collector, model) {
@@ -338,14 +337,10 @@ define('io.ox/files/share/listview', [
             itemList = collector.itemList;                      // view items if necessary.
 
         if (isInvitation) {
-            console.log('sharingBug: invite model', { model: model });
-            var invModel = makeInvitationOnlySharingModel(model);
-            if (invModel) { itemList.push(target.renderListItem(invModel)); }
+            itemList.push(target.renderListItem(makeInvitationOnlySharingModel(model)));
         }
         if (isPublicLink) {
-            console.log('sharingBug: public model', { model: model });
-            var pubModel = makePublicLinkOnlySharingModel(model);
-            if (pubModel) { itemList.push(target.renderListItem(pubModel)); }
+            itemList.push(target.renderListItem(makePublicLinkOnlySharingModel(model)));
         }
         return collector;
     }
