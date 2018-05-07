@@ -103,9 +103,11 @@ define('io.ox/calendar/model', [
                             return _(modelsToAdd).findWhere({ entity: user });
                         });
                         userAPI.getList(usersToResolve).done(function (users) {
-                            modelsToAdd = _.uniq(_.union(modelsToAdd, _(users).map(function (user) {
+                            modelsToAdd = _.compact(_.uniq(_.union(modelsToAdd, _(users).map(function (user) {
+                                // remove broken users without mail address to be robust see bug 58370
+                                if (!user.email1) return;
                                 return util.createAttendee(user);
-                            })));
+                            }))));
                             // no merge here or we would overwrite the confirm status
                             def.resolve(self.oldAdd(modelsToAdd, options));
                         }).fail(def.reject);
