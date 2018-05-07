@@ -37,7 +37,9 @@ define('io.ox/oauth/reauth_handler', [
                 require(['io.ox/oauth/keychain']).then(function (keychain) {
                     var account = keychain.accounts.get(err.error_params[1]);
 
-                    account.reauthorize();
+                    return account.reauthorize();
+                }).then(function () {
+                    ox.trigger('please:refresh');
                 });
             })
             .open();
