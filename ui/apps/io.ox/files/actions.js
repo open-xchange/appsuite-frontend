@@ -1245,6 +1245,24 @@ define('io.ox/files/actions', [
         ref: 'io.ox/files/actions/delete'
     }));
 
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'favorite-add',
+        index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Add to favorites'),
+        ref: 'io.ox/files/favorites/add'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'favorite-remove',
+        index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Remove from favorites'),
+        ref: 'io.ox/files/favorites/remove'
+    }));
+
     // low
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
