@@ -32,8 +32,6 @@ define('io.ox/mail/categories/tabs', [
             'contextmenu': 'onConfigureCategories',
             'dblclick': 'onConfigureCategories',
             'selection:drop': 'onMove',
-            'mouseover .category': 'onMouseover',
-            'mouseout .category': 'onMouseout',
             'mousedown .category button': 'respondToNonKeyboardFocus',
             'blur .category button': 'respondToNonKeyboardFocus'
         },
@@ -65,9 +63,6 @@ define('io.ox/mail/categories/tabs', [
                 'background': 'white'
             });
         },
-
-        onMouseover: function (e) { $(e.currentTarget).addClass('hover'); },
-        onMouseout: function (e) { $(e.currentTarget).removeClass('hover'); },
 
         render: function () {
 
