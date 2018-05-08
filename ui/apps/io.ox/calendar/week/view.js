@@ -592,8 +592,7 @@ define('io.ox/calendar/week/view', [
                     self.trigger('openCreateAppointment', e, {
                         startDate: { value: start.utc(true).format('YYYYMMDD') },
                         endDate: { value: start.utc(true).format('YYYYMMDD') },
-                        folder: folder.id,
-                        allDay: true
+                        folder: folder.id
                     });
                 }
             });

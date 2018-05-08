@@ -310,7 +310,7 @@ define('io.ox/calendar/edit/extensions', [
             baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-xs-6',
-                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'startDate',
                 label: gt('Starts on'),
                 timezoneButton: true,
@@ -346,7 +346,7 @@ define('io.ox/calendar/edit/extensions', [
             baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-xs-6',
-                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'endDate',
                 label: gt('Ends on'),
                 timezoneButton: true,
@@ -785,7 +785,6 @@ define('io.ox/calendar/edit/extensions', [
                         var validDate = !(_.isNaN(appointment.startDate) || _.isNaN(appointment.endDate));
 
                         if (validDate) {
-                            e.data.model.set({ allDay: appointment.allDay });
                             e.data.model.set({ startDate: appointment.startDate });
                         }
 

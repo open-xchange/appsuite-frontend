@@ -233,8 +233,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         isFullTime: function () {
-            if (!this.options.ignoreToggle && (this.model.has('full_time') || this.model.has('allDay'))) {
-                return !!(this.model.get('full_time') || this.model.get('allDay'));
+            if (!this.options.ignoreToggle && (this.model.has('full_time'))) {
+                return !!(this.model.get('full_time'));
             } else if (this.chronos) {
                 return util.isAllday(this.model);
             }

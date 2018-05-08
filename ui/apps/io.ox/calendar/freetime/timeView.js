@@ -294,7 +294,6 @@ define('io.ox/calendar/freetime/timeView', [
                         if (util.isAllday(event)) {
                             event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
                             event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
-                            event.allDay = true;
                         }
                     } else {
                         // we only have a timeslot. Fake some event data, so code can be reused
@@ -805,7 +804,6 @@ define('io.ox/calendar/freetime/timeView', [
                 return {
                     startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: startTime.tz() },
                     endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: endTime.tz() },
-                    allDay: false,
                     attendees: attendees
                 };
             }
