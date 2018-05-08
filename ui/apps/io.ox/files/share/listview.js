@@ -318,12 +318,12 @@ define('io.ox/files/share/listview', [
         // new 'io.ox/files/share/api' model
         model = (new api.Model(model.toJSON()));
         var permissionList = model.getPermissions().filter(function (item) {
-            return (item.type === 'anonymous');
+            return (item.type === 'anonymous' && item.isInherited !== true);
         });
 
         model.setPermissions(permissionList);
 
-        return model;
+        return permissionList.length ? model : false;
     }
 
     function collectListItemsFromSharingModel(collector, model) {
@@ -337,10 +337,12 @@ define('io.ox/files/share/listview', [
             itemList = collector.itemList;                      // view items if necessary.
 
         if (isInvitation) {
-            itemList.push(target.renderListItem(makeInvitationOnlySharingModel(model)));
+            var invModel = makeInvitationOnlySharingModel(model);
+            if (invModel) { itemList.push(target.renderListItem(invModel)); }
         }
         if (isPublicLink) {
-            itemList.push(target.renderListItem(makePublicLinkOnlySharingModel(model)));
+            var pubModel = makePublicLinkOnlySharingModel(model);
+            if (pubModel) { itemList.push(target.renderListItem(pubModel)); }
         }
         return collector;
     }
