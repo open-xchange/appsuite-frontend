@@ -8,6 +8,7 @@ define('plugins/portal/twitter/util', [
 
     var tweetCache,
         $tweets,
+        limit = 280,
         currentUserID;
 
     var parseTweet = function (text, entities) {
@@ -417,7 +418,7 @@ define('plugins/portal/twitter/util', [
                     updateTextLength();
                 }),
             buttonContainer = $('<div class="io-ox-twitter-tweet-button">'),
-            tweetCounter = $('<div class="io-ox-twitter-tweet-counter">').text(140),
+            tweetCounter = $('<div class="io-ox-twitter-tweet-counter">').text(limit),
             tweetButton = $('<a class="btn btn-default disabled" role="button">').text(title)
                 .on('click', function (e) {
                     var text = textArea.val();
@@ -471,9 +472,9 @@ define('plugins/portal/twitter/util', [
                 //cut out links
                 nonLinkLength = textArea.val().replace(linkRegexp, '').length;
 
-            tweetCounter.text((140 - (linkLength + nonLinkLength)));
+            tweetCounter.text((limit - (linkLength + nonLinkLength)));
 
-            if (linkLength + nonLinkLength > 140) {
+            if (linkLength + nonLinkLength > limit) {
                 tweetCounter.addClass('limit-exceeded');
             } else {
                 tweetCounter.removeClass('limit-exceeded');
