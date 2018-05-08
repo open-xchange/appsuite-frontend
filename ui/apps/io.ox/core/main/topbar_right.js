@@ -129,7 +129,7 @@ define('io.ox/core/main/topbar_right', [
             });
             if (helpView.$el.hasClass('hidden')) return;
             this.append(
-                addLauncher('right', helpView.render().$el)
+                addLauncher('right', helpView.render().$el.attr('tabindex', -1))
             );
         }
     });
@@ -179,7 +179,7 @@ define('io.ox/core/main/topbar_right', [
             if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
 
             self.append(
-                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
+                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
                     //#. starts the client onboarding wizard that helps users
                     //#. to configure their devices to access/sync appsuites
                     //#. data (f.e. install ox mail app)
@@ -244,14 +244,17 @@ define('io.ox/core/main/topbar_right', [
         extend: function () {
             //replaced by module
             var helpView = new HelpView({
+                attributes: {
+                    role: 'menuitem',
+                    tabindex: -1
+                },
                 content: gt('Help'),
                 href: getHelp
             });
             this.divider();
             if (helpView.$el.hasClass('hidden')) return;
-            this.append(
-                helpView.render().$el.attr('role', 'menuitem')
-            );
+
+            this.append(helpView.render().$el);
         }
     });
 
@@ -302,7 +305,7 @@ define('io.ox/core/main/topbar_right', [
         index: 1000,
         draw: function () {
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('title', gt('Settings')),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
                 dropdown = new Dropdown({
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',
@@ -313,7 +316,7 @@ define('io.ox/core/main/topbar_right', [
 
             updatePicture();
             ext.point('io.ox/core/appcontrol/right/dropdown').invoke('extend', dropdown);
-            this.append(dropdown.render().$el);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
 
             // via global address book
             contactAPI.on('reset:image update:image', updatePicture);

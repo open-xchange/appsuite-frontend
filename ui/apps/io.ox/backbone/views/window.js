@@ -94,14 +94,14 @@ define('io.ox/backbone/views/window', [
 
         renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
-            return $('<div class="controls">').append(
+            return $('<div class="controls" role="toolbar">').append(
                 //#. window resize
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="normalize">').attr('title', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', isNormal),
+                $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('title', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', isNormal),
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="maximize">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', !isNormal),
-                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times" aria-hidden="true">') : ''
+                $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', !isNormal),
+                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
 
@@ -406,7 +406,7 @@ define('io.ox/backbone/views/window', [
         onChangeTitle: function () {
             var title = this.model.get('title').trim();
             this.$title.text(title);
-            this.$el.attr('title', title);
+            this.$button.attr('title', title);
             if (!this.model.get('minimized')) ox.trigger('change:document:title', this.model.get('title'));
         },
 
@@ -423,9 +423,9 @@ define('io.ox/backbone/views/window', [
 
         render: function () {
             this.$el.attr('data-cid', this.model.cid).append(
-                $('<button type="button" class="taskbar-button" data-action="restore">').append(
-                    this.$icon = this.model.get('taskbarIcon') ? $('<i class="fa">').addClass(this.model.get('taskbarIcon')) : $(),
-                    this.$title = $('<span class="title">'),
+                this.$button = $('<button type="button" class="taskbar-button" data-action="restore">').append(
+                    this.$icon = this.model.get('taskbarIcon') ? $('<i class="fa" aria-hidden="true">').addClass(this.model.get('taskbarIcon')) : $(),
+                    this.$title = $('<span class="title" aria-hidden="true">'),
                     this.$count = $('<span class="count label label-danger">'),
                     // margin-right-auto for flex
                     $('<span class="spacing">'),

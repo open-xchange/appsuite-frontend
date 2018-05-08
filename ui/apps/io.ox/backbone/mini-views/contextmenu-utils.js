@@ -20,7 +20,7 @@ define('io.ox/backbone/mini-views/contextmenu-utils', [
     // drawing utility functions
     //
     function a(action, text) {
-        return $('<a href="#" role="menuitem">')
+        return $('<a href="#" role="menuitem" tabindex="-1">')
             .attr('data-action', action).text(text)
             // always prevent default
             .on('click', $.preventDefault);

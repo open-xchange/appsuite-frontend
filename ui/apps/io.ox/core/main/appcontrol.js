@@ -184,6 +184,7 @@ define('io.ox/core/main/appcontrol', [
     // });
 
     var LaunchersView = Backbone.View.extend({
+        tagName: 'li',
         className: 'dropdown',
         id: 'io-ox-launcher',
 
@@ -326,7 +327,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'right',
         index: 600,
         draw: function () {
-            var taskbar = $('<ul class="taskbar list-unstyled">');
+            var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
             this.append($('<div id="io-ox-toprightbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
         }
