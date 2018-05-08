@@ -963,7 +963,7 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
-            api.on('refresh:listviews', _.debounce(function () {
+            api.on('refresh:listviews change:file', _.debounce(function () {
                 ox.trigger('refresh^');
             }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
