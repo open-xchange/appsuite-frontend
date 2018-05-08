@@ -440,6 +440,7 @@ define('io.ox/calendar/month/perspective', [
          */
         print: function () {
             var win, data = null,
+                folder = this.folder,
                 folderID = this.folder.id || this.folder.folder,
                 styleNode = $('<style type="text/css">').text(printStyle);
 
@@ -456,7 +457,8 @@ define('io.ox/calendar/month/perspective', [
                 // apply custom colors
                 win.onload = function () {
                     $(win.document.head).append(styleNode);
-                    $(win.document.body).addClass('print-view-custom-colors');
+                    // apply folder color to appointments that don't have their own
+                    $(win.document.body).addClass('print-view-custom-colors').find('.colorLabel-0').addClass('colorLabel-' + folder.meta.color_label);
                     win.onload = null;
                 };
             }

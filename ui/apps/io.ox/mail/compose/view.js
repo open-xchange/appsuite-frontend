@@ -573,8 +573,8 @@ define('io.ox/mail/compose/view', [
                     } else {
                         // TODO
                         // In e.g. edit mode middleware wraps content in a div this should be solved in middleware!
-                        if (/^<div id="ox-\w+">/.test(content.trim())) {
-                            content = content.trim().replace(/^<div id="ox-\w+">/, '').replace(/<\/div>$/, '');
+                        if (/^<div id="ox-\w+"[^>]*>/.test(content.trim())) {
+                            content = content.trim().replace(/^<div id="ox-\w+"[^>]*>/, '').replace(/<\/div>$/, '');
                         }
                         def.resolve();
                     }

@@ -2048,7 +2048,8 @@ define('io.ox/calendar/week/view', [
                 // apply custom colors
                 win.onload = function () {
                     $(win.document.head).append(styleNode);
-                    $(win.document.body).addClass('print-view-custom-colors');
+                    // apply folder color to appointments that don't have their own
+                    $(win.document.body).addClass('print-view-custom-colors').find('.colorLabel-0').addClass('colorLabel-' + folder.meta.color_label);
                     win.onload = null;
                 };
             }

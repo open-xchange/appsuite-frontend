@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:15+0100\n"
+"PO-Revision-Date: 2018-04-27 15:47+0200\n"
 "Last-Translator: Sandrine <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
@@ -1000,11 +1000,11 @@ msgstr "Commence le"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Start time"
-msgstr ""
+msgstr "Date de début"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "Date de fin"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1583,12 +1583,12 @@ msgstr "Suivant"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "Cellule de tableau vide"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "Sélectionnée - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2413,6 +2413,8 @@ msgstr[1] "%1$d éléments sélectionnés"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
 msgstr ""
+"Les éléments sélectionnés. Appuyez sur « Retour arrière » ou « Supprimer » "
+"pour effacer."
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2424,6 +2426,8 @@ msgstr[1] "%1$d adresses sélectionnées"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
 msgstr ""
+"Les adresses sélectionnées. Appuyez sur « Retour arrière » ou « Supprimer » "
+"pour effacer."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3207,19 +3211,9 @@ msgstr "Pièce jointe au contact enregistrée"
 msgid "Saved attachment"
 msgstr "Pièce jointe enregistrée"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "Prévisualiser"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3302,11 +3296,11 @@ msgstr "Vous devez utiliser la version %n d'iOS ou une version supérieure."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Votre plate-forme n'est pas prise en charge !"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "Votre plate-forme n'est pas prise en charge pour le moment."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3320,10 +3314,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr ""
+"Pour des résultats optimaux, nous recommandons Google Chrome pour Android."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Obtenez la dernière version depuis le"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3367,7 +3362,7 @@ msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
-msgstr ""
+msgstr "Délai de la connexion dépassé. Veuillez recharger la page."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3672,11 +3667,11 @@ msgstr "Nouveau dossier"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "Nom de l'agenda"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "Nom du carnet d'adresses"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4290,15 +4285,15 @@ msgstr "En êtes-vous sûr ?"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "La déconnexion forcée peut provoquer des pertes de données."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "Forcer la déconnexion"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "Échec de la déconnexion."
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4343,14 +4338,15 @@ msgstr ""
 "systématiquement le bouton de déconnexion lorsque vous avez fini votre "
 "travail."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Saviez-vous que vous pouvez emporter la suite OX App partout avec vous ? "
-"Cliquez sur cette icône et choisissez \"Connecter votre appareil\" dans le "
-"menu."
+"Saviez-vous que vous pouvez emporter %1$s partout avec vous ? Cliquez sur "
+"cette icône et choisissez \"Connecter votre appareil\" dans le menu."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5348,17 +5344,6 @@ msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
 "Le courrier n'a pas été importé. Seuls les fichiers .eml sont reconnus."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"Le fichier ne peut pas être téléversé car il dépasse le quota de %1$s"
-msgstr[1] ""
-"Les fichiers ne peuvent pas être téléversés car ils dépassent le quota de "
-"%1$s"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6303,15 +6288,15 @@ msgstr "Quota de fichiers"
 msgid "Need more space?"
 msgstr "Besoin de davantage d'espace ?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "L'opération de déplacement prend plus de temps"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "Fin du déplacement"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7965,9 +7950,14 @@ msgstr "Afficher le message complet"
 msgid "Email from %1$s: %2$s"
 msgstr "Courrier électronique de %1$s : %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "Via"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "Afficher le message entier, en incluant toutes les images externes"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -8118,7 +8108,7 @@ msgstr "poursuivre si l'ensemble de ces conditions sont vérifiées"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "poursuivre si l'une de ces conditions est vérifiée"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8336,7 +8326,7 @@ msgstr "Existe"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "N'existe pas"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -9019,11 +9009,6 @@ msgstr "Taille des messages"
 msgid "Statistics"
 msgstr "Statistiques"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "réexpédié par"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Expéditeur inconnu"
@@ -9588,10 +9573,6 @@ msgstr "Documents"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Réinitialiser le champ"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "dans"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11378,6 +11359,30 @@ msgstr "Inviter à %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Ajouter à %s"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Saviez-vous que vous pouvez emporter la suite OX App partout avec vous ? "
+#~ "Cliquez sur cette icône et choisissez \"Connecter votre appareil\" dans "
+#~ "le menu."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Le fichier ne peut pas être téléversé car il dépasse le quota de %1$s"
+#~ msgstr[1] ""
+#~ "Les fichiers ne peuvent pas être téléversés car ils dépassent le quota de "
+#~ "%1$s"
+
+#~ msgid "via"
+#~ msgstr "réexpédié par"
+
+#~ msgid "in"
+#~ msgstr "dans"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

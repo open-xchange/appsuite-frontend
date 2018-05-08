@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:11+0100\n"
+"PO-Revision-Date: 2018-04-27 15:54+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -987,7 +987,7 @@ msgstr "Sākuma laiks"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "Beigu laiks"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1558,12 +1558,12 @@ msgstr "Nākošais"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "Tukša tabulas šūna"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "Izvēlēts - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2396,6 +2396,7 @@ msgstr[2] "Izvēlētas %1$s vienības"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
 msgstr ""
+"Izvēlētās vienības. Lai noņemtu, piespiediet atpakaļ-taustiņu vai Dzēst."
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2408,6 +2409,7 @@ msgstr[2] "Izvēlētas %1$s adreses"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
 msgstr ""
+"Izvēlētās adreses. Lai noņemtu, piespiediet atpakaļ-taustiņu vai Dzēst."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3193,19 +3195,9 @@ msgstr "Saglabāts kontakta pievienojums"
 msgid "Saved attachment"
 msgstr "Saglabāts pievienojums"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "Pārslēgt skatu"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3289,11 +3281,11 @@ msgstr "Jums ir jāizmanto iOS %n vai jaunāka versija."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Jūsu platforma netiek atbalstīta!"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "Šī platforma pašlaik netiek atbalstīta."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3307,10 +3299,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr ""
+"Labākiem rezultātiem mēs iesakām izmantot Google Chrome Android versiju."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Iegūt jaunāko versiju no "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3355,7 +3348,7 @@ msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
-msgstr ""
+msgstr "Iestājies pieslēguma noilgums. Lūdzu pārlādējiet lapu."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3669,11 +3662,11 @@ msgstr "Jauna mape"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "Kalendāra vārds"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "Adrešu grāmatas vārds"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4276,15 +4269,15 @@ msgstr "Vai esat pārliecināti?"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "Piespiedu atslēgšanās var izraisīt datu zudumu."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "Piespiedu atslēgšanās"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "Atslēgšanās kļūda."
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4328,13 +4321,15 @@ msgstr ""
 "Iepriekšējā reizē jūs aizmirsāt izrakstīties. Kad beidzat darbu, vienmēr "
 "izrakstieties, piespiežot izrakstīšanās taustiņu."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Vai jūs zināt, ka jūs varat paņemt OX App Suite sev līdz? Vienkārši "
-"noklikšķiniet uz šīs ikonas un izvēlieties \"Savienot ar ierīci\"."
+"Vai jūs zināt, ka jūs varat paņemt %1$s sev līdz? Vienkārši noklikšķiniet uz "
+"šīs ikonas un izvēlieties \"Savienot ar ierīci\"."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5325,18 +5320,6 @@ msgstr "Mapju augšupielāde netiek atbalstīta."
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Pasts nav importēts. Atbalstīti tiek tikai .eml faili."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"Fails nevar tikt augšupielādēts, jo tas pārsniedz %1$s kvotas limitu"
-msgstr[1] ""
-"Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
-msgstr[2] ""
-"Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6278,15 +6261,15 @@ msgstr "Failu kvota"
 msgid "Need more space?"
 msgstr "Vai ir nepieciešama papildus vieta?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "Pārvietošanas operācija prasa ilgāku laiku"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "Pārvietošana pabeigta"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7941,9 +7924,14 @@ msgstr "Rādīt pilnu paziņojumu"
 msgid "Email from %1$s: %2$s"
 msgstr "E-pasts no %1$s: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "Sūtītājs"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "Rādīt visu ziņojumu, ietverot visus ārējos attēlus"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -8094,7 +8082,7 @@ msgstr "turpināt, ja izpildās visi šie nosacījumi"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "turpināt, ja izpildās jebkurš no šiem nosacījumiem"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8312,7 +8300,7 @@ msgstr "Eksistē"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "Neeksistē"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8985,11 +8973,6 @@ msgstr "Ziņojuma izmērs"
 msgid "Statistics"
 msgstr "Statistika"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "caur"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Nezināms nosūtītājs"
@@ -9551,10 +9534,6 @@ msgstr "Dokumenti"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Tīrīt lauku"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "iekš"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11326,6 +11305,30 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Vai jūs zināt, ka jūs varat paņemt OX App Suite sev līdz? Vienkārši "
+#~ "noklikšķiniet uz šīs ikonas un izvēlieties \"Savienot ar ierīci\"."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Fails nevar tikt augšupielādēts, jo tas pārsniedz %1$s kvotas limitu"
+#~ msgstr[1] ""
+#~ "Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
+#~ msgstr[2] ""
+#~ "Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
+
+#~ msgid "via"
+#~ msgstr "caur"
+
+#~ msgid "in"
+#~ msgstr "iekš"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

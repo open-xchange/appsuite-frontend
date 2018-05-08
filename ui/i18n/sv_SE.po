@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-03 17:54+0100\n"
+"PO-Revision-Date: 2018-04-27 16:05+0200\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.9\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -238,12 +238,6 @@ msgstr ""
 "Använd piltangenter för att ändra datum. Tryck ner Ctrl-tangenten samtidigt "
 "för att ändra år, eller skifttangenten för att ändra månad. Stäng "
 "datumväljaren genom att trycka på Esc-tangenten."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Använd upp- och nedåtpilarna för att ändra tiden. Stäng med ESC-tangenten."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -990,6 +984,14 @@ msgstr "Plats"
 msgid "Starts on"
 msgstr "Startar den"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr "Starttid"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr "Sluttid"
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1553,6 +1555,15 @@ msgstr "Föregående"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nästa"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr "Tom tabellcell"
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr "Markerat - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2356,6 +2367,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Välj"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Ta bort"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2363,12 +2379,24 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d objekt markerat"
 msgstr[1] "%1$d objekt markerade"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr "De markerade objekten. Tryck Baksteg eller Delete för att ta bort."
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d adress markerad"
 msgstr[1] "%1$d adresser markerade"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr "De markerade adresserna. Tryck Baksteg eller Delete för att ta bort."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Rensa markering"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3143,6 +3171,10 @@ msgid "Saved attachment"
 msgstr "Sparade bilaga"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr "Växla förhandsgranskning"
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d bilaga"
@@ -3222,6 +3254,30 @@ msgid "You need to use iOS %n or higher."
 msgstr "Du måste använda iOS %n eller nyare."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr "Din plattform stöds inte!"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr "Den här plattformen stöds inte för närvarande."
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr "Stöd startar från Chrome %1$d, Firefox %2$d, IE %3$d och Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+"För bäst resultat rekommenderar vi att du använder Google Chrome för Android."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr "Hämta senaste version från "
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Ditt operativsystem stöds inte."
 
@@ -3257,6 +3313,10 @@ msgstr "Nedkopplat läge"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "Din webbläsares kakfunktioner är avaktiverade. Vänligen aktivera dem."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr "Anslutning överskred tidsgräns. Försök att ladda om sidan."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3309,8 +3369,8 @@ msgstr "Stäng premiumfunktioner"
 msgid "Try now!"
 msgstr "Testa nu!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Försök igen"
@@ -3555,6 +3615,14 @@ msgstr "Ny adressbok"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
 msgstr "Ny mapp"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr "Kalendernamn"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr "Adressboksnamn"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4035,11 +4103,6 @@ msgstr "Det fanns ingen uppgiftsdata att importera"
 msgid "There was no appointment data to import"
 msgstr "Det fanns ingen mötesinformation att importera"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Rad %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Välj fil att importera"
@@ -4157,6 +4220,22 @@ msgstr "Automatisk utloggning"
 msgid "Sign out now"
 msgstr "Logga ut nu"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Är du säker?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr "Framtvingad utloggning kan orsaka dataförlust."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr "Framtvinga utloggning"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr "Utloggning misslyckades."
+
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "close for %1$s"
@@ -4199,13 +4278,15 @@ msgstr ""
 "Du glömde logga ut tidigare. Använd alltid logga-utknappen när du har "
 "arbetat färdigt."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Visste du att du kan ta OX App Suite med deg? Klicka på den här ikonen och "
-"välj \"Anslut din enhet\" från menyn."
+"Visste du att du kan ta %1$s med deg? Klicka på den här ikonen och välj "
+"\"Anslut din enhet\" från menyn."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5195,14 +5276,6 @@ msgstr "Inget stöd för att ladda upp mappar."
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Meddelandet importerades inte. Endast .eml-filer stöds."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "Filen kan inte laddas upp eftersom den överskrider kvoten på %1$s"
-msgstr[1] "Filerna kan inte laddas upp eftersom den överskrider kvoten på %1$s"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -5347,7 +5420,8 @@ msgstr "Lägg till beskrivning"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Storlek"
@@ -6133,6 +6207,16 @@ msgstr "Filkvot"
 msgid "Need more space?"
 msgstr "Behöver du mer utrymme?"
 
+#. moving folders/files
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid "Move operation takes longer to finish"
+msgstr "Flyttåtgärd tar längre tid att slutföra"
+
+#. %1$s: moving folders/files
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid "Finished moving"
+msgstr "Flytt slutförd"
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6325,10 +6409,6 @@ msgstr "Administrativ roll"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Användare"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Ta bort"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7763,6 +7843,15 @@ msgstr "Visa hela meddelandet"
 msgid "Email from %1$s: %2$s"
 msgstr "Meddelande från %1$s: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "Via"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr "Visa hela meddelandet inklusive alla externa bilder"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Fel: Kunde inte läsa meddelandets innehåll"
@@ -7911,8 +8000,8 @@ msgstr "fortsätt om alla dessa villkor uppfylls"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "fortsätt om något av dessa villkor uppfylls"
+msgid "continue if any of these conditions are met"
+msgstr "fortsätt om något dessa villkor uppfylls"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8030,11 +8119,6 @@ msgstr "Sändlista"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Storlek (byte)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Är större än"
 
@@ -8069,11 +8153,6 @@ msgstr "Återskickat-från"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Återskickat-till"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "Huvud finns"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8131,6 +8210,16 @@ msgstr "Reguttr"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Inte reguttr"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Finns"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr "Finns inte"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8545,12 +8634,6 @@ msgstr "Färglägg citerade rader"
 msgid "Use fixed-width font for text mails"
 msgstr "Använd teckensnitt med fast bredd för textmeddelanden"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Pynta e-post i klartext"
-
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Visa begäran för läskvitton"
@@ -8805,11 +8888,6 @@ msgstr "Meddelandestorlek"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Statistics"
 msgstr "Statistik"
-
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "via"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
@@ -9082,6 +9160,11 @@ msgid "Install"
 msgstr "Installera"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Premium"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Anslut din enhet"
 
@@ -9098,10 +9181,6 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "bakåt"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Premium"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -9368,10 +9447,6 @@ msgstr "Dokument"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Rensa fält"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "om"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11134,8 +11209,48 @@ msgstr "Bjud in till %s"
 msgid "Add on %s"
 msgstr "Lägg till på %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Rensa markering"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Använd upp- och nedåtpilarna för att ändra tiden. Stäng med ESC-tangenten."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Rad %1$d: %2$s"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Visste du att du kan ta OX App Suite med deg? Klicka på den här ikonen "
+#~ "och välj \"Anslut din enhet\" från menyn."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Filen kan inte laddas upp eftersom den överskrider kvoten på %1$s"
+#~ msgstr[1] ""
+#~ "Filerna kan inte laddas upp eftersom den överskrider kvoten på %1$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "fortsätt om något av dessa villkor uppfylls"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Storlek (byte)"
+
+#~ msgid "Header exists"
+#~ msgstr "Huvud finns"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Pynta e-post i klartext"
+
+#~ msgid "via"
+#~ msgstr "via"
+
+#~ msgid "in"
+#~ msgstr "om"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Anpassa %1$s"
@@ -11178,9 +11293,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "Regeln gäller inte tills"
-
-#~ msgid "Exists"
-#~ msgstr "Finns"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Tillämpa regeln om något villkor möts."
@@ -12009,9 +12121,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "April"
 #~ msgstr "April"
-
-#~ msgid "Are you sure?"
-#~ msgstr "Är du säker?"
 
 #~ msgid "Ask for return receipt"
 #~ msgstr "Be om läskvitto"

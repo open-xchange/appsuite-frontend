@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:11+0100\n"
+"PO-Revision-Date: 2018-04-27 15:53+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -992,7 +992,7 @@ msgstr "開始時刻"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "終了時刻"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1563,12 +1563,12 @@ msgstr "次へ"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "表のセルが空です。"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "%1$s を選択します。"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2365,7 +2365,7 @@ msgstr[0] "%1$d 個のアイテムを選択しました"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "選択されたアイテム。backspaceかdeleteを押して削除します。"
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2375,7 +2375,7 @@ msgstr[0] "%1$d 個の連絡先を選択しました"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "選択されたアドレス。backspaceかdeleteを押して削除します。"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3152,19 +3152,9 @@ msgstr "保存された連絡先の添付ファイル"
 msgid "Saved attachment"
 msgstr "保存された添付ファイル"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "プレビューを表示"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3246,11 +3236,11 @@ msgstr "iOS %n 以上を使用する必要があります。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "ご利用のプラットフォームはサポートされていません。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "このプラットフォームは現在サポートされていません。"
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3263,10 +3253,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr ""
+"最良の結果を得るには、Android用Google Chromeを使用することをお勧めします。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "以下から最新バージョンを取得してください。 "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3309,7 +3300,7 @@ msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
-msgstr ""
+msgstr "接続がタイムアウトです。ページをもう一度読み込んでください。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3601,11 +3592,11 @@ msgstr "フォルダを表示"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "予定表名"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "アドレス帳名"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4207,15 +4198,15 @@ msgstr "続行しますか？"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "強制的にログアウトすることでデータが失われる可能性があります。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "強制サインアウト"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "ログアウトに失敗しました。"
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4259,13 +4250,15 @@ msgstr ""
 "前回、作業終了後にサインアウトを忘れたようです。作業終了後にかならずサインア"
 "ウトボタンを使ってください。"
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"OX App Suiteを使えることを知っていますか？アイコンをクリックして、メニューか"
-"ら'デバイスの接続'を選んでください。"
+"%1$を使えることを知っていますか？アイコンをクリックして、メニューから'デバイ"
+"スの接続'を選んでください。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5243,14 +5236,6 @@ msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
 "メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"ファイルが割当量の上限 \"%1$s\" を超えたため、アップロードできません。"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6173,15 +6158,15 @@ msgstr "ファイル割当量"
 msgid "Need more space?"
 msgstr "容量が必要ですか？"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "移動操作の終了にはもう少し時間がかかります。"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "移動を終了する"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7789,9 +7774,14 @@ msgstr "全メッセージを表示する"
 msgid "Email from %1$s: %2$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "経由メール"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "すべての外部画像を含む全メッセージを表示する"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -7942,9 +7932,8 @@ msgstr "この条件すべてを満たす時に継続"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "continue if any of these conditions are met"
-msgstr "この条件すべてを満たす時に継続"
+msgstr "この条件のいずれかを満たす時に継続"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8162,7 +8151,7 @@ msgstr "存在"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "存在しません"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8829,11 +8818,6 @@ msgstr "メッセージサイズ"
 msgid "Statistics"
 msgstr "統計"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "経由メール:"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "差出人が不明です。"
@@ -9392,10 +9376,6 @@ msgstr "ドキュメント"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "フィールドをクリア"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "指定月"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11140,6 +11120,26 @@ msgstr "%s に出席依頼"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s に追加"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "OX App Suiteを使えることを知っていますか？アイコンをクリックして、メニュー"
+#~ "から'デバイスの接続'を選んでください。"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "ファイルが割当量の上限 \"%1$s\" を超えたため、アップロードできません。"
+
+#~ msgid "via"
+#~ msgstr "経由メール:"
+
+#~ msgid "in"
+#~ msgstr "指定月"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

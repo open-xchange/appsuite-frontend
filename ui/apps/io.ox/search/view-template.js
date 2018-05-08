@@ -144,7 +144,7 @@ define('io.ox/search/view-template', [
                     .removeClass('fa-none')
                     .addClass('fa-check');
                 // add name
-                cell.find('.name').text(gt('in') + ' ' + titles[id]);
+                cell.find('.name').text(titles[id]);
             }
 
             // delegate handler

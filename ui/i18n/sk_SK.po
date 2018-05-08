@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:14+0100\n"
+"PO-Revision-Date: 2018-04-27 16:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -992,7 +992,7 @@ msgstr "Čas začiatku"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "Čas ukončenia"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1564,12 +1564,12 @@ msgstr "Ďalší"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "Prázdna bunka"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "Vybrané - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2398,7 +2398,7 @@ msgstr[2] "%1$d položiek vybraných"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Vybrané položky. Stlačením klávesu Backspace alebo Delete odstránite."
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2410,7 +2410,7 @@ msgstr[2] "%1$d správ vybraných"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Vybrané adresy. Stlačením klávesu Backspace alebo Delete odstránite."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3195,19 +3195,9 @@ msgstr "Uložená príloha kontaktu"
 msgid "Saved attachment"
 msgstr "Uložiť prílohu"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "Prepnúť náhľad"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3291,11 +3281,11 @@ msgstr "Musíte použiť iOS %n alebo vyšší."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Vaša platforma nie je podporovaná!"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "Táto platforma nie je momentálne podporovaná."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3309,10 +3299,12 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
 msgstr ""
+"Aby ste dosiahli najlepších výsledkov, odporúčame používať prehliadač Google "
+"Chrome pre Android."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Stiahnite si najnovšiu verziu z"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3355,7 +3347,7 @@ msgstr "Funkcia cookies vášho prehliadača je vypnutá. Prosím, zapnite ju."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
-msgstr ""
+msgstr "Uplynul časový limit pripojenia. Prosím, skúste stránku načítať znova."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3669,11 +3661,11 @@ msgstr "Nový priečinok"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "Názov kalendára"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "Názov adresára kontaktov"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4280,15 +4272,15 @@ msgstr "Ste si istý?"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "Vynútenie odhlásenia môže spôsobiť stratu údajov."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "Vynútiť odhlásenie"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "Nepodarilo sa odhlásiť."
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4332,13 +4324,15 @@ msgstr ""
 "Minule ste sa zabudli odhlásiť. Po ukončení práce vždy použite tlačidlo na "
 "odhlásenie."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Vedeli ste, že si môžete Balík aplikácií OX vziať so sebou? Stačí kliknúť na "
-"túto ikonu a vybrať z menu „Pripojiť svoje zariadenie“."
+"Vedeli ste, že si môžete %1$s vziať so sebou? Stačí kliknúť na túto ikonu a "
+"vybrať z menu „Pripojiť svoje zariadenie“."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -5329,17 +5323,6 @@ msgstr "Nahrávanie priečinkov nie je podporované."
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Pošta sa neimportovala. Sú podporované iba súbory .eml."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "Súbor nie je možné nahrať, pretože prekračuje obmedzenie kvóty %1$s"
-msgstr[1] ""
-"Súbory nie je možné nahrať, pretože prekračujú obmedzenie kvóty %1$s"
-msgstr[2] ""
-"Súbory nie je možné nahrať, pretože prekračujú obmedzenie kvóty %1$s"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6280,15 +6263,15 @@ msgstr "Kvóta súborov"
 msgid "Need more space?"
 msgstr "Potrebujete viac miesta?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "Dokončenie operácia presunutia trvá dlhšie"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "Presunutie dokončené"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7935,9 +7918,14 @@ msgstr "Zobraziť celú správu"
 msgid "Email from %1$s: %2$s"
 msgstr "Email od %1$s: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "prostredníctvom"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "Zobraziť celú správu vrátane všetkých externých obrázkov"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -8088,7 +8076,7 @@ msgstr "pokračovať ak sú splnené všetky tieto podmienky"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8306,7 +8294,7 @@ msgstr "Existuje"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "Neexistuje"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8980,11 +8968,6 @@ msgstr "Veľkosť správy"
 msgid "Statistics"
 msgstr "Štatistika"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "prostredníctvom"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Neznámy odosielateľ"
@@ -9547,10 +9530,6 @@ msgstr "Dokumenty"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Vyprázdniť pole"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "v"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11325,6 +11304,30 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Vedeli ste, že si môžete Balík aplikácií OX vziať so sebou? Stačí kliknúť "
+#~ "na túto ikonu a vybrať z menu „Pripojiť svoje zariadenie“."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Súbor nie je možné nahrať, pretože prekračuje obmedzenie kvóty %1$s"
+#~ msgstr[1] ""
+#~ "Súbory nie je možné nahrať, pretože prekračujú obmedzenie kvóty %1$s"
+#~ msgstr[2] ""
+#~ "Súbory nie je možné nahrať, pretože prekračujú obmedzenie kvóty %1$s"
+
+#~ msgid "via"
+#~ msgstr "prostredníctvom"
+
+#~ msgid "in"
+#~ msgstr "v"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "

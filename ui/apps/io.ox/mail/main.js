@@ -613,7 +613,9 @@ define('io.ox/mail/main', [
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
-                    app.listView.collection.expire();
+                    // Bug 58207: manual gc, delay to avoid visual distractions for the user
+                    var collection = app.listView.collection;
+                    setTimeout(collection.reset.bind(collection), 0);
                 }
                 app.listView.model.set('thread', !!value);
             });

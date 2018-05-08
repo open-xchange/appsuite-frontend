@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-12-22 11:13+0100\n"
+"PO-Revision-Date: 2018-04-27 15:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -991,7 +991,7 @@ msgstr "Ora de început"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr ""
+msgstr "Ora de sfârșit:"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -1563,12 +1563,12 @@ msgstr "Următorul"
 
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Empty table cell"
-msgstr ""
+msgstr "Celulă de tabel goală"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
-msgstr ""
+msgstr "Selectat - %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2402,7 +2402,7 @@ msgstr[2] "%1$d de elemente selectate"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected items. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Elementele selectate. Apăsați Backspace sau Delete pentru a elimina."
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2414,7 +2414,7 @@ msgstr[2] "%1$d de adrese selectate"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
+msgstr "Adresele selectate. Apăsați Backspace sau Delete pentru a elimina."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3199,19 +3199,9 @@ msgstr "Fișier atașat contactului salvat "
 msgid "Saved attachment"
 msgstr "Fișier atașat salvat"
 
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving \"%1$s\""
-msgstr ""
-
-#. %1$s: Folder name
-#: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "Moving folder"
-msgstr ""
-
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
-msgstr ""
+msgstr "Comutare previzualizare"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -3296,11 +3286,11 @@ msgstr "Trebuie să utilizați  iOS %n sau o versiune mai recentă."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
+msgstr "Platforma dumneavoastră nu este suportată!"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This platform is currently not supported."
-msgstr ""
+msgstr "Această platformă nu este suportată în prezent."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3311,11 +3301,11 @@ msgstr "Suportul începe cu Chrome %1$d, Firefox %2$d, IE %3$d și Safari %4$d."
 #. 'Google Chrome' is a brand and should not be translated
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results we recommend using Google Chrome for Android."
-msgstr ""
+msgstr "Pentru rezultate optime vă recomandăm Google Chrome pentru Android."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr ""
+msgstr "Obțineți cea mai nouă versiune a "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3360,6 +3350,8 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr ""
+"Timpul de așteptare pentru conexiune a expirat. Încercați să reîncărcați "
+"pagina."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3674,11 +3666,11 @@ msgstr "Dosar nou"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr ""
+msgstr "Nume calendar"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr ""
+msgstr "Nume agendă de contacte"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4285,15 +4277,15 @@ msgstr "Sigur?"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
-msgstr ""
+msgstr "Dacă forțați deconexiunea, puteți pierde date."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Force sign out"
-msgstr ""
+msgstr "Forțează deconectarea"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Logout failed."
-msgstr ""
+msgstr "Deconectarea a eșuat."
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4337,12 +4329,14 @@ msgstr ""
 "Data trecută ați uitat să vă deconectați. Utilizați întotdeauna butonul de "
 "deconectare când ați finalizat lucrul."
 
+#. %1$s is the product name
 #: apps/io.ox/core/main.js module:io.ox/core
+#, c-format
 msgid ""
-"Did you know that you can take OX App Suite with you? Just click this icon "
-"and choose 'Connect your device' from the menu."
+"Did you know that you can take %1$s with you? Just click this icon and "
+"choose 'Connect your device' from the menu."
 msgstr ""
-"Știați că puteți să luați OX App Suite cu dumneavoastră? Apăsați pe această "
+"Știați că puteți să luați %1$s cu dumneavoastră? Apăsați pe această "
 "pictogramă și selectați 'Conectează dispozitivul' din meniu."
 
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5335,15 +5329,6 @@ msgstr "Încărcarea dosarelor nu este suportată."
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Mesajul nu a fost importat. Doar fișierele .eml sunt suportate."
 
-#. %1$s quota limit
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-msgid_plural ""
-"The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "Fișierul nu poate fi încărcat deoarece depășește limita de %1$s"
-msgstr[1] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
-msgstr[2] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
-
 #. %1$s the filename
 #. %2$s the maximum file size
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6292,15 +6277,15 @@ msgstr "Cotă de fișier"
 msgid "Need more space?"
 msgstr "Necesitați mai mult spațiu?"
 
-#. %1$s: folder name
+#. moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Moving folder \"%1$s\" takes longer to finish"
-msgstr ""
+msgid "Move operation takes longer to finish"
+msgstr "Operațiunea de mutare poate dura"
 
-#. %1$s: folder name
+#. %1$s: moving folders/files
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid " Finished moving folder \"%1$s\""
-msgstr ""
+msgid "Finished moving"
+msgstr "Mutarea a fost terminată"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7952,9 +7937,14 @@ msgstr "Afișează întregul mesaj"
 msgid "Email from %1$s: %2$s"
 msgstr "Mesaj de la %1$s: %2$s"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Via"
+msgstr "Via"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Show entire message including all external images"
-msgstr ""
+msgstr "Afișează întregul mesaj, inclusiv toate imaginile externe"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -8105,7 +8095,7 @@ msgstr "continuă dacă toate aceste condiții sunt adevărate"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if any of these conditions are met"
-msgstr ""
+msgstr "continuă dacă cel puțin una dintre aceste condiții este adevărată"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8323,7 +8313,7 @@ msgstr "Există"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr ""
+msgstr "Nu există"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8994,11 +8984,6 @@ msgstr "Dimensiune mesaj"
 msgid "Statistics"
 msgstr "Statistici"
 
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "prin"
-
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
 msgstr "Expeditor necunoscut"
@@ -9560,10 +9545,6 @@ msgstr "Documente"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Golește câmpul"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgid "in"
-msgstr "în"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -11346,6 +11327,27 @@ msgstr "Invită la %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Știați că puteți să luați OX App Suite cu dumneavoastră? Apăsați pe "
+#~ "această pictogramă și selectați 'Conectează dispozitivul' din meniu."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "Fișierul nu poate fi încărcat deoarece depășește limita de %1$s"
+#~ msgstr[1] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
+#~ msgstr[2] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
+
+#~ msgid "via"
+#~ msgstr "prin"
+
+#~ msgid "in"
+#~ msgstr "în"
 
 #~ msgid ""
 #~ "Use up and down keys to change the time. Close selection by pressing ESC "
