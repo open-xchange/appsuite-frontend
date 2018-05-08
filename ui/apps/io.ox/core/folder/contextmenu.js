@@ -585,7 +585,8 @@ define('io.ox/core/folder/contextmenu', [
                                 return calendarUtil.getFolderColor(this.model.attributes);
                             },
                             setValue: function (value) {
-                                api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
+                                // make sure existing properties are not overwritten
+                                api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': _(_.copy(this.model.get('com.openexchange.calendar.extendedProperties') || {})).extend({ color: { value: value } }) }).fail(function (error) {
                                     require(['io.ox/core/notifications'], function (notifications) {
                                         notifications.yell(error);
                                     });
