@@ -176,6 +176,7 @@ define('io.ox/core/folder/tree', [
             // return early on close
             var isOpen = this.dropdown.$el.hasClass('open');
             if (isOpen || _.device('smartphone')) return;
+            if (!target.is('a.contextmenu-control')) target = target.find('.contextmenu-control').first();
 
             _.defer(function () {
 
@@ -210,18 +211,18 @@ define('io.ox/core/folder/tree', [
 
         onKeydownMenuKeys: function (e) {
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
-            if (e.type === 'keydown') {
-                var shiftF10 = (e.shiftKey && e.which === 121),
-                    menuKey = (_.device('windows') && e.which === 93);
-                if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
-                    this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+            if (e.type !== 'keydown') return;
 
-                    // e.preventDefault() is needed here to surpress browser menu
-                    if (shiftF10 || menuKey) {
-                        e.preventDefault();
-                        this.onContextMenu(e);
-                    }
-                }
+            var shiftF10 = (e.shiftKey && e.which === 121),
+                menuKey = e.which === 93;
+            if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
+                this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+            }
+
+            if (shiftF10 || menuKey) {
+                // e.preventDefault() is needed here to surpress browser menu
+                e.preventDefault();
+                this.onContextMenu(e);
             }
         },
 
@@ -234,6 +235,9 @@ define('io.ox/core/folder/tree', [
                 top = target.offset().top;
                 left = target.offset().left + 40;
                 target.removeData('fixed');
+                // need prevent default here, so there is no second (browser) contextmenu via the control
+                // Bug 42409 still fixed
+                e.preventDefault();
             }
             this.toggleContextMenu(target, top, left);
         },
@@ -299,6 +303,10 @@ define('io.ox/core/folder/tree', [
                 this.$dropdownMenu.attr('role', 'menu');
             }
 
+            function fixFocus() {
+                this.dropdown.$toggle.parents('li').focus();
+            }
+
             return function () {
                 this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options'));
                 this.$dropdownMenu = $('<ul class="dropdown-menu">');
@@ -313,6 +321,7 @@ define('io.ox/core/folder/tree', [
                 this.$el.after(
                     this.dropdown.render().$el
                     .on('show.bs.dropdown', show.bind(this))
+                    .on('hidden.bs.dropdown', fixFocus.bind(this))
                 );
                 this.$dropdownMenu.removeAttr('role');
             };
