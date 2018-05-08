@@ -1593,8 +1593,7 @@ define('io.ox/files/main', [
             // ensure proper type
             baton.dropType = 'infostore';
             baton.target = baton.target.replace(/^folder\./, '');
-            // avoid self-reference
-            if (baton.data[0].id === baton.target) return;
+
             // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });

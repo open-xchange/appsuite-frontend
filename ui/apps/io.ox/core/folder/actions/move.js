@@ -25,6 +25,28 @@ define('io.ox/core/folder/actions/move', [
         'virtual/myfolders': api.altnamespace ? 'default0' : 'default0' + mailAPI.separator + 'INBOX'
     };
 
+    function canMoveFolder(target, input) {
+        var canMoveState = 'ok';
+
+        _.all(input, function (inputItem) {
+            var currentFolderId = target;
+
+            // do not check files
+            if (inputItem.folder_id !== 'folder') return true;
+            // check if folder is moved into itself
+            if (currentFolderId === inputItem.id) { canMoveState = 'error:self'; return false; }
+
+            // check if folder is moved into own subfolder
+            while (currentFolderId) {
+                if (String(currentFolderId) === '1') return true;
+                if (currentFolderId === inputItem.id) { canMoveState = 'error:subfld'; return false; }
+                // move on level up in the folder tree
+                currentFolderId = api.pool.getModel(currentFolderId).get('folder_id');
+            }
+        });
+        return canMoveState;
+    }
+
     return {
 
         //
@@ -73,6 +95,19 @@ define('io.ox/core/folder/actions/move', [
                 if (!onlyFolder && !api.pool.getModel(target).can('create')) {
                     return notifications.yell('error', gt('You cannot move items to this folder'));
                 }
+
+                if (type === 'move' && options.module === 'infostore') {
+                    switch (canMoveFolder(target, input)) {
+                        case 'ok':
+                            break;
+                        case 'error:self':
+                            return notifications.yell('error', gt('A folder cannot be moved into itself'));
+                        case 'error:subfld':
+                            return notifications.yell('error', gt('A folder cannot be moved to one of its subfolders'));
+                        // no default
+                    }
+                }
+
                 // support for move, moveAll, and copy
                 options.api[type](input, target, options.all).then(
                     function (response) {
