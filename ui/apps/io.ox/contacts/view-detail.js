@@ -442,15 +442,13 @@ define('io.ox/contacts/view-detail', [
             var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
 
             $(this).append(
+                address,
                 $('<a class="maps-service" target="_blank" rel="noopener">')
                 .attr('href', services[service].url + query)
                 .append(
-                    address,
-                    $('<p>').append(
-                        $('<i class="fa fa-external-link" aria-hidden="true">'),
-                        //#. %1$s is a map service, like "Google Maps"
-                        $.txt(' ' + gt('Open in %1$s', services[service].label))
-                    )
+                    $('<i class="fa fa-external-link" aria-hidden="true">'),
+                    //#. %1$s is a map service, like "Google Maps"
+                    $.txt(' ' + gt('Open in %1$s', services[service].label))
                 )
             );
         };
