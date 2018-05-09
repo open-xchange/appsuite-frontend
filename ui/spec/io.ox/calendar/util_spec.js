@@ -22,7 +22,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             var model;
 
             beforeEach(function () {
-                model = new models.Model();
+                model = new models.Model({ id: '1234567' });
             });
 
             it('yesterday', function () {
