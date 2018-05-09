@@ -53,7 +53,7 @@ define('io.ox/core/extPatterns/links', [
                     href: '#',
                     'data-action': self.id,
                     'draggable': options.draggable || false,
-                    'role': 'menuitem',
+                    'role': self.role || 'menuitem',
                     'data-section': self.section || 'default',
                     'data-section-description': self.sectionDescription,
                     'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
