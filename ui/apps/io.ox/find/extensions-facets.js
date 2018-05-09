@@ -78,7 +78,7 @@ define('io.ox/find/extensions-facets', [
                 dropdown = new Dropdown({
                     model: ddmodel,
                     tagName: 'li',
-                    className: 'dropdown pull-left',
+                    className: 'facets dropdown pull-left',
                     attributes: {
                         'data-dropdown': 'view',
                         role: 'presentation'
@@ -150,7 +150,7 @@ define('io.ox/find/extensions-facets', [
                         'data-dropdown': 'view',
                         role: 'presentation'
                     },
-                    className: 'dropdown pull-left'
+                    className: 'facets dropdown pull-left'
                 }),
                 last;
 
