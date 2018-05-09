@@ -902,6 +902,9 @@ define('io.ox/mail/compose/view', [
             });
             return def.then(function (editor) {
                 self.editorHash[self.model.get('editorMode')] = editor;
+                // maybe there will be a better place for the following line in the future, but until then it will stay here
+                // attaches listeners to the tinymce instance
+                if (editor.tinymce) $(editor.tinymce().getElement()).on('removeInlineImage', self.onRemoveInlineImage.bind(self));
                 return self.reuseEditor(content);
             });
         },
@@ -946,6 +949,12 @@ define('io.ox/mail/compose/view', [
                 if (!_.isFunction(this.editor.tinymce)) return;
                 this.editor.tinymce().undoManager.clear();
             }.bind(this));
+        },
+
+        onRemoveInlineImage: function (e, id) {
+            var attachments = this.model.get('attachments'),
+                image = attachments.findWhere({ cid: '<' + id + '>' });
+            if (image) attachments.remove(image);
         },
 
         syncMail: function () {

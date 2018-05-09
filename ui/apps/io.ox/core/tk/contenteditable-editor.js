@@ -85,6 +85,32 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
     });
 
+    ext.point(POINT + '/setup').extend({
+        id: 'image-remove',
+        index: INDEX += 100,
+        draw: (function () {
+            function getImageIds(content) {
+                var images = $(content).find('img');
+                return _(images.toArray()).chain().map(function (img) {
+                    return $(img).attr('id');
+                }).compact().value();
+            }
+            return function (ed) {
+                var oldsIds = [];
+                ed.on('BeforeSetContent change Focus Blur', function (e) {
+                    // use e.content for BeforeSetContent events
+                    var ids = getImageIds(e.content || ed.getContent()),
+                        removed = _.difference(oldsIds, ids);
+                    removed.forEach(function (id) {
+                        var editorElement = $(ed.getElement());
+                        editorElement.trigger('removeInlineImage', id);
+                    });
+                    oldsIds = ids;
+                });
+            };
+        }())
+    });
+
     function splitContent_W3C(ed) {
         // get current range
         var range = ed.selection.getRng();
