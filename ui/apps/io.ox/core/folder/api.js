@@ -645,7 +645,10 @@ define('io.ox/core/folder/api', [
     //
 
     function multiple(ids, options) {
+
+        if (!ids || !ids.length) return $.when([]);
         options = _.extend({ cache: true, errors: false }, options);
+
         try {
             http.pause();
             return $.when.apply($,
@@ -661,9 +664,20 @@ define('io.ox/core/folder/api', [
             )
             .pipe(function () {
                 return _(arguments).toArray();
+            })
+            .pipe(function (responses) {
+                // fail completely if no connection available, i.e. all requests fail with NOSERVER or OFFLINE (see bug 57323)
+                if (!responses.length) return [];
+                if (_(responses).all({ code: 'OFFLINE' })) return reject('offline');
+                if (_(responses).all({ code: 'NOSERVER' })) return reject('noserver');
+                return responses;
             });
         } finally {
             http.resume();
+        }
+
+        function reject(code) {
+            return $.Deferred().reject({ error: http.messages[code], code: code.toUpperCase() });
         }
     }
 
