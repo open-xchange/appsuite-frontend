@@ -1214,6 +1214,15 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Respond total/unread number changes when folder is reloaded (this may happen independent from refresh)
+         */
+        'reloadOnFolderChange': function (app) {
+            api.on('changesAfterReloading', function reload() {
+                app.listView.reload();
+            });
+        },
+
+        /*
          * auto select first seen email (only on initial startup)
          */
         'auto-select': function (app) {

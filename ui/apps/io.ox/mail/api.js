@@ -724,6 +724,13 @@ define('io.ox/mail/api', [
                 folderAPI.list(id, { cache: false });
                 _(pool.getByFolder(id)).invoke('expire');
             });
+        },
+        'changesAfterReloading:mail': function (model) {
+            // if total or unread changed during a folder reload, we need to update the collection (reload happens independent from refresh)
+            if (_(model.changed).has('unread') || _(model.changed).has('total')) {
+                _(pool.getByFolder(model.id)).invoke('expire');
+                api.trigger('changesAfterReloading');
+            }
         }
     });
 
