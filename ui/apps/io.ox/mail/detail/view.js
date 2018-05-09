@@ -380,12 +380,24 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'content-flags',
+        index: 200,
+        draw: function (baton) {
+            if (!baton.content) return;
+            var $content = $(baton.content);
+            this.closest('article')
+                .toggleClass('content-links', !!$content.find('a').length);
+        }
+    });
+
     ext.point('io.ox/mail/detail/body/iframe').extend({
         id: 'content',
         index: 100,
         draw: function (baton) {
 
-            var $content = $(content.get(baton.data, {}, baton.flow).content), resizing = 0;
+            baton.content = content.get(baton.data, {}, baton.flow).content;
+            var $content = $(baton.content), resizing = 0;
 
             // inject content and listen to resize event
             this.on('load', function () {

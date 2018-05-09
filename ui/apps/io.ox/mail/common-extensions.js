@@ -731,9 +731,10 @@ define('io.ox/mail/common-extensions', [
             }
 
             function draw() {
+                // hint: initally hidden unless article has content-links class
                 this.append(
                     $('<div class="notification-item disabled-links">').append(
-                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show Links')),
+                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Enable Links')),
                         $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
                         $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
