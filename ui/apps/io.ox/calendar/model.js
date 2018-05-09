@@ -65,7 +65,10 @@ define('io.ox/calendar/model', [
                     groups = [],
                     modelsToAdd = [],
                     self = this,
+                    // as this is an async add, we need to make sure the reset event is triggered after adding
+                    isReset = options && options.previousModels !== undefined,
                     def = $.Deferred();
+
                 models = [].concat(models);
                 _(models).each(function (model) {
 
@@ -110,6 +113,7 @@ define('io.ox/calendar/model', [
                             }))));
                             // no merge here or we would overwrite the confirm status
                             def.resolve(self.oldAdd(modelsToAdd, options));
+                            if (isReset) self.trigger('reset');
                         }).fail(def.reject);
                     });
                 });
