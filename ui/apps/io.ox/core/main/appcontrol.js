@@ -365,6 +365,46 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'metrics',
+        draw: function () {
+            require(['io.ox/metrics/main'], function (metrics) {
+                // toolbar actions
+                $('#io-ox-appcontrol .taskbar').on('mousedown', 'li', function (e) {
+                    // click within dropdown
+                    if ($(e.target).closest('div.hidden').length) return;
+                    metrics.trackEvent({
+                        app: 'core',
+                        target: 'banner/taskbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('id')
+                    });
+                });
+
+                metrics.watch({
+                    node: $('#io-ox-appcontrol'),
+                    selector: '#io-ox-top-logo',
+                    type: 'click'
+                }, {
+                    app: 'core',
+                    target: 'banner/logo',
+                    type: 'click',
+                    action: ''
+                });
+
+                $(document.documentElement).on('mousedown', '.halo-link', function () {
+                    var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
+                    metrics.trackEvent({
+                        app: 'core',
+                        type: 'click',
+                        action: 'halo',
+                        detail: _.last(app.get('name').split('/'))
+                    });
+                });
+            });
+        }
+    });
+
     // ext.point('io.ox/core/appcontrol/search').extend({
     //     id: 'default',
     //     index: 100,

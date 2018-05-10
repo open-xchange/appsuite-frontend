@@ -129,7 +129,7 @@ define('io.ox/core/main/topbar_right', [
             });
             if (helpView.$el.hasClass('hidden')) return;
             this.append(
-                addLauncher('right', helpView.render().$el.attr('tabindex', -1))
+                addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
             );
         }
     });
