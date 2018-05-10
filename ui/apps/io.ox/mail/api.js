@@ -1760,6 +1760,7 @@ define('io.ox/mail/api', [
     settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted', function () {
         pool.get('detail').each(function (model) {
             model.unset('attachments', { silent: true });
+            model.unset('security', { silent: true });
         });
     });
 
