@@ -148,9 +148,11 @@
 
 .modal.share-permissions-dialog {
 
-    .modal-content {
-        min-height: 250px;
-    }
+    html:not(.ie11) & {
+        .modal-content {
+            min-height: 250px;
+        }
+     }
 
     .modal-header {
 
