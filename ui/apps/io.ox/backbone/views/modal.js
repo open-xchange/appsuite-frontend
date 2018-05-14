@@ -282,6 +282,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
+            if (this.$footer.find('[data-action="cancel"]').length > 0) this.trigger('cancel');
             this.close();
         },
 
