@@ -14,6 +14,8 @@ for (var file in window.__karma__.files) {
 
 //console.log('-----[ running ' + tests.length + ' test files ]-----');
 
+_.extend(ox, Backbone.Events);
+
 require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function (Stage) {
 
     'use strict';
