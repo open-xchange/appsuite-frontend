@@ -341,6 +341,13 @@ define('io.ox/calendar/month/view', [
                 }
             }, this);
 
+            if (_.device('safari')) {
+                // bug in safari causes the caption to disappear after new content has been added to a tablecell.
+                // just force rerendering of the caption to make it appear again
+                var caption = this.$('caption');
+                caption.css('transform', !!caption.css('transform') ? '' : 'translateZ(0)');
+            }
+
             // exit here if we are on a phone
             if (_.device('smartphone')) return;
 
