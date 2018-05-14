@@ -420,7 +420,7 @@ define('io.ox/core/folder/view', [
         // respond to folder removal
         api.on('before:remove', function (data) {
             // select parent or default folder
-            var id = data.folder_id === '1' ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
+            var id = /^1|2$/.test(data.folder_id) ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
             tree.selection.set(id);
         });
 
