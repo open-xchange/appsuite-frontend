@@ -107,7 +107,7 @@ define('io.ox/core/folder/actions/properties', [
         id: 'caldav-url',
         index: 300,
         render: function () {
-            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties'),
+            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties') || {},
                 usedForSync = extendedProperties.usedForSync || {};
             if (!usedForSync || usedForSync.value !== 'true') return;
             var url = this.model.get('com.openexchange.caldav.url');
