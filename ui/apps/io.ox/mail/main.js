@@ -192,9 +192,11 @@ define('io.ox/mail/main', [
             });
             app.pages.getNavbar('threadView').on('leftAction', function () {
                 app.pages.goBack();
+                app.listView.selection.selectNone();
             });
             app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
+                app.listView.selection.selectNone();
             });
 
             // checkbox toggle
