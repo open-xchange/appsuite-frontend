@@ -271,7 +271,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.ErrorView({ name: 'summary', model: self.model }).render().$el
                 )
             );
-            input.on('keyup', function () {
+            input.on('keyup change', function () {
                 // update title on keyup
                 self.model.trigger('keyup:summary', $(this).val());
             });
