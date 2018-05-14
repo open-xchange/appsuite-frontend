@@ -90,7 +90,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         draw: (function () {
             function getImageIds(content) {
-                var images = $(content).find('img');
+                // content can be just a string when e.g. pasting
+                var images = $('<div>' + content + '</div>').find('img');
                 return _(images.toArray()).chain().map(function (img) {
                     return $(img).attr('id');
                 }).compact().value();
