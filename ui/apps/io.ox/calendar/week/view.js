@@ -266,12 +266,13 @@ define('io.ox/calendar/week/view', [
          *        moment: moment date object in the reference week
          * @param { object } options
          *        utc (boolean): full-time appointment
+         *        propagate (boolean): propagate change
          */
 
         setStartDate: function (value, options) {
 
             var previous = moment(this.startDate),
-                opt = _.extend({ utc: false }, options);
+                opt = _.extend({ utc: false, propagate: true }, options);
 
             if (value) {
                 // number | LocalDate
@@ -307,7 +308,7 @@ define('io.ox/calendar/week/view', [
 
             // only trigger change event if start date has changed
             if (this.startDate.isSame(previous)) return;
-            this.trigger('change:date', this.startDate);
+            if (opt.propagate) this.trigger('change:date', this.startDate);
             if (ox.debug) console.log('refresh calendar data');
             this.trigger('onRefresh');
         },

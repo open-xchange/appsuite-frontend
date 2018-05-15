@@ -340,10 +340,10 @@ define('io.ox/calendar/week/perspective', [
                 });
 
                 // respond to date change on app level
-                this.view.listenTo(app.props, 'change:date', _.debounce(function (model, value) {
+                this.view.listenTo(app.props, 'change:date', _.debounce(function (model, value, options) {
                     if (!this.$el.is(':visible')) return;
                     if (ox.debug) console.log('week: change date by app', value);
-                    this.setStartDate(value);
+                    this.setStartDate(value, options);
                 }, 100, true));
 
                 this.main.attr('aria-label', {

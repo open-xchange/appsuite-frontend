@@ -279,7 +279,7 @@ define('io.ox/calendar/main', [
 
                     new DatePicker({ parent: this.closest('#io-ox-core'), showTodayButton: false })
                         .on('select', function (date) {
-                            app.setDate(date);
+                            app.setDate(date, { propagate: false });
                             this.setDate(date, true);
                         })
                         .listenTo(app.props, 'change:date', function (model, value) {
