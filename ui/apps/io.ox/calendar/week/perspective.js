@@ -18,13 +18,13 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosModel, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, yell, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
@@ -64,8 +64,14 @@ define('io.ox/calendar/week/perspective', [
                 }
             }
 
-            function failHandler() {
-                notifications.yell('error', gt('An error occurred. Please try again.'));
+            function failHandler(e) {
+                // CAL-4040: Appointment not found
+                if (e && e.code === 'CAL-4040') {
+                    yell(e);
+                } else {
+                    yell('error', gt('An error occurred. Please try again.'));
+                }
+                self.dialog.close();
                 $('.appointment', self.main).removeClass('opac current');
                 if (_.device('smartphone')) {
                     self.app.pages.getPage('detailView').idle();
@@ -127,7 +133,7 @@ define('io.ox/calendar/week/perspective', [
                     });
                 }, function fail(error) {
                     self.view.renderAppointments();
-                    notifications.yell(error);
+                    yell(error);
                 });
             };
 
