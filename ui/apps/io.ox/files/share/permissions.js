@@ -111,6 +111,11 @@ define('io.ox/files/share/permissions', [
                 return this.get('type') === 'anonymous';
             },
 
+            isOwner: function (parentModel) {
+                if (!this.get('entity') || !parentModel || parentModel.getOwner) return;
+                return this.get('entity') === parentModel.getOwner();
+            },
+
             getDisplayName: function (htmlOutput) {
                 switch (this.get('type')) {
                     case 'user':
@@ -403,7 +408,7 @@ define('io.ox/files/share/permissions', [
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
                     if (bits === 2 || bits === 4) return 'reviewer';
-                } else if (this.model.get('entity') === this.parentModel.get('created_by') || this.model.get('entity') === this.parentModel.getOwner()) {
+                } else if (this.model.isOwner(this.parentModel)) {
                     return 'owner';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
@@ -573,7 +578,7 @@ define('io.ox/files/share/permissions', [
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
-                    isOwner = baton.model.get('entity') === baton.parentModel.get('created_by'),
+                    isOwner = baton.model.isOwner(baton.parentModel),
                     module = baton.parentModel.get('module'),
                     supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
 
@@ -735,8 +740,7 @@ define('io.ox/files/share/permissions', [
 
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
-                if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
-                if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.getOwner()) return;
+                if (isFolderAdmin && baton.model.isOwner(baton.parentModel)) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
