@@ -34,10 +34,10 @@ define('io.ox/core/main/topbar_right', [
 
         if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
 
-        return {
+        return _.extend({
             base: 'help',
             target: 'index.html'
-        };
+        }, currentApp && currentApp.get('help'));
     }
 
     ext.point('io.ox/core/topbar/right').extend({
