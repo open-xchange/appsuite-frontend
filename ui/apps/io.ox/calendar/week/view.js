@@ -260,29 +260,25 @@ define('io.ox/calendar/week/view', [
 
         /**
          * set week reference start date
-         * @param { string|number|LocalDate } opt
+         * @param { string|number|LocalDate } value
          *        number: Timestamp of a date in the reference week. Now if empty
          *        string: { 'next', 'prev' } set next or previous week
          *        moment: moment date object in the reference week
          * @param { boolean } utc     true if full-time appointment
          */
-        setStartDate: function (opt, utc) {
+        setStartDate: function (value, utc) {
 
             var previous = moment(this.startDate);
 
             utc = utc || false;
-            if (opt) {
+            if (value) {
                 // number | LocalDate
-                if (typeof opt === 'number' || moment.isMoment(opt)) {
-                    if (utc) {
-                        opt = moment.utc(opt).local(true).valueOf();
-                    }
-                    this.startDate = moment(opt);
+                if (typeof value === 'number' || moment.isMoment(value)) {
+                    if (utc) value = moment.utc(value).local(true).valueOf();
+                    this.startDate = moment(value);
                 }
                 //string
-                if (typeof opt === 'string') {
-                    this.startDate[opt === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
-                }
+                if (typeof value === 'string') this.startDate[value === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
             } else {
                 // today button
                 this.startDate = moment();
@@ -307,12 +303,11 @@ define('io.ox/calendar/week/view', [
             if (month % 2 === 1) month--;
             this.apiRefTime = moment(this.startDate).month(month).date(1);
 
+            if (this.startDate.isSame(previous)) return;
             // only trigger change event if date has changed
-            if (!this.startDate.isSame(previous)) {
-                this.trigger('change:date', this.startDate);
-                if (ox.debug) console.log('refresh calendar data');
-                this.trigger('onRefresh');
-            }
+            this.trigger('change:date', this.startDate);
+            if (ox.debug) console.log('refresh calendar data');
+            this.trigger('onRefresh');
         },
 
         /**
