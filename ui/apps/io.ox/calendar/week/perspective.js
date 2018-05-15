@@ -59,7 +59,7 @@ define('io.ox/calendar/week/perspective', [
                     self.setNewStart = false;
                     if (self.view) {
                         //view is rendered already
-                        self.view.setStartDate(util.getMoment(model.get('startDate')), false);
+                        self.view.setStartDate(util.getMoment(model.get('startDate')));
                     }
                 }
             }
@@ -458,7 +458,7 @@ define('io.ox/calendar/week/perspective', [
                     if (!/^io.ox\/calendar/.test(current)) return;
                     if (!obj.seriesId || obj.seriesId !== obj.id) {
                         if (app.folder.get() !== String(obj.folder)) app.folder.set(obj.folder);
-                        self.view.setStartDate(util.getMoment(obj.startDate).valueOf(), obj.allTime);
+                        self.view.setStartDate(util.getMoment(obj.startDate).valueOf(), { utc: obj.allTime });
                     }
                 });
 

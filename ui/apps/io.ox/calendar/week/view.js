@@ -167,7 +167,7 @@ define('io.ox/calendar/week/view', [
                     new Picker({ date: self.startDate })
                         .attachTo(self.kwInfo)
                         .on('select', function (date) {
-                            self.setStartDate(date, false);
+                            self.setStartDate(date);
                         })
                         .on('before:open', function () {
                             this.setDate(self.startDate);
@@ -264,20 +264,22 @@ define('io.ox/calendar/week/view', [
          *        number: Timestamp of a date in the reference week. Now if empty
          *        string: { 'next', 'prev' } set next or previous week
          *        moment: moment date object in the reference week
-         * @param { boolean } utc     true if full-time appointment
+         * @param { object } options
+         *        utc (boolean): full-time appointment
          */
-        setStartDate: function (value, utc) {
 
-            var previous = moment(this.startDate);
+        setStartDate: function (value, options) {
 
-            utc = utc || false;
+            var previous = moment(this.startDate),
+                opt = _.extend({ utc: false }, options);
+
             if (value) {
                 // number | LocalDate
                 if (typeof value === 'number' || moment.isMoment(value)) {
-                    if (utc) value = moment.utc(value).local(true).valueOf();
+                    if (opt.utc) value = moment.utc(value).local(true).valueOf();
                     this.startDate = moment(value);
                 }
-                //string
+                // string
                 if (typeof value === 'string') this.startDate[value === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
             } else {
                 // today button
@@ -303,8 +305,8 @@ define('io.ox/calendar/week/view', [
             if (month % 2 === 1) month--;
             this.apiRefTime = moment(this.startDate).month(month).date(1);
 
+            // only trigger change event if start date has changed
             if (this.startDate.isSame(previous)) return;
-            // only trigger change event if date has changed
             this.trigger('change:date', this.startDate);
             if (ox.debug) console.log('refresh calendar data');
             this.trigger('onRefresh');
