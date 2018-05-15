@@ -1002,6 +1002,15 @@ define('io.ox/mail/compose/view', [
                 self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
                 // compose vs. edit
                 self.model.setInitialSignature();
+
+                if (self.editor.tinymce) {
+                    var defaultFontStyle = settings.get('defaultFontStyle', {}),
+                        family = defaultFontStyle.family.split(',')[0];
+                    if (!_.isEmpty(defaultFontStyle)) {
+                        if (family) self.editor.tinymce().execCommand('fontName', false, family);
+                        if (defaultFontStyle.size) self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
+                    }
+                }
             });
         },
 
