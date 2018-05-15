@@ -974,7 +974,7 @@ define('io.ox/files/share/permissions', [
                     click = function (e, member) {
                         // build extended permission object
                         var isInternal = /^(1|2)$/.test(member.get('type')) || member.has('user_id'),
-                            isGuest = member.get('type') === 5,
+                            isGuest = !isInternal && member.get('type') === 5,
                             obj = {
                                 bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
                                 group: member.get('type') === 2,
