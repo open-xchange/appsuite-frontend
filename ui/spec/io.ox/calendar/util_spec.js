@@ -19,8 +19,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
 
         describe('can convert timestamp to even smarter dates', function () {
 
-            var model = new models.Model({
-                allDay: false
+            var model;
+
+            beforeEach(function () {
+                model = new models.Model({ id: '1234567' });
             });
 
             it('yesterday', function () {

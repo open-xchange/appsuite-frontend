@@ -963,6 +963,9 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
+            api.on('refresh:listviews change:file', _.debounce(function () {
+                ox.trigger('refresh^');
+            }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
@@ -1590,8 +1593,7 @@ define('io.ox/files/main', [
             // ensure proper type
             baton.dropType = 'infostore';
             baton.target = baton.target.replace(/^folder\./, '');
-            // avoid self-reference
-            if (baton.data[0].id === baton.target) return;
+
             // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });

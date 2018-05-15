@@ -1022,7 +1022,7 @@ define('io.ox/contacts/addressbook/popup', [
                     $('<a href="#" class="pull-right clear" role="button">').text(gt('Clear selection'))
                 ),
                 // list
-                $('<div aria-live="polite" aria-relevant="removals" aria-hidden="false">').attr('aria-label', description).append(
+                $('<div aria-live="polite" aria-relevant="removals">').attr('aria-label', description).append(
                     $('<ul class="addresses unstyled listbox" tabindex="0" role="listbox">')
                         .append(_(list).map(addToken))
                 )

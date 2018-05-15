@@ -194,6 +194,7 @@ define('io.ox/core/folder/tree', [
             // return early on close
             var isOpen = this.dropdown.$el.hasClass('open');
             if (isOpen || _.device('smartphone')) return;
+            if (!pos.target.is('a.contextmenu-control')) pos.target = pos.target.find('.contextmenu-control').first();
 
             _.defer(function () {
 
@@ -229,18 +230,18 @@ define('io.ox/core/folder/tree', [
         onKeydownMenuKeys: function (e) {
             ContextMenuUtils.macOSKeyboardHandler(e);
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
-            if (e.type === 'keydown') {
-                var shiftF10 = (e.shiftKey && e.which === 121),
-                    menuKey = e.which === 93;
-                if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
-                    this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+            if (e.type !== 'keydown') return;
 
-                    // e.isKeyboardEvent will be true for Shift-F10 triggered context menus on macOS
-                    // other browsers will just trigger contextmenu events
-                    if (e.isKeyboardEvent) {
-                        this.onContextMenu(e);
-                    }
-                }
+            var shiftF10 = (e.shiftKey && e.which === 121),
+                menuKey = e.which === 93;
+            if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
+                this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+            }
+
+            if (shiftF10 && e.isKeyboardEvent) {
+                // e.isKeyboardEvent will be true for Shift-F10 triggered context menus on macOS
+                // other browsers will just trigger contextmenu events
+                this.onContextMenu(e);
             }
         },
 
@@ -313,6 +314,10 @@ define('io.ox/core/folder/tree', [
                 this.$dropdownMenu.attr('role', 'menu');
             }
 
+            function fixFocus() {
+                this.dropdown.$toggle.parents('li').focus();
+            }
+
             return function () {
                 this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options'));
                 this.$dropdownMenu = $('<ul class="dropdown-menu">');
@@ -327,6 +332,7 @@ define('io.ox/core/folder/tree', [
                 this.$el.after(
                     this.dropdown.render().$el
                     .on('show.bs.dropdown', show.bind(this))
+                    .on('hidden.bs.dropdown', fixFocus.bind(this))
                 );
                 this.$dropdownMenu.removeAttr('role');
             };

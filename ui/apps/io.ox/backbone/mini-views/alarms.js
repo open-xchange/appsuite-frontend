@@ -160,8 +160,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm) {
-            // don't show acknowledged alarms
-            if (!alarm || !alarm.trigger || alarm.acknowledged) return;
+            if (!alarm || !alarm.trigger) return;
 
             var row, container;
 
@@ -209,7 +208,7 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         getAlarmsArray: function () {
             var self = this;
-            return _(this.model.get(this.attribute) || []).filter(function (alarm) { return alarm.acknowledged; }).concat(_(this.list.children()).map(function (item) {
+            return _(this.list.children()).map(function (item) {
                 var alarm = { action: $(item).find('.alarm-action').val() },
                     time = $(item).find('.alarm-time').val(),
                     related = $(item).find('.alarm-related').val();
@@ -235,7 +234,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     // no default
                 }
                 return alarm;
-            }));
+            });
         }
     });
 
@@ -253,15 +252,14 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         render: function () {
             this.$el.empty().append(
-                _(this.model.get(this.attribute) || []).filter(function (alarm) { return !alarm.acknowledged; }).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
+                (this.model.get(this.attribute) || []).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
             );
             return this;
         },
         drawList: function () {
             var node = $('<ul class="list-unstyled alarm--link-list">');
             _(this.model.get(this.attribute)).each(function (alarm) {
-                // don't show acknowledged alarms
-                if (!alarm || !alarm.trigger || alarm.acknowledged) return;
+                if (!alarm || !alarm.trigger) return;
                 var options = [], key;
 
                 if (_(standardTypes).indexOf(alarm.action) === -1) {
@@ -303,7 +301,8 @@ define('io.ox/backbone/mini-views/alarms', [
                 .addCancelButton()
                 .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
-                    self.model.set(self.attribute, alarmView.getAlarmsArray());
+                    // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
+                    self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
                 })
                 .open();
             });

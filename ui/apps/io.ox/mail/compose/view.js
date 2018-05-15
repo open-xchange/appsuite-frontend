@@ -266,7 +266,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-2 col-xs-offset-2">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3 col-xs-offset-2">');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -280,7 +280,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-8">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
                 );
             }
         }
@@ -902,6 +902,9 @@ define('io.ox/mail/compose/view', [
             });
             return def.then(function (editor) {
                 self.editorHash[self.model.get('editorMode')] = editor;
+                // maybe there will be a better place for the following line in the future, but until then it will stay here
+                // attaches listeners to the tinymce instance
+                if (editor.tinymce) $(editor.tinymce().getElement()).on('removeInlineImage', self.onRemoveInlineImage.bind(self));
                 return self.reuseEditor(content);
             });
         },
@@ -946,6 +949,12 @@ define('io.ox/mail/compose/view', [
                 if (!_.isFunction(this.editor.tinymce)) return;
                 this.editor.tinymce().undoManager.clear();
             }.bind(this));
+        },
+
+        onRemoveInlineImage: function (e, id) {
+            var attachments = this.model.get('attachments'),
+                image = attachments.findWhere({ cid: '<' + id + '>' });
+            if (image) attachments.remove(image);
         },
 
         syncMail: function () {
@@ -1018,6 +1027,15 @@ define('io.ox/mail/compose/view', [
                 self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
                 // compose vs. edit
                 self.model.setInitialSignature();
+
+                if (self.editor.tinymce) {
+                    var defaultFontStyle = settings.get('defaultFontStyle', {}),
+                        family = defaultFontStyle.family.split(',')[0];
+                    if (!_.isEmpty(defaultFontStyle)) {
+                        if (family) self.editor.tinymce().execCommand('fontName', false, family);
+                        if (defaultFontStyle.size) self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
+                    }
+                }
             });
         },
 

@@ -18,8 +18,9 @@ define('io.ox/files/view-options', [
     'io.ox/core/folder/api',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
+    'io.ox/core/folder/util',
     'gettext!io.ox/files'
-], function (ext, Dropdown, BreadcrumbView, FolderAPI, Capabilities, FileStorage, gt) {
+], function (ext, Dropdown, BreadcrumbView, FolderAPI, Capabilities, FileStorage, FolderUtil, gt) {
 
     'use strict';
 
@@ -146,7 +147,7 @@ define('io.ox/files/view-options', [
              */
             function toggleFilter() {
                 baton.app.folder.getData().done(function (folder) {
-                    if (FileStorage.isExternal(folder)) {
+                    if (FileStorage.isExternal(folder) || FolderUtil.is('attachmentView', folder)) {
                         self.data('view').$ul.children().slice(4).hide();
                     } else {
                         self.data('view').$ul.children().slice(4).show();

@@ -228,17 +228,19 @@ define('io.ox/mail/view-options', [
             var app = baton.app, model = app.props;
 
             var dropdown = new Dropdown({
+                tagName: 'li',
+                className: 'dropdown grid-options toolbar-item margin-auto',
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort'),
                 dataAction: 'sort',
-                model: model
+                model: model,
+                tabindex: -1
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(
                 dropdown.render().$el
-                    .addClass('grid-options toolbar-item margin-auto')
                     .find('.dropdown-menu')
                     .addClass('dropdown-menu-right')
                     .end()
@@ -287,6 +289,8 @@ define('io.ox/mail/view-options', [
             var app = baton.app, model = app.props;
 
             var dropdown = new Dropdown({
+                tagName: 'li',
+                className: 'dropdown grid-options toolbar-item',
                 caret: true,
                 //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
                 label: gt.pgettext('dropdown', 'All'),
@@ -296,7 +300,7 @@ define('io.ox/mail/view-options', [
 
             ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
 
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 

@@ -633,6 +633,10 @@ define('io.ox/core/folder/api', [
         .pipe(function (data) {
             // update/add model
             var model = pool.addModel(data);
+            if (options.isReload && _(model.changed).size()) {
+                // use module here, so apis only listen to their own folders
+                api.trigger('changesAfterReloading:' + model.get('module'), model);
+            }
             // propagate changes via api events
             propagate(model);
             // to make sure we always get the same result (just data; not timestamp)
@@ -645,7 +649,10 @@ define('io.ox/core/folder/api', [
     //
 
     function multiple(ids, options) {
+
+        if (!ids || !ids.length) return $.when([]);
         options = _.extend({ cache: true, errors: false }, options);
+
         try {
             http.pause();
             return $.when.apply($,
@@ -661,9 +668,20 @@ define('io.ox/core/folder/api', [
             )
             .pipe(function () {
                 return _(arguments).toArray();
+            })
+            .pipe(function (responses) {
+                // fail completely if no connection available, i.e. all requests fail with NOSERVER or OFFLINE (see bug 57323)
+                if (!responses.length) return [];
+                if (_(responses).all({ code: 'OFFLINE' })) return reject('offline');
+                if (_(responses).all({ code: 'NOSERVER' })) return reject('noserver');
+                return responses;
             });
         } finally {
             http.resume();
+        }
+
+        function reject(code) {
+            return $.Deferred().reject({ error: http.messages[code], code: code.toUpperCase() });
         }
     }
 
@@ -768,20 +786,12 @@ define('io.ox/core/folder/api', [
         // be robust
         if (id === undefined) return $.when([]);
 
-        function checkCircularReference(array, current) {
-            return _.find(array, function (elem) { return elem.id === current; });
-        }
-
         // try to resolve via pool
         do {
             result.push(data = pool.getModel(current).toJSON());
             current = data.folder_id;
             done = String(current) === '1';
-
-        // info for the checkCircularReference() condition: when a folder is moved into an
-        // own child we get an error from the backend, but in the meantime there is
-        // a short moment were we have a circular reference in the model that can cause a endless loop
-        } while (current && !done && !checkCircularReference(result, current));
+        } while (current && !done);
 
         // resolve in reverse order (root > folder)
         if (done) return $.when(result.reverse());
@@ -1401,7 +1411,7 @@ define('io.ox/core/folder/api', [
     function reload() {
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             // register function call once
-            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
+            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false, isReload: true }), reload.wait);
             api.trigger('reload:' + id);
             reload.hash[id]();
         });

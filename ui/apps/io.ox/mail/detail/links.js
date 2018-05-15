@@ -177,6 +177,8 @@ define('io.ox/mail/detail/links', [
         var matches = node.nodeValue.match(regMailMatch);
         if (matches === null || matches.length === 0) return node;
         var prefix = matches[1], address = matches[2], suffix = matches[4];
+        // see bug 58266: ignore urls with email address parameter; returns false to continue processing
+        if (/(http:|https:)$/i.test(prefix) || /^www\./i.test(address)) return false;
 
         var link = $('<a href="#" class="mailto-link" target="_blank">').attr('href', 'mailto:' + address)
             .data({ address: address })

@@ -1,8 +1,0 @@
-{
-    "title": "Portal",
-    "settings": true,
-    "requires": "portal",
-    "refreshable": true,
-    "hasLauncher": true,
-    "index": 500
-}

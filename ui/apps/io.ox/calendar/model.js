@@ -59,28 +59,63 @@ define('io.ox/calendar/model', [
             },
 
             // special add function that allows resolving of groups
-            // is used when option resolveGroups is active (used by scheduling view)
             addAsync: function (models, options) {
                 var usersToResolve  = [],
+                    groupsToResolve = [],
+                    groups = [],
                     modelsToAdd = [],
                     self = this,
+                    // as this is an async add, we need to make sure the reset event is triggered after adding
+                    isReset = options && options.previousModels !== undefined,
                     def = $.Deferred();
+
                 models = [].concat(models);
                 _(models).each(function (model) {
-                    if (model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
-                        usersToResolve = _.uniq(usersToResolve.concat(model instanceof Backbone.Model ? model.get('members') : model.members));
+
+                    // try to resolve groups if possible
+                    if (!self.options.noInitialResolve && model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
+                        var users = model instanceof Backbone.Model ? model.get('members') : model.members,
+                            entity = model instanceof Backbone.Model ? model.get('entity') : model.entity;
+
+                        if (users) {
+                            // we have user ids
+                            usersToResolve = _.uniq(usersToResolve.concat(users));
+                        } else if (entity) {
+                            // we don't have user ids but it's an internal group
+                            groupsToResolve = _.uniq(groupsToResolve.concat({ id: entity }));
+                            groups.push(model);
+                        } else {
+                            // we cannot resolve this group, so we just add it to the collection
+                            modelsToAdd.push(model);
+                        }
                     } else {
                         modelsToAdd.push(model);
                     }
                 });
-                require(['io.ox/core/api/user'], function (userAPI) {
-                    userAPI.getList(usersToResolve).done(function (users) {
-                        modelsToAdd = _.uniq(_.union(modelsToAdd, _(users).map(function (user) {
-                            return util.createAttendee(user);
-                        })));
-                        // no merge here or we would overwrite the confirm status
-                        def.resolve(self.oldAdd(modelsToAdd, options));
-                    }).fail(def.reject);
+                require(['io.ox/core/api/user', 'io.ox/core/api/group'], function (userAPI, groupAPI) {
+                    groupAPI.getList(groupsToResolve).then(function (data) {
+                        // add to user list
+                        usersToResolve = _.uniq(usersToResolve.concat(_(_(data).pluck('members')).flatten()));
+                    }, function () {
+                        // something went wrong, just add the group as a whole
+                        modelsToAdd = modelsToAdd.concat(groups);
+                    }).always(function () {
+                        self.options.noInitialResolve = false;
+                        // no need to resolve users that are already attendees
+                        usersToResolve = _(usersToResolve).reject(function (user) {
+                            return _(modelsToAdd).findWhere({ entity: user });
+                        });
+                        userAPI.getList(usersToResolve).done(function (users) {
+                            modelsToAdd = _.compact(_.uniq(_.union(modelsToAdd, _(users).map(function (user) {
+                                // remove broken users without mail address to be robust see bug 58370
+                                if (!user.email1) return;
+                                return util.createAttendee(user);
+                            }))));
+                            // no merge here or we would overwrite the confirm status
+                            def.resolve(self.oldAdd(modelsToAdd, options));
+                            if (isReset) self.trigger('reset');
+                        }).fail(def.reject);
+                    });
                 });
 
                 return def;
@@ -233,11 +268,14 @@ define('io.ox/calendar/model', [
         },
         getAttendees: function () {
             if (this._attendees) return this._attendees;
+
             var self = this,
                 resetListUpdate = false,
+                attendees = this.get('attendees') || [],
                 changeAttendeesUpdate = false;
 
-            this._attendees = new AttendeeCollection(this.get('attendees'), { resolveGroups: true, silent: false });
+            // you want to skip resolving groups when first creating the attendeeCollection. Otherwise the model would be dirty without any change
+            this._attendees = new AttendeeCollection(attendees, { resolveGroups: true, silent: false, noInitialResolve: attendees.length > 1 });
 
             this._attendees.on('add remove reset', function () {
                 if (changeAttendeesUpdate) return;
@@ -271,12 +309,14 @@ define('io.ox/calendar/model', [
                         uri: 'mailto:' + user.email1,
                         entity: user.id
                     });
-                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' });
-                    // Merge attributes or add (note add with merge option does not overwrite old values with new ones, so it cannot be used here)
-                    if (self.getAttendees().get(newAttendee)) {
-                        self.getAttendees().get(newAttendee).set(newAttendee);
+                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' }),
+                        id = newAttendee.email ? { email:  newAttendee.email } : { entity: newAttendee.entity };
+
+                    // Merge attributes or add
+                    if (_(self.get('attendees')).findWhere(id)) {
+                        _(self.get('attendees')).findWhere(id).partStat = 'ACCEPTED';
                         // trigger add manually to make sure the attendee attribute and collection are synced correctly -> see follow up events action
-                        self.getAttendees().trigger('add');
+                        self.trigger('change:attendees');
                     } else {
                         self.getAttendees().add(newAttendee);
                     }

@@ -380,12 +380,24 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'content-flags',
+        index: 200,
+        draw: function (baton) {
+            if (!baton.content) return;
+            var $content = $(baton.content);
+            this.closest('article')
+                .toggleClass('content-links', !!$content.find('a').length);
+        }
+    });
+
     ext.point('io.ox/mail/detail/body/iframe').extend({
         id: 'content',
         index: 100,
         draw: function (baton) {
 
-            var $content = $(content.get(baton.data, {}, baton.flow).content), resizing = 0;
+            baton.content = content.get(baton.data, {}, baton.flow).content;
+            var $content = $(baton.content), resizing = 0;
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -445,11 +457,16 @@ define('io.ox/mail/detail/view', [
         id: 'events',
         index: 200,
         draw: function () {
-            var targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
-            // forward deep link clicks from iframe scope to document-wide handlers
-            this.contents().on('click', targets, function (e) {
-                e.preventDefault();
-                ox.trigger('click:deep-link-mail', e, this);
+            this.on('load', function () {
+                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
+                _.defer(function () {
+                    var html = $(this.contentDocument).find('html'),
+                        targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
+                    // forward deep link clicks from iframe scope to document-wide handlers
+                    html.on('click', targets, function (e) {
+                        ox.trigger('click:deep-link-mail', e, this);
+                    });
+                }.bind(this));
             });
         }
     });

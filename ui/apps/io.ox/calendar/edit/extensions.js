@@ -100,20 +100,6 @@ define('io.ox/calendar/edit/extensions', [
                         baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
 
-                    // save attachment data to model
-                    if (attachments.length) {
-                        var attachmentData = [];
-                        _(attachments).each(function (attachment) {
-                            attachmentData.push({
-                                filename: attachment.filename,
-                                fmtType: attachment.file.type,
-                                uri: 'cid:' + 'file_' + attachment.cid
-                            });
-                        });
-                        // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
-                        attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
-                        baton.model.set('attachments', attachmentData, { silent: true });
-                    }
 
                     // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
@@ -129,6 +115,30 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                     if (!baton.model.isValid({ isSave: true })) return;
+
+                    // save attachment data to model
+                    if (attachments.length) {
+                        var attachmentData = [];
+                        _(attachments).each(function (attachment) {
+                            attachmentData.push({
+                                filename: attachment.filename,
+                                fmtType: attachment.file.type,
+                                uri: 'cid:' + 'file_' + attachment.cid
+                            });
+                        });
+                        // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
+                        attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
+                        baton.model.set('attachments', attachmentData, { silent: true });
+                    }
+
+                    // do some cleanup
+                    // remove groups with entity. Those are not needed, as the attendees are also added individually.
+                    // we only remove them if there where changes to the attendees, as we don't want to create a false dirty status
+                    if (!_.isEqual(baton.app.initialModelData.attendees, baton.model.get('attendees'))) {
+                        baton.model._attendees.remove(baton.model._attendees.filter(function (attendee) {
+                            return attendee.get('cuType') === 'GROUP' && attendee.get('entity');
+                        }));
+                    }
 
                     baton.app.getWindow().busy();
                     // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
@@ -261,7 +271,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.ErrorView({ name: 'summary', model: self.model }).render().$el
                 )
             );
-            input.on('keyup', function () {
+            input.on('keyup change', function () {
                 // update title on keyup
                 self.model.trigger('keyup:summary', $(this).val());
             });
@@ -300,7 +310,7 @@ define('io.ox/calendar/edit/extensions', [
             baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-xs-6',
-                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'startDate',
                 label: gt('Starts on'),
                 timezoneButton: true,
@@ -336,7 +346,7 @@ define('io.ox/calendar/edit/extensions', [
             baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-xs-6',
-                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'endDate',
                 label: gt('Ends on'),
                 timezoneButton: true,
@@ -500,7 +510,8 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getAttendees(),
-                baton: baton
+                baton: baton,
+                hideInternalGroups: true
             }).render().$el);
         }
     });
@@ -710,22 +721,21 @@ define('io.ox/calendar/edit/extensions', [
                     //in file picker dialog - other browsers still seem to work)
                     $input[0].value = '';
                     $input.trigger('reset.fileupload');
-                    // look if the quota is exceeded
-                    baton.model.on('invalid:quota_exceeded', function (messages) {
-                        require(['io.ox/core/yell'], function (yell) {
-                            yell('error', messages[0]);
-                        });
-                    });
                     baton.model.validate();
-                    // turn of again to prevent double yells on save
-                    baton.model.off('invalid:quota_exceeded');
                 };
+
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
             $node.append($('<div>').addClass('col-md-12').append($inputWrap));
+
+            baton.model.on('invalid:quota_exceeded', function (messages) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', messages[0]);
+                });
+            });
         }
     });
 
@@ -775,7 +785,6 @@ define('io.ox/calendar/edit/extensions', [
                         var validDate = !(_.isNaN(appointment.startDate) || _.isNaN(appointment.endDate));
 
                         if (validDate) {
-                            e.data.model.set({ allDay: appointment.allDay });
                             e.data.model.set({ startDate: appointment.startDate });
                         }
 

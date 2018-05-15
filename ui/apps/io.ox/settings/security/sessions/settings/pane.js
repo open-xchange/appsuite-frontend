@@ -352,7 +352,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
         render: function (baton) {
             var link;
             this.$el.append(
-                link = $('<button data-action="remove-all" class="btn btn-primary hidden">').text('Sign out from all clients').on('click', function (e) {
+                link = $('<button data-action="remove-all" class="btn btn-primary hidden">').text(gt('Sign out from all clients')).on('click', function (e) {
                     e.preventDefault();
                     buildConfirmationDialog(gt('Do you really want to sign out from all clients except the current one?'), gt('Sign out')).done(function () {
                         var dialog = this;

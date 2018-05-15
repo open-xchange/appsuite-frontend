@@ -208,7 +208,7 @@ define('io.ox/calendar/freetime/main', [
                 async: true,
                 focus: 'input.add-participant.tt-input',
                 maximize: true,
-                title: options.title || gt('Scheduling'),
+                title: options.title || gt.pgettext('app', 'Scheduling'),
                 width: '100%'
             })
             .build(function () {
@@ -231,7 +231,12 @@ define('io.ox/calendar/freetime/main', [
 
     function createApp() {
 
-        var app = ox.ui.createApp({ name: 'io.ox/calendar/scheduling', title: gt('Scheduling'), userContent: true, closable: true }), win;
+        var app = ox.ui.createApp({
+                name: 'io.ox/calendar/scheduling',
+                title: gt.pgettext('app', 'Scheduling'),
+                userContent: true,
+                closable: true
+            }), win;
 
         app.setLauncher(function (options) {
 
@@ -254,7 +259,7 @@ define('io.ox/calendar/freetime/main', [
             app.view = new FreetimeView(options);
             win.nodes.main.append(
                 $('<div class="scheduling-app-header">').append(
-                    $('<h4 class="app-title">').text(gt('Scheduling')),
+                    $('<h4 class="app-title">').text(gt.pgettext('app', 'Scheduling')),
                     app.view.timeSubview.headerNodeRow1,
                     closeButton
                 ),
@@ -276,7 +281,7 @@ define('io.ox/calendar/freetime/main', [
         app.failSave = function () {
             if (this.view.model) {
                 return {
-                    description: gt('Scheduling'),
+                    description: gt.pgettext('app', 'Scheduling'),
                     module: 'io.ox/calendar/freetime',
                     point:  {
                         attendees: this.view.model.get('attendees'),

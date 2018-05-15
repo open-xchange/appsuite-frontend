@@ -194,7 +194,7 @@ define('plugins/demo/customize/register', [
     function applytopbarSize() {
         var value = 39 + model.get('topbarSize') * 8;
         $('#io-ox-screens').css('top', value);
-        $('#io-ox-appcontrol, #io-ox-appcontrol #io-ox-launcher>button').css({ height: value + 'px' });
+        $('#io-ox-appcontrol, #io-ox-appcontrol #io-ox-launcher>button').css('height', value);
         // maybe we need to toggle the header logo
         updateLogo();
     }
@@ -261,7 +261,7 @@ define('plugins/demo/customize/register', [
         if (_.isEmpty(data)) applyPreset(0); else model.set(data);
         // make sure this is called once!
         updateStylesheet();
-        applytopbarSize();
+        _.delay(applytopbarSize, 2000);
     };
 
     var url = '',

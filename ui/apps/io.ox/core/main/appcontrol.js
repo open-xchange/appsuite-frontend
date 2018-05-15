@@ -71,7 +71,7 @@ define('io.ox/core/main/appcontrol', [
                     this.model.launch();
                     return;
                 }
-                ox.launch(this.model.get('path') || this.model.get('name') + '/main');
+                ox.launch(this.model.get('path'));
             }
         },
         quitApp: function (e) {
@@ -87,29 +87,31 @@ define('io.ox/core/main/appcontrol', [
             this.closer = close;
         },
         drawDate: function () {
-            this.$svg.find('tspan:first').text(moment().format('D'));
+            this.$icon.find('tspan:first').text(moment().format('D'));
         },
         drawIcon: function () {
-            var svg = this.model.get('svg'),
+            var icon = this.model.get('icon'),
                 id = this.model.get('id'),
                 title = this.model.get('title'),
                 firstLetter = _.isString(title) ? title[0] : '?';
 
+            // expect icon to look like HTML
+            icon = /^<.*>$/.test(icon) ? icon : '';
             // check for compose apps
             if (this.model.get('closable') && _.device('smartphone')) {
-                svg = ox.ui.appIcons[this.model.options.name];
+                icon = ox.ui.appIcons[this.model.options.name];
             }
 
-            this.$svg = svg ? $(svg) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
+            this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
             // reverted for 7.10
-            // if (settings.get('coloredIcons', false)) this.$svg.addClass('colored');
+            // if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
 
-            if (id === 'io.ox/calendar' || this.model.options.name.match(/calendar/)) this.drawDate();
+            if (id === 'io.ox/calendar' || /calendar/.test(this.model.getName())) this.drawDate();
 
             var cell = $('<div class="lcell" aria-hidden="true">').append(
                 this.badge = $('<div class="indicator">').toggle(this.model.get('hasBadge')),
-                $('<div class="svgwrap">').append(this.$svg),
+                $('<div class="icon">').append(this.$icon),
                 $('<div class="title">').text(this.model.get('title'))
             );
             // checks for upsell and append an icon if needed
@@ -182,6 +184,7 @@ define('io.ox/core/main/appcontrol', [
     // });
 
     var LaunchersView = Backbone.View.extend({
+        tagName: 'li',
         className: 'dropdown',
         id: 'io-ox-launcher',
 
@@ -198,7 +201,7 @@ define('io.ox/core/main/appcontrol', [
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
                 $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
-                    this.collection.where({ hasLauncher: true }).map(function (model) {
+                    this.collection.forLauncher().map(function (model) {
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model }).render().$el
                         );
@@ -324,7 +327,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'right',
         index: 600,
         draw: function () {
-            var taskbar = $('<ul class="taskbar list-unstyled">');
+            var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
             this.append($('<div id="io-ox-toprightbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
         }
@@ -359,6 +362,46 @@ define('io.ox/core/main/appcontrol', [
         index: 10000,
         draw: function () {
             this.show();
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'metrics',
+        draw: function () {
+            require(['io.ox/metrics/main'], function (metrics) {
+                // toolbar actions
+                $('#io-ox-appcontrol .taskbar').on('mousedown', 'li', function (e) {
+                    // click within dropdown
+                    if ($(e.target).closest('div.hidden').length) return;
+                    metrics.trackEvent({
+                        app: 'core',
+                        target: 'banner/taskbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('id')
+                    });
+                });
+
+                metrics.watch({
+                    node: $('#io-ox-appcontrol'),
+                    selector: '#io-ox-top-logo',
+                    type: 'click'
+                }, {
+                    app: 'core',
+                    target: 'banner/logo',
+                    type: 'click',
+                    action: ''
+                });
+
+                $(document.documentElement).on('mousedown', '.halo-link', function () {
+                    var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
+                    metrics.trackEvent({
+                        app: 'core',
+                        type: 'click',
+                        action: 'halo',
+                        detail: _.last(app.get('name').split('/'))
+                    });
+                });
+            });
         }
     });
 

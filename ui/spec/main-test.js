@@ -14,6 +14,8 @@ for (var file in window.__karma__.files) {
 
 //console.log('-----[ running ' + tests.length + ' test files ]-----');
 
+_.extend(ox, Backbone.Events);
+
 require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function (Stage) {
 
     'use strict';
@@ -40,6 +42,15 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
     $('body').prepend('<div id="background-loader">');
 
     new Stage('io.ox/core/stages', {
+        id: 'basic_settings',
+        index: 1,
+        run: function () {
+            return require(['settings!io.ox/core']).then(function (settings) {
+                settings.set('autoStart', 'none');
+            });
+        }
+    });
+    new Stage('io.ox/core/stages', {
         id: 'run_tests',
         index: 99999,
         run: function () {
@@ -52,13 +63,9 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
 
                 // start test run, once Require.js is done
                 callback: function () {
-                    require(['settings!io.ox/core'])
-                    .then(function (settings) {
-                        settings.set('autoStart', 'none/main');
-                        server.restore();
-                        server = null;
-                    })
-                    .then(window.__karma__.start);
+                    server.restore();
+                    server = null;
+                    window.__karma__.start();
                 }
             });
         }

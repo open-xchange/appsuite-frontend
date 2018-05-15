@@ -1,13 +1,13 @@
 <html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Rechercher des fichiers</title>
+<title>9.7. Rechercher des fichiers</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Manuel de l'utilisateur">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapitre 9. Fichiers">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.5.10. Travailler avec des versions">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. Accéder aux fichiers avec WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.6.11. Travailler avec des versions">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.8. Accéder aux fichiers avec WebDAV">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,13 +31,15 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Fichiers</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.files.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.6. Rechercher des fichiers</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.7. Rechercher des fichiers</h2></div></div></div>
+<a class="indexterm" name="id-1.10.13.2"></a><a class="indexterm" name="id-1.10.13.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p id="ox.appsuite.user.concept.files.search">Afin de chercher des fichiers, vous pouvez utiliser les critères de recherche suivants :</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">termes de recherche pour les noms de fichiers, les descriptions de fichiers</p></li>
+<li class="listitem"><p role="presentation">dossiers dans lesquels effectuer la recherche</p></li>
 <li class="listitem"><p role="presentation">type de fichier : tous, sonores, documents, images, autres, vidéos</p></li>
 <li class="listitem"><p role="presentation">taille du fichier</p></li>
+<li class="listitem"><p role="presentation">intervalle de temps pour la date de dernière modification, relativement à la date du jour : semaine dernière, mois dernier, an dernier</p></li>
 <li class="listitem"><p role="presentation">type de dossier : tous, privé, public, partagé</p></li>
 </ul>
 <p>
@@ -46,15 +48,7 @@
 <div class="task" id="ox.appsuite.user.task.files.search">
 <p class="title">Comment chercher des fichiers :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">Cliquez sur l'icône <span class="guibutton"><strong>Démarrer la recherche</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> ou le champ de saisie dans la barre de recherche. Le bouton de dossier indique les dossiers à cibler pour la recherche. Les <span class="guibutton"><strong>Options</strong></span> offrent des fonctions limitant la portée de la recherche.</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.files.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_click.png" alt="Le champ de saisie"></div></div></div>
-</li>
-<li class="step"><p role="presentation">Pour définir le dossier dans lequel effectuer la recherche, cliquez sur le bouton du dossier.<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Si vous choisissez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers privés, publics et partagés.</p></li>
-<li class="listitem"><p role="presentation">Si vous choisissez un dossier particulier ou le dossier, la recherche s'effectue uniquement dans ce dossier et aucun de ses sous-dossiers.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Cliquez sur le champ de saisie <span class="guibutton"><strong>Rechercher</strong></span> dans la barre de menu. Des icônes supplémentaires apparaissent.</p></li>
 <li class="step">
 <p role="presentation">Saisissez un terme de recherche dans le champ de saisie. Le menu de recherche s'ouvre.</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.files.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_searchmenue.png" alt="Le menu de recherche"></div></div></div>
@@ -68,15 +62,22 @@
           </p>
 <p role="presentation">Les résultats de la recherche sont affichés dans la liste, disponible dans la zone d'affichage.</p>
 </li>
-<li class="step"><p role="presentation">Vous avez les options suivantes pour ajuster les résultats de la recherche :<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Pour affiner les résultats de la recherche, saisissez des termes complémentaires : pour supprimer un terme recherché, cliquez sur l'icône <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> à proximité du terme recherché. </p></li>
-<li class="listitem"><p role="presentation">Pour chercher dans un autre dossier, cliquez sur le bouton du dossier. Sélectionnez un dossier.</p></li>
-<li class="listitem"><p role="presentation">Pour limiter la recherche aux dossiers privés, publics ou partagés, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type de dossier.</p></li>
-<li class="listitem"><p role="presentation">Pour limiter la recherche à des fichiers donnés, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type.</p></li>
-<li class="listitem"><p role="presentation">Pour limiter la recherche à des fichiers d'une taille donnée, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez une taille de fichier.</p></li>
+<li class="step"><p role="presentation">Pour sélectionner un dossier dans lequel effectuer la recherche, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Le dossier cible apparaît dans le menu déroulant <span class="guibutton"><strong>Dossier</strong></span>. Pour choisir un autre dossier, ouvrez le menu déroulant.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Si vous choisissez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers privés, publics et partagés.</p>
+<p role="presentation">Pour restreindre la recherche aux dossiers privés, publics ou partagés, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type de dossier.</p>
+</li>
+<li class="listitem"><p role="presentation">Si vous choisissez un dossier particulier ou le dossier, la recherche s'effectue uniquement dans ce dossier et aucun de ses sous-dossiers.</p></li>
 </ul>
           </p></li>
-<li class="step"><p role="presentation">Afin de terminer la recherche, cliquez sur l'icône <span class="guibutton"><strong>Annuler la recherche</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
+<li class="step"><p role="presentation">Pour restreindre la recherche à des fichiers spécifiques, vous disposez des options suivantes :<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Pour rechercher des fichiers spécifiques, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.type"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Ouvrez le menu déroulant <span class="guibutton"><strong>Type de fichier</strong></span> et choisissez un type de fichier.</p></li>
+<li class="listitem"><p role="presentation">Pour restreindre la recherche aux fichiers d'une taille donnée, cliquez sur l'icône<span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.size"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Ouvrez la liste déroulante <span class="guibutton"><strong>Taille du fichier</strong></span> et choisissez la taille.</p></li>
+<li class="listitem"><p role="presentation">Pour rechercher des fichiers ayant été modifié durant une période de temps donnée, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.date"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Ouvrez le menu déroulant <span class="guibutton"><strong>Date</strong></span> et choisissez une valeur.</p></li>
+</ul>
+          </p></li>
+<li class="step"><p role="presentation">Pour affiner les résultats de la recherche, saisissez des termes complémentaires : pour supprimer un terme recherché, cliquez sur l'icône <span class="guibutton"><strong>Supprimer</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> à côté du terme recherché.</p></li>
+<li class="step"><p role="presentation">Pour clore la recherche, cliquez sur l'icône <span class="guibutton"><strong>Fermer</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.concept.files.search.parent">Sujet supérieur : <a class="xref" href="ox.appsuite.user.chap.files.html"><i><span class="phrase">Fichiers</span></i></a></p>

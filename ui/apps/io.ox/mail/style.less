@@ -172,6 +172,7 @@
         .smartphone & {
             padding-top: 16px;
             padding-bottom: 15px;
+            .list-item-checkmark { top: 9px; }
         }
     }
 
@@ -553,6 +554,8 @@
     .notification-item + .notification-item { border-top: none; }
 
     .notifications { cursor: default; }
+
+    &:not(.content-links) .disabled-links { display: none };
 
     .alert, .well {
         margin: 0;

@@ -45,10 +45,7 @@ define('io.ox/core/main/icons', [
                 'io.ox/mail/compose': 'io.ox/mail',
                 'io.ox/contacts/edit': 'io.ox/contacts',
                 'io.ox/calendar/edit': 'io.ox/calendar',
-                'io.ox/tasks/edit': 'io.ox/tasks',
-                'io.ox/office/text': 'io.ox/office/portal/text',
-                'io.ox/office/spreadsheet': 'io.ox/office/portal/spreadsheet',
-                'io.ox/office/presentation': 'io.ox/office/portal/presentation'
+                'io.ox/tasks/edit': 'io.ox/tasks'
             };
         }
     });
@@ -68,9 +65,6 @@ define('io.ox/core/main/icons', [
                 'io.ox/files': '<i class="fa fa-cloud">',
                 'io.ox/portal': '<i class="fa fa-th-large">',
                 'io.ox/tasks': '<i class="fa fa-check-square-o">',
-                'io.ox/office/portal/text': '<i class="fa fa-file-text-o">',
-                'io.ox/office/portal/spreadsheet': '<i class="fa fa-table">',
-                'io.ox/office/portal/presentation': '<i class="fa fa-list-alt">',
                 'launcher': '<i class="fa fa-th">',
                 'fallback': '<i class="fa fa-question">'
             };

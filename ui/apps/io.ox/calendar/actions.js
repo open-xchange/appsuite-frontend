@@ -134,21 +134,11 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/edit', {
         requires: function (e) {
-            var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
-                allowed = e.collection.has('one', 'modify'),
-                // only organizer is allowed to make changes. Attendees are only allowed to change their personal alarms or confirmation state
-                isOrganizer = exists && util.hasFlag(e.baton.data, 'organizer');
+            var exists = e.baton && e.baton.data && e.baton.data.id !== undefined,
+                allowed = e.collection.has('one', 'modify');
+            if (!exists || !allowed) return false;
 
-            if (allowed) {
-                // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
-                if (!e.baton.data.folder) {
-                    // you need to have a folder id to edit
-                    allowed = false;
-                }
-            }
-            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return allowed && exists && isBossy && isOrganizer;
-            });
+            return util.allowedToEdit(e.baton.data);
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/edit']).done(function (action) {
@@ -159,9 +149,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
-            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return e.collection.has('delete') && isBossy;
-            });
+            return e.collection.has('delete') && (util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'attendee'));
         },
         multiple: function (list) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
@@ -185,14 +173,7 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
 
             function cont(model) {
-                var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
-                return $.when(def, util.isBossyAppointmentHandling({ app: e.baton.data, invert: true })).then(function (folder, isBossy) {
-                    var attendees = model.get('attendees') || [],
-                        user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
-                        iamUser = !!_(attendees).findWhere({ entity: user });
-
-                    return e.collection.has('one') && iamUser && isBossy;
-                });
+                return e.collection.has('one') && util.hasFlag(model, 'attendee');
             }
 
             var model = e.baton.model,
@@ -302,10 +283,8 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/move', {
         requires: function (e) {
-            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                var isSeries = !!e.baton.data.recurrenceId;
-                return e.collection.has('some', 'delete') && isBossy && !isSeries;
-            });
+            var isSeries = !!e.baton.data.recurrenceId;
+            return e.collection.has('some', 'delete') && util.hasFlag(e.baton.data, 'organizer') && !isSeries;
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
@@ -509,32 +488,16 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !e.baton.data.attendees) return false;
-
-            var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
-            return def.then(function (folder) {
-                var attendees = e.baton.data.attendees || [],
-                    user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
-                    iamUser = !!_(attendees).findWhere({ entity: user });
-
-                return iamUser && _(attendees).findWhere({ entity: user }).partStat !== 'ACCEPTED';
-            });
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
+            return util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted');
         },
         action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !e.baton.data.attendees) return false;
-
-            var def = e.baton.noFolderCheck || !e.baton.data.folder ? $.when() : folderAPI.get(e.baton.data.folder);
-            return def.then(function (folder) {
-                var attendees = e.baton.data.attendees || [],
-                    user = folder && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
-                    iamUser = !!_(attendees).findWhere({ entity: user });
-
-                return iamUser && _(attendees).findWhere({ entity: user }).partStat !== 'DECLINED';
-            });
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
+            return util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined');
         },
         action: acceptDecline
     });

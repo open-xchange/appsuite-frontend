@@ -842,7 +842,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 that.trigger('stop fail', r.xhr);
                 var message = xhr.status !== 0 ? xhr.status + ' ' : '';
                 message += errorThrown || (navigator.onLine ? that.messages.generic : that.messages.offline);
-                r.def.reject({ error: message }, xhr);
+                r.def.reject({ error: message, code: navigator.onLine ? 'NOSERVER' : 'OFFLINE' }, xhr);
                 r = null;
             });
         }
@@ -1369,6 +1369,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         messages: {
             // translation will be injected by http_error.js
             generic: 'An unknown error occurred',
+            // add better more specific messages with next release
+            noserver: 'An unknown error occurred',
             offline: 'Cannot connect to server. Please check your connection.'
         },
 

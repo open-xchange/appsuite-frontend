@@ -25,16 +25,16 @@ define('io.ox/core/settings/pane', [
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker'
-], function (ext, ExtensibleView, mini, util, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
+], function (ext, ExtensibleView, mini, util, apps, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
 
     'use strict';
 
     var INDEX = 0,
         MINUTES = 60000,
-        availableApps = appAPI.getApps().map(function (o) {
+        availableApps = apps.forLauncher().map(function (o) {
             return {
-                label: /*#, dynamic*/gt.pgettext('app', o.title),
-                value: o.path
+                label: o.getTitle(),
+                value: o.get('path')
             };
         }).concat([{ label: gt('None'), value: 'none' }]);
 

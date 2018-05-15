@@ -192,9 +192,11 @@ define('io.ox/mail/main', [
             });
             app.pages.getNavbar('threadView').on('leftAction', function () {
                 app.pages.goBack();
+                app.listView.selection.selectNone();
             });
             app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
+                app.listView.selection.selectNone();
             });
 
             // checkbox toggle
@@ -1214,6 +1216,15 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Respond total/unread number changes when folder is reloaded (this may happen independent from refresh)
+         */
+        'reloadOnFolderChange': function (app) {
+            api.on('changesAfterReloading', function reload() {
+                app.listView.reload();
+            });
+        },
+
+        /*
          * auto select first seen email (only on initial startup)
          */
         'auto-select': function (app) {
@@ -1568,6 +1579,9 @@ define('io.ox/mail/main', [
                 app.listView.$el.trigger('scroll');
                 toggleClasses();
             });
+
+            // update classes on folder change, e.g. text preview is not available for external accounts
+            app.on('folder:change', toggleClasses);
 
             toggleClasses();
 

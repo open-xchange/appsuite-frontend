@@ -80,6 +80,7 @@ define('io.ox/find/view-token', [
                 dropdown = new Dropdown({
                     model: ddmodel,
                     tagName: 'div',
+                    classname: 'facets',
                     label: function () {
                         return [
                             $('<span class="token-type">').text(value.getTokenType()),

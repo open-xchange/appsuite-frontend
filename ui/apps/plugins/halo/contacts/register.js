@@ -11,7 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('plugins/halo/contacts/register', ['io.ox/core/extensions'], function (ext) {
+define('plugins/halo/contacts/register', [
+    'io.ox/core/extensions',
+    'settings!io.ox/mail'
+], function (ext, mailSettings) {
 
     'use strict';
 
@@ -27,7 +30,11 @@ define('plugins/halo/contacts/register', ['io.ox/core/extensions'], function (ex
             var self = this, def = $.Deferred();
 
             require(['io.ox/contacts/view-detail', 'io.ox/contacts/util', 'less!io.ox/contacts/style'], function (view, util) {
-                var contact = baton.data[0];
+
+                // prefer entry that is not in "collected addresses" (bug 58433)
+                var contact = _.sortBy(baton.data, function (contact) {
+                    return contact.folder_id === mailSettings.get('contactCollectFolder') ? 1 : 0;
+                })[0];
 
                 // if no display name can be computed, use the name of the mail
                 if (util.getDisplayName(contact) === '') contact.display_name = baton.contact.name;

@@ -1,13 +1,13 @@
 <html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. 搜寻文件</title>
+<title>9.7. 搜索文件</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="用户向导&gt;">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="第 9 章 磁盘">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.5.10. 处理版本">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. 用 WebDAV 访问文件">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.6.11. 处理版本">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.8. 以 WebDAV 访问文件">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,13 +31,15 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">磁盘</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.files.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.6. 搜寻文件</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.7. 搜索文件</h2></div></div></div>
+<a class="indexterm" name="id-1.10.13.2"></a><a class="indexterm" name="id-1.10.13.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p id="ox.appsuite.user.concept.files.search">为了搜寻文件，您可以使用以下搜寻准则：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">文件名称、文件描述的搜寻词</p></li>
+<li class="listitem"><p role="presentation">要搜寻的文件夹</p></li>
 <li class="listitem"><p role="presentation">文件类型：所有、音频、文档、图像、其他、视频</p></li>
 <li class="listitem"><p role="presentation">文件大小</p></li>
+<li class="listitem"><p role="presentation">最后更改的时段，相对于当前日期：上周、上月、去年</p></li>
 <li class="listitem"><p role="presentation">文件夹类型：所有、私人、公共、共享</p></li>
 </ul>
 <p>
@@ -46,15 +48,7 @@
 <div class="task" id="ox.appsuite.user.task.files.search">
 <p class="title">如何搜索文件：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">单击<span class="guibutton"><strong>开始搜寻</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>或在搜寻条的输入字段里单击。文件夹按钮指示要搜寻的文件夹。<span class="guibutton"><strong>选项</strong></span>下拉提供限制搜寻的功能。</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.files.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_click.png" alt="输入字段"></div></div></div>
-</li>
-<li class="step"><p role="presentation">要为搜寻选择一个文件夹，在文件夹按键上单击。<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">如果您选择<span class="guibutton"><strong>所有文件夹</strong></span>，会搜寻所有私人、公共、共享的文件夹和子文件夹。</p></li>
-<li class="listitem"><p role="presentation">如果选择一个指定的文件夹或文件夹，只有搜寻此文件夹而不会搜寻子文件夹。</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">在菜单条里单击<span class="guibutton"><strong>搜寻</strong></span>输入字段。会显示额外图标。</p></li>
 <li class="step">
 <p role="presentation">在输入字段里输入一个搜寻词。会打开搜寻菜单。</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.files.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_searchmenue.png" alt="搜寻菜单"></div></div></div>
@@ -68,15 +62,22 @@
           </p>
 <p role="presentation">搜寻结果会在显示区域里的列表内显示。</p>
 </li>
-<li class="step"><p role="presentation">您有以下选项以调整搜寻结果：<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">要重定搜寻结果，输入更多搜寻词：要移除一个搜寻词，单击搜寻词旁边的图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>。</p></li>
-<li class="listitem"><p role="presentation">要在别的文件夹里搜寻，单击文件夹按钮。选择一个文件夹。</p></li>
-<li class="listitem"><p role="presentation">要限制搜寻于私人、公共、或共享文件夹，单击<span class="guibutton"><strong>选项</strong></span>。选择一个文件夹类型。</p></li>
-<li class="listitem"><p role="presentation">要限制搜寻于指定文件，单击<span class="guibutton"><strong>选项</strong></span>。选择一个类型。</p></li>
-<li class="listitem"><p role="presentation">要限制搜寻于指定大小的文件，单击<span class="guibutton"><strong>选项</strong></span>。选择文件大小。</p></li>
+<li class="step"><p role="presentation">要选择一个文件夹以作搜寻，在输入字段里单击<span class="guibutton"><strong>选项</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>。已搜寻的文件夹，会于<span class="guibutton"><strong>文件夹</strong></span>下拉里显示。要选择别的文件夹，打开下拉。<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">如果您选择<span class="guibutton"><strong>所有文件夹</strong></span>，会搜寻所有私人、公共、共享的文件夹和子文件夹。</p>
+<p role="presentation">要限制搜寻于私人、公共、或共享文件夹，单击<span class="guibutton"><strong>选项</strong></span>。选择一个类型。</p>
+</li>
+<li class="listitem"><p role="presentation">如果选择一个指定的文件夹或文件夹，只有搜寻此文件夹而不会搜寻子文件夹。</p></li>
 </ul>
           </p></li>
-<li class="step"><p role="presentation">为了结束搜寻，单击<span class="guibutton"><strong>取消搜寻</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>。</p></li>
+<li class="step"><p role="presentation">您有以下选项去限制搜寻到指定的文件：<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">要搜寻指定文件，在输入字段里单击<span class="guibutton"><strong>选项</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.type"><img src="../../images/appsuite_user_icon_dropdown.png"></span>。打开<span class="guibutton"><strong>文件类型</strong></span>下拉。选择一个类型。</p></li>
+<li class="listitem"><p role="presentation">要以指定大小限制文件搜寻，在输入字段里单击<span class="guibutton"><strong>选项</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.size"><img src="../../images/appsuite_user_icon_dropdown.png"></span>。打开<span class="guibutton"><strong>文件大小</strong></span>下拉。选择一个大小。</p></li>
+<li class="listitem"><p role="presentation">要搜寻于指定时段里更改的文件，在输入字段里单击<span class="guibutton"><strong>选项</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.date"><img src="../../images/appsuite_user_icon_dropdown.png"></span>。打开<span class="guibutton"><strong>日期</strong></span>下拉。选择一个值。</p></li>
+</ul>
+          </p></li>
+<li class="step"><p role="presentation">要改善搜寻结果，输入更多搜寻词：要移除一个搜寻词，单击搜寻词旁边的<span class="guibutton"><strong>移除</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>。</p></li>
+<li class="step"><p role="presentation">为了结束搜寻，单击<span class="guibutton"><strong>关闭</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>。</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.concept.files.search.parent">母主题：<a class="xref" href="ox.appsuite.user.chap.files.html"><i><span class="phrase">磁盘</span></i></a></p>

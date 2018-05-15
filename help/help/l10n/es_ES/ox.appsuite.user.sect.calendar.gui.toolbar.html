@@ -1,13 +1,13 @@
-<html lang="de">
+<html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.1.3. La barra de herramientas de Calendario</title>
+<title>7.1.2. La barra de herramientas de Calendario</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Guía del usuario">
 <link rel="up" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Los componentes de Calendario">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.gui.foldertree.html" title="7.1.2. El árbol de carpetas de Calendario">
-<link rel="next" href="ox.appsuite.user.sect.calendar.gui.content.html" title="7.1.4. El área de visualización de Calendario">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.gui.search.html" title="7.1.1. La barra de búsqueda de Calendario">
+<link rel="next" href="ox.appsuite.user.sect.calendar.gui.minicalendar.html" title="7.1.3. El mini calendario">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,13 +19,13 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.gui.foldertree.html">Zurück</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.gui.content.html">Weiter</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.gui.search.html">Anterior</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">Siguiente</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -33,41 +33,33 @@
 <h2 class="sr-only">Los componentes de <span class="phrase"><span class="guilabel"><strong>Calendario</strong></span></span>
 </h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.gui.toolbar">
-<div class="titlepage"><div><div><h3 class="title">7.1.3. La barra de herramientas de <span class="phrase">Calendario</span>
+<div class="titlepage"><div><div><h3 class="title">7.1.2. La barra de herramientas de <span class="phrase">Calendario</span>
 </h3></div></div></div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><p id="ox.appsuite.user.reference.calendar.gui.toolbar">Contiene los siguientes elementos en las vistas del calendario:</p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><p id="ox.appsuite.user.reference.calendar.gui.toolbar"><span class="phrase"><strong>Nota:</strong></span> Algunas funciones solo están disponibles si abre un calendario para el que tenga los permisos adecuados para crear o editar objetos.</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Nuevo</strong></span>. Crea una nueva cita.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Planificación</strong></span>. Abre la vista de planificación para planificar citas con varios participantes.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Hoy</strong></span>. Selecciona el rango de tiempo con el día actual.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Nuevo</strong></span>. Crea una cita nueva.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Planificación</strong></span>. Abre la vista de planificación para programar citas con múltiples participantes.</p></li>
+<li class="listitem"><p role="presentation">Si se selecciona una vista de calendario en el botón <span class="guibutton"><strong>Vista</strong></span>: Botón <span class="guibutton"><strong>Hoy</strong></span>. Selecciona el rango de tiempo con el día actual.</p></li>
 <li class="listitem">
 <p role="presentation"><span class="guibutton"><strong>Vista</strong></span>. Abre un menú con casillas de verificación para controlar la vista.</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.calendar.gui.toolbar.view" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Día</strong></span>, <span class="guibutton"><strong>Semana laboral</strong></span>, <span class="guibutton"><strong>Semana</strong></span> o <span class="guibutton"><strong>Mes</strong></span>. Permite seleccionar una <a class="link" href="ox.appsuite.user.sect.calendar.gui.calendarview.html">vista del calendario</a>.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Día</strong></span>, <span class="guibutton"><strong>Semana laboral</strong></span>, <span class="guibutton"><strong>Semana</strong></span>, <span class="guibutton"><strong>Mes</strong></span> o <span class="guibutton"><strong>Año</strong></span>. Selecciona una vista de calendario.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Lista</strong></span>. Activa la <a class="link" href="ox.appsuite.user.sect.calendar.gui.list.html">vista de lista</a>.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Vista de carpeta</strong></span>. Abre o cierra el árbol de carpetas.</p></li>
-<li class="listitem">
-<p role="presentation">Colores de las citas.</p>
-<ul class="itemizedlist" style="list-style-type: square; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Colores clásicos</strong></span>. Muestra las citas con colores claros.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Colores oscuros</strong></span>. Muestra las citas con colores oscuros.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Colores personalizados</strong></span>. Puede decidir con qué color se muestra una cita.</p></li>
-</ul>
-<p role="presentation"> </p>
-</li>
-<li class="listitem"><p role="presentation">Si está seleccionada la vista de lista y las <span class="guibutton"><strong>casillas de verificación</strong></span> están activadas, las casillas de verificación para marcar objetos se muestran en la lista.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Mini calendario</strong></span>. Abre o cierra el mini calendario.</p></li>
+<li class="listitem"><p role="presentation">Si la vista de lista está seleccionada y las <span class="guibutton"><strong>casillas de verificación</strong></span> están activadas, las casillas de verificación para marcar objetos se muestran en la lista.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Imprimir</strong></span>. Abre la vista previa de impresión para imprimir una hoja de calendario.</p></li>
 </ul>
 <p role="presentation"> </p>
 </li>
 </ul>
-<p>Si selecciona una cita en la vista de lista, se mostrarán elementos adicionales:</p>
+<p>Si selecciona una cita en la vista de lista, se muestran elementos adicionales:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Editar</strong></span>. Edita los datos de una cita.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Estado</strong></span>. Cambia el estado de confirmación de la cita.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Borrar</strong></span>. Borra las citas que haya seleccionado.</p></li>
-<li class="listitem"><p role="presentation">El icono <span class="guibutton"><strong>Acciones</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.toolbar.actions"><img src="../../images/appsuite_user_icon_actions.png"></span> . Abre un menú con más funciones:</p></li>
+<li class="listitem"><p role="presentation">Icono <span class="guibutton"><strong>Más acciones</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.toolbar.actions"><img src="../../images/appsuite_user_icon_actions.png"></span>. Abre un menú con más <a class="link" href="ox.appsuite.user.sect.calendar.gui.toolbar.html#ox.appsuite.user.reference.calendar.gui.toolbar.related.actions">funciones</a>:</p></li>
 </ul>
 <p>
       </p>
@@ -76,18 +68,22 @@
 <ul class="itemizedlist" id="ox.appsuite.user.reference.calendar.gui.toolbar.related" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.toolbar.html">La barra de herramientas</a></p></li>
 <li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">El mini calendario</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.calendarview.html">Vista del calendario Día, Semana laboral, Semana, Mes o Año.</a></p>
+</li>
+<li class="listitem" style="list-style-type: none">
 <p role="presentation">Instrucciones para los botones e iconos:</p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.html">Creación de citas</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html">Uso de la vista de planificación</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html">Edición de citas</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Modificación del estado de la cita</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Cambio del estado de confirmación de la cita</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html">Borrado de citas</a></p>
 </li>
-<li class="listitem" style="list-style-type: none">
-<p role="presentation">Instrucciones sobre las funciones del menú <span class="guibutton"><strong>Acciones</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"><img src="../../images/appsuite_user_icon_actions.png"></span> :</p>
+<li class="listitem" id="ox.appsuite.user.reference.calendar.gui.toolbar.related.actions" style="list-style-type: none">
+<p role="presentation">Instrucciones sobre las funciones del menú <span class="guibutton"><strong>Más acciones</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"><img src="../../images/appsuite_user_icon_actions.png"></span>:</p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.export.html">Exportación de citas</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html">Impresión de citas</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html">Traslado de citas a otra carpeta</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html">Edición de varias citas de una vez</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html">Mover citas a otro calendario</a></p>
 </li>
 </ul>
 <p id="ox.appsuite.user.reference.calendar.gui.toolbar.parent">Tema superior: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html">Los componentes de <span class="phrase"><span class="guilabel"><strong>Calendario</strong></span></span></a></p>

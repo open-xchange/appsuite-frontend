@@ -46,8 +46,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         var name = model.getDisplayName() || '-';
         var disableLink = options.disableLink || false;
 
-        //fix for 53324
-        if (model.get('source') !== 'drive') return $.txt(name);
+        //fix for 53324, 58378
+        if (!model.isFile()) return $.txt(name);
 
         // fix for 56070
         if (disableLink) return $.txt(name);

@@ -26,12 +26,11 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
-    'settings!io.ox/core',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, coreSettings, attachments, http, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments, http, DOMPurify) {
 
     'use strict';
 
@@ -78,6 +77,10 @@ define('io.ox/contacts/view-detail', [
 
     }
 
+    function hideAddressBook() {
+        return ox.ui.apps._indexOf('io.ox/contacts') < 0;
+    }
+
     function createText(format, classes) {
         return _.aprintf(
             format.format,
@@ -109,7 +112,7 @@ define('io.ox/contacts/view-detail', [
         id: 'inline-actions',
         draw: function (baton) {
             if (api.looksLikeResource(baton.data)) return;
-            if (coreSettings.get('features/hideAddressBook')) return;
+            if (hideAddressBook()) return;
             ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
         }
     });
@@ -439,15 +442,13 @@ define('io.ox/contacts/view-detail', [
             var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
 
             $(this).append(
+                address,
                 $('<a class="maps-service" target="_blank" rel="noopener">')
                 .attr('href', services[service].url + query)
                 .append(
-                    address,
-                    $('<p>').append(
-                        $('<i class="fa fa-external-link" aria-hidden="true">'),
-                        //#. %1$s is a map service, like "Google Maps"
-                        $.txt(' ' + gt('Open in %1$s', services[service].label))
-                    )
+                    $('<i class="fa fa-external-link" aria-hidden="true">'),
+                    //#. %1$s is a map service, like "Google Maps"
+                    $.txt(' ' + gt('Open in %1$s', services[service].label))
                 )
             );
         };
@@ -753,7 +754,7 @@ define('io.ox/contacts/view-detail', [
 
             // this is also used by halo, so we might miss a folder id
             if (!id) return;
-            if (coreSettings.get('features/hideAddressBook')) return;
+            if (hideAddressBook()) return;
 
             // don't show folders path for folder 6 if global address book is disabled
             if (String(id) === '6' && !capabilities.has('gab')) return;

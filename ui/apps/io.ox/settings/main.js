@@ -31,7 +31,7 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
+], function (VGrid, apps, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
     'use strict';
 
@@ -119,7 +119,7 @@ define('io.ox/settings/main', [
         }).scrollable();
 
         // Create extensions for the apps
-        var appsInitialized = $.when(appsAPI.getAppsWithSettings()).done(function (apps) {
+        var appsInitialized = $.when(apps.where({ settings: true })).done(function (apps) {
 
             ext.point('io.ox/settings/pane').extend({
                 id: 'main',
@@ -131,10 +131,10 @@ define('io.ox/settings/main', [
 
             _(apps).each(function (app) {
                 ext.point('io.ox/settings/pane/main').extend(_.extend({}, {
-                    title: app.description,
+                    title: app.get('description'),
                     ref: app.id,
                     index: index
-                }, app));
+                }, app.toJSON()));
                 index += 100;
             });
         });

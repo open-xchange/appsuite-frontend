@@ -548,7 +548,7 @@ define('io.ox/mail/util', [
 
             function getAuthenticityLevel() {
                 if (!settings.get('features/authenticity', false)) return 'none';
-                return settings.get('authenticity/level');
+                return settings.get('authenticity/level', 'none');
             }
 
             function getAuthenticityStatus(data) {
@@ -561,10 +561,9 @@ define('io.ox/mail/util', [
                     // contact image
                     case 'image':
                         return /(fail|neutral)/.test(status);
-                    // append icon with info hover next to the frin field
-                    case 'icon':
-                        return status === 'neutral' && /(fail_neutral|all)/.test(level);
+                    // append icon with info hover next to the from field
                     // prepend in sender block (detail), 'via' hint for different mail server
+                    case 'icon':
                     case 'via':
                         if (status === 'trusted') return true;
                         switch (level) {

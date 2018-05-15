@@ -341,6 +341,13 @@ define('io.ox/calendar/month/view', [
                 }
             }, this);
 
+            if (_.device('safari')) {
+                // bug in safari causes the caption to disappear after new content has been added to a tablecell.
+                // just force rerendering of the caption to make it appear again
+                var caption = this.$('caption');
+                caption.css('transform', !!caption.css('transform') ? '' : 'translateZ(0)');
+            }
+
             // exit here if we are on a phone
             if (_.device('smartphone')) return;
 
@@ -465,7 +472,7 @@ define('io.ox/calendar/month/view', [
             if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
                 classes = 'private';
             } else {
-                var canModifiy = folderAPI.can('write', folder, a.attributes) && a.hasFlag('organizer');
+                var canModifiy = folderAPI.can('write', folder, a.attributes) && util.allowedToEdit(a, { synced: true, folderData: folder });
                 conf = util.getConfirmationStatus(a);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
@@ -495,12 +502,6 @@ define('io.ox/calendar/month/view', [
                 .attr({
                     'data-extension': 'default'
                 });
-
-            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
-                if (!isBossy) {
-                    self.removeClass('modify');
-                }
-            });
         }
     });
 

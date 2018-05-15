@@ -295,7 +295,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 this.view.$el.find('.alarm-list-item').length.should.equal(4);
             });
 
-            it('should remove alarmes when button is clicked', function () {
+            it('should remove alarms when button is clicked', function () {
                 this.view.$el.find('.alarm-remove:first').trigger('click');
                 this.view.$el.find('.alarm-list-item').length.should.equal(2);
             });

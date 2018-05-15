@@ -20,8 +20,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'io.ox
         className: 'classic-toolbar-container',
 
         events: {
-            'mousedown ul.classic-toolbar > li > a': 'onMousedown',
-            'keydown ul.classic-toolbar > li > a': 'onKeydown'
+            'mousedown ul.classic-toolbar > li > a': 'onMousedown'
         },
 
         initialize: function (opt) {
@@ -82,32 +81,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'io.ox
         onMousedown: function (e) {
             this.$links.attr('tabindex', -1);
             $(e.currentTarget).attr('tabindex', this.options.tabindex);
-        },
-
-        onKeydown: function (e) {
-            // if not space, cursor or modifier key pressed: Do not process
-            if (!/(37|38|39|40)/.test(e.which) || e.altKey || e.ctrlKey || e.shiftKey) {
-                return;
-            }
-            // Refresh buttons
-            this.$links = this.getButtons();
-
-            var index = (this.$links.index($(document.activeElement)) || 0);
-
-            if (index < 0) return;
-
-            // LEFT and UP
-            if (/37|38/.test(e.which)) index -= 1;
-            // RIGHT / DOWN (DOWN except if dropdown)
-            else if (/39|40/.test(e.which) && $(e.currentTarget).not('[data-toggle="dropdown"]')) index += 1;
-
-            this.$links
-                .attr('tabindex', -1)
-                .eq(index %= this.$links.length)
-                .attr('tabindex', this.options.tabindex)
-                .focus();
         }
-
     });
 
     return Toolbar;

@@ -231,10 +231,12 @@ define('io.ox/core/tk/doc-converter-utils', [
      */
     Utils.getProprietaryParams = function (model) {
 
-        var // the original mail and PIM attachment model data
-            originalModel = model.get('origData'),
-            // the PIM module id
-            moduleId = model.get('module');
+        // the original mail and PIM attachment model data
+        var originalModel = model.get('origData');
+        // the PIM module id
+        var moduleId = model.get('module');
+        // the Guard parameters
+        var file_options = model.get('file_options');
 
         if (model.isMailAttachment()) {
             return {
@@ -252,8 +254,7 @@ define('io.ox/core/tk/doc-converter-utils', [
                 module: moduleId
             };
 
-        } else if (model.isEncrypted()) {
-            var file_options = model.get('file_options');
+        } else if (model.isEncrypted() || _.isObject(file_options)) {
             var file_options_params = file_options ? file_options.params : null;
             return {
                 source: 'guard',

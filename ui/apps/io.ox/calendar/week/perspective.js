@@ -18,13 +18,13 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosModel, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, yell, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
@@ -59,13 +59,19 @@ define('io.ox/calendar/week/perspective', [
                     self.setNewStart = false;
                     if (self.view) {
                         //view is rendered already
-                        self.view.setStartDate(util.getMoment(model.get('startDate')), false);
+                        self.view.setStartDate(util.getMoment(model.get('startDate')));
                     }
                 }
             }
 
-            function failHandler() {
-                notifications.yell('error', gt('An error occurred. Please try again.'));
+            function failHandler(e) {
+                // CAL-4040: Appointment not found
+                if (e && e.code === 'CAL-4040') {
+                    yell(e);
+                } else {
+                    yell('error', gt('An error occurred. Please try again.'));
+                }
+                self.dialog.close();
                 $('.appointment', self.main).removeClass('opac current');
                 if (_.device('smartphone')) {
                     self.app.pages.getPage('detailView').idle();
@@ -127,7 +133,7 @@ define('io.ox/calendar/week/perspective', [
                     });
                 }, function fail(error) {
                     self.view.renderAppointments();
-                    notifications.yell(error);
+                    yell(error);
                 });
             };
 
@@ -334,10 +340,10 @@ define('io.ox/calendar/week/perspective', [
                 });
 
                 // respond to date change on app level
-                this.view.listenTo(app.props, 'change:date', _.debounce(function (model, value) {
+                this.view.listenTo(app.props, 'change:date', _.debounce(function (model, value, options) {
                     if (!this.$el.is(':visible')) return;
                     if (ox.debug) console.log('week: change date by app', value);
-                    this.setStartDate(value);
+                    this.setStartDate(value, options);
                 }, 100, true));
 
                 this.main.attr('aria-label', {
@@ -452,7 +458,7 @@ define('io.ox/calendar/week/perspective', [
                     if (!/^io.ox\/calendar/.test(current)) return;
                     if (!obj.seriesId || obj.seriesId !== obj.id) {
                         if (app.folder.get() !== String(obj.folder)) app.folder.set(obj.folder);
-                        self.view.setStartDate(util.getMoment(obj.startDate).valueOf(), obj.allTime);
+                        self.view.setStartDate(util.getMoment(obj.startDate).valueOf(), { utc: obj.allTime });
                     }
                 });
 

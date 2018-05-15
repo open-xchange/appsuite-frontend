@@ -37,7 +37,7 @@ define('io.ox/core/folder/favorites', [
             invalid = {};
 
         function store(ids) {
-            settings.set('favorites/' + module, ids).save();
+            settings.set(getSettingsKey(module), ids).save();
         }
 
         function storeCollection() {
@@ -50,7 +50,7 @@ define('io.ox/core/folder/favorites', [
         // define virtual folder
         api.virtual.add(id, function () {
             var cache = !collection.expired && collection.fetched;
-            return api.multiple(settings.get('favorites/' + module, []), { errors: true, cache: cache }).then(function (response) {
+            return api.multiple(getFavorites(module), { errors: true, cache: cache }).then(function (response) {
                 // remove non-existent entries
                 var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
@@ -135,6 +135,22 @@ define('io.ox/core/folder/favorites', [
         ext.point('io.ox/core/foldertree/' + module + '/popup').extend(_.extend({}, extension));
     });
 
+    function getFavorites(module) {
+        // migrate to chronos API?
+        if (module === 'calendar' && settings.get('favorites/chronos') === undefined) migrateCalendar();
+        return settings.get(getSettingsKey(module), []);
+    }
+
+    // since 7.10 we use another path for calendar not to lose favorites (see bug 58508)
+    function getSettingsKey(module) {
+        return 'favorites/' + (module === 'calendar' ? 'chronos' : module);
+    }
+
+    function migrateCalendar() {
+        var ids = _(settings.get('favorites/calendar', [])).map(function (id) { return 'cal://0/' + id; });
+        settings.set('favorites/chronos', ids).save();
+    }
+
     function getAffectedSubfolders(collection, id) {
         return collection.filter(function (model) {
             var modelId = model.get('id');
@@ -184,7 +200,7 @@ define('io.ox/core/folder/favorites', [
     }
 
     function a(action, text) {
-        return $('<a href="#" role="menuitem">')
+        return $('<a href="#" role="menuitem" tabindex="-1">')
             .attr('data-action', action).text(text)
             // always prevent default
             .on('click', $.preventDefault);
@@ -210,7 +226,7 @@ define('io.ox/core/folder/favorites', [
 
             var id = baton.data.id,
                 module = baton.module,
-                favorites = settings.get('favorites/' + module, []),
+                favorites = getFavorites(module),
                 isFavorite = _(favorites).indexOf(id) > -1;
 
             // don't offer for trash folders

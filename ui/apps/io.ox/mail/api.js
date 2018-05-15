@@ -724,6 +724,13 @@ define('io.ox/mail/api', [
                 folderAPI.list(id, { cache: false });
                 _(pool.getByFolder(id)).invoke('expire');
             });
+        },
+        'changesAfterReloading:mail': function (model) {
+            // if total or unread changed during a folder reload, we need to update the collection (reload happens independent from refresh)
+            if (_(model.changed).has('unread') || _(model.changed).has('total')) {
+                _(pool.getByFolder(model.id)).invoke('expire');
+                api.trigger('changesAfterReloading');
+            }
         }
     });
 
@@ -1262,7 +1269,7 @@ define('io.ox/mail/api', [
         data.bcc = _(data.bcc).map(flatten);
         if (data.share_attachments && data.share_attachments.expiry_date) {
             // expiry date should count from mail send
-            data.share_attachments.expiry_date = _.now() + data.share_attachments.expiry_date;
+            data.share_attachments.expiry_date = _.now() + parseInt(data.share_attachments.expiry_date, 10);
         }
         function mapArgs(obj) {
             return {
@@ -1753,6 +1760,7 @@ define('io.ox/mail/api', [
     settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted', function () {
         pool.get('detail').each(function (model) {
             model.unset('attachments', { silent: true });
+            model.unset('security', { silent: true });
         });
     });
 

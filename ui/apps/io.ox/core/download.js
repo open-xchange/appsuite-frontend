@@ -43,15 +43,15 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         options = options || {};
 
         var name = _.uniqueId('iframe'),
-            form = $('<form>', { action: options.url, method: 'post', target: name });
-
-        $('#tmp').append(
-            $('<iframe>', { src: 'blank.html', name: name, 'class': 'hidden download-frame' }),
-            form.append(
+            iframe = $('<iframe>', { src: 'blank.html', name: name, 'class': 'hidden download-frame' }),
+            form = $('<form>', { action: options.url, method: 'post', target: name }).append(
                 $('<input type="hidden" name="body" value="">').val(options.body)
-            )
-        );
+            );
 
+        // except for iOS we use a hidden iframe
+        // iOS will open the form in a new window/tab
+        if (!_.device('ios')) $('#tmp').append(iframe);
+        $('#tmp').append(form);
         form.submit();
     }
 
@@ -60,12 +60,18 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         // publish utility functions for general use
         url: iframe,
         multiple: form,
+
         // actually only for ios
         window: function (url) {
-            blankshield.open(url, '_blank');
+            return blankshield.open(url, '_blank');
         },
+
         // download single file
         file: function (options) {
+
+            // on iOS we need a new window, so open this right now
+            var win = _.device('ios') && this.window('blank.html');
+
             api.get(options).done(function (file) {
                 if (options.version) {
                     file = _.extend({}, file, { version: options.version });
@@ -75,7 +81,7 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
                 }
                 var url = api.getUrl(file, 'download', { params: options.params });
                 if (_.device('ios')) {
-                    blankshield.open(url, '_blank');
+                    win.location = url;
                 } else {
                     iframe(url);
                 }

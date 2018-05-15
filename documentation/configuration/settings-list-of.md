@@ -50,9 +50,6 @@ settings!io.ox/core
 **features/folderIcons**
 > show icons in the folder tree (true/false)
 
-**features/hideAddressBook**
-> hide address book e.g. for drive standalone (true/false)
-
 **features/logoutButtonHint**
 > shows little reminder tooltip when user didn't logged out last time  (true/false)
 
@@ -139,6 +136,9 @@ settings!io.ox/core
 
 **properties/infostoreUsage**
 > current summarized file size of all inforstore files
+
+**properties/contactImageMaxWidth**
+> max target image width when croping contact/user images (default: 500)
 
 ## Feedback
 
@@ -729,6 +729,12 @@ settings!io.ox/mail
 
 **features/anonymousAliases**
 > ...
+
+**features/authenticity**
+> when enabled (default: false) email authentication status gets highlighted
+
+**authenticity/level**
+> user setting which statuses are highlighted (default: false, values: none/fail_neutral/all)
 
 **features/autoCollapseBlockquotes**
 > when enabled the limit of 300 chars is applied

@@ -39,23 +39,17 @@ define('plugins/core/feedback/register', [
             5: gt.pgettext('rating', 'It\'s awesome')
         },
         appWhiteList = [
-            'mail',
-            'contacts',
-            'calendar',
-            'files'
+            'io.ox/mail',
+            'io.ox/contacts',
+            'io.ox/calendar',
+            'io.ox/files'
         ];
 
     function getAppOptions(useWhitelist) {
-        var currentApp,
-            apps = _(appApi.getApps()).map(function (app) {
-                app.id = app.id.replace(/io\.ox\/(office\/portal\/|office\/)?/, '');
-
+        var currentApp = ox.ui.App.getCurrentApp(),
+            apps = appApi.forLauncher().map(function (app) {
                 if (useWhitelist && !_(appWhiteList).contains(app.id)) return;
-                // suport for edit dialogs
-                if (ox.ui.App.getCurrentApp() && ox.ui.App.getCurrentApp().get('name').replace(/io\.ox\/(office\/portal\/|office\/)?/, '').indexOf(app.id) === 0) {
-                    currentApp = app;
-                }
-                return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
+                return $('<option>').val(app.id).text(app.get('title'));
             });
         apps = _(apps).compact();
         return { currentApp: currentApp, apps: apps };
@@ -131,16 +125,19 @@ define('plugins/core/feedback/register', [
             var apps = getAppOptions(true);
 
             if (settings.get('feedback/showModuleSelect', true)) {
+                var preSelect = apps.apps.filter(function (app) {
+                    return app.val() === apps.currentApp.id;
+                });
                 //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
                 apps.apps.unshift($('<option>').val('general').text(gt('General')));
                 popupBody.append(
                     this.appSelect = $('<select class="feedback-select-box form-control">').append(apps.apps)
                 );
-                this.appSelect.val((apps.currentApp ? apps.currentApp.id : apps.apps[0].val()));
+                this.appSelect.val(preSelect.length > 0 && preSelect[0].val() || apps.apps[0].val());
             } else if (apps.currentApp) {
                 popupBody.append(
-                    $('<div class="form-control">').text(/*#, dynamic*/gt.pgettext('app', apps.currentApp.title)),
-                    this.appSelect = $('<div aria-hidden="true">').val(apps.currentApp.id).hide()
+                    $('<div class="form-control">').text(apps.currentApp.get('name')),
+                    this.appSelect = $('<div aria-hidden="true">').val(apps.currentApp.get('name')).hide()
                 );
             } else {
                 popupBody.append(
@@ -312,7 +309,7 @@ define('plugins/core/feedback/register', [
                             // feedback
                             score: this.ratingView.getValue(),
                             app: this.ratingView.appSelect ? this.ratingView.appSelect.val() : 'general',
-                            entry_point: (currentApp ? currentApp.id : 'general'),
+                            entry_point: (currentApp ? currentApp.get('name') : 'general'),
                             comment: this.$('.feedback-note').val() || '',
                             // system info
                             operating_system: 'Other',
