@@ -264,6 +264,9 @@ define('io.ox/mail/main', [
         },
 
         'folder-view-ssl-events': function (app) {
+
+            if (coreSettings.get('security/acceptUntrustedCertificates') || !coreSettings.get('security/manageCertificates')) return;
+
             // open certificates page when the user clicks on error indicator
             app.treeView.on('accountlink:ssl', function () {
                 ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/certificate' });

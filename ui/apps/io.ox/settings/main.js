@@ -458,7 +458,7 @@ define('io.ox/settings/main', [
             index: 100
         });
 
-        if (!capabilities.has('guest')) {
+        if ((coreSettings.get('security/manageCertificates') && !coreSettings.get('security/acceptUntrustedCertificates')) && !capabilities.has('guest')) {
             ext.point('io.ox/settings/pane/general/security').extend({
                 id: 'certificates',
                 title: gt('Certificates'),
