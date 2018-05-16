@@ -168,12 +168,13 @@ define('io.ox/participants/chronos-views', [
                 case 'RESOURCE':
                     if (this.options.halo && !this.options.hideMail) {
                         var data = this.model.toJSON();
+                        if (data.resource) data = data.resource;
                         data.callbacks = {};
                         if (this.options.baton && this.options.baton.callbacks) {
                             data.callbacks = this.options.baton.callbacks;
                         }
                         var link = $('<a href="#">')
-                            .data(data.resource ? data.resource : data)
+                            .data(data)
                             .addClass('halo-resource-link');
                         this.nodes.$extra.replaceWith(link);
                         this.nodes.$extra = link;
