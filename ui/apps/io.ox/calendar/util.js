@@ -486,7 +486,8 @@ define('io.ox/calendar/util', [
         },
 
         getShownAs: function (data) {
-            if (that.hasFlag(data, 'transparent')) return 'free';
+            //#. State of an appointment (reserved or free)
+            if (that.hasFlag(data, 'transparent')) return gt('Free');
             return gt('Reserved');
         },
 
