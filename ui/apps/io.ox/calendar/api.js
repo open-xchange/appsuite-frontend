@@ -120,7 +120,7 @@ define('io.ox/calendar/api', [
                         if (_.isArray(result)) {
                             result.forEach(function (r) {
                                 if (r.error) {
-                                    ox.trigger('http:error:' + r.code, r);
+                                    ox.trigger('http:error:' + r.error.code, r.error);
                                 }
                             });
                         }

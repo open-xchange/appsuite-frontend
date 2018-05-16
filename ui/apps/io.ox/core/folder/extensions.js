@@ -1079,6 +1079,7 @@ define('io.ox/core/folder/extensions', [
                     var accountError = baton.data['com.openexchange.calendar.accountError'];
                     if (accountError) {
                         baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                        ox.trigger('http:error:' + accountError.code, accountError);
                     } else {
                         baton.view.hideStatusIcon();
                     }

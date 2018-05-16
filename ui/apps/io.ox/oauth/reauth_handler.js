@@ -22,7 +22,15 @@ define('io.ox/oauth/reauth_handler', [
         err.handled = true;
         if ($('.modal.oauth-reauthorize').length > 0) return;
 
-        require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
+        require([
+            'io.ox/backbone/views/modal',
+            'io.ox/oauth/keychain'
+        ]).then(function (ModalDialog, keychain) {
+            var account = keychain.accounts.get(err.error_params[1]);
+            if (account.has('reauthCooldown') && _.now() < account.get('reauthCooldown')) return;
+
+            // don't bother me about this account for the next 10 minutes (or relogin)
+            account.set('reauthCooldown', _.now() + 10 * 60 * 1000);
             new ModalDialog({ title: gt('Error') })
             .build(function () {
                 this.$el.addClass('oauth-reauthorize');
@@ -34,10 +42,8 @@ define('io.ox/oauth/reauth_handler', [
                 label: gt('Reauthorize')
             })
             .on('reauthorize', function () {
-                require(['io.ox/oauth/keychain']).then(function (keychain) {
-                    var account = keychain.accounts.get(err.error_params[1]);
-
-                    account.reauthorize();
+                account.reauthorize().then(function () {
+                    ox.trigger('please:refresh');
                 });
             })
             .open();
