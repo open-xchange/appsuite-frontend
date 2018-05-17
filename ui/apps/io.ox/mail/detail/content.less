@@ -14,6 +14,9 @@
 body {
     margin: 0;
     padding: 0;
+    // was introduced during the iframe resizing refactoring
+    // changing this can lead to a lot of side effects
+    // note: apps with the 'simple' flag (portal) will overwrite this to allow scrolling on mobile
     overflow-x: auto !important;
     overflow-y: hidden !important;
 }
