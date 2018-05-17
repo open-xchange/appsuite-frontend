@@ -457,7 +457,6 @@ define('io.ox/calendar/week/perspective', [
                     var current = ox.ui.App.getCurrentApp().getName();
                     if (!/^io.ox\/calendar/.test(current)) return;
                     if (!obj.seriesId || obj.seriesId !== obj.id) {
-                        if (app.folder.get() !== String(obj.folder)) app.folder.set(obj.folder);
                         self.view.setStartDate(util.getMoment(obj.startDate).valueOf(), { utc: obj.allTime });
                     }
                 });
