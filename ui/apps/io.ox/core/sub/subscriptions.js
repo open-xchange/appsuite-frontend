@@ -177,9 +177,12 @@ define('io.ox/core/sub/subscriptions', [
 
             subscribe: function () {
                 var self = this,
-                    popup = this.popup;
+                    popup = this.popup,
+                    service = _(this.services).findWhere({ id: this.model.get('source') });
 
                 popup.busy();
+                // workaround: service is needed for proper validation
+                this.model.set('service', service);
 
                 // validate model and check for errors
                 this.model.validate();
@@ -192,7 +195,6 @@ define('io.ox/core/sub/subscriptions', [
                     return;
                 }
 
-                var service = _(this.services).findWhere({ id: this.model.get('source') });
                 subscribe(this.model, service).then(
                     function saveSuccess(id) {
                         //set id, if none is present (new model)
