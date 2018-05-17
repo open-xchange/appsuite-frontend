@@ -104,13 +104,14 @@ define('io.ox/participants/chronos-views', [
         },
 
         setCustomImage: function () {
-            var data = this.model.toJSON();
+            var data = this.model.toJSON(),
+                cuType = this.model.get('cuType');
             api.pictureHalo(
                 this.nodes.$img,
                 data,
                 { width: 54, height: 54 }
             );
-            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (this.model.get('cuType').toLowerCase() + '-image' || ''));
+            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (cuType ? cuType.toLowerCase() + '-image' : ''));
         },
 
         setRows: function (mail, extra) {
