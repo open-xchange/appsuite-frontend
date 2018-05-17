@@ -138,7 +138,8 @@
 
 .mce-grid.mce-colorbutton-grid td.mce-grid-cell div { line-height: 11px; }
 
-.mce-container [data-name="fontsizeselect"] button { width: 72px; }
+// overflow hidden is needed so the focus outline is rendered correctly in firefox
+.mce-container [data-name="fontsizeselect"] button { width: 72px; overflow: hidden }
 
 /* do not show toolbar separators in small windows */
 .floating-window.width-xs:not(.maximized) .mce-btn-group {
