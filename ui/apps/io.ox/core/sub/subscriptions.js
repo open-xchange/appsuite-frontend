@@ -128,7 +128,7 @@ define('io.ox/core/sub/subscriptions', [
                     title = gt('Subscribe');
 
                 if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe to address book');
-                else if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
+                if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
 
                 popup.getHeader().append($('<h4>').text(title));
 
@@ -185,7 +185,7 @@ define('io.ox/core/sub/subscriptions', [
                 this.model.validate();
                 if (this.model.errors && this.model.errors.hasErrors()) {
                     this.model.errors.each(function (errors) {
-                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors[0]);
+                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors);
                     });
                     popup.idle();
                     popup.getContentNode().find('input').first().focus();
@@ -249,7 +249,7 @@ define('io.ox/core/sub/subscriptions', [
             title = gt('New Folder');
 
         if (service.displayName && module === 'calendar') title = gt('My %1$s calendar', service.displayName);
-        else if (service.displayName && module === 'contacts') title = gt('My %1$s contacts', service.displayName);
+        if (service.displayName && module === 'contacts') title = gt('My %1$s contacts', service.displayName);
 
         return folderAPI.create(folder, {
             title: title
@@ -262,14 +262,16 @@ define('io.ox/core/sub/subscriptions', [
     }
 
     function showErrorInline(node, label, msg) {
+        var list = [].concat(msg);
         node.find('div.alert').remove();
-        node.prepend($('<div class="alert alert-danger alert-dismissible" role="alert">').append(
-            $('<strong>').text(label),
-            $.txt(' '),
-            $('<span>').html(msg),
-            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
-        );
-
+        _(list).each(function (msg) {
+            this.prepend($('<div class="alert alert-danger alert-dismissible" role="alert">').append(
+                $('<strong>').text(label),
+                $.txt(' '),
+                $('<span>').html(msg),
+                $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
+            );
+        }, node);
     }
 
     ext.point(POINT + '/dialog').extend({
