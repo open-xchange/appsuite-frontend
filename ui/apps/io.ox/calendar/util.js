@@ -947,8 +947,8 @@ define('io.ox/calendar/util', [
             canvas.height = 1;
 
             return function (color) {
-                context.fillStyle = 'rgba(0, 0, 0, 0)';
-                context.clearRect(0, 0, 1, 1);
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, 1, 1);
                 context.fillStyle = color;
                 context.fillRect(0, 0, 1, 1);
                 return context.getImageData(0, 0, 1, 1).data;

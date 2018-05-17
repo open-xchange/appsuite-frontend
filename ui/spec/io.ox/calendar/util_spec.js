@@ -575,6 +575,8 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             expect(contrast([0, 0, 0], util.getForegroundColor('rgb(0, 0, 0)')), 'black').to.be.above(4.5);
             // white
             expect(contrast([255, 255, 255], util.getForegroundColor('rgb(255, 255, 255)')), 'white').to.be.above(4.5);
+            // transparent (expect white background)
+            expect(contrast([255, 255, 255], util.getForegroundColor('transparent')), 'transparent').to.be.above(4.5);
         });
 
     });
