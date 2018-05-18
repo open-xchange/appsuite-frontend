@@ -137,12 +137,13 @@ define('io.ox/backbone/extendedModel', [
                 options = options || {};
             }
             var self = this,
-                errors = new ValidationErrors();
+                errors = self.errors = new ValidationErrors();
             attributes = attributes || this.toJSON();
             this.point('validation').invoke('validate', errors, attributes, errors, this);
             if (options.isSave) {
                 this.point('validation/save').invoke('validate', errors, attributes, errors, this);
             }
+
             if (errors.hasErrors()) {
                 var validAttributes = {};
                 _(attributes).chain().keys().each(function (key) {
@@ -158,10 +159,8 @@ define('io.ox/backbone/extendedModel', [
                         self.trigger('valid:' + attribute, self);
                     }
                 });
-
                 self.attributeValidity = validAttributes;
                 self.trigger('invalid', errors, self);
-                self.errors = errors;
                 self._valid = false;
             } else if (!self._valid) {
                 _(self.attributeValidity).each(function (wasValid, attribute) {
@@ -169,7 +168,6 @@ define('io.ox/backbone/extendedModel', [
                         self.trigger('valid:' + attribute, self);
                     }
                 });
-
                 _(attributes).chain().keys().each(function (key) {
                     self.attributeValidity[key] = true;
                 });

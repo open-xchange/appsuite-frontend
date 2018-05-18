@@ -183,14 +183,10 @@ define('io.ox/mail/accounts/settings', [
 
                 list.listenTo(list, 'select', function (service) {
                     if (service.get('type') === 'wizard') return;
-                    var account = oauthAPI.accounts.forService(service.id)
-                        .filter(function (account) {
-                            return !account.hasScopes('mail');
-                        })[0] ||
-                        new OAuth.Account.Model({
-                            serviceId: service.id,
-                            displayName: oauthAPI.chooseDisplayName(service)
-                        });
+                    var account = new OAuth.Account.Model({
+                        serviceId: service.id,
+                        displayName: oauthAPI.chooseDisplayName(service)
+                    });
 
                     account.enableScopes('mail').save().then(function () {
                         baton.popup.busy();
@@ -208,17 +204,6 @@ define('io.ox/mail/accounts/settings', [
 
                             validateMailaccount(data, baton.popup, def);
                             return def;
-                        }).then(function () {
-                            oauthAPI.accounts.add(account, { merge: true });
-                        }, function (response) {
-                            account.disableScopes('mail');
-                            if (account.get('wantedScopes').length === 0) {
-                                return account.destroy().then(function () {
-                                    return $.Deferred().reject(response);
-                                });
-                            }
-                            account.set('enabledScopes', account.get('wantedScopes')).save();
-                            return $.Deferred().reject(response);
                         }).fail(notifications.yell).always(function () {
                             baton.popup.idle();
                         });

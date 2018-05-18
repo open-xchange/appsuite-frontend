@@ -598,7 +598,7 @@ define('io.ox/core/api/account', [
         //make it always successful but either true or false, if false we give the warnings back
         .then(
             function success(response) {
-                return $.Deferred().resolve(response.data);
+                return $.Deferred().resolve(response.data, response.category === 13 ? response : undefined);
             },
             function fail(response) {
                 return $.Deferred().resolve(response.data, response);

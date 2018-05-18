@@ -94,7 +94,7 @@ define('io.ox/calendar/api', [
             return response;
         },
 
-        defaultFields = ['color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
+        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
         api = {
             // used externally by itip updates in mail invites
@@ -120,7 +120,7 @@ define('io.ox/calendar/api', [
                         if (_.isArray(result)) {
                             result.forEach(function (r) {
                                 if (r.error) {
-                                    ox.trigger('http:error:' + r.code, r);
+                                    ox.trigger('http:error:' + r.error.code, r.error);
                                 }
                             });
                         }

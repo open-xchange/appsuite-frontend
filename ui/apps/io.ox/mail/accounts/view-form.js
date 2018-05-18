@@ -21,8 +21,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
     'io.ox/core/capabilities',
-    'io.ox/core/settings/util'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util) {
+    'io.ox/core/settings/util',
+    'settings!io.ox/core'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util, coreSettings) {
 
     'use strict';
 
@@ -359,7 +360,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                         this.getContentNode().append(messages);
                                     });
 
-                                if (/SSL/.test(error.code)) dialog.addSuccessButton('inspect', gt('Inspect certificate'));
+                                if (/SSL/.test(error.code) && coreSettings.get('security/manageCertificates')) dialog.addSuccessButton('inspect', gt('Inspect certificate'));
 
                                 dialog
                                     .addPrimaryButton('proceed', gt('Ignore Warnings'))

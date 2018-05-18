@@ -25,8 +25,9 @@ define('io.ox/portal/main', [
     'io.ox/core/yell',
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
+    'settings!io.ox/core',
     'less!io.ox/portal/style'
-], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -524,7 +525,7 @@ define('io.ox/portal/main', [
 
                     return solutionContainer;
                 }
-
+                var showCertManager = !coreSettings.get('security/acceptUntrustedCertificates') && coreSettings.get('security/manageCertificates');
                 // special return value?
                 if (e === 'remove') {
                     widgets.remove(baton.model);
@@ -552,7 +553,7 @@ define('io.ox/portal/main', [
                                 (!/SSL/.test(e.code)) ? $('<a class="solution">').text(gt('Try again.')).on('click', function () {
                                     node.find('.decoration').addClass('pending');
                                     loadAndPreview(point, node, baton);
-                                }) : $(), (/SSL/.test(e.code)) ? getTrustOption() : $()] : $()
+                                }) : $(), (/SSL/.test(e.code) && showCertManager) ? getTrustOption() : $()] : $()
 
                         )
                     );

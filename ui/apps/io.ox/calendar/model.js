@@ -333,6 +333,14 @@ define('io.ox/calendar/model', [
         },
         parse: function (res) {
             if (res.folder && res.id) res.cid = res.cid = util.cid(res);
+            // if there was a change to the model in the meantime, clear all attributes that are not in the response
+            // if we don't do this we get models with 2 states mixed into one (current but incomplete all request data vs complete but outdated get request data)
+            // this can lead to flags not matching up with the rest of the model for example
+            if (res.lastModified && this.get('lastModified') && res.lastModified !== this.get('lastModified')) {
+                for (var attr in this.attributes) {
+                    if (!_.has(res, attr)) this.unset(attr, { silent: true });
+                }
+            }
             return res;
         },
         getRruleMapModel: function () {
@@ -435,7 +443,7 @@ define('io.ox/calendar/model', [
                         return util.getMoment(event.startDate).valueOf();
                     })
                     .value();
-                self[method](data);
+                self[method](data, { parse: true });
                 self.trigger('load');
                 return data;
             }, function fail(err) {

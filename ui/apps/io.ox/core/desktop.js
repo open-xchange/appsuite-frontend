@@ -1254,7 +1254,10 @@ define('io.ox/core/desktop', [
                                 this.floating.open(true);
                             } else if (this.simple) {
                                 node.insertAfter('#io-ox-appcontrol');
-                                $('body').css('overflowY', 'auto');
+
+                                // during the iframe resizing refactoring the body node got some !important styles.
+                                // we don't want to create side effects here and break the resizing again (super fragile), so we just use more important styles to allow scrolling on mobile again
+                                document.body.style.setProperty('overflow-y', 'auto', 'important');
                             } else {
                                 node.appendTo(pane);
                             }
