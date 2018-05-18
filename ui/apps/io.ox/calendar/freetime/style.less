@@ -13,9 +13,7 @@
 
 //definitions
 @freetime-free:             rgba(58, 107, 23, 0.5);
-@freetime-temporary:        #ffbb00;
 @freetime-reserved:         #3774a8;
-@freetime-absent:           #eee;
 // use strange cyan so the lasso can be seen when exactly covering appointments
 @freetime-lasso:            rgba(0, 185, 255, 0.5);
 @freetime-non-working-hour: #efefef;
@@ -455,10 +453,6 @@
         background-image: none;
     }
 
-    &.zoomlevel-1000.showFineGrid .freetime-table-cell {
-        background-image: linear-gradient(90deg, #333 0px, transparent 1px, transparent 49px, #ccc 50px, transparent 51px, transparent 99px, #ccc 100px, transparent 101px, transparent 149px);
-        background-size: 150px 1px;
-    }
     &.zoomlevel-100.showFineGrid .freetime-table-cell {
         background-size: 15px 1px;
     }
@@ -468,16 +462,19 @@
     &.zoomlevel-400.showFineGrid .freetime-table-cell {
         background-size: 60px 1px;
     }
+
     &.zoomlevel-1000.showFineGrid .freetime-table-cell {
-        background-image: linear-gradient(90deg, #333 0px, transparent 1px, transparent 49px, #ccc 50px, transparent 51px, transparent 99px, #ccc 100px, transparent 101px, transparent 149px);
+        // little hacky gradient, to keep the lines at 1px
+        background-image: linear-gradient(90deg, #333333 0px, transparent 1px, transparent 50px, #888 51px, transparent 51px, transparent 99px, #888 100px, transparent 100px, transparent 149px);
         background-size: 150px 1px;
     }
+
     &.showFineGrid.zoomlevel-1000 .freetime-time-view-body .freetime-table .freetime-time-table .freetime-table-cell:not(.today) {
         border-left: none;
     }
 
-    &.zoomlevel-100 .appointment{
-         &.under-one-hour .title,.location{
+    &.zoomlevel-100 .appointment.under-one-hour{
+        .title,.location{
             display: none;
         }
     }
@@ -615,20 +612,6 @@
                     }
                     &.free {
                         background-color: @freetime-free;
-                    }
-                    &.absent {
-                        background-color: @freetime-absent;
-                        .title, .location {
-                            color: #333;
-                        }
-                        border-left-color: #333;
-                        background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 7px, #bbbbbb 1px, #bbbbbb 8px);
-                        background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 7px, #bbbbbb 1px, #bbbbbb 8px);
-                        background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 7px, #bbbbbb 1px, #bbbbbb 8px);
-                        background-image: repeating-linear-gradient(-45deg, transparent, transparent 7px, #bbbbbb 1px, #bbbbbb 8px);
-                    }
-                    &.temporary {
-                        background-color: @freetime-temporary;
                     }
                     &.reserved {
                         background-color: @freetime-reserved;

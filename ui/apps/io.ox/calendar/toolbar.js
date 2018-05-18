@@ -43,16 +43,13 @@ define('io.ox/calendar/toolbar', [
             mobile: 'hi',
             label: gt('New'),
             title: gt('New appointment'),
-            customize: function (baton) {
-                this.parent().toggle(!baton.app.props.get('folderview'));
-            },
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },
         'schedule': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Scheduling'),
+            label: gt.pgettext('app', 'Scheduling'),
             title: gt('Find a free time'),
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
@@ -181,11 +178,6 @@ define('io.ox/calendar/toolbar', [
             .option('folderview', true, gt('Folder view'))
             .option('showMiniCalendar', true, gt('Mini calendar'))
             .option('checkboxes', true, gt('Checkboxes'))
-            .divider()
-            .header(gt('Color scheme'))
-            .option('colorScheme', 'custom', gt('Custom colors'), { radio: true })
-            .option('colorScheme', 'classic', gt('Classic colors'), { radio: true })
-            .option('colorScheme', 'dark', gt('Dark colors'), { radio: true })
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 

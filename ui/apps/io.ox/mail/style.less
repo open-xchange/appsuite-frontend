@@ -55,11 +55,6 @@
     }
 }
 
-/* add some extra margins around delete icon to make it easier to click */
-.io-ox-mail-window .classic-toolbar .io-ox-action-link[data-action="delete"] {
-    margin: 0 24px;
-}
-
 .preview-bottom {
     .leftside {
         right: 0;
@@ -177,6 +172,7 @@
         .smartphone & {
             padding-top: 16px;
             padding-bottom: 15px;
+            .list-item-checkmark { top: 9px; }
         }
     }
 
@@ -269,6 +265,13 @@
         &.loading { min-height: 80px; }
     }
 
+    .ios & {
+        section.body {
+            // special fix for ios iframe handling, keep this!
+            overflow-x: auto;
+        }
+    }
+
     section.attachments,
     section.notifications,
     section.error { display: none; }
@@ -283,7 +286,8 @@
         &.notifications,
         &.error { display: block; }
         // for proper overflow behavior (see bug 45248)
-        &.body { display: table; }
+        // 15.3.18: set to block. Works in Safari since iFrame. 45248 still fixed
+        &.body { display: block; }
         &.attachments:empty { display: none;  }
     }
 
@@ -414,15 +418,6 @@
         margin-left: 0.5em;
     }
 
-    .external-images, .disposition-notification {
-        display: table;
-        width: 100%;
-
-        .btn { float: left; margin-right: @default-padding; }
-        .comment { display: table; }
-        .close { position: relative; right: -10px; }
-    }
-
     .priority {
         float: right;
         font-size: @icon-size;
@@ -537,16 +532,30 @@
 
     &.expanded .detail-view-header { border-bottom: 1px solid #ddd; }
 
-    .notifications { cursor: default; }
+    .notification-item,
+    .notification-item.disposition-notification {
+        display: flex;
+        align-items: flex-start;
 
-    .notification-item {
         padding: @default-padding;
         padding-left: 40px;
         border-bottom: 1px solid #ddd;
+
+        .btn { margin-right: @default-padding; }
+        .comment { flex: 1; align-self: center; }
+        .close {
+            height: 30px;
+            padding: 5px 0;
+            font-size: 16px;
+        }
+        .smartphone & { padding: @default-padding; }
     }
 
     .notification-item + .notification-item { border-top: none; }
 
+    .notifications { cursor: default; }
+
+    &:not(.content-links) .disabled-links { display: none };
 
     .alert, .well {
         margin: 0;
@@ -610,7 +619,7 @@
         max-height: 20px;
         span.person {
             color: inherit;
-            .fontWeight(700);
+            //.fontWeight(700);
         }
     }
 
@@ -987,8 +996,8 @@
 }
 
 .floating-quick-reply {
-    &.cornered, &.centered { max-width: 720px; min-height: auto; }
-    &.cornered { max-height: 320px; }
+    max-height: 320px;
+    top: ~"calc(50% - 160px)";
 }
 
 textarea.inplace-editor {
@@ -1332,14 +1341,10 @@ body.dragging .categories-toolbar-container {
         color: #fff;
         padding: 16px 40px;
         line-height: 16px;
+        .smartphone & { padding: 16px; }
     }
-    .fail {
-        background-color: @a-color-fail;
-    }
-    .trusted {
-        background-color: @a-color-trusted;
-    }
-
+    .fail { background-color: @a-color-fail; }
+    .trusted {background-color: @a-color-trusted; }
 }
 
 .touch {
@@ -1494,7 +1499,7 @@ body.dragging .categories-toolbar-container {
         }
 
         section.authenticity {
-            padding: 16px;
+            padding: 0;
             border-bottom: 1px solid #ddd;
         }
     }
@@ -1584,8 +1589,8 @@ body.dragging .categories-toolbar-container {
                     }
 
                     .unread-toggle {
-                        left: 8px;
-                        top: 7px;
+                        left: 15px;
+                        top: 18px;
                         padding: 0;
                         position: absolute;
                     }
@@ -1609,6 +1614,7 @@ body.dragging .categories-toolbar-container {
                         margin-bottom: -1px;
                         border-bottom: 0;
                     }
+                    .person-from { flex: 1 }
                 }
                 // do not show recipients
                 &:not(.expanded) .recipients { max-height: initial; }

@@ -60,9 +60,6 @@ define('plugins/notifications/calendar/register', [
                             id: appointmentData.id,
                             folder: appointmentData.folder
                         };
-                        // convenience function to convert old alarms into new chronos alarms
-                        // TODO remove once migration process is implemented
-                        o.data.alarms = util.convertAlarms(o.data.alarms);
                         o.data.attendee.partStat = 'ACCEPTED';
 
                         var expand = util.getCurrentRangeOptions();
@@ -84,7 +81,7 @@ define('plugins/notifications/calendar/register', [
                 };
 
             var cid = _.cid(model.attributes),
-                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' }),
+                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() }),
                 recurrenceString = util.getRecurrenceString(model.attributes);
 
             node.attr({
@@ -95,8 +92,8 @@ define('plugins/notifications/calendar/register', [
                 'aria-label': gt('Invitation for %1$s.', model.get('title'))
             }).append(
                 $('<a class="notification-info" role="button">').append(
-                    $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
-                    $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
+                    $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes, moment().tz())),
+                    $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes, moment().tz())),
                     recurrenceString === '' ? [] : $('<span class="span-to-div recurrence">').text(recurrenceString),
                     $('<span class="span-to-div title">').text(model.get('summary')),
                     $('<span class="span-to-div location">').text(model.get('location')),
@@ -116,18 +113,16 @@ define('plugins/notifications/calendar/register', [
                             this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
                             var currentPage =  this.pages.getCurrentPage();
                             // resume calendar app
-                            if (currentPage && currentPage.perspective) {
+                            if (currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
                                 var e = $.Event('click', { target: currentPage.perspective.main });
                                 currentPage.perspective.setNewStart = true;
                                 currentPage.perspective.showAppointment(e, options, { arrow: false });
                             } else {
                                 // perspective is not initialized yet on newly launched calendar app
-                                var self = this;
-                                this.on('aftershow:done', function (perspective) {
+                                this.once('aftershow:done', function (perspective) {
                                     var e = $.Event('click', { target: perspective.main });
                                     perspective.setNewStart = true;
                                     perspective.showAppointment(e, options, { arrow: false });
-                                    self.off('aftershow:donw');
                                 });
                             }
                         });
@@ -175,13 +170,13 @@ define('plugins/notifications/calendar/register', [
                     calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     baton.view.collection.remove(baton.requestedModel.attributes);
                 });
-                node.find('[data-action="reminder"]').on('click change', function (e) {
+                node.find('[data-action="selector"]').on('click change', function (e) {
                     //if we do this on smartphones the dropdown does not close correctly
                     if (!_.device('smartphone')) {
                         e.stopPropagation();
                     }
 
-                    var min = $(e.target).data('value') || $(e.target).val();
+                    var min = $(e.target).val();
                     //0 means 'pick a time here' was selected. Do nothing.
                     if (min !== '0') {
                         calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {
@@ -282,7 +277,7 @@ define('plugins/notifications/calendar/register', [
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
-                            if (alarm.time > now) {
+                            if (alarm.time <= now) {
                                 if (alarm.action === 'AUDIO') {
                                     playAlarm(alarm);
                                 } else {
@@ -299,7 +294,7 @@ define('plugins/notifications/calendar/register', [
                         });
                         alarmsToShow = temp;
                         if (nextAlarm) {
-                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm).utc().valueOf() - new moment(now).utc().valueOf());
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).utc().valueOf() - new moment(now).utc().valueOf());
                         }
                     };
 

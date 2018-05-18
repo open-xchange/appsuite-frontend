@@ -22,8 +22,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, CoreSettings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -268,6 +269,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                     label: gt('Add to portal'),
                     section: 'share',
                     ref: 'io.ox/files/actions/add-to-portal'
+                },
+                'addtofavorites': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to favorites'),
+                    section: 'favorites',
+                    ref: 'io.ox/files/favorites/add'
+                },
+                'removefromfavorites': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Remove from favorites'),
+                    section: 'favorites',
+                    ref: 'io.ox/files/favorites/remove'
                 },
                 'uploadnewversion': {
                     prio: 'lo',
@@ -641,7 +656,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onModelChange: function (changedModel) {
             // ignore events that require no render
-            if (!_.isString(this.model.previous('description')) && changedModel.get('description') === '') {
+            if (changedModel.changed.description && (this.model.previous('description') !== changedModel.get('description'))) {
                 return;
             }
             this.render(changedModel);
@@ -688,7 +703,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         model: model,
                         models: isDriveFile ? [model] : null,
                         data: isDriveFile ? model.toJSON() : origData,
-                        openedBy: this.openedBy
+                        openedBy: this.openedBy,
+                        favorites: CoreSettings.get('favorites/infostore', [])
                     }),
                     appName = model.get('source'),
                     self = this,
@@ -700,7 +716,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
                 // save current data as view model
                 this.model = model;
+                this.stopListening(this.model);
                 this.listenTo(this.model, 'change', this.onModelChange);
+
+                // listener for added/removed favorites
+                this.stopListening(FilesAPI);
+                this.listenTo(FilesAPI, 'favorite:add favorite:remove', function (file) {
+                    if (file.id === _.cid(model.toJSON())) {
+                        self.onModelChange(FilesAPI.pool.get('detail').get(file.id));
+                    }
+                });
                 // set device type
                 Util.setDeviceClass(this.$el);
                 toolbar.empty().append(pageNavigation);
@@ -754,7 +779,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),
                 group = $('<li class="viewer-toolbar-navigation" role="presentation">'),
+                // #58229 - sidebar closed by default for shared files
+                sidebarState = (this.isSharing) ? false : Settings.getSidebarOpenState(),
                 self = this;
+
             function setButtonState(nodes, state) {
                 if (state) {
                     $(nodes).removeClass('disabled').removeAttr('aria-disabled');
@@ -811,7 +839,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             prev.on('click', onPrevPage);
             next.on('click', onNextPage);
             group.append(prev, next, pageInputWrapper, totalPage)
-                .toggleClass('sidebar-offset', Settings.getSidebarOpenState());
+                .toggleClass('sidebar-offset', sidebarState);
             this.$el.prepend(group);
         },
 

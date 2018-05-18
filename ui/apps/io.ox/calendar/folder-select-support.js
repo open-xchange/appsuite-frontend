@@ -13,8 +13,9 @@
 
 define('io.ox/calendar/folder-select-support', [
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
-], function (folderAPI, settings) {
+    'settings!io.ox/calendar',
+    'io.ox/core/capabilities'
+], function (folderAPI, settings, capabilities) {
 
     'use strict';
 
@@ -52,9 +53,29 @@ define('io.ox/calendar/folder-select-support', [
             app: app
         });
 
-        var initialList = settings.get('selectedFolders');
-        if (!initialList || initialList.length === 0) initialList = [folderAPI.getDefaultFolder('calendar')];
-        setFolders.call(this, initialList);
+        var self = this,
+            initialList = settings.get('selectedFolders');
+        if (!initialList) {
+            // this is the case, when upgrading to the new calendar. all private appointments and allPublic should be checked
+            folderAPI.flat({ module: 'calendar', all: true }).then(function (data) {
+                initialList = _(data['private']).pluck('id');
+                if (capabilities.has('edit_public_folders')) initialList.push('cal://0/allPublic');
+                setFolders.call(self, initialList);
+                // make sure that all checkmarks are rendered
+                _(self.folders).each(self.repaintNode.bind(self));
+            });
+        } else if (initialList.length === 0) {
+            // fallback, when the user deselected all his calendars
+            initialList = [folderAPI.getDefaultFolder('calendar')];
+            setFolders.call(this, initialList);
+        } else {
+            setFolders.call(this, initialList);
+        }
+
+        settings.on('change:selectedFolders', function (list) {
+            if (_.isEqual(self.folders, list)) return;
+            setFolders.call(self, list);
+        });
     }
 
     FolderSelection.prototype.isSingleSelection = function () {
@@ -64,10 +85,12 @@ define('io.ox/calendar/folder-select-support', [
     FolderSelection.prototype.getData = function () {
         var self = this;
         return $.when.apply($, this.folders.map(function (folder) {
-            return folderAPI.get(folder).then(function (folder) {
+            // allow some virtual folders
+            if (/^(cal:\/\/0\/allPublic)$/.test(folder)) return { id: folder };
+            return folderAPI.get(folder).then(function success(folder) {
                 if (!folder.subscribed) return;
                 return folder;
-            }, function () {
+            }, function fail() {
                 self.remove(folder);
             });
         })).then(function () {
@@ -96,7 +119,9 @@ define('io.ox/calendar/folder-select-support', [
 
     FolderSelection.prototype.remove = function (folder, opt) {
         if (this.singleSelection) this.reset();
-        var list = _(this.folders).without(folder);
+        var list = _(this.folders).filter(function (f) {
+            return String(f) !== String(folder);
+        });
         this.repaintNode(folder);
         setFolders.call(this, list, opt);
     };
@@ -119,13 +144,17 @@ define('io.ox/calendar/folder-select-support', [
     };
 
     FolderSelection.prototype.repaintNode = _.debounce(function (id) {
+        if (!this.app || !this.app.treeView) {
+            if (ox.debug) console.log('Cannot repaint node: ' + id);
+            return;
+        }
         var nodes = this.app.treeView.$('[data-id="' + id + '"]');
         nodes.each(function () {
             var node = $(this).data('view');
             if (!node) return;
             node.repaint();
         });
-    }, 10);
+    }, 1);
 
     return function (app) {
         app.folders = new FolderSelection(app);

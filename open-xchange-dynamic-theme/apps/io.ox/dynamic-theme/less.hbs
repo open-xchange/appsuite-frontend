@@ -1,0 +1,101 @@
+// NOJSHINT
+
+define('io.ox/dynamic-theme/less', [
+    'io.ox/dynamic-theme/files',
+    'io.ox/dynamic-theme/settings/defaults',
+    'less'
+], function (files, defaults, lessPlugin) {
+    'use strict';
+
+    var less = (function () {
+            var less = { tree: {} }, exports = less;
+            function require(name) {
+                return less[name.split("/")[1]];
+            }
+            (function () {
+                var window; // pretend we're not in a browser
+                {{>parser}}
+            }());
+            {{>functions}}
+            {{>colors}}
+            {{>tree}}
+            {{#each (glob "lib/node_modules/less/lib/less/tree/*.js")}}
+                {{{read .}}}
+            {{/each}}
+            {{>env}}
+            {{>visitor}}
+            {{>import-visitor}}
+            {{>join-selector-visitor}}
+            {{>to-css-visitor}}
+            {{>extend-visitor}}
+            {{>browser}}
+            {{>source-map-output}}
+            return less;
+        }());
+
+    var nodes = {}, vars = {}, header = '';
+    var api = {
+        setVars: function (newVars) {
+            vars = _.extend({}, defaults, newVars);
+            var data = [];
+            for (var i in vars) {
+                if (!vars[i]) continue;
+                data.push('@io-ox-dynamic-theme-', i, ': ', vars[i], ';\n');
+            }
+            header = data.join('');
+            var loaded = $('head > style[data-dynamic-src]').map(function () {
+                    return this.dataset.dynamicSrc;
+                }).get();
+            require(loaded.map(function (name) {
+                    return 'text!io.ox/dynamic-theme/apps/' + name + '.less.dyn';
+                }), function () {
+                    var args = arguments;
+                    loaded.forEach(function(name, i) { api.enable(name, args[i]); });
+                });
+        },
+        enable: function (name, file) {
+            function error(e) {
+                if (!('console' in window) || !console.error) return;
+                console.error('Error in', name, e);
+            }
+            new less.Parser().parse(header + file, function (e, root) {
+                if (e) return error(e);
+                try {
+                    var css = root.toCSS(), node = nodes[name];
+                    if (node) {
+                        node.text(css);
+                    } else {
+                        nodes[name] = $('<style type="text/css">')
+                            .attr('data-dynamic-src', name)
+                            .text(css)
+                            .insertAfter('#custom');
+                    }
+                } catch (e) {
+                    error(e);
+                }
+            });
+        },
+        disable: function (name) {
+            if (!nodes[name]) return;
+            nodes[name].remove();
+            delete nodes[name];
+        }
+    };
+
+    files = _.reduce(files, function (o, v) { o[v] = true; return o; }, {});
+
+    requirejs.undef('less');
+    define('less', {
+        load: function (name, parentRequire, load, config) {
+            var module = name.replace(/(?:\.less)?$/, ''); // remove extension
+            if (files[module]) {
+                require(['text!io.ox/dynamic-theme/apps/' + module +
+                         '.less.dyn'])
+                    .then(function (file) { api.enable(module, file); });
+            }
+            return lessPlugin.load(name, parentRequire, load, config);
+        }
+    });
+
+    return api;
+});

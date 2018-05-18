@@ -58,7 +58,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true, openedBy: this.openedBy };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true, openedBy: this.openedBy, isSharing: this.isSharing };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
@@ -96,7 +96,9 @@ define('io.ox/core/viewer/views/mainview', [
          * @returns {MainView}
          */
         render: function (model) {
-            var state = Settings.getSidebarOpenState();
+            // #58229 - sidebar closed by default for shared files
+            var state = (this.isSharing) ? false : Settings.getSidebarOpenState();
+
             if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
                 return;
@@ -271,8 +273,10 @@ define('io.ox/core/viewer/views/mainview', [
             }
 
             this.viewerEvents.trigger('viewer:beforeclose');
-            // save sidebar state
-            Settings.setSidebarOpenState(this.sidebarView.open);
+            // save sidebar state, but only if files are not shared #58229
+            if (!this.isSharing) {
+                Settings.setSidebarOpenState(this.sidebarView.open);
+            }
             this.$el.hide();
             if (!this.standalone) {
                 this.$el.parent().find('.simple-window').show();

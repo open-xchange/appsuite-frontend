@@ -249,7 +249,7 @@ define('io.ox/mail/util', [
 
                 if (i < $i - 1) {
                     tmp.append(
-                        $('<span class="delimiter">').text(',\u00A0\u00A0\u00A0 ')
+                        $('<span class="delimiter">').text(',\u00A0\u00A0 ')
                     );
                 }
             }
@@ -548,12 +548,10 @@ define('io.ox/mail/util', [
 
             function getAuthenticityLevel() {
                 if (!settings.get('features/authenticity', false)) return 'none';
-                return settings.get('authenticity/level');
+                return settings.get('authenticity/level', 'none');
             }
 
             function getAuthenticityStatus(data) {
-                var level = getAuthenticityLevel();
-                if (level === 'none') return;
                 if (!_.isObject(data)) return;
                 return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
             }
@@ -562,26 +560,22 @@ define('io.ox/mail/util', [
                 switch (aspect) {
                     // contact image
                     case 'image':
-                        if (/fail/.test(level)) return status === 'fail';
-                        if (level === 'all') return /(fail|neutral)/.test(status);
-                        return false;
-                    // prepend in sender block (detail)
+                        return /(fail|neutral)/.test(status);
+                    // append icon with info hover next to the from field
+                    // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
+                    case 'via':
+                        if (status === 'trusted') return true;
                         switch (level) {
-                            case 'fail': return status === 'fail';
-                            case 'fail_trusted': return /(fail|trusted)/.test(status);
-                            case 'fail_trusted_pass': return /(fail|pass|trusted)/.test(status);
+                            case 'fail_neutral': return /(fail|neutral)/.test(status);
                             case 'all': return true;
                             default: return false;
                         }
                     // info box wihtin mail detail
                     case 'box':
-                        if (/fail/.test(level)) return status === 'fail';
                         return /(fail|trusted)/.test(status);
-                    // disable links, replace external images and 'via' hint for different mail server
+                    // disable links, replace external images
                     case 'block':
-                    case 'via':
-                        if (level === 'fail') return false;
                         return status === 'fail';
                     default:
                         return false;
@@ -590,9 +584,14 @@ define('io.ox/mail/util', [
             }
 
             return function (aspect, data) {
+                // support incomplete data (only 'status'), provided by all request
+                if (data.authenticity_preview) data = _.extend({}, { authenticity: data.authenticity_preview }, data);
+
                 var status = getAuthenticityStatus(data),
                     level = getAuthenticityLevel();
 
+                // always show trusted
+                if (level === 'none' && status !== 'trusted') return;
                 if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
 
                 return isRelevant(aspect, level, status) ? status : undefined;
@@ -601,7 +600,7 @@ define('io.ox/mail/util', [
 
         getAuthenticityMessage: function (status, email) {
             switch (status) {
-                case 'fail': return gt('This might be a phishing email because we could not verify that it is really from %1$s.', email);
+                case 'fail': return gt('This is a suspicious email because we could not verify that it is really from %1$s.', email);
                 case 'neutral': return gt('We could not verify that this email is from %1$s.', email);
                 case 'pass':
                 case 'trusted': return gt('We could verify that this email is from %1$s.', email);
@@ -615,7 +614,6 @@ define('io.ox/mail/util', [
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
-                if (that.authenticity('block', data)) return true;
                 // nested mails don't have their own folder id. So use the parent mails folder id
                 return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };

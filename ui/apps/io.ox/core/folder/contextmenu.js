@@ -174,8 +174,11 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
+                var folderId = baton.data.id || baton.app.folder.get(),
+                    model = api.pool.getModel(folderId);
 
                 if (!api.can('rename', baton.data)) return;
+                if (api.is('trash', model.toJSON())) return;
 
                 contextUtils.addLink(this, {
                     action: 'rename',
@@ -201,13 +204,14 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!api.can('remove:folder', baton.data)) return;
-
+                var folderId = baton.data.id || baton.app.folder.get(),
+                    model = api.pool.getModel(folderId);
                 contextUtils.addLink(this, {
                     action: 'delete',
                     data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
-                    text: gt('Delete')
+                    text: api.is('trash', model.toJSON()) ? gt('Delete forever') : gt('Delete')
                 });
             };
         }()),
@@ -299,6 +303,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (!/^(infostore)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (!api.can('remove:folder', baton.data)) return;
+                if (baton.favorite) return false;
 
                 contextUtils.addLink(this, {
                     action: 'move',
@@ -383,7 +388,6 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (_.device('ios || android')) return;
                 if (!api.can('import', baton.data)) return;
-                if (baton.data.module === 'calendar') return;
 
                 contextUtils.addLink(this, {
                     action: 'import',
@@ -447,8 +451,7 @@ define('io.ox/core/folder/contextmenu', [
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: invite,
-                        // Using concat notation to avoid necessity for new translations right before the release
-                        text: showInvitePeople ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
+                        text: showInvitePeople ? gt('Permissions / Invite people') : gt('Permissions')
                     });
                 }
 
@@ -512,6 +515,13 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+                if (baton.module !== 'calendar') return;
+
+                // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
+                var provider = baton.data['com.openexchange.calendar.provider'],
+                    extendedProperties = baton.data['com.openexchange.calendar.extendedProperties'] || {},
+                    usedForSync = extendedProperties.usedForSync || {};
+                if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
 
                 contextUtils.addLink(this, {
                     action: 'properties',
@@ -563,31 +573,30 @@ define('io.ox/core/folder/contextmenu', [
                 var extProps = baton.data['com.openexchange.calendar.extendedProperties'];
                 if (extProps && extProps.color && extProps.color.proected === false) return;
 
-                if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
-                    var listItem, container = this.parent();
+                var listItem, container = this.parent();
 
-                    this.append(listItem = $('<li role="presentation">'));
+                this.append(listItem = $('<li role="presentation">'));
 
-                    require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
-                        listItem.append(
-                            new ColorPicker({
-                                model: api.pool.getModel(baton.data.id),
-                                getValue: function () {
-                                    return calendarUtil.getFolderColor(this.model.attributes);
-                                },
-                                setValue: function (value) {
-                                    api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
-                                        require(['io.ox/core/notifications'], function (notifications) {
-                                            notifications.yell(error);
-                                        });
+                require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
+                    listItem.append(
+                        new ColorPicker({
+                            model: api.pool.getModel(baton.data.id),
+                            getValue: function () {
+                                return calendarUtil.getFolderColor(this.model.attributes);
+                            },
+                            setValue: function (value) {
+                                // make sure existing properties are not overwritten
+                                api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': _(_.copy(this.model.get('com.openexchange.calendar.extendedProperties') || {})).extend({ color: { value: value } }) }).fail(function (error) {
+                                    require(['io.ox/core/notifications'], function (notifications) {
+                                        notifications.yell(error);
                                     });
-                                }
-                            }).render().$el
-                        );
-                        // trigger ready to recompute bounds of smart dropdown
-                        container.trigger('ready');
-                    });
-                }
+                                });
+                            }
+                        }).render().$el
+                    );
+                    // trigger ready to recompute bounds of smart dropdown
+                    container.trigger('ready');
+                });
             };
         })(),
 
@@ -621,6 +630,23 @@ define('io.ox/core/folder/contextmenu', [
                 enabled: true,
                 handler: actions.selectOnly,
                 text: isOnly ? gt('Show all calendars') : gt('Show this calendar only')
+            });
+        },
+
+        // not used in folder contextmenu
+        // but in the "select all" menu in listview
+        selectAll: function (baton) {
+            if (baton.module !== 'mail') return;
+
+            contextUtils.addLink(this, {
+                action: 'selectall',
+                data: { folder: baton.data.id, app: baton.app },
+                enabled: true,
+                handler: function () {
+                    baton.listView.selection.selectAll();
+                    baton.listView.trigger('selection:showHint');
+                },
+                text: gt('Select all messages')
             });
         },
 
@@ -737,13 +763,7 @@ define('io.ox/core/folder/contextmenu', [
             draw: contextUtils.divider
         },
         // -----------------------------------------------
-        /*
-        {
-            id: 'properties',
-            index: 6100,
-            draw: extensions.properties
-        },
-        */
+
         {
             id: 'refresh-calendar',
             index: 6100,
@@ -778,6 +798,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'restore',
             index: 6600,
             draw: extensions.restoreFolder
+        },
+        {
+            id: 'properties',
+            index: 6700,
+            draw: extensions.properties
         }
     );
 

@@ -14,6 +14,7 @@
 define('io.ox/core/folder/tree', [
     'io.ox/backbone/disposable',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
@@ -21,8 +22,9 @@ define('io.ox/core/folder/tree', [
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
+    'io.ox/files/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Dropdown, Selection, api, ext, a11y, settings, gt) {
+], function (DisposableView, Dropdown, ContextMenuUtils, Selection, api, ext, a11y, settings, gt) {
 
     'use strict';
 
@@ -32,7 +34,7 @@ define('io.ox/core/folder/tree', [
 
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
-            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
+            'contextmenu .folder.selectable[aria-haspopup="true"]': 'onContextMenu',
             'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys',
             'keydown .folder.selectable': 'onKeydown',
             'click .folder.selectable.selected': 'onClick'
@@ -89,7 +91,10 @@ define('io.ox/core/folder/tree', [
         },
 
         // See Bug: 54812 (Note: This should not be necessary, but node does not get focus otherwise)
-        onClick: function (e) { $(e.currentTarget).focus(); },
+        onClick: function (e) {
+            if ($(document.activeElement).is('.folder.selectable.selected')) return;
+            $(e.currentTarget).focus();
+        },
 
         // counter-part
         onAppear: function (id, handler) {
@@ -106,6 +111,7 @@ define('io.ox/core/folder/tree', [
             this.onAppear(id, function () {
                 // defer selection; might be too fast otherwise
                 _.defer(this.selection.set.bind(this.selection, id));
+                this.trigger('afterAppear');
             });
         },
 
@@ -176,20 +182,24 @@ define('io.ox/core/folder/tree', [
             if (options.parent.folder === 'virtual/standard') {
                 options.icons = true;
             }
+            if (options.parent.folder === 'virtual/favorites/infostore') {
+                options.inFavorites = true;
+            }
 
             return options;
         },
 
-        toggleContextMenu: function (target, top, left) {
+        toggleContextMenu: function (pos) {
 
             // return early on close
             var isOpen = this.dropdown.$el.hasClass('open');
             if (isOpen || _.device('smartphone')) return;
+            if (!pos.target.is('a.contextmenu-control')) pos.target = pos.target.find('.contextmenu-control').first();
 
             _.defer(function () {
 
-                this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
-                this.dropdown.$toggle = target;
+                this.$dropdownMenu.css({ top: pos.top, left: pos.left, bottom: 'auto' }).empty().busy();
+                this.dropdown.$toggle = pos.target;
                 this.$dropdownToggle.dropdown('toggle');
 
             }.bind(this));
@@ -203,7 +213,7 @@ define('io.ox/core/folder/tree', [
                 left = offset.left + target.outerWidth() + 7;
 
             target.data('preventFocus', true);
-            this.toggleContextMenu(target, top, left);
+            this.toggleContextMenu({ target: target, top: top, left: left });
         },
 
         onKeydown: function (e) {
@@ -218,19 +228,20 @@ define('io.ox/core/folder/tree', [
         },
 
         onKeydownMenuKeys: function (e) {
+            ContextMenuUtils.macOSKeyboardHandler(e);
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
-            if (e.type === 'keydown') {
-                var shiftF10 = (e.shiftKey && e.which === 121),
-                    menuKey = e.which === 93;
-                if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
-                    this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+            if (e.type !== 'keydown') return;
 
-                    // e.preventDefault() is needed here to surpress browser menu
-                    if (shiftF10 || menuKey) {
-                        e.preventDefault();
-                        this.onContextMenu(e);
-                    }
-                }
+            var shiftF10 = (e.shiftKey && e.which === 121),
+                menuKey = e.which === 93;
+            if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
+                this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+            }
+
+            if (shiftF10 && e.isKeyboardEvent) {
+                // e.isKeyboardEvent will be true for Shift-F10 triggered context menus on macOS
+                // other browsers will just trigger contextmenu events
+                this.onContextMenu(e);
             }
         },
 
@@ -238,17 +249,7 @@ define('io.ox/core/folder/tree', [
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            var target = $(e.currentTarget).data('fixed', true), top = e.pageY - 20, left = e.pageX + 30;
-            if (target.is('.contextmenu-control')) {
-                top = target.offset().top;
-                left = target.offset().left + 40;
-                target.removeData('fixed');
-            }
-            if (e.type === 'contextmenu' && target.hasClass('contextmenu-control')) {
-                // if the contextmenubutton was rightclicked, the selection doesn't change, so we are allowed to prevent the default in this case (Bug 42409 remains fixed)
-                e.preventDefault();
-            }
-            this.toggleContextMenu(target, top, left);
+            this.toggleContextMenu(ContextMenuUtils.positionForEvent(e));
         },
 
         getContextMenuId: function (id) {
@@ -261,10 +262,11 @@ define('io.ox/core/folder/tree', [
                 module = this.module,
                 ul = this.$dropdownMenu.empty(),
                 point = this.getContextMenuId(contextmenu),
-                view = this;
+                view = this,
+                favorite = this.selection.get('data-favorite');
             // get folder data and redraw
             api.get(id).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
+                var baton = new ext.Baton({ app: app, data: data, view: view, module: module, favorite: favorite });
                 ext.point(point).invoke('draw', ul, baton);
                 if (_.device('smartphone')) {
                     ul.append(
@@ -312,6 +314,10 @@ define('io.ox/core/folder/tree', [
                 this.$dropdownMenu.attr('role', 'menu');
             }
 
+            function fixFocus() {
+                this.dropdown.$toggle.parents('li').focus();
+            }
+
             return function () {
                 this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options'));
                 this.$dropdownMenu = $('<ul class="dropdown-menu">');
@@ -326,6 +332,7 @@ define('io.ox/core/folder/tree', [
                 this.$el.after(
                     this.dropdown.render().$el
                     .on('show.bs.dropdown', show.bind(this))
+                    .on('hidden.bs.dropdown', fixFocus.bind(this))
                 );
                 this.$dropdownMenu.removeAttr('role');
             };

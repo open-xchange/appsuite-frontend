@@ -48,7 +48,7 @@ define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings
         // has no children?
         if (children.length === 0) {
             //do not trim single spaces
-            text = self.text().match(/^[ \t]$/) ? self.text : $.trim(self.text());
+            text = self.text().match(/^[ \u00A0\t]$/) ? self.text : $.trim(self.text());
             // has no text?
             if (text === '') {
                 // empty table cell?

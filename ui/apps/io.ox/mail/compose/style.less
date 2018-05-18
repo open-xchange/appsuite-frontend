@@ -22,18 +22,10 @@
     }
 }
 
-.powermove-window-open .io-ox-mail-compose-window.cornered {
-    // if the floating window is small we need more space for the labels (560px)
-    @media (max-width: 1672px) {
-        .mail-input {
-            padding-left: 25px;
-        }
-    }
-}
-
 .io-ox-mail-compose {
+
     // baseline adjustment
-    padding-top: @default-padding;
+    padding-top: 8px;
 
     & > .mail-compose-fields > .row {
 
@@ -58,7 +50,7 @@
         }
 
         &.subject {
-            margin-bottom: 7px;
+            margin-bottom: 15px;
             .maillabel { padding-top: 5px; }
             input {
                 padding-top: 3px;
@@ -297,45 +289,29 @@
 
         display: flex;
         align-items: center;
-        padding-left: 16px;
-
-        .toggle,
-        .expire.dropdown,
-        .notification.dropdown,
-        .password {
-            margin-right: 16px;
-            padding-bottom: 0;
-            margin-bottom: 0;
+        padding-left: 32px;
+        button {
+            margin-top: 2px;
         }
+    }
+}
 
-        .password.input-group {
-            width: 25%;
-            display: inline-table;
+.share-attachments-view-dialog {
+    legend {
+        display: block;
+        width: 100%;
+        margin: 0;
+        border: 0;
+        padding: 0;
+        h2 {
+            font-size: 13px;
+            line-height: 24px;
+            font-weight: 700;
+            color: #666666;
         }
-
-        &.active {
-
-            .toggle {
-                text-decoration: none;
-                font-weight: bold;
-                color: #FF6E00;
-            }
-
-            .fa-fw:before {
-                // fa-check
-                content: '\f00c';
-                color: #FF6E00;
-            }
-        }
-
-
-        &:not(.active) {
-            .expire.dropdown,
-            .notification.dropdown,
-            .password.input-group {
-                display: none
-            }
-        }
+    }
+    .password-wrapper, fieldset {
+        margin-top: 24px;
     }
 }
 

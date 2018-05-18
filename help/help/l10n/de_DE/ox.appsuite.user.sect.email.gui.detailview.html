@@ -46,26 +46,30 @@
 <a name="ox.appsuite.user.reference.email.gui.detailview"></a><p id="ox.appsuite.user.reference.email.gui.detailview">
         Zeigt den Inhalt der E-Mail, die Sie in der 
         <a class="link" href="ox.appsuite.user.sect.email.gui.list.html">Liste</a> 
-        angeklickt haben. 
+        angeklickt haben. Wenn Sie die E-Mail in der Liste doppelklicken, wird der Inhalt in einem Fenster angezeigt.
         </p>
 <p class="title">Inhalt</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.detailview.entries" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Betreff</p>
-<p role="presentation">Wenn E-Mails nach Konversationen sortiert angezeigt werden, wird die Anzahl der E-Mails in einer 
-              Konversation unterhalb des Betreffs angezeigt. Um alle E-Mails der Konversation zu öffnen oder zu schließen, 
-              klicken Sie auf das Symbol
+<p role="presentation">Wenn E-Mails nach Konversationen sortiert angezeigt werden, wird bei einer Konversation neben dem Betreff das Symbol
               <span class="guibutton"><strong>Alle Nachrichten öffnen/schließen</strong></span>
-              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.threadopen"><img src="../../images/appsuite_user_icon_thread_open.png"></span>.
-              Anklicken einer freien Stelle zwischen Absender und Datum des Empfangs öffnet oder schließt die E-Mail.
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.threadopen"><img src="../../images/appsuite_user_icon_thread_open.png"></span> angezeigt. 
+              Anklicken einer freien Stelle zwischen Absender und Datum des Empfangs öffnet oder schließt eine einzelne E-Mail.
             </p>
 </li>
-<li class="listitem"><p role="presentation">Foto des Absenders, wenn vorhanden</p></li>
-<li class="listitem" id="ox.appsuite.user.reference.email.gui.detailview.messenger"><p role="presentation">Je nach Konfiguration der Groupware zeigt ein farbiger Punkt vor dem Namen den 
-              <span class="phrase">Messenger</span>-Status des Absenders oder eines Empfängers.</p></li>
 <li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Gelesen</strong></span>  
-              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.read"><img src="../../images/appsuite_user_icon_email_read.png"></span> . Ändert den Status von gelesen nach ungelesen und umgekehrt.</p></li>
-<li class="listitem"><p role="presentation">Name des Absenders. Name des Empfängers. Wenn vorhanden, die Namen weiterer Empfänger der E-Mail. Anklicken eines Namens öffnet ein 
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.read"><img src="../../images/appsuite_user_icon_email_read.png"></span>. Ändert den Status von gelesen nach ungelesen und umgekehrt.</p></li>
+<li class="listitem">
+<p role="presentation">Name oder E-Mail-Adresse des Absenders. Anklicken öffnet ein <span class="guilabel"><strong>Popup</strong></span>. 
+              Es zeigt verschiedene Kontaktinformationen.
+            </p>
+<p role="presentation">Wenn Sie in den Einstellungen bestimmt haben, dass die Authentizität einer E-Mail angezeigt wird, 
+              zeigt die Farbe und ein nachfolgendes Symbol die Authentzität der E-Mail. Anklicken des Symbols zeigt 
+              einen entsprechenden Hinweistext.
+            </p>
+</li>
+<li class="listitem"><p role="presentation">Name des Empfängers. Wenn vorhanden, die Namen weiterer Empfänger der E-Mail. Anklicken eines Namens öffnet ein 
               <span class="guilabel"><strong>Popup</strong></span>. Es zeigt verschiedene Kontaktinformationen.
             </p></li>
 <li class="listitem"><p role="presentation">Datum und Uhrzeit des Empfangs</p></li>
@@ -74,11 +78,11 @@
               </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Markierung</strong></span>
-                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.starred"><img src="../../images/appsuite_user_icon_starred.png"></span> . 
+                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.starred"><img src="../../images/appsuite_user_icon_starred.png"></span>. 
                     Markiert die E-Mail.
                   </p></li>
 <li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Farbe zuweisen</strong></span>
-                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.label"><img src="../../images/appsuite_user_icon_label.png"></span> . 
+                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.label"><img src="../../images/appsuite_user_icon_label.png"></span>. 
                     Öffnet ein Menü, mit dem Sie der E-Mail ein farbiges Label zuweisen können.
                   </p></li>
 </ul>
@@ -86,25 +90,26 @@
               <span class="phrase"><strong>Hinweis:</strong></span> Je nach Konfiguration der Groupware sind nicht alle Möglichkeiten zum Kennzeichnen verfügbar.
             </p>
 </li>
+<li class="listitem"><p role="presentation">Foto des Absenders, wenn vorhanden</p></li>
 <li class="listitem"><p role="presentation">Häufig verwendete Funktionen: 
-              <span class="guibutton"><strong>Schnellantwort</strong></span>, <span class="guibutton"><strong>Allen antworten</strong></span>, 
+              <span class="guibutton"><strong>Antworten</strong></span>, <span class="guibutton"><strong>Allen antworten</strong></span>, 
               <span class="guibutton"><strong>Weiterleiten</strong></span>, <span class="guibutton"><strong>Löschen</strong></span>
             </p></li>
 <li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Weitere Aktionen</strong></span>
-              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.actions"><img src="../../images/appsuite_user_icon_actions.png"></span> . Öffnet ein Menü mit Bearbeitungsfunktionen.</p></li>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.detailview.actions"><img src="../../images/appsuite_user_icon_actions.png"></span>. Öffnet ein Menü mit Bearbeitungsfunktionen.</p></li>
 <li class="listitem">
 <p role="presentation">Wenn die E-Mail Anhänge enthält, werden weitere Elemente angezeigt.
               </p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.detailview.attachments" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Anhang</strong></span>
-                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.attachment"><img src="../../images/appsuite_user_icon_clip.png"></span> . Öffnet einen Bereich, der die Anhänge als Symbole 
+                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.attachment"><img src="../../images/appsuite_user_icon_clip.png"></span>. Öffnet einen Bereich, der die Anhänge als Symbole 
                     oder als Liste anzeigt.</p></li>
 <li class="listitem"><p role="presentation">Schaltflächen, mit denen Sie für alle E-Mail-Anhänge gemeinsam eine
                     Funktion ausführen können.</p></li>
 <li class="listitem"><p role="presentation">Symbole <span class="guibutton"><strong>Kacheln</strong></span>
                     <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.tiles"><img src="../../images/appsuite_user_icon_tiles.png"></span>,
                     <span class="guibutton"><strong>Liste</strong></span>
-                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.list"><img src="../../images/appsuite_user_icon_list.png"></span> . Zeigt die Anhänge als Kacheln oder als Liste. Um für einen bestimmten Anhang eine 
+                    <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.list"><img src="../../images/appsuite_user_icon_list.png"></span>. Zeigt die Anhänge als Kacheln oder als Liste. Um für einen bestimmten Anhang eine 
                     Funktion auszuführen, klicken Sie in der Ansicht Liste auf den Namen des Anhangs.</p></li>
 </ul>
 <p role="presentation">
@@ -133,6 +138,7 @@
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.teamwork.distributionlist.html">Alle Empfänger einer E-Mail als Verteilerliste speichern</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.manage.html">E-Mails organisieren</a></p>
 </li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.security.emailauthentication.html">Authentizität von E-Mails anzeigen</a></p></li>
 <li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.gui.popup.html">Das
         <span class="phrase">E-Mail</span>-Popup
       </a></p></li>

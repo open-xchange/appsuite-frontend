@@ -123,7 +123,7 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(fullModel, { noFolderCheck: true }));
+                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true }));
                     });
                 });
             });
@@ -234,20 +234,13 @@ define('io.ox/calendar/invitations/register', [
 
         renderReminder: function () {
             if (!this.AlarmsView || !this.alarmsModel) return;
-            var alarmsViewInstance = new this.AlarmsView({ model: this.alarmsModel });
+            var alarmsViewInstance = new this.AlarmsView.linkView({ model: this.alarmsModel });
             this.$el.find('.itip-actions').before(
                 $('<div class="itip-reminder">').append(
                     $('<legend>').text(gt('Reminder')),
                     alarmsViewInstance.render().$el
                 )
             );
-            // custom event that is triggered when the view is actually appended to the dom
-            this.on('appended', alarmsViewInstance.reactToResize);
-            var callback = _(alarmsViewInstance.reactToResize).bind(alarmsViewInstance);
-            $(window).on('resize', callback);
-            alarmsViewInstance.on('dispose', function () {
-                $(window).off('resize', callback);
-            });
         },
 
         getActions: function () {
@@ -314,7 +307,7 @@ define('io.ox/calendar/invitations/register', [
             this.$el.empty();
             if (this.$el.is(':hidden')) this.$el.fadeIn(300);
 
-            var actions = this.getActions(), buttons;
+            var actions, buttons;
 
             this.renderScaffold();
             this.renderAnnotations();
@@ -328,7 +321,11 @@ define('io.ox/calendar/invitations/register', [
             this.renderSummary();
             this.renderChanges();
 
+            // don't offer actions when this is an external account => not supported
+            if (parseInt(this.mailModel.get('account_id'), 10) !== 0) return this;
+
             // get standard buttons
+            actions = this.getActions();
             buttons = this.getButtons(actions);
             if (buttons.length === 0) return this;
             // use doesn't need any controls to "ignore" the message
@@ -381,10 +378,11 @@ define('io.ox/calendar/invitations/register', [
                     }
                 })
                 .then(
-                    function done() {
+                    function done(data) {
                         // api refresh
                         var refresh = require(['io.ox/calendar/api']).then(
                             function (api) {
+                                api.updatePoolData({ updated: data });
                                 api.refresh();
                                 if (self.options.yell !== false) {
                                     notifications.yell('success', success[action]);
@@ -442,7 +440,8 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getActions: function () {
-            return this.options.actions;
+            if (this.getConfirmationStatus() !== 'ACCEPTED') return this.options.actions;
+            return _(this.options.actions).without('decline', 'tentative', 'accept');
         },
 
         renderAnnotations: function () {
@@ -466,11 +465,16 @@ define('io.ox/calendar/invitations/register', [
         repaint: function () {
             this.options.container.analyzeIMIPAttachment(this.imip)
                 .done(function (list) {
-                    var data = list[0],
-                        change = data.changes[0],
+                    var data = _(list).first() || {},
+                        change = data.changes ? data.changes[0] : {},
                         eventData = change.deletedEvent || change.newEvent || change.currentEvent;
-                    if (!eventData) return;
-                    this.model.set(eventData);
+                    // update content
+                    this.options.actions = data.actions;
+                    this.options.introduction = change.introduction;
+                    this.options.diffDescription = change.diffDescription;
+                    this.options.annotations = data.annotations;
+                    if (eventData) this.model.set(eventData);
+                    else delete this.model;
                     this.render();
                 }.bind(this));
         }
@@ -776,9 +780,11 @@ define('io.ox/calendar/invitations/register', [
                 yell = this.options && this.options.yell;
             imip.mail = { folder_id: this.model.get('folder_id'), id: this.model.get('id') };
             return this.analyzeIMIPAttachment(imip).done(function (list) {
+                if (self.disposed) return;
                 if (list.length === 0) return;
 
-                var data = list[0], model,
+                var model,
+                    data = _(list).first() || {},
                     change = data.changes ? data.changes[0] : {},
                     eventData = change.deletedEvent || change.newEvent || change.currentEvent;
                 if (eventData) model = new models.Model(eventData);
@@ -829,6 +835,8 @@ define('io.ox/calendar/invitations/register', [
                 yell = this.options && this.options.yell;
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
                 return api.resolve(cid.id, true).then(function (model) {
+                    if (self.disposed) return;
+
                     var intView = new InternalAppointmentView({
                         model: model,
                         module: 'calendar',

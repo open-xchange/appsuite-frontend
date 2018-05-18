@@ -179,12 +179,11 @@ define('io.ox/contacts/edit/main', [
                             }
                             considerSaved = true;
                             win.idle();
-                            if (app.dropZone) app.dropZone.remove();
                             app.quit();
                         });
 
                         if (settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
-
+                            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'
                             }, editView);
@@ -312,12 +311,10 @@ define('io.ox/contacts/edit/main', [
                     savePoint = {
                         description: gt('Contact') + (title ? ': ' + title : ''),
                         module: 'io.ox/contacts/edit',
-                        point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited')
+                        point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited'),
+                        passPointOnGetApp: true
                     };
-                // to restore the my contact data dialog, we need to pass the data on the getApp call
-                if (app.userMode) {
-                    savePoint.passPointOnGetApp = true;
-                }
+
                 return savePoint;
             }
             return false;
@@ -336,7 +333,7 @@ define('io.ox/contacts/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.contacts.gui.create.html';
+            return this.userMode ? 'ox.appsuite.user.sect.firststeps.personaldata.html' : 'ox.appsuite.user.sect.contacts.gui.create.html';
         };
 
         ext.point('io.ox/contacts/edit/main/model').extend({

@@ -171,8 +171,19 @@ define('io.ox/mail/accounts/model', [
                     }
 
                     return AccountAPI.update(changes).done(function () {
+                        var def = $.when();
                         folderAPI.pool.unfetch('default' + id);
-                        folderAPI.refresh();
+                        if (typeof changes.unified_inbox_enabled !== 'undefined') {
+                            def = require(['settings!io.ox/mail']).then(function (settings) {
+                                // reload settings to fetch unifiedInboxIdentifier
+                                return settings.reload();
+                            }).then(function () {
+                                folderAPI.pool.unfetch('1');
+                            });
+                        }
+                        def.then(function () {
+                            folderAPI.refresh();
+                        });
                     });
 
                 }).then(function () {

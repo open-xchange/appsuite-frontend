@@ -14,13 +14,16 @@
 
 define('io.ox/tours/intro', [
     'io.ox/core/extensions',
-    'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'io.ox/core/tk/wizard',
-    'gettext!io.ox/tours'
-], function (ext, notifications, capabilities, Tour, gt) {
+    'settings!io.ox/tours',
+    'gettext!io.ox/tours',
+    'io.ox/tours/whats-new'
+], function (ext, capabilities, Tour, settings, gt) {
 
     'use strict';
+
+    var whatsNewPoint = ext.point('io.ox/tours/whats_new');
 
     /* Tour: intro. The special one that does not belong to an app */
     Tour.registry.add({
@@ -29,18 +32,18 @@ define('io.ox/tours/intro', [
         //Tour needs webmail and should be disabled for guests (See Bug 40545)
         if (!capabilities.has('webmail && !guest')) return;
 
-        new Tour()
+        var tour = new Tour()
         .step()
             .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
             .content(gt('This guided tour will briefly introduce you to the product. Get more detailed information in the tours for the single apps or in the online help.'))
             .end()
         .step()
             .title(gt('Launching an app'))
-            .on('before:show', function () { if ($('#io-ox-launchgrid:visible').length === 0) $('#io-ox-launcher .btn').first().click(); })
+            .on('before:show', function () { if ($('.launcher-dropdown:visible').length === 0) $('#io-ox-launcher .btn').first().click(); })
             .content(gt('To launch an app, use the quick launch icons on the left side of the menu bar or click on an entry inside the app launcher menu.'))
             .hotspot('#io-ox-launchgrid')
             .referTo('#io-ox-launchgrid')
-            .on('hide', function () { if ($('#io-ox-launchgrid:visible').length === 1) $('#io-ox-launcher .btn').first().click(); })
+            .on('hide', function () { if ($('.launcher-dropdown:visible').length === 1) $('#io-ox-launcher .btn').first().click(); })
             .end()
         .step()
             .title(gt('Displaying the help or the settings'))
@@ -50,7 +53,6 @@ define('io.ox/tours/intro', [
             .waitFor('#topbar-settings-dropdown')
             .on('wait', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
             .on('hide', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
-            .on('before:show', function () { notifications.hide(); })
             .end()
         // notification area is not always shown in new topbar
         /*.step()
@@ -71,10 +73,9 @@ define('io.ox/tours/intro', [
             .title(gt('Creating new items'))
             .content(gt('To create a new E-Mail, click the Compose new E-Mail in the toolbar.'))
             .navigateTo('io.ox/mail/main')
-            .waitFor('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
-            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
-            .referTo('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:first:visible')
-            .on('before:show', function () { notifications.hide(); })
+            .waitFor('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:visible:first')
+            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:visible:first')
+            .referTo('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:visible:first')
             .end()
         .step()
             .title(gt('Opening or closing the folder tree'))
@@ -113,8 +114,22 @@ define('io.ox/tours/intro', [
             .title(gt('The Detail view'))
             .content(gt('The Detail view displays an object\'s content. Depending on the app, further functions for organizing objects can be found in the Detail view.'))
             .spotlight('.mail-detail-pane')
-            .end()
-        .step()
+            .end();
+
+        // integrate what's new tour steps
+        var baton = new ext.Baton({ tour: tour }),
+            list = whatsNewPoint.list(),
+            blackList = ['launcher-icon', 'launcher', 'help'];
+
+        _(list).each(function (step) {
+            if (blackList.indexOf(step.id) !== -1) return;
+            step.invoke('steps', this, baton);
+        });
+
+        // no need to show the what's new tour when the user has already seen the steps here
+        settings.set('whatsNew/autoShow', 0).save();
+
+        tour.step()
             .title(gt('Further information'))
             .content(gt('Detailed instructions for the single apps are located in System menu > Help.'))
             .hotspot('#topbar-settings-dropdown .io-ox-context-help')
@@ -123,6 +138,6 @@ define('io.ox/tours/intro', [
             .on('wait', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
             .on('hide', function () { $('#io-ox-topbar-dropdown-icon .dropdown-toggle').click(); })
             .end()
-        .start();
+            .start();
     });
 });

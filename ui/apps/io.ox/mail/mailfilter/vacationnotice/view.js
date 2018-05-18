@@ -18,6 +18,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/datepicker',
     'io.ox/backbone/views/modal',
     'io.ox/core/settings/util',
     'io.ox/core/yell',
@@ -27,7 +28,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/mailfilter/vacationnotice/style'
-], function (Model, api, views, ext, mini, ModalView, util, yell, userAPI, accountAPI, contactsUtil, settings, gt) {
+], function (Model, api, views, ext, mini, MiniDatePickerView, ModalView, util, yell, userAPI, accountAPI, contactsUtil, settings, gt) {
 
     'use strict';
 
@@ -35,6 +36,13 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
         INDEX = 0,
         INDEX_RANGE = 0,
         INDEX_ADV = 0;
+
+    var DatePickerView = MiniDatePickerView.extend({
+        // overwrite to skip validation
+        updateModel: function () {
+            this.model.set(this.attribute, this.getTimestamp(), { validate: false, fulltime: this.isFullTime() });
+        }
+    });
 
     function open() {
         return getData().then(openModalDialog, fail);
@@ -56,6 +64,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             model: data.model,
             point: POINT,
             title: gt('Vacation notice'),
+            help: 'ox.appsuite.user.sect.email.send.vacationnotice.html',
             width: 640
         })
         .inject({
@@ -176,9 +185,13 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                         ['dateFrom', 'dateUntil'].map(function (id) {
                             return $('<div class="col-md-4">').append(
                                 $('<label class="control-label">').attr('for', 'vacation_notice_' + id).text(labels[id]),
-                                new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
-                                    .render().$el
-                                    .prop('disabled', !baton.model.get('activateTimeFrame'))
+                                _.device('smartphone') ?
+                                    new DatePickerView({ attribute: id, model: baton.model, id: 'vacation_notice_' + id, clearButton: true })
+                                        .render().$el
+                                        .prop('disabled', !baton.model.get('activateTimeFrame')) :
+                                    new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
+                                        .render().$el
+                                        .prop('disabled', !baton.model.get('activateTimeFrame'))
                             );
                         })
                     )
@@ -198,11 +211,11 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             id: 'days',
             render: function (baton) {
 
-                if (_.device('smartphone')) return;
-
-                baton.$el.find('.row:last').append(
-                    $('<div class="col-md-4 duration">').text(this.getDurationString())
-                );
+                if (!_.device('smartphone')) {
+                    baton.$el.find('.row:last').append(
+                        $('<div class="col-md-4 duration">').text(this.getDurationString())
+                    );
+                }
 
                 baton.$el.append(
                     $('<div class="row error-message has-error">').hide().append(
@@ -326,12 +339,12 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             id: 'aliases',
             render: function (baton) {
 
-                if (this.data.aliases.length <= 1) return;
-                if (!settings.get('features/setAddressesInVacationNotice', true)) return;
-
                 var model = this.model,
                     primaryMail = this.data.primary || this.data.aliases[0];
                 model.set('primaryMail', primaryMail);
+
+                if (this.data.aliases.length <= 1) return;
+                if (!settings.get('features/setAddressesInVacationNotice', true)) return;
 
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);

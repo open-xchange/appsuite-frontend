@@ -84,6 +84,7 @@ define('io.ox/calendar/week/view', [
             var events = {
                 'click .control.next,.control.prev': 'onControlView',
                 'click .appointment': 'onClickAppointment',
+                'mousedown .appointment': 'onMousdownAppointment',
                 'click .weekday': 'onCreateAppointment',
                 'click .merge-split': 'onMergeSplit'
             };
@@ -166,7 +167,7 @@ define('io.ox/calendar/week/view', [
                     new Picker({ date: self.startDate })
                         .attachTo(self.kwInfo)
                         .on('select', function (date) {
-                            self.setStartDate(date, false);
+                            self.setStartDate(date);
                         })
                         .on('before:open', function () {
                             this.setDate(self.startDate);
@@ -249,6 +250,7 @@ define('io.ox/calendar/week/view', [
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
 
+            this.$('.merge-split').toggleClass('hidden', this.mode !== 'day' || this.app.folders.list().length <= 1);
             this.renderAppointments();
 
             this
@@ -258,29 +260,28 @@ define('io.ox/calendar/week/view', [
 
         /**
          * set week reference start date
-         * @param { string|number|LocalDate } opt
+         * @param { string|number|LocalDate } value
          *        number: Timestamp of a date in the reference week. Now if empty
          *        string: { 'next', 'prev' } set next or previous week
          *        moment: moment date object in the reference week
-         * @param { boolean } utc     true if full-time appointment
+         * @param { object } options
+         *        utc (boolean): full-time appointment
+         *        propagate (boolean): propagate change
          */
-        setStartDate: function (opt, utc) {
 
-            var previous = moment(this.startDate);
+        setStartDate: function (value, options) {
 
-            utc = utc || false;
-            if (opt) {
+            var previous = moment(this.startDate),
+                opt = _.extend({ utc: false, propagate: true }, options);
+
+            if (value) {
                 // number | LocalDate
-                if (typeof opt === 'number' || moment.isMoment(opt)) {
-                    if (utc) {
-                        opt = moment.utc(opt).local(true).valueOf();
-                    }
-                    this.startDate = moment(opt);
+                if (typeof value === 'number' || moment.isMoment(value)) {
+                    if (opt.utc) value = moment.utc(value).local(true).valueOf();
+                    this.startDate = moment(value);
                 }
-                //string
-                if (typeof opt === 'string') {
-                    this.startDate[opt === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
-                }
+                // string
+                if (typeof value === 'string') this.startDate[value === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
             } else {
                 // today button
                 this.startDate = moment();
@@ -305,12 +306,11 @@ define('io.ox/calendar/week/view', [
             if (month % 2 === 1) month--;
             this.apiRefTime = moment(this.startDate).month(month).date(1);
 
-            // only trigger change event if date has changed
-            if (!this.startDate.isSame(previous)) {
-                this.trigger('change:date', this.startDate);
-                if (ox.debug) console.log('refresh calendar data');
-                this.trigger('onRefresh');
-            }
+            // only trigger change event if start date has changed
+            if (this.startDate.isSame(previous)) return;
+            if (opt.propagate) this.trigger('change:date', this.startDate);
+            if (ox.debug) console.log('refresh calendar data');
+            this.trigger('onRefresh');
         },
 
         /**
@@ -343,8 +343,10 @@ define('io.ox/calendar/week/view', [
                         };
 
                         self.gridSize = 60 / settings.get('interval', 30);
+                        var timelineContainer = self.timeline.parent();
                         self.renderTimeslots();
                         self.applyTimeScale();
+                        timelineContainer.append(self.timeline);
 
                         // if this function is called while the calendar app is not visible we get wrong height measurements
                         // so wait until the next show event, to calculate correctly
@@ -374,7 +376,7 @@ define('io.ox/calendar/week/view', [
             if (!this.lasso) {
                 var cid = util.cid(String($(e.currentTarget).data('cid'))),
                     el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]', this.$el),
-                    bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
+                    bg = el.data('background-color');
                 switch (e.type) {
                     case 'mouseenter':
                         if (e.relatedTarget && e.relatedTarget.tagName !== 'TD') {
@@ -507,13 +509,21 @@ define('io.ox/calendar/week/view', [
             }
         },
 
+        onMousdownAppointment: function (e) {
+            if ($(e.target).hasClass('ui-resizable-handle')) {
+                delete this.clicktarget;
+                return;
+            }
+            this.clicktarget = $(e.currentTarget).attr('data-cid');
+        },
+
         /**
          * handler for single- and double-click events on appointments
-         * TODO check if this code is an exact duplication of the week-views onclick appointment
          * @param  { MouseEvent } e Mouse event
          */
         onClickAppointment: function (e) {
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
+            if (cT.attr('data-cid') !== this.clicktarget) return;
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = util.cid(String(cT.data('cid')));
@@ -580,8 +590,7 @@ define('io.ox/calendar/week/view', [
                     self.trigger('openCreateAppointment', e, {
                         startDate: { value: start.utc(true).format('YYYYMMDD') },
                         endDate: { value: start.utc(true).format('YYYYMMDD') },
-                        folder: folder.id,
-                        allDay: true
+                        folder: folder.id
                     });
                 }
             });
@@ -611,7 +620,7 @@ define('io.ox/calendar/week/view', [
                 // switch mouse events
                 switch (e.type) {
                     case 'mousedown':
-                        if (self.lasso === false && $(e.target).hasClass('timeslot')) {
+                        if (e.which === 1 && self.lasso === false && $(e.target).hasClass('timeslot')) {
                             self.lasso = true;
                             self.mousedownAt = e.pageY + self.pane.scrollTop();
                         }
@@ -925,7 +934,8 @@ define('io.ox/calendar/week/view', [
             settings.on('change:renderTimezones', update);
             settings.on('change:favoriteTimezones', updateAndDrawDropdown);
 
-            this.timeLabelBar = $('<div class="time-label-bar">');
+            this.timeLabelBar = this.weekViewCon.find('.time-label-bar');
+            if (this.timeLabelBar.length === 0) this.timeLabelBar = $('<div class="time-label-bar">');
             drawDropdown();
             drawTimezoneLabels();
         },
@@ -949,10 +959,16 @@ define('io.ox/calendar/week/view', [
             var renderTimeline = function () {
                 var d = moment();
                 self.timeline.css({ top: ((d.hours() / 24 + d.minutes() / 1440) * 100) + '%' });
+                // check, if the day changed
+                var now = _.now(),
+                    lastRendered = parseInt(self.timeline.attr('data-last') || now, 10);
+                self.timeline.attr('data-last', now);
+                if (moment(lastRendered).startOf('day').valueOf() !== moment(now).startOf('day').valueOf()) self.rerender();
             };
             // create and animate timeline
             renderTimeline();
-            setInterval(renderTimeline, 60000);
+            if (this.intervalId) clearInterval(this.intervalId);
+            this.intervalId = setInterval(renderTimeline, 60000);
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
@@ -999,11 +1015,14 @@ define('io.ox/calendar/week/view', [
                         .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
                     this.kwInfo,
-                    this.mode === 'day' && this.app.folders.list().length > 1 ? $('<a href="#" class="merge-split">').tooltip({
-                        placement: 'bottom',
-                        title: settings.get('mergeview') ? gt('Click to merge all folders into one column') : gt('Click to split all folders into separate columns')
+                    $('<a href="#" class="merge-split">')
+                        .toggleClass('hidden', this.mode !== 'day' || this.app.folders.list().length <= 1)
                         //#. Should appointments of different folders/calendars be shown in the same column (merge) or in seperate ones (split)
-                    }).text(settings.get('mergeview') ? gt('Merge') : gt('Split')) : ''
+                        .text(settings.get('mergeview') ? gt('Merge') : gt('Split'))
+                        .tooltip({
+                            placement: 'bottom',
+                            title: settings.get('mergeview') ? gt('Click to merge all folders into one column') : gt('Click to split all folders into separate columns')
+                        })
                 ),
                 $('<div class="footer-container">').append(
                     this.dayLabel
@@ -1113,6 +1132,12 @@ define('io.ox/calendar/week/view', [
                 Math.max(this.paneHeight / (cells * this.gridSize), this.minCellHeight)
             );
 
+            // app window is not visible we need to postpone height calculation to avoid side effects (happens when scheduling view is restored)
+            if (!this.pane.is(':visible') && !this.app.getWindow().state.visible) {
+                this.app.getWindow().one('show', _(this.adjustCellHeight).bind(this));
+                return;
+            }
+
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
                 var timeslots = $('.timeslot', this.pane),
@@ -1209,7 +1234,7 @@ define('io.ox/calendar/week/view', [
                     self.timeline.show();
                 }
                 days.push(day);
-                tmpDate.add(1, 'day');
+                if (!self.isMergeView) tmpDate.add(1, 'day');
             });
 
             this.dayLabel.empty().append(days);
@@ -1234,7 +1259,7 @@ define('io.ox/calendar/week/view', [
                     cw: gt('CW %1$d', this.startDate.format('w')),
                     date: this.columns > 1
                         ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
-                        : this.startDate.format('l')
+                        : this.startDate.format('ddd, l')
                 };
                 // bubbling event to get it in page controller
                 this.trigger('change:navbar:date', this.navbarDates);
@@ -1653,7 +1678,8 @@ define('io.ox/calendar/week/view', [
             print.request('io.ox/calendar/week/print', {
                 start: moment(this.startDate).valueOf(),
                 end: moment(this.startDate).add(this.columns, 'days').valueOf(),
-                folders: this.folders
+                folders: this.folders,
+                title: _(this.folders).keys().length === 1 ? this.folders[_(this.folders).keys()[0]].display_title || this.folders[_(this.folders).keys()[0]].title : gt('Appointments')
             });
         }
     });

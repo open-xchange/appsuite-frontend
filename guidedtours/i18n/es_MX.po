@@ -1,19 +1,19 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2009, 2010, 2012.
-# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
+# Andres Herrera <andres@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
-"Language-Team: Spanish <es@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2018-04-04 20:35+0100\n"
+"Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
+"Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
 "Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -684,15 +684,13 @@ msgstr ""
 "hay debajo de Participantes. Puede agregar documentos adjuntos a la tarea."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"Para iniciar una aplicación, presione en un elemento de la izquierda de la "
-"barra de menús."
+"Para lanzar una aplicación, use los iconos de acceso rápido de la parte "
+"izquierda de la barra de menús o presione en un elemento dentro del menú de "
+"inicio de aplicaciones."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -728,34 +726,24 @@ msgstr ""
 "Presione en Correo en la parte izquierda."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Para abrir la ayuda, presione el icono Menú de sistema de la parte superior "
-"derecha de la barra de menú. Seleccione Ayuda. Se mostrará la ayuda para la "
-"aplicación actual. Para navegar por la ayuda completa, presione en Página de "
-"inicio o Tabla de contenidos en la parte superior de la ventana. "
+"Para abrir la ayuda, presione en la imagen del usuario de la parte superior "
+"derecha de la barra de menús. Seleccione Ayuda. Se mostrará la ayuda de la "
+"aplicación seleccionada. Para navegar por toda la ayuda, presione en Página "
+"de inicio o Tabla de contenidos en la parte superior de la ventana."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Para abrir los ajustes, presione el icono Menú del sistema situado en la "
-"parte superior derecha de la barra de menús. Seleccione Configuración."
+"Para abrir los ajustes, presione en la imagen del usuario de la parte "
+"superior derecha de la barra de menús. Seleccione Ajustes."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -803,15 +791,11 @@ msgstr ""
 "derecha de la barra de menús. Seleccione Cerrar sesión."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Para cerrar la sesión, presione el icono Menú del sistema situado a la "
-"derecha de la barra de menús. Seleccione Cerrar sesión."
+"Para cerrar la sesión, presione el icono de cierre de sesión de la parte "
+"superior derecha de la barra de menús."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -12307,6 +12291,12 @@ msgstr ""
 #~ msgstr "Para iniciar una aplicación, haga clic en el título de una ficha."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Para iniciar una aplicación, presione en un elemento de la izquierda de "
+#~ "la barra de menús."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -12325,6 +12315,25 @@ msgstr ""
 #~ msgstr ""
 #~ "Para abrir la ayuda, pulse el icono Menú del sistema situado a la derecha "
 #~ "de la barra de menús. Seleccione Ayuda."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Para abrir la ayuda, presione el icono Menú de sistema de la parte "
+#~ "superior derecha de la barra de menú. Seleccione Ayuda. Se mostrará la "
+#~ "ayuda para la aplicación actual. Para navegar por la ayuda completa, "
+#~ "presione en Página de inicio o Tabla de contenidos en la parte superior "
+#~ "de la ventana. "
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Para abrir los ajustes, presione el icono Menú del sistema situado en la "
+#~ "parte superior derecha de la barra de menús. Seleccione Configuración."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

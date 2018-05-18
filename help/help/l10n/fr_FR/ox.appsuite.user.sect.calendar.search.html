@@ -1,13 +1,13 @@
-<html lang="de">
+<html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.7. Recherche de rendez-vous</title>
+<title>7.8. Recherche de rendez-vous</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Manuel de l'utilisateur">
-<link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Kapitel 7. Agenda">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Modifier plusieurs rendez-vous à la fois">
-<link rel="next" href="ox.appsuite.user.sect.calendar.teamwork.html" title="7.8. Rendez-vous en équipe">
+<link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Chapitre 7. Agenda">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.7.9. Supprimer des rendez-vous">
+<link rel="next" href="ox.appsuite.user.sect.calendar.teamwork.html" title="7.9. Rendez-vous en équipe">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,27 +19,27 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.manage.multiple.html">Zurück</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.teamwork.html">Weiter</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.manage.delete.html">Précédent</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.teamwork.html">Suivant</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Agenda</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.calendar.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">7.7. Recherche de rendez-vous</h2></div></div></div>
-<a class="indexterm" name="id-1.8.14.2"></a><a class="indexterm" name="id-1.8.14.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">7.8. Recherche de rendez-vous</h2></div></div></div>
+<a class="indexterm" name="id-1.8.15.2"></a><a class="indexterm" name="id-1.8.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.calendar.search"></a><p id="ox.appsuite.user.concept.calendar.search">Afin de chercher des rendez-vous donnés, vous pouvez utiliser les critères de recherche suivants :</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">termes de recherche pour le sujet, la description, l'emplacement, le nomdes pièces jointes, les participants</p></li>
-<li class="listitem"><p role="presentation">Dossiers devant être ciblés par la recherche</p></li>
+<li class="listitem"><p role="presentation">agendas devant être ciblés par la recherche</p></li>
 <li class="listitem"><p role="presentation">état de confirmation du rendez-vous</p></li>
-<li class="listitem"><p role="presentation">Type : tous, récurrents, uniques</p></li>
-<li class="listitem"><p role="presentation">Type de dossier : tous, privé, public, partagé</p></li>
+<li class="listitem"><p role="presentation">Intervalle de temps pour la création du rendez-vous, défini par rapport à la date actuelle : un mois, trois mois, un an</p></li>
+<li class="listitem"><p role="presentation">type : tous, récurrents, uniques</p></li>
 </ul>
 <p>
     </p>
@@ -47,15 +47,7 @@
 <div class="task" id="ox.appsuite.user.task.calendar.search">
 <p class="title">Comment chercher des rendez-vous :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">Cliquez sur l'icône <span class="guibutton"><strong>Démarrer la recherche</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> ou le champ de saisie dans la barre de recherche. Le bouton de dossier indique les dossiers à cibler pour la recherche. Les <span class="guibutton"><strong>Options</strong></span> offrent des fonctions limitant la portée de la recherche.</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.calendar.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_calendar_search_click.png" alt="Le champ de saisie"></div></div></div>
-</li>
-<li class="step"><p role="presentation">Pour définir le dossier dans lequel effectuer la recherche, cliquez sur le bouton du dossier.<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Si vous choisissez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers privés, publics et partagés.</p></li>
-<li class="listitem"><p role="presentation">Si vous choisissez un dossier particulier ou le dossier, la recherche s'effectue uniquement dans ce dossier et aucun de ses sous-dossiers.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Cliquez sur le champ de saisie <span class="guibutton"><strong>Rechercher</strong></span>.Des icônes supplémentaires sont affichées.</p></li>
 <li class="step">
 <p role="presentation">Saisissez un terme de recherche dans le champ de saisie. Le menu de recherche s'ouvre.</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.calendar.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_calendar_search_searchmenue.png" alt="Le menu de recherche"></div></div></div>
@@ -70,15 +62,18 @@
           </p>
 <p role="presentation">Les résultats de la recherche sont affichés dans la liste disponible dans la zone d'affichage.</p>
 </li>
-<li class="step"><p role="presentation">Vous pouvez ajuster les résultats de la recherche au moyen des options suivantes :<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Pour affiner les résultats de la recherche, saisissez des termes complémentaires : pour supprimer un terme recherché, cliquez sur l'icône <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> à côté du terme recherché. </p></li>
-<li class="listitem"><p role="presentation">Pour chercher dans un autre dossier, cliquez sur le bouton du dossier. Sélectionnez un dossier.</p></li>
-<li class="listitem"><p role="presentation">Pour limiter la recherche aux dossiers privés, publics ou partagés, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type de dossier.</p></li>
-<li class="listitem"><p role="presentation">Pour limiter la recherche aux rendez-vous dans un état de confirmation donné, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un état.</p></li>
-<li class="listitem"><p role="presentation">Pour limiter la recherche à des rendez-vous uniques ou récurrents, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type.</p></li>
+<li class="step">
+<p role="presentation">Pour sélectionner un agenda à cibler pour la recherche, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. L'agenda à cibler pour la recherche apparaît dans la liste déroulante <span class="guibutton"><strong>Dossier</strong></span>. Pour choisir un autre agenda, ouvrez cette liste déroulante.</p>
+<p role="presentation">Si vous choisissez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des agendas privés, publics et partagés.</p>
+</li>
+<li class="step"><p role="presentation">Vous pouvez restreindre la recherche à des rendez-vous spécifiques au moyen des options suivantes :<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Pour restreindre la recherche aux rendez-vous possédant un état de confirmation donné, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.changestatus"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Ouvrez le menu déroulant <span class="guibutton"><strong>Mon état</strong></span>. Choisissez une valeur.</p></li>
+<li class="listitem"><p role="presentation">Pour restreindre la recherche à un intervalle de tempsdonné, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.changeinterval"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Ouvrez le menu déroulant <span class="guibutton"><strong>Intervalle de temps</strong></span>. Choisissez une valeur.</p></li>
+<li class="listitem"><p role="presentation">Pour restreindre la recherche à des séries ou à des rendez-vous uniques, cliquez sur l'icône <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.changetype"><img src="../../images/appsuite_user_icon_dropdown.png"></span> dans le champ de saisie. Ouvrez le menu déroulant <span class="guibutton"><strong>Type</strong></span>. Choisissez une valeur.</p></li>
 </ul>
           </p></li>
-<li class="step"><p role="presentation">Pour terminer la recherche, cliquez sur l'icône <span class="guibutton"><strong>Annuler la recherche</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
+<li class="step"><p role="presentation">Pour affiner les résultats de la recherche, saisissez des termes complémentaires : pour supprimer un terme recherché, cliquez sur l'icône <span class="guibutton"><strong>Supprimer</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> à côté du terme recherché.</p></li>
+<li class="step"><p role="presentation">Pour terminer la recherche, cliquez sur l'icône <span class="guibutton"><strong>Fermer</strong></span>  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.concept.calendar.search.parent">Sujet parent : <a class="xref" href="ox.appsuite.user.chap.calendar.html"><i><span class="phrase">Agenda</span></i></a></p>

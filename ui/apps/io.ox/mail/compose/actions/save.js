@@ -113,8 +113,12 @@ define('io.ox/mail/compose/actions/save', [
             perform: function (baton) {
                 // Replace inline images in contenteditable with links from draft response
                 if (baton.model.get('editorMode') === 'html') {
-                    $('<div>' + baton.newData.attachments[0].content + '</div>').find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', baton.view.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
+                    $('<div>').html(baton.newData.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                        var $el = $(el);
+                        $('img:not(.emoji):eq(' + index + ')', baton.view.editorContainer.find('.editable')).attr({
+                            src: $el.attr('src'),
+                            id: $el.attr('id')
+                        });
                     });
                 }
                 var encrypted = baton.newData.security_info && baton.newData.security_info.encrypted;

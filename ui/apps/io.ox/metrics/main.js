@@ -27,12 +27,12 @@ define('io.ox/metrics/main', [
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        userhash = util.getUserHash(),
+        userhash,
         metrics;
 
     function isEnabled() {
         // disable when doNotTrack is enabled
-        if (settings.get('tracking/donottrack', false) && util.doNotTrack()) return false;
+        if (util.doNotTrack()) return false;
         // disable for tests
         if (_.device('karma')) return false;
         // disable durin development
@@ -87,6 +87,7 @@ define('io.ox/metrics/main', [
         },
         // util
         getUserHash: function () {
+            userhash = userhash || util.getUserHash();
             return userhash;
         },
         getFolderFlags: util.getFolderFlags,

@@ -27,17 +27,19 @@ define('io.ox/search/facets/extensions', [
                 module = type === 'files' ? 'infostore' : type;
 
             picker({
+                async: true,
                 folder: id || api.getDefaultFolder(module),
                 module: module,
                 flat: api.isFlat(module),
                 root: type === 'files' ? '9' : '1',
-                done: function (target) {
+                done: function (target, dialog) {
                     //get folder data
                     api.get(target)
                         .always(function (data) {
                             //use id as fallback label
                             var label = (data || {}).title || target;
                             baton.model.update(facet.id, id, { custom: target, name: label });
+                            dialog.close();
                         });
                 },
                 disable: function (data) {

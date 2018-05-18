@@ -48,7 +48,7 @@
         $('.dropdown-backdrop').remove();
         if (phone) {
             $('#io-ox-core').removeClass('menu-blur');
-            $('.dropdown-menu').hide();
+            $('.dropdown-menu:not([dontProcessOnMobile="true"])').hide();
             ox.idle();
         }
         $('[data-toggle="dropdown"]').each(function () {
@@ -63,7 +63,10 @@
 
             $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget));
 
-            if (e.isDefaultPrevented()) return;
+            // dropdowns can be manually prevented from closing.
+            // used by special dropdowns, like notification area (should not close when a sidepopup is opened or the user clicks within it)
+            // also used by tours
+            if (e.isDefaultPrevented() || $parent.attr('forceOpen') === 'true') return;
 
             // if the user clicked on a focusable inputfield we focus that instead of the dropdown root element
             var focusableElement = $(document.activeElement).filter('.editable, input[type="text"], input[type="textarea"], input[type="email"]');
@@ -98,13 +101,14 @@
     function toggle(e, f) {
         var $this = $(this),
             $parent = getParent($this),
+            dontProcessOnMobile = $parent.attr('dontProcessOnMobile'),
             isActive = $parent.hasClass('open');
 
         if ($this.is('.disabled, :disabled')) return;
 
         // on a phone detach the menu and attach it to the body again
         // with position fixed. Then it will be a modal menu in fullscreen
-        if (phone) {
+        if (phone && !dontProcessOnMobile) {
             var $ul = $parent.find('ul');
             if ($ul.length > 0) {
                 // menu was not re-attched before
@@ -167,7 +171,7 @@
                 .toggleClass('open')
                 .trigger($.Event('shown.bs.dropdown', relatedTarget));
 
-            if (phone) {
+            if (phone && !dontProcessOnMobile) {
                 ox.disable(true);
                 $('#io-ox-core').addClass('menu-blur');
                 $parent.data('menu').show();
@@ -193,9 +197,14 @@
         if (!isActive) {
             // do not explecitely open on enter or space
             if (!/(13|32)/.test(e.which)) $target.trigger('click');
-            _.defer(function () {
-                if (/(13|32|40)/.test(e.which)) $('a[role^="menuitem"]', $menu).first(':visible').focus();
-                if (e.which === 38) $('a[role^="menuitem"]', $menu).last(':visible').focus();
+            require(['io.ox/core/a11y'], function (a11y) {
+                _.defer(function () {
+                    var items = a11y.getTabbable($menu);
+                    if (/(13|32|40)/.test(e.which)) {
+                        items.first(':visible').focus();
+                    }
+                    if (e.which === 38) items.last(':visible').focus();
+                });
             });
             return;
         }

@@ -509,7 +509,6 @@
             ox.theme = name;
             var path = ox.base + '/apps/themes/' + name + '/',
                 icons = {
-                    favicon: 'favicon.ico',
                     icon57: 'icon57.png',
                     icon72: 'icon72.png',
                     icon76: 'icon76.png',
@@ -520,11 +519,14 @@
                     icon167: 'icon167.png',
                     icon180: 'icon180.png',
                     icon192: 'icon192.png',
-                    win8Icon: 'icon144_win.png'
+                    win8Icon: 'icon144_win.png',
+                    // update favicon last; latest chrome (~64) runs into issues (see bug 57324)
+                    favicon: 'favicon.ico'
                 };
-            for (var i in icons) {
-                $('head #' + i).attr({ href: path + icons[i] }).detach().appendTo('head');
-            }
+            _(icons).each(function (file, id) {
+                // firefox needs detach/append (see bug 25287);
+                $('head #' + id).attr({ href: path + file }).detach().appendTo('head');
+            });
             if (name !== 'login') {
                 themeCommon.path = path + 'common';
                 themeStyle.path = path + 'style';

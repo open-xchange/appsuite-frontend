@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-27 19:41+0200\n"
+"PO-Revision-Date: 2018-03-26 17:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -139,7 +139,7 @@ msgid ""
 "original file stays available."
 msgstr ""
 "Знаете ли вы, что вы можете редактировать документы и таблицы в режиме "
-"онлайн? Drive автоматически обновляет измененные файлы, но благодаря "
+"онлайн? «Диск» автоматически обновляет измененные файлы, но благодаря "
 "возможностям управления версиями вы всегда сможете восстановить исходный "
 "документ."
 
@@ -161,7 +161,7 @@ msgid ""
 "cloud storage account you use to save and sync your files. Simply click on "
 "the appropriate logo to access your existing data."
 msgstr ""
-"Drive позволяет подключаться к другим сервисам хранения данных. Если у вас "
+"«Диск» позволяет подключаться к другим сервисам хранения данных. Если у вас "
 "уже есть учетная запись, просто выберите логотип сервиса для подключения и "
 "синхронизации данных."
 
@@ -219,7 +219,7 @@ msgstr "Введите тему сообщения в одноименном п�
 msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
-msgstr "Как минимум заполните тему, дату начала и окончания встречи. "
+msgstr "Как минимум заполните тему, дату начала и окончания встречи."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
@@ -455,11 +455,11 @@ msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app"
-msgstr "Приложение Drive"
+msgstr "Приложение Диск"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app tour.txt"
-msgstr "Обзор приложения Drive"
+msgstr "Обзор приложения Диск"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -656,13 +656,12 @@ msgstr ""
 "Дополнительно можно вложить документы."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
-msgstr "Чтобы запустить приложение, выберите его имя в левой части меню."
+msgstr ""
+"Чтобы запустить приложение, используйте значки быстрого запуска в левой "
+"части панели меню или выберите нужный элемент в меню запуска приложений."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -697,33 +696,24 @@ msgstr ""
 "«Параметры», затем в левой части окна выберите «Почта»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Чтобы открыть справку текущего приложения, откройте системное меню в правом "
-"верхнем углу и выберите пункт «Справка». Чтобы открыть общую справку, в "
-"верхней части окна выберите «Начальная страница» или «Содержание»."
+"Чтобы открыть справку по приложению, щелкните изображение пользователя в "
+"правом верхнем углу и выберите пункт «Справка». Чтобы открыть полное "
+"руководство, в верхней части окна выберите «Первая страница» или "
+"«Содержание»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Для доступа к параметрам откройте системное меню в правой части панели "
-"навигации и выберите «Параметры»."
+"Чтобы открыть настройки, щелкните изображение пользователя в правом верхнем "
+"углу панели меню и выберите «Настройки»."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -770,15 +760,9 @@ msgstr ""
 "выберите «Выход»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
-msgstr ""
-"Чтобы завершить сеанс, откройте системное меню в правом верхнем углу и "
-"выберите «Выход»."
+msgstr "Чтобы завершить сеанс, нажмите значок выхода в правом верхнем углу."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -805,7 +789,7 @@ msgid ""
 msgstr ""
 "Чтобы загрузить файл в хранилище, нажмите кнопку «Добавить файл» и выберите "
 "локальный файл или, еще проще, перетащите значки файлов с локального "
-"устройства в Drive. Файлы в Drive будут доступны с любых устройств."
+"устройства на Диск. Файлы на Диске будут доступны с любых устройств."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Toolbar"
@@ -851,7 +835,7 @@ msgstr ""
 "познакомит вас с новым сервисом для размещения данных в облаке — вашей "
 "единой точкой доступа к файлам с разных аккаунтов. Добавив файлы в "
 "централизованное хранилище, вы сможете их синхронизировать с другими "
-"устройствами."
+"устройствами.  "
 
 #~ msgid "!!!This file has not been added"
 #~ msgstr "Файл не был добавлен!"
@@ -5827,6 +5811,10 @@ msgstr ""
 #~ msgstr "Чтобы запустить приложение, щелкните на заголовке плитки."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr "Чтобы запустить приложение, выберите его имя в левой части меню."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5844,6 +5832,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Чтобы открыть справку, нажмите значок системы в правом верхнем углу и "
 #~ "выберите «Справка». "
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Чтобы открыть справку текущего приложения, откройте системное меню в "
+#~ "правом верхнем углу и выберите пункт «Справка». Чтобы открыть общую "
+#~ "справку, в верхней части окна выберите «Начальная страница» или "
+#~ "«Содержание»."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Для доступа к параметрам откройте системное меню в правой части панели "
+#~ "навигации и выберите «Параметры»."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

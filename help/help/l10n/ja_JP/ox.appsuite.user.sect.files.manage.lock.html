@@ -1,13 +1,13 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5.9. ファイルのロックおよびロックの解除</title>
+<title>9.6.10. ファイルのロックおよびロックの解除</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. ファイルの整理">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.5.8. ファイルの削除">
-<link rel="next" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.5.10. バージョンの操作">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.6. ファイルおよびフォルダの整理">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.6.9. ファイルまたはフォルダを追加する">
+<link rel="next" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.6.11. バージョンの操作">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -30,27 +30,34 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">ドライブ</span></h1>
-<h2 class="sr-only">ファイルの整理</h2>
+<h2 class="sr-only">ファイルおよびフォルダの整理</h2>
 <div class="sect2" id="ox.appsuite.user.sect.files.manage.lock">
-<div class="titlepage"><div><div><h3 class="title">9.5.9. ファイルのロックおよびロックの解除</h3></div></div></div>
-<a class="indexterm" name="id-1.10.11.14.2"></a><a class="indexterm" name="id-1.10.11.14.3"></a><a class="indexterm" name="id-1.10.11.14.4"></a><a class="indexterm" name="id-1.10.11.14.5"></a><div class="concept">
+<div class="titlepage"><div><div><h3 class="title">9.6.10. ファイルのロックおよびロックの解除</h3></div></div></div>
+<a class="indexterm" name="id-1.10.12.15.2"></a><a class="indexterm" name="id-1.10.12.15.3"></a><a class="indexterm" name="id-1.10.12.15.4"></a><a class="indexterm" name="id-1.10.12.15.5"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.manage.lock"></a><p id="ox.appsuite.user.concept.files.manage.lock">ファイルを編集する際に、そのファイルをロックすることができます。ロックには次のような働きがあります。</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">ファイルが現在編集中で、既に最新版でない可能性があることを他のユーザに通知します。</p></li>
 <li class="listitem"><p role="presentation">編集権限を付与したユーザと共有しているフォルダにファイルがある場合でも、これらのユーザはロックされたファイルを編集できません。</p></li>
+<li class="listitem"><p role="presentation">ご自分が共有ファイルの所有者で、別のユーザがそのファイルをロックした場合、ファイルをアンロックすることができあます。</p></li>
 </ul>
 <p> 
       </p>
 </div>
 <div class="task" id="ox.appsuite.user.task.files.manage.lock">
 <p class="title">ファイルをロックする：</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p role="presentation">表示エリアで、１つまたは複数のファイルを選択します。ツールバーの<span class="guibutton"><strong>アクション</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.manage.lock.toolbar"><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックします。メニューで、<span class="guibutton"><strong>ロック</strong></span>をクリックします。</p></li></ul></div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">表示エリアで、１つまたは複数のファイルを選択します。</p></li>
+<li class="step"><p role="presentation">ツールバーの<span class="guibutton"><strong>追加アクション</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.manage.lock.toolbar"><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックします。メニューで、<span class="guibutton"><strong>ロック</strong></span>をクリックします。</p></li>
+</ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.files.manage.unlock">
 <p class="title">ファイルのロックを解除する：</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p role="presentation">表示エリアで、１つまたは複数のファイルを選択します。ツールバーの<span class="guibutton"><strong>アクション</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.manage.unlock.toolbar"><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックします。メニューで、<span class="guibutton"><strong>ロックを解除</strong></span>をクリックします。</p></li></ul></div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">表示エリアで、１つまたは複数のファイルを選択します。</p></li>
+<li class="step"><p role="presentation">ツールバーの<span class="guibutton"><strong>追加アクション</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.manage.unlock.toolbar"><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックします。メニューで、<span class="guibutton"><strong>ロックを解除</strong></span>をクリックします。</p></li>
+</ol></div>
 </div>
-<p id="ox.appsuite.user.concept.files.manage.lock.parent">親記事：<a class="xref" href="ox.appsuite.user.sect.files.manage.html">ファイルの整理</a></p>
+<p id="ox.appsuite.user.concept.files.manage.lock.parent">親記事：<a class="xref" href="ox.appsuite.user.sect.files.manage.html">ファイルおよびフォルダの整理</a></p>
 </div>
           </div>
         </body>

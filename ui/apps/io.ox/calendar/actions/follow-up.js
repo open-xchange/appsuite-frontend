@@ -21,7 +21,7 @@ define('io.ox/calendar/actions/follow-up', [
 
         // reduce data
         var copy = model.pick(
-            'alarms color class folder location description participants attendees transp summary'.split(' ')
+            'color class folder location description participants attendees transp summary'.split(' ')
         );
 
         // check isBefore once for the startDate; then reuse that information for endDate (see bug 44647)
@@ -39,7 +39,20 @@ define('io.ox/calendar/actions/follow-up', [
                 d.add(1, 'w');
                 isBefore = true;
             }
-            copy[field] = { value: d.format(format), tzid: ref.tzid };
+            copy[field] = { value: d.format(format), tzid: ref.tz() };
+        });
+
+        // clean up attendees (remove confirmation status comments etc)
+        copy.attendees = _(copy.attendees).map(function (attendee) {
+            var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+            // resources are always set to accepted
+            if (temp.cn === 'RESOURCE') {
+                temp.partStat = 'ACCEPTED';
+                if (attendee.comment) temp.comment = attendee.comment;
+            } else {
+                temp.partStat = 'NEEDS-ACTION';
+            }
+            return temp;
         });
 
         // use ox.launch to have an indicator for slow connections

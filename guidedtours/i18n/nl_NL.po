@@ -1,13 +1,13 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
-# Ivar Snaaijer <ivar@bureau-cornavin.com >, 2010, 2011, 2012, 2013, 2016.
-# Reinout van Schouwen <reinout@bureau-cornavin.com>, 2012, 2013, 2014, 2015.
+# Ivar Snaaijer <ivar@workshop-chapina.com >, 2010, 2011, 2012, 2013, 2016, 2018.
+# Reinout van Schouwen <reinout@workshop-chapina.com>, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-28 23:45+0100\n"
-"Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2018-03-29 20:35+0100\n"
+"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
@@ -686,13 +686,12 @@ msgstr ""
 "Deelnemers. U kan documenten toevoegen als bijlage bij de taak."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
-msgstr "Om een app te starten moet u op een item links in de menubalk klikken."
+msgstr ""
+"Om de app te starten gebruikt u de pictogrammen aan de linkerkant van de "
+"menubalk of klik op een item in de startmenu van de app."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -728,34 +727,24 @@ msgstr ""
 "mail aan de linkerkant."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Om de help te tonen, klikt u het Systeem menu pictogram in de "
-"rechterbovenhoek van de menubalk. Selecteer help. Het helpscherm voor de "
-"huidige app wordt getoond. Om de volledige help door te lezen klikt u op "
-"Startpagina of Inhoudsopgave in het bovenste gedeelte."
+"Om help te openen, klikt u op het gebruiker pictogram in de rechterbovenhoek "
+"van de menubalk. Kies help. De helptekst voor de gekozen app wordt getoond. "
+"Om de volledige help door te lezen klikt u op de Startpagina of de "
+"Inhoudsopgave aan de bovenkant van het scherm."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Om de instellingen te openen moet u op het Systeemmenu pictogram klikken in "
-"de rechterbovenhoek van de menubalk. Kies Instellingen."
+"Om de instellingen te openen klikt u op het gebruiker pictogram in de "
+"rechterbovenhoek van de menubalk. Kies Instellingen."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -802,15 +791,11 @@ msgstr ""
 "rechterbovenhoek van de menubalk. Kies Afmelden."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Om af te melden moet u op het Systeemmenu pictogram klikken in de "
-"rechterbovenhoek van de menubalk. Kies Afmelden."
+"Om af te melden klikt u op het afmelden pictogram in de de rechter bovenkant "
+"van de menubalk."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -5529,6 +5514,11 @@ msgstr ""
 #~ msgstr "Om een app te starten, klikt u op de titel van een vlak."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Om een app te starten moet u op een item links in de menubalk klikken."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5546,6 +5536,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Om de hulp te openen moet u op het Systeemmenu pictogram klikken in de "
 #~ "rechterbovenhoek van de menubalk. Kies Help."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Om de help te tonen, klikt u het Systeem menu pictogram in de "
+#~ "rechterbovenhoek van de menubalk. Selecteer help. Het helpscherm voor de "
+#~ "huidige app wordt getoond. Om de volledige help door te lezen klikt u op "
+#~ "Startpagina of Inhoudsopgave in het bovenste gedeelte."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Om de instellingen te openen moet u op het Systeemmenu pictogram klikken "
+#~ "in de rechterbovenhoek van de menubalk. Kies Instellingen."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

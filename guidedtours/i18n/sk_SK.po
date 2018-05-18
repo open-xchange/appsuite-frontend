@@ -2,13 +2,14 @@
 # Copyright (C) 2011 Open-Xchange.
 # This file is distributed under the same license as the Open-Xchange package.
 # Antje Faber, 2013.
+# Ivan Masár <helix84@centrum.sk>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-27 10:33+0200\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2018-05-02 13:07+0200\n"
+"Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -536,9 +537,8 @@ msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
 msgstr ""
-"Tento prehliadka vám stručne predstaví tento produkt. Podrobnejšie "
-"informácie získate v prehliadkach jednotlivých aplikácií alebo v Pomocníkovi "
-"online."
+"Táto prehliadka vám stručne predstaví tento produkt. Podrobnejšie informácie "
+"získate v prehliadkach jednotlivých aplikácií alebo v Pomocníkovi online."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To add further details, click on Expand form."
@@ -669,13 +669,12 @@ msgstr ""
 "pridať dokumenty ako prílohu k úlohe."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
-msgstr "Aplikáciu spustíte kliknutím na položku na ľavej strane panela menu."
+msgstr ""
+"Na spustenie aplikácie použite ikony na rýchle spustenie na ľavej strane "
+"panela menu alebo kliknite na položku v menu spúšťača aplikácie."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -711,33 +710,23 @@ msgstr ""
 "strane."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Ak chcete otvoriť Pomocníka, kliknite na ikonu menu Systém v pravej hornej "
+"Ak chcete otvoriť Pomocníka, kliknite na obrázok používateľa v pravej hornej "
 "časti panela menu. Vyberte položku Pomocník. Zobrazí sa téma Pomocníka pre "
 "aktuálne vybratú aplikáciu. Úplného Pomocníka zobrazíte kliknutím na "
 "tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Nastavenia otvoríte kliknutím na ikonu menu Systém v pravej hornej časti "
+"Nastavenia otvoríte kliknutím na obrázok používateľa v pravej hornej časti "
 "panela menu. Vyberte Nastavenia."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -786,15 +775,10 @@ msgstr ""
 "panela menu. Vyberte Odhlásiť sa."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Odhlásite sa kliknutím na ikonu systémového menu v pravej hornej časti "
-"panela menu. Vyberte Odhlásiť sa."
+"Odhlásite sa kliknutím na ikonu odhlásenia v pravej hornej časti panela menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -9460,6 +9444,11 @@ msgstr ""
 #~ msgstr "Aplikáciu spustíte kliknutím na titulok dlaždice."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Aplikáciu spustíte kliknutím na položku na ľavej strane panela menu."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -9477,6 +9466,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Pomocníka otvoríte kliknutím na ikonu systémového menu v pravej hornej "
 #~ "časti panela menu. Vyberte Pomocník."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Ak chcete otvoriť Pomocníka, kliknite na ikonu menu Systém v pravej "
+#~ "hornej časti panela menu. Vyberte položku Pomocník. Zobrazí sa téma "
+#~ "Pomocníka pre aktuálne vybratú aplikáciu. Úplného Pomocníka zobrazíte "
+#~ "kliknutím na tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Nastavenia otvoríte kliknutím na ikonu menu Systém v pravej hornej časti "
+#~ "panela menu. Vyberte Nastavenia."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

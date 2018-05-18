@@ -19,22 +19,32 @@ define('io.ox/mail/actions/source', [
 
     'use strict';
 
-    function getAuthenticityBlock(data) {
-        if (!data || !(data.spf || data.dkim || data.dmarc)) return;
-        var content = _.chain(['spf', 'dkim', 'dmarc'])
+    function setAuthentification(data, dialog) {
+        // ensure full auth data is available
+        return api.get(_.cid(data)).done(function (data) {
+            data = data.authenticity;
+            if (!data || !(data.spf || data.dkim || data.dmarc)) return;
+
+            var content = _.chain(['spf', 'dkim', 'dmarc'])
                 .filter(function (key) { return data[key]; })
                 .map(function (key) {
                     if (!data[key] || !data[key].reason) return;
                     return key.toUpperCase() + ': ' + data[key].reason;
                 })
                 .value()
-                .join('\n');
-        if (!content.trim()) return;
-        return [
-            $('<h2 id="mail-authenticity-headline">').text(gt('Authentication details')),
-            $('<textarea class="form-control mail-authenticity-view" readonly="readonly" aria-labelledby="mail-authenticity-headline">')
-            .val(content)
-        ];
+                .join('\n')
+                .trim();
+
+            dialog.find('.mail-authenticity-view').val(content);
+            dialog.find('#mail-authenticity-headline, .mail-authenticity-view').toggleClass('hidden', !content);
+        });
+    }
+
+    function setSource(data, dialog) {
+        return api.getSource(data).done(function (src) {
+            dialog.find('textarea.mail-source-view').val(src || '');
+            dialog.find('.modal-body').css({ visibility: 'visible' });
+        });
     }
 
     return function (baton) {
@@ -51,14 +61,16 @@ define('io.ox/mail/actions/source', [
                         if (e.which !== 27) e.stopPropagation();
                     })
                 )
-                .append(getAuthenticityBlock(data.authenticity))
+                .append([
+                    $('<h2 id="mail-authenticity-headline" class="hidden">').text(gt('Authentication details')),
+                    $('<textarea class="form-control mail-authenticity-view hidden" readonly="readonly" aria-labelledby="mail-authenticity-headline">')
+                ])
                 .show(function () {
                     this.busy();
-                    api.getSource(data).done(function (src) {
-                        this.find('textarea.mail-source-view').val(src || '');
-                        this.find('.modal-body').css({ visibility: 'visible' });
-                        this.idle();
-                    }.bind(this));
+                    $.when(
+                        setSource(data, this),
+                        setAuthentification(data, this)
+                    ).done(this.idle.bind(this));
                 });
         });
     };

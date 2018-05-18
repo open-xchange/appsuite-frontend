@@ -25,7 +25,7 @@ define.async('io.ox/core/manifests', [
         // useful for upsell stuff
         getRequirements: function (id) {
             validate();
-            return (this.apps[id] || this.plugins[id] || {}).requires || '';
+            return (this.plugins[id] || {}).requires || '';
         },
 
         loadPluginsFor: function (pointName, cb) {
@@ -93,7 +93,6 @@ define.async('io.ox/core/manifests', [
             validate();
             return this.disabled[id];
         },
-        apps: null,
         plugins: null,
         pluginPoints: null
     };
@@ -113,17 +112,14 @@ define.async('io.ox/core/manifests', [
 
     function process(manifest) {
 
-        // apps don't have a namespace
         if (!manifest.namespace) {
-            // Looks like an app
-            manifestManager.apps[manifest.path] = manifest;
-            manifestManager.disabled[manifest.path] = isDisabled(manifest);
+            if (ox.debug) console.warn('Looks like an app is defined "the old way". Apps can not be defined in manifest files any longer, but should be defined explicitly in code.');
             return;
         }
 
         // take care of plugins:
 
-        // lacks path?
+        // lacks path or namespace?
         if (!manifest.path) {
             console.warn('Cannot process plugin manifest without a path', manifest);
             return;
@@ -151,7 +147,6 @@ define.async('io.ox/core/manifests', [
     var self = {
         manager: manifestManager,
         reset: function () {
-            manifestManager.apps = null;
             manifestManager.plugins = null;
             manifestManager.pluginPoints = null;
             manifestManager.disabled = null;
@@ -160,11 +155,10 @@ define.async('io.ox/core/manifests', [
 
     function validate() {
 
-        if (manifestManager.apps) return;
+        if (manifestManager.plugins) return;
 
         manifestManager.pluginPoints = {};
         manifestManager.plugins = {};
-        manifestManager.apps = {};
         manifestManager.disabled = {};
 
         _(ox.serverConfig.manifests).each(process);

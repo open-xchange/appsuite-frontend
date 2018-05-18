@@ -16,8 +16,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
-    'io.ox/backbone/mini-views/dropdown'
-], function (notifications, gt, ext, mini, Dropdown) {
+    'io.ox/backbone/mini-views/dropdown',
+    'settings!io.ox/core'
+], function (notifications, gt, ext, mini, Dropdown, coreSettings) {
 
     'use strict';
 
@@ -69,7 +70,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     _(options.sort).map(function (value) {
                         if (value === options.skip) return;
                         return $('<li>').append(
-                            $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
+                            $('<a href="#" data-action="change-dropdown-value" role="menuitemradio">').attr('data-value', value).data(options).append(
                                 $.txt(values[value])
                             )
                         );
@@ -250,6 +251,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return indicatorKey;
                 }
 
+                function returnTzOffset(timeValue) {
+                    return moment.tz(timeValue, coreSettings.get('timezone')).format('Z').replace(':', '');
+                }
+
                 if (testsPart.tests && testsPart.tests.length === 0) {
                     this.model.set('test', { id: 'true' });
 
@@ -261,9 +266,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         this.model.set('test', { id: 'true' });
                     }
 
-                    // clear zone option in currentdate condition for single test if no special zone is set
+                    // set zone option in currentdate condition for single test if "original" is set
                     if (testsPart.zone === 'original' && testsPart.id === 'currentdate') {
-                        delete this.model.attributes.test.zone;
+                        this.model.attributes.test.zone = returnTzOffset(testsPart.datevalue[0]);
                     }
                 }
 
@@ -271,13 +276,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     _.each(this.model.attributes.test.tests, function (test, key) {
 
-                        // clear zone option in currentdate condition for multiple tests if no special zone is set
-                        if (test.zone === 'original' && test.id === 'currentdate') self.model.attributes.test.tests[key].zone = null;
+                        // set zone option in currentdate condition for multiple tests if "original" zone is set
+                        if (test.zone === 'original' && test.id === 'currentdate') self.model.attributes.test.tests[key].zone = returnTzOffset(test.datevalue[0]);
 
-                        // clear zone option in currentdate condition for multiple nested tests if no special zone is set
+                        // set zone option in currentdate condition for multiple nested tests if "original" zone is set
                         if (test.tests && !_.isEmpty(test.tests)) {
                             _.each(test.tests, function (nestedTest, nestedKey) {
-                                if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = null;
+                                if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = returnTzOffset(nestedTest.datevalue[0]);
                             });
                         }
                     });
@@ -498,7 +503,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 this.trigger('invalid:values');
                                 return 'values';
                             }
-                            this.trigger('valid::values');
+                            this.trigger('valid:values');
+                        }
+
+                        // check for empty nested tests
+                        if (_.has(attrs, 'tests')) {
+                            if (_.isEmpty(attrs.tests)) {
+                                this.trigger('invalid:tests');
+                                return 'tests';
+                            }
                         }
 
                     }
@@ -558,6 +571,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 if (!cmodel.isValid()) {
                     _.each(cmodel.validationError.split(' '), function (name) {
                         conditionList.find('[data-test-id=' + conditionKey + '] input[name="' + name + '"]').closest('.row').addClass('has-error');
+                        if (name === 'tests') conditionList.find('[data-test-id=' + conditionKey + ']').addClass('has-error');
                     });
                 }
             });

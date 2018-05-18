@@ -128,13 +128,12 @@ define('io.ox/core/boot/form', [
             // remove form for sharing
             $('#io-ox-password-forget-form').remove();
 
-            var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
-            if (!forgotPassword) {
+            if (!sc.forgotPassword) {
                 // either not configured or guest user
                 $('#io-ox-forgot-password').remove();
                 $('#io-ox-login-store').toggleClass('col-sm-6 col-sm-12');
             } else {
-                $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
+                $('#io-ox-forgot-password').find('a').attr('href', sc.forgotPassword);
             }
         }
 
@@ -210,8 +209,8 @@ define('io.ox/core/boot/form', [
         language.render();
 
         // update header
-        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').attr('aria-hidden', false);
-        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0').attr('aria-hidden', false);
+        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').removeAttr('aria-hidden');
+        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0').removeAttr('aria-hidden');
 
         // update footer
         var footer = sc.copyright ? sc.copyright + ' ' : '';
@@ -254,6 +253,7 @@ define('io.ox/core/boot/form', [
         manifests.reset();
 
         return $.when(
+            manifests.manager.loadPluginsFor('signin'),
             // use browser language
             language.setDefaultLanguage()
         )

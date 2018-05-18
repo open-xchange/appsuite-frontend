@@ -32,7 +32,7 @@ define('io.ox/files/actions/favorites', [
             collection,
             module = 'infostore';
 
-        if (element.folder_name) {
+        if (element.folder_id === 'folder') {
             model = model || folderAPI.pool.getModel(element.id);
             module = model.get('module');
             if (!module) {
@@ -46,9 +46,28 @@ define('io.ox/files/actions/favorites', [
         collection = folderAPI.pool.getCollection(collectionId);
         // convert folder model into file model
         model = new api.Model(model.toJSON());
-        model.set('index/' + collectionId, collection.length, { silent: false });
-        collection.add(model);
-        collection.sort();
+
+        if (!collection.fetched || collection.expired) {
+            require(['settings!io.ox/core'], function (Settings) {
+                var settingsId = 'favorites/infostore',
+                    setting = model.id;
+                if (model.isFile()) {
+                    settingsId = 'favoriteFiles/infostore';
+                    setting = {
+                        id: model.attributes.id,
+                        folder_id: model.attributes.folder_id
+                    };
+                }
+                var favoriteSettings = Settings.get(settingsId, []);
+                favoriteSettings.push(setting);
+                Settings.set(settingsId, favoriteSettings);
+            });
+        } else {
+            model.set('index/' + collectionId, collection.length, { silent: false });
+            collection.add(model);
+            collection.sort();
+        }
+        api.propagate('favorite:add', model);
     }
 
     /**
@@ -77,8 +96,30 @@ define('io.ox/files/actions/favorites', [
 
         collectionId = 'virtual/favorites/' + module;
         collection = folderAPI.pool.getCollection(collectionId);
-        model.set('index/' + collectionId, collection.length, { silent: false });
-        collection.remove(model);
+
+        if (!collection.fetched || collection.expired) {
+            require(['settings!io.ox/core'], function (Settings) {
+                var favoriteSettings;
+
+                if (model.isFile()) {
+                    favoriteSettings = Settings.get('favoriteFiles/infostore', []);
+                    favoriteSettings = _(favoriteSettings).filter(function (favorite) {
+                        return favorite.id !== model.get('id');
+                    });
+                } else {
+                    favoriteSettings = Settings.get('favorites/infostore', []);
+                    favoriteSettings = _(favoriteSettings).filter(function (favoriteId) {
+                        return favoriteId !== model.get('id');
+                    });
+                }
+
+                Settings.set('favorites/infostore', favoriteSettings);
+            });
+        } else {
+            model.set('index/' + collectionId, collection.length, { silent: false });
+            collection.remove(model);
+        }
+        api.propagate('favorite:remove', model);
     }
 
     return {

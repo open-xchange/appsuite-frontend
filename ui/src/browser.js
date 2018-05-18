@@ -314,7 +314,7 @@
             // true for undefined, null, empty string
             if (!condition) return true;
             // check condition
-            condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
+            condition = String(condition).replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
                 return browserLC[match] || display[match] || misc[match];
             });

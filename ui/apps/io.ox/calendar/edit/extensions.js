@@ -33,8 +33,9 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'io.ox/calendar/color-picker',
+    'io.ox/backbone/mini-views/dropdown',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker, Dropdown) {
 
     'use strict';
 
@@ -98,8 +99,22 @@ define('io.ox/calendar/edit/extensions', [
                         baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
                         baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
-                    // make sure alarms are correctly created
-                    baton.parentView.alarmsView.updateModel();
+
+
+                    // check if participants inputfield contains a valid email address
+                    if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
+                        baton.model._attendees.add(
+                            new baton.model._attendees.model({
+                                cuType: 'INDIVIDUAL',
+                                cn: mailUtil.parseRecipient(inputfieldVal)[0],
+                                partStat: 'NEEDS-ACTION',
+                                email: mailUtil.parseRecipient(inputfieldVal)[1],
+                                uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1]
+                            })
+                        );
+                    }
+
+                    if (!baton.model.isValid({ isSave: true })) return;
 
                     // save attachment data to model
                     if (attachments.length) {
@@ -116,20 +131,14 @@ define('io.ox/calendar/edit/extensions', [
                         baton.model.set('attachments', attachmentData, { silent: true });
                     }
 
-                    // check if participants inputfield contains a valid email address
-                    if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
-                        baton.model._attendees.add(
-                            new baton.model._attendees.model({
-                                cuType: 'INDIVIDUAL',
-                                cn: mailUtil.parseRecipient(inputfieldVal)[0],
-                                partStat: 'NEEDS-ACTION',
-                                email: mailUtil.parseRecipient(inputfieldVal)[1],
-                                uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1]
-                            })
-                        );
+                    // do some cleanup
+                    // remove groups with entity. Those are not needed, as the attendees are also added individually.
+                    // we only remove them if there where changes to the attendees, as we don't want to create a false dirty status
+                    if (!_.isEqual(baton.app.initialModelData.attendees, baton.model.get('attendees'))) {
+                        baton.model._attendees.remove(baton.model._attendees.filter(function (attendee) {
+                            return attendee.get('cuType') === 'GROUP' && attendee.get('entity');
+                        }));
                     }
-
-                    if (!baton.model.isValid({ isSave: true })) return;
 
                     baton.app.getWindow().busy();
                     // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
@@ -211,8 +220,9 @@ define('io.ox/calendar/edit/extensions', [
                 createFolderText: gt('Create new calendar'),
                 folder: this.model.get('folder'),
 
-                done: function (id) {
+                done: function (id, dialog) {
                     self.model.set('folder', id);
+                    dialog.close();
                 },
 
                 disable: function (data, options) {
@@ -261,7 +271,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.ErrorView({ name: 'summary', model: self.model }).render().$el
                 )
             );
-            input.on('keyup', function () {
+            input.on('keyup change', function () {
                 // update title on keyup
                 self.model.trigger('keyup:summary', $(this).val());
             });
@@ -300,7 +310,7 @@ define('io.ox/calendar/edit/extensions', [
             baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-xs-6',
-                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'startDate',
                 label: gt('Starts on'),
                 timezoneButton: true,
@@ -336,7 +346,7 @@ define('io.ox/calendar/edit/extensions', [
             baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
                 className: 'col-xs-6',
-                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'endDate',
                 label: gt('Ends on'),
                 timezoneButton: true,
@@ -370,12 +380,12 @@ define('io.ox/calendar/edit/extensions', [
         nextTo: 'end-date',
         render: function () {
             var model = this.model,
-                userTimezone = moment().zoneAbbr(),
+                userTimezone = moment().tz(),
                 helpBlock = $('<div class="col-xs-12 help-block">').hide();
 
             function setHint() {
-                var startTimezone = model.getMoment('startDate').zoneAbbr(),
-                    endTimezone = model.getMoment('endDate').zoneAbbr(),
+                var startTimezone = model.getMoment('startDate').tz(),
+                    endTimezone = model.getMoment('endDate').tz(),
                     isVisible = startTimezone !== userTimezone || endTimezone !== userTimezone;
                 helpBlock.toggle(isVisible);
                 if (isVisible) {
@@ -442,20 +452,16 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    // move recurrence view to collapsible area on mobile devices
-    var recurrenceIndex = _.device('smartphone') ? 950 : 650;
     // recurrence
     point.extend({
         id: 'recurrence',
         className: 'col-xs-12',
-        index: recurrenceIndex,
+        index: 650,
         render: function () {
             this.$el.append(new RecurrenceView({
                 model: this.model
             }).render().$el);
         }
-    }, {
-        rowClass: 'collapsed'
     });
 
     // note
@@ -496,160 +502,16 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    // shown as
-    point.extend({
-        id: 'shown_as',
-        className: 'col-md-6',
-        index: 800,
-        render: function () {
-            this.$el.append(
-                new mini.CustomCheckboxView({
-                    label: gt('Show as free'),
-                    name: 'transp',
-                    model: this.model,
-                    customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' },
-                    defaultVal: 'OPAQUE'
-                }).render().$el
-            );
-        }
-    }, {
-        rowClass: 'collapsed form-spacer'
-    });
-
-    //color selection
-    point.extend({
-        id: 'color',
-        index: 900,
-        className: 'col-xs-12 col-sm-6',
-        render: function () {
-
-            if (settings.get('colorScheme') !== 'custom') return;
-
-            var picker = new ColorPicker({
-                model: this.model,
-                attribute: 'color',
-                noColorOption: true,
-                additionalColor: this.model.get('color') ? { value: this.model.get('color') } : undefined
-            });
-
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Color')),
-                    picker.render().$el
-                )
-            );
-
-            function onChangeClass() {
-                var elem = picker.$('.no-color .box');
-                if (calendarUtil.isPrivate(picker.model)) {
-                    elem.css({
-                        'background-color': calendarUtil.PRIVATE_EVENT_COLOR,
-                        color: '#fff'
-                    });
-                } else {
-                    elem.css({
-                        'background-color': '#fff',
-                        color: '#000'
-                    });
-                }
-            }
-            picker.listenTo(this.model, 'change:class', onChangeClass);
-            onChangeClass();
-        }
-    }, {
-        rowClass: 'collapsed'
-    });
-
-    // private checkbox
-    point.extend({
-        id: 'private_flag',
-        index: 1000,
-        className: 'col-sm-5 col-xs-10',
-        render: function () {
-
-            // visibility flag only works in private folders
-            var folder = this.model.get('folder');
-            if (!folderAPI.pool.getModel(folder).is('private')) return;
-
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Visibility')),
-                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
-                        { value: 'PUBLIC', label: gt('Public') },
-                        { value: 'CONFIDENTIAL', label: gt('Private') },
-                        { value: 'PRIVATE', label: gt('Secret') }]
-                    }).render().$el
-                )
-            );
-
-        }
-    }, {
-        nextTo: 'color',
-        rowClass: 'collapsed'
-    });
-
-    // visibility helper
-    point.extend({
-        id: 'visibility-helper',
-        index: 1050,
-        className: 'col-sm-1 col-xs-2',
-        render: function () {
-
-            // visibility flag only works in private folders
-            var folder = this.model.get('folder');
-            if (!folderAPI.pool.getModel(folder).is('private')) return;
-            var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="left" data-content=" ">').append('<i class="fa fa-question-circle">')
-                .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
-                    '<div class="ox-popover-title">' + gt('Public') + '</div>' +
-                    '<div>' + gt('The appointment is visible for all users in shared calendars.') + '</div>' +
-                    '<div class="ox-popover-title">' + gt('Private') + '</div>' +
-                    '<div>' + gt('In shared calendars, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
-                    '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
-                    '<div>' + gt('The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view.') + '</div>' +
-                    '</div></div>')
-                    .popover({
-                        container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'
-                    });
-
-            this.$el.append(
-                $('<fieldset>').append(
-                    helpNode
-                )
-            );
-
-        }
-    }, {
-        nextTo: 'private_flag',
-        rowClass: 'collapsed'
-    });
-
-    // alarms
-    point.extend({
-        id: 'alarms',
-        index: 1100,
-        className: 'col-md-12',
-        render: function () {
-            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView({ model: this.model });
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('Reminder')),
-                    this.baton.parentView.alarmsView.render().$el
-                )
-            );
-        }
-    }, {
-        rowClass: 'collapsed form-spacer'
-    });
-
     // participants container
     point.basicExtend({
         id: 'participants_list',
-        index: 1400,
+        index: 800,
         rowClass: 'collapsed form-spacer',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getAttendees(),
-                baton: baton
+                baton: baton,
+                hideInternalGroups: true
             }).render().$el);
         }
     });
@@ -657,7 +519,7 @@ define('io.ox/calendar/edit/extensions', [
     // add participants view
     point.basicExtend({
         id: 'add-participant',
-        index: 1500,
+        index: 900,
         rowClass: 'collapsed',
         draw: function (baton) {
 
@@ -676,27 +538,139 @@ define('io.ox/calendar/edit/extensions', [
             });
 
             this.append(typeahead.$el);
-            typeahead.render().$el.addClass('col-md-6');
+            typeahead.render().$el.addClass('col-xs-12');
         }
     });
 
-    // email notification
+    // alarms
     point.extend({
-        id: 'notify',
-        index: 1510,
-        className: 'col-md-6',
+        id: 'alarms',
+        index: 1000,
+        className: 'col-xs-12 col-sm-6',
         render: function () {
-            var app = this.baton.app,
-                model = new Backbone.Model({ notification: app.get('sendInternalNotifications') });
-            model.on('change:notification', function () {
-                app.set('sendInternalNotifications', this.get('notification'), { silent: true });
-            });
+            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView.linkView({ model: this.model });
             this.$el.append(
-                new mini.CustomCheckboxView({ label: gt('Notify all participants by email.'), name: 'notification', model: model }).render().$el
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Reminder')),
+                    this.baton.parentView.alarmsView.render().$el
+                )
             );
         }
     }, {
-        nextTo: 'add-participant',
+        rowClass: 'collapsed form-spacer'
+    });
+
+    // private checkbox
+    point.extend({
+        id: 'private_flag',
+        index: 1100,
+        className: 'col-sm-6 col-xs-12',
+        render: function () {
+
+            // visibility flag only works in private folders
+            var folder = this.model.get('folder');
+            if (!folderAPI.pool.getModel(folder).is('private')) return;
+
+            var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="left" data-content=" ">').append('<i class="fa fa-question-circle">')
+                .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
+                    '<div class="ox-popover-title">' + gt('Standard') + '</div>' +
+                    '<div>' + gt('The appointment is visible for all users in shared calendars.') + '</div>' +
+                    '<div class="ox-popover-title">' + gt('Private') + '</div>' +
+                    '<div>' + gt('In shared calendars, the appointment is displayed as a simple time slot for non-attending users.') + '</div>' +
+                    '<div class="ox-popover-title">' + gt('Secret') + '</div>' +
+                    '<div>' + gt('The appointment is not visible to non-attending users in shared calendars at all. The appointment is not considered for conflicts and does not appear in the scheduling view. This option cannot be used, if the appointment blocks resources.') + '</div>' +
+                    '</div></div>')
+                    .popover({
+                        container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'
+                    });
+
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Visibility')).append(helpNode),
+                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
+                        { value: 'PUBLIC', label: gt('Standard') },
+                        { value: 'CONFIDENTIAL', label: gt('Private') },
+                        { value: 'PRIVATE', label: gt('Secret') }]
+                    }).render().$el,
+                    new mini.ErrorView({ name: 'class', model: this.model }).render().$el
+                )
+            );
+
+        }
+    }, {
+        nextTo: 'alarms',
+        rowClass: 'collapsed'
+    });
+
+    //color selection
+    point.extend({
+        id: 'color',
+        index: 1200,
+        className: 'col-xs-12 col-sm-6 color-container',
+        render: function () {
+
+            var self = this,
+                picker = new ColorPicker({
+                    model: this.model,
+                    attribute: 'color',
+                    additionalColor: this.model.get('color') ? { value: this.model.get('color') } : undefined
+                }),
+                toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Appointment color')),
+                menu = $('<ul class="dropdown-menu">'),
+                dropdown = new Dropdown({
+                    smart: false,
+                    className: 'color-picker-dropdown dropup',
+                    $toggle: toggle,
+                    $ul: menu,
+                    margin: 24,
+                    model: this.model,
+                    carret: true,
+                    allowUndefined: true
+                }),
+                pickedColor = $('<span class="picked-color">');
+            dropdown.option('color', undefined, gt('No color'));
+            dropdown.divider();
+            menu.append($('<li role="presentation">').append(picker.render().$el));
+
+            this.$el.append(
+                pickedColor,
+                dropdown.render().$el
+            );
+
+            function onChangeColor() {
+                if (!self.model.get('color')) {
+                    pickedColor.addClass('no-color').css('background-color', '#fff');
+                    picker.$el.find(':checked').prop('checked', false);
+                    return;
+                }
+                pickedColor.removeClass('no-color').css('background-color', self.model.get('color'));
+            }
+
+            this.model.on('change:color', onChangeColor);
+            onChangeColor();
+        }
+    }, {
+        rowClass: 'collapsed'
+    });
+
+    // shown as
+    point.extend({
+        id: 'shown_as',
+        className: 'col-xs-12 col-md-6',
+        index: 1300,
+        render: function () {
+            this.$el.append(
+                new mini.CustomCheckboxView({
+                    label: gt('Show as free'),
+                    name: 'transp',
+                    model: this.model,
+                    customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' },
+                    defaultVal: 'OPAQUE'
+                }).render().$el
+            );
+        }
+    }, {
+        nextTo: 'color',
         rowClass: 'collapsed'
     });
 
@@ -705,7 +679,7 @@ define('io.ox/calendar/edit/extensions', [
     // attachments label
     point.extend({
         id: 'attachments_legend',
-        index: 1600,
+        index: 1400,
         className: 'col-md-12',
         render: function () {
             this.$el.append(
@@ -722,7 +696,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'attachment_list',
         registerAs: 'attachmentList',
         className: 'div',
-        index: 1700,
+        index: 1500,
         noUploadOnSave: true,
         module: 1
     }), {
@@ -731,7 +705,7 @@ define('io.ox/calendar/edit/extensions', [
 
     point.basicExtend({
         id: 'attachments_upload',
-        index: 1800,
+        index: 1600,
         rowClass: 'collapsed',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),
@@ -747,22 +721,21 @@ define('io.ox/calendar/edit/extensions', [
                     //in file picker dialog - other browsers still seem to work)
                     $input[0].value = '';
                     $input.trigger('reset.fileupload');
-                    // look if the quota is exceeded
-                    baton.model.on('invalid:quota_exceeded', function (messages) {
-                        require(['io.ox/core/yell'], function (yell) {
-                            yell('error', messages[0]);
-                        });
-                    });
                     baton.model.validate();
-                    // turn of again to prevent double yells on save
-                    baton.model.off('invalid:quota_exceeded');
                 };
+
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
             $node.append($('<div>').addClass('col-md-12').append($inputWrap));
+
+            baton.model.on('invalid:quota_exceeded', function (messages) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', messages[0]);
+                });
+            });
         }
     });
 
@@ -812,7 +785,6 @@ define('io.ox/calendar/edit/extensions', [
                         var validDate = !(_.isNaN(appointment.startDate) || _.isNaN(appointment.endDate));
 
                         if (validDate) {
-                            e.data.model.set({ allDay: appointment.allDay });
                             e.data.model.set({ startDate: appointment.startDate });
                         }
 

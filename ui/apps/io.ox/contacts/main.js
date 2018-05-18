@@ -415,10 +415,7 @@ define('io.ox/contacts/main', [
                     gt('Back')
                 );
 
-            // TODO restore last folder as starting point
-            app.pages.showPage('listView');
         },
-
         'toolbars-mobile': function () {
 
             if (!_.device('smartphone')) return;
@@ -853,21 +850,28 @@ define('io.ox/contacts/main', [
             });
         },
 
+        'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+        },
+
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
+                return 'ox.appsuite.user.sect.contacts.gui.html';
             };
         },
 
-        'primary-action': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
 
-            app.addPrimaryAction({
-                point: 'io.ox/contacts/sidepanel',
-                label: gt('New contact'),
-                action: 'io.ox/contacts/actions/create',
-                toolbar: 'create'
-            });
-        },
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/contacts/sidepanel',
+        //         label: gt('New contact'),
+        //         action: 'io.ox/contacts/actions/create',
+        //         toolbar: 'create'
+        //     });
+        // },
 
         'sidepanel': function (app) {
 

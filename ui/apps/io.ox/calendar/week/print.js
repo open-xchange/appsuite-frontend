@@ -53,7 +53,7 @@ define('io.ox/calendar/week/print', [
         };
     }
 
-    function getMap(dayStart, minHour, maxHour) {
+    function getMap(dayStart, minHour, maxHour, folders) {
         return function (event, index, list) {
             var parts = [],
                 isAllday = util.isAllday(event),
@@ -68,7 +68,10 @@ define('io.ox/calendar/week/print', [
             if (endRange > maxHour) endRange = maxHour;
 
             _.range(startRange, endRange).forEach(function (hour) {
-                var top = startDate.minutes() + (startRange - hour) * 60;
+                var top = startDate.minutes() + (startRange - hour) * 60,
+                    // if declined use base grey color
+                    color = util.getAppointmentColor(folders[event.get('folder')], event) || '#e8e8e8';
+
                 parts.push({
                     isAllday: isAllday,
                     hour: isAllday ? 'allDay' : hour,
@@ -77,7 +80,9 @@ define('io.ox/calendar/week/print', [
                     top: top,
                     height: Math.min((endRange - startRange) * 60, Math.max(15, endDate.diff(startDate, 'minutes') - (startRange - startDate.hour()) * 60)),
                     time: startDate.format('LT'),
-                    title: event.get('summary')
+                    title: event.get('summary'),
+                    color: util.getForegroundColor(color),
+                    backgroundColor: color
                 });
             });
             return parts;
@@ -93,13 +98,13 @@ define('io.ox/calendar/week/print', [
         open: function (selection, win) {
 
             print.smart({
-                selection: [selection.folders],
+                selection: [_(selection.folders).pluck('id')],
 
                 get: function () {
                     var collection = api.getCollection({
                         start: selection.start,
                         end: selection.end,
-                        folders: selection.folders,
+                        folders: _(selection.folders).pluck('id'),
                         view: 'week'
                     });
                     return collection.sync().then(function () {
@@ -126,7 +131,7 @@ define('io.ox/calendar/week/print', [
                                     .chain()
                                     .filter(getFilter(dayStart, dayEnd))
                                     .sortBy(sortBy)
-                                    .map(getMap(weekStart, minHour, maxHour))
+                                    .map(getMap(weekStart, minHour, maxHour, selection.folders))
                                     .flatten()
                                     .groupBy(groupBy)
                                     .value()

@@ -121,8 +121,9 @@ define('io.ox/core/sub/subscriptions', [
                 var self = this,
                     popup = new dialogs.ModalDialog({
                         async: true,
-                        help: 'ox.appsuite.user.sect.dataorganisation.subscribe.data.html',
-                        width: 570
+                        help: 'ox.appsuite.user.sect.contacts.folder.subscribe.html',
+                        // 130 * 4 + 8 * 3 + 30, Button.width * ButtonsPerRow + Button.rightMargin * (ButtonsPerRow - 1) + leftAndRightPaddingOfDialog
+                        width: 574
                     }),
                     title = gt('Subscribe');
 
@@ -155,6 +156,7 @@ define('io.ox/core/sub/subscriptions', [
                                 this.find('[data-action="add"]').hide();
                                 a11y.getTabbable(popup.getContentNode()).first().focus();
                             });
+                        popup.getBody().css('padding', '15px 11px');
                     } else {
                         popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
                         popup.addPrimaryButton('cancel', gt('Cancel')).show();

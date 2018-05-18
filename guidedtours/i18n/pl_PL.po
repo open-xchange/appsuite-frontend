@@ -1,13 +1,13 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2012.
-# Jolanta <jolanta@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
+# Jolanta Kasprzak-Śliwinska <jolanta@workshop-chapina.com>, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-31 11:48+0100\n"
-"Last-Translator: jolanta <kontekst@kontekst.biz>\n"
-"Language-Team: Polish <>\n"
+"PO-Revision-Date: 2018-03-26 14:24+0200\n"
+"Last-Translator: Jolanta Kasprzak-Śliwinska <jolanta@workshop-chapina.com>\n"
+"Language-Team: Polish <pl@workshop-chapina.com>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -681,14 +681,12 @@ msgstr ""
 "nazwy Uczestnicy. Do zadania możesz także dodać załączniki z dokumentami."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"Aby uruchomić aplikację, kliknij pozycję w lewej górnej części paska menu."
+"Aby uruchomić aplikację, kliknij ikonę szybkiego uruchamiania z lewej strony "
+"paska menu lub kliknij pozycję w menu uruchamiania aplikacji."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -724,34 +722,24 @@ msgstr ""
 "E-mail widoczną z lewej strony."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Aby otworzyć pomoc, kliknij ikonę menu systemowego widoczną w prawym górnym "
-"rogu paska menu. Wybierz polecenie Pomoc. Pojawi się pomoc dotycząca "
-"aktualnie wybranej aplikacji. Aby przeglądać całą pomoc, kliknij Strona "
-"początkowa lub Spis treści w górnej części okna."
+"Aby otworzyć pomoc, kliknij ikonę użytkownika widoczną w prawym górnym rogu "
+"paska menu. Wybierz polecenie Pomoc. Pojawi się pomoc dotycząca aktualnie "
+"wybranej aplikacji. Aby przeglądać całą pomoc, kliknij Strona początkowa lub "
+"Spis treści w górnej części okna."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Aby otworzyć ustawienia, kliknij ikonę menu systemowego z prawej strony u "
-"góry paska menu. Wybierz pozycję Ustawienia. "
+"Aby otworzyć ustawienia, kliknij ikonę użytkownika z prawej strony u góry "
+"paska menu. Wybierz pozycję Ustawienia."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -798,15 +786,11 @@ msgstr ""
 "rogu paska menu. Wybierz polecenie Wyloguj."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Aby się wylogować, kliknij ikonę menu systemowego widoczną w prawym górnym "
-"rogu paska menu. Wybierz polecenie Wyloguj."
+"Aby się wylogować, kliknij ikonę wylogowywania widoczną w prawym górnym rogu "
+"paska menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -5857,6 +5841,11 @@ msgstr ""
 #~ msgstr "Aby uruchomić aplikację, kliknij nagłówek kafelka."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Aby uruchomić aplikację, kliknij pozycję w lewej górnej części paska menu."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5875,6 +5864,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Aby otworzyć pomoc, kliknij ikonę menu systemowego widoczną w prawym "
 #~ "górnym rogu paska menu. Wybierz polecenie Pomoc. "
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Aby otworzyć pomoc, kliknij ikonę menu systemowego widoczną w prawym "
+#~ "górnym rogu paska menu. Wybierz polecenie Pomoc. Pojawi się pomoc "
+#~ "dotycząca aktualnie wybranej aplikacji. Aby przeglądać całą pomoc, "
+#~ "kliknij Strona początkowa lub Spis treści w górnej części okna."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Aby otworzyć ustawienia, kliknij ikonę menu systemowego z prawej strony u "
+#~ "góry paska menu. Wybierz pozycję Ustawienia. "
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

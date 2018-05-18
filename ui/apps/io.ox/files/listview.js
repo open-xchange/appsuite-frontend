@@ -13,37 +13,30 @@
 
 define('io.ox/files/listview', [
     'io.ox/core/tk/list',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'settings!io.ox/core',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ext, extensions, filesAPI, settings) {
+], function (ListView, ContextMenuUtils, ext, extensions, filesAPI, settings) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
 
-    function listViewKeyHandler(e) {
-
-        var shiftF10 = (e.shiftKey && e.which === 121),
-            menuKey = (_.device('windows') && e.which === 93);
-
-        if (shiftF10 || menuKey) {
-            e.preventDefault();
-            this.onContextMenu(e);
-        }
-    }
-
     function onContextMenu(e) {
-
+        ContextMenuUtils.checkKeyboardEvent(e);
         var view = this;
         var app = view.app;
         // the link to render the context menu with it's entries.
         var link = 'io.ox/core/file/contextmenu/default';
         // context menu when clicked below the list.
         // var linkOutsideList = link + '/outsideList'; Disabled for now
+
+        // no contextmenu event on small devices
+        if (_.device('smartphone')) return;
 
         var list = view.selection.get();
         if (!list) return;
@@ -52,9 +45,15 @@ define('io.ox/files/listview', [
         list = _(models).invoke('toJSON');
         // extract single object if length === 1
         var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/ });
 
-        view.contextMenu.showContextMenu(e, baton);
+        return require(['io.ox/core/folder/api']).then(function (folderApi) {
+            var folderId = app.folder.get(),
+                model = folderApi.pool.getModel(folderId);
+
+            var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, insideTrash: folderApi.is('trash', model.toJSON()) });
+
+            view.contextMenu.showContextMenu(e, baton);
+        });
     }
 
     //
@@ -73,8 +72,10 @@ define('io.ox/files/listview', [
             view.$el.addClass('file-list-view');
 
             view.favorites = settings.get('favorites/infostore', []);
+            view.favoriteFiles = settings.get('favoriteFiles/infostore', []);
             settings.on('change:favorites/infostore', function () {
                 view.favorites = settings.get('favorites/infostore', []);
+                view.favoriteFiles = settings.get('favoriteFiles/infostore', []);
             });
         },
 
@@ -91,13 +92,6 @@ define('io.ox/files/listview', [
 
         onContextMenu: onContextMenu
     });
-
-    // extend the onItemKeydown handler from list by additional handlers
-    var orgListHandler = ListView.prototype.onItemKeydown;
-    ListView.prototype.onItemKeydown = function () {
-        orgListHandler.apply(this, arguments);
-        listViewKeyHandler.apply(this, arguments);
-    };
 
     // we redraw only if a relevant attribute changes (to avoid flickering)
     FileListView.relevantAttributes = ['index', 'id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version', 'index/virtual/favorites/infostore'];

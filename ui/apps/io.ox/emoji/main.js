@@ -354,7 +354,7 @@ define('io.ox/emoji/main', [
                     converted = info[5][0];
                 }
                 //convert to PUA or leave as is
-                unicode = converted || unicode || '';
+                unicode = converted || unicode;
                 text = text.replace(node.html(), unicode);
             }
 

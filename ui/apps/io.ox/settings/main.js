@@ -31,7 +31,7 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
+], function (VGrid, apps, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
     'use strict';
 
@@ -53,18 +53,25 @@ define('io.ox/settings/main', [
         index: 100,
         list: function () {
             _.extend(this, {
-                'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.dataorganisation.accounts.html',
-                'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
-                'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.html',
                 'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',
                 'virtual/settings/io.ox/autoforward': 'ox.appsuite.user.sect.email.send.autoforward.html',
+                'virtual/settings/io.ox/core': 'ox.appsuite.user.sect.firststeps.globalsettings.html',
+                'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.dataorganisation.accounts.html',
+                'virtual/settings/security': 'ox.appsuite.user.sect.dataorganisation.security.html',
+                'virtual/settings/sessions': 'ox.appsuite.user.sect.dataorganisation.security.sessions.html',
+                'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.receive.html',
+                'virtual/settings/io.ox/mail/settings/compose': 'ox.appsuite.user.sect.email.settings.compose.html',
+                'virtual/settings/io.ox/mail/settings/signatures': 'ox.appsuite.user.sect.email.send.signatures.html',
                 'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.mailfilter.html',
-                'virtual/settings/io.ox/mail/settings/signatures': 'ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.signatures',
-                'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
                 'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
-                'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.settings.html#ox.appsuite.user.reference.calendar.settings.timezones',
-                'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
+                'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.manage.timezones.html',
+                'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
                 'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.files.settings.html',
+                'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
+                'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
+                'virtual/settings/io.ox/office': 'ox.documents.user.sect.text.settings.html',
+                'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.dataorganisation.subscribe.html',
+                'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.firststeps.clients.html',
                 'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
                 'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html'
             });
@@ -112,7 +119,7 @@ define('io.ox/settings/main', [
         }).scrollable();
 
         // Create extensions for the apps
-        var appsInitialized = $.when(appsAPI.getAppsWithSettings()).done(function (apps) {
+        var appsInitialized = $.when(apps.where({ settings: true })).done(function (apps) {
 
             ext.point('io.ox/settings/pane').extend({
                 id: 'main',
@@ -124,10 +131,10 @@ define('io.ox/settings/main', [
 
             _(apps).each(function (app) {
                 ext.point('io.ox/settings/pane/main').extend(_.extend({}, {
-                    title: app.description,
+                    title: app.get('description'),
                     ref: app.id,
                     index: index
-                }, app));
+                }, app.toJSON()));
                 index += 100;
             });
         });

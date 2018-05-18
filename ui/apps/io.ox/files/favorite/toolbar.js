@@ -26,13 +26,6 @@ define('io.ox/files/favorite/toolbar', [
     // define links for classic toolbar
     var point = ext.point('io.ox/files/favorite/classic-toolbar/links'),
         meta = {
-            'removeFromFavorites': {
-                prio: 'hi',
-                mobile: 'lo',
-                label: gt('Remove from favorites'),
-                drawDisabled: true,
-                ref: 'io.ox/files/favorites/remove'
-            },
             'edit': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -44,7 +37,7 @@ define('io.ox/files/favorite/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
                 label: gt('Share'),
-                ref: 'io.ox/files/dropdown/share',
+                ref: 'io.ox/files/dropdown/shareFavorites',
                 customize: function (baton) {
                     var self = this,
                         $ul = links.DropdownLinks({
@@ -129,9 +122,31 @@ define('io.ox/files/favorite/toolbar', [
                 label: gt('Delete'),
                 ref: 'io.ox/files/actions/delete'
             },
+            'removeFromFavorites': {
+                prio: 'hi',
+                mobile: 'lo',
+                label: gt('Remove from favorites'),
+                ref: 'io.ox/files/favorites/remove',
+                section: 'favorites'
+            },
             //
             // --- LO ----
             //
+            'encrypt': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Encrypt'),
+                ref: 'oxguard/encrypt',
+                section: 'guard'
+            },
+            'showInDrive': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Show in Drive'),
+                drawDisabled: true,
+                ref: 'io.ox/files/actions/show-in-folder',
+                section: 'favorites'
+            },
             'rename': {
                 prio: 'lo',
                 mobile: 'lo',
@@ -167,6 +182,13 @@ define('io.ox/files/favorite/toolbar', [
                 ref: 'io.ox/files/actions/add-to-portal',
                 section: 'share'
             },
+            'move': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Move'),
+                ref: 'io.ox/files/actions/move',
+                section: 'file-op'
+            },
             'copy': {
                 prio: 'lo',
                 mobile: 'lo',
@@ -191,13 +213,15 @@ define('io.ox/files/favorite/toolbar', [
             'back': {
                 prio: 'lo',
                 mobile: 'hi',
-                label: gt('Folder'),
+                label: gt('Folders'),
                 ref: 'io.ox/files/favorite/back'
             }
         };
 
     new actions.Action('io.ox/files/favorite/back', {
-        requires: 'none',
+        requires: function () {
+            return _.device('smartphone');
+        },
         action: function () {
             $('[data-page-id="io.ox/files/main"]').trigger('myfavorites-folder-back');
         }

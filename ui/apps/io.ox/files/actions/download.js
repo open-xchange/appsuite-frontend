@@ -45,5 +45,4 @@ define('io.ox/files/actions/download', [
             notifications.yell('info', gt('Items without a file can not be downloaded.'));
         }
     };
-
 });

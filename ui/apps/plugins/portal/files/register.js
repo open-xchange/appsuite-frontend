@@ -106,7 +106,8 @@ define('plugins/portal/files/register', [
                 require(['io.ox/files/actions'], function () {
                     api.get(e.data.file).then(function (file) {
                         var model = api.pool.get('detail').get(_.cid(file));
-                        var baton = new ext.Baton({ data: e.data.file, model: model, collection: model.collection });
+                        var collection = new Backbone.Collection(model);
+                        var baton = new ext.Baton({ data: e.data.file, model: model, collection: collection });
                         ext.point('io.ox/files/actions/viewer').invoke('action', this, baton);
                     });
                 });

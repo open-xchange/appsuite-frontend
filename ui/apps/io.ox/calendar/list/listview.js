@@ -48,7 +48,6 @@ define('io.ox/calendar/list/listview', [
                     var conf = util.getConfirmationStatus(model);
                     self.addClass(util.getConfirmationClass(conf) + (model.get('hard_conflict') ? ' hardconflict' : ''));
 
-                    if (baton.app.props.get('colorScheme') !== 'custom') return;
                     var color = util.getAppointmentColor(folder, model);
                     colorLabel.css({
                         'background-color': color
@@ -56,7 +55,7 @@ define('io.ox/calendar/list/listview', [
                         'data-folder': util.canAppointmentChangeColor(folder, model) ? folder.id : ''
                     });
 
-                    time.addClass(util.getForegroundColor(color));
+                    time.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
                 });
             }
 
@@ -144,6 +143,7 @@ define('io.ox/calendar/list/listview', [
         draw: function (baton) {
             var collection = baton.listView.collection,
                 m = moment(collection.originalStart).add(collection.range || 0, 'month').startOf('day');
+            if (collection.cid.indexOf('folders') < 0) return;
             this.addClass('empty').text(gt.format(gt('No appointments found until %s'), m.format('LLL')));
             baton.listView.drawTail();
         }
@@ -231,6 +231,11 @@ define('io.ox/calendar/list/listview', [
         empty: function () {
             if (this.tail) this.tail.remove();
             return ListView.prototype.empty.apply(this, arguments);
+        },
+
+        onAdd: function (model) {
+            if (this.$('[data-cid="' + $.escape(model.cid) + '"]').length > 0) return;
+            return ListView.prototype.onAdd.call(this, model);
         },
 
         renderListItem: function (model) {

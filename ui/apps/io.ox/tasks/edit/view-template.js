@@ -411,14 +411,14 @@ define('io.ox/tasks/edit/view-template', [
                     { label: gt.pgettext('Tasks priority', 'Low'), value: 1 },
                     { label: gt.pgettext('Tasks priority', 'Medium'), value: 2 },
                     { label: gt.pgettext('Tasks priority', 'High'), value: 3 }
-                ];
+                ], selectbox;
             this.$el.append(
                 $('<label>').attr({
                     class: 'control-label',
                     for: guid
                 }).text(gt.pgettext('Tasks', 'Priority')),
                 $('<div>').append(
-                    new mini.SelectView({
+                    selectbox = new mini.SelectView({
                         list: options,
                         name: 'priority',
                         model: this.baton.model,
@@ -427,6 +427,9 @@ define('io.ox/tasks/edit/view-template', [
                     }).render().$el
                 )
             );
+            if (!this.baton.model.get('priority')) {
+                selectbox.find('option').first().attr('selected', 'selected');
+            }
         }
     }, { row: '8' });
 

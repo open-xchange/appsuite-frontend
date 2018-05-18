@@ -38,7 +38,8 @@ define('io.ox/calendar/edit/main', [
             userContent: true,
             closable: true,
             floating: !_.device('smartphone'),
-            sendInternalNotifications: true
+            sendInternalNotifications: true,
+            size: 'width-sm'
         });
 
         _.extend(app, {
@@ -52,7 +53,6 @@ define('io.ox/calendar/edit/main', [
             dispose: function () {
                 this.view.off('save', _.bind(this.onSave, this));
                 this.model.off();
-                this.dropZone.remove();
             },
 
             // published via callbacks objects in baton (see below)
@@ -285,7 +285,12 @@ define('io.ox/calendar/edit/main', [
                                 } else {
                                     api.update(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), {
+                                            attachments: self.attachmentsFormData || [],
+                                            sendInternalNotifications: sendNotifications,
+                                            checkConflicts: false,
+                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                        })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
                             });
@@ -303,32 +308,28 @@ define('io.ox/calendar/edit/main', [
                     this.model.trigger('update');
                 }
 
-                // TODO can this be removed?
-                /*if (this.moveAfterSave) {
+                if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
-                        fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
-                        self = this;
-                    //update last modified parameter not to run into a conflict error
-                    this.model.set('last_modified', data.last_modified, { silent: true });
-                    api.move(this.model.toJSON(), this.moveAfterSave).then(function () {
+                        fail = _.bind(this.onError, this);
+                    api.move(this.model, this.moveAfterSave, util.getCurrentRangeOptions()).then(function () {
                         delete self.moveAfterSave;
                         save();
                     }, fail);
-                } else {*/
-                this.model.adjustEndDate = false;
-                this.considerSaved = true;
-                self.getWindow().idle();
-                this.quit();
-                //}
+                } else {
+                    this.model.adjustEndDate = false;
+                    this.considerSaved = true;
+                    self.getWindow().idle();
+                    this.quit();
+                }
             },
 
             onError: function (error) {
 
-                /*// restore state of model attributes for moving
+                // restore state of model attributes for moving
                 if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
                     this.model.set('folder', this.moveAfterSave, { silent: true });
                 }
-                delete this.moveAfterSave;*/
+                delete this.moveAfterSave;
                 this.getWindow().idle();
 
                 // restore times (we add a day before saving allday appointments)
@@ -368,6 +369,7 @@ define('io.ox/calendar/edit/main', [
         });
 
         app.setLauncher(function () {
+            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
             this.dropZone = new dnd.UploadZone({
                 ref: 'io.ox/calendar/edit/dnd/actions'
             }, this);

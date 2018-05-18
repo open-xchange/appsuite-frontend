@@ -16,15 +16,36 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/folder/picker',
     'io.ox/core/notifications',
     'gettext!io.ox/core',
-    'io.ox/mail/api',
-    'io.ox/core/api/account'
-], function (api, picker, notifications, gt, mailAPI, accountAPI) {
+    'io.ox/mail/api'
+], function (api, picker, notifications, gt, mailAPI) {
 
     'use strict';
 
     var virtualMapping = {
         'virtual/myfolders': api.altnamespace ? 'default0' : 'default0' + mailAPI.separator + 'INBOX'
     };
+
+    function canMoveFolder(target, input) {
+        var canMoveState = 'ok';
+
+        _.all(input, function (inputItem) {
+            var currentFolderId = target;
+
+            // do not check files
+            if (inputItem.folder_id !== 'folder') return true;
+            // check if folder is moved into itself
+            if (currentFolderId === inputItem.id) { canMoveState = 'error:self'; return false; }
+
+            // check if folder is moved into own subfolder
+            while (currentFolderId) {
+                if (String(currentFolderId) === '1') return true;
+                if (currentFolderId === inputItem.id) { canMoveState = 'error:subfld'; return false; }
+                // move on level up in the folder tree
+                currentFolderId = api.pool.getModel(currentFolderId).get('folder_id');
+            }
+        });
+        return canMoveState;
+    }
 
     return {
 
@@ -74,6 +95,19 @@ define('io.ox/core/folder/actions/move', [
                 if (!onlyFolder && !api.pool.getModel(target).can('create')) {
                     return notifications.yell('error', gt('You cannot move items to this folder'));
                 }
+
+                if (type === 'move' && options.module === 'infostore') {
+                    switch (canMoveFolder(target, input)) {
+                        case 'ok':
+                            break;
+                        case 'error:self':
+                            return notifications.yell('error', gt('A folder cannot be moved into itself'));
+                        case 'error:subfld':
+                            return notifications.yell('error', gt('A folder cannot be moved to one of its subfolders'));
+                        // no default
+                    }
+                }
+
                 // support for move, moveAll, and copy
                 options.api[type](input, target, options.all).then(
                     function (response) {
@@ -133,8 +167,9 @@ define('io.ox/core/folder/actions/move', [
                 initialize: options.pickerInit || $.noop,
                 close: options.pickerClose || $.noop,
 
-                done: function (id) {
+                done: function (id, dialog) {
                     if (type === 'copy' || id !== current) commit(id);
+                    if (dialog) dialog.close();
                 },
 
                 disable: function (data, options) {
@@ -159,9 +194,14 @@ define('io.ox/core/folder/actions/move', [
             picker({
                 async: true,
                 addClass: 'zero-padding',
-                done: function (target, dialog) {
+                done: function (target, dialog, tree) {
+                    dialog.busy(true);
                     if (!!virtualMapping[target]) target = virtualMapping[target];
-                    api.move(id, target, { enqueue: true }).then(dialog.close, dialog.idle).fail(notifications.yell);
+                    function preselect() {
+                        tree.preselect(target);
+                    }
+                    api.move(id, target, { enqueue: true }).done(dialog.close).fail([dialog.idle, preselect, notifications.yell]);
+
                 },
                 customize: function (baton) {
 
@@ -182,7 +222,6 @@ define('io.ox/core/folder/actions/move', [
                 root: module === 'infostore' ? '9' : '1',
                 title: gt('Move folder') + ': ' + model.get('title'),
                 context: context,
-                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX',
                 persistent: 'folderpopup',
                 settings: settings
             });

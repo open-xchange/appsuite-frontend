@@ -172,7 +172,7 @@ define('io.ox/files/contextmenu', [
         },
         {
             id: 'show-in-folder',
-            index: 1100,
+            index: 1200,
             ref: 'io.ox/files/actions/show-in-folder',
             section: '20',
             label: gt('Show in Drive')
@@ -197,46 +197,46 @@ define('io.ox/files/contextmenu', [
             label: gt('View')
         },
         {
-            id: 'show-in-folder',
-            index: 1100,
-            ref: 'io.ox/files/actions/show-in-folder',
-            section: '20',
-            label: gt('Show in Drive')
-        },
-        {
             id: 'add-favorite',
-            index: 1200,
+            index: 1201,
             ref: 'io.ox/files/favorites/add',
             section: '20',
             label: gt('Add to favorites')
         },
         {
+            id: 'remove-favorite',
+            index: 1201,
+            ref: 'io.ox/files/favorites/remove',
+            section: '20',
+            label: gt('Remove from favorites')
+        },
+        {
+            id: 'show-in-folder',
+            index: 1202,
+            ref: 'io.ox/files/actions/show-in-folder',
+            section: '20',
+            label: gt('Show in Drive')
+        },
+        {
             id: 'download',
-            index: 1100,
+            index: 1250,
             ref: 'io.ox/files/actions/download',
-            section: '10',
+            section: '25',
             label: gt('Download')
         },
         {
             id: 'downloadfolder',
-            index: 1200,
+            index: 1250,
             ref: 'io.ox/files/actions/download-folder',
-            section: '10',
-            label: gt('Download')
-        },
-        {
-            id: 'remove-favorite',
-            index: 1200,
-            ref: 'io.ox/files/favorites/remove',
-            section: '20',
-            label: gt('Remove from favorites')
+            section: '25',
+            label: gt('Download entire folder')
         },
         {
             id: 'invite',
             index: 1300,
             ref: 'io.ox/files/actions/invite',
             section: '30',
-            label: gt('Invite people')
+            label: gt('Permissions / Invite people')
         },
         {
             id: 'getalink',
@@ -352,19 +352,24 @@ define('io.ox/files/contextmenu', [
         },
 
         calcPositionFromEvent: function (e) {
+            var target, top, left, targetOffset;
 
-            // 'fixed' is important for setting the position (see dropdown.js)
-            var target = $(e.currentTarget).data('fixed', true);
-
-            var top = e.pageY - 20;
-            var left = e.pageX + 30;
-
-            if (e.type === 'keydown') {
-                var targetOffset = target.offset();
+            if (e.isKeyboardEvent) {
+                // for keyboardEvent
+                target = $(document.activeElement);
+                targetOffset = target.offset();
                 top = targetOffset.top;
                 // open at the mid from the list
                 left = targetOffset.left + (target.width() / 2);
+            } else {
+                // for mouseEvent
+                target = $(e.currentTarget);
+                top = e.pageY - 20;
+                left = e.pageX + 30;
             }
+
+            // 'fixed' is important for setting the position (see dropdown.js)
+            target.data('fixed', true);
 
             return { target: target, top: top, left: left };
         },
@@ -409,6 +414,13 @@ define('io.ox/files/contextmenu', [
             this.$dropdownMenu.removeAttr('role');
 
             //baton.$el = ul; NOTE: found no case were needed, but when there is a bug with certain actions, check if this helps
+            ext.point(link + '/items').replace({
+                id: 'delete',
+                index: 1900,
+                ref: 'io.ox/files/actions/delete',
+                section: '60',
+                label: baton.insideTrash ? gt('Delete forever') : gt('Delete')
+            });
             var finishedRendering = ext.point(link).invoke('draw', ul, baton);
             return finishedRendering;
         }

@@ -18,6 +18,6 @@ module.exports = actor({
         }, title);
         if (skipRefresh === true) return;
         this.click('#io-ox-refresh-icon');
-        this.waitForStalenessOf('#io-ox-refresh-icon .fa-spin');
+        this.waitForDetached('#io-ox-refresh-icon .fa-spin');
     }
 });

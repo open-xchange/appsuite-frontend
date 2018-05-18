@@ -26,11 +26,11 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
-    'settings!io.ox/core',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
+    'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, coreSettings, attachments, http) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments, http, DOMPurify) {
 
     'use strict';
 
@@ -45,9 +45,9 @@ define('io.ox/contacts/view-detail', [
 
     function getDescription(data) {
 
-        function single(index, value, translated) {
+        function single(index, value) {
             var params = new Array(index);
-            params[index - 1] = translated ? value : value;
+            params[index - 1] = value;
             return { format: '%' + index + '$s', params: params };
         }
 
@@ -75,6 +75,10 @@ define('io.ox/contacts/view-detail', [
 
         return util.getMailFormat(data);
 
+    }
+
+    function hideAddressBook() {
+        return ox.ui.apps._indexOf('io.ox/contacts') < 0;
     }
 
     function createText(format, classes) {
@@ -108,7 +112,7 @@ define('io.ox/contacts/view-detail', [
         id: 'inline-actions',
         draw: function (baton) {
             if (api.looksLikeResource(baton.data)) return;
-            if (coreSettings.get('features/hideAddressBook')) return;
+            if (hideAddressBook()) return;
             ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
         }
     });
@@ -438,15 +442,13 @@ define('io.ox/contacts/view-detail', [
             var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
 
             $(this).append(
+                address,
                 $('<a class="maps-service" target="_blank" rel="noopener">')
                 .attr('href', services[service].url + query)
                 .append(
-                    address,
-                    $('<p>').append(
-                        $('<i class="fa fa-external-link" aria-hidden="true">'),
-                        //#. %1$s is a map service, like "Google Maps"
-                        $.txt(' ' + gt('Open in %1$s', services[service].label))
-                    )
+                    $('<i class="fa fa-external-link" aria-hidden="true">'),
+                    //#. %1$s is a map service, like "Google Maps"
+                    $.txt(' ' + gt('Open in %1$s', services[service].label))
                 )
             );
         };
@@ -498,7 +500,8 @@ define('io.ox/contacts/view-detail', [
                             var url = $.trim(baton.data.url);
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
-                            return $('<a target="_blank" rel="noopener">').attr('href', url).text(url);
+                            var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),
@@ -751,7 +754,7 @@ define('io.ox/contacts/view-detail', [
 
             // this is also used by halo, so we might miss a folder id
             if (!id) return;
-            if (coreSettings.get('features/hideAddressBook')) return;
+            if (hideAddressBook()) return;
 
             // don't show folders path for folder 6 if global address book is disabled
             if (String(id) === '6' && !capabilities.has('gab')) return;

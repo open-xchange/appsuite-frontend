@@ -117,7 +117,7 @@ define('io.ox/mail/detail/content', [
         },
 
         disableLinks: function (baton) {
-            if (!util.isMalicious(baton.data)) return;
+            if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
             $(this).addClass('disable-links').on('click', function () { return false; });
         },
 
@@ -170,7 +170,9 @@ define('io.ox/mail/detail/content', [
             });
         },
 
-        checkLinks: function () {
+        checkLinks: function (baton) {
+            var shareLinkUrl = baton.data.headers['X-Open-Xchange-Share-URL'];
+
             each(this, 'a', function (node) {
                 var link = $(node),
                     href = link.attr('href') || '',
@@ -183,6 +185,8 @@ define('io.ox/mail/detail/content', [
                     // fix ID, i.e. replace the DOT (old notation) by a SLASH (new notation, 7.8.0)
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
                     link.addClass(data.className).data(data);
+                    // if this is a sharing link add the generic deep link class so event handlers work properly and it doesn't get opened in a new tab
+                    if (shareLinkUrl && link.attr('href') === shareLinkUrl) link.addClass('deep-link-app');
                 } else if (href.search(/^\s*mailto:/i) > -1) {
                     // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
@@ -197,6 +201,8 @@ define('io.ox/mail/detail/content', [
                 } else if (link.attr('href')) {
                     // other links
                     link.attr({ 'rel': 'noopener', 'target': '_blank' });
+                    // Replace doublequotes that are actually written as &quot; / Prevents XSS (See Bugs 57692 and 58333)
+                    link.attr('href', link.attr('href').replace(/"/g, '%22'));
                 } else if (!href) {
                     // missing or broken href attribute
                     // remove href as it points to nowhere
@@ -308,7 +314,7 @@ define('io.ox/mail/detail/content', [
         index: 700,
         enabled: settings.get('maliciousCheck'),
         process: function (baton) {
-            if (!util.isMalicious(baton.data)) return;
+            if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
             baton.source = baton.source
                 .replace(/.*/g, extensions.linkDisable)
                 .replace(/.*/g, extensions.linkRemoveRef)
@@ -548,7 +554,7 @@ define('io.ox/mail/detail/content', [
             $(this).hide().prev().show();
             // needed for FF to handle the resize
             _.delay(function () {
-                $(e.delegateTarget).trigger('resize');
+                $(e.delegateTarget).trigger('resize').trigger('toggle-blockquote');
             }, 20);
 
             $(this).remove();
@@ -560,13 +566,13 @@ define('io.ox/mail/detail/content', [
 
         extensions: extensions,
 
-        get: function (data, options) {
+        get: function (data, options, flow) {
 
             if (!data || !data.attachments) {
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }), content,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 

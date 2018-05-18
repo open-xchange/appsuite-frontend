@@ -15,10 +15,11 @@
 define('io.ox/core/tk/list-contextmenu', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/collection',
     'gettext!io.ox/core'
-], function (ext, Dropdown, actions, Collection, gt) {
+], function (ext, Dropdown, ContextMenuUtils, actions, Collection, gt) {
     'use strict';
 
     function renderItems() {
@@ -54,28 +55,20 @@ define('io.ox/core/tk/list-contextmenu', [
         });
     }
 
-    function populate(target, left, top) {
-        this.$dropdownMenu.empty().busy();
-        this.$dropdownMenu.removeAttr('role');
+    function populate() {
         // desktop 'burger' vs. mobile-edit-mode
         var contextmenu = this.dropdown.$toggle.attr('data-contextmenu') || this.selection.get('data-contextmenu');
         // load relevant code on demand
         return ox.manifests.loadPluginsFor(this.contextMenuRef)
-        .then(renderItems.bind(this, contextmenu))
-        .then(function toggleDropdown(renderedExtensions) {
-            if (renderedExtensions.length === 0 || this.contextMenuState === 'aborted') return this.$dropdownMenu.empty();
+            .then(renderItems.bind(this, contextmenu));
+    }
 
-            // a11y: The role menu should only be set if there are menuitems in it
-            this.$dropdownMenu.attr('role', 'menu');
-            this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' });
-            this.dropdown.$toggle = target;
-            this.$dropdownToggle.dropdown('toggle');
-        }.bind(this))
-        .always(function () {
-            this.$dropdownMenu.idle();
-            delete this.contextMenuState;
-            this.stopListening(ox.ui.apps, 'resume add', abortContextmenu);
-        }.bind(this));
+    function toggleDropdown(renderedExtensions) {
+        if (renderedExtensions.length === 0 || this.contextMenuState === 'aborted') return this.$dropdownMenu.empty();
+
+        // a11y: The role menu should only be set if there are menuitems in it
+        this.$dropdownMenu.attr('role', 'menu');
+        this.$dropdownToggle.dropdown('toggle');
     }
 
     function abortContextmenu() {
@@ -87,27 +80,31 @@ define('io.ox/core/tk/list-contextmenu', [
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            var target = $(e.currentTarget).data('fixed', true), top = e.pageY - 20, left = e.pageX + 30;
-            if (target.is('.contextmenu-control')) {
-                top = target.offset().top;
-                left = target.offset().left + 40;
-                target.removeData('fixed');
-            }
-            if (e.type === 'contextmenu' && target.hasClass('contextmenu-control')) {
-                // if the contextmenubutton was rightclicked, the selection doesn't change, so we are allowed to prevent the default in this case (Bug 42409 remains fixed)
-                e.preventDefault();
-            }
-            this.toggleContextMenu(target, top, left);
+
+            this.toggleContextMenu(ContextMenuUtils.positionForEvent(e));
         },
 
-        toggleContextMenu: function (target, top, left) {
+        toggleContextMenu: function (pos) {
             var quitEarly = _.device('smartphone') || this.dropdown && this.dropdown.$el.hasClass('open');
             if (quitEarly) return;
 
             if (!this.dropdown) this.renderContextMenu();
             this.contextMenuState = 'loading';
             this.listenTo(ox.ui.apps, 'resume add', abortContextmenu);
-            return $.when().then(populate.bind(this, target, left, top));
+            this.$dropdownMenu
+                .css({ top: pos.top, left: pos.left, bottom: 'auto' })
+                .empty()
+                .removeAttr('role')
+                .busy();
+            this.dropdown.$toggle = pos.target.data('fixed', true);
+            return $.when()
+                .then(populate.bind(this))
+                .then(toggleDropdown.bind(this))
+                .always(function () {
+                    this.$dropdownMenu.idle();
+                    delete this.contextMenuState;
+                    this.stopListening(ox.ui.apps, 'resume add', abortContextmenu);
+                }.bind(this));
         },
 
         renderContextMenu: function () {

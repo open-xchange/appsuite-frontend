@@ -119,12 +119,14 @@ define('io.ox/calendar/actions', [
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (distlist) {
-                ox.load(['io.ox/contacts/distrib/main', 'settings!io.ox/core']).done(function (m, coreSettings) {
-                    m.getApp().launch().done(function () {
-                        this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
-                        // trigger an empty remove just to get rid of unnecessary values in contacts
-                        if (!_.isEmpty(distlist)) this.view.baton.member.trigger('remove', {}, this.view.baton.member);
-                    });
+                require(['settings!io.ox/core'], function (coreSettings) {
+                    ox.launch('io.ox/contacts/distrib/main')
+                        .done(function () {
+                            this.create(coreSettings.get('folder/contacts'), {
+                                distribution_list: distlist,
+                                display_name: baton.data.summary
+                            });
+                        });
                 });
             });
         }
@@ -132,21 +134,11 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/edit', {
         requires: function (e) {
-            var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
-                allowed = e.collection.has('one', 'modify'),
-                // only organizer is allowed to make changes. Attendees are only allowed to change their personal alarms or confirmation state
-                isOrganizer = exists && util.hasFlag(e.baton.data, 'organizer');
+            var exists = e.baton && e.baton.data && e.baton.data.id !== undefined,
+                allowed = e.collection.has('one', 'modify');
+            if (!exists || !allowed) return false;
 
-            if (allowed) {
-                // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
-                if (!e.baton.data.folder) {
-                    // you need to have a folder id to edit
-                    allowed = false;
-                }
-            }
-            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return allowed && exists && isBossy && isOrganizer;
-            });
+            return util.allowedToEdit(e.baton.data);
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/edit']).done(function (action) {
@@ -157,9 +149,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
-            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return e.collection.has('delete') && isBossy;
-            });
+            return e.collection.has('delete') && (util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'attendee'));
         },
         multiple: function (list) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
@@ -183,11 +173,7 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
 
             function cont(model) {
-                return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
-                    var attendees = model.get('attendees') || [],
-                        iamUser = !!_(attendees).findWhere({ entity: ox.user_id });
-                    return e.collection.has('one') && iamUser && isBossy;
-                });
+                return e.collection.has('one') && util.hasFlag(model, 'attendee');
             }
 
             var model = e.baton.model,
@@ -297,10 +283,8 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/move', {
         requires: function (e) {
-            return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                var isSeries = !!e.baton.data.recurrenceId;
-                return e.collection.has('some', 'delete') && isBossy && !isSeries;
-            });
+            var isSeries = !!e.baton.data.recurrenceId;
+            return e.collection.has('some', 'delete') && util.hasFlag(e.baton.data, 'organizer') && !isSeries;
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
@@ -319,7 +303,8 @@ define('io.ox/calendar/actions', [
                     },
                     target: baton.target,
                     title: gt('Move'),
-                    type: 'move'
+                    type: 'move',
+                    all: util.getCurrentRangeOptions()
                 });
             });
         }
@@ -372,6 +357,24 @@ define('io.ox/calendar/actions', [
     });
 
     // Actions mobile
+    new Action('io.ox/calendar/actions/monthview/showNext', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth('next');
+        }
+    });
+
+    new Action('io.ox/calendar/actions/monthview/showPrevious', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth('prev');
+        }
+    });
+
     new Action('io.ox/calendar/actions/dayview/showNext', {
         requires: true,
         action: function (baton) {
@@ -485,16 +488,16 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
-            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'ACCEPTED';
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
+            return util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted');
         },
         action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
-            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'DECLINED';
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
+            return util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined');
         },
         action: acceptDecline
     });

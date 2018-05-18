@@ -72,7 +72,6 @@ define('io.ox/core/folder/actions/imap-subscription', [
         }
 
         picker({
-
             async: true,
             all: true,
             addClass: 'zero-padding subscribe-imap-folder',
@@ -82,8 +81,9 @@ define('io.ox/core/folder/actions/imap-subscription', [
             module: 'mail',
             selection: false,
             title: gt('Subscribe to IMAP folders'),
+            help: 'ox.appsuite.user.sect.email.teamwork.subscribe.html',
 
-            always: function () {
+            always: function (dialog) {
 
                 http.pause();
 
@@ -118,6 +118,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
                 http.resume().done(function () {
                     // refresh all virtual folders to be safe
                     api.virtual.refresh();
+                    dialog.close();
                 });
             },
 

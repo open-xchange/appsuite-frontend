@@ -65,7 +65,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
 
             var halo = {
                 // alternative fields to get the name
-                name: options.full_name || options.display_name || options.name || options.cn,
+                name: options.full_name || options.display_name || options.name || options.cn || options.email,
                 // halo view looks for email1
                 email: options.email,
                 email1: options.email,
@@ -234,12 +234,14 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
             return ox.abs + ox.root + '/#!&app=' + app + folder + id;
         },
 
-        // recognize addresses in a string
+        // recognize addresses in a string (see bug 49937)
         // delimiters: comma, semi-colon, tab, newline, space; ignores delimiters in quotes
-        // display name can contain a-z plus \u00C0-\u024F, i.e. Latin supplement, Latin Extended-A, and Latin Extended-B
+        // display name can contain a-z plus \u00C0-\u024F, i.e. Latin supplement, Latin Extended-A, and Latin Extended-B (see OXUI-297)
         // the local part is either a quoted string or latin (see above) plus . ! # $ % & ' * + - / = ? ^ _ ` { | } ~
         // returns array of addresses
         getAddresses: function (str) {
+            // cover simple case separately; simple string without comma, semi-colon or white-space (see bug 57870)
+            if (/^[^,;\s]+$/.test(str)) return [str];
             var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');

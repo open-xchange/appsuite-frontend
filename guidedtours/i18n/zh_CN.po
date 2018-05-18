@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-27 20:03+1000\n"
+"PO-Revision-Date: 2018-04-02 02:27+0800\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -612,13 +612,12 @@ msgstr ""
 "务成附件。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
-msgstr "要执行一个应用程序，请单击菜单条左边的一个项目。"
+msgstr ""
+"要启动应用程序，请使用菜单栏左侧的快速启动图标，或点击应用程序启动器菜单中的"
+"条目。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -649,30 +648,20 @@ msgstr ""
 "子邮件。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应用"
-"程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
+"要打开帮助，单击在菜单条右上方上的用户图像。选择帮助，会显示当前选择应用程序"
+"的帮助。要浏览完整帮助，单击在窗口上部的开始页或目录。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
-msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
+msgstr "要打开设置，单击菜单条右上方的用户图像。选择设置。"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -714,13 +703,9 @@ msgid ""
 msgstr "要注销，请单击菜单条右上方的系统菜单图标。选择注销。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
-msgstr "要注销，请单击菜单条右上方的系统菜单图标。选择注销。"
+msgstr "要注销, 请单击菜单栏右上角的注销图标。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -7340,6 +7325,10 @@ msgstr ""
 #~ msgstr "要执行一个应用程序，请单击一个方块的标头。"
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr "要执行一个应用程序，请单击菜单条左边的一个项目。"
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -7353,6 +7342,20 @@ msgstr ""
 #~ "To open the help, click the System menu icon on the upper right side of "
 #~ "the menu bar. Select Help."
 #~ msgstr "要打开帮助，请单击菜单条右上方的系统菜单图标。选择帮助。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应"
+#~ "用程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

@@ -35,7 +35,7 @@ define('io.ox/tasks/view-grid-template', [
                     $('<div class="second-row">').append(
                         status = $('<span class="status" aria-hidden="true">'),
                         user = $('<i class="participants fa fa-user" aria-hidden="true">').hide(),
-                        progress = $('<div class="progress" aria-hidden="true"><div class="progress-bar" style="width: 0%;"></div></div>').hide()
+                        progress = $('<div class="progress" aria-hidden="true" style="background-size:0%"></div>').hide()
                     )
                 );
 
@@ -83,12 +83,12 @@ define('io.ox/tasks/view-grid-template', [
                 }
 
                 if (data.percent_completed > 0 && data.percent_completed < 100) {
-                    fields.progress.find('.progress-bar').css('width', data.percent_completed + '%').end().show();
+                    fields.progress.css('background-size', data.percent_completed + '%').show();
                     //#. %1$s how much of a task is completed in percent, values from 0-100
                     //#, c-format
                     ariaLabel = ariaLabel + ', ' + gt('Progress %1$s %', data.percent_completed);
                 } else {
-                    fields.progress.find('.progress-bar').css('width', 0 + '%').end().hide();
+                    fields.progress.css('background-size', 0 + '%').hide();
                 }
 
                 this.attr({

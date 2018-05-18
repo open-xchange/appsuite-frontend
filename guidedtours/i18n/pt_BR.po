@@ -1,20 +1,20 @@
-# Luiz Fernando Ranghetti <luiz@bureau-cornavin.com>, 2013, 2014.
-# Aracele Torres <aracele@bureau-cornavin.com>, 2013, 2014, 2016.
-# Bianca Oliveira <bianca@bureau-cornavin.com>, 2013, 2014, 2015.
+# Luiz Fernando Ranghetti <luiz@workshop-chapina.com>, 2013, 2014.
+# Aracele Torres <aracele@workshop-chapina.com>, 2013, 2014, 2016.
+# Bianca Oliveira <bianca@workshop-chapina.com>, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-27 12:05-0200\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
-"Language-Team: Portuguese <>\n"
+"PO-Revision-Date: 2018-03-27 13:55-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
+"Language-Team: Portuguese <pt@workshop-chapina.com>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -487,7 +487,7 @@ msgid ""
 msgstr ""
 "A Visualização em Lista exibe uma lista dos compromissos na pasta atual. Se "
 "clicar em um compromisso, os dados do compromisso e algumas funções são "
-"exibidas na Visualização de detalhes"
+"exibidas na Visualização de detalhes."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -617,7 +617,7 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr "Para criar um compromisso, clique em Criar no canto inferior esquerdo."
+msgstr "Para criar um compromisso, clique em Criar no lado inferior esquerdo."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
@@ -684,15 +684,13 @@ msgstr ""
 "abaixo. Você pode adicionar documentos como anexo para a tarefa."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"Para iniciar um aplicativo, clique em uma entrada no canto superior esquerdo "
-"na barra de menu."
+"Para iniciar um aplicativo, use os ícones de início rápido no lado esquerdo "
+"da barra de menu ou clique em uma entrada dentro do menu do aplicativo "
+"lançador."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -728,34 +726,24 @@ msgstr ""
 "mail na parte esquerda."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Para abrir a ajuda, clique no ícone do Menu do sistema no canto superior "
-"direito da barra de menu. Selecione Ajuda. A ajuda para o aplicativo "
-"atualmente selecionado é exibida. Para navegar na ajuda completa, clique em "
-"Página inicial ou Tabela de conteúdo na parte superior da janela."
+"Para abrir a ajuda, clique na imagem do usuário no lado superior direito da "
+"barra de menu. Selecione Ajuda. A ajuda para o aplicativo atualmente "
+"selecionado é exibida. Para navegar em toda a ajuda, clique na Página "
+"inicial ou Tabela de conteúdos na parte superior da janela."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Para abrir as configurações, clique no ícone do menu Sistema no canto "
-"superior direito da barra de menu. Selecione Configurações."
+"Para abrir as configurações, clique na imagem do usuário no lado superior "
+"direito da barra de menu. Selecione Configurações."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -804,15 +792,11 @@ msgstr ""
 "direito ba barra de menu. Selecione Encerrar sessão."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Para encerrar a sessão, clique no ícone Sistema do menu no lado superior "
-"direito ba barra de menu. Selecione Encerrar sessão."
+"Para encerrar a sessão, clique no ícone de encerrar sessão no lado superior "
+"direito da barra de menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -885,10 +869,10 @@ msgid ""
 "files, share them and synchronize them with different devices.  "
 msgstr ""
 "Bem-vindo ao seu aplicativo de armazenamento em nuvem. Este passeio guiado "
-"irá apresentá-loa sua nova solução de armazenamento online - seu ponto de "
-"acesso único para os arquivos armazenadosonline de todas as suas contas. "
-"Este é o lugar onde você pode carregar e salvar seusarquivos, compartilhá-"
-"los e sincroniza-los com diferentes dispositivos."
+"irá apresentá-lo a sua nova solução de armazenamento online - seu ponto de "
+"acesso único para os arquivos armazenados online de todas as suas contas. "
+"Este é o lugar onde você pode carregar e salvar seus arquivos, compartilhá-"
+"los e sincroniza-los com diferentes dispositivos.  "
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -1044,6 +1028,12 @@ msgstr ""
 #~ msgstr "Para criar a tarefa, clique em Criar no lado superior direito."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Para iniciar um aplicativo, clique em uma entrada no canto superior "
+#~ "esquerdo na barra de menu."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -1053,6 +1043,24 @@ msgstr ""
 #~ "lado superior direito da barra de menu. Selecione Configurações. Clique "
 #~ "em E-mail no lado esquerdo. Para exibir todas as configurações, ative as "
 #~ "Configurações Avançadas no botão do lado inferior esquerdo"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Para abrir a ajuda, clique no ícone do Menu do sistema no canto superior "
+#~ "direito da barra de menu. Selecione Ajuda. A ajuda para o aplicativo "
+#~ "atualmente selecionado é exibida. Para navegar na ajuda completa, clique "
+#~ "em Página inicial ou Tabela de conteúdo na parte superior da janela."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Para abrir as configurações, clique no ícone do menu Sistema no canto "
+#~ "superior direito da barra de menu. Selecione Configurações."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

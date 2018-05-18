@@ -77,8 +77,21 @@
     .progress {
         height: 13px;
         margin: 0 1em 0 0;
+        background-color: #eee;
+        border-radius: 3px;
+        border: 1px solid #fff;
+        background-position: -1px 0;
+        background-repeat: repeat-y;
+        background-size: 0%;
+        overflow: hidden;
+        // The background image is an opaque #283F73 1px png
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPUsC/+DwADTAHbRU1B9QAAAABJRU5ErkJggg==);
+        transition: background-size 0.6s ease;
     }
 }
+
+.vgrid-cell.tasks.selected .progress { border: 1px solid #ddd; }
+.has-focus .vgrid-cell.tasks.selected .progress { border: 1px solid #283f73; }
 
 .tasks-detailview {
     .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
@@ -166,6 +179,16 @@
         text-align: left;
         padding-top: 8px;
         line-height: 24px;
+    }
+
+    @media (min-width: 768px) {
+        .dl-horizontal dt.detail-label {
+            width: 220px;
+        }
+
+        .dl-horizontal dd {
+            margin-left: 240px;
+        }
     }
 
     .detail-value {

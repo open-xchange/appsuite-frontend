@@ -161,7 +161,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/folder/favorites.js',
                             'apps/io.ox/core/folder/view.js',
                             'apps/io.ox/core/folder/extensions.js',
-                            'apps/io.ox/core/folder/folder-color.js',
                             // defaults
                             'apps/io.ox/core/settings/defaults.js',
                             'apps/io.ox/core/settingOptions/settings/defaults.js',
@@ -183,13 +182,12 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/tk/selection.js',
                             'apps/io.ox/core/tk/visibility-api-util.js',
                             'apps/io.ox/core/desktopNotifications.js',
-                            'apps/io.ox/core/notifications/badgeview.js',
                             // core
                             'apps/io.ox/core/main/addLauncher.js',
                             'apps/io.ox/core/main/appcontrol.js',
                             'apps/io.ox/core/main/autologout.js',
                             'apps/io.ox/core/main/debug.js',
-                            'apps/io.ox/core/main/i18n.js',
+                            'apps/io.ox/core/main/apps.js',
                             'apps/io.ox/core/main/logout.js',
                             'apps/io.ox/core/main/offline.js',
                             'apps/io.ox/core/main/refresh.js',

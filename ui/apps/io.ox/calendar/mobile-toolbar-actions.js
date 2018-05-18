@@ -58,6 +58,25 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 ref: 'io.ox/calendar/actions/switch-to-month-view',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
+            'nextMonth': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show next month'),
+                icon: 'fa fa-chevron-right',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/monthview/showNext',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+
+            },
+            'prevMonth': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show previous month'),
+                icon: 'fa fa-chevron-left',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/monthview/showPrevious',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
             'nextDay': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -147,7 +166,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }));
 
     // add other actions
-    addAction(pMonth, ['create', 'listView', 'today-month']);
+    addAction(pMonth, ['create', 'listView', 'prevMonth', 'today-month', 'nextMonth']);
     addAction(pWeek, ['create', 'listView', 'prevDay', 'today', 'nextDay']);
     addAction(pList, ['calendarView']);
     addAction(multiInlineActions, ['move', 'delete']);

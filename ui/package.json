@@ -1,7 +1,7 @@
 {
   "name": "open-xchange-appsuite",
   "description": "",
-  "version": "7.10.0-3",
+  "version": "7.10.0-5",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -25,11 +25,12 @@
     "grunt-eslint": "^20.0.0",
     "grunt-newer": "^1.3.0",
     "grunt-require-gettext": "^0.8.1",
-    "open-xchange-shared-grunt-config": "^0.15.0-pre2"
+    "open-xchange-shared-grunt-config": "^0.15.0-pre2",
+    "webpack": "^0.9.0"
   },
   "devDependencies": {
     "@open-xchange/codecept-helper": "0.0.4",
-    "appserver": "^0.7.0-pre8",
+    "appserver": "^0.7.0-pre9",
     "chai": "^4.0.2",
     "codeceptjs": "^1.1.6",
     "eslint-plugin-codeceptjs": "^0.4.0",
@@ -57,11 +58,11 @@
   "dependencies": {
     "@open-xchange/hopscotch": "0.0.1",
     "@open-xchange/moment-interval": "0.0.1",
-    "@open-xchange/tinymce": "^4.6.3-6",
+    "@open-xchange/tinymce": "4.6.3-8",
     "backbone": "1.3.3",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
-    "blankshield": "0.6.1",
+    "blankshield": "0.6.2",
     "bootstrap": "3.3.7",
     "bootstrap-datepicker": "git://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
     "bootstrap-tokenfield": "git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07",
@@ -69,7 +70,7 @@
     "clipboard": "1.7.1",
     "crypto-js": "3.1.9-1",
     "croppie": "2.5.0",
-    "dompurify": "^1.0.0",
+    "dompurify": "1.0.3",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
     "jquery-touch-events": "git://github.com/benmajor/jQuery-Touch-Events.git#1.0.9",
@@ -77,11 +78,10 @@
     "mobiscroll": "git://github.com/acidb/mobiscroll.git#v2.17.3",
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",
-    "open-sans-fontface": "1.4.0",
-    "pdfjs-dist": "1.7.225",
+    "pdfjs-dist": "1.9.426",
     "requirejs": "2.3.3",
     "resize-polyfill": "1.1.1",
-    "socket.io-client": "^2.0.3",
+    "socket.io-client": "2.0.3",
     "swiper": "3.4.2",
     "tinymce": "4.6.7",
     "typeahead.js": "0.10.5",

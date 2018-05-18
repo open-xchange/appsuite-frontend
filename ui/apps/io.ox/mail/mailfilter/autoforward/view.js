@@ -49,12 +49,32 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             model: data.model,
             point: POINT,
             title: gt('Auto forward'),
+            help: 'ox.appsuite.user.sect.email.send.autoforward.html',
             width: 640
         })
         .inject({
             updateActive: function () {
                 var enabled = this.model.get('active');
                 this.$body.toggleClass('disabled', !enabled).find(':input').prop('disabled', !enabled);
+            },
+            manageSaveButton: function () {
+                var saveButton = _.first(this.$footer.find('[data-action="save"]')),
+                    field = _.first(this.$body.find('input[name="to"]')),
+                    self = this;
+
+                function setStatus() {
+                    $(saveButton).attr('disabled', ($(field).val().trim() === '' && !self.model.get('id')) || ($(field).val().trim() === '' && self.model.get('active')));
+                }
+
+                if ($(field).val().trim() === '' && !this.model.get('active')) $(saveButton).attr('disabled', true);
+
+                $(field).on('keyup', function () {
+                    setStatus();
+                });
+
+                this.model.on('change:active', function () {
+                    setStatus();
+                });
             }
         })
         .build(function () {
@@ -65,6 +85,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
         .addButton({ label: gt('Apply changes'), action: 'save' })
         .on('open', function () {
             this.updateActive();
+            this.manageSaveButton();
         })
         .on('save', function () {
             this.model.save().done(this.close).fail(this.idle).fail(yell);

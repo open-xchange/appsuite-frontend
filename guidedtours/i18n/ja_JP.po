@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-09-30 14:34+0100\n"
+"PO-Revision-Date: 2018-03-26 17:13+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.7.7\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -42,17 +42,17 @@ msgid ""
 "and edit files. Or just get a link to let others view and download your "
 "files. You can use an expiration date and password protection if you like."
 msgstr ""
-"ファイルやフォルダーの共有方法を２つの方法から選びます。アクセス権限を管理"
-"し、宛先がファイルの作成や編集をできるようにしたい場合は、出席依頼を使用しま"
-"す。または、リンクで他の人にファイルを表示したり、ダウンロードできるようにし"
-"ます。利用期限やパスワード保護を使用することもできます。"
+"ファイルやフォルダの共有方法を２つの方法から選びます。アクセス権限を管理し、"
+"宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用します。また"
+"は、リンクで他の人にファイルを表示したり、ダウンロードできるようにします。利"
+"用期限やパスワード保護を使用することもできます。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
 "Click on a letter on the left side of the navigation bar in order to display "
 "the corresponding contacts from the selected address book."
 msgstr ""
-"選択したアドレス帳にある連絡先を表示するには、ナビゲーション バーの左側にある"
+"選択したアドレス帳にある連絡先を表示するには、ナビゲーションバーの左側にある"
 "該当する文字をクリックします。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -81,7 +81,7 @@ msgstr "新規メールの作成"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
-msgstr "新規アポイントの作成"
+msgstr "新規予定の作成"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Creating a new contact"
@@ -97,15 +97,15 @@ msgstr "新規アイテムの作成"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating recurring appointments"
-msgstr "定期的なアポイントの作成"
+msgstr "繰り返しの予定の作成"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating recurring tasks"
-msgstr "定期的なアポイントの作成"
+msgstr "繰り返しの仕事の作成"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating the appointment"
-msgstr "アポイントの作成"
+msgstr "予定の作成"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating the task"
@@ -137,8 +137,8 @@ msgid ""
 "original file stays available."
 msgstr ""
 "テキストドキュメントやスプレッドシートをオンラインで編集できると知っていまし"
-"たか？Drive が自動で編集されたファイルをアップロードしますが、バージョン設定"
-"のおかげで元のファイルも利用可能です。"
+"たか？ドライブが自動で編集されたファイルを更新しますが、バージョン管理のおか"
+"げで元のファイルも利用可能です。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
@@ -158,9 +158,9 @@ msgid ""
 "cloud storage account you use to save and sync your files. Simply click on "
 "the appropriate logo to access your existing data."
 msgstr ""
-"ファイルの保存や同期用にすでにクラウドストレージをお持ちの場合、Drive によっ"
-"て別のストレージソリューションに接続ができます。適切のロゴをクリックするだけ"
-"で、既存のデータにアイクセスできます。"
+"ファイルの保存や同期用にすでにクラウドストレージをお持ちの場合、ドライブに"
+"よって別のストレージソリューションに接続ができます。適切のロゴをクリックする"
+"だけで、既存のデータにアイクセスできます。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -194,9 +194,9 @@ msgid ""
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"本文エリアにメールの本文を入力します。テキストフォーマットがオプションでHTML"
-"に設定されると、メールテキストのフォーマットができます。テキストをフォーマッ"
-"トするには、テキスト部分を選択して、書式バーのアイコンをクリックします。"
+"本文エリアにメールの本文を入力します。テキスト形式がオプションでHTMLに設定さ"
+"れると、メールテキストの形式ができます。テキストをフォーマットするには、テキ"
+"スト部分を選択して、書式バーのアイコンをクリックします。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -217,8 +217,7 @@ msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
 msgstr ""
-"件名、アポイントの開始日時と終了日時を入力します。その他の情報はオプションで"
-"す。"
+"件名、予定の開始日時と終了日時を入力します。その他の情報はオプションです。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
@@ -234,7 +233,7 @@ msgstr "メールの本文の入力"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
-msgstr "アポイントのデータの入力"
+msgstr "予定のデータの入力"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -254,11 +253,11 @@ msgstr "ファイルの詳細"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder content"
-msgstr "フォルダコンテンツ"
+msgstr "フォルダ内容"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
-msgstr "フォルダ ツリー"
+msgstr "フォルダツリー"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -269,7 +268,7 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
-msgstr "アポイントには、添付ファイルを追加することができます。"
+msgstr "予定には、添付ファイルを追加することができます。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Further functions"
@@ -328,7 +327,7 @@ msgstr "このエリアには、添付ファイルの追加などの詳細機能
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
-msgstr "アポイントへの出席依頼"
+msgstr "予定への招待"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Launching an app"
@@ -336,7 +335,7 @@ msgstr "アプリケーションの起動"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Navigation bar"
-msgstr "ナビゲーション バー"
+msgstr "ナビゲーションバー"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -347,7 +346,7 @@ msgid ""
 msgstr ""
 "左側にフォルダツリーが表示されます。フォルダ構造が表示され、特定のフォルダや"
 "サブフォルダ間を移動することができます。ドキュメントフォルダ、音楽フォルダ、"
-"画像フォルダおよび動画フォルダを含めれば、より簡単に行えます。"
+"画像フォルダおよびビデオフォルダを含めれば、より簡単に行えます。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -355,7 +354,7 @@ msgstr "メールを別のウィンドウで開く"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Opening or closing the folder tree"
-msgstr "フォルダ ツリーを開く、閉じる"
+msgstr "フォルダツリーを開く、閉じる"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the E-Mail settings"
@@ -416,9 +415,9 @@ msgid ""
 "able to collaborate with you on text documents and spreadsheets at the same "
 "time."
 msgstr ""
-"出席依頼をすることによるファイルの共有は、ファイルを作成および編集するオプ"
-"ションを宛先に与えるだけではありません。内部および外部出席者も共同して、テキ"
-"ストドキュメントやスプレッドシートを同時に作業することができます。"
+"招待をすることによるファイルの共有は、ファイルを作成および編集するオプション"
+"を宛先に与えるだけではありません。内部および外部参加者も共同して、テキストド"
+"キュメントやスプレッドシートを同時に作業することができます。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing options"
@@ -426,7 +425,7 @@ msgstr "共有オプション"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
-msgstr "サイン アウト"
+msgstr "サインアウト"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Sorting tasks"
@@ -450,11 +449,11 @@ msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app"
-msgstr "Drive アプリケーション"
+msgstr "ドライブアプリケーション"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app tour.txt"
-msgstr "Drive アプリケーションツアー.txt"
+msgstr "ドライブアプリケーションツアー.txt"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -466,9 +465,8 @@ msgid ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 msgstr ""
-"リストビューには、現在のフォルダにあるアポイントの一覧が表示されます。アポイ"
-"ントをクリックすると、そのアポイントのデータと機能が詳細ビューに表示されま"
-"す。"
+"リストビューには、現在のフォルダにある予定の一覧が表示されます。予定をクリッ"
+"クすると、その予定のデータと機能が詳細ビューに表示されます。"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -479,8 +477,8 @@ msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
 msgstr ""
-"ポータルでは、最新のメール、アポイント、ソーシャル ネットワーク ニュースが表"
-"示されます。"
+"ポータルでは、最新のメール、予定、ソーシャルネットワークニュースが表示されま"
+"す。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The calendar views"
@@ -491,8 +489,7 @@ msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
 msgstr ""
-"予定表ビューでは、選択された時間軸で、予定表シートにアポイントが表示されま"
-"す。"
+"予定表ビューでは、選択された時間軸で、予定表シートに予定が表示されます。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -506,7 +503,7 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
-msgstr "フォルダ ツリー"
+msgstr "フォルダツリー"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -563,7 +560,7 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
-msgstr "新規アポイントを作成するには、ツールバーで、[新規] をクリックします。"
+msgstr "新規予定を作成するには、ツールバーで、[新規] をクリックします。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
@@ -580,20 +577,20 @@ msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"定期的なアポイントを作成するには、[定期的なアポイント] を有効にします。繰り返"
-"しのパラメータを設定するための機能が表示されます。"
+"繰り返しの予定を作成するには、[繰り返しの予定] を有効にします。繰り返しのパラ"
+"メータを設定するための機能が表示されます。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"定期的なアポイントを作成するには、[定期的なアポイント] を有効にします。繰り返"
-"しのパラメータを設定するための機能が表示されます。"
+"繰り返しの仕事を作成するには、[繰り返しの予定] を有効にします。繰り返しのパラ"
+"メータを設定するための機能が表示されます。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr "アポイントを作成するには、左下の「作成」をクリックします。"
+msgstr "予定を作成するには、左下の「作成」をクリックします。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
@@ -612,8 +609,8 @@ msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
 msgstr ""
-"ヘルプや設定を表示するには、メニュー バーで、システム メニューをクリックしま"
-"す。"
+"ヘルプや設定を表示するには、メニューバーで、システムメニューアイコンをクリッ"
+"クします。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
@@ -645,33 +642,29 @@ msgid ""
 "Participants. To avoid appointment conflicts, click on Find a free time at "
 "the upper right side."
 msgstr ""
-"他の人にアポイントへの出席を依頼するには、[出席者] の下にあるフィールドに依頼"
-"する人の名前を入力します。アポイントの競合を避けるには、右上の [空き時間を検"
-"索] をクリックします。"
+"他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
+"を入力します。予定の競合を避けるには、右上の [空き時間を検索] をクリックしま"
+"す。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. You can add documents as attachment to the task."
 msgstr ""
-"他の人にアポイントへの出席を依頼するには、[出席者] の下にあるフィールドに依頼"
-"する人の名前を入力します。仕事にドキュメントを追加すれば、添付ファイルを作成"
-"できます。"
+"他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
+"を入力します。仕事にドキュメントを追加すれば、添付ファイルを作成できます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"アプリケーションを起動するには、メニュー バーの左側にある項目をクリックしま"
-"す。"
+"アプリケーションを起動するには、メニューバーの左側にあるクィックアイコンを使"
+"用するか、アプリケーションランチャーメニュー内の項目をクリックします。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
-msgstr "アポイントを見逃さないようにするには、アラーム機能を使用します。"
+msgstr "予定を見逃さないようにするには、アラーム機能を使用します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To not miss the task, use the reminder function."
@@ -690,8 +683,8 @@ msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
 msgstr ""
-"フォルダ ツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォ"
-"ルダ ビュー] の順にクリックします。"
+"フォルダツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォル"
+"ダ ビュー] の順にクリックします。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -702,34 +695,24 @@ msgstr ""
 "リックします。設定 を選択します。左側のメールをクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"ヘルプを表示するには、メニューバーの右上のシステムメニューアイコンをクリック"
-"します。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示"
-"します。ヘルプをすべてブラウズするには、ウィンドウの上にあるスタートページま"
-"たは目次をクリックします。"
+"ヘルプを表示するには、メニューバーの右上のユーザイメージをクリックします。ヘ"
+"ルプを選択します。現在選択されているアプリケーションのヘルプを表示します。ヘ"
+"ルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をク"
+"リックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリックし"
-"ます。設定 を選択します。"
+"設定を表示するには、メニューバーの右上のユーザイメージをクリックします。設定 "
+"を選択します。"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -746,7 +729,7 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
-"オブジェクトを検索するには、メニュー バーで、検索アイコンをクリックします。"
+"オブジェクトを検索するには、メニューバーで、検索アイコンをクリックします。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -777,15 +760,11 @@ msgstr ""
 "します。サインアウトを選択します。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"サインアウトするには、メニューバーの右上のシステムメニューアイコンをクリック"
-"します。サインアウトを選択します。"
+"サインアウトするには、メニューバーの右上のサインアウトアイコンをクリックしま"
+"す。サインアウトを選択します。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -810,8 +789,9 @@ msgid ""
 msgstr ""
 "新規ファイルをローカルデバイスからアップロードするには、ローカルファイルを追"
 "加をクリックし、アップロードしたいファイルを選択します。ローカルデバイスから "
-"Drive ファイルをドラッグし、ここにドロップすると、さらに簡単に行えます。これ"
-"で、アップロードファイルはすべてのご利用のデバイスの Drive で利用できます。"
+"ドライブファイルをドラッグし、ここにドロップすると、さらに簡単に行えます。こ"
+"れで、アップロードファイルはすべてのご利用のデバイスの ドライブで利用できま"
+"す。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Toolbar"
@@ -830,7 +810,7 @@ msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr ""
-"目的のオブジェクトを一覧に表示するには、フォルダ ツリーでそのオブジェクトが保"
+"目的のオブジェクトを一覧に表示するには、フォルダツリーでそのオブジェクトが保"
 "存されているフォルダを開きます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -10709,6 +10689,12 @@ msgstr ""
 #~ "アプリケーションを起動するには、該当するタイルの見出しをクリックします。"
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "アプリケーションを起動するには、メニュー バーの左側にある項目をクリックし"
+#~ "ます。"
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -10724,6 +10710,24 @@ msgstr ""
 #~ msgstr ""
 #~ "ヘルプを開くには、メニュー バーの右上にある歯車のアイコンをクリックし、[ヘ"
 #~ "ルプ] を選択します。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "ヘルプを表示するには、メニューバーの右上のシステムメニューアイコンをクリッ"
+#~ "クします。ヘルプを選択します。現在選択されているアプリケーションのヘルプを"
+#~ "表示します。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページ"
+#~ "または目次をクリックします。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリック"
+#~ "します。設定 を選択します。"
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

@@ -53,11 +53,12 @@ define('io.ox/core/extPatterns/links', [
                     href: '#',
                     'data-action': self.id,
                     'draggable': options.draggable || false,
-                    'role': 'menuitem',
+                    'role': self.role || 'menuitem',
                     'data-section': self.section || 'default',
                     'data-section-description': self.sectionDescription,
                     'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
-                    'data-ref': self.ref
+                    'data-ref': self.ref,
+                    'tabindex': -1
                 };
                 var a = preRendered.a.clone()
                     .addClass(self.cssClasses || 'io-ox-action-link');
@@ -69,7 +70,7 @@ define('io.ox/core/extPatterns/links', [
                 // add icon or text? (icons are prefered over labels)
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
-                    a.append(preRendered.i.clone().addClass(self.icon));
+                    a.append(preRendered.i.clone().addClass(self.icon).attr('aria-hidden', 'true'));
                     attr.title = self.title || self.label || '';
                 } else if (self.label) {
                     // add text. add title unless it matches content
@@ -120,7 +121,6 @@ define('io.ox/core/extPatterns/links', [
                     .tooltip('destroy')
                     .addClass('disabled')
                     .attr('aria-disabled', true)
-                    .removeAttr('href')
                 );
                 // call customize? (call after append; must be self - not this)
                 if (self.customize) self.customize.call(link, baton);
@@ -262,6 +262,8 @@ define('io.ox/core/extPatterns/links', [
                         count++;
                     }
                 });
+                nav.find('li > a').attr('tabindex', -1);
+                nav.find('li > a:first').attr('tabindex', 0);
                 // empty?
                 if (count === 0) nav.addClass('empty').removeAttr('role');
             })
@@ -405,7 +407,7 @@ define('io.ox/core/extPatterns/links', [
             if (isSmartphone) all.children().filter('[data-prio="none"]').parent().remove();
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
-                var dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
+                var dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="-1">')
                     .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions'))
                     .append(
                         isSmartphone && !extension.compactDropdown ?
@@ -590,7 +592,7 @@ define('io.ox/core/extPatterns/links', [
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
         wrap = !!_.defaultValue(options.wrap, true);
-        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap).done(function () {
+        drawLinks(options, new Collection(baton.data), null, baton, [], wrap).done(function () {
             // if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
             if (!baton.$el) return;
             if (options.emptyCallback && baton.$el.hasClass('empty')) options.emptyCallback();

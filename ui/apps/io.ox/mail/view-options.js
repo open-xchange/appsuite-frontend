@@ -228,17 +228,19 @@ define('io.ox/mail/view-options', [
             var app = baton.app, model = app.props;
 
             var dropdown = new Dropdown({
+                tagName: 'li',
+                className: 'dropdown grid-options toolbar-item margin-auto',
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort'),
                 dataAction: 'sort',
-                model: model
+                model: model,
+                tabindex: -1
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(
                 dropdown.render().$el
-                    .addClass('grid-options toolbar-item margin-auto')
                     .find('.dropdown-menu')
                     .addClass('dropdown-menu-right')
                     .end()
@@ -260,13 +262,19 @@ define('io.ox/mail/view-options', [
 
             var app = baton.app,
                 extensions = contextmenu.extensions,
-                node = this.$ul;
+                node = this.$ul,
+                actions = ['markFolderSeen', 'moveAllMessages', 'archive', 'divider', 'empty'];
 
-            this.header(gt('All messages in this folder'));
+            // show a generic select all action for all-unseen, searchresults and when using categories
+            if (app.folder.get() === 'virtual/all-unseen' || app.props.get('find-result') || app.props.get('categories')) {
+                actions = ['selectAll'];
+            } else {
+                this.header(gt('All messages in this folder'));
+            }
 
             app.folder.getData().done(function (data) {
-                var baton = new ext.Baton({ data: data, module: 'mail' });
-                ['markFolderSeen', 'moveAllMessages', 'archive', 'divider', 'empty'].forEach(function (id) {
+                var baton = new ext.Baton({ data: data, module: 'mail', listView: app.listView });
+                actions.forEach(function (id) {
                     extensions[id].call(node, baton);
                 });
             });
@@ -281,6 +289,8 @@ define('io.ox/mail/view-options', [
             var app = baton.app, model = app.props;
 
             var dropdown = new Dropdown({
+                tagName: 'li',
+                className: 'dropdown grid-options toolbar-item',
                 caret: true,
                 //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
                 label: gt.pgettext('dropdown', 'All'),
@@ -290,22 +300,16 @@ define('io.ox/mail/view-options', [
 
             ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
 
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 
-            // hide in all-unseen folder and for search results
-            var toggle = _.partial(toggleByState, app, dropdown.$el);
-
             app.on('folder:change', function () {
-                toggle();
                 // cleanup menu
                 dropdown.prepareReuse().render();
                 // redraw options with current folder data
                 ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
             });
-
-            toggle();
         }
     });
 

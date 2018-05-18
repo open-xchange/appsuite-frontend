@@ -20,7 +20,7 @@ define('io.ox/backbone/mini-views/alarms', [
 ], function (util, DisposableView, gt, mailSettings) {
 
     'use strict';
-    // TODO enable when mw supports this
+    // TODO enable email when mw supports this
     var standardTypes = ['DISPLAY', 'AUDIO'/*, 'EMAIL'*/],
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
@@ -31,15 +31,83 @@ define('io.ox/backbone/mini-views/alarms', [
             'END-': gt.format('before end'),
             //#. Used in a selectbox when the reminder for an appointment is after the end time
             'END': gt.format('after end')
+        },
+        predefinedSentences = {
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYSTART-': gt('Notify %1$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYSTART': gt('Notify %1$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYEND-': gt('Notify %1$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'DISPLAYEND': gt('Notify %1$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'DISPLAYABS': gt('Notify at %1$s.'),
+            //#. Used to display reminders for appointments
+            'DISPLAYSTART0': gt('Notify at start.'),
+            //#. Used to display reminders for appointments
+            'DISPLAYEND0': gt('Notify at end.'),
+
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOSTART-': gt('Play sound %1$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOSTART': gt('Play sound %1$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOEND-': gt('Play sound %1$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'AUDIOEND': gt('Play sound %1$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'AUDIOABS': gt('Play sound at %1$s.'),
+            //#. Used to display reminders for appointments
+            'AUDIOSTART0': gt('Play sound at start.'),
+            //#. Used to display reminders for appointments
+            'AUDIOEND0': gt('Play sound at end.'),
+
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICSTART-': gt('%1$s %2$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICSTART': gt('%1$s %2$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICEND-': gt('%1$s %2$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'GENERICEND': gt('%1$s %2$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'GENERICABS': gt('%1$s at %2$s.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            'GENERICSTART0': gt('%1$s at start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS/EMAIL etc
+            'GENERICEND0': gt('%1$s at end.')
         };
 
-    var alarms = DisposableView.extend({
+    var alarmsView = DisposableView.extend({
         className: 'alarms-view',
         events: {
             'click .alarm-remove': 'onRemove',
             'change .alarm-action': 'updateModel',
             'change .alarm-time': 'updateModel',
-            'change .alarm-relation': 'updateModel'
+            'change .alarm-related': 'updateModel'
         },
         initialize: function (options) {
             this.options = options || {};
@@ -47,20 +115,14 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list = $('<ul class="list-unstyled alarm-list">');
 
             if (this.model) {
-                this.model.on('change:' + this.attribute, _(this.updateView).bind(this));
+                this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
             }
         },
-        // if you want the alarm view to react to resizing or use the container as a width guide, call this function after appending the view and on resizing
-        reactToResize: _.throttle(function () {
-            // not attached
-            if (this.$el.parent().length === 0) return;
-            this.$el.toggleClass('uses-small-container', this.$el.parent().width() <= 992);
-        }, 200),
         render: function () {
             var self = this;
             this.$el.empty().append(
                 self.list,
-                $('<button class="btn btn-default" type="button">').text(gt('Add new reminder'))
+                $('<button class="btn btn-default" type="button">').text(gt('Add reminder'))
                     .on('click', function () {
                         var duration;
 
@@ -102,32 +164,30 @@ define('io.ox/backbone/mini-views/alarms', [
 
             var row, container;
 
-            container = $('<li class="alarm-list-item">').append(row = $('<div class="row">')).data('id', alarm.uid);
+            container = $('<li class="alarm-list-item">').append(row = $('<div class="item">')).data('id', alarm.uid);
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="col-md-3 alarm-action">').text(alarm.action).val(alarm.action));
+                row.append($('<div class="alarm-action">').text(alarm.action).val(alarm.action));
             } else {
-                row.append($('<div class="col-xs-10 col-md-3">').append(
+                row.append(
                     $('<select class="form-control alarm-action">').append(
                         $('<option>').text(gt('Notification')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO')
                         // TODO enable when mw supports this
                         //$('<option>').text(gt('Mail')).val('EMAIL')
                     ).val(alarm.action)
-                ));
+                );
             }
 
             if (alarm.trigger.duration) {
                 var selectbox, relatedbox;
-                row.append($('<div>').addClass('col-xs-5 col-md-3').append(
+                row.append(
                     selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
-                    }))
-                ),
-                $('<div>').addClass('col-xs-5 col-md-3').append(
+                    })),
                     relatedbox = $('<select class="form-control alarm-related">').append(_.map(relatedLabels, function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
-                ));
+                );
 
                 // add custom option so we can show non standard times
                 if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration.replace('-', '')) === -1) {
@@ -137,11 +197,11 @@ define('io.ox/backbone/mini-views/alarms', [
                 relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
                 selectbox.val(alarm.trigger.duration.replace('-', ''));
             } else {
-                row.append($('<div class="alarm-time">').addClass('col-xs-10 col-md-6').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
+                row.append($('<div class="alarm-time">').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(
-                $('<span role="button" tabindex="0" class="alarm-remove">').addClass('col-md-offset-2 col-md-1 col-xs-2').append($('<i class="alarm-remove fa fa-trash">'))
+                $('<span role="button" tabindex="0" class="alarm-remove">').append($('<i class="alarm-remove fa fa-trash">'))
             );
 
             return container;
@@ -178,6 +238,80 @@ define('io.ox/backbone/mini-views/alarms', [
         }
     });
 
-    return alarms;
+    var linkView  = DisposableView.extend({
+        className: 'alarms-link-view',
+        events: {
+            'click .alarm-link': 'openDialog'
+        },
+        initialize: function (options) {
+            this.options = options || {};
+            this.attribute = options.attribute || 'alarms';
+            if (this.model) {
+                this.listenTo(this.model, 'change:' + this.attribute, this.render);
+            }
+        },
+        render: function () {
+            this.$el.empty().append(
+                (this.model.get(this.attribute) || []).length === 0 ? $('<button type="button" class="alarm-link btn btn-link">').text(gt('No reminder')) : this.drawList()
+            );
+            return this;
+        },
+        drawList: function () {
+            var node = $('<ul class="list-unstyled alarm--link-list">');
+            _(this.model.get(this.attribute)).each(function (alarm) {
+                if (!alarm || !alarm.trigger) return;
+                var options = [], key;
+
+                if (_(standardTypes).indexOf(alarm.action) === -1) {
+                    // unknown type
+                    options.push(alarm.action);
+                    key = 'GENERIC';
+                } else {
+                    key = alarm.action;
+                }
+
+                if (alarm.trigger.duration) {
+                    options.push(util.getReminderOptions()[alarm.trigger.duration.replace('-', '')] || new moment.duration(alarm.trigger.duration).humanize());
+                    key = key + (alarm.trigger.related || 'START') + (alarm.trigger.duration.indexOf('PT0') === -1 ? alarm.trigger.duration.replace(/\w*/g, '') : '0');
+                } else {
+                    options.push(new moment(alarm.trigger.dateTime).format('LLL'));
+                    key = key + 'ABS';
+                }
+
+                options.unshift(predefinedSentences[key]);
+                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(gt.format.apply(undefined, options))));
+            });
+            return node;
+        },
+        openDialog: function () {
+            var self = this;
+
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                var model = {}, alarmView;
+                model[self.attribute] = self.model.get(self.attribute);
+                alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute });
+                new ModalDialog({
+                    title: gt('Edit reminders'),
+                    width: 600
+                })
+                .build(function () {
+                    this.$body.append(alarmView.render().$el);
+                    this.$el.addClass('alarms-view-dialog');
+                })
+                .addCancelButton()
+                .addButton({ action: 'apply', label: gt('Apply') })
+                .on('apply', function () {
+                    // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
+                    self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
+                })
+                .open();
+            });
+        }
+    });
+
+    return {
+        linkView: linkView,
+        alarmsView: alarmsView
+    };
 
 });

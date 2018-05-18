@@ -23,9 +23,10 @@ define('io.ox/filter/folder', [
     ext.point('io.ox/folder/filter').extend({
         id: 'folder_blacklist',
         isVisible: function (folder) {
+            if (typeof folder === 'undefined') return false;
             var blacklist = settings.get('folder/blacklist', {});
             var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
-            return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
+            return typeof blacklistedFolder === 'undefined' || blacklistedFolder === false;
         }
     });
 

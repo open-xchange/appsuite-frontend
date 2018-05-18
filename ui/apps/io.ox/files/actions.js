@@ -21,10 +21,12 @@ define('io.ox/files/actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
+    'io.ox/files/actions/download',
     'settings!io.ox/files',
+    'settings!io.ox/core',
     'gettext!io.ox/files',
     'io.ox/core/yell'
-], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, links, capabilities, settings, gt, yell) {
+], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, links, capabilities, download, settings, coreSettings, gt, yell) {
 
     'use strict';
 
@@ -35,6 +37,18 @@ define('io.ox/files/actions', [
 
     if (capabilities.has('guard')) {
         allowedFileExtensions.push('pgp');
+    }
+
+    function isTrash(baton) {
+        var model,
+            folderId;
+        if (baton.app) {
+            folderId = baton.app.folder.get();
+        } else if (baton.data) {
+            folderId = baton.data.folder_id;
+        }
+        model = folderAPI.pool.getModel(folderId);
+        return model ? folderAPI.is('trash', model.toJSON()) : false;
     }
 
     // actions
@@ -83,6 +97,7 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
+                if (isTrash(e.baton)) return false;
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
                     var model = _.first(e.baton.models);
                     var isEncrypted = model && model.isEncrypted();
@@ -121,12 +136,13 @@ define('io.ox/files/actions', [
 
                 // Check if Guard file.  If so, do auth then call with parameters
                 // do not use endsWith because of IE11
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard')) {
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.toLowerCase().lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
                                 cryptoAction: 'Decrypt',
-                                cryptoAuth: auth
+                                cryptoAuth: auth,
+                                session: ox.session
                             };
                             launch(params);
                         });
@@ -188,9 +204,7 @@ define('io.ox/files/actions', [
             return isValid(e.baton.data);
         },
         multiple: function (list) {
-            ox.load(['io.ox/files/actions/download']).done(function (action) {
-                action(list);
-            });
+            download(list);
         }
     });
 
@@ -255,12 +269,10 @@ define('io.ox/files/actions', [
             if (_(e.baton.data).has('internal_userid')) return false;
             // locally added but not yet uploaded
             if (e.baton.data.group === 'localFile') { return false; }
-            if (e.baton.data.file_mimetype) {
-                // no 'open' menu entry for office documents, PDF and plain text
-                if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
-            }
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.isOffice(e.baton.data)) return false;
+            if (api.isPDF(e.baton.data)) return false;
+            if (api.isText(e.baton.data)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -348,7 +360,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -369,7 +381,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -432,6 +444,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             // one?
             if (!e.collection.has('one')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
@@ -465,7 +478,9 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/save-as-pdf', {
         capabilities: 'document_preview', // document converter.
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             // one?
+            if (e.baton.favorite) return false;
             if (!e.collection.has('one')) return false;
 
             // hide in mail compose preview
@@ -495,6 +510,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             if (!e.collection.has('one', 'items')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
@@ -575,7 +591,7 @@ define('io.ox/files/actions', [
             requires:  function (e) {
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
-                if (e.baton.favorite) return false;
+                if (type === 'move' && e.baton.favorite) return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
                 // anonymous guests just have one folder so no valid target folder (see bug 42621)
                 if (capabilities.has('guest && anonymous')) return false;
@@ -592,6 +608,7 @@ define('io.ox/files/actions', [
                         label: label,
                         success: success,
                         successCallback: function (response, apiInput) {
+                            // see file/api.js transfer(): in case of an error the callback returns a string
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
                                     itemsLeft = [];
@@ -601,7 +618,8 @@ define('io.ox/files/actions', [
                                 }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _.each(response, function (error) {
-                                    var errorResponse = error.error;
+                                    // check the error structure to prevent a nested error object
+                                    var errorResponse = _.isString(error.error) ? error : error.error;
 
                                     if (errorResponse) {
 
@@ -651,8 +669,28 @@ define('io.ox/files/actions', [
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
-                                                api[type](itemsLeft, baton.target || apiInput.target, true);
+                                                api[type](itemsLeft, baton.target || apiInput.target, true)
+                                                .always(function (response) {
 
+                                                    // see file/api.js transfer(): in case of an error the callback returns a string
+                                                    // important: only errors must be checked, conflicts can't happen here, since the
+                                                    // ignoreConflicts flag is 'true' at api.move
+                                                    var error = _.isString(response);
+
+                                                    if (error) {
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('error', response);
+                                                            api.trigger('reload:listview');
+                                                        });
+
+                                                    } else {
+                                                        //no error, must be success
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('success', itemsLeft.length > 1 ? success.multiple : success.single);
+                                                        });
+                                                    }
+
+                                                });
                                             },
                                             callbackCancel: function () {
                                                 // note: drag&drop and actions via menu use a different baton, see b53498
@@ -717,26 +755,24 @@ define('io.ox/files/actions', [
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
     new Action('io.ox/files/actions/editShare', {
         requires: function (e) {
-            if (e.baton.models.length > 1) return false;
+            if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
             return isShareable(e, 'link') || isShareable(e, 'invite');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                var models;
-                if (baton.models && baton.models.length === 1) models = baton.models;
+                var models = _.isArray(baton.models) ? baton.models : [baton.models],
+                    shareType, elem;
                 if (models && models.length) {
-                    _.each(models, function (model) {
-                        if (!baton.app || !baton.app.mysharesListView || !baton.app.mysharesListView.$el) return false;
-                        var elem = baton.app.mysharesListView.$el.find('.list-item.selected[data-cid="' + (model.cid ? model.cid : _.cid(model)) + '"]');
-                        if (elem.length) {
-                            var shareType = elem.attr('data-share-type');
-                            if (shareType === 'invited-people') {
-                                action.invite(models);
-                            } else if (shareType === 'public-link') {
-                                action.link(models);
-                            }
+                    elem = baton.app.mysharesListView.$el.find('.list-item.selected');
+                    if (elem.length) {
+                        shareType = elem.attr('data-share-type');
+                        if (shareType === 'invited-people') {
+                            action.invite(models);
+                        } else if (shareType === 'public-link') {
+                            action.link(models);
                         }
-                    });
+                    }
                 }
             });
         }
@@ -789,78 +825,77 @@ define('io.ox/files/actions', [
     // Action to revoke the sharing of the files.
     new Action('io.ox/files/share/revoke', {
         requires: function (e) {
-            console.log(e);
+            if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
             return isShareable(e, 'link') || isShareable(e, 'invite');
         },
         action: function (baton) {
             require(['io.ox/files/share/permissions', 'io.ox/files/share/api'], function (permissions, shareApi) {
-                var models;
-                if (baton.models && baton.models.length === 1) models = baton.models;
+                var models = _.isArray(baton.models) ? baton.models : [baton.models];
                 if (models && models.length) {
-                    _.each(models, function (model) {
-                        if (!baton.app || !baton.app.mysharesListView || !baton.app.mysharesListView.$el) return false;
-                        var elem = baton.app.mysharesListView.$el.find('.list-item.selected[data-cid="' + (model.cid ? model.cid : _.cid(model)) + '"]');
-                        if (elem.length) {
-                            var shareType = elem.attr('data-share-type'),
-                                folderId = model.get('folder_id') || model.get('id'),
-                                object = { module: 'infostore', folder: folderId };
+                    var model = _.first(models),
+                        elem = baton.app.mysharesListView.$el.find('.list-item.selected'),
+                        shareType = elem.attr('data-share-type'),
+                        shareModel = new shareApi.Model(model.isFile() ? model.pick('id', 'folder_id') : model.pick('id')),
+                        folderId = model.get('folder_id') || model.get('id'),
+                        options = { module: 'infostore', folder: folderId },
+                        permissionsToKeep,
+                        fileModel, folderModel,
+                        newPermissionList, newExtendedPermissionList;
+
+                    shareModel.loadExtendedPermissions().done(function () {
+                        if (shareType === 'public-link') {
                             if (model.isFile()) {
-                                object.elem = model.get('id');
+                                options.item = model.get('id');
                             }
-
-
-                            var shareModel = new shareApi.Model(model.isFile() ? model.pick('id', 'folder_id') : model.pick('id'));
-                            shareModel.loadExtendedPermissions().done(function () {
-                                var ids = [];
-                                var permissionsToKeep = shareModel.getPermissions().filter(function (item) {
-                                    if (shareType === 'invited-people') {
-                                        if (item.type === 'anonymous' || ox.user_id === item.entity) {
-                                            ids.push(item.entity);
-                                            return true;
-                                        }
-                                    } else if (item.type !== 'anonymous') {
-                                        ids.push(item.entity);
-                                        return true;
-                                    }
-                                    return false;
-                                });
-
-                                shareModel.setPermissions(permissionsToKeep);
-
-                                if (model.isFolder()) {
-                                    folderAPI.get(model.get('id')).done(function (folderDesc) {
-                                        var folderModel = new folderAPI.FolderModel(folderDesc);
-                                        var newPermissionList = folderModel.get('permissions').filter(function (item) {
-                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                        });
-                                        folderAPI
-                                            .update(folderModel.get('id'), { permissions: newPermissionList })
-                                            .done(yell('success', gt('Revoked access.')))
-                                            .fail(function (error) {
-                                                yell(error);
-                                            });
-                                    });
-                                } else {
-                                    api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
-                                        var fileModel = new api.Model(fileDesc);
-                                        var newPermissionList = fileModel.get('object_permissions').filter(function (item) {
-                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                        });
-                                        var newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
-                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                        });
-                                        api
-                                            .update(fileDesc, { object_permissions: newPermissionList, 'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList })
-                                            .done(function () {
-                                                fileModel.destroy.bind(fileModel);
-                                                yell('success', gt('Revoked access.'));
-                                            })
-                                            .fail(function (error) {
-                                                yell(error);
-                                            });
-                                    });
+                            shareAPI.deleteLink(options)
+                                .done(shareModel.destroy.bind(shareModel));
+                        } else {
+                            permissionsToKeep = shareModel.getPermissions().filter(function (item) {
+                                if (item.type === 'anonymous' || ox.user_id === item.entity) {
+                                    return true;
                                 }
+                                return false;
                             });
+
+                            shareModel.setPermissions(permissionsToKeep);
+
+                            if (model.isFolder()) {
+                                folderAPI.get(model.get('id')).done(function (folderDesc) {
+                                    folderModel = new folderAPI.FolderModel(folderDesc);
+                                    newPermissionList = folderModel.get('permissions').filter(function (item) {
+                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                    });
+                                    folderAPI
+                                        .update(folderModel.get('id'), { permissions: newPermissionList })
+                                        .done(yell('success', gt('Revoked access.')))
+                                        .fail(function (error) {
+                                            yell(error);
+                                        });
+                                });
+                            } else {
+                                api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
+                                    fileModel = new api.Model(fileDesc);
+                                    newPermissionList = fileModel.get('object_permissions').filter(function (item) {
+                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                    });
+                                    newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
+                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                    });
+                                    api
+                                        .update(fileDesc, {
+                                            object_permissions: newPermissionList,
+                                            'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
+                                        })
+                                        .done(function () {
+                                            fileModel.destroy.bind(fileModel);
+                                            yell('success', gt('Revoked access.'));
+                                        })
+                                        .fail(function (error) {
+                                            yell(error);
+                                        });
+                                });
+                            }
                         }
                     });
                 }
@@ -1000,43 +1035,46 @@ define('io.ox/files/actions', [
     // Action to add files/folders to favorites
     new Action('io.ox/files/favorites/add', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             if (capabilities.has('guest && anonymous')) return false;
-            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
-                if (Array.isArray(e.context)) {
-                    var result = true;
-                    _.each(e.context, function (element) {
-                        if (folderAPI.is('trash', element)) {
-                            result = false;
-                        }
-                        if (result) {
-                            var favorites = e.baton.app.listView.favorites,
-                                isFavorite = _.find(favorites, function (elem) {
-                                    if (elem.id === element.id) {
-                                        return true;
-                                    }
-                                });
-                            if (isFavorite) {
-                                result = false;
-                            }
-                        }
-                    });
-                    return result;
+
+            var favorites = coreSettings.get('favorites/infostore', []);
+            var favoriteFiles = coreSettings.get('favoriteFiles/infostore', []);
+
+            var allFavorites = favorites;
+            _.each(favoriteFiles, function (file) {
+                allFavorites.push(file.id);
+            });
+
+            if (Array.isArray(allFavorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
                 }
-                if (folderAPI.is('trash', e.context)) return false;
-                var id = e.context.id,
-                    favorites = e.baton.app.listView.favorites,
-                    isFavorite = _.find(favorites, function (elem) {
-                        if (elem.id === id) {
+
+                if (!e.context.length) {
+                    e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
+                }
+
+                // returns false if one file/folder of the selection is in favorites
+                var result =  _.some(e.context, function (element) {
+                    var isFavorite = _.find(favorites, function (elemId) {
+                        if (elemId === element.id) {
                             return true;
                         }
                     });
-                if (isFavorite) {
-                    return false;
-                }
+                    return folderAPI.is('trash', element) || isFavorite;
+                });
+                return !result;
             }
             return true;
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
+            if (!Array.isArray(list) || !list.length) {
+                if (baton.app) {
+                    var model = folderAPI.pool.getModel(baton.app.folder.get());
+                    list = [model.toJSON()];
+                }
+            }
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
                 action.add(list);
             });
@@ -1047,38 +1085,43 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/favorites/remove', {
         requires: function (e) {
             if (capabilities.has('guest && anonymous')) return false;
-            if (e.baton && e.baton.data && e.baton.app && e.baton.app.listView) {
-                if (Array.isArray(e.context)) {
-                    var result = false;
-                    _.each(e.context, function (element) {
-                        if (!result) {
-                            var favorites = e.baton.app.listView.favorites,
-                                isFavorite = _.find(favorites, function (elem) {
-                                    if (elem.id === element.id) {
-                                        return true;
-                                    }
-                                });
-                            if (isFavorite) {
-                                result = true;
-                            }
-                        }
-                    });
-                    return result;
+            var favorites = coreSettings.get('favorites/infostore', []);
+            var favoriteFiles = coreSettings.get('favoriteFiles/infostore', []);
+
+            var allFavorites = favorites;
+            _.each(favoriteFiles, function (file) {
+                allFavorites.push(file.id);
+            });
+
+            if (Array.isArray(allFavorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
                 }
-                var id = e.context.id,
-                    favorites = e.baton.app.listView.favorites,
-                    isFavorite = _.find(favorites, function (elem) {
-                        if (elem.id === id) {
+
+                if (!e.context.length) {
+                    e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
+                }
+
+                // returns true if one file/folder of the selection is in favorites
+                var result =  _.some(e.context, function (element) {
+                    var isFavorite = _.find(favorites, function (elemId) {
+                        if (elemId === element.id) {
                             return true;
                         }
                     });
-                if (isFavorite) {
-                    return true;
-                }
+                    return isFavorite;
+                });
+                return result;
             }
             return false;
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
+            if (!Array.isArray(list) || !list.length) {
+                if (baton.app) {
+                    var model = folderAPI.pool.getModel(baton.app.folder.get());
+                    list = [model.toJSON()];
+                }
+            }
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
                 action.remove(list);
             });
@@ -1187,6 +1230,24 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'favorite-add',
+        index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Add to favorites'),
+        ref: 'io.ox/files/favorites/add'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'favorite-remove',
+        index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Remove from favorites'),
+        ref: 'io.ox/files/favorites/remove'
     }));
 
     // low

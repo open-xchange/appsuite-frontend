@@ -253,12 +253,15 @@ define('io.ox/core/pdf/pdfdocument', [
             // a given PDF file and set the password error response accordingly
             var encTestPDFConverterURL = pdfConverterURL + '&enctest=pdf';
 
-            $.get(encTestPDFConverterURL).always(function (data) {
-                loadDef.resolve(
-                    (_.isObject(data) && _.isString(data.responseText)) ?
-                        $.parseJSON(data.responseText) :
-                        { cause: 'filterError' });
+            $.ajax({
+                url: encTestPDFConverterURL,
+                dataType: 'json'
 
+            }).always(function (data) {
+                loadDef.resolve(
+                    (_.isObject(data) && _.isString(data.cause)) ?
+                        data :
+                        { cause: 'filterError' });
             });
         });
 

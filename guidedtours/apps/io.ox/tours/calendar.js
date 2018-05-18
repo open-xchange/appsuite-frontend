@@ -34,7 +34,16 @@ define('io.ox/tours/calendar', [
                 .title(gt('Creating a new appointment'))
                 .content(gt('To create a new appointment, click on New in the toolbar.'))
                 .spotlight('.io-ox-calendar-window .primary-action .btn:visible, [data-ref="io.ox/calendar/detail/actions/create"]:visible')
+                .on('before:show', function () {
+                    if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
+                        createApp.getWindow().floating.onMinimize();
+                    }
+                })
                 .on('next', function () {
+                    if (createApp) {
+                        if (createApp.getWindow().floating.model.get('minimized')) createApp.getWindow().floating.model.set('minimized', false);
+                        return;
+                    }
                     ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/model']).then(function (edit, models) {
                         var app = edit.getApp();
                         createApp = app;
@@ -53,85 +62,106 @@ define('io.ox/tours/calendar', [
             .step()
                 .title(gt('Entering the appointment\'s data'))
                 .content(gt('Enter the subject, the start and the end date of the appointment. Other details are optional.'))
-                .waitFor('[data-extension-id="title"] > label')
-                .spotlight('[data-extension-id="title"] > label')
+                .waitFor('.io-ox-calendar-edit-window.active [data-extension-id="title"] > label')
+                .spotlight('.io-ox-calendar-edit-window.active [data-extension-id="title"] > label')
+                .on('before:show', function () {
+                    if ($('.io-ox-calendar-edit-window.active [data-extension-id="title"] > label').length === 0) return;
+                    $('.io-ox-calendar-edit-window.active [data-extension-id="title"] > label')[0].scrollIntoView();
+                })
+                .on('show', function () {
+                    $('.io-ox-calendar-edit-window.active [data-extension-id="title"] > label')[0].scrollIntoView();
+                })
                 .end()
             .step()
                 .title(gt('Creating recurring appointments'))
                 .content(gt('To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown.'))
-                .spotlight('[data-extension-id="recurrence"]')
-                .end()
-            .step()
-                .title(gt('Using the reminder function'))
-                .content(gt('To not miss the appointment, use the reminder function.'))
-                .spotlight('[data-extension-id="alarms"]')
-                .on('next', function () {
-                    $('.add-participant:last')[0].scrollIntoView();
+                .spotlight('.io-ox-calendar-edit-window.active [data-extension-id="recurrence"]')
+                .on('before:show', function () {
+                    $('.io-ox-calendar-edit-window.active [data-extension-id="recurrence"]')[0].scrollIntoView();
                 })
                 .end()
             .step()
                 .title(gt('Inviting other participants'))
                 .content(gt('To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.'))
-                .spotlight('.add-participant')
-                .on('next', function () {
-                    $('[data-extension-id="attachments_legend"]:last')[0].scrollIntoView();
+                .spotlight('.io-ox-calendar-edit-window.active .add-participant')
+                .on('before:show', function () {
+                    $('.io-ox-calendar-edit-window.active .add-participant:last')[0].scrollIntoView();
+                })
+                .end()
+            .step()
+                .title(gt('Using the reminder function'))
+                .content(gt('To not miss the appointment, use the reminder function.'))
+                .spotlight('.io-ox-calendar-edit-window.active [data-extension-id="alarms"]')
+                .on('before:show', function () {
+                    $('.io-ox-calendar-edit-window.active [data-extension-id="alarms"]')[0].scrollIntoView();
                 })
                 .end()
             .step()
                 .title(gt('Adding attachments'))
                 .content(gt('Further down you can add documents as attachments to the appointment.'))
-                .hotspot('[data-extension-id="attachments_legend"]')
+                .hotspot('.io-ox-calendar-edit-window.active [data-extension-id="attachments_legend"]')
+                .on('before:show', function () {
+                    $('.io-ox-calendar-edit-window.active [data-extension-id="attachments_legend"]:last')[0].scrollIntoView();
+                })
                 .end()
             .step()
                 .title(gt('Creating the appointment'))
                 .content(gt('To create the appointment, click on Create at the lower left side.'))
-                .referTo('[data-action="save"]')
-                .hotspot('[data-action="save"]')
+                .referTo('.io-ox-calendar-edit-window.active [data-action="save"]')
+                .hotspot('.io-ox-calendar-edit-window.active [data-action="save"]')
+                .on('before:show', function () {
+                    if (createApp && createApp.getWindow().floating.model.get('minimized')) {
+                        createApp.getWindow().floating.model.set('minimized', false);
+                    }
+                })
                 .end()
             .step()
                 .title(gt('Selecting a view'))
                 .content(gt('To select one of the views like Day, Month or List, click on View in the toolbar. Select a menu entry from the Layout section.'))
                 .navigateTo('io.ox/calendar/main')
-                .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
-                .referTo('.classic-toolbar [data-dropdown="view"] ul')
-                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .spotlight('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .referTo('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
                 .on('wait', function () {
-                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+                    if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
+                        createApp.getWindow().floating.onMinimize();
+                    }
+                    $('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
                 })
                 .on('hide', function () {
-                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+                    $('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul').css('display', '');
                 })
                 .end()
             .step()
                 .title(gt('The calendar views'))
                 .content(gt('The calendar views display a calendar sheet with the appointments for the selected time range.'))
-                .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
-                .referTo('.classic-toolbar [data-dropdown="view"] ul')
-                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .spotlight('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .referTo('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
                 .on('wait', function () {
-                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+                    $('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
                 })
                 .on('hide', function () {
-                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+                    $('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul').css('display', '');
                 })
                 .end()
             .step()
                 .title(gt('The List view'))
                 .content(gt('The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment\'s data and some functions are displayed in the Detail view.'))
-                .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-value="list"]')
-                .referTo('.classic-toolbar [data-dropdown="view"] ul')
-                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-value="list"]')
+                .spotlight('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul a[data-value="list"]')
+                .referTo('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul a[data-value="list"]')
                 .on('wait', function () {
-                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+                    $('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
                 })
                 .on('hide', function () {
-                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+                    $('.io-ox-calendar-window .classic-toolbar [data-dropdown="view"] ul').css('display', '');
                 })
                 .end()
             .on('stop', function () {
                 if (createApp) {
-                    //prevent app from asking about changed content
                     createApp.quit();
+                    createApp = null;
                 }
             })
             .start();

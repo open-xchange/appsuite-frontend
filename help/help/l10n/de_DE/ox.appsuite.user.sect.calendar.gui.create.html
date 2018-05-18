@@ -1,12 +1,12 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.1.11. Das Terminbearbeitungsfenster</title>
+<title>7.1.12. Das Terminbearbeitungsfenster</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Die Kalender-Bestandteile">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.gui.scheduling.html" title="7.1.10. Die Planungsansicht">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.gui.scheduling.html" title="7.1.11. Die Planungsansicht">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Termine anzeigen">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -39,10 +39,10 @@
       <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span></span>-Bestandteile
     </h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.gui.create">
-<div class="titlepage"><div><div><h3 class="title">7.1.11. Das Terminbearbeitungsfenster</h3></div></div></div>
+<div class="titlepage"><div><div><h3 class="title">7.1.12. Das Terminbearbeitungsfenster</h3></div></div></div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.create"></a><p id="ox.appsuite.user.reference.calendar.gui.create">
-        Dieses Fenster wird verwendet, wenn Sie einen neuen Termin anlegen, einen Termin bearbeiten oder einen Termin doppelklicken.
+        Dieses Fenster wird verwendet, wenn Sie einen neuen Termin anlegen oder einen Termin bearbeiten.
         </p>
 <p class="title">Inhalt</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.calendar.gui.create.entries" style="list-style-type: disc; ">
@@ -51,67 +51,85 @@
               </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Fenstertitel</p></li>
-<li class="listitem"><p role="presentation">Symbole zum Festlegen der Fensterposition.</p></li>
+<li class="listitem"><p role="presentation">Symbole zum Festlegen der Fensterposition, Symbol zum Abbrechen</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">Elemente, die sich je nach Konfiguration der Groupware oben oder unten befinden.
+<p role="presentation">Termindaten
               </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Anlegen</strong></span>. Anklicken speichert die aktuellen Daten des Termins und
-                    schließt die Bearbeitungsseite.</p></li>
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Verwerfen</strong></span>. Wenn Sie das Erstellen oder die Bearbeitung abbrechen
-                    möchten, klicken Sie auf diese Schaltfläche.</p></li>
-<li class="listitem"><p role="presentation">Die Schaltfläche neben <span class="guibutton"><strong>Kalender</strong></span> zeigt den Kalenderordner, in dem der Termin angelegt wird.
-                    Wenn Sie den Termin in einem anderen Kalenderordner anlegen möchten, klicken Sie auf diese Schaltfläche.</p></li>
+<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Betreff</strong></span>. Geben Sie hier den Betreff ein. Der Betreff wird als Termintitel angezeigt.</p></li>
+<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Ort</strong></span>. Geben Sie hier optional den Ort ein, an dem der Termin 
+                    stattfinden soll.</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Beginnt am</strong></span> und <span class="guibutton"><strong>Endet am</strong></span>. Bestimmt den 
+                    Beginn und das Ende des Termins. Hineinklicken öffnet den Datumswähler. 
+                  </p>
+<p role="presentation">Wenn <span class="guibutton"><strong>Ganztägig</strong></span> ausgeschaltet ist, können Sie Uhrzeiten für den Beginn 
+                    und das Ende festlegen.</p>
+</li>
+<li class="listitem"><p role="presentation">Anklicken einer Zeitzonen-Schaltfläche neben einer Uhrzeit öffnet ein Dialogfenster zum Auswählen 
+                    einer Zeitzone für den Beginn und das Ende der Termins.
+                    In den Kalender-Einstellungen können Sie häufig benötigte Zeitzonen 
+                    <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html">als Favoriten festlegen</a>.
+                  </p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Ganztägig</strong></span>. Bestimmt, ob der Termin ganze Tage dauern soll.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Verfügbaren Zeitraum finden</strong></span>. Öffnet die Planungsansicht. Mit dieser
+                    Ansicht können Sie verfügbare Zeiträume finden, wenn Sie einen Termin mit mehreren Teilnehmern planen.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Wiederholen</strong></span>. Bestimmt, ob der Termin wiederholt werden soll. 
+                    Beispiele zur Anwendung finden Sie bei den
+                    <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">Fragen zu Terminen und Aufgaben</a>.</p></li>
+<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Beschreibung</strong></span>. Geben Sie hier optional eine Beschreibung 
+                    des Termins ein.</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Betreff</strong></span>. Geben Sie hier den Betreff ein. Der Betreff wird in
-            den Ansichten als Termintitel angezeigt.</p></li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Ort</strong></span>. Geben Sie hier optional den Ort ein, an dem der Termin 
-              stattfinden soll.</p></li>
 <li class="listitem">
-<p role="presentation">Eingabefelder <span class="guibutton"><strong>Beginnt am</strong></span> und <span class="guibutton"><strong>Endet am</strong></span>. Bestimmt den 
-              Beginn und das Ende des Termins. Hineinklicken öffnet den Datumswähler. 
-              
-            </p>
-<p role="presentation">Wenn das Kontrollfeld <span class="guibutton"><strong>Ganztägig</strong></span> ausgeschaltet ist, können Sie Uhrzeiten für den Beginn 
-              und das Ende festlegen.</p>
-<p role="presentation">Anklicken der Zeitzonen-Schaltflächen neben der Uhrzeit zeigt die Uhrzeit in verschiedenen Zeitzonen. 
-              In den Kalender-Einstellungen können Sie häufig benötigte Zeitzonen 
-              <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html">als Favoriten festlegen</a>.</p>
+<p role="presentation">Termindarstellung
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Als frei anzeigen</strong></span>. Bestimmt, ob der Termin als frei angezeigt wird.
+                    Aktivieren Sie dieses Kontrollfeld, wenn der Termin bei einer Überschneidung mit anderen Terminen 
+                    keinen Konflikt erzeugen soll.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Terminfarbe</strong></span>. Bestimmt, in welcher Farbe der Termin angezeigt wird. Wenn das 
+                    Kontrollfeld <span class="guibutton"><strong>Keine Farbe</strong></span> aktiviert ist, erhält der Termin die Farbe des Kalenders.
+                    Um dem Termin eine andere Farbe zu geben, klicken Sie auf ein Farbfeld.
+                  </p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Sichtbarkeit</strong></span>. Bestimmt die Sichtbarkeit des Termins in einem freigegebenen Kalender.
+                    </p>
+<ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Standard</strong></span>. Der Termin ist für alle Benutzer sichtbar.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Privat</strong></span>. Benutzer, die keine Teilnehmer sind, können nur den Zeitpunkt des Termins sehen.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Geheim</strong></span>. Benutzer, die keine Teilnehmer sind, können den Termin nicht sehen.</p></li>
+</ul>
+<p role="presentation">                 
+                  </p>
 </li>
-<li class="listitem"><p role="presentation">Kontrollfeld <span class="guibutton"><strong>Ganztägig</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn der Termin ganze 
-              Tage dauern soll.</p></li>
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Verfügbaren Zeitraum finden</strong></span>. Öffnet die Planungsansicht. Mit dieser
-              Ansicht können Sie verfügbare Zeiträume finden, wenn Sie einen Termin mit mehreren Teilnehmern planen.</p></li>
-<li class="listitem"><p role="presentation">Kontrollfeld <span class="guibutton"><strong>Wiederholen</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn der Termin mehrmals 
-              wiederholt werden soll. Weitere Bedienelemente zum Einstellen der Wiederholungsparameter werden angezeigt. 
-              Beispiele zur Anwendung finden Sie bei den
-              <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">Fragen zu Terminen und Aufgaben</a>.</p></li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Beschreibung</strong></span>. Geben Sie hier optional eine Beschreibung 
-              des Termins ein.</p></li>
-<li class="listitem"><p role="presentation">Auswahlliste <span class="guibutton"><strong>Erinnerung</strong></span>. Bestimmt, wann Sie durch einen Eintrag im Infobereich
-            an den Termin erinnert werden.</p></li>
-<li class="listitem"><p role="presentation">Auswahlliste <span class="guibutton"><strong>Anzeigen als</strong></span>. Bestimmt Ihre Verfügbarkeit während der Dauer des Termins.
-              Bei zeitlich überlappenden Terminen erhalten Sie eine Konfliktmeldung, es sei denn, die Verfügbarkeit ist auf 
-              <span class="guibutton"><strong>Frei</strong></span> eingestellt. Beispiele zur Anwendung finden Sie bei den 
-              <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.display_as">Fragen und Antworten zum Kalender</a>.</p></li>
-<li class="listitem"><p role="presentation">Wenn Sie in der Werkzeugleiste im Menü <span class="guibutton"><strong>Ansicht</strong></span> die Einstellung 
-              <span class="guibutton"><strong>Benutzerdefinierte Farben</strong></span> gewählt haben, wird ein Farbwahlfeld angezeigt. Anklicken
-              eines Farbfelds bestimmt die Farbe des Termins. Wenn Sie das erste Farbfeld anklicken, erhält der Termin
-              die Farbe seines Kalenders.</p></li>
-<li class="listitem"><p role="presentation">Kontrollfeld <span class="guibutton"><strong>Privat</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn andere Benutzer den
-              Betreff und die Beschreibung des Termins nicht sehen sollen.</p></li>
-<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Teilnehmer/Ressourcen hinzufügen</strong></span>. Geben Sie hier die Namen der Teilnehmer
-            an, die am Termin teilnehmen sollen. Wenn Teilnehmer eine zusätzliche Termineinladung per E-Mail erhalten sollen, aktivieren Sie
-            <span class="guibutton"><strong>Alle Teilnehmer per E-Mail benachrichtigen</strong></span>.</p></li>
-<li class="listitem"><p role="presentation">Schaltfläche <span class="guibutton"><strong>Anhänge hinzufügen</strong></span> unterhalb von <span class="guibutton"><strong>Anhänge</strong></span>. Klicken 
-              Sie auf diese Schaltfläche, wenn Sie den Kontaktdaten eine Datei oder mehrere Dateien anhängen wollen.</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Erinnerung</strong></span>. Bestimmt, wann und wie Sie an den Termin erinnert werden.</p></li>
+<li class="listitem"><p role="presentation">Eingabefeld <span class="guibutton"><strong>Kontakt/Ressourcen hinzufügen</strong></span>. Geben Sie hier die Namen der Teilnehmer oder 
+              Ressourcen an.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Anhänge hinzufügen</strong></span>. Fügt Dateien hinzu.</p></li>
+<li class="listitem">
+<p role="presentation">Schaltflächenleiste
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Anlegen</strong></span>. Speichert die aktuellen Daten des Termins.
+                    Schließt das Bearbeitungsfenster.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Verwerfen</strong></span>. Bricht das Anlegen oder die Bearbeitung des Termins ab.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Kalender</strong></span>. Zeigt den Kalender, in dem der Termin angelegt wird.
+                    Anklicken öffnet das Fenster zur Auswahl eines Kalenders.</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
 </ul>
 <p>
       </p>
@@ -121,6 +139,7 @@
 <li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.create.html">Das Bearbeitungsfenster</a></p></li>
 <li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">Der Datumswähler</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.scheduling.html">Die Planungsansicht</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html">Neuen Termin anlegen</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html">Termine bearbeiten</a></p>
 </li>

@@ -57,7 +57,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // they both add the same property; never use simultaneously!
                 '662': 'text_preview',
                 '663': 'text_preview',
-                '664': 'authenticity'
+                '664': 'authenticity_preview'
             },
             'contacts': {
                 '500': 'display_name',
@@ -219,6 +219,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '401': 'full_time'
             },
             'folders': {
+                // please note: Any changes inside the folders must be communicated to the MW such that
+                // the rampup attribute folderList contains the correct columns and can be mapped
                 '1': 'id',
                 '2': 'created_by',
                 '3': 'modified_by',
@@ -255,6 +257,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3201': 'com.openexchange.calendar.extendedProperties',
                 '3203': 'com.openexchange.calendar.provider',
                 '3220': 'com.openexchange.caldav.url',
+                '3204': 'com.openexchange.calendar.accountError',
                 '3205': 'com.openexchange.calendar.config'
             },
             'user': {
@@ -682,7 +685,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             }
         } else {
             // e.g. plain text
-            deferred.resolve(response || '');
+            deferred.resolve(response);
         }
     };
 
@@ -816,7 +819,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // process response
                 if (r.o.processData) {
                     processResponse(r.def, response, r.o, r.o.type);
-                } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
+                } else if (r.xhr.dataType === 'json' && response.error !== undefined && response.category !== 13) {
                     // error handling if JSON (e.g. for UPLOAD)
                     response.folder = r.o.data.folder;
                     ox.trigger('http:error:' + response.code, response, r.o);
@@ -839,7 +842,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 that.trigger('stop fail', r.xhr);
                 var message = xhr.status !== 0 ? xhr.status + ' ' : '';
                 message += errorThrown || (navigator.onLine ? that.messages.generic : that.messages.offline);
-                r.def.reject({ error: message }, xhr);
+                r.def.reject({ error: message, code: navigator.onLine ? 'NOSERVER' : 'OFFLINE' }, xhr);
                 r = null;
             });
         }
@@ -1366,6 +1369,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         messages: {
             // translation will be injected by http_error.js
             generic: 'An unknown error occurred',
+            // add better more specific messages with next release
+            noserver: 'An unknown error occurred',
             offline: 'Cannot connect to server. Please check your connection.'
         },
 

@@ -19,6 +19,21 @@ define('io.ox/core/api/jobs', [
 
     var longRunningJobs = {}, jobTimer;
 
+    // A failsafe iterator that doesn't break the iteration when one callback throws an error.
+    // This is important, because callbacks after a thrown error would not be invoked anymore.
+    // This can lead to unresolved deferreds.
+    function iterateCallbacksFailsafe(array, result) {
+        _(array).each(function (cb) {
+            try {
+                cb(result);
+            } catch (e) {
+                // just catch errors to prevent that later callbacks are not invoked
+                // IMPORTANT: this is normal behavior for the 'throw error' hack in files/api.js/'update()'
+                if (ox.debug) { console.warn('Catched error inside callback, probably normal for quota error', e); }
+            }
+        });
+    }
+
     var api = {
 
         updateJobTimer: function () {
@@ -47,15 +62,18 @@ define('io.ox/core/api/jobs', [
                     _(_(doneJobs).keys()).each(function (key) {
                         var job = doneJobs[key];
                         api.get(job.id).done(function (result) {
-                            if (result.error && doneJobs[job.id].failCallback) {
-                                doneJobs[job.id].failCallback(result);
-                            } else if (doneJobs[job.id].successCallback) {
-                                doneJobs[job.id].successCallback(result);
+                            if (result.error && doneJobs[job.id].failCallback.length) {
+                                iterateCallbacksFailsafe(doneJobs[job.id].failCallback, result);
+
+                            } else if (doneJobs[job.id].successCallback.length) {
+                                iterateCallbacksFailsafe(doneJobs[job.id].successCallback, result);
                             }
 
                             api.trigger('finished:' + job.id, result);
                             // used to trigger redraw of folderview
                             api.trigger('finished:' + job.showIn, result);
+                        }).fail(function (result) {
+                            iterateCallbacksFailsafe(doneJobs[job.id].failCallback, result);
                         });
                     });
                 });
@@ -104,8 +122,8 @@ define('io.ox/core/api/jobs', [
                         // only infostore for now
                         showIn: 'infostore',
                         // use generic fallback
-                        successCallback: function () { ox.trigger('refresh.all'); },
-                        failCallback: function () { ox.trigger('refresh.all'); }
+                        successCallback: [function () { ox.trigger('refresh.all'); }],
+                        failCallback: [function () { ox.trigger('refresh.all'); }]
                     }, job));
                 });
             });
@@ -131,7 +149,18 @@ define('io.ox/core/api/jobs', [
             });
         },
         addJob: function (job) {
-            if (!job || longRunningJobs[job.id]) return;
+            if (!job) return;
+
+            // make sure we have arrays
+            job.failCallback = [].concat(job.failCallback);
+            job.successCallback = [].concat(job.successCallback);
+
+            // if it already exists we just add the callbacks
+            if (longRunningJobs[job.id]) {
+                longRunningJobs[job.id].failCallback = longRunningJobs[job.id].failCallback.concat(job.failCallback);
+                longRunningJobs[job.id].successCallback = longRunningJobs[job.id].successCallback.concat(job.successCallback);
+                return;
+            }
 
             longRunningJobs[job.id] = job;
 

@@ -347,10 +347,6 @@ define('io.ox/core/notifications/subview', [
                 newItems = _.difference(newIds, oldIds),
                 model = this.model;
             if (newItems.length) {
-                if (!_.device('smartphone') && model.get('autoOpen')) {
-                    this.trigger('autoopen', { numberOfNewItems: newItems.length, subviewId: model.get('id'), itemIds: newItems });
-                }
-
                 if (model.get('desktopNotificationSupport')) {
                     var generic = model.get('genericDesktopNotification'),
                         specific = model.get('specificDesktopNotification');
@@ -366,6 +362,7 @@ define('io.ox/core/notifications/subview', [
                         model.set('showNotificationFor', newItems[0]);
                     }
                 }
+                return true;
             }
         },
         addNotifications: function (items, silent) {
@@ -380,8 +377,11 @@ define('io.ox/core/notifications/subview', [
                 return;
             }
             items = this.checkHidden(items);
-            this.checkNew(items);
+            var newModels = this.checkNew(items, this.collection);
             this.collection.add(items, { silent: silent });
+            if (newModels && !_.device('smartphone') && this.model.get('autoOpen')) {
+                this.trigger('autoopen');
+            }
         },
         removeNotifications: function (items, silent) {
 
@@ -409,6 +409,7 @@ define('io.ox/core/notifications/subview', [
                     this.render(this.$el.parent());
                 }
                 this.trigger('responsive-remove');
+                return;
             }
             this.collection.remove(items, { silent: silent });
         },
@@ -421,8 +422,11 @@ define('io.ox/core/notifications/subview', [
                 return;
             }
             items = this.checkHidden(items);
-            this.checkNew(items);
+            var newModels = this.checkNew(items);
             this.collection.reset(items, { silent: silent });
+            if (newModels && !_.device('smartphone') && this.model.get('autoOpen')) {
+                this.trigger('autoopen');
+            }
         },
         onClick: function (e) {
             if ((!(this.model.get('detailview'))) ||
@@ -434,13 +438,12 @@ define('io.ox/core/notifications/subview', [
             var cid = e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
                 fullModel = this.model.get('fullModel'),
-                sidepopupNode = notifications.nodes.sidepopup,
-                status = notifications.getStatus(),
+                sidepopupNode = notifications.sidepopupNode,
                 getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
                 self = this;
 
             // toggle?
-            if (status === 'sidepopup' && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
+            if (notifications.model.get('sidepopup') && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
                 notifications.closeSidepopup();
             } else {
                 notifications.closeSidepopup();

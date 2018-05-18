@@ -24,12 +24,12 @@ define('io.ox/core/desktop', [
     'io.ox/core/upsell',
     'io.ox/core/adaptiveLoader',
     'io.ox/core/folder/api',
+    'io.ox/core/api/apps',
     'io.ox/find/main',
     'io.ox/core/main/icons',
-    'io.ox/core/api/apps',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, icons, appApi, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -45,11 +45,12 @@ define('io.ox/core/desktop', [
     function supportsFind(name) {
         // enabled apps
         var list = coreSettings.get('search/modules') || [];
-        var searchable = ox.ui.apps.get(name) && ox.ui.apps.get(name).get('searchable');
+        //var searchable = apps.get(name) && apps.get(name).get('searchable');
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
-        return list.indexOf(name) > -1 && searchable;
+        //return list.indexOf(name) > -1 && searchable;
+        return list.indexOf(name) > -1;
     }
 
     var AbstractApp = Backbone.Model.extend({
@@ -61,8 +62,9 @@ define('io.ox/core/desktop', [
         initialize: function (options) {
             var self = this;
             this.options = options || {};
-            this.guid = options.guid;
-            this.id = this.id || 'app-' + this.guid;
+            this.guid = this.options.guid || appGuid++;
+            this.id = this.id || (this.options.refreshable ? this.options.name : '') || 'app-' + this.guid;
+            this.set('path', this.options.path ? this.options.path : this.getName() + '/main');
             this.set('id', this.id);
             this.getInstance = function () {
                 return self;
@@ -202,7 +204,7 @@ define('io.ox/core/desktop', [
                                     grid.busy().prop('folder', folder);
                                     grid.refresh();
                                     // load fresh folder & trigger update event
-                                    api.reload(id);
+                                    folderAPI.reload(id);
                                 }
                                 // update hash
                                 _.url.hash('folder', folder);
@@ -220,13 +222,13 @@ define('io.ox/core/desktop', [
                             if (id !== undefined && id !== null && String(id) !== folder) {
 
                                 var app = _.url.hash('app'),
-                                    model = api.pool.getModel(id),
+                                    model = folderAPI.pool.getModel(id),
                                     data = model.toJSON();
 
                                 if (model.has('title')) {
                                     change(id, data, app, def, favorite);
                                 } else {
-                                    api.get(id).then(
+                                    folderAPI.get(id).then(
                                         function success(data) {
                                             change(id, data, app, def, favorite);
                                         },
@@ -238,7 +240,7 @@ define('io.ox/core/desktop', [
                                 }
                             } else if (String(id) === folder) {
                                 // see Bug 34927 - [L3] unexpected application error when clicking on "show all messages in inbox" in notification area
-                                def.resolve(api.pool.getModel(id).toJSON(), false);
+                                def.resolve(folderAPI.pool.getModel(id).toJSON(), false);
                             } else {
                                 def.reject();
                             }
@@ -253,11 +255,11 @@ define('io.ox/core/desktop', [
 
                     setDefault: function () {
                         return $.when().then(function () {
-                            var defaultFolder = api.getDefaultFolder(type);
+                            var defaultFolder = folderAPI.getDefaultFolder(type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
                             }
-                            return api.getExistingFolder(type).then(
+                            return folderAPI.getExistingFolder(type).then(
                                 function (id) {
                                     return that.set(id);
                                 },
@@ -270,7 +272,7 @@ define('io.ox/core/desktop', [
 
                     isDefault: function () {
                         return $.when().then(function () {
-                            var defaultFolder = api.getDefaultFolder(type);
+                            var defaultFolder = folderAPI.getDefaultFolder(type);
                             return String(folder) === String(defaultFolder);
                         });
                     },
@@ -283,7 +285,7 @@ define('io.ox/core/desktop', [
 
                         if (folder === null) return $.Deferred().resolve({});
 
-                        var model = api.pool.getModel(folder);
+                        var model = folderAPI.pool.getModel(folder);
                         return $.Deferred().resolve(model.toJSON());
                     },
 
@@ -316,8 +318,8 @@ define('io.ox/core/desktop', [
 
                         var process = _.debounce(function (error) {
                             // refresh parent folder or if flat all
-                            var model = api.pool.getModel(self.folder.get());
-                            if (model) api.list(model.get('folder_id'), { cache: false });
+                            var model = folderAPI.pool.getModel(self.folder.get());
+                            if (model) folderAPI.list(model.get('folder_id'), { cache: false });
                             self.folder.setDefault();
                             notifications.yell(error);
                         }, 1000, true);
@@ -354,10 +356,10 @@ define('io.ox/core/desktop', [
                                 var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
                                 if (folder !== self.folder.get()) return;
                                 // don't show expected errors see Bug 56276
-                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && api.isBeingDeleted(folder)) return;
+                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && folderAPI.isBeingDeleted(folder)) return;
                                 if (!regex.test(error.code)) return;
                                 // special handling for no permission. if api.get fails, 'http-error' is triggered again
-                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return api.get(self.folder.get(), { cache: false });
+                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return folderAPI.get(self.folder.get(), { cache: false });
                                 process(error);
                             });
                         };
@@ -388,23 +390,25 @@ define('io.ox/core/desktop', [
             this.set('window', win);
             win.app = this;
             if (this.options.floating) {
-                var model = this.options.floatingWindowModel || new FloatingWindow.Model({
-                    title: this.options.title,
-                    closable: this.options.closable,
-                    displayStyle: this.options.displayStyle,
-                    taskbarIcon: this.options.taskbarIcon,
-                    win: win
-                });
-                win.floating = new FloatingWindow.View({
-                    el: win.nodes.outer,
-                    model: model
-                }).render();
+                var model = this.options.floatingWindowModel || new FloatingWindow.Model(
+                    _.extend(_(this.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title', 'name'), { win: win })
+                );
+                win.floating = new FloatingWindow.View({ el: win.nodes.outer, model: model }).render();
 
                 win.floating.listenTo(model, 'quit', function () {
                     win.app.quit().done(function () {
                         model.trigger('close');
                     });
                 });
+
+                // handle dropzone
+                win.floating.listenTo(model, 'change:active change:minimized', function (model) {
+                    if (!win.app.dropZone) return;
+                    var active = model.get('active') && !model.get('minimized');
+                    if (!active) return win.app.dropZone.remove();
+                    win.app.dropZone.include();
+                });
+
                 win.app.once('quit', function () { model.trigger('close'); });
             }
             // add app name
@@ -529,8 +533,7 @@ define('io.ox/core/desktop', [
         launch: function (options) {
             var deferred = $.when(),
                 self = this,
-                name = this.getName(),
-                isDisabled = ox.manifests.isDisabled(name + '/main');
+                name = this.getName();
 
             // update hash
             if (!this.options.floating && name !== _.url.hash('app')) {
@@ -543,23 +546,19 @@ define('io.ox/core/desktop', [
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
                 ox.trigger('app:init', this);
-                if (isDisabled) {
-                    deferred = $.Deferred().reject();
-                } else {
-                    _.extend(this.options, options);
-                    if (name) {
-                        ext.point(name + '/main').invoke('launch', this, this.options);
-                    }
-                    try {
-                        var fn = this.get('launch');
-                        deferred = fn.call(this, this.options) || $.when();
-                    } catch (e) {
-                        console.error('Error while launching application:', e.message, e, this);
-                    }
+                _.extend(this.options, options);
+                if (name) {
+                    ext.point(name + '/main').invoke('launch', this, this.options);
+                }
+                try {
+                    var fn = this.get('launch');
+                    deferred = fn.call(this, this.options) || $.when();
+                } catch (e) {
+                    console.error('Error while launching application:', e.message, e, this);
                 }
                 deferred.then(
                     function success() {
-                        ox.ui.apps.add(self);
+                        apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
                         ox.trigger('app:start', self);
@@ -622,8 +621,9 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
+                if (self.dropZone && self.dropZone.remove) self.dropZone.remove();
                 // remove from list
-                ox.ui.apps.remove(self);
+                apps.remove(self);
                 // mark as not running
                 self.trigger('quit');
                 ox.trigger('app:stop', self);
@@ -798,11 +798,13 @@ define('io.ox/core/desktop', [
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && app.options.floating) {
-                                var model = new FloatingWindow.Model({ id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon }),
+                                var model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name }),
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
                                 FloatingWindow.collection.add(model);
                                 win.listenToOnce(model, 'lazyload', function () {
                                     var oldId = obj.id;
+                                    // copy app options over to window model
+                                    model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
                                     app.launch({ floatingWindowModel: model }).then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
@@ -842,19 +844,15 @@ define('io.ox/core/desktop', [
         },
 
         get: function (name) {
-            return ox.ui.apps.filter(function (app) {
-                return app.getName() === name;
-            });
+            return apps.where({ name: name });
         },
 
         getByCid: function (cid) {
-            return ox.ui.apps.chain().filter(function (app) {
-                return app.cid === cid;
-            }).first().value();
+            return apps.get(cid);
         },
 
         reuse: function (cid) {
-            var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
+            var app = apps.get(cid);
             if (app) {
                 app.launch();
                 return true;
@@ -864,6 +862,13 @@ define('io.ox/core/desktop', [
 
         getCurrentApp: function () {
             return currentWindow !== null ? currentWindow.app : null;
+        },
+
+        getCurrentFloatingApp: function () {
+            return _.chain(ox.ui.apps.pluck('window')).compact()
+                .map(function (win) {
+                    return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
+                }).compact().first().value();
         },
 
         getCurrentWindow: function () {
@@ -878,7 +883,7 @@ define('io.ox/core/desktop', [
     window.onbeforeunload = function () {
 
         // find all applications with unsaved changes
-        var dirtyApps = ox.ui.apps.filter(function (app) {
+        var dirtyApps = apps.filter(function (app) {
             return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
         });
 
@@ -894,9 +899,9 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
-        options.guid = appGuid++;
-        if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
-        return ox.ui.apps.add(new ox.ui.App(options));
+        if (upsell.visible(options.requires) && _.device(options.device)) {
+            return apps.add(new ox.ui.App(options));
+        }
     };
 
     ox.ui.screens = (function () {
@@ -1193,24 +1198,6 @@ define('io.ox/core/desktop', [
                     }
                 });
 
-                ext.point(name + '/window-toolbar').extend({
-                    id: 'default',
-                    draw: function () {
-                        return $('<ul class="window-toolbar" class="f6-target" attr="toolbar">')
-                            .attr('aria-label', gt('Application Toolbar'));
-                    }
-                });
-
-                ext.point(name + '/window-head').extend({
-                    id: 'default',
-                    draw: function () {
-                        return this.head.append(
-                            this.toolbar = ext.point(name + '/window-toolbar')
-                                .invoke('draw', this).first().value() || $()
-                        );
-                    }
-                });
-
                 ext.point(name + '/window-body').extend({
                     id: 'default',
                     draw: function () {
@@ -1306,7 +1293,7 @@ define('io.ox/core/desktop', [
                             firstShow = false;
                         }
                         ox.ui.windowManager.trigger('window.show', self);
-                        ox.ui.apps.trigger('resume', self.app);
+                        apps.trigger('resume', self.app);
 
                     } else {
                         _.call(cont);
@@ -1351,7 +1338,7 @@ define('io.ox/core/desktop', [
                 this.preQuit = function () {
                     if (!window.cordova) this.hide();
                     this.state.open = false;
-                    this.trigger('pre-quit');
+                    if (this.floating) this.floating.minimize();
                     ox.ui.windowManager.trigger('window.pre-quit', this);
                     return this;
                 };
@@ -1494,11 +1481,9 @@ define('io.ox/core/desktop', [
                 this.setChromeless = function (mode) {
                     if (mode) {
                         this.nodes.outer.addClass('chromeless-window');
-                        this.nodes.head.hide();
                         this.nodes.body.css('left', '0px');
                     } else {
                         this.nodes.outer.removeClass('chromeless-window');
-                        this.nodes.head.show();
                         this.nodes.body.css('left', '');
                     }
                 };
@@ -1555,9 +1540,6 @@ define('io.ox/core/desktop', [
                             $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
-                        // window HEAD
-                        // @deprecated
-                        win.nodes.head = $('<div class="window-head">'),
                         // window HEADER
                         win.nodes.header = $('<div class="window-header">'),
                         // window SIDEPANEL
@@ -1581,8 +1563,6 @@ define('io.ox/core/desktop', [
                     win.nodes.outer.addClass(opt.name.replace(/[./]/g, '-') + '-window');
                 }
 
-                // draw window head
-                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
                 ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             }
 
@@ -1597,103 +1577,103 @@ define('io.ox/core/desktop', [
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
             }
 
-            // if (opt.find && supportsFind(opt.name)) {
+            if (opt.find && supportsFind(opt.name)) {
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'view',
-            //         index: 100,
-            //         draw: function (baton) {
-            //             baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
+                ext.point('io.ox/find/view').extend({
+                    id: 'view',
+                    index: 100,
+                    draw: function (baton) {
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
 
-            //             // add nodes
-            //             this.nodes.sidepanel
-            //                 .append(baton.$.viewnode)
-            //                 .addClass('top-toolbar');
-            //         }
-            //     });
+                        // add nodes
+                        this.nodes.sidepanel
+                            .append(baton.$.viewnode)
+                            .addClass('top-toolbar');
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'subviews',
-            //         index: 200,
-            //         draw: function (baton) {
-            //             baton.$.viewnode.append(
-            //                 $('<div class="sr-only arialive" role="status" aria-live="polite">'),
-            //                 baton.$.box = $('<form class="search-box">'),
-            //                 baton.$.boxfilter = $('<div class="search-box-filter">')
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'subviews',
+                    index: 200,
+                    draw: function (baton) {
+                        baton.$.viewnode.append(
+                            $('<div class="sr-only arialive" role="status" aria-live="polite">'),
+                            baton.$.box = $('<form class="search-box">'),
+                            baton.$.boxfilter = $('<div class="search-box-filter">')
+                        );
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'form',
-            //         index: 300,
-            //         draw: function (baton) {
-            //             // share data
-            //             _.extend(baton.data, {
-            //                 label: gt('Search'),
-            //                 id:  _.uniqueId(win.name + '-search-field'),
-            //                 guid:  _.uniqueId('form-control-description-')
-            //             });
-            //             // search box form
-            //             baton.$.group = $('<div class="form-group has-feedback">').append(
-            //                 $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-            //                     id: baton.data.id,
-            //                     placeholder: baton.data.label + '...',
-            //                     'aria-describedby': baton.data.guid
-            //                 })
-            //             );
-            //             // add to searchbox area
-            //             baton.$.box.append(
-            //                 baton.$.group
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'form',
+                    index: 300,
+                    draw: function (baton) {
+                        // share data
+                        _.extend(baton.data, {
+                            label: gt('Search'),
+                            id:  _.uniqueId(win.name + '-search-field'),
+                            guid:  _.uniqueId('form-control-description-')
+                        });
+                        // search box form
+                        baton.$.group = $('<div class="form-group has-feedback">').append(
+                            $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+                                id: baton.data.id,
+                                placeholder: baton.data.label + '...',
+                                'aria-describedby': baton.data.guid
+                            })
+                        );
+                        // add to searchbox area
+                        baton.$.box.append(
+                            baton.$.group
+                        );
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'buttons',
-            //         index: 400,
-            //         draw: function (baton) {
-            //             baton.$.group.append(
-            //                 // search
-            //                 $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-            //                     .attr({
-            //                         'data-original-title': gt('Start search'),
-            //                         'aria-label': gt('Start search')
-            //                     }).append($('<i class="fa fa-search" aria-hidden="true">'))
-            //                     .tooltip(),
-            //                 // cancel/reset
-            //                 $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
-            //                     .attr({
-            //                         'data-original-title': gt('Cancel search'),
-            //                         'aria-label': gt('Cancel search')
-            //                     }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
-            //                     .tooltip()
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'buttons',
+                    index: 400,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // search
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                .attr({
+                                    'data-original-title': gt('Start search'),
+                                    'aria-label': gt('Start search')
+                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
+                                .tooltip(),
+                            // cancel/reset
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                                .attr({
+                                    'data-original-title': gt('Cancel search'),
+                                    'aria-label': gt('Cancel search')
+                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
+                                .tooltip()
+                        );
+                    }
+                });
 
-            //     ext.point('io.ox/find/view').extend({
-            //         id: 'screenreader',
-            //         index: 500,
-            //         draw: function (baton) {
-            //             baton.$.group.append(
-            //                 // sr label
-            //                 $('<label class="sr-only">')
-            //                     .attr('for', baton.data.id)
-            //                     .text(baton.data.label),
-            //                 // sr description
-            //                 $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
-            //                     .text(
-            //                         //#. search feature help text for screenreaders
-            //                         gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-            //                     )
-            //             );
-            //         }
-            //     });
+                ext.point('io.ox/find/view').extend({
+                    id: 'screenreader',
+                    index: 500,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // sr label
+                            $('<label class="sr-only">')
+                                .attr('for', baton.data.id)
+                                .text(baton.data.label),
+                            // sr description
+                            $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
+                                .text(
+                                    //#. search feature help text for screenreaders
+                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                )
+                        );
+                    }
+                });
 
-            //     // draw searchfield and attach lazy load listener
-            //     ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
-            // }
+                // draw searchfield and attach lazy load listener
+                ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
+            }
 
             // fix height/position/appearance
             if (opt.chromeless) {
@@ -1818,16 +1798,10 @@ define('io.ox/core/desktop', [
         return def;
     };
 
-    ox.ui.apps.on('resume', function (app) {
+    apps.on('resume', function (app) {
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
     });
 
-    _(appApi.getApps()).each(function (obj) {
-        if (upsell.visible(obj.requires) && _.device(obj.device)) {
-            ox.ui.apps.add(new ox.ui.App(_.extend({ name: obj.id }, obj)));
-        }
-    });
-
-    return {};
+    return ox.ui;
 });

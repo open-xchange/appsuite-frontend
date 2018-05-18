@@ -133,10 +133,13 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
 
                         // get properties
                         items = true;
+                        // calendar items use an object here instead of a simple number
+                        var created_by = item.createdBy && item.createdBy.entity ? item.createdBy.entity : item.created_by;
+
                         // bug #52825, check if permission is granted by the folder or by the object
-                        props.read = props.read && ((objectPermission && objectPermission.bits >= 1) || getRight(folder, item.created_by, 7));
-                        props.modify = props.modify && ((objectPermission && objectPermission.bits >= 2) || getRight(folder, item.created_by, 14));
-                        props['delete'] = props['delete'] && ((objectPermission && objectPermission.bits >= 4) || getRight(folder, item.created_by, 21));
+                        props.read = props.read && ((objectPermission && objectPermission.bits >= 1) || getRight(folder, created_by, 7));
+                        props.modify = props.modify && ((objectPermission && objectPermission.bits >= 2) || getRight(folder, created_by, 14));
+                        props['delete'] = props['delete'] && ((objectPermission && objectPermission.bits >= 4) || getRight(folder, created_by, 21));
 
                         if (folder) {
                             // create new objects

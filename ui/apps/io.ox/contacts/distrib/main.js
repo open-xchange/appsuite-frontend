@@ -181,10 +181,14 @@ define('io.ox/contacts/distrib/main', [
 
             // hash state support
             var state = app.getState();
-            if ('id' in state) {
-                app.edit(state);
-            } else if ('folder' in state) {
-                app.create(state.folder);
+            if ('app' in state && state.app !== 'io.ox/contacts') return $.when();
+
+            if (!app.attributes.floating) {
+                if ('id' in state) {
+                    app.edit(state);
+                } else if ('folder' in state) {
+                    app.create(state.folder);
+                }
             }
         });
 

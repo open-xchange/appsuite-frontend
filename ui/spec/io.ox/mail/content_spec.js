@@ -187,6 +187,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
         function process(str, type) {
             return content.get({
+                headers: {},
                 attachments: [{ content: str, content_type: type || 'text/html', disp: 'inline' }]
             });
         }

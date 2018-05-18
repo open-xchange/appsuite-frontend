@@ -172,11 +172,6 @@ define.async('io.ox/mail/accounts/view-form', [
                     });
                 }
 
-                // setting mail_protocol default if dsc account
-                if (settings.get('dsc/enabled', false) && self.model.get('id') === undefined) {
-                    model.set('mail_protocol', 'imap');
-                }
-
                 function syncLogin(model, value) {
                     model.set('login', value, { validate: true });
                 }
@@ -406,11 +401,9 @@ define.async('io.ox/mail/accounts/view-form', [
                 picker({
                     async: true,
                     context: 'account',
-                    done: function (target) {
+                    done: function (target, dialog) {
                         self.model.set(property, target, { validate: true });
-                    },
-                    close: function () {
-                        self.dialog.resume();
+                        dialog.close();
                     },
                     folder: id,
                     module: 'mail',
@@ -637,8 +630,8 @@ define.async('io.ox/mail/accounts/view-form', [
                                 new InputView({ model: model, id: 'primary_address', mandatory: true }).render().$el
                             )
                         ),
-                        // unified inbox, disabled for DSC as well
-                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') || settings.get('dsc/enabled') ?
+
+                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ?
                         $() :
                         group(
                             checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
@@ -675,23 +668,12 @@ define.async('io.ox/mail/accounts/view-form', [
                 changeTransportAuth.call(view);
             }
 
-            // don't show folder settings if this is a new account or we are in a DSC environment
-            if (model.get('id') !== undefined && (model.get('id') === 0 || !settings.get('dsc/enabled'))) {
+            // don't show folder settings if this is a new account
+            if (model.get('id') !== undefined) {
                 this.append(serverSettingsFolder);
             }
         }
     });
-
-    // debugging
-    /*ext.point(POINT + '/pane').extend({
-        index: 200,
-        id: 'dsc',
-        draw: function (baton) {
-            if (!settings.get('dsc/enabled')) return;
-            console.log('draw', this, baton);
-
-        }
-    });*/
 
     return accountAPI.getDefaultDisplayName().then(function (name) {
         defaultDisplayName = name;

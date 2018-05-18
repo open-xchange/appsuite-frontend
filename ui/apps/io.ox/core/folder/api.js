@@ -99,6 +99,7 @@ define('io.ox/core/folder/api', [
     }
 
     function isVirtual(id) {
+        if (id === 'cal://0/allPublic') return true;
         return /^virtual/.test(id);
     }
 
@@ -202,6 +203,7 @@ define('io.ox/core/folder/api', [
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
             if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
+            if (this.is('calendar') && this.is('private')) return this.supportsShares();
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
             return capabilities.has('read_create_shared_folders');
@@ -460,6 +462,22 @@ define('io.ox/core/folder/api', [
         });
     }
 
+    if (capabilities.has('edit_public_folders')) {
+        pool.addModel({
+            folder_id: '1',
+            id: 'cal://0/allPublic',
+            module: 'calendar',
+            permissions: [{ bits: 0, entity: ox.user_id, group: false }],
+            standard_folder: true,
+            supported_capabilities: [],
+            title: gt('All my public appointments'),
+            total: -1,
+            type: 1,
+            subscribed: true
+        });
+    }
+
+
     //
     // Propagate
     // central hub to coordinate events and caches
@@ -486,16 +504,6 @@ define('io.ox/core/folder/api', [
         }
 
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
-
-            if (mailSettings.get('dsc/enabled')) {
-
-                // need to refresh subfolders of default0
-                return list('default0', { cache: false }).done(function () {
-                    refresh();
-                    api.trigger('refresh');
-                });
-
-            }
 
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
@@ -625,6 +633,10 @@ define('io.ox/core/folder/api', [
         .pipe(function (data) {
             // update/add model
             var model = pool.addModel(data);
+            if (options.isReload && _(model.changed).size()) {
+                // use module here, so apis only listen to their own folders
+                api.trigger('changesAfterReloading:' + model.get('module'), model);
+            }
             // propagate changes via api events
             propagate(model);
             // to make sure we always get the same result (just data; not timestamp)
@@ -637,7 +649,10 @@ define('io.ox/core/folder/api', [
     //
 
     function multiple(ids, options) {
+
+        if (!ids || !ids.length) return $.when([]);
         options = _.extend({ cache: true, errors: false }, options);
+
         try {
             http.pause();
             return $.when.apply($,
@@ -653,9 +668,20 @@ define('io.ox/core/folder/api', [
             )
             .pipe(function () {
                 return _(arguments).toArray();
+            })
+            .pipe(function (responses) {
+                // fail completely if no connection available, i.e. all requests fail with NOSERVER or OFFLINE (see bug 57323)
+                if (!responses.length) return [];
+                if (_(responses).all({ code: 'OFFLINE' })) return reject('offline');
+                if (_(responses).all({ code: 'NOSERVER' })) return reject('noserver');
+                return responses;
             });
         } finally {
             http.resume();
+        }
+
+        function reject(code) {
+            return $.Deferred().reject({ error: http.messages[code], code: code.toUpperCase() });
         }
     }
 
@@ -826,6 +852,10 @@ define('io.ox/core/folder/api', [
             .value();
     }
 
+    function injectVirtualCalendarFolder(array) {
+        array.unshift(pool.getModel('cal://0/allPublic').toJSON());
+    }
+
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
@@ -896,6 +926,9 @@ define('io.ox/core/folder/api', [
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
 
+            // inject public section if not presend
+            if (module === 'event' && !data['public']) data['public'] = [];
+
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
                 var array = _(section).filter(function (folder) {
@@ -906,6 +939,8 @@ define('io.ox/core/folder/api', [
                     // otherwise
                     return true;
                 });
+                // inject 'All my public appointments' for calender/public
+                if (module === 'event' && id === 'public') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -937,6 +972,8 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
         if (isVirtual(id)) return $.when();
+
+        if (!options.silent) api.trigger('before:update before:update:' + id, id, model);
 
         // build data object
         var data = { folder: changes },
@@ -1069,8 +1106,8 @@ define('io.ox/core/folder/api', [
             function fail(error) {
                 // re-add folder
                 pool.getModel(folderId).set('subscr_subflds', true);
-                virtual.refresh();
                 pool.getCollection(folderId).add(model);
+                virtual.refresh();
                 throw error;
             }
         );
@@ -1265,15 +1302,9 @@ define('io.ox/core/folder/api', [
         .done(function () {
             _(list).each(function (model) {
                 var id = model.get('id');
-                api.get(id, { cache: false }).done(function (folderModel) {
-                    api.path(folderModel.folder_id).done(function (folderModels) {
-                        api.pool.getModel(folderModel.folder_id).set('subscr_subflds', true);
-                        folderModels.push(folderModel);
-                        _.each(folderModels, function (tmp) {
-                            api.pool.getCollection(tmp.folder_id).add(tmp);
-                        });
-                        api.trigger('restore', model.toJSON());
-                    });
+                api.get(id, { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('restore', model.toJSON());
                 })
                 .fail(function (error) {
                     // folder does not exist
@@ -1380,7 +1411,7 @@ define('io.ox/core/folder/api', [
     function reload() {
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             // register function call once
-            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
+            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false, isReload: true }), reload.wait);
             api.trigger('reload:' + id);
             reload.hash[id]();
         });

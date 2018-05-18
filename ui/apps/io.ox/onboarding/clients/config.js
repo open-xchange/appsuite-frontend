@@ -331,7 +331,7 @@ define('io.ox/onboarding/clients/config', [
         getUserMail: function () {
             var user = this.user;
             if (!user) return;
-            return user.email1 || user.email3 || user.email3;
+            return user.email1 || user.email2 || user.email3;
         },
 
         getUserMobile: function () {

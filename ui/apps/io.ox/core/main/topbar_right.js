@@ -30,23 +30,14 @@ define('io.ox/core/main/topbar_right', [
 ], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
 
     function getHelp() {
-        var currentApp = ox.ui.App.getCurrentApp();
+        var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
 
         if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
 
-        var currentType = currentApp && currentApp.getName(),
-            manifest = _.defaults(
-                ox.manifests.apps[currentType] || {},
-                ox.manifests.apps[currentType + '/main'] || {},
-                {
-                    help: {
-                        base: 'help',
-                        target: 'index.html'
-                    }
-                }
-            ).help;
-
-        return manifest;
+        return _.extend({
+            base: 'help',
+            target: 'index.html'
+        }, currentApp && currentApp.get('help'));
     }
 
     ext.point('io.ox/core/topbar/right').extend({
@@ -82,11 +73,11 @@ define('io.ox/core/main/topbar_right', [
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness!
                 // only requests are delayed by 5s, the badge is drawn normally
-                self.append(notifications.attach(addLauncher, DELAY));
+                self.append(notifications.attach(DELAY));
             } else {
                 //lets wait till we are online
                 ox.once('connection:online', function () {
-                    self.append(notifications.attach(addLauncher, DELAY));
+                    self.append(notifications.attach(DELAY));
                 });
             }
         }
@@ -138,7 +129,7 @@ define('io.ox/core/main/topbar_right', [
             });
             if (helpView.$el.hasClass('hidden')) return;
             this.append(
-                addLauncher('right', helpView.render().$el)
+                addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
             );
         }
     });
@@ -188,7 +179,7 @@ define('io.ox/core/main/topbar_right', [
             if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
 
             self.append(
-                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
+                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
                     //#. starts the client onboarding wizard that helps users
                     //#. to configure their devices to access/sync appsuites
                     //#. data (f.e. install ox mail app)
@@ -253,14 +244,17 @@ define('io.ox/core/main/topbar_right', [
         extend: function () {
             //replaced by module
             var helpView = new HelpView({
+                attributes: {
+                    role: 'menuitem',
+                    tabindex: -1
+                },
                 content: gt('Help'),
                 href: getHelp
             });
             this.divider();
             if (helpView.$el.hasClass('hidden')) return;
-            this.append(
-                helpView.render().$el.attr('role', 'menuitem')
-            );
+
+            this.append(helpView.render().$el);
         }
     });
 
@@ -311,7 +305,7 @@ define('io.ox/core/main/topbar_right', [
         index: 1000,
         draw: function () {
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('title', gt('Settings')),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
                 dropdown = new Dropdown({
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',
@@ -322,7 +316,7 @@ define('io.ox/core/main/topbar_right', [
 
             updatePicture();
             ext.point('io.ox/core/appcontrol/right/dropdown').invoke('extend', dropdown);
-            this.append(dropdown.render().$el);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
 
             // via global address book
             contactAPI.on('reset:image update:image', updatePicture);
@@ -332,7 +326,7 @@ define('io.ox/core/main/topbar_right', [
             function updatePicture() {
                 a.empty().append(
                     contactAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden"true">')
+                        $('<div class="contact-picture" aria-hidden="true">')
                         .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }
@@ -366,13 +360,13 @@ define('io.ox/core/main/topbar_right', [
 
     // TODO: APPCONTROL
 
-    /* (function logoutHint() {
+    (function logoutHint() {
 
         var data = _.clone(settings.get('features/logoutButtonHint', {}));
 
         if (!data.enabled) return;
 
-        ext.point('io.ox/core/topbar/right').extend({
+        ext.point('io.ox/core/appcontrol/right').extend({
             id: 'logout-button-hint',
             index: 2100,
             draw: function () {
@@ -385,12 +379,13 @@ define('io.ox/core/main/topbar_right', [
                 if (_.device('reload') && session.isAutoLogin()) return;
 
                 // topbar action, dropdown action
-                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a');
+                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a').first();
                 // popover
                 link.popover({
                     content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
                     template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
-                    placement: 'bottom'
+                    placement: 'bottom',
+                    container: 'body'
                 });
                 // prevent logout action when clicking hint
                 this.get(0).addEventListener('click', function (e) {
@@ -405,7 +400,7 @@ define('io.ox/core/main/topbar_right', [
         });
     })();
 
-    ext.point('io.ox/core/topbar/right').extend({
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'client-onboarding-hint',
         index: 2200,
         draw: function () {
@@ -421,9 +416,12 @@ define('io.ox/core/main/topbar_right', [
             var link = this.find('#io-ox-topbar-dropdown-icon > a');
             // popover
             link.popover({
-                content: gt("Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                //#. %1$s is the product name
+                //#, c-format
+                content: gt("Did you know that you can take %1$s with you? Just click this icon and choose 'Connect your device' from the menu.", ox.serverConfig.productName),
                 template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
-                placement: 'bottom'
+                placement: 'bottom',
+                container: 'body'
             });
             // show
             _.defer(link.popover.bind(link, 'show'));
@@ -436,6 +434,5 @@ define('io.ox/core/main/topbar_right', [
             }
         }
     });
-    */
 
 });

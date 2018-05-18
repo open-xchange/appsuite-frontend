@@ -547,6 +547,7 @@ define('io.ox/files/main', [
                     app.folder.unset();
                     app.getWindow().setTitle(gt('Favorites'));
                     if (app.myFavoritesListViewControl) {
+                        app.myFavoriteListView.trigger('selection:change');
                         app.myFavoritesListViewControl.$el.show().siblings().hide();
                         return;
                     }
@@ -587,7 +588,6 @@ define('io.ox/files/main', [
                         }
 
                         app.updateMyFavoritesToolbar = _.debounce(function (cidList) {
-                            if (!cidList) return;
                             // var folder = api.pool.getModel(_.cid(folder));
                             toolbar.disableButtons();
                             var // turn cids into proper objects
@@ -603,6 +603,7 @@ define('io.ox/files/main', [
                                     models: models,
                                     app: this,
                                     allIds: [],
+                                    favorite: true,
                                     collection: app.myFavoriteListView.collection
                                 }),
                                 // draw toolbar
@@ -613,7 +614,7 @@ define('io.ox/files/main', [
 
                         app.updateMyFavoritesToolbar();
                         // update toolbar on selection change as well as any model change
-                        app.myFavoriteListView.on('selection:change change', function () {
+                        app.myFavoriteListView.on('selection:change change favorite:add favorite:remove', function () {
                             app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
                         });
 
@@ -962,6 +963,9 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
+            api.on('refresh:listviews change:file', _.debounce(function () {
+                ox.trigger('refresh^');
+            }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
@@ -1270,6 +1274,27 @@ define('io.ox/files/main', [
             app.toggleFolders = toggle;
         },
 
+        'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
+            function registerHandler(model, find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.listControl.$el.find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.listControl.$el.find('.grid-options:first').show();
+                    }
+                });
+            }
+
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
+        },
+
         // respond to search results
         'find': function (app) {
             if (_.device('smartphone') || !app.get('find')) return;
@@ -1283,7 +1308,7 @@ define('io.ox/files/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.sect.files.gui';
+                return 'ox.appsuite.user.sect.files.gui.html';
             };
         },
 
@@ -1506,6 +1531,8 @@ define('io.ox/files/main', [
         //  => Bug 56943: error handling on external folder delete
         // FLD-0003 -> permission denied
         //  => Bug 57149: error handling on permission denied
+        // FILE_STORAGE-0055
+        //  => Bug 54793 : error handling when folder does not exists anymore
         'special-error-handling': function (app) {
             var process = _.debounce(function (error) {
                 var model = folderAPI.pool.getModel(app.folder.get());
@@ -1513,7 +1540,7 @@ define('io.ox/files/main', [
                 app.folder.setDefault();
                 notifications.yell(error);
             }, 1000, true);
-            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003', function (error, request) {
+            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003 http:error:FILE_STORAGE-0055', function (error, request) {
                 var folder = request.params.parent || request.data.parent;
                 if (!folder || folder !== this.folder.get()) return;
                 if (folderAPI.isBeingDeleted(folder)) return;
@@ -1566,8 +1593,7 @@ define('io.ox/files/main', [
             // ensure proper type
             baton.dropType = 'infostore';
             baton.target = baton.target.replace(/^folder\./, '');
-            // avoid self-reference
-            if (baton.data[0].id === baton.target) return;
+
             // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });

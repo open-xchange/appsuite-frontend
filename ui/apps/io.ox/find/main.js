@@ -124,6 +124,8 @@ define('io.ox/find/main', [
                 if (!app.get('inplace')) return;
                 // reset on folder click
                 app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.cancel);
+                // reset on sidepanel close (lazy)
+                app.listenTo(app.get('parent').props, 'change:folderview', app.cancel);
             },
 
             'enable-disable-toggle': function (app) {
@@ -549,7 +551,7 @@ define('io.ox/find/main', [
                         }
 
                         // mandatory
-                        if (app.isMandatory('account') && !manager.findWhere({ id: 'account' })) {
+                        if (app.isMandatory('account') && !(manager.findWhere({ id: 'account' }) && manager.findWhere({ id: 'account' }).getActive().length)) {
                             facets.push({
                                 facet: 'account',
                                 filter: null,

@@ -44,6 +44,11 @@ done
 
 ## cd ##
 
+NOW=$(echo "${NOW}" | grep -s '[0-9]\{8\}\.[0-9]\{6\}' -)
+if [ -z "${NOW}" ]; then
+    echo "Timestamp invalid, make sure to generate it using 'date -u +%Y%m%d.%H%M%S'"
+    exit 1
+fi
 if [ ! -f core ]; then
     echo "HTML files not found in $(pwd)" >&2
     exit 1

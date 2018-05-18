@@ -13,12 +13,14 @@
 
 .services-list-view {
     margin-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
 
     .service-item {
         display: inline-block;
         padding: 0;
         line-height: 28px;
-        margin: 0 8px 8px 0;
+        margin: 0 4px 8px 4px;
 
         .service-label {
             color: #555;
@@ -26,8 +28,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        &:nth-child(4), &:last-child { margin-right: 0; }
 
         &:focus, &:active { background-color: white; }
 

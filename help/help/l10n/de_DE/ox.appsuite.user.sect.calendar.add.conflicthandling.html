@@ -1,12 +1,12 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.4.12. Terminkonflikte lösen</title>
+<title>7.4.11. Terminkonflikte lösen</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Termine anlegen">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.add.subscribe.html" title="7.4.11. Termine aus externen Kalendern abonnieren">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.add.icalattachment.html" title="7.4.10. Termin aus iCal-Anhang anlegen">
 <link rel="next" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.5. Termineinladung beantworten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.add.subscribe.html">Zurück</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.add.icalattachment.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.invitation.html">Weiter</a></li>
@@ -37,21 +37,37 @@
   </h1>
 <h2 class="sr-only">Termine anlegen</h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.add.conflicthandling">
-<div class="titlepage"><div><div><h3 class="title">7.4.12. Terminkonflikte lösen</h3></div></div></div>
-<a class="indexterm" name="id-1.8.11.16.2"></a><a class="indexterm" name="id-1.8.11.16.3"></a><div class="concept">
+<div class="titlepage"><div><div><h3 class="title">7.4.11. Terminkonflikte lösen</h3></div></div></div>
+<a class="indexterm" name="id-1.8.11.15.2"></a><a class="indexterm" name="id-1.8.11.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.calendar.add.conflicthandling"></a><p id="ox.appsuite.user.concept.calendar.add.conflicthandling">Ein Terminkonflikt tritt auf, wenn folgende
-        Umstände zusammentreffen: </p>
+        Umstände zusammentreffen: 
+        </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Sie sind Teilnehmer eines vorhandenen Termins. Ihre Verfügbarkeit in <span class="guilabel"><strong>Anzeigen als</strong></span> ist auf
-              einen dieser Werte eingestellt: <span class="guilabel"><strong>Gebucht</strong></span>, <span class="guilabel"><strong>Mit Vorbehalt</strong></span>,
-                <span class="guilabel"><strong>Abwesend</strong></span>.</p></li>
-<li class="listitem"><p role="presentation">Sie legen einen neuen Termin an. Ihre Verfügbarkeit in <span class="guilabel"><strong>Anzeigen als</strong></span> ist auf einen dieser
-              Werte eingestellt: <span class="guilabel"><strong>Gebucht</strong></span>, <span class="guilabel"><strong>Mit Vorbehalt</strong></span>, <span class="guilabel"><strong>Abwesend</strong></span>.
-              Der neue Termin überschneidet sich zeitlich mit dem vorhandenen Termin. </p></li>
+<li class="listitem">
+<p role="presentation">Sie sind Teilnehmer eines vorhandenen Termins. Die Termindarstellung dieses Termins ist folgendermaßen eingestellt:
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Die Sichtbarkeit ist eingestellt auf <span class="guibutton"><strong>Standard</strong></span> oder auf <span class="guibutton"><strong>Privat</strong></span></p></li>
+<li class="listitem"><p role="presentation">Das Kontrollfeld <span class="guibutton"><strong>Als frei anzeigen</strong></span> ist deaktiviert.</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Sie legen einen neuen Termin an. Sie wählen die folgende Termindarstellung:
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Die Sichtbarkeit ist eingestellt auf <span class="guibutton"><strong>Standard</strong></span> oder auf <span class="guibutton"><strong>Privat</strong></span></p></li>
+<li class="listitem"><p role="presentation">Das Kontrollfeld <span class="guibutton"><strong>Als frei anzeigen</strong></span> ist deaktiviert.</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
 </ul>
 <p> 
         Sobald Sie auf <span class="guibutton"><strong>Anlegen</strong></span> klicken, öffnet sich das Fenster 
-        <span class="guilabel"><strong>Konflikt aufgetreten</strong></span>. Die Termine, die den Konflikt verursachen, werden angezeigt. </p>
+        <span class="guilabel"><strong>Konflikt aufgetreten</strong></span>. Die Termine, die den Konflikt verursachen, werden angezeigt. 
+      </p>
 </div>
 <div class="task" id="ox.appsuite.user.task.calendar.add.conflicthandling">
 <p class="title">So lösen Sie Terminkonflikte:</p>
@@ -63,7 +79,7 @@
 <li class="listitem"><p role="presentation">Wenn Sie den Termin trotz Konflikt anlegen möchten, klicken Sie auf 
                     <span class="guibutton"><strong>Konflikte ignorieren</strong></span>.</p></li>
 <li class="listitem"><p role="presentation">Wenn Sie den Konflikt beseitigen möchten, klicken Sie auf <span class="guibutton"><strong>Abbrechen</strong></span>. Ändern Sie die
-                    Zeiten des Termins oder setzen Sie <span class="guibutton"><strong>Anzeigen als</strong></span> auf <span class="guibutton"><strong>Frei</strong></span>.</p></li>
+                    Zeiten des Termins oder aktivieren Sie <span class="guibutton"><strong>Als frei anzeigen</strong></span>.</p></li>
 </ul>
             </p></li>
 </ol></div>

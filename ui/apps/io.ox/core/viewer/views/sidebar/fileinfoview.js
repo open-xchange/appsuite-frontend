@@ -46,8 +46,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         var name = model.getDisplayName() || '-';
         var disableLink = options.disableLink || false;
 
-        //fix for 53324
-        if (model.get('source') !== 'drive') return $.txt(name);
+        //fix for 53324, 58378
+        if (!model.isFile()) return $.txt(name);
 
         // fix for 56070
         if (disableLink) return $.txt(name);
@@ -224,7 +224,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             //#. File and folder details
             this.setPanelHeader(gt('Details'));
             // attach event handlers
-            this.listenTo(this.model, 'change:cid change:filename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
+            this.listenTo(this.model, 'change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
             this.on('dispose', this.disposeView.bind(this));
         },
 
@@ -239,9 +239,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             // only draw if needed
             if (this.closable && this.$('.sidebar-panel-heading .close').length === 0) {
                 this.$('.sidebar-panel-heading').prepend(
-                    $('<button type="button" class="close pull-right">')
-                    .attr('aria-label', gt('Hide details'))
-                    .append('<span aria-hidden="true">&times;</span></button>')
+                    $('<button type="button" class="close pull-right">').attr('title', gt('Hide details')).append('<i class="fa fa-times" aria-hidden="true">')
                 );
             }
 

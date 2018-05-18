@@ -18,158 +18,153 @@ define('io.ox/mail/compose/sharing', [
     'io.ox/core/extensions',
     'io.ox/core/yell',
     'gettext!io.ox/mail',
+    'settings!io.ox/mail',
     'settings!io.ox/core',
     'static/3rd.party/jquery-ui.min.js'
-], function (ExtensibleView, mini, Dropdown, ext, yell, gt, coreSettings) {
+], function (ExtensibleView, mini, Dropdown, ext, yell, gt, mailSettings, coreSettings) {
 
     ext.point('io.ox/mail/compose/sharing').extend({
-        id: 'toggle',
+        id: 'expire',
         index: 100,
         render: function () {
-            var message = gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', this.settings.name);
-
-            this.$el.append(
-                $('<a href="#" class="toggle" aria-expanded="false" role="button">').append(
-                    $('<i class="fa fa-fw" aria-hidden="true">'),
-                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    $('<span>').text(gt('Use %1$s', this.settings.name))
-                ).on('click', function () {
-                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    if (this.model.get('thresholdExceeded')) return yell('info', message);
-                    // only uncheck if allowed (server setting can enforce drivemail if attachments are to large)
-                    this.model.set('enable', !this.model.get('enable'));
-                }.bind(this))
-            );
-        }
-    }, {
-        id: 'expire',
-        index: 200,
-        render: function () {
-            var now = _.now();
-
-            this.dropdown = new Dropdown({
-                model: this.model,
-                label: getLabel.bind(this),
-                tagName: 'div',
-                caret: true
-            });
+            var options = [], selectbox;
 
             // option: timespan
-            _(this.settings.expiryDates).each(function (seed) {
+            _(mailSettings.get('compose/shareAttachments/expiryDates', [])).each(function (seed) {
                 var count = seed.slice(0, seed.length - 1),
                     unit = seed.slice(seed.length - 1, seed.length),
-                    timestamp = moment(now).add(count, unit).valueOf(),
+                    // _.now will be added to the value on send to have correct timestamps
+                    value,
                     text = '';
 
                 switch (unit) {
                     case 'd':
                         text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
+                        value = count * 86400000;
                         break;
                     case 'w':
                         text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
+                        value = count * 604800000;
                         break;
                     case 'M':
                         text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
+                        // we just assume 30 days here
+                        value = count * 2592000000;
                         break;
                     case 'y':
                         text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
+                        // 365 days
+                        value = count * 31536000000;
                         break;
                     default:
                         break;
                 }
-                this.dropdown.option('expiry_date', timestamp, text);
-                if (seed === this.settings.defaultExpiryDate) this.model.set('expiry_date', timestamp);
+                options.push({ label: text, value: value });
+
+                if (!this.sharingModel.get('expiry_date') && seed === mailSettings.get('compose/shareAttachments/defaultExpiryDate', '')) this.sharingModel.set('expiry_date', value);
             }.bind(this));
 
+
             // option: none
-            if (!this.settings.requiredExpiration && !this.settings.forceAutoDelete) {
-                this.dropdown.option('expiry_date', '', gt('no expiry date'));
-                if (this.settings.defaultExpiryDate === '') this.model.set('expiry_date', '');
+            if (!mailSettings.get('compose/shareAttachments/requiredExpiration') && !mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) {
+                options.push({ label: gt('Never'), value: '' });
+                if (!this.sharingModel.get('expiry_date') && mailSettings.get('compose/shareAttachments/defaultExpiryDate', '') === '') this.sharingModel.set('expiry_date', '');
             }
 
-            // update dropdown label
-            this.listenTo(this.model, 'change:expiry_date', function () {
-                this.dropdown.$('.dropdown-label').empty().append(getLabel.bind(this));
+            selectbox = new mini.SelectView({
+                model: this.sharingModel,
+                name: 'expiry_date',
+                list: options,
+                id: 'expiration-select-box'
             });
 
-            function getLabel() {
-                var value = this.model.get('expiry_date');
-                if (_.isUndefined(value)) return gt('Expiration');
-                var option = this.dropdown.$ul.find('[data-value="' + value + '"]').parent().text();
-                //#. %1$d represents a time span like "1 month" or "no expire"
-                return gt('Expiration: %1$d', option);
-            }
-
-            this.$el.append(this.dropdown.render().$el.addClass('expire'));
+            //#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+            this.dialogNode.append($('<label for="expiration-select-box">').text(gt('Expiration')), selectbox.render().$el);
         }
     }, {
-        index: 300,
+        index: 200,
         render: function () {
             var self = this;
-            this.dropdown
-                .divider()
-                .option('autodelete', true, gt('delete if expired'));
 
-            var node = this.dropdown.$ul.find('[data-name="autodelete"]');
+            var node = new mini.CustomCheckboxView({
+                model: this.sharingModel,
+                name: 'autodelete',
+                label: gt('delete if expired')
+            }).render().$el;
 
             // disable when forced
-            if (this.settings.forceAutoDelete) return node.prop('disabled', true).addClass('disabled');
+            if (mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) return node.prop('disabled', true).addClass('disabled');
             // hide option and divider when 'no expire' is used
-            this.listenTo(this.model, 'change:expiry_date', updateVisibility);
+            this.listenTo(this.sharingModel, 'change:expiry_date', updateVisibility);
             updateVisibility();
 
             function updateVisibility() {
-                var noExpire = self.model.get('expiry_date') === '';
-                node.toggleClass('hidden', noExpire)
-                    .parent().prev().toggleClass('hidden', noExpire);
+                node.toggleClass('hidden', self.sharingModel.get('expiry_date') === '');
             }
-        }
-    }, {
-        id: 'notifications',
-        index: 400,
-        render: function () {
-            if (!this.settings.enableNotifications) return;
-
-            this.notificationModel = new Backbone.Model();
-
-            this.$el.append(
-                new Dropdown({
-                    model: this.notificationModel,
-                    label: gt('Notification'),
-                    tagName: 'div',
-                    caret: true
-                })
-                .option('download', true, gt('when the receivers have finished downloading the files'))
-                .option('expired', true, gt('when the link is expired'))
-                .option('visit', true, gt('when the receivers have accessed the files'))
-                .render().$el.addClass('notification')
-            );
-
-            this.listenTo(this.notificationModel, 'change', function () {
-                this.model.set('notifications', _.allKeys(this.notificationModel.attributes));
-            });
+            this.dialogNode.append(node);
         }
     }, {
         id: 'password',
-        index: 500,
+        index: 300,
         render: function () {
-            var model = this.model, passContainer;
+            var model = this.sharingModel, passContainer;
 
             function toggleState() {
                 if (model.get('usepassword')) return passContainer.find('input').prop('disabled', false);
                 passContainer.find('input').prop('disabled', true);
             }
 
-            this.$el.append(
-                $('<div class="input-group password">').append(
-                    $('<span class="input-group-addon">').append(
-                        new mini.CheckboxView({ name: 'usepassword', model: model }).render().$el
-                    ),
+            this.dialogNode.append(
+                $('<div class="password-wrapper">').append(
+                    //#. checkbox label to determine if a password should be used
+                    new mini.CustomCheckboxView({ name: 'usepassword', model: model, label: gt('Use password') }).render().$el.addClass('use-password'),
                     passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                 )
             );
             model.on('change:usepassword', toggleState);
             toggleState();
+        }
+    }, {
+        id: 'notifications',
+        index: 400,
+        render: function () {
+            if (!mailSettings.get('compose/shareAttachments/enableNotifications', false)) return;
+
+            this.notificationModel = new Backbone.Model({
+                download: _(this.sharingModel.get('notifications')).contains('download'),
+                expired: _(this.sharingModel.get('notifications')).contains('expired'),
+                visit: _(this.sharingModel.get('notifications')).contains('visit')
+            });
+
+            this.dialogNode.append(
+                $('<fieldset>').append(
+                    $('<legend>').append($('<h2>').text(gt('Email notifications'))),
+                    new mini.CustomCheckboxView({
+                        model: this.notificationModel,
+                        name: 'download',
+                        //#. There is a label "Nofification" before this text
+                        label: gt('Receive notification when someone finished downloading file(s)')
+                    }).render().$el,
+                    new mini.CustomCheckboxView({
+                        model: this.notificationModel,
+                        name: 'expired',
+                        //#. There is a label "Nofification" before this text
+                        label: gt('Receive notification when the link expires')
+                    }).render().$el,
+                    new mini.CustomCheckboxView({
+                        model: this.notificationModel,
+                        name: 'visit',
+                        //#. There is a label "Nofification" before this text
+                        label: gt('Receive notification when someone accesses the file(s)')
+                    }).render().$el
+                )
+            );
+
+            this.listenTo(this.notificationModel, 'change', function () {
+                this.sharingModel.set('notifications', _.allKeys(_(this.notificationModel.attributes).pick(function (value) {
+                    return value === true;
+                })));
+            });
         }
     });
 
@@ -181,48 +176,87 @@ define('io.ox/mail/compose/sharing', [
 
         point: 'io.ox/mail/compose/sharing',
 
-        initialize: function (options) {
-            _.extend(this, options);
-
-            this.model = new Backbone.Model({
+        initialize: function () {
+            this.sharingModel = new Backbone.Model({
                 'instruction_language': coreSettings.get('language'),
                 'enable': false,
-                'thresholdExceeded': false,
-                'autodelete': this.settings.forceAutoDelete
+                'autodelete': mailSettings.get('compose/shareAttachments/forceAutoDelete', false)
             });
-
-            // show/hide
-            this.listenTo(this.collection, 'update', this.updateVisibility);
-            this.listenTo(this.model, 'change:enable change:thresholdExceeded', this.updateVisibility);
-
-            // force
-            if (this.settings.threshold > 0) {
-                this.mailModel.get('attachments').on('add remove reset', function updateThreshold() {
-                    var actualAttachmentSize = this.mailModel.get('attachments').getSize();
-                    this.model.set('thresholdExceeded', actualAttachmentSize > this.settings.threshold);
-                }.bind(this));
-            }
-
-            // update mail model onChange
-            this.listenTo(this.model, 'change', function (model) {
-                if (!model.get('enable')) return this.mailModel.unset('share_attachments');
-                var blacklist = ['usepassword', 'thresholdExceeded'];
-                // don't save password if the field is empty or disabled.
-                if (!model.get('usepassword') || _.isEmpty(model.get('password'))) blacklist.push('password');
-                this.mailModel.set('share_attachments', _.omit(model.attributes, blacklist));
-            });
+            this.listenTo(this.model.get('attachments'), 'add remove reset', this.updateVisibility);
+            this.listenTo(this.sharingModel, 'change:enable', this.updateVisibility);
+            this.listenTo(this.sharingModel, 'change:enable', this.syncToMailModel);
         },
 
         updateVisibility: function () {
-            var isActive = !!this.collection.getValidModels().length && (this.model.get('thresholdExceeded') || this.model.get('enable'));
-            this.$el.toggleClass('active', isActive);
+            if (!this.optionsButton) return;
+
+            if (mailSettings.get('compose/shareAttachments/threshold', 0) > 0) {
+                var actualAttachmentSize = this.model.get('attachments').getSize();
+                if (actualAttachmentSize > mailSettings.get('compose/shareAttachments/threshold', 0) && this.sharingModel.get('enable') === false) {
+                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                    yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
+                    this.sharingModel.set('enable', true);
+                }
+            }
+            // offer option t ocactivate when attachments are present
+            this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
+            // is active
+            this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enable'));
+        },
+
+        syncToMailModel: function () {
+            if (!this.sharingModel.get('enable')) return this.model.unset('share_attachments');
+
+            var obj =  this.sharingModel.toJSON(),
+                blacklist = ['usepassword'];
+            // don't save password if the field is empty or disabled.
+            if (!this.sharingModel.get('usepassword') || _.isEmpty(this.sharingModel.get('password'))) blacklist.push('password');
+            this.model.set('share_attachments', _.omit(obj, blacklist));
         },
 
         render: function () {
             if (this.isRendered) return this;
-            this.invoke('render');
+
+            this.$el.append(
+                new mini.CustomCheckboxView({
+                    model: this.sharingModel,
+                    name: 'enable',
+                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                    label: gt('Use %1$s', mailSettings.get('compose/shareAttachments/name'))
+                }).render().$el,
+                this.optionsButton = $('<button type="button" class="btn btn-link hidden">').text(gt('Options')).on('click', _(this.openDialog).bind(this))
+            );
+            this.updateVisibility();
             this.isRendered = true;
             return this;
+        },
+
+        openDialog: function () {
+            var self = this,
+                previousAttr = this.sharingModel.toJSON();
+
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                new ModalDialog({
+                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                    title: gt('%1$s options', mailSettings.get('compose/shareAttachments/name')),
+                    width: 400
+                })
+                .build(function () {
+                    self.dialogNode = this.$body;
+                    this.$el.addClass('share-attachments-view-dialog');
+                    self.invoke('render');
+                })
+                .addCancelButton()
+                .addButton({ action: 'apply', label: gt('Apply') })
+                .on('apply', function () {
+                    self.syncToMailModel();
+                })
+                .on('cancel', function () {
+                    // revert to previous attributes
+                    self.sharingModel.clear().set(previousAttr);
+                })
+                .open();
+            });
         }
     });
 

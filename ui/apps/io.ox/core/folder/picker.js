@@ -36,6 +36,7 @@ define('io.ox/core/folder/picker', [
     //     flat         {bool}      use flat tree (e.g. for contacts)
     //     folder       {string}    Current folder (for preselection)
     //     height       {number}    dialog height in px
+    //     help         {string}    contextual help reference
     //     indent       {bool}      indent first level (default is true; also needed for flat trees)
     //     last         {bool}      Prefer last folder used (needs settings and persistent)
     //     list         {array}     list of items, use first to determine first folder
@@ -126,7 +127,8 @@ define('io.ox/core/folder/picker', [
             async: o.async,
             width: o.width,
             title: o.title,
-            point: 'io.ox/core/folder/picker'
+            point: 'io.ox/core/folder/picker',
+            help: o.help
         })
             .build(function () {
                 this.$el.addClass('folder-picker-dialog ' + o.addClass);
@@ -143,7 +145,7 @@ define('io.ox/core/folder/picker', [
         }
         dialog.$body.css({ height: o.height });
 
-        var id = o.folder;
+        var id = o.folder || api.getDefaultFolder(o.module);
 
         if (id === undefined && o.settings && _.isString(o.persistent)) {
             id = o.settings.get(o.persistent + '/last');
@@ -181,6 +183,11 @@ define('io.ox/core/folder/picker', [
             });
             tree.on('change', function (id) {
                 o.settings.set(o.persistent + '/last', id).save();
+            });
+            tree.on('afterAppear', function () {
+                _.defer(function () {
+                    tree.$('.tree-container .selectable.selected').focus().trigger('click');
+                });
             });
         }
 
@@ -222,8 +229,6 @@ define('io.ox/core/folder/picker', [
                     .always(function () {
                         dialog.idle();
                         dialog.$body.prepend(tree.render().$el);
-                        // focus and trigger click on first element for proper keyboard a11y
-                        tree.$('.tree-container .selectable:visible:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
                     return this;
@@ -234,12 +239,12 @@ define('io.ox/core/folder/picker', [
                 if (id) o.done(id, dialog, tree);
                 o.always(dialog, tree);
                 o.close(dialog, tree);
-                this.close();
             })
             .on('alternative', function () {
                 o.alternative(dialog, tree);
             })
             .on('cancel', o.cancel)
+            .on('close', o.close)
             .on('create', create)
             .renderTree()
             .open();

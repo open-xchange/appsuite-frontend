@@ -279,13 +279,14 @@ define('io.ox/calendar/main', [
 
                     new DatePicker({ parent: this.closest('#io-ox-core'), showTodayButton: false })
                         .on('select', function (date) {
-                            app.setDate(date);
+                            app.setDate(date, { propagate: false });
                             this.setDate(date, true);
                         })
                         .listenTo(app.props, 'change:date', function (model, value) {
                             // check if the layout supports ranges (week, month year). If the new date is still within that range, we don't need to change the mini calendar
                             // those layous set it always to the first day within their specific range and would overwrite the selection of the user, see(bug 57223)
-                            if (layoutRanges[app.props.get('layout')] && moment(value).startOf(layoutRanges[app.props.get('layout')]).valueOf() === moment(this.getDate()).startOf(layoutRanges[app.props.get('layout')]).valueOf()) return;
+                            var unit = layoutRanges[app.props.get('layout')];
+                            if (unit && moment(value).startOf(unit).valueOf() === moment(this.getDate()).startOf(unit).valueOf()) return;
 
                             this.setDate(value, true);
                         })
@@ -303,11 +304,35 @@ define('io.ox/calendar/main', [
          * Folder view support
          */
         'folder-view': function (app) {
+            if (_.device('smartphone')) return;
 
             app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar', dblclick: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
+        },
+
+        'folder-view-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({
+                app: app,
+                contextmenu: true,
+                flat: true,
+                indent: false,
+                module: 'calendar'
+            });
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month' });
+            page.append(tree.render().$el);
+            app.treeView = tree;
         },
 
         'folder-create': function (app) {
@@ -367,6 +392,40 @@ define('io.ox/calendar/main', [
             });
         },
 
+        'account-errors': function (app) {
+            app.treeView.on('click:account-error', function (folder) {
+                var accountError = folder['com.openexchange.calendar.accountError'];
+                if (!accountError) return;
+                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog, notifications) {
+                    new ModalDialog({
+                        point: 'io.ox/calendar/account-errors',
+                        title: gt('Calendar account error')
+                    })
+                    .extend({
+                        default: function () {
+                            this.$body.append(
+                                $('<div class="info-text">')
+                                    .css('word-break', 'break-word')
+                                    .text(accountError.error)
+                            );
+                        }
+                    })
+                    .addCancelButton()
+                    .addButton({ label: gt('Try again'), action: 'retry', className: 'btn-primary' })
+                    .on('retry', function () {
+                        notifications.yell('warning', gt('Refreshing calendar might take some time...'));
+                        api.refreshCalendar(folder.id).then(function () {
+                            notifications.yell('success', gt('Successfully refreshed calendar'));
+                        }, notifications.yell).always(function () {
+                            folderAPI.pool.unfetch(folder.id);
+                            folderAPI.refresh();
+                        });
+                    })
+                    .open();
+                });
+            });
+        },
+
         'listview': function (app) {
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true });
             app.listView.model.set({ view: 'list' }, { silent: true });
@@ -421,37 +480,6 @@ define('io.ox/calendar/main', [
         },
 
         /*
-         * Folder view mobile support
-         */
-        'folder-view-mobile': function (app) {
-            if (_.device('!smartphone')) return;
-
-            var nav = app.pages.getNavbar('folderTree'),
-                page = app.pages.getPage('folderTree');
-
-            nav.on('rightAction', function () {
-                app.toggleFolders();
-            });
-
-            var tree = new TreeView({
-                app: app,
-                contextmenu: true,
-                flat: true,
-                indent: false,
-                module: 'calendar'
-            });
-            // always change to month view after folder change
-            var cb = function () {
-                if (app.getWindow().currentPerspective !== 'month') {
-                    ox.ui.Perspective.show(app, 'month');
-                }
-            };
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb });
-            page.append(tree.render().$el);
-        },
-
-        /*
          * Default application properties
          */
         'props': function (app) {
@@ -463,7 +491,6 @@ define('io.ox/calendar/main', [
                 'date': moment().valueOf(),
                 'layout': view,
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
-                'colorScheme': app.settings.get('colorScheme', 'custom'),
                 'mobileFolderSelectMode': false,
                 'showMiniCalendar': app.settings.get('showMiniCalendar', true)
             });
@@ -473,12 +500,16 @@ define('io.ox/calendar/main', [
                 return moment(app.props.get('date'));
             };
 
-            app.setDate = function (arg) {
-                app.props.set('date', moment(arg).valueOf());
+            app.setDate = function (newDate, opt) {
+                // try to keep month and year if possible
+                if (!_.isArray(newDate._i)) return app.props.set('date', moment(newDate).valueOf(), opt);
+                var oldDate = this.getDate(),
+                    initArgs = newDate._i,
+                    year = initArgs.length > 0 ? initArgs[0] : oldDate.year(),
+                    month = initArgs.length > 1 ? initArgs[1] : oldDate.month(),
+                    day = initArgs.length > 2 ? initArgs[2] : oldDate.date();
+                app.props.set('date', moment([year, month, day]).valueOf(), opt);
             };
-
-            // store colorScheme in settings to ensure that 'colorScheme' is not undefined
-            app.settings.set('colorScheme', app.props.get('colorScheme'));
         },
 
         'listview-checkboxes': function (app) {
@@ -515,7 +546,6 @@ define('io.ox/calendar/main', [
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .set('showMiniCalendar', data.showMiniCalendar)
-                    .set('colorScheme', data.colorScheme)
                     .save();
             }, 500));
         },
@@ -548,33 +578,6 @@ define('io.ox/calendar/main', [
         },
 
         /*
-         * Respond to change:colorScheme
-         */
-        'change:colorScheme': function (app) {
-            var selectScheme = function (app, value) {
-                var node = app.getWindow().nodes.outer;
-
-                switch (value) {
-                    case 'classic': node.removeClass('dark-colors custom-colors'); break;
-                    case 'dark':
-                        if (_.device('smartphone')) {
-                            node.removeClass('dark-colors custom-colors');
-                        } else {
-                            node.removeClass('custom-colors').addClass('dark-colors');
-                        }
-                        break;
-                    case 'custom': node.removeClass('dark-colors').addClass('custom-colors'); break;
-                    default: node.removeClass('dark-colors custom-colors'); break;
-                }
-            };
-
-            app.props.on('change:colorScheme', function (model, value) {
-                selectScheme(app, value);
-            });
-            selectScheme(app, app.props.get('colorScheme'));
-        },
-
-        /*
          * Respond to layout change
          */
         'change:layout': function (app) {
@@ -593,6 +596,10 @@ define('io.ox/calendar/main', [
 
         'create': function (app) {
             api.on('create', function (event) {
+                var folder = folderAPI.pool.getModel(event.folder);
+                // do not select public folder if allPublic is selected
+                if (app.folders.isSelected('cal://0/allPublic') && folder && folder.is('public')) return;
+                if (app.folders.isSingleSelection()) return;
                 app.folders.add(event.folder);
                 var model = folderAPI.pool.getModel(event.folder);
                 model.trigger('change', model);
@@ -619,6 +626,10 @@ define('io.ox/calendar/main', [
         },
 
         'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list';
 
@@ -636,7 +647,7 @@ define('io.ox/calendar/main', [
                 find.on({
                     'find:query': function () {
                         // switch to supported perspective
-                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                        lastPerspective = lastPerspective || app.props.get('layout') || _.sanitize.option(_.url.hash('perspective'));
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
                             // fluent option: do not write to user settings
                             app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
@@ -646,7 +657,7 @@ define('io.ox/calendar/main', [
                     },
                     'find:cancel': function () {
                         // switch back to perspective used before
-                        var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                        var currentPerspective = _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
                         if (lastPerspective && lastPerspective !== currentPerspective) {
                             app.props.set('layout', lastPerspective);
                         }
@@ -696,21 +707,30 @@ define('io.ox/calendar/main', [
             });
         },
 
+        /*
+         * Add support for virtual folder "All my public appointments"
+         */
+        'virtual-folders': function (app) {
+            app.folderView.tree.selection.addSelectableVirtualFolder('cal://0/allPublic');
+        },
+
+
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
+                return 'ox.appsuite.user.sect.calendar.gui.html';
             };
         },
 
-        'primary-action': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
 
-            app.addPrimaryAction({
-                point: 'io.ox/calendar/sidepanel',
-                label: gt('New appointment'),
-                action: 'io.ox/calendar/detail/actions/create',
-                toolbar: 'create'
-            });
-        },
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/calendar/sidepanel',
+        //         label: gt('New appointment'),
+        //         action: 'io.ox/calendar/detail/actions/create',
+        //         toolbar: 'create'
+        //     });
+        // },
 
         'sidepanel': function (app) {
 
@@ -718,6 +738,7 @@ define('io.ox/calendar/main', [
                 id: 'tree',
                 index: 100,
                 draw: function (baton) {
+                    if (_.device('smartphone')) return;
                     // add border & render tree and add to DOM
                     this.addClass('border-right').append(baton.app.treeView.$el);
                 }
@@ -882,7 +903,6 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        // TODO change core settings so the default folder isnt just a number
         var defaultFolder  = options.folder || folderAPI.getDefaultFolder('calendar');
         if (!options.folder && capabilities.has('guest')) {
             // try to select the first shared folder available
@@ -905,9 +925,8 @@ define('io.ox/calendar/main', [
                     win.show();
                 })
                 .done(function () {
-
                     // app perspective
-                    var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+                    var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
 
                     if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
                         lastPerspective = 'week:day';
@@ -915,8 +934,12 @@ define('io.ox/calendar/main', [
                         // corrupt data fix
                         lastPerspective = 'week:workweek';
                     }
-                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                    app.props.set('layout', lastPerspective);
+
+                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true })
+                        .then(undefined, function applyFallback() {
+                            lastPerspective = 'week:workweek';
+                            return ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
+                        }).done(function () { app.props.set('layout', lastPerspective); });
                 });
         }
     });

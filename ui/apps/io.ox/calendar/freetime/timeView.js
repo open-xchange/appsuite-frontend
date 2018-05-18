@@ -128,7 +128,6 @@ define('io.ox/calendar/freetime/timeView', [
                 .divider()
                 .header(gt('Appointment types'))
                 .option('showFree', true, gt('Free'))
-                .option('showReserved', true, gt('Reserved'))
                 .divider()
                 .header(gt('Date range'))
                 .option('dateRange', 'week', gt('Week'), { radio: true })
@@ -177,9 +176,9 @@ define('io.ox/calendar/freetime/timeView', [
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
                     var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p'),
-                        caluculatedWidth = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px';
-                    // edge needs the min-width or the cells are crushed together
-                    sections.push($('<span class="freetime-hour">').css({ 'width': caluculatedWidth, 'min-width': caluculatedWidth })
+                        calculatedWidth = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px';
+                    // edge needs the min-width and max width or the cells are crushed together or much to wide... WHY U NEVER WORK EDGE!
+                    sections.push($('<span class="freetime-hour">').css({ 'width': calculatedWidth, 'min-width': calculatedWidth, 'max-width': calculatedWidth })
                         .text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                         .addClass(i === start ? 'day-start' : '')
                         .addClass(i === start && counter === 0 ? 'first' : '')
@@ -284,9 +283,9 @@ define('io.ox/calendar/freetime/timeView', [
                 tooltipContainer = baton.view.headerNodeRow1.parent().parent().parent();
 
             _(baton.model.get('attendees').models).each(function (attendee) {
-                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity')).appendTo(table);
+                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity') || attendee.get('uri')).appendTo(table);
 
-                _(baton.model.get('timeSlots')[attendee.get('entity')]).each(function (timeSlot, index) {
+                _(baton.model.get('timeSlots')[attendee.get('entity') || attendee.get('uri')]).each(function (timeSlot, index) {
                     var event;
                     // analyze the timeslot to see if there is an event, and if so check the start dates
                     if (timeSlot.event) {
@@ -295,7 +294,6 @@ define('io.ox/calendar/freetime/timeView', [
                         if (util.isAllday(event)) {
                             event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
                             event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
-                            event.allDay = true;
                         }
                     } else {
                         // we only have a timeslot. Fake some event data, so code can be reused
@@ -444,7 +442,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.on('change:dateRange', self.onChangeDateRange.bind(this));
             this.model.on('change:timeSlots', self.renderBody.bind(this));
             this.model.on('change:zoom', self.updateZoom.bind(this));
-            this.model.on('change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateVisibility.bind(this));
+            this.model.on('change:showFree', self.updateVisibility.bind(this));
 
             this.parentView = options.parentView;
 
@@ -485,16 +483,14 @@ define('io.ox/calendar/freetime/timeView', [
                     oldScrollPos = table.parent().scrollLeft(),
                     newWidth = BASEWIDTH * (parseInt(this.model.get('zoom'), 10) / 100);
 
-                this.headerNodeRow2.find('.freetime-hour').css('width', newWidth + 'px');
+                // edge needs the min-width and max width or the cells are crushed together or much to wide... WHY U NEVER WORK EDGE!
+                this.headerNodeRow2.find('.freetime-hour').css({ 'min-width':  newWidth + 'px', width: newWidth + 'px', 'max-width':  newWidth + 'px' });
                 table.find('.freetime-table-cell').css('width', newWidth + 'px');
                 table.css('width', nodes * newWidth + 'px').parent().scrollLeft((oldScrollPos / oldWidth) * nodes * newWidth);
             }
         },
         updateVisibility: function () {
-            this.bodyNode.toggleClass('showFree', this.model.get('showFree'))
-                .toggleClass('showTemporary', this.model.get('showTemporary'))
-                .toggleClass('showReserved', this.model.get('showReserved'))
-                .toggleClass('showAbsent', this.model.get('showAbsent'));
+            this.bodyNode.addClass('showReserved').toggleClass('showFree', this.model.get('showFree'));
         },
         onScroll: function () {
             this.headerNodeRow2.scrollLeft(this.bodyNode.scrollLeft());
@@ -505,7 +501,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.onChangeWorkingHours();
         },
 
-        onChangeWorkingHours: function (fullrender) {
+        onChangeWorkingHours: function () {
             var numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth();
             this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 + numberOfDays);
             // correct lasso positions
@@ -523,7 +519,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100, true);
             }
 
-            this.renderHeader(!fullrender);
+            this.renderHeader(true);
             this.getAppointmentsInstant();
         },
 
@@ -573,7 +569,7 @@ define('io.ox/calendar/freetime/timeView', [
             if (addOnly === true) {
                 var keys = _(self.model.get('timeSlots')).keys();
                 attendees = _(attendees).filter(function (attendee) {
-                    return _(keys).indexOf(String(attendee.entity)) === -1;
+                    return _(keys).indexOf(String(attendee.entity || attendee.uri)) === -1;
                 });
             }
 
@@ -600,7 +596,7 @@ define('io.ox/calendar/freetime/timeView', [
 
                 for (var i = 0; i < attendees.length; i++) {
                     // only events for now
-                    timeSlots[attendees[i].entity] = _.compact(items[i].freeBusyTime);
+                    timeSlots[attendees[i].entity || attendees[i].uri] = _.compact(items[i].freeBusyTime);
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
@@ -610,7 +606,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         removeParticipant: function (model) {
-            var node = this.bodyNode.find('.appointment-table[data-value="' + model.get('entity') + '"]'),
+            var node = this.bodyNode.find('.appointment-table[data-value="' + (model.get('entity') || model.get('uri')) + '"]'),
                 timeSlots = this.model.get('timeSlots');
             if (node.length) {
                 node.remove();
@@ -620,7 +616,7 @@ define('io.ox/calendar/freetime/timeView', [
                 // trigger scroll for lazyload
                 this.parentView.participantsSubview.bodyNode.trigger('scroll');
             }
-            delete timeSlots[model.get('id')];
+            delete timeSlots[model.get('entity') || model.get('uri')];
             // silent or we would trigger a redraw
             this.model.set('timeSlots', timeSlots, { silent: true });
         },
@@ -808,7 +804,6 @@ define('io.ox/calendar/freetime/timeView', [
                 return {
                     startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: startTime.tz() },
                     endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: endTime.tz() },
-                    allDay: false,
                     attendees: attendees
                 };
             }

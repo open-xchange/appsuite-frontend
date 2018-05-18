@@ -26,7 +26,7 @@ define('io.ox/calendar/week/extensions', [
         draw: function (baton) {
             var self = this,
                 a = baton.model,
-                folder = baton.folders[a.get('folder')],
+                folder = folderAPI.pool.getModel(a.get('folder')).toJSON(),
                 conf = 1,
                 confString = '%1$s',
                 classes = '';
@@ -38,25 +38,23 @@ define('io.ox/calendar/week/extensions', [
                     'background-color': color,
                     'color': util.getForegroundColor(color)
                 }).data('background-color', color);
-                self.addClass(util.getForegroundColor(color));
+                self.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
                 if (util.canAppointmentChangeColor(f, a)) {
                     self.attr('data-folder', f.id);
                 }
             }
 
             var folderId = a.get('folder');
-            if (baton.app.props.get('colorScheme') === 'custom') {
-                if (String(folder.id) === String(folderId)) {
-                    addColors(folder);
-                } else if (folderId !== undefined) {
-                    folderAPI.get(folderId).done(addColors);
-                }
+            if (String(folder.id) === String(folderId)) {
+                addColors(folder);
+            } else if (folderId !== undefined) {
+                folderAPI.get(folderId).done(addColors);
             }
 
             if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
-                var canModifiy = folderAPI.can('write', folder, a.attributes) && a.hasFlag('organizer');
+                var canModifiy = folderAPI.can('write', folder, a.attributes) && util.allowedToEdit(a, { synced: true, folderData: folder });
                 conf = util.getConfirmationStatus(a);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
@@ -100,12 +98,6 @@ define('io.ox/calendar/week/extensions', [
                     $(this).find('.flags').addClass('bottom-right');
                 } else {
                     $(this).find('.flags').hide();
-                }
-            });
-
-            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
-                if (!isBossy) {
-                    self.removeClass('modify');
                 }
             });
         }

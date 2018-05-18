@@ -19,8 +19,9 @@
 
 define('io.ox/core/api/filestorage', [
     'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Events) {
+    'io.ox/core/event',
+    'io.ox/core/extensions'
+], function (http, Events, ext) {
 
     'use strict';
 
@@ -34,11 +35,12 @@ define('io.ox/core/api/filestorage', [
         idsCache = [],
         //utility function to add to idsCache
         addToIdsCache = function (accounts) {
+            var services = ['googledrive', 'dropbox', 'boxcom', 'onedrive'];
+
+            ext.point('io.ox/core/filestorage/service-list').invoke('customize', services);
+
             _(accounts).each(function (account) {
-                // unfortunately we need this hardcoded for now or the standard infostore folders could be recognized as external storages because it has a qualified id too
-                // this would cause some actions to be disabled
-                if (account.filestorageService === 'dropbox' || account.filestorageService === 'googledrive' ||
-                    account.filestorageService === 'onedrive' || account.filestorageService === 'boxcom') {
+                if (_(services).indexOf(account.filestorageService) !== -1) {
                     idsCache.push(account.qualifiedId);
                 }
             });

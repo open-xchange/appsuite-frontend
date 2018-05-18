@@ -1,13 +1,13 @@
-# Gabor Kelemen <gabor@bureau-cornavin.com>, 2012, 2013, 2014.
-# Kálmán Kéménczy <kalman@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
+# Gabor Kelemen <gabor@workshop-chapina.com>, 2012, 2013, 2014.
+# Kálmán Kéménczy <kalman@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-08 19:18+0100\n"
-"Last-Translator: \n"
-"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"PO-Revision-Date: 2018-03-26 14:23+0200\n"
+"Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
+"Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -677,15 +677,12 @@ msgstr ""
 "található mezőben. Mellékletként dokumentumok csatolhatók a feladathoz."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"Az alkalmazás indításához kattintson a menüsáv bal oldalán található "
-"bejegyzések egyikére."
+"Az alkalmazás indításához használja a menüsáv bal oldalán található "
+"gyorsindító ikonokat vagy kattintson az alkalmazásindító menü egyik elemére."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -722,12 +719,6 @@ msgstr ""
 "kattintson az E-mail beállításokra a bal oldalon."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
@@ -735,21 +726,17 @@ msgid ""
 "upper part of the window."
 msgstr ""
 "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
-"Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott "
+"felhasználó képre. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott "
 "alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső "
 "részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
 "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
-"található Rendszer menü ikonra és válassza ki a Beállításokat."
+"található felhasználó képre és válassza ki a Beállításokat."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -798,15 +785,11 @@ msgstr ""
 "Rendszer menü ikonra és válassza ki a Kijelentkezést."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "A kijelentkezéshez kattintson a menüsor jobb felső részében található "
-"Rendszer menü ikonra és válassza ki a Kijelentkezést."
+"kijelentkezés ikonra."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -967,6 +950,30 @@ msgstr ""
 #~ msgstr ""
 #~ "A találkozó létrehozásához kattintson a jobb felső részen található "
 #~ "Létrehozás gombra."
+
+#~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Az alkalmazás indításához kattintson a menüsáv bal oldalán található "
+#~ "bejegyzések egyikére."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
+#~ "Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a "
+#~ "kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson "
+#~ "az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
+#~ "található Rendszer menü ikonra és válassza ki a Beállításokat."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

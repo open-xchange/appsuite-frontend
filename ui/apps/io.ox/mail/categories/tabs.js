@@ -29,12 +29,9 @@ define('io.ox/mail/categories/tabs', [
 
         events: {
             'click .category button': 'onChangeTab',
-            'keydown .category button': 'onCursor',
             'contextmenu': 'onConfigureCategories',
             'dblclick': 'onConfigureCategories',
             'selection:drop': 'onMove',
-            'mouseover .category': 'onMouseover',
-            'mouseout .category': 'onMouseout',
             'mousedown .category button': 'respondToNonKeyboardFocus',
             'blur .category button': 'respondToNonKeyboardFocus'
         },
@@ -67,9 +64,6 @@ define('io.ox/mail/categories/tabs', [
             });
         },
 
-        onMouseover: function (e) { $(e.currentTarget).addClass('hover'); },
-        onMouseout: function (e) { $(e.currentTarget).removeClass('hover'); },
-
         render: function () {
 
             var current = this.props.get('category_id');
@@ -77,7 +71,7 @@ define('io.ox/mail/categories/tabs', [
             this.$el.empty().append(
                 this.collection.map(function (model) {
                     return $('<li class="category" role="presentation">').append(
-                        $('<button type="button" class="btn btn-link" draggable="false">').append(
+                        $('<button type="button" class="btn btn-link" draggable="false" tabindex="-1">').append(
                             $('<span class="category-name">').text(model.get('name')),
                             $('<span class="category-counter">').append(
                                 $('<span class="counter">').text(model.getCount()),
@@ -92,6 +86,7 @@ define('io.ox/mail/categories/tabs', [
                 }),
                 $('<li class="free-space" aria-hidden="true">')
             );
+            this.$el.find('li:first > button').removeAttr('tabindex');
             return this;
         },
 

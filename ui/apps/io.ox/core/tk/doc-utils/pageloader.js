@@ -94,7 +94,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
         function loadPageIntoNode(pageNode, pageNumber, options) {
 
             var // the Deferred object waiting for the image
-                def = null,
+                def = $.Deferred(),
                 // the jquery node
                 jqPageNode = $(pageNode),
                 // the target image format
@@ -110,7 +110,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
                 jqPageNode.data('data-pagezoom', options.pageZoom);
 
                 var pageSize = pdfView.createPDFPageNode(jqPageNode, options);
-                def = (pageSize ? $.Deferred().resolve(pageSize) : $.Deferred().reject());
+                if (pageSize) def.resolve(pageSize); else def.reject();
             }
 
             return def.promise();

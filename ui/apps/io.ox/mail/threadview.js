@@ -249,7 +249,7 @@ define('io.ox/mail/threadview', [
             if (!thread.length) return;
             // reset collection
             var type = this.collection.length === 0 ? 'reset' : 'set';
-            this.collection[type || 'reset'](thread);
+            this.collection[type](thread);
         },
 
         onReset: function () {

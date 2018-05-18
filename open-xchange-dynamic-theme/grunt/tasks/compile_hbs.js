@@ -9,8 +9,11 @@ module.exports = function (grunt) {
             helpers: ['lib/helpers/*.js'],
             files: [
                 {
-                    src: 'apps/io.ox/dynamic-theme/register.hbs',
-                    dest: 'build/apps/io.ox/dynamic-theme/register.js'
+                    expand: true,
+                    cwd: 'apps/',
+                    src: '**/*.hbs',
+                    dest: 'build/apps/',
+                    ext: '.js'
                 }
             ]
         }

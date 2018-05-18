@@ -685,7 +685,7 @@ define('io.ox/contacts/api', [
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
                     node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            if (image.width === 1) {
+                            if (image.width === 1 || e.type === 'error') {
                                 url = opt.fallback ? fallback : null;
                             } else {
                                 cachedURLs[url] = url;

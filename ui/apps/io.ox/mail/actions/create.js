@@ -87,8 +87,10 @@ define('io.ox/mail/actions/create', [
         ox.launch('io.ox/contacts/distrib/main')
             .always(idle)
             .done(function () {
-                this.create(settings.get('folder/contacts'), { distribution_list: members, display_name: title });
-                this.view.baton.member.add(members);
+                this.create(settings.get('folder/contacts'), {
+                    distribution_list: members,
+                    display_name: title
+                });
             });
     }
 

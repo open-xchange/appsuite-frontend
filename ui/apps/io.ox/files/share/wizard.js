@@ -25,9 +25,10 @@ define('io.ox/files/share/wizard', [
     'settings!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/addresspicker',
+    'io.ox/backbone/mini-views/copy-to-clipboard',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard) {
 
     'use strict';
 
@@ -88,42 +89,14 @@ define('io.ox/files/share/wizard', [
         index: INDEX += 100,
         draw: function () {
             var group = this.find('.link-group'),
-                target = '#' + group.find('input').attr('id'),
-                //.# tooltip for a button that copies the content of a field to operating sytems clipboard
-                label = gt('Copy to clipboard'),
-                //.# tooltip for a button after it was clicked and a copy action was executed
-                labelpost = gt('Copied'),
-                button;
+                target = '#' + group.find('input').attr('id');
 
             // copy-to-clipboard button
             group.append(
                 $('<span class="input-group-btn">').append(
-                    button = $('<button type="button" class="btn btn-default">')
-                    .append($('<i class="fa fa-clipboard clippy" aria-hidden="true">'))
-                    .attr({
-                        'data-clipboard-target': target,
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'bottom',
-                        'data-original-title': label,
-                        'aria-label': label,
-                        'data-container': 'body'
-                    })
-                    .tooltip()
+                    new CopyToClipboard({ targetId: target }).render().$el
                 )
             );
-
-            // load lib
-            require(['static/3rd.party/clipboard.min.js']).then(function (ClipBoard) {
-                new ClipBoard(button.get(0));
-                button.prop('disabled', false);
-            });
-
-            // change tooltip after button was clicked
-            button.on('click', function () {
-                button
-                    .attr('data-original-title', labelpost).tooltip('show')
-                    .attr('data-original-title', label);
-            });
         }
     });
 
@@ -244,7 +217,7 @@ define('io.ox/files/share/wizard', [
             var guid, elmCheckbox;
             this.append(
                 $('<div class="form-group">').append(
-                    $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
+                    $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Share with subfolders')).prepend(
                         new miniViews.CheckboxView({ id: guid, name: 'includeSubfolders', model: baton.model }).render().$el
                         .on('click', function (/* e */) {
                             baton.model.set('includeSubfolders', elmCheckbox.checked);

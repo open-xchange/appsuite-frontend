@@ -103,6 +103,9 @@ define('io.ox/settings/security/settings/pane', [
         id: 'mail',
         index: 100,
         render: function () {
+            // fallback default value
+            if (mailSettings.get('features/authenticity', false) && !this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
+
             this.$el.append(
                 util.fieldset(
                     gt.pgettext('app', 'Mail'),
@@ -111,15 +114,11 @@ define('io.ox/settings/security/settings/pane', [
                     // mail authenticity
                     !mailSettings.get('features/authenticity', false) ? $() :
                         util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            //#. Status for mail authenticity features. Do not show any information at all
                             { label: gt('Disabled'), value: 'none' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous emails only'), value: 'fail' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous and trusted emails'), value: 'fail_trusted' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
-                            { label: gt('Dangerous, trusted and valid emails'), value: 'fail_trusted_pass' },
-                            //#. Status for mail authenticity features. Defines a verbosity level for displaying information
+                            //#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
+                            { label: gt('Suspicious and unclassified emails only'), value: 'fail_neutral' },
+                            //#. Status for mail authenticity features. Show information for any mail
                             { label: gt('All emails'), value: 'all' }
                         ])
                 )

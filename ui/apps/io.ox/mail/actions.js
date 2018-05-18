@@ -194,7 +194,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/edit-copy', {
         requires: validDraft,
         action: function (baton) {
-            var data = baton.first();
+            var data = _.extend({}, baton.first());
 
             api.copy(data, data.folder_id).done(function (list) {
                 api.refresh();
@@ -554,6 +554,7 @@ define('io.ox/mail/actions', [
         }
     });
 
+
     // all actions
 
     new Action('io.ox/mail/actions/sendmail', {
@@ -612,23 +613,11 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync',
-        requires: function () {
-            // use client onboarding here, since it is a setting and not a capability
-            return capabilities.has('client-onboarding');
-        },
-        action: function () {
-            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                wizard.run();
-            });
-        }
-    });
-
     // inline links
     var INDEX = 0;
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+    // disabled quick reply for 7.10.0
+    /*ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
@@ -637,11 +626,11 @@ define('io.ox/mail/actions', [
         label: gt('Quick reply'),
         ref: 'io.ox/mail/actions/inplace-reply',
         section: 'standard'
-    }));
+    }));*/
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'lo',
+        prio: 'hi',
         id: 'reply',
         mobile: 'lo',
         label: gt('Reply'),
@@ -909,11 +898,4 @@ define('io.ox/mail/actions', [
         classes: 'list-unstyled'
     }));
 
-    ext.point('io.ox/mail/links/premium-links').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'synchronize',
-        label: gt('Synchronize with Outlook'),
-        ref: 'io.ox/mail/premium/actions/synchronize'
-    }));
 });

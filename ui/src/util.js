@@ -126,10 +126,19 @@
          */
         param: function (obj) {
             return this.serialize(obj, ' / ', _.identity);
+        },
+
+        // quite like param but also drop undefined values
+        cacheKey: function (obj) {
+            return this.param($.extend({}, obj));
         }
     });
 
     $(window).resize(_.recheckDevice);
+
+    $(document).on('shown.bs.popover hide.bs.popover', function (e) {
+        $(e.target).toggleClass('popover-open', e.type === 'shown');
+    });
 
     //
     // Cookie handling
@@ -944,6 +953,12 @@
 
     _.escapeRegExp = function (s) {
         return (s || '').replace(/([$^*+?!:=.|(){}[\]\\])/g, function () { return ('\\' + arguments[1]); });
+    };
+
+    _.sanitize = {
+        option: function (value) {
+            return (value || '').replace(/[^a-z0-9:._-]/ig, '').trim();
+        }
     };
 
     window.assert = function (value, message) {

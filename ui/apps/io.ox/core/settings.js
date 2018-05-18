@@ -273,6 +273,9 @@ define('io.ox/core/settings', [
                         saved = JSON.parse(JSON.stringify(data));
                         self.trigger('save');
                     })
+                    .fail(function (e) {
+                        if (ox.debug) console.error('jslob:set', e);
+                    })
                     .always(function () {
                         delete pending[path];
                     });

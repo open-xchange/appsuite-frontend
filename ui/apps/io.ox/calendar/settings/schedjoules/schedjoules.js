@@ -36,6 +36,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             width: 600,
             center: false,
             maximize: true,
+            help: 'ox.appsuite.user.sect.calendar.folder.subscribe.html',
             async: true,
             point: 'io.ox/core/folder/add-schedjoules-calendar',
             title: gt('Add calendar'),
@@ -121,7 +122,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             http.pause();
             // subscribe
             _.each(subscritions, function (sub) {
-                if (!currentSubscriptions[sub.itemId]) {
+                if (!currentSubscriptions[sub.itemId] || (currentSubscriptions[sub.itemId] && currentSubscriptions[sub.itemId].locale !== sub.locale)) {
                     api.subscribeCalendar(sub);
                 } else {
                     delete currentSubscriptions[sub.itemId];
@@ -186,7 +187,8 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                         customValues: {
                             'true': {
                                 itemId: this.model.attributes.item.item_id,
-                                name: this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id) ? this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id).name : this.model.attributes.item.name + country
+                                name: this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id) ? this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id).name : this.model.attributes.item.name + country,
+                                locale: this.opt.dialogView.data.dialog.requestModel.get('language')
                             },
                             'false': 'false'
                         }
@@ -194,6 +196,11 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                         .render().$el.attr('title', gt('subscribe to calendar'))
                 )
             );
+            if (this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id)) {
+                if (this.opt.dialogView.data.subscriptionsModel.get(this.model.attributes.item.item_id).locale !== this.opt.dialogView.data.dialog.requestModel.get('language')) {
+                    $(this.$el.find('input[type="checkbox"]')).prop('checked', true).attr({ 'disabled': true, 'data-state': 'manual' });
+                }
+            }
 
             return this;
         },
@@ -369,7 +376,8 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
                 _.each(accountFolders, function (model) {
                     collection[model.get('com.openexchange.calendar.config').itemId] = {
                         itemId: model.get('com.openexchange.calendar.config').itemId,
-                        name: model.get('folder_name')
+                        name: model.get('folder_name'),
+                        locale: model.get('com.openexchange.calendar.config').locale
                     };
 
                     if (withId) {

@@ -36,6 +36,7 @@
             border: 0;
             vertical-align: baseline;
             margin-right: 16px;
+            margin-left: 2px;
         }
         .info[disabled] {
             opacity: 1;
@@ -64,10 +65,6 @@
                     border-bottom: 2px solid;
                     margin-right: 1px;
                     margin-left: 1px;
-
-                    .io-ox-calendar-main:not(.custom-colors) & {
-                        border-color: transparent!important;
-                    }
                 }
 
                 .number {
@@ -113,7 +110,7 @@
             > div {
                 display: table-cell;
                 vertical-align: bottom;
-                padding-right: 7px;
+                padding-right: 11px;
                 width: 80px;
             }
         }
@@ -480,7 +477,7 @@
         .week-view-container {
 
             .fulltime-container { margin-left: @weekview-time-widthSmall; }
-            .more-appointments-container { left: @weekview-time-widthSmall; right: 0; }
+            .more-appointments-container { left: @weekview-time-widthSmall; right: 0; bottom: 10px; }
 
             .scrollpane {
 

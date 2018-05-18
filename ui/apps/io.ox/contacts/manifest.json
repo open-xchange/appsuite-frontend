@@ -1,9 +1,0 @@
-{
-    "title": "Address Book",
-    "settings": true,
-    "requires": "contacts",
-    "refreshable": true,
-    "searchable": true,
-    "hasLauncher": true,
-    "index": 700
-}

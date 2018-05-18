@@ -120,6 +120,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.nodes.a11yDate = $('<p class="sr-only">').attr('id', ariaID)
                             .text(gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.'));
 
+                        self.toggleTimeInput(!self.isFullTime());
+
                         return [
                             self.nodes.dayField,
                             dayFieldLabel,
@@ -231,8 +233,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         isFullTime: function () {
-            if (!this.options.ignoreToggle && (this.model.has('full_time') || this.model.has('allDay'))) {
-                return !!(this.model.get('full_time') || this.model.get('allDay'));
+            if (!this.options.ignoreToggle && (this.model.has('full_time'))) {
+                return !!(this.model.get('full_time'));
             } else if (this.chronos) {
                 return util.isAllday(this.model);
             }

@@ -1,13 +1,12 @@
 # Antje Faber, 2011, 2012, 2013.
-# Robert Kratky <robert@bureau-cornavin.com>, 2011, 2012, 2013, 2014.
-# Robert Krátký <kratky@rob.cz>, 2015, 2016.
+# Robert Kratky <robert@workshop-chapina.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-29 19:33+0100\n"
-"Last-Translator: Robert Kratky <kratky@rob.cz>\n"
+"PO-Revision-Date: 2018-04-07 15:53+0100\n"
+"Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
@@ -664,15 +663,12 @@ msgstr ""
 "Účastníci. Dokumenty můžete k úkolu přidat jako přílohy."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"Chcete-li spustit aplikaci, klikněte na položku v levé horní části lišty s "
-"menu."
+"Chcete-li spustit aplikaci, použijte ikony na levé straně lišty menu, nebo "
+"klikněte na položku v menu pro spouštění aplikací."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -707,34 +703,24 @@ msgstr ""
 "horní části lišty menu. Zvolte Nastavení a klikněte na Pošta na levé straně."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu na pravé horní "
+"Chcete-li otevřít nápovědu, klikněte na ikonu uživatele na pravé horní "
 "straně lišty s menu. Zvolte Nápověda. Zobrazí se nápověda pro aktuálně "
 "vybranou aplikaci. Chcete-li procházet kompletní nápovědu, klikněte na "
 "stránku Start nebo Obsah v horní části okna."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Chcete-li otevřít nastavení, klikněte na ikonu Systémové menu v pravé horní "
-"části lišty s menu. Zvolte Nastavení."
+"Chcete-li otevřít nastavení, klikněte na ikonu uživatele v pravé horní části "
+"lišty s menu. Zvolte Nastavení."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -782,15 +768,11 @@ msgstr ""
 "lišty menu. Zvolte Odhlásit."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Chcete-li se odhlásit, klikněte na ikonu Systémové menu v pravé horní části "
-"lišty menu. Zvolte Odhlásit."
+"Chcete-li se odhlásit, klikněte na ikonu odhlášení v pravé horní části lišty "
+"menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -12226,6 +12208,12 @@ msgstr ""
 #~ msgstr "Chcete-li spustit aplikaci, klikněte na nadpis dlaždice."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "Chcete-li spustit aplikaci, klikněte na položku v levé horní části lišty "
+#~ "s menu."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -12243,6 +12231,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu v pravé "
 #~ "horní části lišty s menu. Zvolte Nápověda."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu na pravé "
+#~ "horní straně lišty s menu. Zvolte Nápověda. Zobrazí se nápověda pro "
+#~ "aktuálně vybranou aplikaci. Chcete-li procházet kompletní nápovědu, "
+#~ "klikněte na stránku Start nebo Obsah v horní části okna."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Chcete-li otevřít nastavení, klikněte na ikonu Systémové menu v pravé "
+#~ "horní části lišty s menu. Zvolte Nastavení."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

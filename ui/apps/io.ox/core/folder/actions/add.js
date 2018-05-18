@@ -60,7 +60,7 @@ define('io.ox/core/folder/actions/add', [
             enter: 'add',
             focus: 'input[name="name"]',
             previousFocus: $(document.activeElement),
-            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.html',
             point: 'io.ox/core/folder/add-popup',
             width: _.device('smartphone') ? window.innerWidth - 30 : 400
         })
@@ -155,7 +155,7 @@ define('io.ox/core/folder/actions/add', [
     return function (folder, opt) {
         opt = opt || {};
 
-        if (!folder || !opt.module) return $.when().reject();
+        if (!folder || !opt.module) return $.Deferred().reject();
 
         // only address book, calendar, and tasks do have a "public folder" section
         var hasPublic = /^(contacts|event|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');

@@ -425,11 +425,6 @@ define('io.ox/core/tk/vgrid', [
         template.node.addClass('selectable'); //.attr('aria-describedby', this.multiselectId);
         label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
 
-        // fix mobile safari bug (all content other than position=static is cut off)
-        if (_.device('iOS && Safari')) {
-            container.css('webkitTransform', 'translate3d(0, 0, 0)');
-        }
-
         // IE focus fix for bug 31617.
         // "The focus event does not bubble in Internet Explorer"
         // http://api.jquery.com/focus/

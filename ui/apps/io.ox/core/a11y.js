@@ -34,7 +34,7 @@ define('io.ox/core/a11y', [], function () {
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
         if (/13|32/.test(e.which)) {
             e.preventDefault();
-            node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+            focusListSelection(node);
         }
     });
 
@@ -56,8 +56,7 @@ define('io.ox/core/a11y', [], function () {
 
     $(document).on('keydown.bs.dropdown.data-api', 'ul.dropdown-menu[role="menu"]', dropdownTrapFocus);
 
-    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]:not(.classic-toolbar), ul.launchers', menubarKeydown);
-    $(document).on('keydown.toolbars', 'ul[role="toolbar"].categories', menubarKeydown);
+    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], [role="toolbar"], ul.launchers', menubarKeydown);
 
     // listbox
 
@@ -76,7 +75,7 @@ define('io.ox/core/a11y', [], function () {
         // ENTER/SPACE
         if (/^(13|32)$/.test(e.which)) {
             e.preventDefault();
-            return node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+            return focusListSelection(node);
         }
 
         // BACKSPACE/DELETE
@@ -192,6 +191,10 @@ define('io.ox/core/a11y', [], function () {
         }
     });
 
+    function focusListSelection(node) {
+        return node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+    }
+
     //
     // Tab trap
     //
@@ -218,7 +221,7 @@ define('io.ox/core/a11y', [], function () {
                 // skip tabbable elements of contenteditables
                 return !$(this).closest('[contenteditable="true"]').length;
             })
-            .filter('[tabindex!="-1"][disabled!="disabled"]:visible');
+            .filter(':visible');
     }
 
     function trapFocus(el, e) {
@@ -288,14 +291,22 @@ define('io.ox/core/a11y', [], function () {
         if (e.which === 37) idx--; else idx++;
         if (idx < 0) idx = el.length - 1;
         if (idx === el.length) idx = 0;
-        return el.eq(idx).focus();
+        var node = el.eq(idx).removeAttr('tabindex');
+        if ($(e.currentTarget).is('ul')) node.parent().siblings().find('> a,> button').attr('tabindex', -1);
+        else node.siblings().attr('tabindex', -1);
+        return node.focus();
     }
 
     function menubarKeydown(e) {
+        if ($(e.currentTarget).parents('.mce-tinymce').length > 0) return; // Skip tinymce
+
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
         // space on role="button" is already handled
         if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
-        var links = $(e.currentTarget).find('> li:visible > a, > li:visible > button');
+
+        var isList = $(e.currentTarget).is('ul');
+        var links = $(e.currentTarget).find(isList ? '> li > a, > li > button' : '> a, > button').filter(':visible');
+
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
     }
@@ -334,6 +345,7 @@ define('io.ox/core/a11y', [], function () {
     return {
         collapse: collapse,
         dropdownTrapFocus: dropdownTrapFocus,
+        focusListSelection: focusListSelection,
         getTabbable: getTabbable,
         menubarKeydown: menubarKeydown,
         trapFocus: trapFocus

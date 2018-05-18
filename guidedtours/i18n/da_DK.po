@@ -1,18 +1,18 @@
-# Jacob Sparre Andersen <jacob@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
+# Jacob Sparre Andersen <jacob@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-31 22:59+0100\n"
-"Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
-"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2018-03-27 10:57+0100\n"
+"Last-Translator: Jacob Sparre Andersen <jacob@workshop-chapina.com>\n"
+"Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -601,8 +601,7 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr ""
-"For at oprette en aftale, klikkes der på »Opret« i nederste venstre side."
+msgstr "For at oprette en aftale, klik på »Opret« i nederste venstre side."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
@@ -666,15 +665,12 @@ msgstr ""
 "Deltagere. Du kan tilføje dokumenter som vedhæftninger til opgaven."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid ""
 "To launch an app, use the quick launch icons on the left side of the menu "
 "bar or click on an entry inside the app launcher menu."
 msgstr ""
-"For at starte et program, klikkes der på et element i venstre side af "
-"menulinjen."
+"For at starte en app, brug hurtigstart-ikonene i venstre side af "
+"menubjælken, eller klik på en app inde i app-starter-menuen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -710,34 +706,24 @@ msgstr ""
 "side."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"For et åbne hjælpen, klik på menuikonet System i øverste højre side af "
-"menulinjen. Vælg Hjælp.  Hjælpen for det aktuelle program bliver vist.  For "
-"at se den komplette hjælp, klik på Startside eller Indholdsfortegnelse "
-"øverst i vinduet."
+"For at åbne hjælpen, klik på brugerbilledet øverst til højre på "
+"menubjælken.  Vælg »Hjælp«.  Hjælpen til den aktuelt valgte app bliver "
+"vist.  For at se den samlede hjælp, klik på »Startside« eller "
+"»Indholdsfortegnelse« øverst i vinduet."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"For at åbne indstillingerne, klik på menuikonet »System« i øverste højre "
-"side af menulinjen. Vælg »Indstillinger«."
+"For at åbne indstillingerne, klik på brugerbilledet øverst til højre på "
+"menubjælken.  Vælg »Indstillinger«."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -784,15 +770,9 @@ msgstr ""
 "menulinjen. Vælg log af."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
-msgstr ""
-"For at logge af, tryk på menuikonet System i øverste højre side af "
-"menulinjen. Vælg log af."
+msgstr "For at logge ud, klik på log-ud-ikonet øverst til højre i menubjælken."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
@@ -5681,6 +5661,12 @@ msgstr ""
 #~ msgstr "For at starte et program, klik på en flises overskrift."
 
 #~ msgid ""
+#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr ""
+#~ "For at starte et program, klikkes der på et element i venstre side af "
+#~ "menulinjen."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5698,6 +5684,24 @@ msgstr ""
 #~ msgstr ""
 #~ "For at åbne hjælp, tryk på menuikonet System i øverste højre side af "
 #~ "menulinjen. Vælg hjælp."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "For et åbne hjælpen, klik på menuikonet System i øverste højre side af "
+#~ "menulinjen. Vælg Hjælp.  Hjælpen for det aktuelle program bliver vist.  "
+#~ "For at se den komplette hjælp, klik på Startside eller "
+#~ "Indholdsfortegnelse øverst i vinduet."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "For at åbne indstillingerne, klik på menuikonet »System« i øverste højre "
+#~ "side af menulinjen. Vælg »Indstillinger«."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

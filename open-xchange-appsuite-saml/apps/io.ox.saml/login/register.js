@@ -13,13 +13,18 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
                 $.get(ox.apiRoot + samlPath + '/init?flow=login').done(function (data) {
                     var baton = new ext.Baton({ data: data });
                     ext.point('io.ox.saml/login').invoke('handle', baton, baton);
-                    def.resolve();
+                    if (baton.handled && baton.handled.always) {
+                        baton.handled.always(def.resolve);
+                    } else {
+                        def.resolve();
+                    }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     if (ox.serverConfig.samlLoginErrorRedirect) {
                         _.url.redirect(ox.serverConfig.samlLoginErrorRedirectURL +
                             '#&' + _.serialize({ language: ox.language, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
+                    } else {
+                        def.resolve();
                     }
-                    def.resolve();
                 });
                 if (ox.serverConfig.samlLoginErrorPage === true) {
                     setTimeout(function () {

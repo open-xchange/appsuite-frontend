@@ -1,12 +1,12 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.1.11. The appointment editing window:</title>
+<title>7.1.12. The appointment editing window:</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. The Calendar Components">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.gui.scheduling.html" title="7.1.10. The scheduling view">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.gui.scheduling.html" title="7.1.11. The scheduling view">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Viewing Appointments">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -32,47 +32,70 @@
   <h1 class="sr-only"><span class="phrase">Calendar</span></h1>
 <h2 class="sr-only">The <span class="phrase"><span class="guilabel"><strong>Calendar</strong></span></span> Components</h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.gui.create">
-<div class="titlepage"><div><div><h3 class="title">7.1.11. The appointment editing window:</h3></div></div></div>
+<div class="titlepage"><div><div><h3 class="title">7.1.12. The appointment editing window:</h3></div></div></div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p id="ox.appsuite.user.reference.calendar.gui.create">This window is used when creating a new appointment, editing an appointment or double-clicking on an appointment.</p>
+<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p id="ox.appsuite.user.reference.calendar.gui.create">This window is used when creating a new appointment or editing an appointment.</p>
 <p class="title">Content</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.calendar.gui.create.entries" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">The title bar includes the following elements:</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">window title</p></li>
-<li class="listitem"><p role="presentation">icons for setting the window position</p></li>
+<li class="listitem"><p role="presentation">icons for adjusting the window position, cancel icons</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p role="presentation">depending on the groupware configuration, elements that can be either at the top or at the bottom</p>
+<p role="presentation">Appointment data</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Create</strong></span> button. If clicking on this button, the current appointment data are saved and the editing page is closed.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Discard</strong></span> button. In order to cancel the creation or editing, click on this button.</p></li>
-<li class="listitem"><p role="presentation">The button next to <span class="guibutton"><strong>Calendar</strong></span> shows the calendar folder in which the appointment will be created. To create the appointment in another calendar folder, click on this button.</p></li>
-</ul>
-<p role="presentation">
-            </p>
-</li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Subject</strong></span> input field. Enter the subject in this field. The subject is displayed as appointment title in the views.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Subject</strong></span> input field. Enter the subject in this field. The subject is displayed as appointment title.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Location</strong></span> button. Here, you can enter the location where the appointment is to take place.</p></li>
 <li class="listitem">
-<p role="presentation"><span class="guibutton"><strong>Starts on</strong></span> and <span class="guibutton"><strong>Ends on</strong></span> input fields. Set the start and end date of the appointment. Clicking on it opens the date picker. </p>
-<p role="presentation">If the <span class="guibutton"><strong>All day</strong></span> checkbox is disabled, you can set start and end times.</p>
-<p role="presentation">If clicking on the timezone button next to the time, the time is displayed in different time zones. You can <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html">set frequently used time zones as favorites</a> in the calendar settings.</p>
+<p role="presentation"><span class="guibutton"><strong>Starts on</strong></span> and <span class="guibutton"><strong>Ends on</strong></span>. Set the start and end date of the appointment. Clicking on it opens the date picker.</p>
+<p role="presentation">If <span class="guibutton"><strong>All day</strong></span> is disabled, you can set start and end times.</p>
 </li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>All day</strong></span> checkbox. Enable this checkbox if the appointment is to last the whole day.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Find a free time</strong></span> button. Opens the scheduling view. In this view, you can find a free time when scheduling an appointment with several participants.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Repeat</strong></span> checkbox. Enable this checkbox if the appointment is to be repeated. Additional control elements for setting the recurring parameters are displayed. Examples can be found in the <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">questions about appointments and tasks</a>.</p></li>
+<li class="listitem"><p role="presentation">If clicking on a timezone button next to a time, a dialog window opens that allows to select a time zone for the appointment's start and end time. You can <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html">set frequently used time zones as favorites</a> in the calendar settings.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>All day</strong></span>. Defines whether the appointment is supposed to last whole days.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Find a free time</strong></span>. Opens the scheduling view. In this view, you can find a free time when scheduling an appointment with several participants.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Repeat</strong></span>. Defines whether the appointment is supposed to last whole days. Examples can be found in the <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">questions about appointments and tasks</a>.</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Description</strong></span> input field. You can enter a description for the appointment in this field.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Reminder</strong></span> drop-down menu. Defines when to be reminded of the appointment by an entry in the info area.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Shown as</strong></span> drop-down menu. Defines your availability during the appointment duration. If there are overlapping appointments, you will get a conflict message, unless the availability is set to <span class="guibutton"><strong>Free</strong></span>. Examples can be found in the <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.display_as">Calendar questions and answers</a>.</p></li>
-<li class="listitem"><p role="presentation">When having selected <span class="guibutton"><strong>Custom colors</strong></span> in the <span class="guibutton"><strong>View</strong></span> menu in the toolbar, a color selection field is displayed. Clicking on a color field defines the appointment's color. If clicking on the first color field, the appointment gets the color if its calendar.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Private</strong></span> checkbox. Enable this checkbox if other users are not to see the appointment's subject and description.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Add participant/resource</strong></span> input field. Enter the names of the participants that are to take part in the appointment in this field. If participants are to get an additional invitation E-Mail for the appointment, enable <span class="guibutton"><strong>Notify all participants by email</strong></span>.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Add attachments</strong></span> button below <span class="guibutton"><strong>Attachments</strong></span>. Click on this button to attach one or several files to the contact data.</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Appointment view</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Show as free</strong></span>. Defines whether the appointment is displayed as free. Enable this checkbox to avoid conflicts with overlapping appointments.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Appointment color</strong></span>. You can define the color in which the appointment is displayed. If the <span class="guibutton"><strong>No color</strong></span> checkbox is enabled, the appointment is displayed in the color of the calendar. In order to set a different color for the appointment, click on a color field.</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Visibility</strong></span>. Defines the visibility of the appointment in a shared calendar.</p>
+<ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Standard</strong></span>. The appointment is visible to all users.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Private</strong></span>. Users that are no participants can only view the appointment date.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Secret</strong></span>. Users that are no participants can not view the appointment.</p></li>
+</ul>
+<p role="presentation">                 
+                  </p>
+</li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Reminder</strong></span>. Defines when and how you will be reminded about the appointment's due date.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Add contact/resource</strong></span> input field. Enter the names of the participants or resources.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Add attachments</strong></span>. Adds files.</p></li>
+<li class="listitem">
+<p role="presentation">button bar</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Create</strong></span>. Saves the current data of the appointment. Closes the Format window.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Cancel</strong></span>. Cancels creating or editing the appointment.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Calendar</strong></span>. Shows the calendar in which the appointment will be created. If clicking on it, a window for selecting a calendar opens.</p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
 </ul>
 <p>
       </p>
@@ -82,6 +105,7 @@
 <li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.create.html">The editing window</a></p></li>
 <li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">The date picker</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.scheduling.html">The scheduling view</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html">Creating new appointments</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html">Editing appointments</a></p>
 </li>
