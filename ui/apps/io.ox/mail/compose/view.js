@@ -1017,7 +1017,7 @@ define('io.ox/mail/compose/view', [
                     }
                     if (self.editor.tinymce) {
                         var defaultFontStyle = settings.get('defaultFontStyle', {}),
-                            family = defaultFontStyle.family.split(',')[0];
+                            family = (defaultFontStyle.family || '').split(',')[0];
                         if (!_.isEmpty(defaultFontStyle)) {
                             if (family && family !== 'browser-default') self.editor.tinymce().execCommand('fontName', false, family);
                             if (defaultFontStyle.size && defaultFontStyle.size !== 'browser-default') self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
