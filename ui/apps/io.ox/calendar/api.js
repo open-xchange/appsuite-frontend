@@ -480,8 +480,8 @@ define('io.ox/calendar/api', [
                 }
 
                 options = _.extend({
-                    from: moment().startOf('day').utc().format(util.ZULU_FORMAT_DAY_ONLY),
-                    until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT_DAY_ONLY)
+                    from: moment().startOf('day').utc().format(util.ZULU_FORMAT),
+                    until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT)
                 }, options);
 
                 var order = _(list).pluck('entity');

@@ -574,13 +574,13 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             if (this.model.get('onlyWorkingHours')) {
-                from = moment(this.model.get('startDate')).add(this.model.get('startHour'), 'hours');
-                until = moment(from).add((this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth() - 1), 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours');
+                from = moment(this.model.get('startDate')).add(this.model.get('startHour'), 'hours').utc();
+                until = moment(from).add((this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth() - 1), 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours').utc();
             } else {
-                from = moment(this.model.get('startDate')).startOf('day');
-                until = moment(from).add(1, this.model.get('dateRange') + 's');
+                from = moment(this.model.get('startDate')).startOf('day').utc();
+                until = moment(from).add(1, this.model.get('dateRange') + 's').utc();
             }
-            return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT_DAY_ONLY), until: until.format(util.ZULU_FORMAT_DAY_ONLY) }).done(function (items) {
+            return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT), until: until.format(util.ZULU_FORMAT) }).done(function (items) {
 
                 if (items.length === 0 && attendees.length !== 0) {
                     // remove busy animation again

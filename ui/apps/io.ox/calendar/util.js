@@ -129,7 +129,6 @@ define('io.ox/calendar/util', [
         PRIVATE_EVENT_COLOR: '#616161',
 
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
-        ZULU_FORMAT_DAY_ONLY: 'YYYYMMDD',
 
         getFirstWeekDay: function () {
             // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
