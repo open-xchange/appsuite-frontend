@@ -570,8 +570,11 @@ define('io.ox/calendar/week/view', [
 
             var self = this,
                 getFolder = this.mode === 'day' && settings.get('mergeview') ? folderAPI.get($(e.currentTarget).attr('data-folder-cid') || this.folder().id) : $.when(this.folder());
+            getFolder.then(function (folder) {
+                if (folderAPI.can('create', folder)) return folder;
+                return folderAPI.get(settings.get('chronos/defaultFolderId'));
+            }).done(function (folder) {
 
-            getFolder.done(function (folder) {
                 if (!folderAPI.can('create', folder)) return;
 
                 var start = self.getTimeFromDateTag($(e.currentTarget).attr('date'));
@@ -614,7 +617,10 @@ define('io.ox/calendar/week/view', [
             var self = this,
                 getFolder = this.mode === 'day' && settings.get('mergeview') ? folderAPI.get($(e.target).closest('.day').attr('data-folder-cid') || this.folder().id) : $.when(this.folder());
 
-            getFolder.done(function (folder) {
+            getFolder.then(function (folder) {
+                if (folderAPI.can('create', folder)) return folder;
+                return folderAPI.get(settings.get('chronos/defaultFolderId'));
+            }).done(function (folder) {
                 if (!folderAPI.can('create', folder)) return;
 
                 // switch mouse events

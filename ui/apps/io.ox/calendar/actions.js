@@ -159,9 +159,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        requires: function (e) {
-            return e.baton.app.folder.can('create');
-        },
+        requires: true,
         action: function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
