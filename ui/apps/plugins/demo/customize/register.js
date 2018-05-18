@@ -147,6 +147,7 @@ define('plugins/demo/customize/register', [
             '  background-image: ' + gradient(model) + (model.has('topbarColor1') || gradient(model) !== 'none' ? '!important' : '') + ';\n' +
             '}\n' +
             '#io-ox-appcontrol:before { display: none; }\n' +
+            '#io-ox-appcontrol #io-ox-launcher > button { height: ' + (39 + (model.get('topbarSize') || 0) * 8) + 'px}\n' +
             '#io-ox-appcontrol .banner-logo {\n' +
             '  width: 60px; height: 100%;\n' +
             '  background-position: left center; background-origin: content-box; background-repeat: no-repeat;\n' +
@@ -189,12 +190,12 @@ define('plugins/demo/customize/register', [
     //
     // Colors
     //
-    model.on('change:topbarColor1 change:topbarColor2 change:selectionColor change:linkColor change:topbarGradient change:officebarColor change:treeFgColor change:treeBgColor', updateStylesheet);
+    model.on('change:topbarSize change:topbarColor1 change:topbarColor2 change:selectionColor change:linkColor change:topbarGradient change:officebarColor change:treeFgColor change:treeBgColor', updateStylesheet);
 
     function applytopbarSize() {
-        var value = 39 + model.get('topbarSize') * 8;
+        var value = 39 + (model.get('topbarSize') || 0) * 8;
         $('#io-ox-screens').css('top', value);
-        $('#io-ox-appcontrol, #io-ox-appcontrol #io-ox-launcher>button').css('height', value);
+        $('#io-ox-appcontrol').css('height', value);
         // maybe we need to toggle the header logo
         updateLogo();
     }
