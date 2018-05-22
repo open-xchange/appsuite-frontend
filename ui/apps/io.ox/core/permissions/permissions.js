@@ -22,11 +22,12 @@ define('io.ox/core/permissions/permissions', [
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
     'io.ox/core/tk/typeahead',
+    'io.ox/core/settings/util',
     'io.ox/participants/model',
     'io.ox/participants/views',
     'gettext!io.ox/core',
     'less!io.ox/core/permissions/style'
-], function (ext, notifications, BreadcrumbView, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+], function (ext, notifications, BreadcrumbView, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, settingsUtil, pModel, pViews, gt) {
 
     'use strict';
 
@@ -417,20 +418,11 @@ define('io.ox/core/permissions/permissions', [
                             }
                         });
 
-                        var checkboxId = _.uniqueId('form-control-label-'),
-                            buildCheckbox = function () {
-                                var checkbox = $('<input type="checkbox">')
-                                .on('change', function () {
-                                    cascadePermissionsFlag = checkbox.prop('checked');
-                                });
-                                checkbox.prop('checked', cascadePermissionsFlag);
-                                return checkbox;
-
-                            },
-                            checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
-                                $('<label>').attr('for', checkboxId).text(gt('Apply to all subfolders')).prepend(
-                                    buildCheckbox().attr('id', checkboxId)
-                                )
+                        var checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
+                                settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), cascadePermissionsFlag).on('change', function (e) {
+                                    var input = e.originalEvent.srcElement;
+                                    cascadePermissionsFlag = input.checked;
+                                })
                             ),
                             view = new Typeahead({
                                 apiOptions: {
