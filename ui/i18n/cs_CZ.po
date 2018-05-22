@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-29 16:29+0100\n"
+"PO-Revision-Date: 2018-05-20 09:33-0800\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -1554,6 +1554,7 @@ msgstr "Zadejte, prosím, název distribučního seznamu"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "Plánování"
 
@@ -1984,8 +1985,7 @@ msgstr[1] "%d dny"
 msgstr[2] "%d dní"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendář"
@@ -4659,8 +4659,8 @@ msgid ""
 "Ignoring existing appointments is helpful to import public holiday "
 "calendars, for example."
 msgstr ""
-"Ignorovat existující schůzky. Hodí se například pro importování kalendářů se"
-" státními svátky."
+"Ignorovat existující schůzky. Hodí se například pro importování kalendářů se "
+"státními svátky."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
@@ -4726,6 +4726,45 @@ msgstr "Obnovit"
 msgid "Currently refreshing"
 msgstr "Právě aktualizuji"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "Pošta"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "Adresář"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "Portál"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Drive"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "Úkoly"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "Poznámky"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4757,56 +4796,6 @@ msgstr "Vynutit odhlášení"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "Odhlášení selhalo."
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "Portál"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "Pošta"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "Adresář"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "Plánování"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "Úkoly"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Drive"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "Konverzace"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -4893,8 +4882,8 @@ msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
 msgstr ""
-"Věděli jste, že si %1$s můžete vzít s sebou? Prostě klikněte na tuto "
-"ikonku a zvolte v menu ‚Připojit zařízení‘."
+"Věděli jste, že si %1$s můžete vzít s sebou? Prostě klikněte na tuto ikonku "
+"a zvolte v menu ‚Připojit zařízení‘."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
@@ -8005,8 +7994,8 @@ msgstr "Zobrazit odkazy"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
 msgstr ""
-"Odkazy byly zablokovány, abychom vás uchránili před případnou nevyžádanou"
-" poštou."
+"Odkazy byly zablokovány, abychom vás uchránili před případnou nevyžádanou "
+"poštou."
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Show images"
@@ -9650,8 +9639,8 @@ msgid ""
 "This is a suspicious email because we could not verify that it is really "
 "from %1$s."
 msgstr ""
-"Tato zpráva je podezřelá, protože se nám nepodařilo ověřit, že by skutečně"
-" byla od %1$s."
+"Tato zpráva je podezřelá, protože se nám nepodařilo ověřit, že by skutečně "
+"byla od %1$s."
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could not verify that this email is from %1$s."
@@ -10166,16 +10155,6 @@ msgid ""
 msgstr ""
 "Vybraná složka je virtuální a nelze ji prohledávat. Vyberte, prosím, jinou "
 "složku."
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "Nastavení"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "Dokumenty"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
@@ -11020,8 +10999,8 @@ msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
 msgstr ""
-"Pro navigaci mezi několika aplikacemi %1$s klikněte na novou ikonku App"
-" Launcher."
+"Pro navigaci mezi několika aplikacemi %1$s klikněte na novou ikonku App "
+"Launcher."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
@@ -11036,16 +11015,16 @@ msgid ""
 "Emails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"E-maily se objeví v novém okně. Tato okna mohou maximalizována,"
-" minimalizována, a zavřena."
+"E-maily se objeví v novém okně. Tato okna mohou maximalizována, "
+"minimalizována, a zavřena."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
 msgstr ""
-"Okna, která máte minimalizována, se pro snadný přístup objeví ve všech"
-" aplikacích. Okno můžete opět maximalizovat kliknutím."
+"Okna, která máte minimalizována, se pro snadný přístup objeví ve všech "
+"aplikacích. Okno můžete opět maximalizovat kliknutím."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -11068,8 +11047,8 @@ msgid ""
 "through some of the new and improved features."
 msgstr ""
 "Vítejte v %1$s.\n"
-"%1$s přináší řadu zajímavých změn. Tento krátký průvodce vás provede po"
-" některých nových a vylepšených funkcích."
+"%1$s přináší řadu zajímavých změn. Tento krátký průvodce vás provede po "
+"některých nových a vylepšených funkcích."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
@@ -12199,6 +12178,21 @@ msgstr "Pozvat na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Přidat do %s"
+
+#~ msgid "Scheduling"
+#~ msgstr "Plánování"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Konverzace"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Nastavení"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Dokumenty"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "iCal úspěšně importován"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-26 19:15+0200\n"
+"PO-Revision-Date: 2018-05-13 14:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -1248,6 +1248,7 @@ msgid "Please enter a name for the distribution list"
 msgstr "連絡先グループ名を入力してください。"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "スケジューリング"
 
@@ -1622,7 +1623,7 @@ msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d 日"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/search/view-template.js
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "予定表"
@@ -4076,6 +4077,39 @@ msgstr "最新の状態に更新"
 msgid "Currently refreshing"
 msgstr "現在更新中"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/mail/settings/pane.js module:io.ox/mail apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "メール"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "アドレス帳"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "ポータル"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "ドライブ"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "仕事"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "メモ"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4104,44 +4138,6 @@ msgstr "強制サインアウト"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "ログアウトに失敗しました。"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "ポータル"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/mail/settings/pane.js module:io.ox/mail apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "メール"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "アドレス帳"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "スケジューリング"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "仕事"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "ドライブ"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "スレッド"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -4995,6 +4991,7 @@ msgstr "自動補完項目が見つかりません。"
 msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "自動補完項目が１つ見つかりました。"
+msgstr[1] "自動補完項目が%1$dつ見つかりました。"
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added distribution list %s with %s member. The only member of the distribution list is %s."
@@ -6762,6 +6759,8 @@ msgstr "差出人が不明です。"
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgid_plural "All future messages from the senders of the selected mails will be moved to the selected folder."
 msgstr[0] "%1$s からのこれからのメッセージは選択したフォルダへ移動します。"
+msgstr[1] "選択したメールの差出人からのこれからのメッセージは選択したフォルダへ移動します。"
+
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7528,12 +7527,12 @@ msgstr "保持"
 #. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js module:io.ox/mailfilter
 msgid "File into"
-msgstr "フォルダに移動"
+msgstr "次にファイル"
 
 #. Copy a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js module:io.ox/mailfilter
 msgid "Copy into"
-msgstr "フォルダにコピー"
+msgstr "次にコピー"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js module:io.ox/mailfilter
 msgid "Redirect to"
@@ -8703,6 +8702,8 @@ msgstr "構成は完了していません。"
 msgid "This email address cannot be used"
 msgid_plural "The following email addresses cannot be used: %1$d"
 msgstr[0] "このメールアドレスは、使用できません。"
+msgstr[1] "次メールアドレスは、使用できません：%1$d"
+
 
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
@@ -8902,16 +8903,6 @@ msgstr "アイテムが見つかりません。"
 #: apps/io.ox/search/model.js module:io.ox/search
 msgid "The selected folder is virtual and can not be searched. Please select another folder."
 msgstr "選択したフォルダは仮想フォルダです。検索できません。別のフォルダを選択してください。"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "設定"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "ドキュメント"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
@@ -10777,6 +10768,21 @@ msgstr "%s に招待"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s に追加"
+
+#~ msgid "Scheduling"
+#~ msgstr "スケジューリング"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "スレッド"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "設定"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "ドキュメント"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "iCalフィードは正しくインポートされました。"

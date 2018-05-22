@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-30 17:59+1000\n"
+"PO-Revision-Date: 2018-05-10 14:06+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -1541,8 +1541,9 @@ msgstr "请为通讯组列表输入一个名称"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
-msgstr "安排时间"
+msgstr "排程"
 
 #: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
 msgid "Add participant"
@@ -1969,8 +1970,7 @@ msgid_plural "%1$d days"
 msgstr[0] "%1$d 天"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "日历"
@@ -4643,6 +4643,45 @@ msgstr "刷新"
 msgid "Currently refreshing"
 msgstr "当前刷新"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "邮件"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "地址簿"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "门户"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Drive"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "任务"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "笔记"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4672,56 +4711,6 @@ msgstr "强制注销"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "注销失败。"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "门户"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "邮件"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "地址簿"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "排程"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "任务"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Drive"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "谈话"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -9921,16 +9910,6 @@ msgid ""
 msgstr "选择的文件夹为虚拟和不能被搜寻的。请选择别的文件夹。"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "设定"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "文档"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "清除字段"
 
@@ -11895,6 +11874,21 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid "Scheduling"
+#~ msgstr "安排时间"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "谈话"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "设定"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "文档"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "已成功导入 iCal 提要"

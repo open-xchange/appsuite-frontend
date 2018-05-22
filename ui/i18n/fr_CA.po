@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-02 17:47+0900\n"
-"Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
-"Language-Team: French <fr@workshop-chapina.com>\n"
+"PO-Revision-Date: 2018-05-14 08:52+0100\n"
+"Last-Translator: Nicolas Ternisien <nicolas@workshop-chapina.com>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -1578,6 +1578,7 @@ msgstr "Veuillez saisir un nom pour la liste de diffusion"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "Planification"
 
@@ -2015,8 +2016,7 @@ msgstr[0] "%1$d jour"
 msgstr[1] "%1$d jours"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "Agenda"
@@ -4770,6 +4770,45 @@ msgstr "Actualiser"
 msgid "Currently refreshing"
 msgstr "Rafraîchissement en cours"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "Courrier"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "Carnet d'adresses"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "Portail"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Drive"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "Tâches"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "Remarques"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4800,56 +4839,6 @@ msgstr "Forcer la déconnexion"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "Échec de la déconnexion."
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "Portail"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "Courrier"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "Carnet d'adresses"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "Planification"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "Tâches"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Drive"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "Conversations"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -7868,8 +7857,7 @@ msgstr[0] ""
 "dossier sélectionné."
 msgstr[1] ""
 "À l'avenir, tous les messages en provenance des expéditeurs seront déplacés "
-"vers le "
-"dossier sélectionné."
+"vers le dossier sélectionné."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -10268,16 +10256,6 @@ msgstr ""
 "recherche. Veuillez choisir un autre dossier."
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "Réglages"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "Documents"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Réinitialiser le champ"
 
@@ -11118,8 +11096,8 @@ msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
 msgstr ""
-"Pour naviguer entre les applications %1$s, cliquez simplement sur la nouvelle "
-"icône du lanceur d'applications."
+"Pour naviguer entre les applications %1$s, cliquez simplement sur la "
+"nouvelle icône du lanceur d'applications."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
@@ -11142,8 +11120,9 @@ msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
 msgstr ""
-"Les fenêtres que vous avez réduites apparaîtront dans toutes les applications "
-"pour un accès rapide. Vous pouvez agrandir une fenêtre en cliquant dessus."
+"Les fenêtres que vous avez réduites apparaîtront dans toutes les "
+"applications pour un accès rapide. Vous pouvez agrandir une fenêtre en "
+"cliquant dessus."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -12316,6 +12295,21 @@ msgstr "Inviter à %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Ajouter à %s"
+
+#~ msgid "Scheduling"
+#~ msgstr "Planification"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Conversations"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Réglages"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Documents"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "Le flux iCal a été importé avec succès"

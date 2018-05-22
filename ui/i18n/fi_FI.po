@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-01 16:45+0300\n"
+"PO-Revision-Date: 2018-05-09 21:23+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -1554,6 +1554,7 @@ msgstr "Anna nimi jakelulistaa varten"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "Suunnittelu"
 
@@ -1985,8 +1986,7 @@ msgstr[0] "%1$d päivää"
 msgstr[1] "%1$d päivää"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalenteri"
@@ -4711,6 +4711,45 @@ msgstr "Päivitä"
 msgid "Currently refreshing"
 msgstr "Virkistetään"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "Sähköposti"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "Osoitekirja"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "Portaali"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Drive"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "Tehtävät"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "Muistiinpanot"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4741,56 +4780,6 @@ msgstr "Pakota  uloskirjautuminen"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "Uloskirjautuminen epäonnistui."
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "Portaali"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "Sähköposti"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "Osoitekirja"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "Suunnittelu"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "Tehtävät"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Drive"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "Keskustelut"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -6487,7 +6476,7 @@ msgstr "Tiputa tähän ladataksesi <b class=\"dndignore\">uusi tiedosto</b>"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
-msgstr "Tiputa tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
+msgstr "Pudota tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
@@ -6769,7 +6758,7 @@ msgid ""
 "space is %3$s. "
 msgstr ""
 "Tilasi on jaettu kaikkien ryhmäsi jäsenten kesken. Ryhmäsi käyttää nyt %1$s "
-"kaikkiaan %2$s tilastaan. Vapaan tilan määrä on %3$s"
+"kaikkiaan %2$s tilastaan. Vapaan tilan määrä on %3$s "
 
 #. %1$s used disk space
 #. %2$s total disk space
@@ -6778,7 +6767,7 @@ msgstr ""
 msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left. "
-msgstr "Käytät nyt %1$s %2$s levytilastasi. Sinulla on %3$s jäljellä"
+msgstr "Käytät nyt %1$s %2$s levytilastasi. Sinulla on %3$s jäljellä. "
 
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Top 10 folder size"
@@ -7393,7 +7382,8 @@ msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form. "
 msgstr ""
-"Tilin asetuksia ei voitu tallentaa. Ole hyvä ja lue huomautukset lomakkeella"
+"Tilin asetuksia ei voitu tallentaa. Ole hyvä ja lue huomautukset "
+"lomakkeella. "
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7969,7 +7959,7 @@ msgstr "Näytä kuvat"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
-msgstr "Viestissä olevia kuvia ei näytetä yksityisyytesi suojaamiseksi"
+msgstr "Ulkoiset kuvat on estetty, jotta sinua voidaan suojella roskapostilta!"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
@@ -9385,16 +9375,15 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr ""
-"Lähetettäessä automaattisesti kerää yhteystietoja kansioon \"Collected "
-"addresses\""
+"Lähetettäessä kerää automaattisesti yhteystietodot kansioon \"Kerätyt "
+"osoitteet\""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading"
 msgstr ""
-"Luettaessa automaattisesti kerää yhteystietoja kansioon \"Collected addresses"
-"\""
+"Luettaessa kerää automaattisesti yhteystiedot kansioon \"Kerätyt osoitteet\""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -10114,16 +10103,6 @@ msgid ""
 "another folder."
 msgstr ""
 "Valittu kansio on virtuaalinen eikä siitä voi hakea. Valitse toinen kansio."
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "Asetukset"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "Asiakirjat"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
@@ -12141,6 +12120,21 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "Scheduling"
+#~ msgstr "Suunnittelu"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Keskustelut"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Asetukset"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Asiakirjat"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "iCal-syöte on tuotu onnistuneesti"

@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-29 17:08-0500\n"
-"Last-Translator: Aracele Torres <aracele@workshop-chapina.com >\n"
-"Language-Team: Portuguese <>\n"
+"PO-Revision-Date: 2018-05-09 07:44-0300\n"
+"Last-Translator: Bianca Oliveira <bianca@workshop-chapina.com >\n"
+"Language-Team: Portuguese <br@workshop-chapina.com>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1566,6 +1566,7 @@ msgstr "Digite um nome para a lista de distribuição"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "Agendamento"
 
@@ -2001,8 +2002,7 @@ msgstr[0] "%1$d dia"
 msgstr[1] "%1$d dias"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "Calendário"
@@ -4669,8 +4669,8 @@ msgid ""
 "Ignoring existing appointments is helpful to import public holiday "
 "calendars, for example."
 msgstr ""
-"Ignorar compromissos existentes é útil para importar calendários de feriados"
-"públicos, por exemplo."
+"Ignorar compromissos existentes é útil para importar calendários de "
+"feriadospúblicos, por exemplo."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
@@ -4735,6 +4735,45 @@ msgstr "Atualizar"
 msgid "Currently refreshing"
 msgstr "Atualizando agora"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "E-mail"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "Catálogo de endereços"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "Portal"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Drive"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "Tarefas"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "Notas"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4765,56 +4804,6 @@ msgstr "Forçar encerramento de sessão"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "Falha ao encerrar a sessão."
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "Portal"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "E-mail"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "Catálogo de endereços"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "Agendamento"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "Tarefas"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Drive"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "Conversas"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -4901,8 +4890,8 @@ msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
 msgstr ""
-"Você sabia que pode levar %1$s com você? Basta clicar neste ícone e"
-"escolher \"Conectar seu dispositivo\" no menu."
+"Você sabia que pode levar %1$s com você? Basta clicar neste ícone eescolher "
+"\"Conectar seu dispositivo\" no menu."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
@@ -7808,8 +7797,8 @@ msgid_plural ""
 msgstr[0] ""
 "Todas as mensagens futuras de %1$s serão movidas para a pasta selecionada."
 msgstr[1] ""
-"Todas as mensagens futuras dos remetentes dos e-mails selecionados serão"
-" movidas para a pasta selecionada."
+"Todas as mensagens futuras dos remetentes dos e-mails selecionados serão "
+"movidas para a pasta selecionada."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -9662,8 +9651,8 @@ msgid ""
 "This is a suspicious email because we could not verify that it is really "
 "from %1$s."
 msgstr ""
-"Este é um email suspeito porque não conseguimos confirmar se é realmente"
-"de %1$s."
+"Este é um email suspeito porque não conseguimos confirmar se é realmentede "
+"%1$s."
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could not verify that this email is from %1$s."
@@ -10180,16 +10169,6 @@ msgid ""
 msgstr ""
 "A pasta selecionada é virtual e não pode ser pesquisada. Selecione outra "
 "pasta."
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "Configurações"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "Documentos"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
@@ -11030,8 +11009,8 @@ msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
 msgstr ""
-"Para navegar entre os aplicativos %1$s, basta clicar no ícone do novo App"
-" Launcher."
+"Para navegar entre os aplicativos %1$s, basta clicar no ícone do novo App "
+"Launcher."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
@@ -11046,17 +11025,16 @@ msgid ""
 "Emails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"E-mails serão exibidos em uma nova janela. Essas janelas podem ser maximizadas"
-"minimizadas e fechadas."
+"E-mails serão exibidos em uma nova janela. Essas janelas podem ser "
+"maximizadasminimizadas e fechadas."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
 msgstr ""
-"As janelas que você minimizou aparecerão em todos os aplicativos para"
-" facilitar o acesso."
-"Você pode maximizar uma janela novamente clicando nela."
+"As janelas que você minimizou aparecerão em todos os aplicativos para "
+"facilitar o acesso.Você pode maximizar uma janela novamente clicando nela."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -11080,8 +11058,8 @@ msgid ""
 "through some of the new and improved features."
 msgstr ""
 "Bem-vindo à %1$s.\n"
-"Fizemos algumas alterações interessantes em %1$s. Este tour rápido irá guiá-lo"
-"através de algumas das novas e melhoradas funcionalidades."
+"Fizemos algumas alterações interessantes em %1$s. Este tour rápido irá guiá-"
+"loatravés de algumas das novas e melhoradas funcionalidades."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
@@ -12215,6 +12193,21 @@ msgstr "Convidar para %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adicionar em %s"
+
+#~ msgid "Scheduling"
+#~ msgstr "Agendamento"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Conversas"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Configurações"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Documentos"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "O feed do iCal foi importado com sucesso"

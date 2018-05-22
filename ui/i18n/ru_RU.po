@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-24 09:05+0200\n"
+"PO-Revision-Date: 2018-05-04 15:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -1549,6 +1549,7 @@ msgstr "Введите название для списка рассылки"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "Планирование"
 
@@ -1981,8 +1982,7 @@ msgstr[1] "%1$d дня"
 msgstr[2] "%1$d дней"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "Календарь"
@@ -2902,7 +2902,6 @@ msgstr "Совместные адресные книги"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-
 msgid "Select contacts"
 msgstr "Выберите контакты"
 
@@ -4657,9 +4656,7 @@ msgstr "Узнать больше"
 msgid ""
 "Ignoring existing appointments is helpful to import public holiday "
 "calendars, for example."
-msgstr ""
-"Игнорирование событий подходит для импорта календаря "
-"праздничных дней и т.п."
+msgstr "Игнорирование событий подходит для импорта календаря праздничных дней и т.п."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
@@ -4725,6 +4722,45 @@ msgstr "Обновить"
 msgid "Currently refreshing"
 msgstr "Обновляется..."
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "Почта"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "Адресная книга"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "Портал"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Диск"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "Задачи"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "Заметки"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4756,56 +4792,6 @@ msgstr "Принудительный выход"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "Ошибка выхода."
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "Портал"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "Почта"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "Адресная книга"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "Планирование"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "Задачи"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Диск"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "Обсуждения"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -4891,7 +4877,9 @@ msgstr ""
 msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
-msgstr "Знаете ли вы, что вы можете взять %1$s с собой в дорогу? Просто щелкните значок и в открывшемся меню выберите «Подключить устройство»."
+msgstr ""
+"Знаете ли вы, что вы можете взять %1$s с собой в дорогу? Просто щелкните "
+"значок и в открывшемся меню выберите «Подключить устройство»."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
@@ -7765,11 +7753,9 @@ msgid_plural ""
 "the selected folder."
 msgstr[0] "В будущем сообщения от %1$s будут переноситься в выбранную папку."
 msgstr[1] ""
-"Все последующие сообщения от отправителей, указанных в выбранных сообщениях, "
-"будут переноситься в выбранную папку "
+"Все последующие сообщения от отправителей выбранных сообщений будут переноситься в выбранную папку."
 msgstr[2] ""
-"Все последующие сообщения от отправителей, указанных в выбранных сообщениях, "
-"будут переноситься в выбранную папку "
+"Все последующие сообщения от отправителей выбранных сообщений будут переноситься в выбранную папку."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7914,9 +7900,7 @@ msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural "Do you want to move all messages from selected senders to that category?"
 msgstr[0] "Переместить все сообщения от %1$s в эту категорию?"
 msgstr[1] "Переместить все сообщения от выбранных отправителей в эту категорию?"
-msgstr[2] ""
-""
-"Переместить все сообщения от выбранных отправителей в эту категорию?"
+msgstr[2] "Переместить все сообщения от выбранных отправителей в эту категорию?"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
@@ -10117,16 +10101,6 @@ msgid ""
 msgstr "Поиск в виртуальных папках невозможен. Выберите другую папку."
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "Параметры"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "Документы"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Очистить поле"
 
@@ -10778,7 +10752,6 @@ msgid "Due"
 msgstr "Срок"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
-
 msgid "Date completed"
 msgstr "Дата завершения"
 
@@ -10965,7 +10938,9 @@ msgstr "Агент запуска приложений"
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
-msgstr "Для переключения между приложениями %1$s щелкните новый значок агента запуска."
+msgstr ""
+"Для переключения между приложениями %1$s щелкните новый значок агента "
+"запуска."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
@@ -10979,13 +10954,17 @@ msgstr "Новые окна"
 msgid ""
 "Emails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
-msgstr "Письма будут открываться в новом окне. Окна можно развернуть, свернуть и закрыть."
+msgstr ""
+"Письма будут открываться в новом окне. Окна можно развернуть, свернуть и "
+"закрыть."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
-msgstr "Минимизированные окна будут доступны во всех приложениях. Чтобы развернуть окно, щелкните его еще раз."
+msgstr ""
+"Минимизированные окна будут доступны во всех приложениях. Чтобы развернуть "
+"окно, щелкните его еще раз."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -11008,7 +10987,8 @@ msgid ""
 "through some of the new and improved features."
 msgstr ""
 "Добро пожаловать в %1$s.\n"
-"Мы внесли качественные изменения в %1$s. Этот обзор познакомит вас с новыми возможностями."
+"Мы внесли качественные изменения в %1$s. Этот обзор познакомит вас с новыми "
+"возможностями."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
@@ -11489,6 +11469,7 @@ msgstr "Скрыть напоминания задач."
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+
 msgid "Task invitations"
 msgstr "Приглашения задач"
 
@@ -12130,6 +12111,21 @@ msgstr "Пригласить на %s"
 msgid "Add on %s"
 msgstr "Добавить в %s"
 
+#~ msgid "Scheduling"
+#~ msgstr "Планирование"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Обсуждения"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Параметры"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Документы"
+
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "Лента iCal успешно импортирована."
 
@@ -12288,6 +12284,7 @@ msgstr "Добавить в %s"
 #~ msgid "Number of items"
 #~ msgstr "Число объектов"
 
+
 #~ msgid "List of public calendars and events"
 #~ msgstr "Список публичных календарей и событий"
 
@@ -12348,6 +12345,7 @@ msgstr "Добавить в %s"
 
 #~ msgid "Dangerous and trusted"
 #~ msgstr "Опасные и доверенные"
+
 
 #~ msgid "Acknowledge all reminders"
 #~ msgstr "Отметить все напоминания как прочитанные"
@@ -12975,7 +12973,6 @@ msgstr "Добавить в %s"
 
 #~ msgid "Add Box account"
 #~ msgstr "Добавить аккаунт Box"
-
 
 #~ msgid "Add Dropbox account"
 #~ msgstr "Добавить аккаунт Dropbox"
@@ -14743,7 +14740,6 @@ msgstr "Добавить в %s"
 #~ msgstr "Показать комментарии"
 
 #~ msgid "Show conflicts"
-
 #~ msgstr "Показать конфликты"
 
 #~ msgid "Show contacts from administrator group"

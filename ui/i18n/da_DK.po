@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-01 21:40+0100\n"
+"PO-Revision-Date: 2018-05-07 09:06+0100\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -1554,6 +1554,7 @@ msgstr "Indtast venligst et navn til distributionslisten"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
+msgctxt "app"
 msgid "Scheduling"
 msgstr "Planlægning"
 
@@ -1988,8 +1989,7 @@ msgstr[0] "%1$d dag"
 msgstr[1] "%1$d dage"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
@@ -4651,8 +4651,8 @@ msgid ""
 "Ignoring existing appointments is helpful to import public holiday "
 "calendars, for example."
 msgstr ""
-"At ignorere eksisterende aftaler kan for eksempel være praktisk, hvis man"
-" importerer en helligdagskalender."
+"At ignorere eksisterende aftaler kan for eksempel være praktisk, hvis man "
+"importerer en helligdagskalender."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
@@ -4716,6 +4716,45 @@ msgstr "Opdatér"
 msgid "Currently refreshing"
 msgstr "I gang med at opdatere"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
+msgctxt "app"
+msgid "Mail"
+msgstr "E-mail"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Address Book"
+msgstr "Adressebog"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Portal"
+msgstr "Portal"
+
+#. %1$s is usually "Drive" (product name; might be customized)
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgctxt "app"
+msgid "Drive"
+msgstr "Drive"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
+msgctxt "app"
+msgid "Tasks"
+msgstr "Opgaver"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
+msgid "Notes"
+msgstr "Noter"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -4746,56 +4785,6 @@ msgstr "Gennemtrumf udlogning"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Logout failed."
 msgstr "Udlogning mislykkedes."
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Portal"
-msgstr "Portal"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/search/view-template.js
-#: apps/io.ox/settings/security/settings/pane.js
-msgctxt "app"
-msgid "Mail"
-msgstr "E-mail"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Address Book"
-msgstr "Adressebog"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Scheduling"
-msgstr "Planlægning"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
-#: module:io.ox/tasks
-msgctxt "app"
-msgid "Tasks"
-msgstr "Opgaver"
-
-#. %1$s is usually "Drive" (product name; might be customized)
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Drive"
-msgstr "Drive"
-
-#: apps/io.ox/core/main/i18n.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Conversations"
-msgstr "Samtaler"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -4882,8 +4871,8 @@ msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
 msgstr ""
-"Vidste du at du kan tage %1$s med dig?  Klik bare på dette ikon og vælg"
-" »Forbind din enhed« i menuen."
+"Vidste du at du kan tage %1$s med dig?  Klik bare på dette ikon og vælg "
+"»Forbind din enhed« i menuen."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
@@ -7774,8 +7763,8 @@ msgid_plural ""
 msgstr[0] ""
 "Alle fremtidige beskeder fra %1$s vil blive flyttet til den valgte mappe."
 msgstr[1] ""
-"Alle fremtidige beskeder fra afsenderne af de valgte beskeder vil blive"
-" flyttet til den valgte mappe."
+"Alle fremtidige beskeder fra afsenderne af de valgte beskeder vil blive "
+"flyttet til den valgte mappe."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -9608,8 +9597,8 @@ msgid ""
 "This is a suspicious email because we could not verify that it is really "
 "from %1$s."
 msgstr ""
-"Dette er en mistænkelig besked.  Vi kunne ikke verificere at beskeden"
-" virkelig er fra %1$s."
+"Dette er en mistænkelig besked.  Vi kunne ikke verificere at beskeden "
+"virkelig er fra %1$s."
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could not verify that this email is from %1$s."
@@ -10124,16 +10113,6 @@ msgid ""
 msgstr ""
 "Den valgte mappe er virtuel og kan ikke søges i.  Vælg venligst en anden "
 "mappe."
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Settings"
-msgstr "Indstillinger"
-
-#: apps/io.ox/search/view-template.js module:io.ox/core
-msgctxt "app"
-msgid "Documents"
-msgstr "Dokumenter"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
@@ -10984,16 +10963,17 @@ msgid ""
 "Emails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"Beskeder vil dukke op i et nyt vindue.  Disse vinduer kan maksimeres,"
-" minimeres og lukkes."
+"Beskeder vil dukke op i et nyt vindue.  Disse vinduer kan maksimeres, "
+"minimeres og lukkes."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
 msgstr ""
-"Vinduer du har minimeret vil være synlige i alle programmer, så det er let at"
-" komme tilbage til dem.  Du kan maksimere et vindue igen ved at klikke på det."
+"Vinduer du har minimeret vil være synlige i alle programmer, så det er let "
+"at komme tilbage til dem.  Du kan maksimere et vindue igen ved at klikke på "
+"det."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -11016,8 +10996,8 @@ msgid ""
 "through some of the new and improved features."
 msgstr ""
 "Velkommen til %1$s.\n"
-"Vi har lavet nogle spændende ændringer i %1$s.  Denne hurtige rundvisning vil"
-" guide dig gennem nogle af den nye og forbedrede funktionalitet."
+"Vi har lavet nogle spændende ændringer i %1$s.  Denne hurtige rundvisning "
+"vil guide dig gennem nogle af den nye og forbedrede funktionalitet."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
@@ -12147,6 +12127,21 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "Scheduling"
+#~ msgstr "Planlægning"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Samtaler"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Indstillinger"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Dokumenter"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "ICal-kilde er blevet importeret"
