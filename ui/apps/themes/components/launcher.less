@@ -111,7 +111,7 @@
         margin: 0 24px 0 24px; // like rightside
     }
 
-    #io-ox-launcher {
+    #io-ox-launcher, #io-ox-quicklaunch {
         flex-shrink:0;
         align-self: auto;
         min-width: 0;
@@ -164,62 +164,7 @@
             top: 20px;
             left: 33px;
         }
-
-        .icon {
-            padding: 8px;
-            height: @appcontrol-height;
-        }
-        svg {
-            position: relative;
-            height: 100%;
-            width: 100%;
-            overflow: visible;
-            stroke-opacity: .5;
-            fill-opacity: .5;
-            .stroke-c1 { stroke: #fff; }
-            .fill-none { fill: none;   }
-            .fill-c1   { fill: #fff;   }
-            .stroke-w1 {
-                .retina & {
-                    stroke-width: @quicklaunch-stroke-width-retina;
-                }
-                stroke-width: @quicklaunch-stroke-width;
-            }
-            &:hover, &:focus {
-                stroke-opacity: 1;
-                fill-opacity: 1;
-                .fill-c1 {
-                    fill-opacity: 1;
-                }
-            }
-
-        }
-
-        button {
-            position: relative;
-            z-index: 2;
-            height: @appcontrol-height;
-            width: 48px;
-            display: inline-block;
-            padding:0;
-            border: 0;
-            outline: 0;
-            margin-top: -1px;
-            .title { display: none; }
-            .badge {
-                position: absolute;
-                top: 55%;
-                font-size: 9px;
-                z-index: 1;
-                background-color: #c80000;
-            }
-
-            &:focus, &:hover {
-                background: rgba(0, 0, 0, .3);
-                //svg .stroke-c1 { stroke: @launcher-fg-hover; }
-                //svg .fill-c1   { fill: @launcher-fg-hover;   }
-            }
-        }
+        .title { display: none; }
     }
 
     #io-ox-topsearch {

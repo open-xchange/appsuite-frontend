@@ -38,11 +38,10 @@ define('io.ox/core/settings/pane', [
             };
         }).concat([{ label: gt('None'), value: 'none' }]);
 
-    // reverted for 7.10
-    // // Check that the app exists in available applications
-    // function getAvailablePath(app) {
-    //     return _(availableApps).findWhere({ 'value': app }) ? app : '';
-    // }
+    // Check that the app exists in available applications
+    function getAvailablePath(app) {
+        return _(availableApps).findWhere({ 'value': app }) ? app : '';
+    }
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -370,75 +369,72 @@ define('io.ox/core/settings/pane', [
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
                 );
             }
-        }
-        //
+        },
+
         // Quicklaunch apps
-        //
-        // reverted for 7.10
-        // {
-        //     id: 'quickLaunch',
-        //     index: INDEX += 100,
-        //     render: function (baton) {
-        //         // FIXME: wow, this is complicated. We need a separate model, because the setting is actually supposed to be
-        //         // _one_ string instead of just fields in an object. Since settings are no real models, we can not sync
-        //         // silently between the states.
-        //         var quickLaunchModel = new Backbone.Model(),
-        //             settings = this.model,
-        //             settingsStr = settings.get('quicklaunch'),
-        //             // first view does all the event handling, cleans up listeners on dispose
-        //             firstView = null;
-        //         if (settingsStr) {
-        //             var a = settingsStr.split(',');
-        //             for (var pos = 0; pos <= a.length; pos++) {
-        //                 quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
-        //             }
-        //         }
-        //         function appsForPos(pos) {
-        //             return [0, 1, 2]
-        //                 .filter(function (i) { return i !== pos; })
-        //                 .map(function (i) { return quickLaunchModel.get('apps/quicklaunch' + i); })
-        //                 .reduce(function (acc, app) {
-        //                     return acc.filter(function (a) { return a.value !== app || app === ''; });
-        //                 }, availableApps);
-        //         }
-        //         var multiSelect = function (name, label, options) {
-        //             options = options || {};
-        //             var id = 'settings-' + name,
-        //                 view = new mini.SelectView({ id: id, name: name, model: quickLaunchModel, list: appsForPos(options.pos), pos: options.pos });
+        {
+            id: 'quickLaunch',
+            index: INDEX += 100,
+            render: function (baton) {
+                // FIXME: wow, this is complicated. We need a separate model, because the setting is actually supposed to be
+                // _one_ string instead of just fields in an object. Since settings are no real models, we can not sync
+                // silently between the states.
+                var quickLaunchModel = new Backbone.Model(),
+                    settings = this.model,
+                    settingsStr = settings.get('quicklaunch'),
+                    // first view does all the event handling, cleans up listeners on dispose
+                    firstView = null;
+                if (settingsStr) {
+                    var a = settingsStr.split(',');
+                    for (var pos = 0; pos <= a.length; pos++) {
+                        quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
+                    }
+                }
+                function appsForPos(pos) {
+                    return [0, 1, 2]
+                        .filter(function (i) { return i !== pos; })
+                        .map(function (i) { return quickLaunchModel.get('apps/quicklaunch' + i); })
+                        .reduce(function (acc, app) {
+                            return acc.filter(function (a) { return a.value !== app || app === ''; });
+                        }, availableApps);
+                }
+                var multiSelect = function (name, label, options) {
+                    options = options || {};
+                    var id = 'settings-' + name,
+                        view = new mini.SelectView({ id: id, name: name, model: quickLaunchModel, list: appsForPos(options.pos), pos: options.pos });
 
-        //             if (!firstView) firstView = view;
-        //             view.listenTo(quickLaunchModel, 'change', function () {
-        //                 this.options.list = appsForPos(this.options.pos);
-        //                 this.$el.empty();
-        //                 this.render();
-        //             });
-        //             return $('<div class="col-md-6">').append(
+                    if (!firstView) firstView = view;
+                    view.listenTo(quickLaunchModel, 'change', function () {
+                        this.options.list = appsForPos(this.options.pos);
+                        this.$el.empty();
+                        this.render();
+                    });
+                    return $('<div class="col-md-6">').append(
+                        $('<label>').attr('for', id).text(label),
+                        view.render().$el
+                    );
+                };
+                baton.$el.append(
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch0', gt('Quick launch 1'), { pos: 0 })),
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch1', gt('Quick launch 2'), { pos: 1 })),
+                    $('<div class="form-group row">').append(multiSelect('apps/quicklaunch2', gt('Quick launch 3'), { pos: 2 }))
+                );
 
-        //                 $('<label>').attr('for', id).text(label),
-        //                 view.render().$el
-        //             );
-        //         };
-        //         baton.$el.append(
-        //             $('<div class="form-group row">').append(multiSelect('apps/quicklaunch0', gt('Quick launch 1'), { pos: 0 })),
-        //             $('<div class="form-group row">').append(multiSelect('apps/quicklaunch1', gt('Quick launch 2'), { pos: 1 })),
-        //             $('<div class="form-group row">').append(multiSelect('apps/quicklaunch2', gt('Quick launch 3'), { pos: 2 }))
-        //         );
-
-        //         firstView.listenTo(quickLaunchModel, 'change', function () {
-        //             settings.set('quicklaunch', [
-        //                 quickLaunchModel.get('apps/quicklaunch0'),
-        //                 quickLaunchModel.get('apps/quicklaunch1'),
-        //                 quickLaunchModel.get('apps/quicklaunch2')
-        //             ].join(','));
-        //         });
-        //         firstView.listenTo(settings, 'change:quicklaunch', function (settingsStr) {
-        //             var a = settingsStr.split(',');
-        //             for (var pos = 0; pos <= a.length; pos++) {
-        //                 quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
-        //             }
-        //         });
-        //     }
-        // }
+                firstView.listenTo(quickLaunchModel, 'change', function () {
+                    settings.set('quicklaunch', [
+                        quickLaunchModel.get('apps/quicklaunch0'),
+                        quickLaunchModel.get('apps/quicklaunch1'),
+                        quickLaunchModel.get('apps/quicklaunch2')
+                    ].join(','));
+                });
+                firstView.listenTo(settings, 'change:quicklaunch', function (settingsStr) {
+                    var a = settingsStr.split(',');
+                    for (var pos = 0; pos <= a.length; pos++) {
+                        quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
+                    }
+                });
+            }
+        }
     );
 
     INDEX = 0;
