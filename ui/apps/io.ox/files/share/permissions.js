@@ -1028,9 +1028,10 @@ define('io.ox/files/share/permissions', [
                 if (objModel.isFolder() && options.nested) {
                     dialog.$footer.append(
                         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ id: guid, name: 'cascadePermissions', model: dialogConfig }).render().$el
-                            )
+                            settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), dialogConfig).on('change', function (e) {
+                                var input = e.originalEvent.srcElement;
+                                dialogConfig.set('byHand', input.checked);
+                            })
                         )
                     );
                 }
