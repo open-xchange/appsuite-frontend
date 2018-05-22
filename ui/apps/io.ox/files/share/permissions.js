@@ -1030,7 +1030,7 @@ define('io.ox/files/share/permissions', [
                         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
                             settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), dialogConfig).on('change', function (e) {
                                 var input = e.originalEvent.srcElement;
-                                dialogConfig.set('byHand', input.checked);
+                                dialogConfig.set('cascadePermissions', input.checked);
                             })
                         )
                     );
