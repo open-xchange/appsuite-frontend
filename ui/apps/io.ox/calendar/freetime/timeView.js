@@ -459,8 +459,11 @@ define('io.ox/calendar/freetime/timeView', [
 
             // preselect lasso
             if (options.parentModel && options.parentModel.get('startDate') !== undefined && options.parentModel.get('endDate') !== undefined) {
-                var start = moment.tz(options.parentModel.get('startDate').value, options.parentModel.get('startDate').tzid).valueOf(),
-                    end = moment.tz(options.parentModel.get('endDate').value, options.parentModel.get('endDate').tzid).valueOf();
+                var start = util.isAllday(options.parentModel) ? moment(options.parentModel.get('startDate').value).startOf('day').valueOf() :
+                        moment.tz(options.parentModel.get('startDate').value, options.parentModel.get('startDate').tzid).valueOf(),
+                    end = util.isAllday(options.parentModel) ? moment(options.parentModel.get('endDate').value).add(1, 'days').startOf('day').valueOf() :
+                        moment.tz(options.parentModel.get('endDate').value, options.parentModel.get('endDate').tzid).valueOf();
+
                 this.lassoStart = this.timeToPosition(start);
                 this.lassoEnd = this.timeToPosition(end);
                 this.keepScrollpos = start;
@@ -797,9 +800,18 @@ define('io.ox/calendar/freetime/timeView', [
                     endTime = Math.max(this.lassoStartTime, this.lassoEndTime),
                     attendees = this.model.get('attendees').toJSON();
 
-                //round to full minutes
+                // round to full minutes
                 startTime = moment(startTime).startOf('minute');
                 endTime = moment(endTime).startOf('minute');
+
+                // check if the lasso is a fullday appointment
+                if (startTime.valueOf() !== endTime.valueOf() && startTime.valueOf() === moment(startTime).startOf('day').valueOf() && endTime.valueOf() === moment(endTime).startOf('day').valueOf()) {
+                    return {
+                        startDate: { value: startTime.format('YYYYMMDD') },
+                        endDate: { value: endTime.subtract(1, 'days').format('YYYYMMDD') },
+                        attendees: attendees
+                    };
+                }
 
                 return {
                     startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: startTime.tz() },
