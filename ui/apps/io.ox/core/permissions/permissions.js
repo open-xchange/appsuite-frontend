@@ -393,7 +393,7 @@ define('io.ox/core/permissions/permissions', [
                         .filter(function (obj) { return obj.group === false; })
                         .pluck('entity')
                         .value(),
-                        cascadePermissionsFlag = false;
+                        cascadeModel = new Backbone.Model({ cascadePermissionsFlag: false });
 
                     dialog.getContentNode().addClass('scrollpane').busy();
 
@@ -419,9 +419,9 @@ define('io.ox/core/permissions/permissions', [
                         });
 
                         var checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
-                                settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), cascadePermissionsFlag).on('change', function (e) {
+                                settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), cascadeModel).on('change', function (e) {
                                     var input = e.originalEvent.srcElement;
-                                    cascadePermissionsFlag = input.checked;
+                                    cascadeModel.set('cascadePermissionsFlag', input.checked);
                                 })
                             ),
                             view = new Typeahead({
@@ -486,7 +486,7 @@ define('io.ox/core/permissions/permissions', [
                             promise.reject();
                             return dialog.idle();
                         }
-                        api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadePermissionsFlag }).then(
+                        api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadeModel.get('cascadePermissionsFlag') }).then(
                             function success() {
                                 collection.off();
                                 dialog.close();
