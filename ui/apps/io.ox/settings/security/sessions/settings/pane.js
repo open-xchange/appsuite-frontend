@@ -121,7 +121,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
             var mapping = {
                 oxdriveapp: settings.get('productname/oxdrive') || 'OXDrive',
                 oxmailapp: settings.get('productname/mailapp') || 'OX Mail',
-                oxsyncapp: settings.get('productname/oxtender') || 'OXtender'
+                oxsyncapp: settings.get('productname/oxsync') || 'OX Sync'
             };
             return function () {
                 var deviceInfo = this.getDeviceInfo('client');
