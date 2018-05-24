@@ -143,25 +143,44 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    var api = {
+        quickLauncherLimit: 3,
+        getQuickLauncherDefaults: function () {
+            return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
+        },
+        getQuickLauncherCount: function () {
+            var n = settings.get('apps/quickLaunchCount', 0);
+            if (!_.isNumber(n)) return 0;
+            return Math.min(this.quickLauncherLimit, n);
+        },
+        getQuickLauncherItems: function () {
+            var count = this.getQuickLauncherCount(),
+                str = settings.get('apps/quickLaunch', this.getQuickLauncherDefaults());
+            // We fill up the list with 'none' in case we have more slots than defaults
+            return (str + new Array(count).join(',none')).split(',').slice(0, count);
+        }
+    };
+
     // reverted for 7.10
     var QuickLaunchersCollection = Backbone.Collection.extend({
         initialize: function () {
             var self = this;
             this.reset(this.fetch());
-            settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
+            settings.on('change:apps/quickLaunch change:apps/quickLaunchCount', function () { self.reset(self.fetch()); });
         },
         fetch: function () {
-            var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
-            return _(quicklaunch.map(function (o) {
-                return ox.ui.apps.findWhere({ path: o });
-            })).compact();
+            var apps = api.getQuickLauncherItems().map(function (o) {
+                return ox.ui.apps.get(o.replace(/\/main$/, ''));
+            });
+            return _(apps).compact();
         }
     });
 
     // reverted for 7.10
     var QuickLaunchersView = Backbone.View.extend({
         attributes: {
-            'id': 'io-ox-quicklaunch'
+            'id': 'io-ox-quicklaunch',
+            'role': 'toolbar'
         },
         events: {
             'click button': 'onClick'
@@ -179,9 +198,10 @@ define('io.ox/core/main/appcontrol', [
                     return new LauncherView({
                         tagName: 'button',
                         model: model, quicklaunch: true
-                    }).render().$el;
+                    }).render().$el.attr('tabindex', -1);
                 })
             );
+            this.$el.find('button').first().removeAttr('tabindex');
             return this;
         }
     });
@@ -280,9 +300,13 @@ define('io.ox/core/main/appcontrol', [
                     })
                 );
             } else if (action) {
+                var autoStart = settings.get('autoStart');
+                if (action === 'autoStart') {
+                    if (autoStart === 'none') return;
+                    action = autoStart;
+                }
                 logo.wrap(
-                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function (e) {
-                        e.preventDefault();
+                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
                         ox.launch(action);
                     })
                 );
@@ -579,8 +603,8 @@ define('io.ox/core/main/appcontrol', [
         });
     }
 
-    return {
+    return _.extend(api, {
         LauncherView: LauncherView,
         LaunchersView: LaunchersView
-    };
+    });
 });
