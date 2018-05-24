@@ -565,12 +565,10 @@ define('io.ox/mail/util', [
                     // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
                     case 'via':
-                        if (status === 'trusted') return true;
-                        switch (level) {
-                            case 'fail_neutral': return /(fail|neutral)/.test(status);
-                            case 'all': return true;
-                            default: return false;
-                        }
+                        // always show if trusted or level is 'all'
+                        if (status === 'trusted' || level === 'all') return true;
+                        // otherwise check occurrence of status in configured level
+                        return level.indexOf(status) > -1;
                     // info box wihtin mail detail
                     case 'box':
                         return /(fail|trusted)/.test(status);
