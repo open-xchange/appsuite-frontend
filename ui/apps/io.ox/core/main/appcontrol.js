@@ -319,6 +319,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'quicklauncher',
         index: 400,
         draw: function () {
+            if (_.device('smartphone')) return;
             var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
             this.append(quicklaunchers.render().$el);
         }
