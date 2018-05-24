@@ -169,6 +169,8 @@ define('io.ox/files/favorites', [
         var id = obj;
         if (typeof obj === 'object') {
             id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
+        } else {
+            obj = _.cid(obj);
         }
 
         filesAPI.get(obj).done(function (file) {
