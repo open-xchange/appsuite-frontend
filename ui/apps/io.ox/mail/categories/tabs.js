@@ -57,7 +57,7 @@ define('io.ox/mail/categories/tabs', [
         respondToNonKeyboardFocus: function (e) {
             if (e.type === 'focusout') return $(e.currentTarget).removeAttr('style');
             // blur event won't get triggered so we reset style for all first
-            if (_.device('safari')) this.$('.category a').removeAttr('style');
+            this.$('.category button').removeAttr('style');
             $(e.currentTarget).css({
                 'border-bottom': '1px solid white',
                 'background': 'white'

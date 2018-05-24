@@ -47,12 +47,16 @@ define('io.ox/calendar/freetime/main', [
             this.options = options || {};
             this.parentModel = options.parentModel;
             this.app = options.app;
-            var attendeesToAdd = [];
+            var attendeesToAdd = [],
+                date;
             if (options.parentModel) {
                 attendeesToAdd = options.parentModel.get('attendees');
-                this.model.set('startDate', util.getMoment(options.parentModel.get('startDate')).startOf(this.model.get('dateRange')));
+                date = util.isAllday(options.parentModel) ? moment(options.parentModel.get('startDate').value) : util.getMoment(options.parentModel.get('startDate'));
+
+                this.model.set('startDate', date.startOf(this.model.get('dateRange')));
             } else {
                 if (options.startDate) {
+                    date = options.startDate;
                     this.model.set('startDate', moment(options.startDate).startOf(this.model.get('dateRange')));
                 }
                 if (options.attendees) {
@@ -61,7 +65,7 @@ define('io.ox/calendar/freetime/main', [
             }
 
             // reference to the date we started the view in (is used to prevent jumping when switching from month to week)
-            this.model.set('viewStartedWith', moment(options.parentModel ? util.getMoment(options.parentModel.get('startDate')) : options.startDate));
+            this.model.set('viewStartedWith', moment(date));
 
             this.participantsSubview = new ParticipantsView({ model: this.model, parentView: this });
             this.timeSubview = new TimeView({ model: this.model, parentModel: options.parentModel, parentView: this });

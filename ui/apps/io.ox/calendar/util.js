@@ -129,7 +129,6 @@ define('io.ox/calendar/util', [
         PRIVATE_EVENT_COLOR: '#616161',
 
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
-        ZULU_FORMAT_DAY_ONLY: 'YYYYMMDD',
 
         getFirstWeekDay: function () {
             // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
@@ -1236,21 +1235,13 @@ define('io.ox/calendar/util', [
         },
 
         // get the right default alarm for an event
-        // note: the defautl alarm for the birthday calendar is not considered here. Ther is no use case since you cannot edit those events atm.
+        // note: the defautl alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
         getDefaultAlarms: function (event) {
             // no event or not fulltime (isAllday returns false for no event)
             if (!this.isAllday(event)) {
-                return settings.get('chronos/defaultAlarmDateTime', [{
-                    action: 'DISPLAY',
-                    description: '',
-                    trigger: { duration: '-PT15M', related: 'START' }
-                }]);
+                return settings.get('chronos/defaultAlarmDateTime', []);
             }
-            return settings.get('chronos/defaultAlarmDate', [{
-                action: 'DISPLAY',
-                description: '',
-                trigger: { duration: '-PT12H', related: 'START' }
-            }]);
+            return settings.get('chronos/defaultAlarmDate', []);
         },
 
         // checks if the user is allowed to edit an event

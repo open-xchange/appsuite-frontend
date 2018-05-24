@@ -510,8 +510,9 @@ define('io.ox/core/extPatterns/links', [
         };
     };
 
-    var drawDropDownItems = function (options, baton, args) {
-        var ul = this.data('ul'), closer;
+    var drawDropDownItems = function (options, dropdownRef, baton, args) {
+        var ul = this.data('ul') || dropdownRef.$ul, closer;
+
         // race-condition
         if (!ul) return;
         // special handling for mobile menus, otherwise the "closer"
@@ -545,22 +546,23 @@ define('io.ox/core/extPatterns/links', [
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul = $('<ul class="dropdown-menu" role="menu">');
+            ul = $('<ul class="dropdown-menu" role="menu">'),
+            dropdownRef = new MiniViewDropdown({
+                el: node.addClass('dropdown'),
+                $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
+                    'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
+                })
+                .append(
+                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
+                ),
+                $ul: ul
+            });
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
-        this.append(new MiniViewDropdown({
-            el: node.addClass('dropdown'),
-            $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
-                'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
-            })
-            .append(
-                options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
-                options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
-            ),
-            $ul: ul
-        }).render().$el);
+        this.append(dropdownRef.render().$el);
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 
@@ -568,7 +570,7 @@ define('io.ox/core/extPatterns/links', [
         if (baton.model) {
             node.on('show.bs.dropdown', { options: options, baton: baton, args: args }, beforeOpenDropDown);
         } else {
-            _.defer(drawDropDownItems.bind(node), options, baton, args);
+            _.defer(drawDropDownItems.bind(node), options, dropdownRef, baton, args);
         }
 
         // usual customizations

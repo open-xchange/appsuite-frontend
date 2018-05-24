@@ -111,7 +111,7 @@ define('io.ox/calendar/week/print', [
                         var weekStart = moment(selection.start),
                             weekEnd = moment(selection.end),
                             days = [],
-                            minHour = Number.MAX_SAFE_INTEGER, maxHour = Number.MIN_SAFE_INTEGER;
+                            minHour = 10000000, maxHour = -10000000;
                         collection.forEach(function (event) {
                             minHour = Math.min(Math.min(minHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
                             maxHour = Math.max(Math.max(maxHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());

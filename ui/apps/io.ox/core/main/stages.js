@@ -63,6 +63,8 @@ define('io.ox/core/main/stages', [
         return autoStart;
     };
 
+    // som
+
     ext.point('io.ox/core/stages').extend({
         id: 'first',
         index: 100,
@@ -378,4 +380,16 @@ define('io.ox/core/main/stages', [
             ox.trigger('core:ready');
         }
     });
+
+    var exports = {
+        // temporary code to get translations for bug 58204
+        restore: function (n) {
+            //#. %1$s is placeholder for the product name like "App Suite"
+            return gt.ngettext('The below item was open last time you exited %1$s.', 'The below items were open last time you exited %1$s.', n, ox.serverConfig.productName) + ' ' +
+                gt('Please click "Continue" if you\'d like to continue editing.') + ' ' +
+                gt.ngettext('If you do not wish to keep the item, please click on the trash icon.', 'If you do not wish to keep an item, please click on the trash icon.', n);
+        }
+    };
+
+    return exports;
 });
