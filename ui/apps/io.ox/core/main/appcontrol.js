@@ -34,18 +34,24 @@ define('io.ox/core/main/appcontrol', [
         tagName: 'a',
         className: 'btn btn-link lcell',
         attributes: {
-            type: 'button'
+            href: '#',
+            role: 'menuitem',
+            tabindex: -1
         },
         events: {
             'click': 'onClick',
             'click .closer': 'quitApp'
         },
         initialize: function (options) {
+            this.pos = options.pos;
             this.quicklaunch = options.quicklaunch;
             this.listenTo(this.model, 'change:hasBadge', this.toggleBadge);
             this.listenTo(this.model, 'change:tooltip', this.updateTooltip);
             this.listenTo(this.model, 'change:title', this.updateTitle);
             this.listenTo(settings, 'change:coloredIcons', this.render);
+        },
+        addAccessKey: function () {
+            if (this.pos <= 9 && this.pos !== 0) this.$el.attr('accesskey', this.pos);
         },
         checkUpsell: function () {
             var requires = this.model.get('requires');
@@ -139,6 +145,7 @@ define('io.ox/core/main/appcontrol', [
                 'data-app-name': this.model.get('name')
             }).append(this.icon = this.drawIcon());
             this.updateTooltip();
+            this.addAccessKey();
             // used on mobile, reverted for 7.10
             // if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
             return this;
@@ -210,9 +217,7 @@ define('io.ox/core/main/appcontrol', [
 
     var LaunchersView = Backbone.View.extend({
         tagName: 'li',
-        className: 'dropdown',
         id: 'io-ox-launcher',
-
         initialize: function () {
             this.listenTo(ox, 'launcher:toggleOverlay', function () {
                 this.$('[data-toggle="dropdown"]').dropdown('toggle');
@@ -225,10 +230,10 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
-                    this.collection.forLauncher().map(function (model) {
+                $('<ul class="dropdown dropdown-menu dropdown-menu-right launcher-dropdown" role="menu">').append(
+                    this.collection.forLauncher().map(function (model, i) {
                         return $('<li role="presentation">').append(
-                            new LauncherView({ model: model }).render().$el
+                            new LauncherView({ model: model, pos: i + 1 }).render().$el
                         );
                     })
                 )
