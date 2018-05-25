@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-23 10:43+0200\n"
+"PO-Revision-Date: 2018-05-25 11:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -4865,6 +4865,31 @@ msgstr "Offline"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "Die gewünschte Anwendung ist im Moment nicht verfügbar."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Das Objekt unten war geöffnet, als Sie zuletzt %1$s beendet haben."
+msgstr[1] ""
+"Die Objekte unten waren geöffnet, als Sie zuletzt %1$s beendet haben."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
+"Wenn Sie das Objekt weiter bearbeiten möchten, klicken Sie bitte auf "
+"\"Fortfahren\"."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Wenn Sie das Objekt nicht behalten wollen, klicken Sie bitte auf das "
+"Mülleimer-Symbol."
+msgstr[1] ""
+"Wenn Sie ein Objekt nicht behalten wollen, klicken Sie bitte auf das "
+"Mülleimer-Symbol."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
