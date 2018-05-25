@@ -788,7 +788,6 @@ define('io.ox/core/tk/dialogs', [
         }
 
         open = function (e, handler) {
-            debugger;
             // get proper elements
             var my = $(this), zIndex, sidepopup;
 
