@@ -27,7 +27,7 @@ define('io.ox/mail/actions/copyMove', [
 
         multiple: function (o) {
             require(['io.ox/core/folder/actions/move'], function (move) {
-                var folderId, createRule;
+                var folderId, createRule, runFlag;
                 function generateRule() {
                     require(['io.ox/mail/mailfilter/settings/filter'
                     ], function (filter) {
@@ -125,8 +125,9 @@ define('io.ox/mail/actions/copyMove', [
                         });
                     },
                     pickerClose: function () {
-                        if (o.type === 'move' && createRule && folderId) {
+                        if (!runFlag && o.type === 'move' && createRule && folderId) {
                             generateRule();
+                            runFlag = true;
                         }
                     }
                 });

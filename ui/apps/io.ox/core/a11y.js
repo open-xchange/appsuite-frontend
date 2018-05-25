@@ -26,12 +26,28 @@ define('io.ox/core/a11y', [], function () {
         $(this).click();
     });
 
+    // focus folder tree from quicklauncher on <enter>
+    $(document).on('keydown.quicklaunch', '#io-ox-quicklaunch button', function (e) {
+        var app = ox.ui.App.getCurrentApp();
+        if (
+            e.which === 13 &&
+            app.get('name') === $(this).attr('data-app-name')
+        ) {
+            var focusableFolder = $('.folder-tree:visible .folder.selected');
+            if (focusableFolder.is(':visible')) {
+                focusableFolder.focus();
+            } else if ($('.window-container:visible').length > 0) {
+                focusListSelection($('.window-container:visible'));
+            }
+        }
+    });
+
     // focus active app from foldertree on <escape> and focus listview on <enter> and <space>
     $(document).on('keydown.foldertree', '.folder-tree .folder.selected', function (e) {
         if (!/13|32|27/.test(e.which)) return;
         if (!$(e.target).is('li')) return;
         var node = $(e.target).closest('.window-container');
-        if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
+        if (e.which === 27) $('#io-ox-quicklaunch button:not([tabindex="-1"])').focus();
         if (/13|32/.test(e.which)) {
             e.preventDefault();
             focusListSelection(node);
@@ -43,7 +59,10 @@ define('io.ox/core/a11y', [], function () {
         if (!/13|32|27/.test(e.which)) return;
         var node = $(e.target).closest('.window-container');
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
-        if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
+        if (e.which === 27) {
+            if (ox.ui.App.getCurrentApp().folderView.isVisible()) node.find('.folder-tree .folder.selected').focus();
+            else $('#io-ox-quicklaunch button:not([tabindex="-1"])').focus();
+        }
         if (/13|32/.test(e.which)) node.find('.rightside, .list-item.focusable:first').last().visibleFocus();
     });
 

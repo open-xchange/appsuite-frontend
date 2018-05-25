@@ -283,6 +283,8 @@ define('io.ox/mail/api', [
             model = pool.get('detail').get(cid),
             cache = options && (options.cache !== undefined) ? options.cache : true;
 
+        if (model && util.authenticity('box', model.toJSON()) === 'trusted') obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
+
         // TODO: make this smarter
         if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 

@@ -556,34 +556,35 @@ define('io.ox/mail/util', [
                 return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
             }
 
+            function matches(regex, status, level) {
+                // status must match the regex AND the status must be a subset of the level
+                return regex.test(status) && level.indexOf(status) > -1;
+            }
+
             function isRelevant(aspect, level, status) {
                 switch (aspect) {
                     // contact image
                     case 'image':
-                        return /(fail|neutral)/.test(status);
+                        return matches(/(fail|neutral)/, status, level);
                     // append icon with info hover next to the from field
                     // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
                     case 'via':
-                        if (status === 'trusted') return true;
-                        switch (level) {
-                            case 'fail_neutral': return /(fail|neutral)/.test(status);
-                            case 'all': return true;
-                            default: return false;
-                        }
+                        // always show if status matches level
+                        return level === 'all' || matches(/(fail|neutral|pass|trusted)/, status, level);
                     // info box wihtin mail detail
                     case 'box':
-                        return /(fail|trusted)/.test(status);
+                        return matches(/(fail|trusted)/, status, level);
                     // disable links, replace external images
                     case 'block':
-                        return status === 'fail';
+                        return matches(/(fail)/, status, level);
                     default:
                         return false;
                 }
-
             }
 
             return function (aspect, data) {
+
                 // support incomplete data (only 'status'), provided by all request
                 if (data.authenticity_preview) data = _.extend({}, { authenticity: data.authenticity_preview }, data);
 

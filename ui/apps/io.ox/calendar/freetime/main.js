@@ -227,6 +227,9 @@ define('io.ox/calendar/freetime/main', [
             })
             .addCancelButton()
             .addButton({ action: 'save', label: options.label || gt('Create appointment') })
+            .on('close', function () {
+                view.dispose();
+            })
             .open();
 
             return { dialog: dialog, view: view };

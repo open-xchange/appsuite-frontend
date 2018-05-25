@@ -372,9 +372,7 @@ define('io.ox/calendar/freetime/timeView', [
                     attendeeTable.append(eventNode);
                 });
             });
-            // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
-            // use margin so resize event does not change things
-            baton.view.headerNodeRow2.css('margin-right', baton.view.bodyNode[0].offsetWidth - baton.view.bodyNode[0].clientWidth - 1 + 'px');
+            baton.view.onResize();
         }
     });
 
@@ -443,6 +441,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.on('change:timeSlots', self.renderBody.bind(this));
             this.model.on('change:zoom', self.updateZoom.bind(this));
             this.model.on('change:showFree', self.updateVisibility.bind(this));
+            this.onResize = this.onResize.bind(this);
 
             this.parentView = options.parentView;
 
@@ -476,6 +475,11 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = 'today';
             }
             this.updateVisibility();
+
+            $(window).on('resize', this.onResize);
+            this.on('dispose', function () {
+                $(window).off('resize', this.onResize);
+            });
         },
 
         updateZoom: function () {
@@ -613,15 +617,18 @@ define('io.ox/calendar/freetime/timeView', [
                 timeSlots = this.model.get('timeSlots');
             if (node.length) {
                 node.remove();
-                // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
-                // use margin so resize event does not change things
-                this.headerNodeRow2.css('margin-right', this.bodyNode[0].offsetWidth - this.bodyNode[0].clientWidth - 1 + 'px');
+                this.onResize();
                 // trigger scroll for lazyload
                 this.parentView.participantsSubview.bodyNode.trigger('scroll');
             }
             delete timeSlots[model.get('entity') || model.get('uri')];
             // silent or we would trigger a redraw
             this.model.set('timeSlots', timeSlots, { silent: true });
+        },
+
+        onResize: function () {
+            // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
+            this.headerNodeRow2.css('margin-right', Math.max(0, this.bodyNode[0].offsetWidth - this.bodyNode[0].clientWidth - 1) + 'px');
         },
 
         onSelectHour: function (e) {

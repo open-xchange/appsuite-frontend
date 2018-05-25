@@ -452,9 +452,9 @@ define('io.ox/mail/common-extensions', [
                 subject = util.getSubject(data, keepPrefix);
 
             this.append(
-                $('<div class="subject">').append(
-                    $('<span class="flags">'),
-                    $('<span class="drag-title">').text(subject)
+                $('<div class="subject" role="presentation">').append(
+                    $('<span class="flags" role="presentation">'),
+                    $('<span class="drag-title" role="presentation">').text(subject).attr('title', subject)
                 )
             );
         },
