@@ -910,6 +910,7 @@ define('io.ox/core/folder/extensions', [
             id: 'private',
             draw: function (baton) {
                 if (baton.context !== 'app') return;
+                if (capabilities.has('guest')) return;
                 var dropdown = new DropdownView({
                     tagName: 'li',
                     className: 'presentation dropdown',
