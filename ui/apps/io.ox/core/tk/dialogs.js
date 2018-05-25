@@ -788,6 +788,7 @@ define('io.ox/core/tk/dialogs', [
         }
 
         open = function (e, handler) {
+            debugger;
             // get proper elements
             var my = $(this), zIndex, sidepopup;
 
@@ -796,7 +797,7 @@ define('io.ox/core/tk/dialogs', [
             self.nodes = {
                 closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
                 click: my.parents('.io-ox-sidepopup-pane, .io-ox-dialog-popup, .notifications-overlay, body').first(),
-                target: target || my.parents('.simple-window, .window-container-center, .notifications-overlay, body').first(),
+                target: target || my.parents('.simple-window, .window-container-center, .notifications-overlay, #io-ox-notifications-sidepopup, body').first(),
                 simple: my.closest('.simple-window')
             };
 
