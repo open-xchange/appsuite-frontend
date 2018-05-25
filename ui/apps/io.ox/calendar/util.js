@@ -514,6 +514,12 @@ define('io.ox/calendar/util', [
                 return moment.months()[i];
             }
 
+            function getWorkweekBitmask() {
+                var bitmask = 0, i;
+                for (i = 0; i < settings.get('numDaysWorkweek'); i++) bitmask += 1 << ((settings.get('workweekStart') + i) % 7);
+                return bitmask;
+            }
+
             var str = '',
                 interval = data.interval,
                 days = data.days || null,
@@ -536,7 +542,7 @@ define('io.ox/calendar/util', [
                         //#. recurrence string
                         //#. %1$d: numeric
                         str = gt.npgettext('weekly', 'Every day.', 'Every %1$d weeks on all days.', interval, interval);
-                    } else if (days === 62) { // special case: weekly on workdays
+                    } else if (days === getWorkweekBitmask()) { // special case: weekly on workdays
                         //#. recurrence string
                         //#. %1$d: numeric
                         str = gt.npgettext('weekly', 'On workdays.', 'Every %1$d weeks on workdays.', interval, interval);
