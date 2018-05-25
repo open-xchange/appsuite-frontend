@@ -217,6 +217,7 @@ define('io.ox/core/main/appcontrol', [
 
     var LaunchersView = Backbone.View.extend({
         tagName: 'li',
+        className: 'dropdown',
         id: 'io-ox-launcher',
         initialize: function () {
             this.listenTo(ox, 'launcher:toggleOverlay', function () {
@@ -230,7 +231,7 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                $('<ul class="dropdown dropdown-menu dropdown-menu-right launcher-dropdown" role="menu">').append(
+                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown" role="menu">').append(
                     this.collection.forLauncher().map(function (model, i) {
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model, pos: i + 1 }).render().$el
