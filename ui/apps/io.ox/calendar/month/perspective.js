@@ -359,7 +359,7 @@ define('io.ox/calendar/month/perspective', [
         restore: function () {
             // goto current date position
             if (!this.folder) return;
-            this.gotoMonth(this.app.props.get('date'));
+            this.gotoMonth(moment(this.app.props.get('date')));
         },
 
         /**
