@@ -195,7 +195,6 @@ define('io.ox/search/main', [
 
         win.nodes.main.addClass('container io-ox-search f6-target empty').attr({
             'tabindex': '0',
-            'role': 'main',
             'aria-label': gt('Search')
         });
 

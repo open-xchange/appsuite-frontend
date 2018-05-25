@@ -395,7 +395,6 @@ define('io.ox/calendar/month/perspective', [
                 .addClass('month-view')
                 .empty()
                 .attr({
-                    'role': 'main',
                     'aria-label': gt('Calendar Month View')
                 })
                 .append(this.scaffold = View.drawScaffold());

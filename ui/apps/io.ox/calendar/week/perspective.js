@@ -424,7 +424,6 @@ define('io.ox/calendar/week/perspective', [
                 .addClass('week-view secondary-time-label')
                 .empty()
                 .attr({
-                    'role': 'main',
                     'aria-label': gt('Appointment list')
                 });
 

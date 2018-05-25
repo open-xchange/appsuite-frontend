@@ -356,7 +356,6 @@ define('io.ox/files/main', [
                 app.listControl.render().$el
                 //#. items list (e.g. mails)
                 .attr({
-                    role: 'main',
                     'aria-label': gt('Files')
                 })
                 .find('.toolbar')

@@ -104,6 +104,8 @@ define('io.ox/core/main/appcontrol', [
 
             this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
+            this.$icon.attr('aria-hidden', true);
+
             // reverted for 7.10
             // if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
 
@@ -389,7 +391,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'show',
         index: 10000,
         draw: function () {
-            this.show();
+            this.attr('role', 'banner').show();
         }
     });
 
