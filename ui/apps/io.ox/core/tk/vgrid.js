@@ -423,7 +423,8 @@ define('io.ox/core/tk/vgrid', [
         // add label class
         this.multiselectId = _.uniqueId('multi-selection-message-');
         template.node.addClass('selectable'); //.attr('aria-describedby', this.multiselectId);
-        label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
+        // tabindex or containeronfocus is called when clicked
+        label.node.addClass('vgrid-label').attr({ tabindex: -1, 'aria-hidden': 'true' });
 
         // IE focus fix for bug 31617.
         // "The focus event does not bubble in Internet Explorer"
