@@ -1003,6 +1003,40 @@
 // generate dark and light themes
 .io-ox-viewer {
 
+    .viewer-print-overlay {
+        display: none;
+
+        @media print {
+            .flex-center(row);
+            position: absolute;
+            z-index: 2;
+            background-color: #fff!important;
+            text-align: center;
+            height: 100%;
+
+            &:before {
+                font-family: FontAwesome;
+                content: "\f1c5";
+                font-size: 75px;
+                width: 100%;
+                margin-top: -150px;
+                position: absolute;
+                color: #333!important;
+            }
+            .print-content {
+                display: flex;
+                flex-wrap: wrap;
+
+                span {
+                    width: 100%;
+                    margin: 15px 100px;
+                    font-size: 32px;
+                    color: #333!important;
+                }
+            }
+        }
+    }
+
     &.viewer-dark-theme {
 
         .viewer-dark-colors();
@@ -1031,3 +1065,14 @@ html.ios .io-ox-viewer {
 
 .viewer-sidebar .description-button { outline:0; padding:0; border:0; font-size: 13px; color: @brand-primary; }
 .viewer-dark-theme .viewer-sidebar .description-button { color: #7ba6d1; }
+
+@media print {
+    .io-ox-viewer {
+        background-color: #fff!important;
+    }
+    .viewer-toolbar,
+    .viewer-sidebar,
+    .viewer-displayer .swiper-button-control {
+        display: none !important;
+    }
+}

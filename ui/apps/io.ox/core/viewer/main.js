@@ -15,8 +15,9 @@
 define('io.ox/core/viewer/main', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'gettext!io.ox/core',
     'io.ox/core/viewer/util'
-], function (ext, Capabilities, Util) {
+], function (ext, Capabilities, gt, Util) {
 
     'use strict';
 
@@ -57,9 +58,17 @@ define('io.ox/core/viewer/main', [
             var self = this,
                 el = $('<div class="io-ox-viewer abs">'),
                 container = data.container || $('#io-ox-core'),
+                printOverlay = $('<div class="viewer-print-overlay">').append(
+                    $('<div class="print-content">').append(
+                        $('<span>').text(gt('Sorry, there is no preview available.')),
+                        $('<span>').text(gt('To print this file, please use "Print as PDF" in the viewer.'))
+                    )
+                ).attr('aria-hidden', true),
                 siblings;
 
             container.append(el);
+            el.append(printOverlay);
+
             siblings = el.siblings().each(function () {
                 var $this = $(this);
                 $this.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
