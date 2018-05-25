@@ -484,7 +484,8 @@ define('io.ox/calendar/api', [
                     until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT)
                 }, options);
 
-                var order = _(list).pluck('entity');
+                // entity for users ressources etc, uri for externals
+                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; });
 
                 return http.PUT({
                     module: 'chronos',
@@ -497,7 +498,7 @@ define('io.ox/calendar/api', [
                 }).then(function (items) {
                     // response order might not be the same as in the request. Fix that.
                     items.sort(function (a, b) {
-                        return order.indexOf(a.attendee.entity) - order.indexOf(b.attendee.entity);
+                        return order.indexOf(a.attendee.entity || a.attendee.uri) - order.indexOf(b.attendee.entity || b.attendee.uri);
                     });
                     return items;
                 });
