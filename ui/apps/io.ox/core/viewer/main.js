@@ -12,7 +12,9 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
-define('io.ox/core/viewer/main', [], function () {
+define('io.ox/core/viewer/main', [
+    'gettext!io.ox/core'
+], function (gt) {
 
     'use strict';
 
@@ -52,9 +54,17 @@ define('io.ox/core/viewer/main', [], function () {
                 el = $('<div class="io-ox-viewer abs">'),
                 fileList = [].concat(data.files),
                 container = data.container || $('#io-ox-core'),
+                printOverlay = $('<div class="viewer-print-overlay">').append(
+                    $('<div class="print-content">').append(
+                        $('<span>').text(gt('Sorry, there is no preview available.')),
+                        $('<span>').text(gt('To print this file, please use "Print as PDF" in the viewer.'))
+                    )
+                ).attr('aria-hidden', true),
                 siblings;
 
             container.append(el);
+            el.append(printOverlay);
+
             siblings = el.siblings().each(function () {
                 var $this = $(this);
                 $this.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
