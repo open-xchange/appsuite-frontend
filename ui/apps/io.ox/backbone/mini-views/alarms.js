@@ -223,13 +223,14 @@ define('io.ox/backbone/mini-views/alarms', [
                 }
 
                 switch (alarm.action) {
+                    // don't use empty string as summary or description if not available. Produces problems with ical
                     case 'EMAIL':
-                        alarm.summary = self.model ? self.model.get('summary') || '' : '';
-                        alarm.description = self.model ? self.model.get('description') || '' : '';
+                        alarm.summary = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
+                        alarm.description = self.model ? self.model.get('description') || 'reminder' : 'reminder';
                         alarm.attendee = 'mailto:' + mailSettings.get('defaultaddress');
                         break;
                     case 'DISPLAY':
-                        alarm.description = self.model ? self.model.get('summary') || '' : '';
+                        alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
                     // no default
                 }
