@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-22 13:00+0300\n"
+"PO-Revision-Date: 2018-05-25 14:21+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -717,8 +717,9 @@ msgstr "Aizvērt"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1602,7 +1603,9 @@ msgstr "Rādīt smalku režģi"
 msgid "Appointment types"
 msgstr "Mītiņu tipi"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Brīvs"
 
@@ -4230,6 +4233,14 @@ msgid "You cannot move items to this folder"
 msgstr "Uz šo mapi vienības nevar tikt pārvietotas"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved into itself"
+msgstr "Mapi nevar pārvietot pašu par sevi"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved to one of its subfolders"
+msgstr "Mapi nevar pārvietot uz kādu no tās apakšmapēm"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Pagaidiet līdz tiek pabeigta iepriekšējā operācija"
 
@@ -4568,14 +4579,16 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Šai mapei ir publikācijas un/vai abonementi"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Izņemt no izlases"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorites.js
 msgid "Add to favorites"
 msgstr "Pievienot izlasei"
@@ -4838,6 +4851,32 @@ msgstr "Bezsaiste"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "Pieprasītā aplikācija pašlaik nav pieejama."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+"Zemāk redzamais vienums bija atvērts kad pēdējo reizi izgājāt no %1$s."
+msgstr[1] ""
+"Zemāk redzamie vienumi bija atvērti kad pēdējo reizi izgājāt no %1$s."
+msgstr[2] ""
+"Zemāk redzamie vienumi bija atvērti kad pēdējo reizi izgājāt no %1$s."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Ja vēlaties turpināt rediģēšanu, noklikšķiniet uz \"Turpināt\"."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Ja nevēlaties paturēt šo vienumu, lūdzu noklikšķiniet uz atkritnes ikonas."
+msgstr[1] ""
+"Ja nevēlaties paturēt vienumu, lūdzu noklikšķiniet uz atkritnes ikonas."
+msgstr[2] ""
+"Ja nevēlaties paturēt vienumu, lūdzu noklikšķiniet uz atkritnes ikonas."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5380,6 +5419,7 @@ msgid "Basic settings"
 msgstr "Pamata iestatījumi"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
@@ -5489,9 +5529,11 @@ msgstr "Publikācija ir jāsatur vietne."
 msgid "Model is incomplete."
 msgstr "Modelis nav pabeigts."
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Lai abonētu jums ir jāievada lietotāja vārds un parole."
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s nedrīkst būt tukšs."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
@@ -7802,20 +7844,20 @@ msgstr "Saglabāt pievienojumu"
 msgid "unknown sender"
 msgstr "nezināms sūtītājs"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "Visi turpmākie %1$s ziņojumi tiks pārvietoti uz norādīto mapi."
+msgstr[0] ""
+"Visi turpmākie ziņojumi no šī nosūtītāja tiks pārvietoti uz norādīto mapi."
 msgstr[1] ""
-"Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+"Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti uz "
 "norādīto mapi."
 msgstr[2] ""
-"Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+"Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti uz "
 "norādīto mapi."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
@@ -8020,8 +8062,8 @@ msgid "Read"
 msgstr "Izlasīts"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Show Links"
-msgstr "Rādīt saites"
+msgid "Enable Links"
+msgstr "Iespējot saites"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
@@ -8078,10 +8120,6 @@ msgstr "Vai aizmirsāt pievienot?"
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Nosūtīt bez pievienojumiem"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Pievienot pielikumu"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
@@ -10502,6 +10540,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "Jūs pašlaik esat pieslēdzies no sekojošām ierīcēm"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from all clients"
+msgstr "Izrakstīties no visiem klientiem"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr "Vai tiešām vēlaties atslēgties no visiem klientiem, izņemt pašreizējo?"
 
@@ -12215,6 +12257,27 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Lai abonētu jums ir jāievada lietotāja vārds un parole."
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "Visi turpmākie %1$s ziņojumi tiks pārvietoti uz norādīto mapi."
+#~ msgstr[1] ""
+#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+#~ "norādīto mapi."
+#~ msgstr[2] ""
+#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+#~ "norādīto mapi."
+
+#~ msgid "Show Links"
+#~ msgstr "Rādīt saites"
+
+#~ msgid "Add attachment"
+#~ msgstr "Pievienot pielikumu"
 
 #~ msgid "Scheduling"
 #~ msgstr "Plānošana"
