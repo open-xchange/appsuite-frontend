@@ -11,7 +11,7 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
                     if ((/^http/i).test(uri)) {
                         window.location = uri;
                         _.defer(function () {
-                            if (window.location !== uri) return;
+                            if (window.location.href !== uri) return;
                             window.location.reload();
                         });
                     } else {
@@ -22,10 +22,12 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
                             path = '/' + uri;
                         }
 
-                        var l = location;
-                        window.location = l.protocol + '//' + l.host + path;
+                        var proto = window.location.protocol,
+                            host = window.location.host;
+                        uri = proto + '//' + host + path;
+                        window.location = uri;
                         _.defer(function () {
-                            if (window.location !== uri) return;
+                            if (window.location.href !== uri) return;
                             window.location.reload();
                         });
                     }
