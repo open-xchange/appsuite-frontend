@@ -19,7 +19,7 @@ module.exports.config = {
             'smartWait': 1000,
             'waitForTimeout': 30000,
             'browser': 'chrome',
-            'restart': false,
+            'restart': true,
             'windowSize': 'maximize',
             'desiredCapabilities': {
                 'browserName': 'chrome',
