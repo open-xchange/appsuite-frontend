@@ -429,7 +429,7 @@ define('io.ox/core/folder/node', [
             }
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) {
+            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app) {
                 this.renderContextControl();
             }
 
@@ -532,6 +532,8 @@ define('io.ox/core/folder/node', [
         },
 
         renderContextControl: function () {
+            // store contextmenu type in main node
+            if (_.device('smartphone')) return this.$el.attr('data-contextmenu', this.options.contextmenu || 'default');
             var title = this.getTitle();
             this.$el.attr('aria-haspopup', true);
             this.$.selectable.append(

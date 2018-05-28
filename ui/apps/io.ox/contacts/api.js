@@ -571,6 +571,7 @@ define('io.ox/contacts/api', [
         fetchCache.clear();
         api.caches.get.clear();
         api.trigger('import');
+        api.trigger('refresh.all');
     });
 
     /** @define {object} simple contact cache */

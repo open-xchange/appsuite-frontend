@@ -990,7 +990,15 @@ define('io.ox/mail/compose/view', [
                     } else {
                         target = self.editor;
                     }
-                    _.defer(function () { target.focus(); });
+                    if (self.editor.tinymce) {
+                        var defaultFontStyle = settings.get('defaultFontStyle', {}),
+                            family = (defaultFontStyle.family || '').split(',')[0];
+                        if (!_.isEmpty(defaultFontStyle)) {
+                            if (family && family !== 'browser-default') self.editor.tinymce().execCommand('fontName', false, family);
+                            if (defaultFontStyle.size && defaultFontStyle.size !== 'browser-default') self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
+                        }
+                    }
+                    target.focus();
                 }
                 self.model.setAutoBCC();
                 if (mode === 'replyall' || mode === 'edit') {

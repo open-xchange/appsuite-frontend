@@ -7902,13 +7902,13 @@ msgstr "保持"
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "File into"
-msgstr "次にファイル"
+msgstr "フォルダに移動"
 
 #. Copy a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "Copy into"
-msgstr "次にコピー"
+msgstr "フォルダにコピー"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
