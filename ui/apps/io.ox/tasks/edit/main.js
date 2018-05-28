@@ -250,7 +250,7 @@ define('io.ox/tasks/edit/main', [
             this.markDirty();
 
             this.view.autoOpen(point);
-            var participants = point.participants;
+            var participants = point.participants || [];
             delete point.participants;
 
             this.model.set(point);
