@@ -152,13 +152,16 @@ define('io.ox/core/links', [
                 folder = data.folder,
                 id = String(data.id || '').replace(/\//, '.'),
                 cid = id.indexOf('.') > -1 ? id : _.cid({ folder: folder, id: id });
-            if (app.folder.get() === folder) {
-                app.getGrid().selection.set(cid);
-            } else {
-                app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(cid);
+
+            $.when()
+                .then(function () {
+                    // set folder
+                    if (!app.folder.get() === folder) return app.folder.set(folder);
+                })
+                .then(function () {
+                    // select item
+                    if (id) return app.getGrid().selection.set(cid);
                 });
-            }
         });
     };
 
