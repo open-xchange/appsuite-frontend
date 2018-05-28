@@ -202,12 +202,12 @@ define('io.ox/calendar/common-extensions', [
         },
 
         shownAs: function (baton) {
+            // only show when marked as free
+            if (!util.hasFlag(baton.model, 'transparent')) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Shown as')),
-                    $('<td>').append(
-                        $('<i class="fa fa-square shown_as" aria-hidden="true">').addClass(util.getShownAsClass(baton.model || baton.data)),
-                        $('<span class="detail shown-as">').text('\u00A0' + util.getShownAs(baton.model || baton.data))
+                    $('<td>').append(util.getShownAs(baton.model || baton.data)
                     )
                 )
             );
