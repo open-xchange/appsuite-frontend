@@ -829,8 +829,9 @@ define('io.ox/files/actions', [
             if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
             return isShareable(e, 'link') || isShareable(e, 'invite');
         },
-        action: function (baton) {
+        action: _.throttle(function (baton) {
             require(['io.ox/files/share/permissions', 'io.ox/files/share/api'], function (permissions, shareApi) {
+
                 var models = _.isArray(baton.models) ? baton.models : [baton.models];
                 if (models && models.length) {
                     var model = _.first(models),
@@ -843,13 +844,47 @@ define('io.ox/files/actions', [
                         fileModel, folderModel,
                         newPermissionList, newExtendedPermissionList;
 
+                    // do nothing when the item is removed from DOM, because the type is (unfortunately) determined by DOM attributes
+                    // revoking an sharing link while the DOM does not exist would remove permissions for example as shareType is undefined
+                    if (shareType === undefined) { return; }
+
                     shareModel.loadExtendedPermissions().done(function () {
+
                         if (shareType === 'public-link') {
+                            var def;
+
                             if (model.isFile()) {
                                 options.item = model.get('id');
+                                // workaround: do not cache, we need the most recent data from the server to prevent old timestamps
+                                def = api.get(_.pick(model.toJSON(), 'id', 'folder_id'), { cache: false }).then(function (fileModel) {
+                                    // use this as a timestamp for files for deleteLink, never use system time!
+                                    return fileModel.sequence_number;
+                                });
+                            } else {
+                                // workaround: do not cache, we need the most recent data from the server to prevent old timestamps
+                                def = folderAPI.get(model.get('id'), { cache: false }).then(function (folderDesc) {
+                                    // use this as a timestamp for deleteLink, never use system time!
+                                    return folderDesc.last_modified_utc;
+                                });
                             }
-                            shareAPI.deleteLink(options)
-                                .done(shareModel.destroy.bind(shareModel));
+
+                            def.done(function (changeTimestamp) {
+                                shareAPI.deleteLink(options, changeTimestamp)
+                                .done(function () {
+                                    yell('success', gt('Revoked access.'));
+                                    shareModel.destroy.bind(shareModel);
+                                })
+                                .fail(function (error) {
+                                    // current 'dirty' workaround: the error below appears when the link does not exist anymore on the server and when the user revoke it,
+                                    // the user should not see this error, so we can just refresh the view and refresh all data to be sync again
+                                    if (error.categories === 'ERROR' && error.code === 'SHR-0023') {
+                                        ox.trigger('refresh^');
+                                    } else {
+                                        yell(error);
+                                    }
+                                });
+                            });
+
                         } else {
                             permissionsToKeep = shareModel.getPermissions().filter(function (item) {
                                 if (item.type === 'anonymous' || ox.user_id === item.entity) {
@@ -900,7 +935,7 @@ define('io.ox/files/actions', [
                     });
                 }
             });
-        }
+        }, 600)
     });
 
     // version specific actions

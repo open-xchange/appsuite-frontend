@@ -21,15 +21,15 @@ define('io.ox/files/share/wizard', [
     'io.ox/contacts/api',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
+    'io.ox/core/settings/util',
     'gettext!io.ox/files',
     'settings!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/addresspicker',
     'io.ox/backbone/mini-views/copy-to-clipboard',
-    'io.ox/office/tk/forms',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard, Forms) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard) {
 
     'use strict';
 
@@ -223,18 +223,13 @@ define('io.ox/files/share/wizard', [
                 }
             });
             if (onlyFiles) return;
-            var checkboxMarkup = Forms.createButtonMarkup({ attributes: { class: 'includeSubfolders', role: 'checkbox' }, label: gt('Share with subfolders') }),
-                $checkbox = $(checkboxMarkup);
 
-            this.append($('<div class="form-group">').append($checkbox));
-
-            Forms.setButtonKeyHandler($checkbox);
-
-            $checkbox.on('click', function () {
-                var state = !$checkbox.find('i').hasClass('checked');
-                baton.model.set('includeSubfolders', state);
-                Forms.checkButtonNodes($checkbox, state, { design: 'boxed', ambiguous: false });
-            });
+            this.append($('<div class="form-inline">').append($('<div class="form-group">').append(
+                settingsUtil.checkbox('includeSubfolders', gt('Share with subfolders'), baton.model).on('change', function (e) {
+                    var input = e.originalEvent.srcElement;
+                    baton.model.set('includeSubfolders', input.checked);
+                })
+            )));
 
             baton.model.once('change', function (model) {
                 var isNewLink = model.get('is_new'),
@@ -246,7 +241,6 @@ define('io.ox/files/share/wizard', [
                 } else {
                     state = model.get('includeSubfolders');
                 }
-                Forms.checkButtonNodes($checkbox, state, { design: 'boxed', ambiguous: false });
             });
         }
     });
@@ -281,37 +275,25 @@ define('io.ox/files/share/wizard', [
                 dropdown.option('expires', parseInt(key, 10), val);
             });
 
-            var checkboxMarkup = Forms.createButtonMarkup({ attributes: { class: 'temporary', role: 'checkbox' }, label: gt('Expires in') }),
-                $checkbox = $(checkboxMarkup);
-
-            this.append($('<div class="form-group expiresgroup">').append(
-                $checkbox,
+            this.append($('<div class="form-inline">').append($('<div class="form-group expiresgroup">').append(
+                settingsUtil.checkbox('temporary', gt('Expires in'), baton.model).on('change', function (e) {
+                    var input = e.originalEvent.srcElement;
+                    baton.model.set('temporary', input.checked);
+                }),
                 $.txt(' '),
                 dropdown.render().$el.addClass('dropup')
-            ));
-
-            Forms.setButtonKeyHandler($checkbox);
-
-            $checkbox.on('click', function () {
-                var state = !$checkbox.find('i').hasClass('checked');
-                baton.model.set('temporary', state);
-                Forms.checkButtonNodes($checkbox, state, { design: 'boxed', ambiguous: false });
-            });
+            )));
 
             baton.model.once('change', function () {
-                var state = false;
                 if (baton.model.get('expiry_date')) {
-                    state = true;
                     baton.model.set('expires', null);
                 }
-                Forms.checkButtonNodes($checkbox, state, { design: 'boxed', ambiguous: false });
             });
 
             baton.model.on('change:expiry_date', function (model, val) {
                 dropdown.$el.find('.dropdown-label').text(new moment(val).format('L'));
                 dropdown.$el.closest('.expiresgroup').find('span.caption>span').text(gt('Expires on'));
                 model.set('temporary', true);
-                Forms.checkButtonNodes($checkbox, true, { design: 'boxed', ambiguous: false });
             });
 
             baton.model.on('change:expires', function (model) {
@@ -320,7 +302,6 @@ define('io.ox/files/share/wizard', [
                         'temporary': true,
                         'expiry_date': model.getExpiryDate()
                     });
-                    Forms.checkButtonNodes($checkbox, true, { design: 'boxed', ambiguous: false });
                 }
             });
         }
@@ -335,12 +316,12 @@ define('io.ox/files/share/wizard', [
         draw: function (baton) {
             var guid, passContainer;
 
-            var checkboxMarkup = Forms.createButtonMarkup({ attributes: { class: 'secured', role: 'checkbox' }, label: gt('Password required') }),
-                $checkbox = $(checkboxMarkup);
-
             this.append($('<div class="form-inline passwordgroup">').append(
                 $('<div class="form-group">').append(
-                    $checkbox
+                    settingsUtil.checkbox('secured', gt('Password required'), baton.model).on('change', function (e) {
+                        var input = e.originalEvent.srcElement;
+                        baton.model.set('secured', input.checked);
+                    })
                 ),
                 $.txt(' '),
                 $('<div class="form-group">').append(
@@ -355,13 +336,6 @@ define('io.ox/files/share/wizard', [
                 )
             ));
 
-            Forms.setButtonKeyHandler($checkbox);
-
-            $checkbox.on('click', function () {
-                var state = !$checkbox.find('i').hasClass('checked');
-                baton.model.set('secured', state);
-                Forms.checkButtonNodes($checkbox, state, { design: 'boxed', ambiguous: false });
-            });
             baton.view.listenTo(baton.model, 'change:password', function (model, val, options) {
                 if (val && !model.get('secured')) {
                     model.set('secured', true, options);
@@ -382,7 +356,6 @@ define('io.ox/files/share/wizard', [
                 model.set('secured', state);
                 passInput.prop('disabled', !state);
                 passContainer.prop('disabled', !state);
-                Forms.checkButtonNodes($checkbox, model.get('secured'), { design: 'boxed', ambiguous: false });
             });
         }
     });

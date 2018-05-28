@@ -32,14 +32,12 @@ define('io.ox/files/share/toolbar', [
                 prio: 'hi',
                 mobile: 'lo',
                 label: gt('Edit share'),
-                drawDisabled: true,
                 ref: 'io.ox/files/actions/editShare'
             },
             'delete': {
                 prio: 'hi',
                 mobile: 'lo',
                 label: gt('Revoke access'),
-                drawDisabled: true,
                 ref: 'io.ox/files/share/revoke'
             },
             'back': {

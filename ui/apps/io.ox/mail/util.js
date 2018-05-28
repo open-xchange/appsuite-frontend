@@ -569,10 +569,13 @@ define('io.ox/mail/util', [
                     // append icon with info hover next to the from field
                     // prepend in sender block (detail), 'via' hint for different mail server
                     case 'icon':
-                    case 'via':
                         // always show if status matches level
                         return level === 'all' || matches(/(fail|neutral|pass|trusted)/, status, level);
-                    // info box wihtin mail detail
+                    case 'via':
+                        // always display "Via <real-domain>" if there is an authenticated domain
+                        // that differs from the "From" header domain
+                        return true;
+                    // info box within mail detail
                     case 'box':
                         return matches(/(fail|trusted)/, status, level);
                     // disable links, replace external images
