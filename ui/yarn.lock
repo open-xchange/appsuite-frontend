@@ -2,10 +2,13 @@
 # yarn lockfile v1
 
 
-"@open-xchange/codecept-helper@0.0.4":
+"@open-xchange/codecept-helper@git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#feature/provisioning":
   version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.4.tgz#cb07743e42a48cbbab08cc1791475aab2d811628"
+  resolved "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#21778a3459ede1eb4c71968582fefd282fcadb23"
   dependencies:
+    axios "^0.18.0"
+    form-data "^2.3.2"
+    soap "^0.24.0"
     underscore "^1.8.3"
 
 "@open-xchange/hopscotch@0.0.1":
@@ -566,12 +569,6 @@ buffer-alloc@^1.1.0:
   dependencies:
     buffer-alloc-unsafe "^0.1.0"
     buffer-fill "^0.1.0"
-
-buffer-browserify@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/buffer-browserify/-/buffer-browserify-0.0.4.tgz#4b0db6c3a935b71fad6f12add55ace466c04c2e5"
-  dependencies:
-    base64-js "0.0.2"
 
 buffer-crc32@0.2.1:
   version "0.2.1"
@@ -1382,11 +1379,7 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-ejs@~2.5.5:
-  version "2.5.8"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.5.8.tgz#2ab6954619f225e6193b7ac5f7c39c48fefe4380"
-
-ejs@~2.5.6:
+ejs@~2.5.5, ejs@~2.5.6:
   version "2.5.9"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.5.9.tgz#7ba254582a560d267437109a68354112475b0ce5"
 
@@ -1929,8 +1922,8 @@ fn-args@^3.0.0:
   resolved "https://registry.yarnpkg.com/fn-args/-/fn-args-3.0.0.tgz#df5c3805ed41ec3b38a72aabe390cf9493ec084c"
 
 follow-redirects@^1.3.0:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.1.tgz#d8120f4518190f55aac65bb6fc7b85fcd666d6aa"
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.0.tgz#234f49cf770b7f35b40e790f636ceba0c3a0ab77"
   dependencies:
     debug "^3.1.0"
 
@@ -3165,7 +3158,7 @@ lodash@^4.0.0, lodash@^4.17.4, lodash@^4.5.0, lodash@^4.8.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-lodash@^4.14.0, lodash@^4.17.10, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.4:
+lodash@^4.14.0, lodash@^4.17.10, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.4:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -4164,8 +4157,8 @@ request@2.81.0, request@2.x.x, request@>=2.12.0, request@^2.72.0, request@~2.x.x
     uuid "^3.0.0"
 
 request@>=2.9.0:
-  version "2.85.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.85.0.tgz#5a03615a47c61420b3eb99b7dba204f83603e1fa"
+  version "2.87.0"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.87.0.tgz#32f00235cd08d482b4d0d68db93a829c0ed5756e"
   dependencies:
     aws-sign2 "~0.7.0"
     aws4 "^1.6.0"
@@ -4175,7 +4168,6 @@ request@>=2.9.0:
     forever-agent "~0.6.1"
     form-data "~2.3.1"
     har-validator "~5.0.3"
-    hawk "~6.0.2"
     http-signature "~1.2.0"
     is-typedarray "~1.0.0"
     isstream "~0.1.2"
@@ -4185,7 +4177,6 @@ request@>=2.9.0:
     performance-now "^2.1.0"
     qs "~6.5.1"
     safe-buffer "^5.1.1"
-    stringstream "~0.0.5"
     tough-cookie "~2.3.3"
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
@@ -4528,16 +4519,16 @@ sntp@2.x.x:
   dependencies:
     hoek "4.x.x"
 
-soap@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/soap/-/soap-0.23.0.tgz#2d8f22bef979ded90c0b4d7a5b3ce23d1ed1e52f"
+soap@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/soap/-/soap-0.24.0.tgz#8a101e63ae0763afc45e876b2761091665abaed8"
   dependencies:
     bluebird "^3.5.0"
     concat-stream "^1.5.1"
     debug "^2.6.9"
     ejs "~2.5.5"
     finalhandler "^1.0.3"
-    lodash "^3.10.1"
+    lodash "^4.17.5"
     request ">=2.9.0"
     sax ">=0.6"
     selectn "^0.9.6"

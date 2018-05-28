@@ -93,7 +93,7 @@ Scenario.skip('Create appointment with all fields', async function (I) {
 
 });
 
-Scenario.only('fullday appointments', async function (I) {
+Scenario('fullday appointments', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 

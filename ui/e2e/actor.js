@@ -1,7 +1,5 @@
 
-const actor = require('@open-xchange/codecept-helper').actor,
-    _ = require('underscore'),
-    util = require('./util');
+const actor = require('@open-xchange/codecept-helper').actor;
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -22,29 +20,6 @@ module.exports = actor({
         if (skipRefresh === true) return;
         this.click('#io-ox-refresh-icon');
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
-    },
-    // TODO move login and logout to external library when we have some experience with it
-
-    login: function (params, options) {
-        params = [].concat(params);
-        options = _.extend({
-            prefix: ''
-        }, options);
-
-        let user = options.user || require('./users')[0];
-        const baseURL = util.getURLRoot(),
-            prefix = options.prefix ? `${options.prefix}/` : '',
-            url = `${baseURL}/${prefix}appsuite/`;
-
-        if (user.toJSON) user = user.toJSON();
-
-        this.amOnPage(url + '#' + params.join('&'));
-        this.waitForFocus('input[name="username"]');
-        this.fillField('username', user.name);
-        this.fillField('password', user.password);
-        this.waitToHide('.busy');
-        this.click('Sign in');
-        this.waitForElement('#io-ox-launcher', 20);
     }
 
 });

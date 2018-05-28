@@ -28,13 +28,11 @@
     "open-xchange-shared-grunt-config": "^0.15.0-pre2"
   },
   "devDependencies": {
-    "@open-xchange/codecept-helper": "0.0.4",
+    "@open-xchange/codecept-helper": "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#feature/provisioning",
     "appserver": "^0.7.0-pre9",
-    "axios": "^0.18.0",
     "chai": "^4.0.2",
     "codeceptjs": "^1.1.6",
     "eslint-plugin-codeceptjs": "^0.4.0",
-    "form-data": "^2.3.2",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-karma": "^2.0.0",
@@ -50,7 +48,6 @@
     "mocha": "^3.2.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.11.0",
-    "soap": "^0.23.0",
     "time-grunt": "^1.0.0",
     "webdriverio": "^4.11.0"
   },

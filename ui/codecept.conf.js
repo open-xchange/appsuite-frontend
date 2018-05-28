@@ -31,7 +31,7 @@ module.exports.config = {
         }, localConf.e2e.helpers.WebDriverIO || {}),
         OpenXchange: _.extend({}, {
             require: './e2e/helper',
-            users: localConf.e2e.users
+            mxDomain: 'ox-e2e-backend.novalocal'
         }, localConf.e2e.helpers.OpenXchange || {})
     },
     'include': {
