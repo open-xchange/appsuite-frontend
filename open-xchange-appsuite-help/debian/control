@@ -17,83 +17,71 @@ Description: Language-independent files of online help for OX App Suite
 Package: open-xchange-appsuite-help-de-de
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-de-de
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-de-de
 Description: Online help for OX App Suite (de_DE)
 
 Package: open-xchange-appsuite-help-en-gb
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-en-gb
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-en-gb
 Description: Online help for OX App Suite (en_GB)
 
 Package: open-xchange-appsuite-help-en-us
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-en-us
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-en-us
 Description: Online help for OX App Suite (en_US)
 
 Package: open-xchange-appsuite-help-es-es
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-es-es
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-es-es
 Description: Online help for OX App Suite (es_ES)
 
 Package: open-xchange-appsuite-help-es-mx
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-es-mx
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-es-mx
 Description: Online help for OX App Suite (es_MX)
 
 Package: open-xchange-appsuite-help-fr-fr
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-fr-fr
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-fr-fr
 Description: Online help for OX App Suite (fr_FR)
 
 Package: open-xchange-appsuite-help-it-it
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-it-it
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-it-it
 Description: Online help for OX App Suite (it_IT)
 
 Package: open-xchange-appsuite-help-ja-jp
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-ja-jp
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-ja-jp
 Description: Online help for OX App Suite (ja_JP)
 
 Package: open-xchange-appsuite-help-nl-nl
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-nl-nl
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-nl-nl
 Description: Online help for OX App Suite (nl_NL)
 
 Package: open-xchange-appsuite-help-pl-pl
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-pl-pl
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-pl-pl
 Description: Online help for OX App Suite (pl_PL)
 
 Package: open-xchange-appsuite-help-zh-cn
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-zh-cn
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-zh-cn
 Description: Online help for OX App Suite (zh_CN)
 
 Package: open-xchange-appsuite-help-zh-tw
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-Provides: open-xchange-appsuite-help
-Provides: open-xchange-guard-help-zh-tw
+Provides: open-xchange-appsuite-help, open-xchange-guard-help-zh-tw
 Description: Online help for OX App Suite (zh_TW)
