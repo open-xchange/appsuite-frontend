@@ -1071,7 +1071,7 @@ define('io.ox/calendar/util', [
 
         showRecurrenceDialog: function (model) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
-            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
+            if (model.get('recurrenceId')) {
                 var dialog = new dialogs.ModalDialog();
                 if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
