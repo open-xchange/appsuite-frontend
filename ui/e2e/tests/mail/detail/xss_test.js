@@ -9,7 +9,7 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
 const expect = require('chai').expect;
 
@@ -72,7 +72,8 @@ Scenario('urls should not be double encoded', async function (I, users) {
     });
     I.wait(0.5);
     I.switchToNextTab();
-    I.seeCurrentUrlEquals('http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test');
+    expect(await I.grabCurrentUrl()).to.equal('http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test');
+
     I.closeCurrentTab();
     I.logout();
 });
