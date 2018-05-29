@@ -170,6 +170,10 @@ define('io.ox/backbone/views/window', [
             // register handlers
             $(document).on('mousemove', this.drag);
             $(document).on('mouseup', this.stopDrag);
+
+            this.lastActiveElement = $(document.activeElement);
+            this.$el.focus();
+
             // add backdrop to prevent iframe drag issues
             $(container).append(backdrop);
         },
@@ -193,6 +197,10 @@ define('io.ox/backbone/views/window', [
 
             $(document).off('mousemove', this.drag);
             $(document).off('mouseup', this.stopDrag);
+            if (this.lastActiveElement) {
+                this.lastActiveElement.focus();
+                this.lastActiveElement = null;
+            }
             backdrop.remove();
         },
 
