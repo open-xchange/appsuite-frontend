@@ -14,6 +14,7 @@
 define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
     'io.ox/calendar/api',
+    'io.ox/core/capabilities',
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/core/tk/dialogs',
@@ -26,7 +27,7 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/model',
     'gettext!io.ox/calendar',
     'io.ox/core/util'
-], function (View, api, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt, coreUtil) {
+], function (View, api, capabilities, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt, coreUtil) {
 
     'use strict';
 
@@ -77,6 +78,7 @@ define('io.ox/calendar/month/perspective', [
          * @param  {number} startTS  timestamp of the day
          */
         createAppointment: function (e, start) {
+            if (capabilities.has('guest')) return;
             // add current time to start timestamp
             start = moment(start).add(Math.ceil((moment().hours() * 60 + moment().minutes()) / 30) * 30, 'minutes');
 
