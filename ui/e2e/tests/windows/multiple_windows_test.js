@@ -15,6 +15,7 @@ Feature('Floating windows');
 
 Before(async function (users) {
     await users.create();
+    await users.create();
 });
 
 After(async function (users) {
@@ -23,7 +24,7 @@ After(async function (users) {
 
 const { expect } = require('chai');
 
-Scenario('Opening multiple windows', async function (I) {
+Scenario('Opening multiple windows', async function (I, users) {
     I.login();
     I.click('#io-ox-launcher');
     I.click('Calendar', '#io-ox-launcher');
@@ -35,7 +36,10 @@ Scenario('Opening multiple windows', async function (I) {
 
     I.fillField('Subject', 'Participants test');
     I.click('.fa.fa-address-book');
-    I.click('Ejaz', '.modal-content .list-item-content');
+    I.waitForEnabled('.modal-content .search-field');
+    I.fillField('.modal-content .search-field', users[1].get('primaryEmail'));
+    I.waitForEnabled('.modal-content .list-item-content');
+    I.click(users[1].get('sur_name'), '.modal-content .list-item-content');
     I.click('Select');
     I.wait(0.5);
 
@@ -44,10 +48,10 @@ Scenario('Opening multiple windows', async function (I) {
 
     I.waitForVisible('.appointment');
     I.click('Participants test', '.appointment');
-    I.click('Ejaz', '.participants-view');
+    I.click(users[1].get('sur_name'), '.participants-view');
 
     I.waitForVisible({ css: '[data-block="messaging"]' });
-    I.click('eahmed@', { css: '[data-block="messaging"]' });
+    I.click(users[1].get('primaryEmail'), { css: '[data-block="messaging"]' });
 
     const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'z-index');
     const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'z-index');
@@ -55,7 +59,7 @@ Scenario('Opening multiple windows', async function (I) {
         expect(Number.parseInt(composeIndex, 10)).to.be.above(sidePopupIndex);
     });
 
-    I.waitForDetached('[data-app-name="io.ox/mail/compose"] .busy');
+    I.waitForInvisible('.window-blocker.io-ox-busy');
 
     I.click('Discard');
 
