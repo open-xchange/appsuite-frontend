@@ -88,7 +88,7 @@ define('io.ox/core/settings/pane', [
                             {
                                 label: gt('Unicolor'),
                                 options: [
-                                    { label: gt('Blue'), value: 'blue' }
+                                    { label: gt('Default'), value: 'primary' }
                                 ]
                             },
                             {
