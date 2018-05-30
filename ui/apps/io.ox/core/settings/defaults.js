@@ -31,7 +31,7 @@ define('io.ox/core/settings/defaults', function () {
     return {
         language: defaultLanguage,
         refreshInterval: 5 * 60000,
-        design: 'day',
+        design: 'primary',
         autoStart: 'io.ox/mail/main',
         coloredIcons: false,
         quicklaunch: ['io.ox/mail/main', 'io.ox/contacts/main'].join(','),
