@@ -523,7 +523,10 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
-                action(baton.data);
+                // initially the description in not in the reduced data in the pool that is used here, get the fileModel
+                api.get(baton.data).done(function (fileModel) {
+                    action(fileModel);
+                });
             });
         }
     });
