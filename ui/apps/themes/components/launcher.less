@@ -15,6 +15,10 @@
 @appcontrol-height-smartphone:          48px;
 @appcontrol-launcher-height-smartphone: 48px;
 
+@appcontrol-border-color:               rgba(0, 0, 0, 0.90);
+@appcontrol-launcher-color:             @white;
+@appcontrol-launcher-color-highlight:   @white;
+
 @launcher-fg:       #666;
 @launcher-bg:       #fff;
 @launcher-fg-hover: #666;
@@ -87,7 +91,7 @@
     z-index: 12;
     color: #fff;
     height: @appcontrol-height - 1;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.90);
+    border-bottom: 1px solid @appcontrol-border-color;
     padding: 0;
     display: flex;
     align-content: center;
@@ -99,7 +103,7 @@
         right: 0;
         z-index: -1;
         height: @appcontrol-height - 1;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.90);
+        border-bottom: 1px solid @appcontrol-border-color;
         opacity: 0;
         .smartphone & {
             height:  @appcontrol-height-smartphone - 1;
@@ -132,7 +136,7 @@
         & > button {
             // styles for fa-icon
             font-size: 18px;
-            color: #fff;
+            color: @appcontrol-launcher-color;
             padding: 2px 16px 0px 16px;
             width: 48px;
             // svg styles
@@ -148,13 +152,11 @@
         }
         button {
             outline:0;
+            &:hover, &:focus { color: @appcontrol-launcher-color-highlight; }
         }
     }
     #io-ox-quicklaunch > button {
-        color: rgba(255, 255, 255, 0.70);
-        &:hover, &:focus {
-            color: #fff;
-        }
+        color: @appcontrol-launcher-color;
     }
 
     &.open #io-ox-launcher > button,
@@ -255,11 +257,12 @@
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
-                color: #fff;
+                color: @appcontrol-launcher-color;
 
-                 &:hover, &:focus {
+                &:hover, &:focus {
                     background: rgba(0, 0, 0, .3);
                     outline: 0;
+                    color: @appcontrol-launcher-color-highlight;
                 }
             }
         }
