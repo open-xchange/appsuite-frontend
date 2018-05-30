@@ -28,7 +28,7 @@ require(['io.ox/core/api/factory'], function (factory) {
     var myapi = factory({
         //defines path/api for request
         module: 'contacts',
-        //defining default parameters for requests using 
+        //defining default parameters for requests using
         //apis get, getAll and getList functions
         requests: {
             all: {
@@ -52,7 +52,7 @@ require(['io.ox/core/api/factory'], function (factory) {
                 }
                 return options;
             }
-        }           
+        }
     });
 });
 ```

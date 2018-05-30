@@ -3,7 +3,7 @@ title: Calendar
 ---
 
 ```
-namespace:  io.ox/calendar 
+namespace:  io.ox/calendar
 settings:   io.ox/calendar
 capability: calendar
 ```

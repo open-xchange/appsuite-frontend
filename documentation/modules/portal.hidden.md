@@ -3,7 +3,7 @@ title: Portal
 ---
 
 ```
-namespace:  io.ox/portal 
+namespace:  io.ox/portal
 settings:   io.ox/portal
 capability: portal
 ```
