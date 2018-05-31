@@ -345,7 +345,7 @@ define('io.ox/mail/compose/extensions', [
                                     'title': title
                                 })
                                 .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
-                                .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
+                                .tooltip({ animation: false, delay: 0, placement: 'right', trigger: 'hover' })
                             ) :
                             // without picker
                             $('<label class="maillabel col-xs-2">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })

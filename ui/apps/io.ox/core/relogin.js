@@ -117,7 +117,7 @@ define('io.ox/core/relogin', [
                 })
                 .addButton({ className: 'btn-default', label: gt('Cancel'), placement: 'left' })
                 .addButton({ action: 'relogin', label: gt('Sign in') })
-                .on('cancel', function () {
+                .on('cancel close', function () {
                     ox.trigger('relogin:cancel');
                     gotoLogoutLocation();
                     $blocker.css('z-index', '');

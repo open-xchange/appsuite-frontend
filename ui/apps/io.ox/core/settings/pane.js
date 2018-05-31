@@ -14,6 +14,7 @@
 define('io.ox/core/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/settings/util',
     'io.ox/core/api/apps',
@@ -24,8 +25,9 @@ define('io.ox/core/settings/pane', [
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
-    'io.ox/backbone/mini-views/timezonepicker'
-], function (ext, ExtensibleView, mini, util, apps, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
+    'io.ox/backbone/mini-views/timezonepicker',
+    'io.ox/core/main/appcontrol'
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
 
     'use strict';
 
@@ -38,11 +40,10 @@ define('io.ox/core/settings/pane', [
             };
         }).concat([{ label: gt('None'), value: 'none' }]);
 
-    // reverted for 7.10
-    // // Check that the app exists in available applications
-    // function getAvailablePath(app) {
-    //     return _(availableApps).findWhere({ 'value': app }) ? app : '';
-    // }
+    // Check that the app exists in available applications
+    function getAvailablePath(app) {
+        return _(availableApps).findWhere({ 'value': app }) ? app : '';
+    }
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -351,6 +352,19 @@ define('io.ox/core/settings/pane', [
         }
     );
 
+    var QuickLaunchModel = Backbone.Model.extend({
+        initialize: function () {
+            appcontrol.getQuickLauncherItems().forEach(function (item, i) {
+                this.set('apps/quickLaunch' + i, getAvailablePath(item));
+            }.bind(this));
+        },
+        toString: function () {
+            return _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
+                return this.get('apps/quickLaunch' + i);
+            }.bind(this)).join(',');
+        }
+    });
+
     INDEX = 0;
 
     ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
@@ -370,76 +384,65 @@ define('io.ox/core/settings/pane', [
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
                 );
             }
-        }
-        //
+        },
+
         // Quicklaunch apps
-        //
-        // reverted for 7.10
-        // {
-        //     id: 'quickLaunch',
-        //     index: INDEX += 100,
-        //     render: function (baton) {
-        //         // FIXME: wow, this is complicated. We need a separate model, because the setting is actually supposed to be
-        //         // _one_ string instead of just fields in an object. Since settings are no real models, we can not sync
-        //         // silently between the states.
-        //         var quickLaunchModel = new Backbone.Model(),
-        //             settings = this.model,
-        //             settingsStr = settings.get('quicklaunch'),
-        //             // first view does all the event handling, cleans up listeners on dispose
-        //             firstView = null;
-        //         if (settingsStr) {
-        //             var a = settingsStr.split(',');
-        //             for (var pos = 0; pos <= a.length; pos++) {
-        //                 quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
-        //             }
-        //         }
-        //         function appsForPos(pos) {
-        //             return [0, 1, 2]
-        //                 .filter(function (i) { return i !== pos; })
-        //                 .map(function (i) { return quickLaunchModel.get('apps/quicklaunch' + i); })
-        //                 .reduce(function (acc, app) {
-        //                     return acc.filter(function (a) { return a.value !== app || app === ''; });
-        //                 }, availableApps);
-        //         }
-        //         var multiSelect = function (name, label, options) {
-        //             options = options || {};
-        //             var id = 'settings-' + name,
-        //                 view = new mini.SelectView({ id: id, name: name, model: quickLaunchModel, list: appsForPos(options.pos), pos: options.pos });
-
-        //             if (!firstView) firstView = view;
-        //             view.listenTo(quickLaunchModel, 'change', function () {
-        //                 this.options.list = appsForPos(this.options.pos);
-        //                 this.$el.empty();
-        //                 this.render();
-        //             });
-        //             return $('<div class="col-md-6">').append(
-
-        //                 $('<label>').attr('for', id).text(label),
-        //                 view.render().$el
-        //             );
-        //         };
-        //         baton.$el.append(
-        //             $('<div class="form-group row">').append(multiSelect('apps/quicklaunch0', gt('Quick launch 1'), { pos: 0 })),
-        //             $('<div class="form-group row">').append(multiSelect('apps/quicklaunch1', gt('Quick launch 2'), { pos: 1 })),
-        //             $('<div class="form-group row">').append(multiSelect('apps/quicklaunch2', gt('Quick launch 3'), { pos: 2 }))
-        //         );
-
-        //         firstView.listenTo(quickLaunchModel, 'change', function () {
-        //             settings.set('quicklaunch', [
-        //                 quickLaunchModel.get('apps/quicklaunch0'),
-        //                 quickLaunchModel.get('apps/quicklaunch1'),
-        //                 quickLaunchModel.get('apps/quicklaunch2')
-        //             ].join(','));
-        //         });
-        //         firstView.listenTo(settings, 'change:quicklaunch', function (settingsStr) {
-        //             var a = settingsStr.split(',');
-        //             for (var pos = 0; pos <= a.length; pos++) {
-        //                 quickLaunchModel.set('apps/quicklaunch' + pos, getAvailablePath(a[pos]));
-        //             }
-        //         });
-        //     }
-        // }
+        {
+            id: 'quickLaunch',
+            index: INDEX += 100,
+            render: function (baton) {
+                if (appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
+                baton.$el.append(
+                    new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
+                );
+            }
+        }
     );
+
+    var quickLauncherSettingsView = DisposableView.extend({
+        initialize: function (options) {
+            this.listenTo(this.model, 'change', function () {
+                options.settings.set('apps/quickLaunch', this.model.toString());
+            });
+        },
+        render: function () {
+            this.$el.append(
+                _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
+                    //#. %s is the number of the quicklauncher (1-3)
+                    return this.getMultiSelect('apps/quickLaunch' + i, gt('Quick launch %s', i + 1), { pos: i });
+                }, this)
+            );
+            return this;
+        },
+        getMultiSelect: function (name, label, options) {
+            options = options || {};
+            var id = 'settings-' + name,
+                view = new mini.SelectView({ id: id, name: name, model: this.model, list: this.appsForPos(options.pos), pos: options.pos }),
+                appsForPos = this.appsForPos.bind(this);
+
+            view.listenTo(this.model, 'change', function () {
+                this.options.list = appsForPos(this.options.pos);
+                this.$el.empty();
+                this.render();
+            });
+
+            return $('<div class="form-group row">').append(
+                $('<div class="col-md-6">').append(
+                    $('<label>').attr('for', id).text(label),
+                    view.render().$el
+                )
+            );
+        },
+        appsForPos: function (pos) {
+            // This function filters the select box, in order to prevent duplicate quicklaunchers
+            return _.range(appcontrol.getQuickLauncherCount())
+                .filter(function (i) { return i !== pos; })
+                .map(function (i) { return this.model.get('apps/quickLaunch' + i); }, this)
+                .reduce(function (acc, app) {
+                    return acc.filter(function (a) { return a.value !== app || app === 'none'; });
+                }, availableApps);
+        }
+    });
 
     INDEX = 0;
 

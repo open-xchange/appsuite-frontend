@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-25 13:49+0300\n"
+"PO-Revision-Date: 2018-05-25 14:21+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -360,6 +360,12 @@ msgstr[2] "%1$s vienības iezīmētas"
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s pārvietots uz pozīciju %2$s no %3$s"
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s nedrīkst būt tukšs."
+
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -525,16 +531,12 @@ msgid "5 minutes"
 msgstr "5 minūtes"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#, fuzzy
-#| msgid "Cannot move folder into itself."
 msgid "A folder cannot be moved into itself"
-msgstr "Mapi nevar pārvietot pašu uz sevi."
+msgstr "Mapi nevar pārvietot pašu par sevi"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#, fuzzy
-#| msgid "Tasks can not be moved to or out of shared folders"
 msgid "A folder cannot be moved to one of its subfolders"
-msgstr "Uzdevumus nevar pārvietot uz vai no koplietojuma mapēm"
+msgstr "Mapi nevar pārvietot uz kādu no tās apakšmapēm"
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "A new version for \"%1$s\" has been added."
@@ -735,10 +737,6 @@ msgstr "Pievienot publisko kalendāru"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Pievienot publisko mapi"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Pievienot pielikumu"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1115,20 +1113,20 @@ msgstr "Visas mapes"
 msgid "All future appointments"
 msgstr "Visi turpmākie mītiņi"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "Visi turpmākie %1$s ziņojumi tiks pārvietoti uz norādīto mapi."
+msgstr[0] ""
+"Visi turpmākie ziņojumi no šī nosūtītāja tiks pārvietoti uz norādīto mapi."
 msgstr[1] ""
-"Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+"Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti uz "
 "norādīto mapi."
 msgstr[2] ""
-"Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+"Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti uz "
 "norādīto mapi."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -1819,8 +1817,9 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3779,10 +3778,8 @@ msgid "Enable %1$s"
 msgstr "Iespējot %1$s"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "Enable Plugin"
 msgid "Enable Links"
-msgstr "Iespējot 'plugin'"
+msgstr "Iespējot saites"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
@@ -4452,10 +4449,11 @@ msgstr "Mapes darbības"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mapes"
 
@@ -4554,7 +4552,9 @@ msgstr "Pārsūtīt visu ienākošo e-pastu uz šo adresi"
 msgid "Forward emails as"
 msgstr "Pārsūtīt e-pastu kā"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Brīvs"
 
@@ -4959,6 +4959,17 @@ msgid ""
 msgstr ""
 "Ja jūs izmainīsiet paroli, jūsu pieslēgums tiks pārtaukts. Lūdzu "
 "pārliecinieties, ka visas izmaiņas ir saglabātas."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Ja nevēlaties paturēt šo vienumu, lūdzu noklikšķiniet uz atkritnes ikonas."
+msgstr[1] ""
+"Ja nevēlaties paturēt vienumu, lūdzu noklikšķiniet uz atkritnes ikonas."
+msgstr[2] ""
+"Ja nevēlaties paturēt vienumu, lūdzu noklikšķiniet uz atkritnes ikonas."
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6596,11 +6607,9 @@ msgstr ""
 "aplikācijā tiks zaudētas"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
-msgstr "Piezīme"
+msgstr "Piezīmes"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notification"
@@ -6731,6 +6740,12 @@ msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Atrasts %1$d automātiskās pabeigšanas ieraksts"
 msgstr[1] "Atrasti %1$d automātiskās pabeigšanas ieraksti"
 msgstr[2] "Atrasti %1$d automātiskās pabeigšanas ieraksti"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+msgid "One of the embedded images could not be used."
+msgstr "Šo failu nevar augšupielādēt."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7263,6 +7278,10 @@ msgstr ""
 "\n"
 "Izpildiet vēstulē norādītās darbības un atgriezieties pie logrīka, lai "
 "pabeigtu iestatīšanu."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Ja vēlaties turpināt rediģēšanu, noklikšķiniet uz \"Turpināt\"."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7800,6 +7819,13 @@ msgstr "Purpura"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Purpura"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Ātrā piekļuve 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9157,7 +9183,7 @@ msgstr "Atslēgties"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from all clients"
-msgstr ""
+msgstr "Izrakstīties no visiem klientiem"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Sign out now"
@@ -9253,6 +9279,12 @@ msgstr "Atvainojiet, šim failam nav apskata iespēju."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Atvainojiet, šim attēlam nav apskata iespēju."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Atvainojiet, šim failam nav apskata iespēju."
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
@@ -9756,6 +9788,17 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Mītiņš ir redzams visiem lietotājiem koplietojuma kalendāros."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+"Zemāk redzamais vienums bija atvērts kad pēdējo reizi izgājāt no %1$s."
+msgstr[1] ""
+"Zemāk redzamie vienumi bija atvērti kad pēdējo reizi izgājāt no %1$s."
+msgstr[2] ""
+"Zemāk redzamie vienumi bija atvērti kad pēdējo reizi izgājāt no %1$s."
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9957,6 +10000,8 @@ msgid "The series never ends."
 msgstr "Sērija nekad nebeidzas."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
@@ -10457,6 +10502,10 @@ msgid ""
 msgstr ""
 "Lai pārvietotos starp %1$s aplikācijām, noklikšķiniet uz aplikāciju "
 "palaidēja ikonas."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11468,10 +11517,6 @@ msgstr "Veikta atkārtota %s konta autorizēšana."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Jūs esat pagaidu apstiprinājis mītiņu"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Lai abonētu jums ir jāievada lietotāja vārds un parole."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12790,6 +12835,9 @@ msgstr "jūsu platforma"
 #~ msgid "Add account"
 #~ msgstr "Pievienot kontu"
 
+#~ msgid "Add attachment"
+#~ msgstr "Pievienot pielikumu"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Pievienot šifra kodu"
 
@@ -12897,6 +12945,18 @@ msgstr "jūsu platforma"
 #~| msgid "Add contact"
 #~ msgid "All contacts"
 #~ msgstr "Pievienot kontaktu"
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "Visi turpmākie %1$s ziņojumi tiks pārvietoti uz norādīto mapi."
+#~ msgstr[1] ""
+#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+#~ "norādīto mapi."
+#~ msgstr[2] ""
+#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+#~ "norādīto mapi."
 
 #~ msgid ""
 #~ "All future messages from the senders of the selected mails will be moved "
@@ -13414,6 +13474,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "Kanādas dolāri"
+
+#~ msgid "Cannot move folder into itself."
+#~ msgstr "Mapi nevar pārvietot pašu uz sevi."
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Sistēmas mapi nevar pārvietot."
@@ -14512,6 +14575,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Enable Infostore Hover"
 #~ msgstr "Iespējot infoglabātuves apskatlogus"
+
+#~ msgid "Enable Plugin"
+#~ msgstr "Iespējot 'plugin'"
 
 #~ msgid "Enable Tasks Hover"
 #~ msgstr "Iespējot uzdevumu apskatlogus"
@@ -16917,9 +16983,6 @@ msgstr "jūsu platforma"
 #~ msgid "Quick config"
 #~ msgstr "Ātrā konfigurācija"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Ātrā piekļuve 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Ātrā piekļuve 2"
 
@@ -17669,10 +17732,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Kļūda pie dokumenta ielādes."
-
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Šo failu nevar augšupielādēt."
 
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
@@ -19526,6 +19585,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "Jums ir sekojošas tikšanās iekš %s:"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Lai abonētu jums ir jāievada lietotāja vārds un parole."
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Jums ir jānorāda e-pasta adrese pāradresācijai."

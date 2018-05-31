@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-01 16:59+0200\n"
+"PO-Revision-Date: 2018-05-07 11:26+0200\n"
 "Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -361,6 +361,13 @@ msgstr[2] "%1$s de elemente selectate"
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s a fost mutat în poziția %2$s of %3$s"
+
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Login must not be empty."
+msgid "%1$s must not be empty."
+msgstr "Câmpul pentru numele de utilizator nu poate fi gol."
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -738,10 +745,6 @@ msgstr "Adaugă ca și calendar public"
 msgid "Add as public folder"
 msgstr "Adaugă ca dosar public"
 
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Adaugă fișier atașat"
-
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add attachments"
@@ -1117,11 +1120,15 @@ msgstr "Toate dosarele"
 msgid "All future appointments"
 msgstr "Toate întâlnirile viitoare"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1821,8 +1828,9 @@ msgstr "Camera %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4463,10 +4471,11 @@ msgstr "Acțiuni specifice dosarului"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Dosare"
 
@@ -4565,7 +4574,9 @@ msgstr "Redirecționează toate e-mailurile primite către această adresă"
 msgid "Forward emails as"
 msgstr "Redirecționează e-mailurile ca"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Liber"
 
@@ -4970,6 +4981,14 @@ msgid ""
 msgstr ""
 "Dacă modificați parola veți fi deconectat. Asigurați-vă că ați închis și ați "
 "salvat tot."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6604,11 +6623,9 @@ msgstr ""
 "extern. Modificările făcute în cadrul appsuite vor fi suprascrise."
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
-msgstr "Notiță"
+msgstr "Notițe"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notification"
@@ -6739,6 +6756,12 @@ msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "S-a găsit o intrare de completare automată"
 msgstr[1] "S-au găsit %1$d intrări de completare automată"
 msgstr[2] "S-au găsit %1$d de intrări de completare automată"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+msgid "One of the embedded images could not be used."
+msgstr "Nu s-a putut încărca fișierul."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7271,6 +7294,10 @@ msgstr ""
 "\n"
 "Urmați instrucțiunile din mesaj și apoi reveniți la aplicație pentru a "
 "termina configurarea contului."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7807,6 +7834,13 @@ msgstr "Violet"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Violet/Magenta"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Lansare rapidă 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9265,6 +9299,12 @@ msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Ne pare rău, pentru această imagine nu există previzualizare"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Ne pare rău, această pagină nu este disponibilă momentan."
@@ -9768,6 +9808,14 @@ msgid "The appointment is visible for all users in shared calendars."
 msgstr ""
 "Întâlnirea este vizibilă pentru toți utilizatorii din calendarele partajate."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9966,6 +10014,8 @@ msgid "The series never ends."
 msgstr "Seria nu se termină niciodată."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Această setare necesită o reîncărcare sau o reautentificare pentru a avea "
@@ -10489,6 +10539,10 @@ msgid ""
 msgstr ""
 "Pentru a naviga între aplicațiile %1$s, apăsați pe pictograma de lansare de "
 "aplicații."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11500,10 +11554,6 @@ msgstr "Ați autorizat din nou acest cont %s."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Ați acceptat provizoriu întâlnirea"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12832,6 +12882,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Add account"
 #~ msgstr "Adaugă un cont"
+
+#~ msgid "Add attachment"
+#~ msgstr "Adaugă fișier atașat"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Adaugă cod de criptare"
@@ -15899,9 +15952,6 @@ msgstr "platforma dumneavoastră"
 #~ "Autentificarea a eșuat. Verificați numele de utilizator și parola, apoi "
 #~ "încercați din nou."
 
-#~ msgid "Login must not be empty."
-#~ msgstr "Câmpul pentru numele de utilizator nu poate fi gol."
-
 #~ msgid "Login not possible at the moment, please try again later."
 #~ msgstr "Autentificarea nu este posibilă momentan, încercați din nou."
 
@@ -17007,9 +17057,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Quick config"
 #~ msgstr "Configurare rapidă"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Lansare rapidă 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Lansare rapidă 2"
 
@@ -17758,10 +17805,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Nu s-a putut încărca documentul."
-
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Nu s-a putut încărca fișierul."
 
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
@@ -19643,6 +19686,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "Aveți următoarea întâlnire peste %s:"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Trebuie să introduceți o adresă de e-mail pentru redirecționare."

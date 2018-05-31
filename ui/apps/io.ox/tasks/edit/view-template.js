@@ -221,12 +221,7 @@ define('io.ox/tasks/edit/view-template', [
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div class="checkbox">').append(
-                    $('<label class="control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'full_time', model: this.model }).render().$el,
-                        $.txt(gt('All day'))
-                    )
-                )
+                new mini.CustomCheckboxView({ id: guid, name: 'full_time', label: gt('All day'), model: this.model }).render().$el
             );
         }
     }, { row: '5' });
@@ -437,7 +432,7 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'private_flag',
         index: 1400,
-        className: 'checkbox col-sm-3 collapsible',
+        className: 'col-sm-3 collapsible',
         render: function () {
 
             // private flag only works in private folders
@@ -447,10 +442,7 @@ define('io.ox/tasks/edit/view-template', [
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
-                        $.txt(gt('Private'))
-                    )
+                    new mini.CustomCheckboxView({ id: guid, name: 'private_flag', label: gt('Private'), model: this.model }).render().$el
                 )
             );
         }

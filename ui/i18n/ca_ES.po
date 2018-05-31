@@ -369,6 +369,13 @@ msgstr[1] ""
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr ""
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Username must not be empty."
+msgid "%1$s must not be empty."
+msgstr "El nom d'usuari no pot estar buit."
+
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -744,10 +751,6 @@ msgstr "Nou calendari públic"
 #, fuzzy
 msgid "Add as public folder"
 msgstr "Nova carpeta pública"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1146,11 +1149,11 @@ msgstr "Totes les carpetes"
 msgid "All future appointments"
 msgstr ""
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1878,8 +1881,9 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4596,10 +4600,11 @@ msgstr "Accions específiques de carpeta"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Carpetes"
 
@@ -4702,7 +4707,9 @@ msgstr "Reenvia tots els correus entrants a aquesta adreça"
 msgid "Forward emails as"
 msgstr "Reenvia correus com a"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Lliure"
 
@@ -5134,6 +5141,13 @@ msgid ""
 msgstr ""
 "Si canviau la contrasenya, es tancarà la sessió. Per favor, assegurau-vos "
 "que tot quedi tancat i desat."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6997,6 +7011,13 @@ msgid_plural "%1$d autocomplete entries found"
 msgstr[0] ""
 msgstr[1] ""
 
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+#| msgid "This file could not be uploaded."
+msgid "One of the embedded images could not be used."
+msgstr "El fitxer no s'ha pogut pujar."
+
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
@@ -7531,6 +7552,10 @@ msgid ""
 "\n"
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
+msgstr ""
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
 msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -8095,6 +8120,11 @@ msgstr "Morat"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
+msgstr ""
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
 msgstr ""
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
@@ -9590,6 +9620,12 @@ msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr ""
@@ -10102,6 +10138,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Recordatoris de cites"
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -10300,6 +10343,8 @@ msgid "The series never ends."
 msgstr "El fitxer està bloquejat per %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "La configuració requereix una recàrrega o reinici per a ser efectiva."
 
@@ -10787,6 +10832,10 @@ msgstr ""
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
+msgstr ""
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11813,11 +11862,6 @@ msgstr "Heu tornat a autoritzar aquest compte de %s."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Heu acceptat provisionalment la cita"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr ""
-"Heu d'indicar un nom d'usuari i una contrasenya per a subscriure-vos-hi."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -13908,11 +13952,6 @@ msgstr "la vostra plataforma"
 
 #, fuzzy
 #~| msgid "This file could not be uploaded."
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "El fitxer no s'ha pogut pujar."
-
-#, fuzzy
-#~| msgid "This file could not be uploaded."
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "El fitxer no s'ha pogut pujar."
 
@@ -14303,6 +14342,10 @@ msgstr "la vostra plataforma"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Heu tornat a autoritzar aquest compte."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr ""
+#~ "Heu d'indicar un nom d'usuari i una contrasenya per a subscriure-vos-hi."
 
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "

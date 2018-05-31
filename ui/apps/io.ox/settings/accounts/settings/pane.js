@@ -18,12 +18,13 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/keychain/api',
     'io.ox/keychain/model',
     'io.ox/core/settings/util',
+    'io.ox/core/notifications',
     'io.ox/settings/accounts/views',
     'io.ox/backbone/mini-views/settings-list-view',
     'settings!io.ox/core',
     'gettext!io.ox/settings/accounts',
     'withPluginsFor!keychainSettings'
-], function (ext, ExtensibleView, accountAPI, api, keychainModel, util, AccountViews, ListView, settings, gt) {
+], function (ext, ExtensibleView, accountAPI, api, keychainModel, util, notifications, AccountViews, ListView, settings, gt) {
 
     'use strict';
 
@@ -53,6 +54,13 @@ define('io.ox/settings/accounts/settings/pane', [
                                 if (!model) return;
                                 model.set('status', s.status !== 'ok' ? s : s.status);
                             }
+                        });
+                    },
+                    showNoticeFields: ['security/acceptUntrustedCertificates'],
+
+                    showNotice: function (attr) {
+                        return _(this.showNoticeFields).some(function (id) {
+                            return id === attr;
                         });
                     }
                 })
@@ -110,6 +118,21 @@ define('io.ox/settings/accounts/settings/pane', [
 
                 this.updateStatuses();
                 this.listenTo(api, 'refresh.all refresh.list', this.updateStatuses);
+            }
+        },
+        {
+            id: 'onchange',
+            index: INDEX += 100,
+            render: function () {
+                this.listenTo(settings, 'change', function (attr) {
+                    var showNotice = this.showNotice(attr);
+                    settings.saveAndYell(undefined, { force: !!showNotice }).then(
+                        function success() {
+                            if (!showNotice) return;
+                            notifications.yell('success', gt('The setting requires a reload or relogin to take effect.'));
+                        }
+                    );
+                });
             }
         },
         //

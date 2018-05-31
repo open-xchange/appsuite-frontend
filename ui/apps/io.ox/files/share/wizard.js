@@ -21,6 +21,7 @@ define('io.ox/files/share/wizard', [
     'io.ox/contacts/api',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
+    'io.ox/core/settings/util',
     'gettext!io.ox/files',
     'settings!io.ox/contacts',
     'io.ox/core/capabilities',
@@ -28,7 +29,7 @@ define('io.ox/files/share/wizard', [
     'io.ox/backbone/mini-views/copy-to-clipboard',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard) {
 
     'use strict';
 
@@ -214,26 +215,31 @@ define('io.ox/files/share/wizard', [
         id: 'includeSubfolders',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid, elmCheckbox;
-            this.append(
-                $('<div class="form-group">').append(
-                    $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Share with subfolders')).prepend(
-                        new miniViews.CheckboxView({ id: guid, name: 'includeSubfolders', model: baton.model }).render().$el
-                        .on('click', function (/* e */) {
-                            baton.model.set('includeSubfolders', elmCheckbox.checked);
-                        })
-                    )
-                )
-            );
-            elmCheckbox = this.find('input').attr({ id: guid })[0];
+            if (!baton.model.attributes || !baton.model.attributes.files) return;
+            var onlyFiles = true;
+            _.each(baton.model.attributes.files, function (model) {
+                if (model.isFolder()) {
+                    onlyFiles = false;
+                }
+            });
+            if (onlyFiles) return;
 
-            baton.model.once('change', function (model/*, options*/) {
-                var isNewLink = model.get('is_new');
+            this.append($('<div class="form-inline">').append($('<div class="form-group">').append(
+                settingsUtil.checkbox('includeSubfolders', gt('Share with subfolders'), baton.model).on('change', function (e) {
+                    var input = e.originalEvent.srcElement;
+                    baton.model.set('includeSubfolders', input.checked);
+                })
+            )));
+
+            baton.model.once('change', function (model) {
+                var isNewLink = model.get('is_new'),
+                    state = false;
 
                 if (isNewLink === true) {
-                    model.set('includeSubfolders', (elmCheckbox.checked = isNewLink));
+                    state = isNewLink;
+                    model.set('includeSubfolders', state);
                 } else {
-                    elmCheckbox.checked = model.get('includeSubfolders');
+                    state = model.get('includeSubfolders');
                 }
             });
         }
@@ -269,20 +275,24 @@ define('io.ox/files/share/wizard', [
                 dropdown.option('expires', parseInt(key, 10), val);
             });
 
-            var guid = _.uniqueId('form-control-label-');
-            this.append(
-                $('<div class="form-group expiresgroup">').append(
-                    $('<label class="checkbox-inline">').attr('for', guid).text(gt('Expires in')).prepend(
-                        new miniViews.CheckboxView({ id: guid, name: 'temporary', model: baton.model }).render().$el
-                    ),
-                    $.txt(' '),
-                    dropdown.render().$el.addClass('dropup')
-                )
-            );
+            this.append($('<div class="form-inline">').append($('<div class="form-group expiresgroup">').append(
+                settingsUtil.checkbox('temporary', gt('Expires in'), baton.model).on('change', function (e) {
+                    var input = e.originalEvent.srcElement;
+                    baton.model.set('temporary', input.checked);
+                }),
+                $.txt(' '),
+                dropdown.render().$el.addClass('dropup')
+            )));
+
+            baton.model.once('change', function () {
+                if (baton.model.get('expiry_date')) {
+                    baton.model.set('expires', null);
+                }
+            });
 
             baton.model.on('change:expiry_date', function (model, val) {
                 dropdown.$el.find('.dropdown-label').text(new moment(val).format('L'));
-                dropdown.$el.closest('.expiresgroup').find('label')[0].childNodes[1].data = gt('Expires on');
+                dropdown.$el.closest('.expiresgroup').find('span.caption>span').text(gt('Expires on'));
                 model.set('temporary', true);
             });
 
@@ -293,15 +303,7 @@ define('io.ox/files/share/wizard', [
                         'expiry_date': model.getExpiryDate()
                     });
                 }
-
             });
-
-            baton.model.once('change', function () {
-                if (baton.model.get('expiry_date')) {
-                    baton.model.set('expires', null);
-                }
-            });
-
         }
     });
 
@@ -313,26 +315,27 @@ define('io.ox/files/share/wizard', [
         index: INDEX += 100,
         draw: function (baton) {
             var guid, passContainer;
-            this.append(
-                $('<div class="form-inline passwordgroup">').append(
-                    $('<div class="form-group">').append(
-                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Password required')).prepend(
-                            new miniViews.CheckboxView({ id: guid, name: 'secured', model: baton.model }).render().$el
-                        )
-                    ),
-                    $.txt(' '),
-                    $('<div class="form-group">').append(
-                        $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('form-control-label-') }),
-                        passContainer = new miniViews.PasswordViewToggle({ name: 'password', model: baton.model, autocomplete: false })
-                            .render().$el.find('input')
-                            // see bug 49639
-                            .attr({ id: guid, placeholder: gt('Password') })
-                            .removeAttr('name')
-                            .prop('disabled', !baton.model.get('secured'))
-                            .end()
-                    )
+
+            this.append($('<div class="form-inline passwordgroup">').append(
+                $('<div class="form-group">').append(
+                    settingsUtil.checkbox('secured', gt('Password required'), baton.model).on('change', function (e) {
+                        var input = e.originalEvent.srcElement;
+                        baton.model.set('secured', input.checked);
+                    })
+                ),
+                $.txt(' '),
+                $('<div class="form-group">').append(
+                    $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                    passContainer = new miniViews.PasswordViewToggle({ name: 'password', model: baton.model, autocomplete: false })
+                        .render().$el.find('input')
+                        // see bug 49639
+                        .attr({ id: guid, placeholder: gt('Password') })
+                        .removeAttr('name')
+                        .prop('disabled', !baton.model.get('secured'))
+                        .end()
                 )
-            );
+            ));
+
             baton.view.listenTo(baton.model, 'change:password', function (model, val, options) {
                 if (val && !model.get('secured')) {
                     model.set('secured', true, options);
@@ -343,6 +346,16 @@ define('io.ox/files/share/wizard', [
                 passInput.prop('disabled', !val);
                 passContainer.prop('disabled', !val);
                 if (!opt._inital) passInput.focus();
+            });
+            baton.model.once('change', function (model) {
+                var passInput = passContainer.find('input'),
+                    state = false;
+                if (model.get('password')) {
+                    state = true;
+                }
+                model.set('secured', state);
+                passInput.prop('disabled', !state);
+                passContainer.prop('disabled', !state);
             });
         }
     });

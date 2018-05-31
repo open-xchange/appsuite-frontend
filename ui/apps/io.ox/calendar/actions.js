@@ -149,7 +149,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
-            return e.collection.has('delete') && (util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'attendee'));
+            return e.collection.has('delete') && ((util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'attendee')));
         },
         multiple: function (list) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
@@ -159,9 +159,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        requires: function (e) {
-            return e.baton.app.folder.can('create');
-        },
+        requires: true,
         action: function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
@@ -171,8 +169,13 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/changestatus', {
         requires: function (e) {
+            function cont(model, folderData) {
 
-            function cont(model) {
+                // in shared calendars the attendee means the calendar owner is attendee, we have to look if we have modify permission
+                if (folderAPI.is('shared', folderData)) {
+                    return e.collection.has('one', 'modify') && util.hasFlag(model, 'attendee');
+                }
+
                 return e.collection.has('one') && util.hasFlag(model, 'attendee');
             }
 
@@ -185,9 +188,9 @@ define('io.ox/calendar/actions', [
 
             // incomplete
             if (data && !model) {
-                return api.get(data).then(cont);
+                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont);
             }
-            return cont(model);
+            return $.when(model, folderAPI.get(data.folder)).then(cont);
         },
         action: function (baton) {
             // load & call
@@ -467,7 +470,6 @@ define('io.ox/calendar/actions', [
                             }
                             $(baton.e.target).addClass('disabled');
                             // those links are for fast accept/decline, so don't check conflicts
-                            // TODO discuss this with alex
                             api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
                                 yell(e);
                                 $(baton.e.target).removeClass('disabled');
@@ -478,7 +480,6 @@ define('io.ox/calendar/actions', [
             }
             $(baton.e.target).addClass('disabled');
             // those links are for fast accept/decline, so don't check conflicts
-            // TODO discuss this with alex
             api.confirm(appointment).fail(function (e) {
                 yell(e);
                 $(baton.e.target).removeClass('disabled');
@@ -489,7 +490,20 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            return util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted');
+            if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted'))) return false;
+
+            var def = $.Deferred();
+            folderAPI.get(e.baton.data.folder).then(function (folderData) {
+                // in shared folders we also have to check if we have the permissin to modify
+                if (folderAPI.is('shared', folderData)) {
+                    def.resolve(e.collection.has('modify'));
+                }
+                def.resolve(true);
+            }, function () {
+                def.resolve(true);
+            });
+
+            return def;
         },
         action: _.partial(acceptDecline, _, true)
     });
@@ -497,7 +511,20 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            return util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined');
+            if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined'))) return false;
+
+            var def = $.Deferred();
+            folderAPI.get(e.baton.data.folder).then(function (folderData) {
+                // in shared folders we also have to check if we have the permissin to modify
+                if (folderAPI.is('shared', folderData)) {
+                    def.resolve(e.collection.has('modify'));
+                }
+                def.resolve(true);
+            }, function () {
+                def.resolve(true);
+            });
+
+            return def;
         },
         action: acceptDecline
     });

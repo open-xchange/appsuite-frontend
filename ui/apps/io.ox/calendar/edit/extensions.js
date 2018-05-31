@@ -415,8 +415,10 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 originalModel = this.model,
-                model = new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
+                model = this.baton.parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
                 view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
+            this.baton.parentView.fullTimeToggleModel = model;
+
             view.listenTo(model, 'change:allDay', function () {
                 if (this.model.get('allDay')) {
                     originalModel.set({
@@ -781,20 +783,16 @@ define('io.ox/calendar/edit/extensions', [
 
                     if (appointment) {
                         data.dialog.close();
-                        // make sure we have correct dates. Do not change dates if a date is NaN
-                        var validDate = !(_.isNaN(appointment.startDate) || _.isNaN(appointment.endDate));
 
-                        if (validDate) {
-                            e.data.model.set({ startDate: appointment.startDate });
-                        }
+                        e.data.model.set({ startDate: appointment.startDate });
 
                         e.data.model.getAttendees().reset(appointment.attendees);
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
-                        if (validDate) {
-                            e.data.model.set({
-                                endDate: appointment.endDate
-                            }, { validate: true });
-                        }
+                        e.data.model.set({
+                            endDate: appointment.endDate
+                        }, { validate: true });
+                        // make sure the correct allday state is set
+                        e.data.app.view.fullTimeToggleModel.set('allDay', calendarUtil.isAllday(appointment));
                     } else {
                         data.dialog.idle();
                         require(['io.ox/core/yell'], function (yell) {

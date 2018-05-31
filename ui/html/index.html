@@ -142,13 +142,13 @@
             <div id="io-ox-login-blocker" style="display: none"></div>
             <div id="io-ox-login-container-scrollpane">
                 <div id="io-ox-login-container" class="container">
-                    <div id="io-ox-login-header">
+                    <div id="io-ox-login-header" role="banner">
                         <h1>
                             <span id="io-ox-login-header-prefix" aria-hidden="true"></span>
                             <span id="io-ox-login-header-label" aria-hidden="true">...</span>
                         </h1>
                     </div>
-                    <div id="io-ox-login-form-container">
+                    <div id="io-ox-login-form-container" role="main">
                         <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
                         <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
                             <input type="hidden" name="location" value=""><!-- used by redirect servlet -->

@@ -121,7 +121,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
             var mapping = {
                 oxdriveapp: settings.get('productname/oxdrive') || 'OXDrive',
                 oxmailapp: settings.get('productname/mailapp') || 'OX Mail',
-                oxsyncapp: settings.get('productname/oxtender') || 'OXtender'
+                oxsyncapp: settings.get('productname/oxsync') || 'OX Sync'
             };
             return function () {
                 var deviceInfo = this.getDeviceInfo('client');
@@ -189,8 +189,9 @@ define('io.ox/settings/security/sessions/settings/pane', [
         comparator: function (model) {
             // sort ascending
             // current session should always be topmost
-            if (model.get('sessionId') === ox.session) return -10000000000000;
-            return -model.get('lastActive');
+            if (model.get('sessionId') === ox.session) return -Number.MAX_VALUE;
+            // sessions without lastActive timestamp should be last
+            return model.has('lastActive') ? -model.get('lastActive') : Number.MAX_VALUE;
         },
 
         initialize: function () {

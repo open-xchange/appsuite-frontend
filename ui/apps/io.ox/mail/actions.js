@@ -404,10 +404,15 @@ define('io.ox/mail/actions', [
             }, true);
         },
         multiple: function (list) {
-            api.markSpam(list).done(function (result) {
-                var error = _(result).chain().pluck('error').compact().first().value();
-                if (error) notifications.yell(error);
-            });
+            api.markSpam(list)
+                .done(function (result) {
+                    var error = _(result).chain().pluck('error').compact().first().value();
+                    if (error) notifications.yell(error);
+                })
+                .fail(function (error) {
+                    notifications.yell(error);
+                    api.trigger('refresh.all');
+                });
         }
     });
 

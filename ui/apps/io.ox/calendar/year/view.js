@@ -93,7 +93,7 @@ define('io.ox/calendar/year/view', [
         },
 
         onClick: function () {
-            this.app.refDate = moment(this.date);
+            this.app.props.set('date', this.date.valueOf());
             this.app.props.set('layout', 'month');
             this.$el.closest('.year-view').busy()
                 .find('button').prop('disabled', true);

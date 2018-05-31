@@ -27,7 +27,7 @@ define('io.ox/mail/actions/copyMove', [
 
         multiple: function (o) {
             require(['io.ox/core/folder/actions/move'], function (move) {
-                var folderId, createRule;
+                var folderId, createRule, runFlag;
                 function generateRule() {
                     require(['io.ox/mail/mailfilter/settings/filter'
                     ], function (filter) {
@@ -78,15 +78,13 @@ define('io.ox/mail/actions/copyMove', [
                 .uniq()
                 .value();
 
-                var infoText = gt.format(
-                    //#. informs user about the consequences when creating a rule for selected mails ()
-                    //#. %1$s represents a single email address (non-essential information: can be left out)
-                    //#, c-format
+                var infoText =
+                    //#. informs user about the consequences when creating a rule for selected mails
                     gt.ngettext(
-                        'All future messages from %1$s will be moved to the selected folder.',
+                        'All future messages from the sender will be moved to the selected folder.',
                         'All future messages from the senders of the selected mails will be moved to the selected folder.',
                         senderList.length
-                    ), _.escape(senderList[0]));
+                    );
 
                 move.item({
                     all: o.list,
@@ -127,8 +125,9 @@ define('io.ox/mail/actions/copyMove', [
                         });
                     },
                     pickerClose: function () {
-                        if (o.type === 'move' && createRule && folderId) {
+                        if (!runFlag && o.type === 'move' && createRule && folderId) {
                             generateRule();
+                            runFlag = true;
                         }
                     }
                 });

@@ -1077,8 +1077,11 @@ define('io.ox/core/desktop', [
         that.on('window.open window.show', function (e, win) {
             // show window manager
             this.show();
+
             // move/add window to top of stack
             windows = _(windows).without(win);
+            _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
+            win.nodes.body.attr('role', 'main');
             windows.unshift(win);
             // add current windows to cache
             if (windows.length > 1) {
@@ -1254,7 +1257,10 @@ define('io.ox/core/desktop', [
                                 this.floating.open(true);
                             } else if (this.simple) {
                                 node.insertAfter('#io-ox-appcontrol');
-                                $('body').css('overflowY', 'auto');
+
+                                // during the iframe resizing refactoring the body node got some !important styles.
+                                // we don't want to create side effects here and break the resizing again (super fragile), so we just use more important styles to allow scrolling on mobile again
+                                document.body.style.setProperty('overflow-y', 'auto', 'important');
                             } else {
                                 node.appendTo(pane);
                             }
@@ -1545,7 +1551,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body">'),
+                        win.nodes.body = $('<div class="window-body" role="main">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )

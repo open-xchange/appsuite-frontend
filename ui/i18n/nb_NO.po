@@ -356,6 +356,13 @@ msgstr[1] "%1$s elementer er valgte"
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s flyttet til posisjon %2$s av %3$s"
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Username must not be empty."
+msgid "%1$s must not be empty."
+msgstr "Brukernavn kan ikke være tomt."
+
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -727,10 +734,6 @@ msgstr "Legg til som offentlig kalender"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Legg til som offentlig mappe"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1116,11 +1119,11 @@ msgstr "Alle mapper"
 msgid "All future appointments"
 msgstr ""
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1831,8 +1834,9 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4465,10 +4469,11 @@ msgstr "Mappespesifikke handlinger"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mapper"
 
@@ -4568,7 +4573,9 @@ msgstr "Videresend all innkommende e-post til denne adressen"
 msgid "Forward emails as"
 msgstr "Videresend e-poster som"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Ledig"
 
@@ -4976,6 +4983,13 @@ msgid ""
 msgstr ""
 "Hvis du endrer passordet vil du bli logget ut. Kontroller at alt er lukket "
 "og lagret."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6767,6 +6781,13 @@ msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Én autofullfør-oppføring funnet"
 msgstr[1] "%1$d autofullfør-oppføringer funnet"
 
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+#| msgid "This file could not be uploaded."
+msgid "One of the embedded images could not be used."
+msgstr "Denne filen kan ikke lastes opp."
+
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
@@ -7304,6 +7325,10 @@ msgstr ""
 "Følg instruksjonene i eposten, og deretter gå tilbake til widgeten for å "
 "fullføre kontooppsettet."
 
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
 msgstr "Kommentar"
@@ -7838,6 +7863,11 @@ msgstr "Lilla"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
+msgstr ""
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
 msgstr ""
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
@@ -9300,6 +9330,12 @@ msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for denne filen."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for dette bildet."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for denne filen."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Beklager, denne siden er ikke tilgjengelig for øyeblikket."
@@ -9799,6 +9835,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Avtaler i delte kalendere"
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9995,6 +10038,8 @@ msgid "The series never ends."
 msgstr "Serien avsluttes aldri."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Innstillingen krever en oppdatering eller logg inn på nytt for å få effekt."
@@ -10498,6 +10543,10 @@ msgstr ""
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
+msgstr ""
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11510,10 +11559,6 @@ msgstr "Du har reautorisert  denne %s konto."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Du har foreløpig godtatt avtalen"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Du må skrive inn brukernavn og passord for å abonnere."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -13689,11 +13734,6 @@ msgstr "plattformen din"
 
 #, fuzzy
 #~| msgid "This file could not be uploaded."
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Denne filen kan ikke lastes opp."
-
-#, fuzzy
-#~| msgid "This file could not be uploaded."
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Denne filen kan ikke lastes opp."
 
@@ -14197,6 +14237,9 @@ msgstr "plattformen din"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Du har reautorisert denne kontoen."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Du må skrive inn brukernavn og passord for å abonnere."
 
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "

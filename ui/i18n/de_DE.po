@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-04 14:29+0200\n"
+"PO-Revision-Date: 2018-05-25 11:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -345,6 +345,12 @@ msgstr[1] "%1$s Objekte markiert"
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s an Position %2$s von %3$s verschoben"
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s darf nicht leer sein."
+
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -508,17 +514,12 @@ msgid "5 minutes"
 msgstr "5 Minuten"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#, fuzzy
-#| msgid "Cannot move folder into itself."
 msgid "A folder cannot be moved into itself"
-msgstr "Ein Ordner kann nicht in sich selbst verschoben werden."
+msgstr "Ein Ordner kann nicht in sich selbst verschoben werden"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#, fuzzy
-#| msgid "Tasks can not be moved to or out of shared folders"
 msgid "A folder cannot be moved to one of its subfolders"
-msgstr ""
-"Aufgaben können nicht in freigegebene Ordner oder daraus verschoben werden"
+msgstr "Der Ordner kann nicht in einen seiner Unterordner verschoben werden"
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "A new version for \"%1$s\" has been added."
@@ -720,10 +721,6 @@ msgstr "Als öffentlichen Kalender hinzufügen"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Als öffentlichen Ordner hinzufügen"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Anhang hinzufügen"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1100,20 +1097,19 @@ msgstr "Alle Ordner"
 msgid "All future appointments"
 msgstr "Alle zukünftigen Termine"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
+"Alle zukünftigen Nachrichten des Absenders werden in den ausgewählten Ordner "
 "verschoben."
 msgstr[1] ""
-"Alle zukünftigen Nachrichten der Sender der gewählten Nachrichten werden in "
-"den ausgewählten Ordner verschoben."
+"Alle zukünftigen Nachrichten von den Absendern der markierten E-Mails werden "
+"in den ausgewählten Ordner verschoben."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "All groups"
@@ -1809,8 +1805,9 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3785,10 +3782,8 @@ msgid "Enable %1$s"
 msgstr "%1$s aktivieren"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "Enable Plugin"
 msgid "Enable Links"
-msgstr "Plugin aktivieren"
+msgstr "Links aktivieren"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
@@ -4458,10 +4453,11 @@ msgstr "Ordnerspezifische Aktionen"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Ordner"
 
@@ -4560,7 +4556,9 @@ msgstr "Alle eingehenden E-Mails an diese Adresse weiterleiten"
 msgid "Forward emails as"
 msgstr "E-Mails weiterleiten als"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Frei"
 
@@ -4965,6 +4963,17 @@ msgid ""
 msgstr ""
 "Wenn Sie das Passwort ändern, werden Sie abgemeldet. Bitte stellen Sie "
 "sicher, dass alles geschlossen und gesichert ist. "
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Wenn Sie das Objekt nicht behalten wollen, klicken Sie bitte auf das "
+"Mülleimer-Symbol."
+msgstr[1] ""
+"Wenn Sie ein Objekt nicht behalten wollen, klicken Sie bitte auf das "
+"Mülleimer-Symbol."
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6729,6 +6738,13 @@ msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Ein Autovervollständigungseintrag gefunden"
 msgstr[1] "%1$d Autovervollständigungseinträge gefunden"
 
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sorry, the audio file could not be played."
+msgid "One of the embedded images could not be used."
+msgstr "Die Audio-Datei konnte leider nicht abgespielt werden."
+
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
@@ -7264,6 +7280,12 @@ msgstr ""
 "\n"
 "Bitte folgen Sie den Anweisungen in der E-Mail und richten Sie dann im "
 "Widget Ihr Konto fertig ein."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
+"Wenn Sie das Objekt weiter bearbeiten möchten, klicken Sie bitte auf "
+"\"Fortfahren\"."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7811,6 +7833,13 @@ msgstr "Lila"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Purpur/Magenta"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Schnellstart 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9163,7 +9192,7 @@ msgstr "Abmelden"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from all clients"
-msgstr ""
+msgstr "Von allen Clients abmelden"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Sign out now"
@@ -9259,6 +9288,12 @@ msgstr "Für diese Datei ist leider keine Voransicht verfügbar."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Für dieses Bild ist leider keine Voransicht verfügbar."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Für diese Datei ist leider keine Voransicht verfügbar."
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
@@ -9762,6 +9797,14 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Der Termin ist in freigegebenen Ordnern für alle Benutzer sichtbar."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Das Objekt unten war geöffnet, als Sie zuletzt %1$s beendet haben."
+msgstr[1] ""
+"Die Objekte unten waren geöffnet, als Sie zuletzt %1$s beendet haben."
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9969,6 +10012,8 @@ msgid "The series never ends."
 msgstr "Die Serie endet nie."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Zum Aktivieren der Einstellung ist ein erneutes Laden oder Anmelden "
@@ -10487,6 +10532,10 @@ msgid ""
 msgstr ""
 "Zum Navigieren zwischen den %1$s-Applikationen klicken Sie einfach auf das "
 "neue App-Startprogramm-Symbol ."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11504,11 +11553,6 @@ msgstr "Sie haben den %s-Account neu autorisiert."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Sie haben den Termin vorläufig bestätigt"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr ""
-"Zum Abonnieren müssen Sie einen Benutzernamen und ein Passwort eingeben."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12862,6 +12906,9 @@ msgstr "Ihre Plattform"
 #~ msgid "Add account"
 #~ msgstr "Account hinzufügen"
 
+#~ msgid "Add attachment"
+#~ msgstr "Anhang hinzufügen"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Verschlüsselung hinzufügen"
 
@@ -12955,6 +13002,17 @@ msgstr "Ihre Plattform"
 
 #~ msgid "All future events"
 #~ msgstr "Alle zukünftigen Ereignisse"
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
+#~ "verschoben."
+#~ msgstr[1] ""
+#~ "Alle zukünftigen Nachrichten der Sender der gewählten Nachrichten werden "
+#~ "in den ausgewählten Ordner verschoben."
 
 #~ msgid ""
 #~ "All future messages from the senders of the selected mails will be moved "
@@ -13375,6 +13433,9 @@ msgstr "Ihre Plattform"
 #~ msgstr ""
 #~ "Teilnehmer / Mitglied mit einer ungültigen E-Mail-Adresse kann nicht "
 #~ "hinzugefügt werden: %1$s"
+
+#~ msgid "Cannot move folder into itself."
+#~ msgstr "Ein Ordner kann nicht in sich selbst verschoben werden."
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Systemordner kann nicht verschoben werden"
@@ -14185,6 +14246,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Enable / Disable"
 #~ msgstr "Aktivieren / Deaktivieren"
+
+#~ msgid "Enable Plugin"
+#~ msgstr "Plugin aktivieren"
 
 #, fuzzy
 #~ msgid "Enable app restore points"
@@ -16110,9 +16174,6 @@ msgstr "Ihre Plattform"
 #~ msgid "Qatar"
 #~ msgstr "Katar"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Schnellstart 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Schnellstart 2"
 
@@ -16697,9 +16758,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Das Dokument konnte leider nicht erfolgreich geladen werden."
-
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Die Audio-Datei konnte leider nicht abgespielt werden."
 
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Das Video konnte leider nicht abgespielt werden."
@@ -18215,6 +18273,10 @@ msgstr "Ihre Plattform"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Sie haben diesen Account neu autorisiert."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr ""
+#~ "Zum Abonnieren müssen Sie einen Benutzernamen und ein Passwort eingeben."
 
 #~ msgid "You like this"
 #~ msgstr "Dir gefällt das"

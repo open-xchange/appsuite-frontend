@@ -910,6 +910,7 @@ define('io.ox/core/folder/extensions', [
             id: 'private',
             draw: function (baton) {
                 if (baton.context !== 'app') return;
+                if (capabilities.has('guest')) return;
                 var dropdown = new DropdownView({
                     tagName: 'li',
                     className: 'presentation dropdown',
@@ -1079,6 +1080,7 @@ define('io.ox/core/folder/extensions', [
                     var accountError = baton.data['com.openexchange.calendar.accountError'];
                     if (accountError) {
                         baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                        ox.trigger('http:error:' + accountError.code, accountError);
                     } else {
                         baton.view.hideStatusIcon();
                     }

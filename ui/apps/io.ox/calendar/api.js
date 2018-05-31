@@ -94,7 +94,7 @@ define('io.ox/calendar/api', [
             return response;
         },
 
-        defaultFields = ['color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
+        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
         api = {
             // used externally by itip updates in mail invites
@@ -120,7 +120,7 @@ define('io.ox/calendar/api', [
                         if (_.isArray(result)) {
                             result.forEach(function (r) {
                                 if (r.error) {
-                                    ox.trigger('http:error:' + r.code, r);
+                                    ox.trigger('http:error:' + r.error.code, r.error);
                                 }
                             });
                         }
@@ -480,11 +480,12 @@ define('io.ox/calendar/api', [
                 }
 
                 options = _.extend({
-                    from: moment().startOf('day').utc().format(util.ZULU_FORMAT_DAY_ONLY),
-                    until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT_DAY_ONLY)
+                    from: moment().startOf('day').utc().format(util.ZULU_FORMAT),
+                    until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT)
                 }, options);
 
-                var order = _(list).pluck('entity');
+                // entity for users ressources etc, uri for externals
+                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; });
 
                 return http.PUT({
                     module: 'chronos',
@@ -497,7 +498,7 @@ define('io.ox/calendar/api', [
                 }).then(function (items) {
                     // response order might not be the same as in the request. Fix that.
                     items.sort(function (a, b) {
-                        return order.indexOf(a.attendee.entity) - order.indexOf(b.attendee.entity);
+                        return order.indexOf(a.attendee.entity || a.attendee.uri) - order.indexOf(b.attendee.entity || b.attendee.uri);
                     });
                     return items;
                 });

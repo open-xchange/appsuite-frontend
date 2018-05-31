@@ -937,6 +937,7 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/checks.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
@@ -2103,8 +2104,10 @@ msgstr ""
 msgid "Appointment types"
 msgstr ""
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr ""
 
@@ -2333,8 +2336,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js
+#: apps/io.ox/core/folder/tree.js
 #: module:io.ox/core
+#: apps/io.ox/core/folder/view.js
 #: apps/io.ox/files/favorite/toolbar.js
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
@@ -6077,6 +6081,26 @@ msgstr ""
 msgid "The requested application is not available at this moment."
 msgstr ""
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js
+#: module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/core/main/stages.js
+#: module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
+
+#: apps/io.ox/core/main/stages.js
+#: module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural "If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/main/topbar_right.js
 #: module:io.ox/core
 #: apps/plugins/portal/upsell/register.js
@@ -6716,6 +6740,8 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 
@@ -6742,6 +6768,12 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 msgid "Default app after sign in"
+msgstr ""
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+msgid "Quick launch %s"
 msgstr ""
 
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
@@ -6842,9 +6874,11 @@ msgstr ""
 msgid "Model is incomplete."
 msgstr ""
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js
 #: module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
+#, c-format
+msgid "%1$s must not be empty."
 msgstr ""
 
 #: apps/io.ox/core/sub/settings/pane.js
@@ -7335,6 +7369,16 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: module:io.ox/core
 msgid "Get free upgrade"
+msgstr ""
+
+#: apps/io.ox/core/viewer/main.js
+#: module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr ""
+
+#: apps/io.ox/core/viewer/main.js
+#: module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 
 #. tooltip for getting auto-play mode ready for running.
@@ -9529,12 +9573,10 @@ msgstr ""
 msgid "unknown sender"
 msgstr ""
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js
 #: module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid "All future messages from the sender will be moved to the selected folder."
 msgid_plural "All future messages from the senders of the selected mails will be moved to the selected folder."
 msgstr[0] ""
 msgstr[1] ""
@@ -9812,11 +9854,6 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/actions/extensions.js
 #: module:io.ox/mail
-msgid "Add attachment"
-msgstr ""
-
-#: apps/io.ox/mail/compose/actions/extensions.js
-#: module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
 msgstr ""
 
@@ -9985,6 +10022,12 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Added %s to attachments."
+msgstr ""
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js
+#: module:io.ox/mail
+msgid "One of the embedded images could not be used."
 msgstr ""
 
 #. generic erromessage if inserting an image into a mail failed.

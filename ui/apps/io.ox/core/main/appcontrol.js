@@ -34,18 +34,24 @@ define('io.ox/core/main/appcontrol', [
         tagName: 'a',
         className: 'btn btn-link lcell',
         attributes: {
-            type: 'button'
+            href: '#',
+            role: 'menuitem',
+            tabindex: -1
         },
         events: {
             'click': 'onClick',
             'click .closer': 'quitApp'
         },
         initialize: function (options) {
+            this.pos = options.pos;
             this.quicklaunch = options.quicklaunch;
             this.listenTo(this.model, 'change:hasBadge', this.toggleBadge);
             this.listenTo(this.model, 'change:tooltip', this.updateTooltip);
             this.listenTo(this.model, 'change:title', this.updateTitle);
             this.listenTo(settings, 'change:coloredIcons', this.render);
+        },
+        addAccessKey: function () {
+            if (this.pos <= 9 && this.pos !== 0) this.$el.attr('accesskey', this.pos);
         },
         checkUpsell: function () {
             var requires = this.model.get('requires');
@@ -104,6 +110,8 @@ define('io.ox/core/main/appcontrol', [
 
             this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
+            this.$icon.attr('aria-hidden', true);
+
             // reverted for 7.10
             // if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
 
@@ -137,57 +145,80 @@ define('io.ox/core/main/appcontrol', [
                 'data-app-name': this.model.get('name')
             }).append(this.icon = this.drawIcon());
             this.updateTooltip();
+            this.addAccessKey();
             // used on mobile, reverted for 7.10
             // if (this.model.get('closable') && _.device('smartphone')) this.drawCloser();
             return this;
         }
     });
 
-    // reverted for 7.10
-    // var QuickLaunchersCollection = Backbone.Collection.extend({
-    //     initialize: function () {
-    //         var self = this;
-    //         this.reset(this.fetch());
-    //         settings.on('change:quicklaunch', function () { self.reset(self.fetch()); });
-    //     },
-    //     fetch: function () {
-    //         var quicklaunch = settings.get('quicklaunch') ? settings.get('quicklaunch').split(',') : [];
-    //         return _(quicklaunch.map(function (o) {
-    //             return ox.ui.apps.findWhere({ path: o, hasLauncher: true });
-    //         })).compact();
-    //     }
-    // });
+    var api = {
+        quickLauncherLimit: 3,
+        getQuickLauncherDefaults: function () {
+            return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
+        },
+        getQuickLauncherCount: function () {
+            var n = settings.get('apps/quickLaunchCount', 0);
+            if (!_.isNumber(n)) return 0;
+            return Math.min(this.quickLauncherLimit, n);
+        },
+        getQuickLauncherItems: function () {
+            var count = this.getQuickLauncherCount(),
+                str = settings.get('apps/quickLaunch', this.getQuickLauncherDefaults());
+            // We fill up the list with 'none' in case we have more slots than defaults
+            return (str + new Array(count).join(',none')).split(',').slice(0, count);
+        }
+    };
 
     // reverted for 7.10
-    // var QuickLaunchersView = Backbone.View.extend({
-    //     attributes: {
-    //         'id': 'io-ox-quicklaunch'
-    //     },
-    //     events: {
-    //         'click button': 'onClick'
-    //     },
-    //     initialize: function () {
-    //         this.collection = new QuickLaunchersCollection();
-    //         this.listenTo(this.collection, { 'reset': this.render });
-    //     },
-    //     onClick: function () {
-    //         toggleOverlay(false);
-    //     },
-    //     render: function () {
-    //         this.$el.empty().append(
-    //             this.collection.map(function (model) {
-    //                 return new LauncherView({ model: model, quicklaunch: true }).render().$el;
-    //             })
-    //         );
-    //         return this;
-    //     }
-    // });
+    var QuickLaunchersCollection = Backbone.Collection.extend({
+        initialize: function () {
+            var self = this;
+            this.reset(this.fetch());
+            settings.on('change:apps/quickLaunch change:apps/quickLaunchCount', function () { self.reset(self.fetch()); });
+        },
+        fetch: function () {
+            var apps = api.getQuickLauncherItems().map(function (o) {
+                return ox.ui.apps.get(o.replace(/\/main$/, ''));
+            });
+            return _(apps).compact();
+        }
+    });
+
+    // reverted for 7.10
+    var QuickLaunchersView = Backbone.View.extend({
+        attributes: {
+            'id': 'io-ox-quicklaunch',
+            'role': 'toolbar'
+        },
+        events: {
+            'click button': 'onClick'
+        },
+        initialize: function () {
+            this.collection = new QuickLaunchersCollection();
+            this.listenTo(this.collection, { 'reset': this.render });
+        },
+        onClick: function () {
+            toggleOverlay(false);
+        },
+        render: function () {
+            this.$el.empty().append(
+                this.collection.map(function (model) {
+                    return new LauncherView({
+                        tagName: 'button',
+                        model: model, quicklaunch: true
+                    }).render().$el.attr('tabindex', -1);
+                })
+            );
+            this.$el.find('button').first().removeAttr('tabindex');
+            return this;
+        }
+    });
 
     var LaunchersView = Backbone.View.extend({
         tagName: 'li',
         className: 'dropdown',
         id: 'io-ox-launcher',
-
         initialize: function () {
             this.listenTo(ox, 'launcher:toggleOverlay', function () {
                 this.$('[data-toggle="dropdown"]').dropdown('toggle');
@@ -200,10 +231,10 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.append(
                 $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown">').append(
-                    this.collection.forLauncher().map(function (model) {
+                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown" role="menu">').append(
+                    this.collection.forLauncher().map(function (model, i) {
                         return $('<li role="presentation">').append(
-                            new LauncherView({ model: model }).render().$el
+                            new LauncherView({ model: model, pos: i + 1 }).render().$el
                         );
                     })
                 )
@@ -277,9 +308,13 @@ define('io.ox/core/main/appcontrol', [
                     })
                 );
             } else if (action) {
+                var autoStart = settings.get('autoStart');
+                if (action === 'autoStart') {
+                    if (autoStart === 'none') return;
+                    action = autoStart;
+                }
                 logo.wrap(
-                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function (e) {
-                        e.preventDefault();
+                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
                         ox.launch(action);
                     })
                 );
@@ -288,14 +323,15 @@ define('io.ox/core/main/appcontrol', [
     });
 
     // reverted for 7.10
-    // ext.point('io.ox/core/appcontrol').extend({
-    //     id: 'quicklauncher',
-    //     index: 400,
-    //     draw: function () {
-    //         var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
-    //         this.append(quicklaunchers.render().$el);
-    //     }
-    // });
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'quicklauncher',
+        index: 400,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            var quicklaunchers = window.quicklaunchers = new QuickLaunchersView();
+            this.append(quicklaunchers.render().$el);
+        }
+    });
 
     // for 7.10
     // move launcher to the right
@@ -361,7 +397,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'show',
         index: 10000,
         draw: function () {
-            this.show();
+            this.attr('role', 'banner').show();
         }
     });
 
@@ -576,8 +612,8 @@ define('io.ox/core/main/appcontrol', [
         });
     }
 
-    return {
+    return _.extend(api, {
         LauncherView: LauncherView,
         LaunchersView: LaunchersView
-    };
+    });
 });

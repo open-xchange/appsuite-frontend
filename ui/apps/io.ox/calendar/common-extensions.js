@@ -206,8 +206,8 @@ define('io.ox/calendar/common-extensions', [
                 $('<tr>').append(
                     $('<th>').text(gt('Shown as')),
                     $('<td>').append(
-                        $('<i class="fa fa-square shown_as" aria-hidden="true">').addClass(util.getShownAsClass(baton.model)),
-                        $('<span class="detail shown-as">').text('\u00A0' + util.getShownAs(baton.model))
+                        $('<i class="fa fa-square shown_as" aria-hidden="true">').addClass(util.getShownAsClass(baton.model || baton.data)),
+                        $('<span class="detail shown-as">').text('\u00A0' + util.getShownAs(baton.model || baton.data))
                     )
                 )
             );

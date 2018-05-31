@@ -28,10 +28,7 @@ define('io.ox/files/actions/add-storage-account', [
     'use strict';
 
     function createAccount(service) {
-        var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-            return !account.hasScopes('drive');
-        })[0] ||
-        new OAuth.Account.Model({
+        var account = new OAuth.Account.Model({
             serviceId: service.id,
             displayName: oauthAPI.chooseDisplayName(service)
         });
@@ -50,8 +47,6 @@ define('io.ox/files/actions/add-storage-account', [
         }
 
         return account.enableScopes('drive').save().then(function (res) {
-            // add new account after it has been created succesfully
-            oauthAPI.accounts.add(account);
             return filestorageApi.createAccountFromOauth(res);
         }).then(function () {
             yell('success', gt('Account added successfully'));

@@ -264,6 +264,9 @@ define('io.ox/mail/main', [
         },
 
         'folder-view-ssl-events': function (app) {
+
+            if (coreSettings.get('security/acceptUntrustedCertificates') || !coreSettings.get('security/manageCertificates')) return;
+
             // open certificates page when the user clicks on error indicator
             app.treeView.on('accountlink:ssl', function () {
                 ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/certificate' });
@@ -1567,6 +1570,11 @@ define('io.ox/mail/main', [
             app.useTextPreview = function () {
                 return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
             };
+
+            app.on('resume', function () {
+                // Viewport calculations are invalid when app is invisible (See Bug 58552)
+                this.listView.fetchTextPreview();
+            });
         },
 
         /*

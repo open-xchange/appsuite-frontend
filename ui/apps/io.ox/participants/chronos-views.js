@@ -104,13 +104,14 @@ define('io.ox/participants/chronos-views', [
         },
 
         setCustomImage: function () {
-            var data = this.model.toJSON();
+            var data = this.model.toJSON(),
+                cuType = this.model.get('cuType') || 'INDIVIDUAL';
             api.pictureHalo(
                 this.nodes.$img,
                 data,
                 { width: 54, height: 54 }
             );
-            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (this.model.get('cuType').toLowerCase() + '-image' || ''));
+            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + cuType.toLowerCase() + '-image');
         },
 
         setRows: function (mail, extra) {
@@ -168,12 +169,13 @@ define('io.ox/participants/chronos-views', [
                 case 'RESOURCE':
                     if (this.options.halo && !this.options.hideMail) {
                         var data = this.model.toJSON();
+                        if (data.resource) data = data.resource;
                         data.callbacks = {};
                         if (this.options.baton && this.options.baton.callbacks) {
                             data.callbacks = this.options.baton.callbacks;
                         }
                         var link = $('<a href="#">')
-                            .data(data.resource ? data.resource : data)
+                            .data(data)
                             .addClass('halo-resource-link');
                         this.nodes.$extra.replaceWith(link);
                         this.nodes.$extra = link;

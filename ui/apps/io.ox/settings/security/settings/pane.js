@@ -103,8 +103,12 @@ define('io.ox/settings/security/settings/pane', [
         id: 'mail',
         index: 100,
         render: function () {
+
+            var isEnabled = mailSettings.get('features/authenticity', false),
+                isConfigurable = isEnabled && mailSettings.isConfigurable('authenticity/level');
+
             // fallback default value
-            if (mailSettings.get('features/authenticity', false) && !this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
+            if (isEnabled && !this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
 
             this.$el.append(
                 util.fieldset(
@@ -112,12 +116,12 @@ define('io.ox/settings/security/settings/pane', [
                     // images
                     util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), this.model),
                     // mail authenticity
-                    !mailSettings.get('features/authenticity', false) ? $() :
+                    !isConfigurable ? $() :
                         util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
                             //#. Status for mail authenticity features. Do not show any information at all
                             { label: gt('Disabled'), value: 'none' },
                             //#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
-                            { label: gt('Suspicious and unclassified emails only'), value: 'fail_neutral' },
+                            { label: gt('Suspicious and unclassified emails only'), value: 'fail_neutral_trusted' },
                             //#. Status for mail authenticity features. Show information for any mail
                             { label: gt('All emails'), value: 'all' }
                         ])

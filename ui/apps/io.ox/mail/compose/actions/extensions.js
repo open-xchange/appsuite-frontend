@@ -81,7 +81,7 @@ define('io.ox/mail/compose/actions/extensions', [
             })
             .on('send', function () { def.resolve(); })
             .addButton({ action: 'send', label: gt('Send without attachment') })
-            .addAlternativeButton({ action: 'add', label: gt('Add attachment') })
+            .addAlternativeButton({ action: 'add', label: gt('Cancel') })
             .build(function () {
                 this.$body.append(
                     $('<div>').append(

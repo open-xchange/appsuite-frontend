@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-01 16:45+0300\n"
+"PO-Revision-Date: 2018-05-09 21:23+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -340,6 +340,13 @@ msgstr[1] "%1$d valittuna"
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s siirretty asemaan %2$s/%3$s"
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Username must not be empty."
+msgid "%1$s must not be empty."
+msgstr "Käyttäjätunnus ei voi olla tyhjä."
+
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -630,7 +637,8 @@ msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form. "
 msgstr ""
-"Tilin asetuksia ei voitu tallentaa. Ole hyvä ja lue huomautukset lomakkeella"
+"Tilin asetuksia ei voitu tallentaa. Ole hyvä ja lue huomautukset "
+"lomakkeella. "
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Account updated"
@@ -710,10 +718,6 @@ msgstr "Lisää julkisena kalenterina"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Lisää julkisena kansiona"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Lisää liite"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1088,11 +1092,15 @@ msgstr "Kaikki kansiot"
 msgid "All future appointments"
 msgstr "Kaikki tulevat tapaamiset"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1478,16 +1486,15 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading"
 msgstr ""
-"Luettaessa automaattisesti kerää yhteystietoja kansioon \"Collected addresses"
-"\""
+"Luettaessa kerää automaattisesti yhteystiedot kansioon \"Kerätyt osoitteet\""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr ""
-"Lähetettäessä automaattisesti kerää yhteystietoja kansioon \"Collected "
-"addresses\""
+"Lähetettäessä kerää automaattisesti yhteystietodot kansioon \"Kerätyt "
+"osoitteet\""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid ""
@@ -1787,8 +1794,9 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3416,7 +3424,7 @@ msgstr "Tiputa tähän ladataksesi <b class=\"dndignore\">uusi versio</b>"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
-msgstr "Tiputa tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
+msgstr "Pudota tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
 
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
@@ -4047,7 +4055,7 @@ msgstr "Ulkoinen yhteystieto"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
-msgstr "Viestissä olevia kuvia ei näytetä yksityisyytesi suojaamiseksi"
+msgstr "Ulkoiset kuvat on estetty, jotta sinua voidaan suojella roskapostilta!"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "External link"
@@ -4400,10 +4408,11 @@ msgstr "Kansiokohtaiset toimenpiteet"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Kansiot"
 
@@ -4502,7 +4511,9 @@ msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Vapaa"
 
@@ -4907,6 +4918,13 @@ msgid ""
 msgstr ""
 "Jos muutat salasanaa, sinut kirjataan ulos. Varmista, että kaikki "
 "keskeneräinen on suljettu ja tallennettu."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6532,11 +6550,9 @@ msgstr ""
 "sisällöllä. Ohjelmiston sisällä tekemäsi muutokset ylikirjoitetaan"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
-msgstr "Huomaa"
+msgstr "Muistiinpanot"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notification"
@@ -6665,6 +6681,12 @@ msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Löytyi yksi täydennysehdotus"
 msgstr[1] "Löytyi %1$d täydennysehdotusta"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+msgid "One of the embedded images could not be used."
+msgstr "Tiedostoa ei voitu ladata."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7196,6 +7218,10 @@ msgstr ""
 "\n"
 "Seuraa sähköpostiviestin ohjeita ja palaa widgetiin viimeistelläksesi tilin "
 "perustamisen."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7731,6 +7757,13 @@ msgstr "Purppura"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Violetti/sinipunainen"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Pikakäynnistys 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9176,6 +9209,12 @@ msgstr "Tiedostoa ei voi valitettavasti esikatsella."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Kuvaa ei voi esikatsella."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Tiedostoa ei voi valitettavasti esikatsella."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Sivu ei ole tällä hetkellä saatavilla."
@@ -9676,6 +9715,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Tapaaminen näkyy kaikille käyttäjille jaetuissa kalentereissa."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9872,6 +9918,8 @@ msgid "The series never ends."
 msgstr "Sarja ei lopu koskaan."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Asetus vaatii uudelleenlatauksen tai uudelleenkirjautumisen alkaakseen "
@@ -10369,6 +10417,10 @@ msgid ""
 msgstr ""
 "Napsauta uutta App Launcher -kuvaketta navigoidaksesi %1$s sovellusten "
 "välillä."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11204,7 +11256,7 @@ msgstr "Olet kirjautuneena seuraaville laitteille"
 msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left. "
-msgstr "Käytät nyt %1$s %2$s levytilastasi. Sinulla on %3$s jäljellä"
+msgstr "Käytät nyt %1$s %2$s levytilastasi. Sinulla on %3$s jäljellä. "
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
@@ -11375,10 +11427,6 @@ msgstr "Olet uudelleenvaltuuttanut tämän %s tilin."
 msgid "You have tentatively accepted the appointment"
 msgstr "Alustavasti hyväksyit tämän tapaamisen"
 
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Syötä käyttäjätunnus ja salasana tilataksesi."
-
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
 msgstr "Sinun täytyy valita ladattava tiedosto."
@@ -11464,7 +11512,7 @@ msgid ""
 "space is %3$s. "
 msgstr ""
 "Tilasi on jaettu kaikkien ryhmäsi jäsenten kesken. Ryhmäsi käyttää nyt %1$s "
-"kaikkiaan %2$s tilastaan. Vapaan tilan määrä on %3$s"
+"kaikkiaan %2$s tilastaan. Vapaan tilan määrä on %3$s "
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your credentials will be sent over a secure connection only"
@@ -12473,6 +12521,9 @@ msgstr "alustasi"
 
 #~ msgid "Add account"
 #~ msgstr "Lisää tili"
+
+#~ msgid "Add attachment"
+#~ msgstr "Lisää liite"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Lisää salauskoodi"
@@ -14085,9 +14136,6 @@ msgstr "alustasi"
 #~ msgid "Publications must have a name"
 #~ msgstr "Julkaisulla täytyy olla nimi"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Pikakäynnistys 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Pikakäynnistys 2"
 
@@ -14428,10 +14476,6 @@ msgstr "alustasi"
 
 #~ msgid "Sorry, common mails couldn't be assigned automatically."
 #~ msgstr "Yhteisiä viestejä ei voitu siirtää automaattisesti."
-
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Tiedostoa ei voitu ladata."
 
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
@@ -15469,6 +15513,9 @@ msgstr "alustasi"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Sinun täytyy uudelleenvaltuuttaa tämä tili."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Syötä käyttäjätunnus ja salasana tilataksesi."
 
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "

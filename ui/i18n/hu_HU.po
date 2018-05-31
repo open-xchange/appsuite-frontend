@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-24 09:04+0200\n"
+"PO-Revision-Date: 2018-05-04 15:00+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -341,6 +341,13 @@ msgstr[1] "%1$s elem kijelölve"
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s a(z) %2$s / %3$s pozícióba került"
+
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Username must not be empty."
+msgid "%1$s must not be empty."
+msgstr "A felhasználónév nem lehet üres."
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -714,10 +721,6 @@ msgstr "Hozzáad nyilvános naptárként"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Hozzáad nyilvános mappaként"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Melléklet hozzáadása"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1093,11 +1096,15 @@ msgstr "Összes mappa"
 msgid "All future appointments"
 msgstr "Összes jövőbeni találkozó"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1799,8 +1806,9 @@ msgstr "%1$s kamera"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4428,10 +4436,11 @@ msgstr "Mappaspecifikus műveletek"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mappák"
 
@@ -4532,7 +4541,9 @@ msgstr "Minden bejövő levél továbbítása ezen címre"
 msgid "Forward emails as"
 msgstr "E-mailek továbbításának módja"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Szabad"
 
@@ -4937,6 +4948,13 @@ msgid ""
 msgstr ""
 "Ha megváltoztatja a jelszót, ki lesz jelentkeztetve. Győződjön meg róla, "
 "hogy mindent bezárt és elmentett."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6565,11 +6583,9 @@ msgstr ""
 "tartalommal. Az appsuite-on belül végzett módosítások felül lesznek írva."
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
-msgstr "Megjegyzés"
+msgstr "Jegyzetek"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notification"
@@ -6698,6 +6714,11 @@ msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Egy automatikus kiegészítés bejegyzés található"
 msgstr[1] "%1$d automatikus kiegészítés bejegyzés található"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "One of the embedded images could not be used."
+msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7229,6 +7250,10 @@ msgstr ""
 "\n"
 "Kövesse az levélben található utmutatást és beállítás befejezéséhez térjen "
 "vissza a widgethez."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7769,6 +7794,13 @@ msgstr "Bíbor"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Lila/Magenta"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Gyorsindítás 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9217,6 +9249,12 @@ msgstr "Sajnáljuk, de ehhez a fájltípushoz nincs előnézet."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Sajnáljuk, de ehhez a képhez nincs előnézet."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Sajnáljuk, de ehhez a fájltípushoz nincs előnézet."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Elnézést, az oldal pillanatnyilag nem érhető el."
@@ -9719,6 +9757,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "A találkozó látható a megosztott naptárak összes felhasználójánál."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9919,6 +9964,8 @@ msgid "The series never ends."
 msgstr "Az ismétlődés nem fejeződik be."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "A beállítás életbe lépéséhez újratöltés vagy újra bejelentkezés szükséges."
@@ -10420,6 +10467,10 @@ msgid ""
 msgstr ""
 "A(z) %1$s alkalmazások közötti navigáláshoz kattintson az új "
 "Alkalmazásindító ikonra."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11432,10 +11483,6 @@ msgstr "Újra felhatalmazta ezt a %s fiókot."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Feltételesen elfogadta a találkozót"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "A feliratkozáshoz meg kell adnia egy felhasználónevet és jelszót."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12463,6 +12510,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Add account"
 #~ msgstr "Fiók hozzáadása"
 
+#~ msgid "Add attachment"
+#~ msgstr "Melléklet hozzáadása"
+
 #~ msgid "Add new account"
 #~ msgstr "Új fiók hozzáadása"
 
@@ -13451,9 +13501,6 @@ msgstr "az Ön rendszere"
 #~ msgid "Public"
 #~ msgstr "Nyilvános"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Gyorsindítás 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Gyorsindítás 2"
 
@@ -14174,6 +14221,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Újra felhatalmazta ezt a fiókot."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "A feliratkozáshoz meg kell adnia egy felhasználónevet és jelszót."
 
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "

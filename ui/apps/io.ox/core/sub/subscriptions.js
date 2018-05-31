@@ -128,7 +128,7 @@ define('io.ox/core/sub/subscriptions', [
                     title = gt('Subscribe');
 
                 if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe to address book');
-                else if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
+                if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
 
                 popup.getHeader().append($('<h4>').text(title));
 
@@ -177,22 +177,24 @@ define('io.ox/core/sub/subscriptions', [
 
             subscribe: function () {
                 var self = this,
-                    popup = this.popup;
+                    popup = this.popup,
+                    service = _(this.services).findWhere({ id: this.model.get('source') });
 
                 popup.busy();
+                // workaround: service is needed for proper validation
+                this.model.set('service', service);
 
                 // validate model and check for errors
                 this.model.validate();
                 if (this.model.errors && this.model.errors.hasErrors()) {
                     this.model.errors.each(function (errors) {
-                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors[0]);
+                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors);
                     });
                     popup.idle();
                     popup.getContentNode().find('input').first().focus();
                     return;
                 }
 
-                var service = _(this.services).findWhere({ id: this.model.get('source') });
                 subscribe(this.model, service).then(
                     function saveSuccess(id) {
                         //set id, if none is present (new model)
@@ -249,7 +251,7 @@ define('io.ox/core/sub/subscriptions', [
             title = gt('New Folder');
 
         if (service.displayName && module === 'calendar') title = gt('My %1$s calendar', service.displayName);
-        else if (service.displayName && module === 'contacts') title = gt('My %1$s contacts', service.displayName);
+        if (service.displayName && module === 'contacts') title = gt('My %1$s contacts', service.displayName);
 
         return folderAPI.create(folder, {
             title: title
@@ -262,14 +264,16 @@ define('io.ox/core/sub/subscriptions', [
     }
 
     function showErrorInline(node, label, msg) {
+        var list = [].concat(msg);
         node.find('div.alert').remove();
-        node.prepend($('<div class="alert alert-danger alert-dismissible" role="alert">').append(
-            $('<strong>').text(label),
-            $.txt(' '),
-            $('<span>').html(msg),
-            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
-        );
-
+        _(list).each(function (msg) {
+            this.prepend($('<div class="alert alert-danger alert-dismissible" role="alert">').append(
+                $('<strong>').text(label),
+                $.txt(' '),
+                $('<span>').html(msg),
+                $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
+            );
+        }, node);
     }
 
     ext.point(POINT + '/dialog').extend({
@@ -310,18 +314,12 @@ define('io.ox/core/sub/subscriptions', [
 
     function createAccount(service, scope) {
         var serviceId = service.formDescription[0].options.type,
-            account = oauthAPI.accounts.forService(serviceId).filter(function (account) {
-                return !account.hasScopes(scope);
-            })[0] ||
-            new OAuth.Account.Model({
+            account = new OAuth.Account.Model({
                 serviceId: serviceId,
                 displayName: oauthAPI.chooseDisplayName(service)
             });
 
-        return account.enableScopes(scope).save().then(function (account) {
-            oauthAPI.accounts.add(account, { merge: true });
-            return account;
-        });
+        return account.enableScopes(scope).save();
     }
     ext.point(POINT + '/oauth').extend({
         id: 'oauth',

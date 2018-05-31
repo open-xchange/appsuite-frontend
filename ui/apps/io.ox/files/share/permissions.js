@@ -24,6 +24,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/contacts/api',
     'io.ox/backbone/views/modal',
     'io.ox/contacts/util',
+    'io.ox/core/settings/util',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
     'io.ox/participants/views',
@@ -35,7 +36,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil) {
 
     'use strict';
 
@@ -922,12 +923,10 @@ define('io.ox/files/share/permissions', [
 
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Send notification by email')).prepend(
-                            new miniViews.CheckboxView({ id: guid, name: 'sendNotifications', model: dialogConfig }).render().$el
-                            .on('click', function (e) {
-                                dialogConfig.set('byHand', e.currentTarget.checked);
-                            })
-                        )
+                        settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
+                            var input = e.originalEvent.srcElement;
+                            dialogConfig.set('byHand', input.checked);
+                        })
                     )
                 );
             }
@@ -1029,9 +1028,10 @@ define('io.ox/files/share/permissions', [
                 if (objModel.isFolder() && options.nested) {
                     dialog.$footer.append(
                         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ id: guid, name: 'cascadePermissions', model: dialogConfig }).render().$el
-                            )
+                            settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), dialogConfig).on('change', function (e) {
+                                var input = e.originalEvent.srcElement;
+                                dialogConfig.set('cascadePermissions', input.checked);
+                            })
                         )
                     );
                 }

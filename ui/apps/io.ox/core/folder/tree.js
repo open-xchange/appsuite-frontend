@@ -30,6 +30,8 @@ define('io.ox/core/folder/tree', [
 
     var TreeView = DisposableView.extend({
 
+        attributes: { role: 'complementary' },
+
         className: 'folder-tree',
 
         events: {
@@ -68,6 +70,7 @@ define('io.ox/core/folder/tree', [
 
             this.$el.data('view', this);
             this.$container = $('<ul class="tree-container f6-target" role="tree">').attr('id', this.id);
+            this.$el.attr('aria-label', gt('Folders'));
 
             this.$dropdownMenu = $();
             this.options = options;

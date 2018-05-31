@@ -178,15 +178,15 @@ define('io.ox/core/sub/model', [
 
     ext.point('io.ox/core/sub/subscription/validation').extend({
         validate: function (obj, errors) {
-            var ref = obj[obj.source], logincheck = false;
-            if (!ref) { errors.add(obj.source, gt('Model is incomplete.')); return; }
-            if (ref.login) {
-                logincheck = (!obj.id && ref.password) || (obj.id && !ref.password);
-            }
-            if (ref === {} || !logincheck && !ref.account && !ref.url) {
-                errors.add(obj.source, gt('You have to enter a username and password to subscribe.'));
-                return;
-            }
+            var ref = obj[obj.source];
+            if (!ref) return errors.add(obj.source, gt('Model is incomplete.'));
+
+            _((obj.service || {}).formDescription).each(function (field) {
+                if (!field.mandatory || ref[field.name]) return;
+                //#. %1$s is a name/label of an input field (for example: URL or Login)
+                //#, c-format
+                errors.add(obj.source, gt('%1$s must not be empty.', field.displayName));
+            });
         }
     });
 

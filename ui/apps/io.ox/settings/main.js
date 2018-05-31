@@ -114,7 +114,6 @@ define('io.ox/settings/main', [
 
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             //needed or mac voice over reads the whole settings pane when an input element is focused
-            'role': 'main',
             'tabindex': 0
         }).scrollable();
 
@@ -458,7 +457,7 @@ define('io.ox/settings/main', [
             index: 100
         });
 
-        if (!capabilities.has('guest')) {
+        if ((coreSettings.get('security/manageCertificates') && !coreSettings.get('security/acceptUntrustedCertificates')) && !capabilities.has('guest')) {
             ext.point('io.ox/settings/pane/general/security').extend({
                 id: 'certificates',
                 title: gt('Certificates'),

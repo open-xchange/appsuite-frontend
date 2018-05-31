@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-01 21:00+0200\n"
+"PO-Revision-Date: 2018-05-05 22:53+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -346,6 +346,13 @@ msgstr[1] "%1$d items geselecteerd"
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s is verplaatst naar %2$s van %3$s"
+
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Username must not be empty."
+msgid "%1$s must not be empty."
+msgstr "Gebruikersnaam mag niet leeg zijn."
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -719,10 +726,6 @@ msgstr "Toevoegen als publieke agenda"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Toevoegen als publieke map"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Voeg bijlage toe"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1099,11 +1102,15 @@ msgstr "Alle mappen"
 msgid "All future appointments"
 msgstr "Alle toekomstige afspraken"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1807,8 +1814,9 @@ msgstr "Camera %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4447,10 +4455,11 @@ msgstr "Mapspecifieke acties"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mappen"
 
@@ -4549,7 +4558,9 @@ msgstr "Alle inkomende berichten doorsturen naar dit adres"
 msgid "Forward emails as"
 msgstr "E-mails doorsturen als"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Vrij"
 
@@ -4954,6 +4965,13 @@ msgid ""
 msgstr ""
 "Als u uw wachtwoord verandert, wordt u afgemeld. Controleer of u alles heeft "
 "gesloten en opgeslagen."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6594,11 +6612,9 @@ msgstr ""
 "overschreven"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
-msgstr "Notitie"
+msgstr "Opmerkingen"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notification"
@@ -6727,6 +6743,12 @@ msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Er is één overeenkomstig woord gevonden"
 msgstr[1] "%1$d overeenkomstige woorden gevonden"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+msgid "One of the embedded images could not be used."
+msgstr "Dit bestand kan niet worden geüpload."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7261,6 +7283,10 @@ msgstr ""
 "\n"
 "Volg de instructies in deze e-mail en kom dan weer terug naar de widget om "
 "de configuratie van het account af te ronden."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
 
 # (Reinout)
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -7808,6 +7834,13 @@ msgstr "Paars"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Paars/Magenta"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Snel-start 1:"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9258,6 +9291,12 @@ msgstr "Sorry, er is geen voorbeeld beschikbaar voor dit bestand."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Sorry, er is geen voorbeeld beschikbaar voor deze afbeelding."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Sorry, er is geen voorbeeld beschikbaar voor dit bestand."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Sorry, deze pagina is momenteel niet beschikbaar."
@@ -9760,6 +9799,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9962,6 +10008,8 @@ msgid "The series never ends."
 msgstr "De afsprakenreeks eindigt nooit."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "De gemaakte wijziging vereist dat u de pagina ververst of dat u zich opnieuw "
@@ -10479,6 +10527,10 @@ msgid ""
 msgstr ""
 "Om te navigeren tussen de %1$s applicaties klikt u op het App Launcher "
 "pictogram."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11492,10 +11544,6 @@ msgstr "U heeft dit %s account opnieuw gemachtigd."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "U heeft de afspraak voorlopig geaccepteerd"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "U moet een gebruikersnaam en wachtwoord ingeven om te abonneren."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12600,6 +12648,9 @@ msgstr "uw platform"
 
 #~ msgid "Add account"
 #~ msgstr "Account toevoegen"
+
+#~ msgid "Add attachment"
+#~ msgstr "Voeg bijlage toe"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Versleutelcode toevoegen"
@@ -14233,9 +14284,6 @@ msgstr "uw platform"
 #~ msgid "Publications must have a name"
 #~ msgstr "Publicaties moeten een naam hebben"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Snel-start 1:"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Snel-start 2:"
 
@@ -14586,10 +14634,6 @@ msgstr "uw platform"
 #~ msgid "Sorry, common mails couldn't be assigned automatically."
 #~ msgstr ""
 #~ "Sorry, normale e-mailberichten konden niet automatisch toegewezen worden."
-
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Dit bestand kan niet worden geüpload."
 
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
@@ -15644,6 +15688,9 @@ msgstr "uw platform"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "U heeft dit account opnieuw gemachtigd."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "U moet een gebruikersnaam en wachtwoord ingeven om te abonneren."
 
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "

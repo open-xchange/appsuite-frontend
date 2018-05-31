@@ -131,14 +131,9 @@ define('io.ox/calendar/month/view', [
             // EXC_BAD_ACCESS (SIGSEGV). See bug 42111
             if (_.device('safari')) document.getSelection().collapse(true);
 
-            this.app.folder.can('create').done(function (create) {
+            if (!$(e.target).hasClass('list')) return;
 
-                if (!create) return;
-                if (!$(e.target).hasClass('list')) return;
-
-                this.trigger('createAppointment', e, $(e.currentTarget).data('date'));
-
-            }.bind(this));
+            this.trigger('createAppointment', e, $(e.currentTarget).data('date'));
         },
 
         // handler for onmouseenter event for hover effect

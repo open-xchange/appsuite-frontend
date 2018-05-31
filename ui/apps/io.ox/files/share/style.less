@@ -50,8 +50,20 @@
         // ensure all inputs share same blank space on the left
         &.form-control { padding-left: 7px; }
     }
-
+    .recipients {
+        z-index: 1;
+        position: relative;
+        .has-picker {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
     .message {
+        z-index: 0;
+        position: relative;
+        &:focus-within {
+            z-index: 2;
+        }
         textarea {
             margin-top: -16px;
             border-radius: 0px 0px @border-radius-small @border-radius-small;
@@ -78,7 +90,6 @@
 
         &.expiresgroup {
             .date { margin-left: 5px; }
-            .dropdown { vertical-align: middle; }
         }
 
         // resize-polyfill sets z-index 2 onto the parent div of the textarea
@@ -146,6 +157,32 @@
     }
 }
 
+.modal.get-link-dialog {
+    .modal-body {
+        .input-group.has-picker:focus-within {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+        .share-wizard .form-inline {
+            .checkbox input[type="checkbox"] {
+                position: absolute;
+            }
+            .dropdown {
+                margin-bottom: 8px;
+                display: inline-block;
+                position: relative;
+                margin-top: 0;
+                vertical-align: middle;
+            }
+            .password-container {
+                margin-top: -10px;
+            }
+        }
+    }
+}
+
 .modal.share-permissions-dialog {
 
     html:not(.ie11) & {
@@ -174,6 +211,13 @@
 
         .form-group {
             margin: 8px 0 0 0;
+        }
+
+        .input-group.has-picker:focus-within {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
         }
     }
 

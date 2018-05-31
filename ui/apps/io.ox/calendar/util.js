@@ -129,7 +129,6 @@ define('io.ox/calendar/util', [
         PRIVATE_EVENT_COLOR: '#616161',
 
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
-        ZULU_FORMAT_DAY_ONLY: 'YYYYMMDD',
 
         getFirstWeekDay: function () {
             // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
@@ -486,7 +485,8 @@ define('io.ox/calendar/util', [
         },
 
         getShownAs: function (data) {
-            if (that.hasFlag(data, 'transparent')) return 'free';
+            //#. State of an appointment (reserved or free)
+            if (that.hasFlag(data, 'transparent')) return gt('Free');
             return gt('Reserved');
         },
 
@@ -538,6 +538,12 @@ define('io.ox/calendar/util', [
                 return moment.months()[i];
             }
 
+            function getWorkweekBitmask() {
+                var bitmask = 0, i;
+                for (i = 0; i < settings.get('numDaysWorkweek'); i++) bitmask += 1 << ((settings.get('workweekStart') + i) % 7);
+                return bitmask;
+            }
+
             var str = '',
                 interval = data.interval,
                 days = data.days || null,
@@ -560,7 +566,7 @@ define('io.ox/calendar/util', [
                         //#. recurrence string
                         //#. %1$d: numeric
                         str = gt.npgettext('weekly', 'Every day.', 'Every %1$d weeks on all days.', interval, interval);
-                    } else if (days === 62) { // special case: weekly on workdays
+                    } else if (days === getWorkweekBitmask()) { // special case: weekly on workdays
                         //#. recurrence string
                         //#. %1$d: numeric
                         str = gt.npgettext('weekly', 'On workdays.', 'Every %1$d weeks on workdays.', interval, interval);
@@ -946,8 +952,8 @@ define('io.ox/calendar/util', [
             canvas.height = 1;
 
             return function (color) {
-                context.fillStyle = 'rgba(0, 0, 0, 0)';
-                context.clearRect(0, 0, 1, 1);
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, 1, 1);
                 context.fillStyle = color;
                 context.fillRect(0, 0, 1, 1);
                 return context.getImageData(0, 0, 1, 1).data;
@@ -1184,7 +1190,7 @@ define('io.ox/calendar/util', [
 
             if (attendee.cuType !== 'RESOURCE') {
                 if ((user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
-                attendee.email = user.field ? user[user.field] : (user.email1 || user.mail);
+                attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
             } else {
@@ -1235,21 +1241,13 @@ define('io.ox/calendar/util', [
         },
 
         // get the right default alarm for an event
-        // note: the defautl alarm for the birthday calendar is not considered here. Ther is no use case since you cannot edit those events atm.
+        // note: the defautl alarm for the birthday calendar is not considered here. There is no use case since you cannot edit those events atm.
         getDefaultAlarms: function (event) {
             // no event or not fulltime (isAllday returns false for no event)
             if (!this.isAllday(event)) {
-                return settings.get('chronos/defaultAlarmDateTime', [{
-                    action: 'DISPLAY',
-                    description: '',
-                    trigger: { duration: '-PT15M', related: 'START' }
-                }]);
+                return settings.get('chronos/defaultAlarmDateTime', []);
             }
-            return settings.get('chronos/defaultAlarmDate', [{
-                action: 'DISPLAY',
-                description: '',
-                trigger: { duration: '-PT12H', related: 'START' }
-            }]);
+            return settings.get('chronos/defaultAlarmDate', []);
         },
 
         // checks if the user is allowed to edit an event

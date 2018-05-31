@@ -65,7 +65,7 @@ define('io.ox/core/main/icons', [
                 'io.ox/files': '<i class="fa fa-cloud">',
                 'io.ox/portal': '<i class="fa fa-th-large">',
                 'io.ox/tasks': '<i class="fa fa-check-square-o">',
-                'launcher': '<i class="fa fa-th">',
+                'launcher': '<i class="fa fa-th" aria-hidden="true">',
                 'fallback': '<i class="fa fa-question">'
             };
             exposeIcons();

@@ -107,7 +107,12 @@ define('io.ox/calendar/actions/create', [
         }
 
         // show warning for shared folders
-        api.get(params.folder).done(function (folder) {
+        api.get(params.folder).then(function (folder) {
+            if (api.can('create', folder)) return folder;
+            params.folder = settings.get('chronos/defaultFolderId');
+            return api.get(params.folder);
+        }).done(function (folder) {
+            if (!api.can('create', folder)) return;
             if (api.is('shared', folder)) showDialog(params, folder); else openEditDialog(params);
         });
     };

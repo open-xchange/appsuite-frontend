@@ -354,6 +354,13 @@ msgstr[1] "%1$s üksust valitud"
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s ümberpaigutus positsioonile %2$s / %3$s"
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Username must not be empty."
+msgid "%1$s must not be empty."
+msgstr "Kasutajanimi ei tohi olla tühi."
+
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -724,10 +731,6 @@ msgstr "Lisa avaliku kalendrina"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "Lisa avaliku kaustana"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1110,11 +1113,11 @@ msgstr "Kõik kaustad"
 msgid "All future appointments"
 msgstr ""
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1826,8 +1829,9 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4459,10 +4463,11 @@ msgstr "Kaustakohased tegevused"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Kaustad"
 
@@ -4562,7 +4567,9 @@ msgstr "Saada kõik saabuvad e-kirjad edasi sellele aadressile"
 msgid "Forward emails as"
 msgstr "Saada E-kirjad edasi kui"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Vaba"
 
@@ -4970,6 +4977,13 @@ msgid ""
 msgstr ""
 "Kui muudate parooli, logitakse teid välja. Veenduge selles, et kõik on "
 "suletud ja salvestatud."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6759,6 +6773,11 @@ msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "Üks automaatse sõnalõpetuse kirje leitud"
 msgstr[1] "%1$d automaatse sõnalõpetuse kirjet leitud"
 
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "One of the embedded images could not be used."
+msgstr ""
+
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
@@ -7295,6 +7314,10 @@ msgstr ""
 "Järgige selles sisalduvaid juhiseid ja naaske siis vidinasse konto "
 "seadistamise lõpetamiseks."
 
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
 msgstr "Palun kommenteerige oma kinnituse olekut."
@@ -7830,6 +7853,11 @@ msgstr "Purpurpunane"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
+msgstr ""
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
 msgstr ""
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
@@ -9293,6 +9321,12 @@ msgstr "Vabandame, selle faili eelvaade puudub."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Vabandame, selle pildi eelvaade puudub."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Vabandame, selle faili eelvaade puudub."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Vabandame, see lehekülg ei ole hetkel saadaval."
@@ -9795,6 +9829,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Kohtumised jagatud kalendrites"
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9995,6 +10036,8 @@ msgid "The series never ends."
 msgstr "Sari ei lõppe kunagi."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Seadistuse jõustumine eeldab uuesti laadimist või uuesti sisselogimist."
@@ -10486,6 +10529,10 @@ msgstr ""
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
+msgstr ""
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -11496,10 +11543,6 @@ msgstr "Te olete selle %s konto uuesti kinnitanud."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Olete kohtumisega esialgselt nõustunud"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Tellimiseks sisestage kasutajanimi ja parool."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -13561,6 +13604,9 @@ msgstr "teie platvorm"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Te olete selle konto uuesti lubanud."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Tellimiseks sisestage kasutajanimi ja parool."
 
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "

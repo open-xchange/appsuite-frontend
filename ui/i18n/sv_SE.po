@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-25 05:20+0200\n"
+"PO-Revision-Date: 2018-05-04 20:00+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -343,6 +343,13 @@ msgstr[1] "%1$s objekt markerade"
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s flyttad till position %2$s av %3$s"
+
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Login must not be empty."
+msgid "%1$s must not be empty."
+msgstr "Inloggning måste vara tom."
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -719,10 +726,6 @@ msgstr "Lägg till som offentlig kalender"
 msgid "Add as public folder"
 msgstr "Lägg till som offentlig mapp"
 
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Lägg till bilaga"
-
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add attachments"
@@ -1098,11 +1101,15 @@ msgstr "Alla mappar"
 msgid "All future appointments"
 msgstr "Alla framtida möten"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -1797,8 +1804,9 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4410,10 +4418,11 @@ msgstr "Mappspecifika åtgärder"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mappar"
 
@@ -4512,7 +4521,9 @@ msgstr "Vidarebefordra all inkommande e-post till denna adress"
 msgid "Forward emails as"
 msgstr "Vidarebefordra meddelande som"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Ledig"
 
@@ -4917,6 +4928,13 @@ msgid ""
 msgstr ""
 "Om du ändrar lösenordet kommer du loggas ut. Kontrollera att allt är stängt "
 "och sparat."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6543,11 +6561,9 @@ msgstr ""
 "det externa innehållet. Ändringar från appsuite kommer skrivas över"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
-msgstr "Anteckning"
+msgstr "Anteckningar"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notification"
@@ -6676,6 +6692,12 @@ msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "En autofyllpost hittades"
 msgstr[1] "%1$d autofyllposter hittades"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+msgid "One of the embedded images could not be used."
+msgstr "Filen kunde inte laddas upp."
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7207,6 +7229,10 @@ msgstr ""
 "\n"
 "Följ instruktionerna i meddelandet och återvänd sedan till komponenten för "
 "att slutföra kontoinställningen."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7742,6 +7768,13 @@ msgstr "Lila"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Lila/Magenta"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "Snabbstart 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9187,6 +9220,12 @@ msgstr "Det finns tyvärr ingen förhandsgranskning för den här filen."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Det finns tyvärr ingen förhandsgranskning för den här bilden."
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "Det finns tyvärr ingen förhandsgranskning för den här filen."
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "Sidan är tyvärr inte tillgänglig just nu."
@@ -9685,6 +9724,13 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Mötet är synligt för alla användare i delade kalendrar."
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9880,6 +9926,8 @@ msgid "The series never ends."
 msgstr "Serien slutar aldrig."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Inställningen kräver en omladdning, eller att du loggar ut och tillbaka in "
@@ -10385,6 +10433,10 @@ msgid ""
 msgstr ""
 "För att navigera mellan %1$s-programmen, klicka bara på den nya "
 "Programstartarikonen."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11393,10 +11445,6 @@ msgstr "%s-kontot är behörigt igen."
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Du har preliminärt accepterat mötet"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Du måste ange ett användarnamn och ett lösenord för att prenumerera."
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12884,6 +12932,9 @@ msgstr "din plattform"
 
 #~ msgid "Add account"
 #~ msgstr "Lägg till konto"
+
+#~ msgid "Add attachment"
+#~ msgstr "Lägg till bilaga"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Lägg till skifferkod"
@@ -15472,9 +15523,6 @@ msgstr "din plattform"
 #~ msgid "Load Error"
 #~ msgstr "Laddningsfel"
 
-#~ msgid "Login must not be empty."
-#~ msgstr "Inloggning måste vara tom."
-
 #~ msgid "Login not possible at the moment. Please try again later."
 #~ msgstr "Det går inte att logga in för tillfället. Försök igen senare."
 
@@ -16518,9 +16566,6 @@ msgstr "din plattform"
 #~ msgid "Put into cache failed."
 #~ msgstr "Lägga till i cacheminnet misslyckades."
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Snabbstart 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "Snabbstart 2"
 
@@ -17016,10 +17061,6 @@ msgstr "din plattform"
 
 #~ msgid "Sorry, common mails couldn't be assigned automatically."
 #~ msgstr "Tyvärr, gemensamma meddelanden kunde inte tilldelas automatiskt."
-
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Filen kunde inte laddas upp."
 
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
@@ -19500,6 +19541,10 @@ msgstr "din plattform"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Du behöver kontrollera kontots behörighet på nytt."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr ""
+#~ "Du måste ange ett användarnamn och ett lösenord för att prenumerera."
 
 #~ msgid "You need write permissions to lock a document."
 #~ msgstr "Du behöver skrivrättigheter för att låsa ett dokument."

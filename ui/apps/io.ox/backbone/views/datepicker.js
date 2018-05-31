@@ -480,7 +480,7 @@ define('io.ox/backbone/views/datepicker', [
                 var tabbable = this.$(':input, :button'),
                     index = tabbable.index(e.target),
                     lowOut = e.shiftKey && index === 0,
-                    highOut = !e.shiftKey && index === tabbable.length - 1;
+                    highOut = !e.shiftKey && index === tabbable.length - 1 && !!this.$target.length;
 
                 // apply focus trap
                 if (lowOut || highOut) e.preventDefault();
@@ -627,7 +627,7 @@ define('io.ox/backbone/views/datepicker', [
     });
 
     function isSame(a, b) {
-        return a.clone().startOf('day').isSame(b.clone().startOf('day'));
+        return a.isSame(b, 'day');
     }
 
     function isToday(m) {

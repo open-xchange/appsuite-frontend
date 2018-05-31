@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-26 19:15+0200\n"
+"PO-Revision-Date: 2018-05-13 14:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -323,6 +323,13 @@ msgstr[0] "%1$s 件のアイテムが選択されています。"
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s は %3$s 内の %2$s へ移動しました"
+
+#. %1$s is a name/label of an input field (for example: URL or Login)
+#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
+#, fuzzy, c-format
+#| msgid "Login must not be empty."
+msgid "%1$s must not be empty."
+msgstr "ログインには値が必要です。"
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -695,10 +702,6 @@ msgstr "パブリック予定表として追加"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Add as public folder"
 msgstr "パブリックフォルダに追加"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "添付ファイルを追加"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -1075,15 +1078,22 @@ msgstr "すべてのフォルダ"
 msgid "All future appointments"
 msgstr "これからのすべての予定"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] "%1$s からのこれからのメッセージは選択したフォルダへ移動します。"
+msgstr[1] ""
+"選択したメールの差出人からのこれからのメッセージは選択したフォルダへ移動しま"
+"す。"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "All groups"
@@ -1764,8 +1774,9 @@ msgstr "カメラ %1$s"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4369,10 +4380,11 @@ msgstr "フォルダアクション"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "フォルダ"
 
@@ -4471,7 +4483,9 @@ msgstr "すべての受信メールを次のアドレスに転送"
 msgid "Forward emails as"
 msgstr "メールの転送方法:"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "空き時間"
 
@@ -4876,6 +4890,12 @@ msgid ""
 msgstr ""
 "パスワードを変更すると、サインアウトされます。作業中のすべてのファイルを保存"
 "し、閉じてください。"
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6500,8 +6520,6 @@ msgstr ""
 "OX App Suite で変更した内容は上書きされます"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
 msgstr "メモ"
@@ -6631,6 +6649,14 @@ msgstr[0] "稼働日"
 msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "自動補完項目が１つ見つかりました。"
+msgstr[1] "自動補完項目が%1$dつ見つかりました。"
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sorry, the audio file could not be played."
+msgid "One of the embedded images could not be used."
+msgstr "このファイルをアップロードできませんでした。"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7164,6 +7190,10 @@ msgstr ""
 "\n"
 "メールの指示に従い、ウィジットを返信してアカウント設定を終了します。"
 
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
 msgstr "確認ステータスについてコメントください。"
@@ -7696,6 +7726,13 @@ msgstr "紫"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "紫／マゼンタ"
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Quick launch 1"
+msgid "Quick launch %s"
+msgstr "クイック起動 1"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -9129,6 +9166,12 @@ msgstr "このファイルに利用できるプレビューがありません。
 msgid "Sorry, there is no preview available for this image."
 msgstr "この画像に利用できるプレビューがありません。"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "Sorry, there is no preview available."
+msgstr "このファイルに利用できるプレビューがありません。"
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
 msgstr "このページは現在、利用できません。"
@@ -9623,6 +9666,12 @@ msgstr ""
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "共有予定表のすべてのユーザが予定を見ることができます。"
 
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9817,6 +9866,8 @@ msgid "The series never ends."
 msgstr "無期限に設定"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "設定を有効にするには、再読み込みするかログオンしなおしてください。"
 
@@ -9998,6 +10049,7 @@ msgstr "本ドキュメントはパスワードで保護されており、表示
 msgid "This email address cannot be used"
 msgid_plural "The following email addresses cannot be used: %1$d"
 msgstr[0] "このメールアドレスは、使用できません。"
+msgstr[1] "次メールアドレスは、使用できません：%1$d"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains a task"
@@ -10309,6 +10361,10 @@ msgid ""
 msgstr ""
 "新しいアプリケーションランチャーアイコンをクリックするだけで、%1$sつのアプリ"
 "ケーション間を移動できます。"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -11307,10 +11363,6 @@ msgstr "この %s アカウントを再認証しました。"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "予定を仮承諾しました。"
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "登録するには、ユーザ名とパスワードを入力してください。"
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
@@ -12609,6 +12661,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Add account"
 #~ msgstr "アカウントを追加"
+
+#~ msgid "Add attachment"
+#~ msgstr "添付ファイルを追加"
 
 #~ msgid "Add cipher code"
 #~ msgstr "暗号コードを追加"
@@ -16449,9 +16504,6 @@ msgstr "ご利用のプラットフォーム"
 #~ "ログインに失敗しました。ユーザ名とパスワードをチェックして、もう一度試して"
 #~ "ください。"
 
-#~ msgid "Login must not be empty."
-#~ msgstr "ログインには値が必要です。"
-
 #~ msgid "Login not possible at the moment, please try again later."
 #~ msgstr "現在ログインできません。後でもう一度試してください。"
 
@@ -17738,9 +17790,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Quick config"
 #~ msgstr "クイック構成"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "クイック起動 1"
-
 #~ msgid "Quick launch 2"
 #~ msgstr "クイック起動 2"
 
@@ -18490,9 +18539,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "正常にドキュメントを読み込めませんでした。"
-
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "このファイルをアップロードできませんでした。"
 
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "このファイルをアップロードできませんでした。"
@@ -20449,6 +20495,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "%s に次のアポイントがあります:"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "登録するには、ユーザ名とパスワードを入力してください。"
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "リダイレクトするには、メール アドレスを指定してください。"

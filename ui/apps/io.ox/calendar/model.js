@@ -251,6 +251,7 @@ define('io.ox/calendar/model', [
             this.onChangeFlags();
             this.on({
                 'change:startDate': this.onChangeStartDate,
+                'change:endDate': this.onChangeEndDate,
                 'change:flags': this.onChangeFlags
             });
         },
@@ -258,10 +259,19 @@ define('io.ox/calendar/model', [
             if (!this.adjustEndDate) return;
             if (this.changedAttributes().endDate) return;
             if (!this.has('endDate')) return;
-            var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
-            prevStartDate = util.getMoment(prevStartDate);
+            var prevStartDate = util.getMoment(this.previous('startDate')), endDate = this.getMoment('endDate');
             endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
             this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
+        },
+        onChangeEndDate: function () {
+            if (this.changedAttributes().startDate) return;
+            if (!this.has('startDate')) return;
+            if (this.getMoment('startDate').isBefore(this.getMoment('endDate'))) return;
+            var startDate = this.getMoment('startDate'), prevEndDate = util.getMoment(this.previous('endDate'));
+            startDate = this.getMoment('endDate').tz(startDate.tz()).add(startDate.diff(prevEndDate, 'ms'), 'ms');
+            this.adjustEndDate = false;
+            this.set('startDate', { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() });
+            this.adjustEndDate = false;
         },
         onChangeFlags: function () {
             this.flags = _.object(this.get('flags'), this.get('flags'));
@@ -333,6 +343,14 @@ define('io.ox/calendar/model', [
         },
         parse: function (res) {
             if (res.folder && res.id) res.cid = res.cid = util.cid(res);
+            // if there was a change to the model in the meantime, clear all attributes that are not in the response
+            // if we don't do this we get models with 2 states mixed into one (current but incomplete all request data vs complete but outdated get request data)
+            // this can lead to flags not matching up with the rest of the model for example
+            if (res.lastModified && this.get('lastModified') && res.lastModified !== this.get('lastModified')) {
+                for (var attr in this.attributes) {
+                    if (!_.has(res, attr)) this.unset(attr, { silent: true });
+                }
+            }
             return res;
         },
         getRruleMapModel: function () {
@@ -435,7 +453,7 @@ define('io.ox/calendar/model', [
                         return util.getMoment(event.startDate).valueOf();
                     })
                     .value();
-                self[method](data);
+                self[method](data, { parse: true });
                 self.trigger('load');
                 return data;
             }, function fail(err) {

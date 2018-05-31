@@ -283,6 +283,8 @@ define('io.ox/mail/api', [
             model = pool.get('detail').get(cid),
             cache = options && (options.cache !== undefined) ? options.cache : true;
 
+        if (model && util.authenticity('box', model.toJSON()) === 'trusted') obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
+
         // TODO: make this smarter
         if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 
@@ -301,15 +303,20 @@ define('io.ox/mail/api', [
             if (obj.src || obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
-            // split by ; because this field might contain further unwanted data
-            data.attachments.forEach(function (attachment) {
-                if (/^text\/(plain|html)/i.test(attachment.content_type)) {
-                    // only clean-up text and html; otherwise we lose data (see bug 43727)
-                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
-                    if (sanitize) attachment = sanitizer.sanitize(attachment);
-                }
-            });
+            if (_.isArray(data.attachments)) {
+                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+                // split by ; because this field might contain further unwanted data
+                data.attachments.forEach(function (attachment) {
+                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                        // only clean-up text and html; otherwise we lose data (see bug 43727)
+                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                        if (sanitize) attachment = sanitizer.sanitize(attachment);
+                    }
+                });
+            } else {
+                // make sure we always have data.attachments (see bug 58631)
+                data.attachments = [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
+            }
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads

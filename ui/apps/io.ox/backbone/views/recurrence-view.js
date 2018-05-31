@@ -17,8 +17,9 @@ define('io.ox/backbone/views/recurrence-view', [
     'io.ox/backbone/mini-views/datepicker',
     'gettext!io.ox/calendar/edit/main',
     'io.ox/calendar/util',
+    'settings!io.ox/calendar',
     'less!io.ox/backbone/views/recurrence-view'
-], function (ext, ModalDialog, mini, MiniDatepickerView, gt, util) {
+], function (ext, ModalDialog, mini, MiniDatepickerView, gt, util, settings) {
 
     var momentShorthands = ['d', 'w', 'M', 'y'],
         INDEX = 0,
@@ -44,13 +45,18 @@ define('io.ox/backbone/views/recurrence-view', [
         id: 'repeat',
         render: (function () {
             var NumberSelectView = mini.SelectView.extend({
+                getBitmask: function () {
+                    var bitmask = 0, i;
+                    for (i = 0; i < settings.get('numDaysWorkweek'); i++) bitmask += 1 << ((settings.get('workweekStart') + i) % 7);
+                    return bitmask;
+                },
                 onChange: function () {
                     var value = this.$el.val(),
                         recurrenceType = parseInt(value, 10),
                         days = this.model.get('days');
 
                     // special handling for workdays (62 is bitmask for workdays)
-                    if (value === '2:1') days = 62;
+                    if (value === '2:1') days = this.getBitmask();
                     if (this.model.get('every-weekday')) days = undefined;
                     this.model.set({
                         'recurrence_type': recurrenceType,

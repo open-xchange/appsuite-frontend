@@ -59,7 +59,7 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<div class="thread-view-header" role="banner">').attr('aria-label', gt('Conversation')),
+                    $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
                     this.$messages = $('<div class="thread-view list-view" role="region">')
                 )
             );
@@ -480,8 +480,8 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<div class="thread-view-header" role="banner">').attr('aria-label', gt('Conversation')),
-                    this.$messages = $('<ul class="thread-view list-view" role="main">')
+                    $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
+                    this.$messages = $('<ul class="thread-view list-view">')
                 )
             );
         }

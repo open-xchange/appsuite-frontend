@@ -89,7 +89,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             descriptionId = _.uniqueId('confirmation-dialog-description-');
 
                         if (!options.taskmode) {
-                            var strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings' });
+                            var strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings', zone: moment().tz() });
                             description = [
                                 $('<b>').text(appointmentData.summary),
                                 $.txt(', '),
