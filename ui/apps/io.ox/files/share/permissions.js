@@ -113,7 +113,7 @@ define('io.ox/files/share/permissions', [
             },
 
             isOwner: function (parentModel) {
-                if (!this.get('entity') || !parentModel || parentModel.getOwner) return;
+                if (!this.get('entity') || !parentModel || !_.isFunction(parentModel.getOwner)) return;
                 return this.get('entity') === parentModel.getOwner();
             },
 
