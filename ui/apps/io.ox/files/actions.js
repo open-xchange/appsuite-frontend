@@ -889,52 +889,59 @@ define('io.ox/files/actions', [
                             });
 
                         } else {
-                            permissionsToKeep = shareModel.getPermissions().filter(function (item) {
-                                if (item.type === 'anonymous' || ox.user_id === item.entity) {
-                                    return true;
+                            shareModel.reload().done(function () {
+                                permissionsToKeep = shareModel.getPermissions().filter(function (item) {
+                                    if (item.type === 'anonymous' || ox.user_id === item.entity) {
+                                        return true;
+                                    }
+                                    return false;
+                                });
+
+                                shareModel.setPermissions(permissionsToKeep);
+
+                                if (model.isFolder()) {
+                                    folderAPI.get(model.get('id')).done(function (folderDesc) {
+                                        folderModel = new folderAPI.FolderModel(folderDesc);
+                                        newPermissionList = folderModel.get('permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        folderAPI
+                                            .update(folderModel.get('id'), { permissions: newPermissionList })
+                                            .done(function () {
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
+                                } else {
+                                    api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
+                                        fileModel = new api.Model(fileDesc);
+                                        newPermissionList = fileModel.get('object_permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        api
+                                            .update(fileDesc, {
+                                                object_permissions: newPermissionList,
+                                                'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
+                                            })
+                                            .done(function () {
+                                                fileModel.destroy.bind(fileModel);
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
                                 }
-                                return false;
                             });
-
-                            shareModel.setPermissions(permissionsToKeep);
-
-                            if (model.isFolder()) {
-                                folderAPI.get(model.get('id')).done(function (folderDesc) {
-                                    folderModel = new folderAPI.FolderModel(folderDesc);
-                                    newPermissionList = folderModel.get('permissions').filter(function (item) {
-                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                    });
-                                    folderAPI
-                                        .update(folderModel.get('id'), { permissions: newPermissionList })
-                                        .done(yell('success', gt('Revoked access.')))
-                                        .fail(function (error) {
-                                            yell(error);
-                                        });
-                                });
-                            } else {
-                                api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
-                                    fileModel = new api.Model(fileDesc);
-                                    newPermissionList = fileModel.get('object_permissions').filter(function (item) {
-                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                    });
-                                    newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
-                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                    });
-                                    api
-                                        .update(fileDesc, {
-                                            object_permissions: newPermissionList,
-                                            'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
-                                        })
-                                        .done(function () {
-                                            fileModel.destroy.bind(fileModel);
-                                            yell('success', gt('Revoked access.'));
-                                        })
-                                        .fail(function (error) {
-                                            yell(error);
-                                        });
-                                });
-                            }
                         }
+                    })
+                    .fail(function (error) {
+                        yell(error);
                     });
                 }
             });

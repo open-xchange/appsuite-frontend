@@ -802,8 +802,15 @@ define('io.ox/files/share/permissions', [
         showByModel: function (model, options) {
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
-            model.loadExtendedPermissions().done(function () {
+            model.loadExtendedPermissions({ cache: false })
+            .done(function () {
                 that.show(model, options);
+            })
+            // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
+            // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
+            // -> check if this handling should be changed later so that the FLD-0003' is handled globally
+            .fail(function (error) {
+                yell(error);
             });
         },
 
@@ -899,11 +906,11 @@ define('io.ox/files/share/permissions', [
                 return permissionsView.collection.where({ type: 'guest' }).length > knownGuests.length;
             }
 
-            permissionsView.collection.on('reset', function () {
+            permissionsView.listenTo(permissionsView.collection, 'reset', function () {
                 dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
             });
 
-            permissionsView.collection.on('add remove', function () {
+            permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
                 if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
