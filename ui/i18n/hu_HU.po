@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-04 15:00+0200\n"
+"PO-Revision-Date: 2018-05-24 10:35+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -714,8 +714,9 @@ msgstr "Bezárás"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1584,7 +1585,9 @@ msgstr "Rács megjelenítése"
 msgid "Appointment types"
 msgstr "Találkozótípusok"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Szabad"
 
@@ -4137,6 +4140,14 @@ msgid "You cannot move items to this folder"
 msgstr "Nem mozgathat elemeket ebbe a mappába"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved into itself"
+msgstr "A mappát nem lehet áthelyezni önmagába"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved to one of its subfolders"
+msgstr "A mappa nem mozgatható az egyik almappájába."
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Várja meg, amíg az előző művelet befejeződik"
 
@@ -4470,14 +4481,16 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "A mappa tartalmaz publikációkat és/vagy feliratkozásokat"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Eltávolítás a kedvencek közül"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorites.js
 msgid "Add to favorites"
 msgstr "Hozzáadás a kedvencekhez"
@@ -4732,6 +4745,24 @@ msgstr "Nem érhető el"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "A kért alkalmazás jelenleg nem elérhető."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Az alábbi elem nyitva volt, amikor legutóbb kilépett a(z) %1$s programból."
+msgstr[1] "Az alábbi elemek nyitva voltak, amikor legutóbb kilépett a(z) %1$s programból."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Ha folytatni szeretné a szerkesztést, kattintson a \"Folytatás\" gombra."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] "Ha nem szeretné megtartani az elemet, kattintson a Törölt elemek ikonra."
+msgstr[1] "Ha nem szeretné megtartani egy elemet, kattintson a Törölt elemek ikonra."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5256,6 +5287,7 @@ msgid "Basic settings"
 msgstr "Alapbeállítások"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "A beállítás életbe lépéséhez újratöltés vagy újra bejelentkezés szükséges."
 
@@ -5362,9 +5394,11 @@ msgstr "A publikációnak rendelkeznie kell oldallal."
 msgid "Model is incomplete."
 msgstr "A modell befejezetlen."
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "A feliratkozáshoz meg kell adnia egy felhasználónevet és jelszót."
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "A(z) %1$s nem lehet üres."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
@@ -7579,15 +7613,14 @@ msgstr "Melléklet mentése"
 msgid "unknown sender"
 msgstr "ismeretlen feladó"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "A(z) %1$s feladótól érkező üzenetek mostantól a kiválasztott mappába kerülnek."
+msgstr[0] "A küldő összes jövőbeni üzenete átkerül a kiválasztott mappába."
 msgstr[1] "A kiválasztott levelek feladóitól érkező üzenetek mostantól a kiválasztott mappába kerülnek."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
@@ -7773,8 +7806,8 @@ msgid "Read"
 msgstr "Olvasás"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Show Links"
-msgstr "Linkek megjelenítése"
+msgid "Enable Links"
+msgstr "Linkek engedélyezése"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
@@ -7826,10 +7859,6 @@ msgstr "Elfelejtette a mellékletet?"
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Küldés melléklet nélkül"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Melléklet hozzáadása"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
@@ -10207,6 +10236,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "Jelenleg az alábbi eszközökkel jelentkezik be"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from all clients"
+msgstr "Kijelentkezés minden eszközből"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr "Valóban ki akar jelentkezni az összes ügyféllel, kivéve az aktuálisat?"
 
@@ -11861,6 +11894,26 @@ msgstr "Meghívás ide: %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "A feliratkozáshoz meg kell adnia egy felhasználónevet és jelszót."
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "A(z) %1$s feladótól érkező üzenetek mostantól a kiválasztott mappába "
+#~ "kerülnek."
+#~ msgstr[1] ""
+#~ "A kiválasztott levelek feladóitól érkező üzenetek mostantól a "
+#~ "kiválasztott mappába kerülnek."
+
+#~ msgid "Show Links"
+#~ msgstr "Linkek megjelenítése"
+
+#~ msgid "Add attachment"
+#~ msgstr "Melléklet hozzáadása"
 
 #~ msgid "Scheduling"
 #~ msgstr "Ütemezés"

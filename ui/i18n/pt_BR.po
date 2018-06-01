@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-09 07:44-0300\n"
-"Last-Translator: Bianca Oliveira <bianca@workshop-chapina.com >\n"
+"PO-Revision-Date: 2018-05-24 13:18-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
 "Language-Team: Portuguese <br@workshop-chapina.com>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.0.7\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -722,8 +722,9 @@ msgstr "Fechar"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1159,7 +1160,7 @@ msgstr "Inscrever"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "iCal feed has been imported successfully"
-msgstr "O feed do iCal foi importado com sucesso."
+msgstr "O feed do iCal foi importado com sucesso"
 
 #: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
 msgid "no color"
@@ -1614,7 +1615,9 @@ msgstr "Exibir grade fina"
 msgid "Appointment types"
 msgstr "Tipos de compromisso"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Livre"
 
@@ -4220,6 +4223,14 @@ msgid "You cannot move items to this folder"
 msgstr "Você não pode mover itens para esta pasta"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved into itself"
+msgstr "Uma pasta não pode ser movida para ela mesma"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved to one of its subfolders"
+msgstr "Uma pasta não pode ser movida para uma de suas subpastas"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Aguarde o término da operação anterior"
 
@@ -4562,14 +4573,16 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Esta pasta tem publicações e/ou inscrições"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Excluir dos favoritos"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorites.js
 msgid "Add to favorites"
 msgstr "Adicionar aos favoritos"
@@ -4829,6 +4842,24 @@ msgstr "Desconectado"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "O aplicativo requisitado não está disponível no momento."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "O item abaixo foi aberto a última vez que você saiu %1$s."
+msgstr[1] "Os itens abaixo foram abertos a última vez que você saiu %1$s."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Clique em \"Continuar\" se você gostaria de continuar editando."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] "Se você não deseja manter o item, clique no ícone da lixeira."
+msgstr[1] "Se você não deseja manter um item, clique no ícone da lixeira."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5372,6 +5403,7 @@ msgid "Basic settings"
 msgstr "Configurações básicas"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "O ajuste exige que você recarregue ou faça login novamente para que entre em "
@@ -5482,9 +5514,11 @@ msgstr "A publicação deve ter um site."
 msgid "Model is incomplete."
 msgstr "O modelo está incompleto."
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Você tem que inserir um nome de usuário e senha para se inscrever."
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s não deve ser vazio."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
@@ -7786,19 +7820,19 @@ msgstr "Salvar anexo"
 msgid "unknown sender"
 msgstr "remetente desconhecido"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Todas as mensagens futuras de %1$s serão movidas para a pasta selecionada."
+"Todas as futuras mensagens do remetente serão movidas para a pasta "
+"selecionada."
 msgstr[1] ""
-"Todas as mensagens futuras dos remetentes dos e-mails selecionados serão "
-"movidas para a pasta selecionada."
+"Todas as futuras mensagens dos remetentes serão movidas para a pasta "
+"selecionada."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7999,8 +8033,8 @@ msgid "Read"
 msgstr "Ler"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Show Links"
-msgstr "Mostrar links"
+msgid "Enable Links"
+msgstr "Habilitar links"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
@@ -8060,10 +8094,6 @@ msgstr "Esqueceu o anexo?"
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Enviar sem anexo"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Adicionar anexo"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
@@ -10482,6 +10512,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "Você está atualmente conectado com os seguintes dispositivos"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from all clients"
+msgstr "Encerrar a sessão de todos os clientes"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Você realmente deseja se desconectar de todos os clientes com exceção do "
@@ -11043,7 +11077,7 @@ msgstr "O que há de novo"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr ""
-"Para saber mais sobre os novos e aprimorados recursos você pode visitar"
+"Para saber mais sobre os novos e aprimorados recursos você pode visitar "
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -12193,6 +12227,25 @@ msgstr "Convidar para %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adicionar em %s"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Você tem que inserir um nome de usuário e senha para se inscrever."
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Todas as mensagens futuras de %1$s serão movidas para a pasta selecionada."
+#~ msgstr[1] ""
+#~ "Todas as mensagens futuras dos remetentes dos e-mails selecionados serão "
+#~ "movidas para a pasta selecionada."
+
+#~ msgid "Show Links"
+#~ msgstr "Mostrar links"
+
+#~ msgid "Add attachment"
+#~ msgstr "Adicionar anexo"
 
 #~ msgid "Scheduling"
 #~ msgstr "Agendamento"

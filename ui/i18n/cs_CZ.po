@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-20 09:33-0800\n"
+"PO-Revision-Date: 2018-05-25 11:27+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -717,8 +717,9 @@ msgstr "Zavřít"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1602,7 +1603,9 @@ msgstr "Zobrazit jemnou mřížku"
 msgid "Appointment types"
 msgstr "Druhy schůzek"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Volné"
 
@@ -4215,6 +4218,14 @@ msgid "You cannot move items to this folder"
 msgstr "Do této složky nelze přesouvat položky"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved into itself"
+msgstr "Složku nelze přesunout do sebe"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved to one of its subfolders"
+msgstr "Složku nelze přesunout do jedné ze svých podsložek"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Vyčkejte, prosím, až skončí předchozí operace"
 
@@ -4552,14 +4563,16 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Tato složka obsahuje publikace a/nebo přihlášení k odběru"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Odstranit z oblíbených"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorites.js
 msgid "Add to favorites"
 msgstr "Přidat do oblíbených"
@@ -4821,6 +4834,26 @@ msgstr "Offline režim"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "Požadovaná aplikace není momentálně dostupná."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Položka níže byla otevřená, když jste naposledy opustili %1$s."
+msgstr[1] "Položky níže byly otevřené, když jste naposledy opustili %1$s."
+msgstr[2] "Položky níže byly otevřené, když jste naposledy opustili %1$s."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Chcete-li pokračovat v editaci, klikněte, prosím, na „Pokračovat“."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] "Pokud si položku nepřejete zachovat, klikněte na ikonku koše."
+msgstr[1] "Pokud si položku nepřejete zachovat, klikněte na ikonku koše."
+msgstr[2] "Pokud si položku nepřejete zachovat, klikněte na ikonku koše."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5360,6 +5393,7 @@ msgid "Basic settings"
 msgstr "Základní nastavení"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
@@ -5468,9 +5502,11 @@ msgstr "Publikace musí mít stránku."
 msgid "Model is incomplete."
 msgstr "Model není kompletní."
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Chcete-li se přihlásit, musíte zadat uživatelské jméno a heslo."
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s nesmí být prázdné."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
@@ -7772,15 +7808,15 @@ msgstr "Uložit přílohu"
 msgid "unknown sender"
 msgstr "neznámý odesílatel"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "Všechny budoucí zprávy od %1$s budou přesunuty do vyznačené složky."
+msgstr[0] ""
+"Všechny budoucí zprávy od odesílatele budou přesunuty do vyznačené složky."
 msgstr[1] ""
 "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
 "vybrané složky."
@@ -7988,8 +8024,8 @@ msgid "Read"
 msgstr "Přečíst"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Show Links"
-msgstr "Zobrazit odkazy"
+msgid "Enable Links"
+msgstr "Povolit odkazy"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
@@ -8051,10 +8087,6 @@ msgstr "Zapomněl(a) jste na přílohu?"
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Odeslat bez příloh"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Přidat přílohu"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
@@ -10468,6 +10500,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "V tuto chvíli jste přihlášený(á) na následujících zařízeních"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from all clients"
+msgstr "Odhlásit se ze všech klientů"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr "Opravdu se chcete odhlásit ze všech klientů kromě aktuálního?"
 
@@ -12178,6 +12214,28 @@ msgstr "Pozvat na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Přidat do %s"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Chcete-li se přihlásit, musíte zadat uživatelské jméno a heslo."
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Všechny budoucí zprávy od %1$s budou přesunuty do vyznačené složky."
+#~ msgstr[1] ""
+#~ "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
+#~ "vybrané složky."
+#~ msgstr[2] ""
+#~ "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
+#~ "vybrané složky."
+
+#~ msgid "Show Links"
+#~ msgstr "Zobrazit odkazy"
+
+#~ msgid "Add attachment"
+#~ msgstr "Přidat přílohu"
 
 #~ msgid "Scheduling"
 #~ msgstr "Plánování"

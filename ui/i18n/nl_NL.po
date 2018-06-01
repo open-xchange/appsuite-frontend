@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-05 22:53+0100\n"
+"PO-Revision-Date: 2018-05-27 10:10+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -722,8 +722,9 @@ msgstr "Sluiten"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1617,7 +1618,9 @@ msgstr "Toon fijne schaal"
 msgid "Appointment types"
 msgstr "Afspraaktypes"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Vrij"
 
@@ -4241,6 +4244,14 @@ msgid "You cannot move items to this folder"
 msgstr "U kan geen items verplaatsen naar deze map"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved into itself"
+msgstr "Een map kan niet naar zichzelf verplaatst worden"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved to one of its subfolders"
+msgstr "Een map kan niet verplaatst worden naar één van haar submappen"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Ogenblik geduld alstublieft tot de vorige operatie is voltooid"
 
@@ -4582,14 +4593,16 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Deze map heeft publicaties en/of abonnementen"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Verwijder uit favorieten"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorites.js
 msgid "Add to favorites"
 msgstr "Toevoegen aan favorieten"
@@ -4852,6 +4865,26 @@ msgstr "Offline"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "De gevraagde applicatie is op dit moment niet beschikbaar."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Het onderstaande item was open tijdens het sluiten van %1$s."
+msgstr[1] "De onderstaande items waren open tijdens het sluiten van %1$s."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Klik alstublieft op \"Doorgaan\" als u door wilt gaan met bewerken."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Als u het item niet wilt behouden klikt u op het prullenbak pictogram."
+msgstr[1] ""
+"Als u de items niet wilt behouden klikt u op het prullenbak pictogram."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5396,6 +5429,7 @@ msgid "Basic settings"
 msgstr "Basisinstellingen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "De gemaakte wijziging vereist dat u de pagina ververst of dat u zich opnieuw "
@@ -5506,9 +5540,11 @@ msgstr "Publicatie moet een website hebben."
 msgid "Model is incomplete."
 msgstr "Model is niet compleet."
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "U moet een gebruikersnaam en wachtwoord ingeven om te abonneren."
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s mag niet leeg zijn."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
@@ -7825,19 +7861,19 @@ msgstr "Bijlage opslaan"
 msgid "unknown sender"
 msgstr "onbekende verzender"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Alle toekomstige berichten van %1$s worden verplaatst naar de gekozen map."
+"Alle toekomstige berichten van de verzender worden verplaatst naar de gekozen"
+" map."
 msgstr[1] ""
-"Alle toekomstige berichten van de verzenders van de gekozen e-mailberichten "
-"worden verplaatst naar de gekozen map."
+"Alle toekomstige berichten van de verzenders van de geselecteerde"
+" e-mailberichten worden verplaatst naar de gekozen map."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -8037,8 +8073,8 @@ msgid "Read"
 msgstr "Lezen"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Show Links"
-msgstr "Toon Links"
+msgid "Enable Links"
+msgstr "Links Inschakelen"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
@@ -8097,10 +8133,6 @@ msgstr "Bijlage vergeten?"
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Verzenden zonder een e-mailbijlage"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Voeg bijlage toe"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
@@ -10531,6 +10563,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "U bent momenteel aangemeld op de volgende apparaten"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from all clients"
+msgstr "Van alle apparaten afmelden"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Weet u zeker dat u van alle cliets wilt afmelden behalve van dit apparaat?"
@@ -12243,6 +12279,25 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "U moet een gebruikersnaam en wachtwoord ingeven om te abonneren."
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Alle toekomstige berichten van %1$s worden verplaatst naar de gekozen map."
+#~ msgstr[1] ""
+#~ "Alle toekomstige berichten van de verzenders van de gekozen e-"
+#~ "mailberichten worden verplaatst naar de gekozen map."
+
+#~ msgid "Show Links"
+#~ msgstr "Toon Links"
+
+#~ msgid "Add attachment"
+#~ msgstr "Voeg bijlage toe"
 
 #~ msgid "Scheduling"
 #~ msgstr "Planning"

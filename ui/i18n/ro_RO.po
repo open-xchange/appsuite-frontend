@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-07 11:26+0200\n"
+"PO-Revision-Date: 2018-05-26 09:52+0200\n"
 "Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -720,8 +720,9 @@ msgstr "Închide"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1607,7 +1608,9 @@ msgstr "Afișează grila fină"
 msgid "Appointment types"
 msgstr "Tipuri de întâlniri"
 
+#. State of an appointment (reserved or free)
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Liber"
 
@@ -4237,6 +4240,14 @@ msgid "You cannot move items to this folder"
 msgstr "Nu se pot muta elemente în acest dosar"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved into itself"
+msgstr "Dosarul nu poate fi mutat în el însuși."
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "A folder cannot be moved to one of its subfolders"
+msgstr "Dosarul nu poate fi mutat într-unul din dosarele sale subordonate"
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Așteptați finalizarea operației anterioare"
 
@@ -4577,14 +4588,16 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Dosarul conține publicații și/sau abonamente"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Elimină din favorite"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/contextmenu.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorites.js
 msgid "Add to favorites"
 msgstr "Adaugă la favorite"
@@ -4846,6 +4859,32 @@ msgstr "Offline"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr "Aplicația cerută nu este disponibilă momentan."
+
+#. %1$s is placeholder for the product name like "App Suite"
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+"Elementul de mai jos a rămas deschis când ați părăsit ultima dată %1$s."
+msgstr[1] ""
+"Elementele de mai jos au rămas deschise când ați părăsit ultima dată %1$s."
+msgstr[2] ""
+"Elementele de mai jos au rămas deschise când ați părăsit ultima dată %1$s."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Apăsați \"Continuă\" dacă doriți să continuați editarea."
+
+#: apps/io.ox/core/main/stages.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Dacă nu doriți să păstrați elementul, apăsați pe pictograma Coș de gunoi."
+msgstr[1] ""
+"Dacă nu doriți să păstrați elementele, apăsați pe pictograma Coș de gunoi."
+msgstr[2] ""
+"Dacă nu doriți să păstrați elementele, apăsați pe pictograma Coș de gunoi."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5387,6 +5426,7 @@ msgid "Basic settings"
 msgstr "Setări de bază"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Această setare necesită o reîncărcare sau o reautentificare pentru a avea "
@@ -5497,9 +5537,11 @@ msgstr "Publicația trebuie să aibă un amplasament."
 msgid "Model is incomplete."
 msgstr "Modelul nu este complet."
 
+#. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "You have to enter a username and password to subscribe."
-msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
+#, c-format
+msgid "%1$s must not be empty."
+msgstr "%1$s nu poate fi gol."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
@@ -7817,21 +7859,20 @@ msgstr "Salvează fișierul atașat"
 msgid "unknown sender"
 msgstr "expeditor necunoscut"
 
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s represents a single email address (non-essential information: can be left out)
+#. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, c-format
-msgid "All future messages from %1$s will be moved to the selected folder."
+msgid ""
+"All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Toate mesajele viitoare de la %1$s vor fi mutate în dosarul selectat."
+"Toate mesajele viitoare de la expeditor vor fi mutate în dosarul selectat."
 msgstr[1] ""
-"Toate mesajele viitoare de la expeditorii adreselor selectate vor fi mutate "
+"Toate mesajele viitoare de la expeditorii mesajelor selectate vor fi mutate "
 "în dosarul selectat."
 msgstr[2] ""
-"Toate mesajele viitoare de la expeditorii adreselor selectate vor fi mutate "
+"Toate mesajele viitoare de la expeditorii mesajelor selectate vor fi mutate "
 "în dosarul selectat."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
@@ -8034,8 +8075,8 @@ msgid "Read"
 msgstr "Citește"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Show Links"
-msgstr "Afișează legăturile"
+msgid "Enable Links"
+msgstr "Activează legăturile"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Links have been disabled to protect you against potential spam!"
@@ -8095,10 +8136,6 @@ msgstr "Ați uitat să atașați fișierul?"
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Trimis fără fișier atațat"
-
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-msgid "Add attachment"
-msgstr "Adaugă fișier atașat"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "It appears as if you forgot to attach a file."
@@ -10525,6 +10562,10 @@ msgid "You are currently signed in with the following devices"
 msgstr "În prezent sunteți conectat cu următoarele dispozitive"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from all clients"
+msgstr "Desconectare de la toți clienții"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Sigur doriți să vă desconectați de la toți clienții, cu excepția celui "
@@ -12249,6 +12290,28 @@ msgstr "Invită la %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Toate mesajele viitoare de la %1$s vor fi mutate în dosarul selectat."
+#~ msgstr[1] ""
+#~ "Toate mesajele viitoare de la expeditorii adreselor selectate vor fi "
+#~ "mutate în dosarul selectat."
+#~ msgstr[2] ""
+#~ "Toate mesajele viitoare de la expeditorii adreselor selectate vor fi "
+#~ "mutate în dosarul selectat."
+
+#~ msgid "Show Links"
+#~ msgstr "Afișează legăturile"
+
+#~ msgid "Add attachment"
+#~ msgstr "Adaugă fișier atașat"
 
 #~ msgid "Scheduling"
 #~ msgstr "Programare"
