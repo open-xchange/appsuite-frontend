@@ -430,8 +430,8 @@ define('io.ox/contacts/addressbook/popup', [
                 var $dropdown = this.$('.folder-dropdown'),
                     count = 0, self = this;
                 // remove global address book?
-                if (!useGlobalAddressBook && folders['public']) {
-                    folders['public'] = _(folders['public']).reject({ id: '6' });
+                if (!useGlobalAddressBook && folders.public) {
+                    folders.public = _(folders.public).reject({ id: '6' });
                 }
                 if (this.options.useGABOnly) {
                     folders = _.pick(folders, 'public');

@@ -40,6 +40,8 @@ OX App Suite help files
 %package        common
 Group:          Applications/Productivity
 Summary:        Language-independent files of online help for OX App Suite
+Obsoletes:      open-xchange-guard-help-common
+Provides:       open-xchange-guard-help-common
 
 %description    common
 Language-independent files of online help for OX App Suite
@@ -49,6 +51,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (de_DE)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-de-de
+Provides:      open-xchange-guard-help-de-de
 
 %description   de-de
 Online help for OX App Suite (de_DE)
@@ -58,6 +62,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (en_GB)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-en-gb
+Provides:      open-xchange-guard-help-en-gb
 
 %description   en-gb
 Online help for OX App Suite (en_GB)
@@ -67,6 +73,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (en_US)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-en-us
+Provides:      open-xchange-guard-help-en-us
 
 %description   en-us
 Online help for OX App Suite (en_US)
@@ -76,6 +84,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (es_ES)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-es-es
+Provides:      open-xchange-guard-help-es-es
 
 %description   es-es
 Online help for OX App Suite (es_ES)
@@ -85,6 +95,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (es_MX)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-es-mx
+Provides:      open-xchange-guard-help-es-mx
 
 %description   es-mx
 Online help for OX App Suite (es_MX)
@@ -94,6 +106,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (fr_FR)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-fr-fr
+Provides:      open-xchange-guard-help-fr-fr
 
 %description   fr-fr
 Online help for OX App Suite (fr_FR)
@@ -103,6 +117,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (it_IT)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-it-it
+Provides:      open-xchange-guard-help-it-it
 
 %description   it-it
 Online help for OX App Suite (it_IT)
@@ -112,6 +128,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (ja_JP)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-ja-jp
+Provides:      open-xchange-guard-help-ja-jp
 
 %description   ja-jp
 Online help for OX App Suite (ja_JP)
@@ -121,6 +139,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (nl_NL)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-nl-nl
+Provides:      open-xchange-guard-help-nl-nl
 
 %description   nl-nl
 Online help for OX App Suite (nl_NL)
@@ -130,6 +150,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (pl_PL)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-pl-pl
+Provides:      open-xchange-guard-help-pl-pl
 
 %description   pl-pl
 Online help for OX App Suite (pl_PL)
@@ -139,6 +161,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (zh_CN)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-zh-cn
+Provides:      open-xchange-guard-help-zh-cn
 
 %description   zh-cn
 Online help for OX App Suite (zh_CN)
@@ -148,6 +172,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (zh_TW)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-zh-tw
+Provides:      open-xchange-guard-help-zh-tw
 
 %description   zh-tw
 Online help for OX App Suite (zh_TW)

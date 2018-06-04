@@ -201,7 +201,7 @@ define('io.ox/calendar/edit/main', [
             create: function (data) {
                 data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
-                if (!data['class']) data['class'] = 'PUBLIC';
+                if (!data.class) data.class = 'PUBLIC';
                 this.edit(data, { mode: 'create' });
             },
 

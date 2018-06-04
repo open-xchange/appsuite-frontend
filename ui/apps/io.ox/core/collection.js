@@ -127,7 +127,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
                         props['delete:folder'] = props['delete:folder'] && api.can('delete:folder', item);
                         props['change:seen'] = props['change:seen'] && api.can('change:seen', item);
                         // we unify delete; otherwise the action checks are too complicated
-                        props['delete'] = props['delete'] && api.can('delete:folder', item);
+                        props.delete = props.delete && api.can('delete:folder', item);
 
                     } else if (objectPermission || folder) {
 
@@ -139,7 +139,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
                         // bug #52825, check if permission is granted by the folder or by the object
                         props.read = props.read && ((objectPermission && objectPermission.bits >= 1) || getRight(folder, created_by, 7));
                         props.modify = props.modify && ((objectPermission && objectPermission.bits >= 2) || getRight(folder, created_by, 14));
-                        props['delete'] = props['delete'] && ((objectPermission && objectPermission.bits >= 4) || getRight(folder, created_by, 21));
+                        props.delete = props.delete && ((objectPermission && objectPermission.bits >= 4) || getRight(folder, created_by, 21));
 
                         if (folder) {
                             // create new objects
@@ -149,7 +149,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
                     } else {
                         // folder unknown
                         props.unknown = true;
-                        props.read = props.modify = props['delete'] = props.create = props['change:seen'] = false;
+                        props.read = props.modify = props.delete = props.create = props['change:seen'] = false;
                         break;
                     }
                 }

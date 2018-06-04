@@ -103,7 +103,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
         requires: function (e) {
-            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1 && !capabilities.has('guest');
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/invite']).done(function (action) {
@@ -159,7 +159,9 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        requires: true,
+        requires: function () {
+            return !capabilities.has('guest');
+        },
         action: function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);

@@ -77,17 +77,103 @@ define('io.ox/metrics/extensions', [
     });
 
     point.extend({
-        id: 'settings',
+        id: 'topbar-logo',
         register: function () {
             var metrics = this;
-            $('#topbar-settings-dropdown').on('mousedown', 'a', function (e) {
-                var node = $(e.target).closest('a'),
-                    action = node.attr('data-action') || node.attr('class') || node.parent().attr('class');
+            metrics.watch({
+                node: $('#io-ox-appcontrol'),
+                selector: '#io-ox-top-logo',
+                type: 'click'
+            }, {
+                app: 'core',
+                target: 'topbar/logo',
+                type: 'click',
+                action: ''
+            });
+        }
+    });
+
+    point.extend({
+        id: 'topbar-quicklaunch',
+        register: function () {
+            var metrics = this;
+            $('#io-ox-appcontrol #io-ox-quicklaunch').on('mousedown', 'button', function (e) {
                 metrics.trackEvent({
                     app: 'core',
-                    target: 'toolbar',
+                    target: 'topbar/quicklaunch',
+                    type: 'click',
+                    action: $(e.currentTarget).attr('data-id')
+                });
+            });
+        }
+    });
+
+    point.extend({
+        id: 'topbar-taskbar',
+        register: function () {
+            var metrics = this;
+            $('#io-ox-appcontrol .taskbar').on('mousedown', 'li', function (e) {
+
+                // tracked in different extension
+                if ($(e.currentTarget).is('#io-ox-topbar-dropdown-icon')) return;
+                // ignore bubbled clicks in opened dropdowns
+                if ($(e.currentTarget).hasClass('dropdown') && $(e.currentTarget).hasClass('open')) return;
+
+                var isLauncher = $(e.currentTarget).hasClass('launcher') || ($(e.currentTarget).hasClass('dropdown')),
+                    value = isLauncher ? $(e.currentTarget).attr('id') : $(e.currentTarget).find('a').attr('data-id');
+
+                if (!value) return;
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'topbar/taskbar',
+                    type: 'click',
+                    action: value
+                });
+            });
+        }
+    });
+
+    point.extend({
+        id: 'topbar-settings-dropdown',
+        register: function () {
+            var metrics = this;
+
+            $('#io-ox-topbar-dropdown-icon').on('mousedown', function () {
+                // prevent tracking bubbled mousedown events
+                if ($(this).hasClass('open')) return;
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'topbar/settings',
+                    type: 'click',
+                    action: 'dropdown/open'
+                });
+            });
+
+            $('#topbar-settings-dropdown').on('mousedown', 'a', function (e) {
+                var node = $(e.target).closest('a'),
+                    action = node.attr('data-name') || node.attr('data-action') || node.attr('class') || node.parent().attr('class');
+
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'topbar/settings',
                     type: 'click',
                     action: action
+                });
+            });
+        }
+    });
+
+    point.extend({
+        id: 'halo',
+        register: function () {
+            var metrics = this;
+            $(document.documentElement).on('mousedown', '.halo-link', function () {
+                var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
+                metrics.trackEvent({
+                    app: 'core',
+                    type: 'click',
+                    action: 'halo',
+                    detail: _.last(app.get('name').split('/'))
                 });
             });
         }

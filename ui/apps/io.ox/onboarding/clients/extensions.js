@@ -230,7 +230,7 @@ define('io.ox/onboarding/clients/extensions', [
                     model: this.model,
                     list: this.config.getCodes()
                 }),
-                standard = this['default'];
+                standard = this.default;
             // adjust node
             select.render().$el
                 .removeClass('form-control')

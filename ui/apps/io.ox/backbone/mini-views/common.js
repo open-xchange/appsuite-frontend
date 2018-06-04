@@ -214,13 +214,13 @@ define('io.ox/backbone/mini-views/common', [
         el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
         getValue: function () {
-            return (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) ? this.options.customValues[this.isChecked()] : this.isChecked();
+            return (this.options.customValues && this.options.customValues.true && this.options.customValues.false) ? this.options.customValues[this.isChecked()] : this.isChecked();
         },
         setValue: function () {
             var val = this.model.get(this.name) || this.options.defaultVal;
-            if (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) {
+            if (this.options.customValues && this.options.customValues.true && this.options.customValues.false) {
                 // val = this.options.customValues['true'] === val;
-                val = _.isEqual(this.options.customValues['true'], val);
+                val = _.isEqual(this.options.customValues.true, val);
             } else {
                 // make true boolean
                 val = !!val;

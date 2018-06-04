@@ -282,7 +282,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             skin: 'lightgray'
         }, opt);
 
-        editor.addClass(opt['class']);
+        editor.addClass(opt.class);
 
         opt.toolbar1 += ' | ' + opt.advanced;
 

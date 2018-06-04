@@ -873,7 +873,7 @@ define('io.ox/core/folder/api', [
             cached = {};
 
         if (collection.fetched && options.cache === true) {
-            cached['private'] = collection.toJSON();
+            cached.private = collection.toJSON();
             ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
                 var collection = getFlatCollection(module, section);
                 if (collection.fetched) cached[section] = collection.toJSON();
@@ -927,7 +927,7 @@ define('io.ox/core/folder/api', [
                 collectionId;
 
             // inject public section if not presend
-            if (module === 'event' && !data['public']) data['public'] = [];
+            if (module === 'event' && !data.public) data.public = [];
 
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {

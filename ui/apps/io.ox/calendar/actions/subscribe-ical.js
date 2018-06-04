@@ -130,7 +130,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
             }).then(function () {
                 notifications.yell('success', gt('iCal feed has been imported successfully'));
                 self.close();
-            })['catch'](function (err) {
+            }).catch(function (err) {
                 if (/^ICAL-PROV-401(0|1|2|3)$/.test(err.code)) {
                     // trigger rerendering
                     var data = {
