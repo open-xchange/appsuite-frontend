@@ -377,7 +377,7 @@ define('io.ox/backbone/views/window', [
             });
         },
         onClick: function () {
-            if (!this.model.get('floating')) {
+            if (!this.model.get('floating') && this.model.get('win')) {
                 this.model.set('minimized', false);
                 this.model.get('win').app.launch();
                 return;
@@ -466,32 +466,54 @@ define('io.ox/backbone/views/window', [
     new TaskbarView().render();
 
     // used to add apps that do not use floating windows to the taskbar => office, planningview etc
-    var addNonFloatingApp = function (app) {
+    // options: lazyload - used by restore points to create taskbarentries without starting the app
+    var addNonFloatingApp = function (app, options) {
         if (!app) return;
 
-        var model = new WindowModel({
-            floating: false,
-            win: app.getWindow(),
-            title: app.getTitle() || '',
-            closable: true,
-            minimized: false,
-            taskbarIcon: app.get('userContentIcon')
-        });
+        // no duplicates
+        if (collection.findWhere({ appId: app.id }) && collection.findWhere({ appId: app.id }).get('win')) return;
 
-        app.on('change:title', function (app, title) { model.set('title', title); });
+        options = options || {};
 
-        model.once('quit', function () { app.quit(); });
-        app.once('quit', function () { model.trigger('close'); });
+        var model = collection.findWhere({ appId: app.id });
 
-        collection.add(model);
+        // in case of lazyloading a non floating app only the window is missing
+        if (model) {
+            model.set('win', app.getWindow());
+        } else {
+            model = new WindowModel({
+                floating: false,
+                win: app.getWindow(),
+                title: app.getTitle() || '',
+                closable: true,
+                minimized: !!options.lazyload,
+                taskbarIcon: app.get('userContentIcon'),
+                appId: app.id
+            });
+        }
+
+        if (!options.lazyload) {
+            app.on('change:title', function (app, title) { model.set('title', title); });
+
+            model.once('quit', function () { app.quit(); });
+            app.once('quit', function () { model.trigger('close'); });
+        }
+
+        if (!collection.findWhere({ appId: app.id })) collection.add(model);
         if (app.get('hideTaskbarEntry') === true) return;
 
-        var taskbarItem = new TaskbarElement({ model: model }).render();
-        app.getWindow().on('hide show', function () {
-            model.set('minimized', !this.state.visible);
-            // minimizing a window moves it to the last position
-            if (!this.state.visible) $('#io-ox-taskbar').append(taskbarItem.$el);
-        });
+        var taskbarItem = app.taskbarItem || new TaskbarElement({ model: model }).render();
+        app.taskbarItem = taskbarItem;
+
+        if (!options.lazyload) {
+            app.getWindow().on('hide show', function () {
+                model.set('minimized', !this.state.visible);
+                // minimizing a window moves it to the last position
+                if (!this.state.visible) $('#io-ox-taskbar').append(taskbarItem.$el);
+            });
+        }
+
+        return taskbarItem;
     };
 
     return {
