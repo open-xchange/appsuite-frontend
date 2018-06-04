@@ -210,7 +210,7 @@ define('io.ox/calendar/api', [
                             extendedEntities: true
                         },
                         data: list
-                    })['catch'](function (err) {
+                    }).catch(function (err) {
                         if (err.code !== 'CAL-5072') throw err;
                         // split list in half if error code suggested a too large list
                         var list1 = _(list).first(Math.ceil(list.length / 2)),

@@ -386,7 +386,7 @@ define('io.ox/calendar/model', [
     ext.point('io.ox/chronos/model/validation').extend({
         id: 'secret-used-with-resource',
         validate: function (attributes) {
-            if (attributes['class'] === 'PRIVATE' && _(_(attributes.attendees).pluck('cuType')).contains('RESOURCE')) {
+            if (attributes.class === 'PRIVATE' && _(_(attributes.attendees).pluck('cuType')).contains('RESOURCE')) {
                 //#. error text is displayed when an appointment is marked as secret but blocking a ressource (e.g. a conference room)
                 this.add('class', gt('You cannot mark the appointment as secret, when blocking a ressource.'));
             }

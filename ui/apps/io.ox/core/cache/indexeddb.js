@@ -190,7 +190,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 queue.remove(key);
                 return readwrite(function (cache) {
                     key = String(id + '//' + key);
-                    return OP(cache['delete'](key), 'delete');
+                    return OP(cache.delete(key), 'delete');
                 });
             },
 
@@ -308,7 +308,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 _(callbacks.step).each(function (fn) {
                     fn(event.target.result);
                 });
-                event.target.result['continue']();
+                event.target.result.continue();
             } else {
                 _(callbacks.end).each(function (fn) {
                     fn();

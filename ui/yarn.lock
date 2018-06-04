@@ -500,8 +500,8 @@ bower-config@^1.4.0:
     untildify "^2.1.0"
 
 brace-expansion@^1.1.7:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
@@ -1421,9 +1421,9 @@ escodegen@^1.8.0:
   optionalDependencies:
     source-map "~0.2.0"
 
-eslint-config-open-xchange-appsuite@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-open-xchange-appsuite/-/eslint-config-open-xchange-appsuite-0.3.2.tgz#b947e27052a5c7a9a31cc6a012cc12fa5b4fc06f"
+eslint-config-open-xchange-appsuite@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-open-xchange-appsuite/-/eslint-config-open-xchange-appsuite-0.4.0.tgz#162974ab1b1088ebb1fff3a5cf27d78a0003f681"
   dependencies:
     eslint-plugin-json "^1.2.0"
     eslint-plugin-requirejs "^3.1.1"
@@ -1441,8 +1441,8 @@ eslint-plugin-json@^1.2.0:
     jshint "^2.8.0"
 
 eslint-plugin-requirejs@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-requirejs/-/eslint-plugin-requirejs-3.1.1.tgz#ab3609d6472f37ea60995364723100abddc4e963"
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-requirejs/-/eslint-plugin-requirejs-3.2.0.tgz#ea5dcfcd9ce4f95e8e5ca83f74a1fdb3b84d697b"
 
 eslint-scope@^3.7.1:
   version "3.7.1"

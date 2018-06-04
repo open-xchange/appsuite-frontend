@@ -58,7 +58,7 @@ define('io.ox/calendar/folder-select-support', [
         if (!initialList) {
             // this is the case, when upgrading to the new calendar. all private appointments and allPublic should be checked
             folderAPI.flat({ module: 'calendar', all: true }).then(function (data) {
-                initialList = _(data['private']).pluck('id');
+                initialList = _(data.private).pluck('id');
                 if (capabilities.has('edit_public_folders')) initialList.push('cal://0/allPublic');
                 setFolders.call(self, initialList);
                 // make sure that all checkmarks are rendered

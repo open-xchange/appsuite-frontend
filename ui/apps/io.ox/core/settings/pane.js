@@ -74,7 +74,7 @@ define('io.ox/core/settings/pane', [
 
                         var availableThemes = settingOptions.get('themes') || {};
                         // until we get translated themes from backend
-                        if (availableThemes['default']) availableThemes['default'] = gt('Default Theme');
+                        if (availableThemes.default) availableThemes.default = gt('Default Theme');
                         // sort
                         return _(availableThemes)
                             .chain()
