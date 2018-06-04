@@ -83,8 +83,7 @@ define('io.ox/backbone/views/capture-media', [
                     var video = this.$('.stream'),
                         model = this.model,
                         data = model.toJSON(),
-                        oldstream = model.get('stream'),
-                        self = this;
+                        oldstream = model.get('stream');
                     this.$('button.btn-primary').attr('data-state', 'manual').prop('disabled', 'disabled').addClass('disabled');
                     if (_.isArray(data.devices) && data.devices.length === 0) return this.model.set('message', MESSAGES.nodevices);
 
@@ -110,7 +109,6 @@ define('io.ox/backbone/views/capture-media', [
                         model.set({ 'access': true, 'stream': stream, 'message': '' });
                         video[0].srcObject = stream;
                         //video.attr('src', window.URL.createObjectURL(stream));
-                        if (_.device('!desktop')) video.parent().off('tap .stream').on('tap .stream', function () { self.setStream(); });
                     }, function (e) {
                         model.set({ 'access': false, 'stream': undefined, 'message': e.message });
                     }).always(function () {
@@ -165,7 +163,10 @@ define('io.ox/backbone/views/capture-media', [
                     var self = this;
                     this.$body.append(
                         $('<div class="stream-container">').append(
-                            $('<video autoplay playsinline class="stream">').on('canplay', ready)
+                            $('<video autoplay playsinline class="stream">').on('canplay', ready),
+                            $('<button class="btn btn-link switchcamera" style="display:none;">').attr('title', gt('Switch camera')).append(
+                                $('<i class="fa fa-refresh" aria-hidden="true">')
+                            ).on('tap', function () { self.setStream(); })
                         )
                     );
 
@@ -176,6 +177,7 @@ define('io.ox/backbone/views/capture-media', [
                         self.$('.stream-container').removeClass('io-ox-busy');
                         // reset style to allow proper bound calculation
                         $(this).removeClass('hidden').removeAttr('style');
+                        if (_.device('!desktop')) self.$('.switchcamera').show();
                         // first time we could gather reliable data
                         var bounds = this.getBoundingClientRect();
                         // gather basic information
