@@ -83,7 +83,8 @@ define('io.ox/backbone/views/capture-media', [
                     var video = this.$('.stream'),
                         model = this.model,
                         data = model.toJSON(),
-                        oldstream = model.get('stream');
+                        oldstream = model.get('stream'),
+                        self = this;
                     this.$('button.btn-primary').attr('data-state', 'manual').prop('disabled', 'disabled').addClass('disabled');
                     if (_.isArray(data.devices) && data.devices.length === 0) return this.model.set('message', MESSAGES.nodevices);
 
@@ -94,6 +95,10 @@ define('io.ox/backbone/views/capture-media', [
                             // prefer front camera
                             { width: { ideal: 400 }, height: { ideal: 400 }, facingMode: 'user' }
                     };
+                    if (_.device('smartphone')) {
+                        this.facingMode = this.facingMode === 'user' ? 'environment' : 'user';
+                        constraints = { video: { facingMode: this.facingMode } };
+                    }
 
                     // duck check: when deferred is pending user is asked for permission
                     var showPendingMessage = setTimeout(function () {
@@ -103,7 +108,9 @@ define('io.ox/backbone/views/capture-media', [
                     video.addClass('hidden').attr('url', '').parent().addClass('io-ox-busy');
                     mediaDevices.getStream(constraints).then(function (stream) {
                         model.set({ 'access': true, 'stream': stream, 'message': '' });
-                        video.attr('src', window.URL.createObjectURL(stream));
+                        video[0].srcObject = stream;
+                        //video.attr('src', window.URL.createObjectURL(stream));
+                        if (_.device('!desktop')) video.parent().off('tap .stream').on('tap .stream', function () { self.setStream(); });
                     }, function (e) {
                         model.set({ 'access': false, 'stream': undefined, 'message': e.message });
                     }).always(function () {
@@ -138,6 +145,7 @@ define('io.ox/backbone/views/capture-media', [
                     });
                 },
                 'select-device': function () {
+                    if (_.device('!desktop')) return;
                     var container = $('<div class="devices">'),
                         guid = _.uniqueId('form-control-label-');
                     this.$body.append(container);
@@ -157,7 +165,7 @@ define('io.ox/backbone/views/capture-media', [
                     var self = this;
                     this.$body.append(
                         $('<div class="stream-container">').append(
-                            $('<video autoplay class="stream">').on('canplay', ready)
+                            $('<video autoplay playsinline class="stream">').on('canplay', ready)
                         )
                     );
 
@@ -185,13 +193,13 @@ define('io.ox/backbone/views/capture-media', [
                                 width: /landscape/.test(data.orientation) ? (length * data.ratio) : length
                             };
                         // store basic information as data attributes
-                        $(this).attr(data).css(sizes);
+                        $(this).attr(data);
+                        if (_.device('!smartphone')) $(this).css(sizes);
                     }
                 },
                 'init-end': function () {
                     // register listeners
                     if (navigator.mediaDevices) navigator.mediaDevices.ondevicechange = this.updateDevices.bind(this);
-
                     this.updateDevices();
                 }
             })
