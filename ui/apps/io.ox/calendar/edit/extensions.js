@@ -525,7 +525,7 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed',
         draw: function (baton) {
 
-            var typeahead = new AddParticipantView({
+            baton.parentView.addParticipantsView = baton.parentView.addParticipantsView || new AddParticipantView({
                 apiOptions: {
                     contacts: true,
                     users: true,
@@ -539,8 +539,8 @@ define('io.ox/calendar/edit/extensions', [
                 scrollIntoView: true
             });
 
-            this.append(typeahead.$el);
-            typeahead.render().$el.addClass('col-xs-12');
+            this.append(baton.parentView.addParticipantsView.$el);
+            baton.parentView.addParticipantsView.render().$el.addClass('col-xs-12');
         }
     });
 
@@ -785,7 +785,8 @@ define('io.ox/calendar/edit/extensions', [
                         data.dialog.close();
 
                         e.data.model.set({ startDate: appointment.startDate });
-
+                        // use initialrendering attribute to avoid autoscrolling
+                        e.data.app.view.addParticipantsView.initialRendering = true;
                         e.data.model.getAttendees().reset(appointment.attendees);
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({
