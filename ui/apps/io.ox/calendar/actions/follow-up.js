@@ -27,7 +27,7 @@ define('io.ox/calendar/actions/follow-up', [
         // check isBefore once for the startDate; then reuse that information for endDate (see bug 44647)
         var isBefore = false,
             isAllday = util.isAllday(model),
-            format = isAllday ? 'YYMMMDD' : 'YYYYMMDD[T]HHmmss';
+            format = isAllday ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
 
         // copy date/time
         ['startDate', 'endDate'].forEach(function (field) {
@@ -39,7 +39,7 @@ define('io.ox/calendar/actions/follow-up', [
                 d.add(1, 'w');
                 isBefore = true;
             }
-            copy[field] = { value: d.format(format), tzid: ref.tz() };
+            copy[field] = { value: d.format(format), tzid: model.get(field).tzid };
         });
 
         // clean up attendees (remove confirmation status comments etc)

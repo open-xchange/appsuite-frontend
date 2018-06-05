@@ -139,6 +139,8 @@ define('plugins/demo/customize/register', [
     }
 
     var updateStylesheet = _.debounce(function () {
+        var topbarPixels = 39 + (model.get('topbarSize') || 0) * 8,
+            topbarIndicatorTop = 8 + (model.get('topbarSize') || 0) * 4;
         $('#customize-css').text(
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
@@ -147,15 +149,18 @@ define('plugins/demo/customize/register', [
             '  background-image: ' + gradient(model) + (model.has('topbarColor1') || gradient(model) !== 'none' ? '!important' : '') + ';\n' +
             '}\n' +
             '#io-ox-appcontrol:before { display: none; }\n' +
-            '#io-ox-appcontrol #io-ox-launcher > button { height: ' + (39 + (model.get('topbarSize') || 0) * 8) + 'px}\n' +
+            '#io-ox-appcontrol #io-ox-launcher > button { height: ' + topbarPixels + 'px}\n' +
+            '#io-ox-appcontrol #io-ox-quicklaunch > button { height: ' + topbarPixels + 'px}\n' +
+            '#io-ox-appcontrol #io-ox-quicklaunch .indicator { top: ' + topbarIndicatorTop + 'px}\n' +
             '#io-ox-appcontrol .banner-logo {\n' +
             '  width: 60px; height: 100%;\n' +
             '  background-position: left center; background-origin: content-box; background-repeat: no-repeat;\n' +
             '}\n' +
             '#io-ox-appcontrol > div { display: flex; align-items: center; }\n' +
-            '#io-ox-top-productname { font-size: 24px; line-height: 32px; font-weight: 300; white-space: nowrap; margin: 0 16px; }\n' +
+            '#io-ox-top-productname { display: inline-block; font-size: 24px; line-height: 32px; font-weight: 300; white-space: nowrap; margin: 0 16px; line-height: ' + topbarPixels + 'px; }\n' +
             '#io-ox-banner .banner-logo.left { background-position: left; left: 0; }\n' +
             '.hide-small-logo #io-ox-top-logo { display: none; }\n' +
+            '#io-ox-top-logo { font-size: 24px; line-height: ' + topbarPixels + 'px; }\n' +
             // selection
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
             '.list-view.visible-selection.has-focus .list-item.selected:focus,\n' +
@@ -224,7 +229,7 @@ define('plugins/demo/customize/register', [
     // Show logo
     //
     model.on('change:showLogo', function (model, value) {
-        $('#io-ox-top-logo').toggle(value);
+        $('#io-ox-top-logo').css('display', value === true ? 'inline-block' : 'none');
     });
 
     //

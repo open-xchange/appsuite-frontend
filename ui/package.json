@@ -28,7 +28,7 @@
     "open-xchange-shared-grunt-config": "^0.15.0-pre2"
   },
   "devDependencies": {
-    "@open-xchange/codecept-helper": "0.0.4",
+    "@open-xchange/codecept-helper": "0.0.5",
     "appserver": "^0.7.0-pre9",
     "chai": "^4.0.2",
     "codeceptjs": "^1.1.6",

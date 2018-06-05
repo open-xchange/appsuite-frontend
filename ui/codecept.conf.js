@@ -19,7 +19,7 @@ module.exports.config = {
             'smartWait': 1000,
             'waitForTimeout': 30000,
             'browser': 'chrome',
-            'restart': false,
+            'restart': true,
             'windowSize': 'maximize',
             'desiredCapabilities': {
                 'browserName': 'chrome',
@@ -29,17 +29,14 @@ module.exports.config = {
                 'acceptSslCerts': true
             }
         }, localConf.e2e.helpers.WebDriverIO || {}),
-        OpenXchange: {
+        OpenXchange: _.extend({}, {
             require: './e2e/helper',
-            users: localConf.e2e.users || [{
-                username: 'tthamm',
-                password: 'secret',
-                mail: 'tthamm@ox-e2e-backend.novalocal'
-            }]
-        }
+            mxDomain: 'ox-e2e-backend.novalocal'
+        }, localConf.e2e.helpers.OpenXchange || {})
     },
     'include': {
-        'I': './e2e/actor'
+        'I': './e2e/actor',
+        'users': './e2e/users'
     },
     'bootstrap': function (done) {
         var chai = require('chai');

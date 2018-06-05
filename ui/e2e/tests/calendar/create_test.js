@@ -15,13 +15,20 @@ const expect = require('chai').expect;
 
 Feature('Calendar: Create new appointment');
 
+Before(async function (users) {
+    await users.create();
+});
+
+After(async function (users) {
+    await users.removeAll();
+});
+
 Scenario.skip('Create appointment with all fields', async function (I) {
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
-
-    I.setSetting('io.ox/core', 'autoOpenNotification', false);
-    I.setSetting('io.ox/core', 'showDesktopNotifications', false);
 
     I.selectFolder('All my appointments');
     I.clickToolbar('New');
@@ -93,8 +100,6 @@ Scenario('fullday appointments', async function (I) {
     I.clickToolbar('View');
     I.click('Week');
 
-    await I.removeAllAppointments();
-
     I.clickToolbar('New');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
     I.fillField('Subject', 'Fullday test');
@@ -120,7 +125,7 @@ Scenario('fullday appointments', async function (I) {
     });
     I.wait(0.5);
 
-    I.click('Fullday test', '.appointment');
+    I.click('Fullday test', '.weekview .appointment');
 
     I.see('5 days', '.io-ox-sidepopup .calendar-detail');
 
