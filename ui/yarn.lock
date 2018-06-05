@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@open-xchange/codecept-helper@git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#feature/provisioning":
-  version "0.0.4"
-  resolved "git+https://gitlab.open-xchange.com/frontend/codecept-helpers.git#21778a3459ede1eb4c71968582fefd282fcadb23"
+"@open-xchange/codecept-helper@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.5.tgz#222066aa8dfc344da2e424c596cc3935f66c61f6"
   dependencies:
     axios "^0.18.0"
     form-data "^2.3.2"
