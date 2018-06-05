@@ -20,8 +20,9 @@ define('plugins/portal/rss/register', [
     'io.ox/keychain/api',
     'io.ox/rss/api',
     'io.ox/core/tk/dialogs',
+    'io.ox/mail/sanitizer',
     'gettext!io.ox/portal'
-], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, dialogs, gt) {
+], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, dialogs, sanitizer, gt) {
 
     'use strict';
 
@@ -99,7 +100,7 @@ define('plugins/portal/rss/register', [
         draw: (function () {
 
             function drawItem(item) {
-                var $body = $('<div class="text-body noI18n">').html(item.body);
+                var $body = $('<div class="text-body noI18n">').html(sanitizer.simpleSanitize(item.body));
 
                 // add target to a tags
                 $body.find('a').attr({ target: '_blank', rel: 'noopener' });
@@ -109,7 +110,7 @@ define('plugins/portal/rss/register', [
                         $('<h4>').text(item.subject),
                         $body,
                         $('<div class="rss-url">').append(
-                            $('<a target="_blank" rel="noopener">').attr('href', item.url).text(item.feedTitle + ' - ' + moment(item.date).format('l'))
+                            $('<a target="_blank" rel="noopener">').attr('href', item.url).text((item.feedTitle ? item.feedTitle + ' - ' : '') + moment(item.date).format('l'))
                         )
                     )
                 );
