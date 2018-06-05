@@ -36,6 +36,9 @@ define('io.ox/files/favorite/listview', [
         // context menu when clicked below the list.
         // var linkOutsideList = link + '/outsideList'; Disabled for now
 
+        // no contextmenu event on small devices
+        if (_.device('smartphone')) { return; }
+
         var list = view.selection.get();
         if (!list) return;
         // turn cids into proper objects
