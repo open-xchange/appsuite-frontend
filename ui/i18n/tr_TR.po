@@ -9861,6 +9861,10 @@ msgstr ""
 msgid "Suspicious and unclassified emails only"
 msgstr ""
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr ""

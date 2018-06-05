@@ -9326,6 +9326,10 @@ msgstr "支持从 Chrome %1$d、Firefox %2$d、IE ％3$d、和 Safari %4$d 开�
 msgid "Suspicious and unclassified emails only"
 msgstr "只有可疑和不机密的电子邮件"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "切换至母文件夹。"

@@ -9556,6 +9556,10 @@ msgstr "Asistența începe cu Chrome %1$d, Firefox %2$d, IE %3$d și Safari %4$d
 msgid "Suspicious and unclassified emails only"
 msgstr "Doar mesajele suspicioase sau fără calificativ"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "Comutare pe dosarul părinte"

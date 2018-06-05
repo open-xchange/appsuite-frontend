@@ -9477,6 +9477,10 @@ msgstr "Stöd startar från Chrome %1$d, Firefox %2$d, IE %3$d och Safari %4$d."
 msgid "Suspicious and unclassified emails only"
 msgstr "Endast misstänkta och oklassificerade meddelanden"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "Växla till överliggande mapp"

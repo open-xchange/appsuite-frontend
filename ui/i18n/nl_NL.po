@@ -9548,6 +9548,10 @@ msgstr "Ondersteund vanaf Chrome %1$s, Firefox %2$d, IE %3$d en Safari %4$d."
 msgid "Suspicious and unclassified emails only"
 msgstr "Alleen verdachte en ongeclassificeerde e-mailberichten"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "Ga naar de bovenliggende map"

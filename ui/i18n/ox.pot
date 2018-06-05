@@ -748,6 +748,11 @@ msgstr ""
 msgid "Webcam"
 msgstr ""
 
+#: apps/io.ox/backbone/views/capture-media.js
+#: module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/backbone/views/datepicker.js
 #: module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
