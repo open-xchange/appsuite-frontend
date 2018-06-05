@@ -14,13 +14,13 @@
 define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/calendar/api',
     'io.ox/backbone/mini-views/alarms',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/core/notifications',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (calApi, AlarmsView, dialogs, folderAPI, util, notifications, settings, gt) {
+], function (calApi, AlarmsView, ModalDialog, folderAPI, util, notifications, settings, gt) {
 
     'use strict';
 
@@ -74,12 +74,13 @@ define('io.ox/calendar/actions/acceptdeny', [
                     );
                 }
 
-                return new dialogs.ModalDialog({
+                return new ModalDialog({
                     async: true,
-                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html'
+                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html',
+                    focus: _.device('smartphone') ? '' : '[data-property="comment"]',
+                    title: gt('Change confirmation status')
                 })
                     .build(function () {
-
                         if (!series && o.recurrenceId) {
                             appointmentData = api.removeRecurrenceInformation(appointmentData);
                         }
@@ -100,11 +101,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                             ];
                         }
 
-                        this.getPopup().attr('aria-describedby', descriptionId);
-                        this.getHeader().append(
-                            $('<h4 id="dialog-title">').text(gt('Change confirmation status'))
-                        );
-                        this.getContentNode().append(
+                        this.$el.attr('aria-describedby', descriptionId);
+                        this.$body.append(
                             confirmId !== ox.user_id ? $('<div class="alert alert-info">').text(gt('You are currently acting on behalf of the calendar owner.')) : '',
                             $('<p>').text(
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
@@ -122,17 +120,14 @@ define('io.ox/calendar/actions/acceptdeny', [
                             )
                         );
                     })
-                    .addSuccessButton('accepted', gt('Accept'), 'accepted')
-                    .addWarningButton('tentative', gt('Tentative'), 'tentative')
-                    .addDangerButton('declined', gt('Decline'), 'declined')
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-                    .on('cancel', function () {
-                        this.close();
-                    })
-                    .on('accepted tentative declined', function (e) {
-
-                        var action = e.type, dialog = this,
-                            message = $.trim(this.getContentNode().find('[data-property="comment"]').val()),
+                    .addCancelButton()
+                    .addButton({ action: 'declined', label: gt('Decline'), className: 'btn-danger' })
+                    .addButton({ action: 'tentative', label: gt('Tentative'), className: 'btn-warning' })
+                    .addButton({ action: 'accepted', label: gt('Accept'), className: 'btn-success' })
+                    .on('action', function (action) {
+                        if (action === 'cancel') return;
+                        var dialog = this,
+                            message = $.trim(this.$body.find('[data-property="comment"]').val()),
                             requestData;
 
                         function performConfirm(checkConflicts) {
@@ -194,31 +189,27 @@ define('io.ox/calendar/actions/acceptdeny', [
 
                         performConfirm(checkConflicts);
                     })
-                    .show(function () {
-                        // do not focus on mobiles. No, never, please. It does simply not work!
-                        if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
-                    });
+                    .open();
             });
             return def;
         }
 
         // series?
         if (!options.taskmode && o.recurrenceId && o.id === o.seriesId) {
-            return new dialogs.ModalDialog()
-                .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
-                .addPrimaryButton('series',
+            return new ModalDialog({ title: gt('Do you want to confirm the whole series or just one appointment within the series?') })
+                .build(function () {
+                    // no need for a dialog body
+                    this.$body.hide();
+                    this.$header.css('border-bottom', 'none');
+                })
+                .addCancelButton()
+                .addButton({ className: 'btn-default', label: gt('Appointment'), action: 'appointment' })
+                .addButton({ action: 'series',
                     //#. Use singular in this context
-                    gt('Series'), 'series')
-                .addButton('appointment', gt('Appointment'), 'appointment')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show()
-                .then(function (action) {
-                    if (action === 'cancel') {
-                        return;
-                    }
-                    _.defer(cont, action === 'series');
-                    return;
-                });
+                    label: gt('Series') })
+                .on('series', function () { _.defer(cont, true); })
+                .on('appointment', function () { _.defer(cont, false); })
+                .open();
         }
         return cont();
     };
