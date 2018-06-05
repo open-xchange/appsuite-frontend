@@ -112,7 +112,10 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
+            return !this.isFolder() && this.isDriveItem();
+        },
+        isDriveItem: function () {
+            return (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
         isSVG: function (type) {
