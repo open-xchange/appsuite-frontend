@@ -90,6 +90,8 @@ define('io.ox/core/desktop', [
             return this.get('title');
         },
 
+        getWindow: $.noop,
+
         saveRestorePoint: $.noop,
 
         call: $.noop
