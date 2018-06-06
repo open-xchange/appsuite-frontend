@@ -52,7 +52,7 @@ define('io.ox/calendar/actions/delete', [
             });
             if (hasSeries) {
                 var hasFirstOccurence = _(list).some(function (event) {
-                        return event.hasFlag('first_occurrence');
+                        return event.hasFlag('first_occurrence') || !event.hasFlag('organizer');
                     }),
                     dialog = new dialogs.ModalDialog();
 
