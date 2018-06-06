@@ -27,9 +27,10 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/addresspicker',
     'io.ox/backbone/mini-views/copy-to-clipboard',
+    'io.ox/core/folder/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard, util) {
 
     'use strict';
 
@@ -215,7 +216,12 @@ define('io.ox/files/share/wizard', [
         id: 'includeSubfolders',
         index: INDEX += 100,
         draw: function (baton) {
-            if (!baton.model.attributes || !baton.model.attributes.files) return;
+            var isDrive = _(baton.model.get('files')).every(function (model) {
+                return !model.isFolder() || util.is('drive', model.attributes);
+            });
+            if (!isDrive || !baton.model.attributes || !baton.model.attributes.files) {
+                return baton.model.set('includeSubfolders', false, { silent: true });
+            }
             var onlyFiles = true;
             _.each(baton.model.attributes.files, function (model) {
                 if (model.isFolder()) {
