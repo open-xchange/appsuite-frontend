@@ -238,7 +238,12 @@ define('io.ox/core/main/appcontrol', [
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model, pos: i + 1 }).render().$el
                         );
-                    })
+                    }),
+                    _.device('smartphone') ? this.collection.where({ closable: true }).map(function (model) {
+                        return $('<li role="presentation">').append(
+                            new LauncherView({ model: model }).render().$el
+                        );
+                    }) : []
                 )
             );
             return this;

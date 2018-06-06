@@ -39,13 +39,9 @@ define('io.ox/core/api/apps', [
             this._indexMap = createIndexMap();
         },
         forLauncher: function getAppsForLauncher() {
-            return [].concat(
-                this.filter(function (a) {
-                    return this._indexOf(a) >= 0;
-                }.bind(this))
-            ).concat(this.filter(function (a) {
-                return _.device('smartphone') && a.get('closable');
-            }));
+            return this.filter(function (a) {
+                return this._indexOf(a) >= 0;
+            }.bind(this));
         },
         _indexOf: function indexOf(app) {
             var index = this._indexMap[_.isString(app) ? app : app.id];
