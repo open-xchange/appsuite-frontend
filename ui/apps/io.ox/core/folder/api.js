@@ -633,7 +633,7 @@ define('io.ox/core/folder/api', [
         .pipe(function (data) {
             // update/add model
             var model = pool.addModel(data);
-            if (options.isReload && _(model.changed).size()) {
+            if (_(model.changed).size()) {
                 // use module here, so apis only listen to their own folders
                 api.trigger('changesAfterReloading:' + model.get('module'), model);
             }
@@ -1411,7 +1411,7 @@ define('io.ox/core/folder/api', [
     function reload() {
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             // register function call once
-            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false, isReload: true }), reload.wait);
+            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
             api.trigger('reload:' + id);
             reload.hash[id]();
         });
