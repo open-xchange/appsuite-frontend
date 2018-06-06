@@ -370,30 +370,6 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol').extend({
-        id: 'runningAppsMobile',
-        index: 1000,
-        draw: function () {
-            if (_.device('!smartphone')) return;
-
-            // add running app to menu
-            ox.ui.apps.on('add', function (model) {
-                if (model.get('closable')) {
-                    $('.launcher-dropdown').append(
-                        $('<li role="presentation">').append(
-                            new LauncherView({ model: model }).render().$el
-                        )
-                    );
-                }
-            });
-
-            // remove on close
-            ox.ui.apps.on('remove', function (model) {
-                $('.launcher-dropdown').find('[data-id="' + model.get('id') + '"]').parent().remove();
-            });
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol').extend({
         id: 'show',
         index: 10000,
         draw: function () {
