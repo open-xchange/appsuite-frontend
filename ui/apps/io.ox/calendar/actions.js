@@ -289,6 +289,13 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/move', {
         requires: function (e) {
             var isSeries = !!e.baton.data.recurrenceId;
+            // support for multi selection
+            if (_.isArray(e.baton.data)) {
+                isSeries = false;
+                _(e.baton.data).each(function (item) {
+                    if (!isSeries) isSeries = !!item.recurrenceId;
+                });
+            }
             return e.collection.has('some', 'delete') && util.hasFlag(e.baton.data, 'organizer') && !isSeries;
         },
         multiple: function (list, baton) {

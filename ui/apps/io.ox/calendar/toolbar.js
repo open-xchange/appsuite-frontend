@@ -220,6 +220,11 @@ define('io.ox/calendar/toolbar', [
                     list = list[0];
                     // add flags to draw items correctly
                     list.flags = this.listView.selection.getNode(this.listView.selection.get()).attr('data-flags') || '';
+                } else if (list.length > 1) {
+                    // add flags
+                    list = _(list).map(function (item) {
+                        return _.extend(item, { flags: app.listView.selection.getNode(util.cid(item)).attr('data-flags') || '' });
+                    });
                 }
                 // disable visible buttons
                 toolbarView.disableButtons();

@@ -1295,6 +1295,9 @@ define('io.ox/calendar/util', [
         },
 
         hasFlag: function (data, flag) {
+            // support for arrays (used in multiple selection). returns true if all items in the array have the flag
+            if (_.isArray(data) && data.length > 0) return _(data).reduce(function (oldVal, item) { return oldVal && that.hasFlag(item, flag); }, true);
+
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;

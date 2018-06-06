@@ -196,7 +196,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     function prepareUpdateToolbar(app) {
         var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : {};
         list = _(list).map(function (item) {
-            if (_.isString(item)) return util.cid(item);
+            if (_.isString(item)) item = _.extend(util.cid(item), { flags: app.listView.selection.getNode(item).attr('data-flags') || '' });
             return item;
         });
         app.updateToolbar(list);
