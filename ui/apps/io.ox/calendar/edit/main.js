@@ -386,7 +386,6 @@ define('io.ox/calendar/edit/main', [
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
-                        ox.trigger('launcher:toggleOverlay', false);
                     }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))

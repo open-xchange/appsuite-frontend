@@ -28,8 +28,6 @@ define('io.ox/core/main/appcontrol', [
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
 
-    ox.on('launcher:toggleOverlay', toggleOverlay);
-
     var LauncherView = Backbone.View.extend({
         tagName: 'a',
         className: 'btn btn-link lcell',
@@ -220,9 +218,6 @@ define('io.ox/core/main/appcontrol', [
         className: 'dropdown',
         id: 'io-ox-launcher',
         initialize: function () {
-            this.listenTo(ox, 'launcher:toggleOverlay', function () {
-                this.$('[data-toggle="dropdown"]').dropdown('toggle');
-            });
             this.listenTo(this.collection, 'add remove', function () {
                 this.$el.empty();
                 this.render();
