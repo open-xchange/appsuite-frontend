@@ -223,12 +223,10 @@ define('io.ox/core/main/appcontrol', [
             this.listenTo(ox, 'launcher:toggleOverlay', function () {
                 this.$('[data-toggle="dropdown"]').dropdown('toggle');
             });
-            this.listenTo(this.collection, 'add remove', this.redraw);
-            if (_.device('smartphone')) this.listenTo(this.collection, 'change:title', this.redraw);
-        },
-        redraw: function () {
-            this.$el.empty();
-            this.render();
+            this.listenTo(this.collection, 'add remove', function () {
+                this.$el.empty();
+                this.render();
+            });
         },
         render: function () {
             this.$el.append(
