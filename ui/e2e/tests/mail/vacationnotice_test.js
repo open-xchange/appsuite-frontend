@@ -92,7 +92,10 @@ Scenario('adds and removes a vacation notice', function (I, users) {
 
     I.click('.modal-dialog .checkbox.custom.small');
 
+    I.waitForElement('input[name="dateFrom"]:not([disabled])');
     I.seeElement('input[name="dateFrom"]:not([disabled])');
+
+    I.waitForElement('input[name="dateUntil"]:not([disabled])');
     I.seeElement('input[name="dateUntil"]:not([disabled])');
 
     I.click('Cancel', '.modal-footer');
