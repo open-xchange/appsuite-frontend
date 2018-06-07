@@ -133,13 +133,6 @@ define('io.ox/files/favorite/toolbar', [
         //
         // --- LO ----
         //
-        'encrypt': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Encrypt'),
-            ref: 'oxguard/encrypt',
-            section: 'guard'
-        },
         'showInDrive': {
             prio: 'lo',
             mobile: 'lo',
