@@ -66,9 +66,13 @@ define('io.ox/core/boot/login/token', [
             session.rampup(),
             hash.store === 'true' ? session.store() : $.when()
         )
-        .always(function () {
+        .done(function () {
             // fetch user config
             config.user().done(whoami);
+        })
+        .fail(function () {
+            util.debug('Session-based login FAILED', hash.session);
+            ox.trigger('login:fail:session-based');
         });
     }
 

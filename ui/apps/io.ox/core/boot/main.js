@@ -197,6 +197,11 @@ define.async('io.ox/core/boot/main', [
             if (!Stage.isRunning('io.ox/core/boot/login')) {
                 exports.start({ after: 'autologin' });
             } // Otherwise continue thru the other login stages
+        },
+
+        'login:fail:session-based': function () {
+            $('.throbber').hide();
+            $('#showstopper, #showstopper .session').show();
         }
     });
 
