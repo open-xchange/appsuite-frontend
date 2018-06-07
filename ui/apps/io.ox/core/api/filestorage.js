@@ -40,6 +40,7 @@ define('io.ox/core/api/filestorage', [
             ext.point('io.ox/core/filestorage/service-list').invoke('customize', services);
 
             _(accounts).each(function (account) {
+                account = !!account.get ? account.toJSON() : account;
                 if (_(services).indexOf(account.filestorageService) !== -1) {
                     idsCache.push(account.qualifiedId);
                 }
