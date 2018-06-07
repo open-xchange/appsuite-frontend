@@ -23,7 +23,7 @@ module.exports = actor({
     },
     openApp: function (name) {
         this.click('#io-ox-launcher');
-        this.click(name, '#io-ox-launcher');
+        this.click(name, '.launcher-dropdown');
     }
 
 });
