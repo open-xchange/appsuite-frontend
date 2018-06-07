@@ -63,7 +63,7 @@ define('io.ox/core/export', [
                     this.model.set('format', (_.first(baton.formats) || {}).value);
                     // apply visuals
                     this.$el.addClass('export-dialog')
-                            .find('.modal-content').css('height', 'initial');
+                            .find('.modal-content').css('height', 'auto');
                 },
                 'single-format': function (baton) {
                     if (baton.formats.length !== 1) return;
