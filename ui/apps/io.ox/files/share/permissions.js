@@ -945,7 +945,8 @@ define('io.ox/files/share/permissions', [
             dialog.$el.addClass('share-permissions-dialog');
 
             // add permissions view
-            dialog.$body.addClass(_.browser.IE < 12 ? 'IE11' : '').append(
+            // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
+            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').append(
                 permissionsView.render().$el
             );
 
