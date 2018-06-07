@@ -748,7 +748,7 @@ define('io.ox/mail/detail/content', [
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
-                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
+                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?(\.[\w-]+)+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^\)]+\)$/gm,
                 defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
