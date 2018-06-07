@@ -10,8 +10,6 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-const expect = require('chai').expect;
-
 Feature('Vacation notice');
 
 Before(async function (users) {
@@ -22,9 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds and removes a vacation notice', function (I, users) {
-    let [user] = users;
-
+Scenario('adds and removes a vacation notice', function (I) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.see('Basic settings', '.rightside h1');
@@ -73,9 +69,7 @@ Scenario('adds and removes a vacation notice', function (I, users) {
     I.waitForInvisible('[data-point="io.ox/mail/vacation-notice/edit"]');
 
     // check notification in mail
-    I.click('#io-ox-launcher');
-    I.seeElement('#io-ox-launcher a[data-app-name="io.ox/mail"]');
-    I.click('#io-ox-launcher a[data-app-name="io.ox/mail"]');
+    I.openApp('Mail');
     I.waitForElement('.window-container.io-ox-mail-window');
     I.waitForElement('a[data-action="edit-vacation-notice"]');
     I.seeElement('a[data-action="edit-vacation-notice"]');

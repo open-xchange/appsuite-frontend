@@ -48,8 +48,7 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.click('Add to portal', '.dropdown.open .dropdown-menu');
 
-    I.click('#io-ox-launcher button.launcher-btn');
-    I.click('Portal', { css: '#io-ox-launcher' });
+    I.openApp('Portal');
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
     I.waitForDetached({ css: '.widgets .widget.io-ox-busy' }, 20);
 

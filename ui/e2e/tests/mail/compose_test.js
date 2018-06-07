@@ -38,8 +38,7 @@ Scenario('Compose plain text mail', function (I, users) {
     I.checkOption({ css: '[name="messageFormat"][value="html"] + i' });
 
     // 1) Switch to the mail app, select "Create mail"
-    I.click('#io-ox-launcher button.launcher-btn');
-    I.click('Mail', { css: '#io-ox-launcher' });
+    I.openApp('Mail');
 
     // 1.1) Mark all messages as read to identify the new message later on
     I.selectFolder('Inbox');
