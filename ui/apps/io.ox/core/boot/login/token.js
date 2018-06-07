@@ -30,7 +30,8 @@ define('io.ox/core/boot/login/token', [
                 baton.stopPropagation();
                 ox.trigger('login:success');
             }, function () {
-                ox.trigger('login:fail');
+                util.debug('Session-based login FAILED', hash.session);
+                ox.trigger('login:fail:session-based');
             });
         }
     });
@@ -75,7 +76,7 @@ define('io.ox/core/boot/login/token', [
             session.rampup(),
             hash.store === 'true' ? session.store() : $.when()
         )
-        .always(function () {
+        .then(function () {
             // fetch user config
             config.user()
                 .then(whoami)

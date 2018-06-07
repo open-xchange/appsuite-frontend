@@ -59,6 +59,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('Offline mode');
         gt('Your browser\'s cookie functionality is disabled. Please turn it on.');
         gt('Connection timed out. Please try reloading the page.');
+        gt('Something went wrong. Please close this browser tab and try again.');
     }
     /* eslint-disable no-unused-vars */
 });
