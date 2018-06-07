@@ -137,7 +137,7 @@ define('io.ox/calendar/common-extensions', [
 
             // we don't show details for private appointments in shared/public folders (see bug 37971)
             var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder);
-            if (util.isPrivate(data) && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
+            if (util.isPrivate(data) && data.createdBy.entity !== ox.user_id && !folderAPI.is('private', folder)) return;
 
             var node = $('<table class="details-table expandable-content">');
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
