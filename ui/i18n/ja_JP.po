@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-29 13:37+0200\n"
+"PO-Revision-Date: 2018-06-07 15:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/backbone/extendedModel.js
 msgid "The dialog contains invalid data"
@@ -814,7 +814,7 @@ msgstr "参加者関連アクション"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
-msgstr "すべての参加者にメールを送信"
+msgstr "すべての参加者にメール送信"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Invite to new appointment"
@@ -2601,7 +2601,7 @@ msgstr "すべてのフィールドを表示"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
-msgstr "名前と会社名のどちらも入力されていません。"
+msgstr "名前と説明が未入力です。"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -8860,7 +8860,7 @@ msgstr "ウィジェットを無効化"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
-msgstr "ポータル"
+msgstr "ポータルの設定"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
@@ -9842,7 +9842,7 @@ msgstr "非常に悪い"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "I don't like it"
-msgstr "msgstr \"悪い\""
+msgstr "悪い"
 
 #. 3 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
