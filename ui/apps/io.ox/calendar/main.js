@@ -492,7 +492,8 @@ define('io.ox/calendar/main', [
                 'layout': view,
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'mobileFolderSelectMode': false,
-                'showMiniCalendar': app.settings.get('showMiniCalendar', true)
+                'showMiniCalendar': app.settings.get('showMiniCalendar', true),
+                'showMonthviewWeekend': app.settings.get('showMonthviewWeekend', true)
             });
 
             // convenience functions
@@ -546,6 +547,7 @@ define('io.ox/calendar/main', [
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .set('showMiniCalendar', data.showMiniCalendar)
+                    .set('showMonthviewWeekend', data.showMonthviewWeekend)
                     .save();
             }, 500));
         },

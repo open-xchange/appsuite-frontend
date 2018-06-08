@@ -25,9 +25,8 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/model',
-    'gettext!io.ox/calendar',
-    'io.ox/core/util'
-], function (View, api, capabilities, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt, coreUtil) {
+    'gettext!io.ox/calendar'
+], function (View, api, capabilities, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
@@ -36,17 +35,11 @@ define('io.ox/calendar/month/perspective', [
     _.extend(perspective, {
 
         scaffold:       $(),    // perspective
-        pane:           $(),    // scrollpane
-        monthInfo:      $(),    //
-        tops:           {},     // scrollTop positions of the shown weeks
-        firstMonth:     null,   // moment of the first month
-        lastMonth:      null,   // moment of the last month
-        updateLoad:     _.device('smartphone') ? 0 : 2,      // amount of months to be loaded on scroll events
-        initLoad:       2,      // amount of initial called updates
-        scrollOffset:   _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
-        currentView:    $(),    // the view with the current month
+        container:      $('<div class="month-container">'),    // container for table with month
+        monthInfo:      $('<span class="month-info">'),
+        currentView:    null,    // the view with the current month
         views:          {},     // all month views
-        current:        null,   // moment of current month
+        current:        moment().startOf('month'),   // moment of current month
         folder:         null,
         app:            null,   // the current application
         dialog:         $(),    // sidepopup
@@ -172,16 +165,21 @@ define('io.ox/calendar/month/perspective', [
         },
 
         updateMonths: function (useCache) {
-            // fetch appointments in a single call before loading collections
-            http.pause();
-            _(this.views).each(function (view) {
-                if (view.$el.hasClass('hidden')) return;
-                var collection = api.getCollection(view.getRequestParams());
-                view.setCollection(collection);
-                if (useCache === false) collection.expired = true;
-                collection.sync();
-            });
-            http.resume();
+            var self = this,
+                collection = api.getCollection(this.currentView.getRequestParams());
+            this.currentView.setCollection(collection);
+            if (useCache === false) {
+                _(this.views).forEach(function (view, identifier) {
+                    view.collection.expired = true;
+                    if (view === self.currentView) return;
+                    // remove view
+                    view.$el.off().removeData();
+                    view.off().stopListening();
+                    for (var id in view) if (view.hasOwnProperty(id)) view[id] = null;
+                    delete self.views[identifier];
+                });
+            }
+            collection.sync();
         },
 
         // re-trigger event on app
@@ -189,31 +187,8 @@ define('io.ox/calendar/month/perspective', [
             this.app.trigger(eventname, e, data, this.name);
         },
 
-        drawMonths: function (opt) {
+        drawMonths: function () {
             var self = this;
-
-            opt = _.extend({
-                up: false,
-                down: false
-            }, opt);
-
-            if (opt.up) {
-                this.firstMonth.subtract(1, 'month');
-                this.lastMonth.subtract(1, 'month');
-            } else if (opt.down) {
-                this.firstMonth.add(1, 'month');
-                this.lastMonth.add(1, 'month');
-            } else if (opt.date) {
-                this.firstMonth = moment(opt.date).startOf('month').subtract(this.updateLoad, 'months');
-                this.lastMonth = moment(opt.date).startOf('month').add(this.updateLoad, 'months');
-            }
-
-            this.current = this.firstMonth.clone().add(this.updateLoad, 'months');
-
-            // mark old views as expired
-            _(this.views).each(function (view) {
-                view.$el.addClass('hidden');
-            });
 
             function createOrReuseView(options) {
 
@@ -222,7 +197,6 @@ define('io.ox/calendar/month/perspective', [
                     collection;
 
                 if (!view) {
-
                     view = self.views[identifier] = new View(options)
                         .on('showAppointment', self.showAppointment, self)
                         .on('showAppointment', _.bind(self.bubble, self, 'showAppointment'))
@@ -240,21 +214,18 @@ define('io.ox/calendar/month/perspective', [
                 return view;
             }
 
-            for (var curMonth = this.firstMonth.clone(); curMonth.isSameOrBefore(this.lastMonth); curMonth.add(1, 'month')) {
+            var view = createOrReuseView({
+                start: this.current,
+                folders: this.folders,
+                app: this.app,
+                perspective: this
+            });
 
-                var view = createOrReuseView({
-                    start: curMonth.clone(),
-                    folders: this.folders,
-                    pane: this.pane,
-                    app: this.app,
-                    perspective: this
-                });
+            if (this.currentView) this.currentView.$el.detach();
+            this.container.append(view.$el);
 
-                this.pane.append(view.$el);
+            this.currentView = view;
 
-                if (this.current.isSame(curMonth, 'month')) this.currentView = view;
-
-            }
             if (_.device('ie && ie <= 11')) {
                 this.calculateHeights();
             }
@@ -311,7 +282,7 @@ define('io.ox/calendar/month/perspective', [
          */
         gotoMonth: function (target) {
 
-            var self = this, previous = this.current;
+            var previous = this.current;
 
             target = target || moment();
 
@@ -322,20 +293,13 @@ define('io.ox/calendar/month/perspective', [
                 else throw Object({ message: 'Unknown target ' + target });
             }
 
-            var firstDay = $('#' + target.format('YYYY-MM'), self.pane),
-                scrollToDate = function () {
-                    if (_.device('smartphone')) return;
-                    if (firstDay.length === 0) return;
-                    firstDay.get(0).scrollIntoView();
-                };
+            this.current = moment(target);
+            this.monthInfo.text(this.current.format('MMMM YYYY'));
 
-            this.drawMonths({ date: target });
-            firstDay = $('#' + target.format('YYYY-MM'), self.pane);
-            scrollToDate();
+            if (this.current.isSame(previous, 'month') && this.currentView) return;
 
-            if (!this.current.isSame(previous, 'month')) {
-                this.app.setDate(moment([this.current.year(), this.current.month()]));
-            }
+            this.drawMonths();
+            this.app.setDate(moment([this.current.year(), this.current.month()]));
         },
 
         /**
@@ -377,16 +341,16 @@ define('io.ox/calendar/month/perspective', [
             });
         },
 
-        refresh: function () {
+        refresh: function (useCache) {
             var self = this;
             this.getFolder().done(function () {
-                self.update();
+                self.update(useCache);
             });
         },
 
         render: function (app) {
-
-            var self = this;
+            var self = this,
+                toolbar = $('<div class="month-toolbar">');
             this.app = app;
             this.current = app.getDate().startOf('month');
             this.previous = moment(this.current).subtract(1, 'month');
@@ -399,7 +363,10 @@ define('io.ox/calendar/month/perspective', [
                 .attr({
                     'aria-label': gt('Calendar Month View')
                 })
-                .append(this.scaffold = View.drawScaffold());
+                .append(
+                    toolbar,
+                    this.container.addClass(this.app.props.get('showMonthviewWeekend') ? 'weekends' : '')
+                );
 
             var refresh = function () {
                 self.refresh();
@@ -411,12 +378,9 @@ define('io.ox/calendar/month/perspective', [
                 });
             };
 
-            this.pane = $('.scrollpane', this.scaffold);
-
             if (_.device('!smartphone')) {
-                var toolbarNode = $('<div>')
-                    .addClass('controls-container')
-                    .append(
+                toolbar.append(
+                    $('<div>').addClass('controls-container').append(
                         $('<a href="#" role="button" class="control prev">').attr('title', gt('Previous')).append(
                             $('<i class="fa fa-chevron-left" aria-hidden="true">')
                         )
@@ -431,38 +395,19 @@ define('io.ox/calendar/month/perspective', [
                             e.preventDefault();
                             this.gotoMonth('next');
                         }, this))
-                    );
-
-                // prepend toolbar to month view
-                this.scaffold.prepend(toolbarNode);
-            }
-
-            if (!_.device('smartphone')) {
-                this.pane
-                    .css('right', -coreUtil.getScrollBarWidth() + 'px')
-                    .on('scroll', _.throttle($.proxy(function (e) {
-                        var $current = this.currentView.$el,
-                            current = $current.get(0),
-                            top = current.offsetTop,
-                            height = current.offsetHeight,
-                            scrollTop = e.target.scrollTop;
-                        if (top + height < scrollTop) {
-                            this.drawMonths({ down: true });
-                            e.target.scrollTop = scrollTop + current.offsetTop - top;
-                        } else if (top > scrollTop + e.target.offsetHeight) {
-                            this.drawMonths({ up: true });
-                            e.target.scrollTop = scrollTop + current.offsetTop - top;
-                        }
-                    }, this), 20))
-                    .on('scrollend', $.proxy(function () {
-                        this.app.setDate(moment([this.current.year(), this.current.month()]), { silent: true });
-                    }, this));
+                    ),
+                    this.monthInfo
+                );
             }
 
             app.props.on('change:date', function (model, value) {
-                if (!this.pane.is(':visible')) return;
+                if (!this.container.is(':visible')) return;
                 if (ox.debug) console.log('month: change date by app', value);
                 this.gotoMonth(app.getDate());
+            }.bind(this));
+
+            app.props.on('change:showMonthviewWeekend', function (model, value) {
+                this.container.toggleClass('weekends', value);
             }.bind(this));
 
             if (_.device('ie && ie <= 11')) {
@@ -473,14 +418,6 @@ define('io.ox/calendar/month/perspective', [
                 self.drawMonths();
                 self.gotoMonth();
             });
-
-            if (_.keys(this.tops).length <= 1) {
-                // when this page is shown for the first time and has no tops (means it is invisible) we have to wait until it is show and afterwards select the month
-                // this requires special handling since gotoMonth uses scrollIntoView() which needs the page to be visible.
-                self.app.pages.getPageObject(self.name).$el.one('animationstart', function () {
-                    self.gotoMonth();
-                });
-            }
 
             this.main
                 .on('keydown', function (e) {
@@ -537,15 +474,6 @@ define('io.ox/calendar/month/perspective', [
                 if (model.get('module') !== 'calendar') return;
                 if (!model.changed['com.openexchange.calendar.extendedProperties']) return;
                 self.updateColor(model);
-            });
-
-            // adjust scrolltop manually on folderview change (see Bug 56691)
-            var topToHeight;
-            this.app.on('before:change:folderview', function () {
-                topToHeight = self.pane.scrollTop() / self.pane.prop('scrollHeight');
-            });
-            this.app.props.on('change:folderview', function () {
-                self.pane.scrollTop(topToHeight * self.pane.prop('scrollHeight'));
             });
         },
 

@@ -170,16 +170,20 @@ define('io.ox/calendar/toolbar', [
             .option('layout', 'week:day', gt('Day'), { radio: true });
             if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true });
             dropdown.option('layout', 'week:week', gt('Week'), { radio: true })
-            .option('layout', 'month', gt('Month'), { radio: true })
-            .option('layout', 'year', gt('Year'), { radio: true })
-            .option('layout', 'list', gt('List'), { radio: true })
-            .divider()
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'))
-            .option('showMiniCalendar', true, gt('Mini calendar'))
-            .option('checkboxes', true, gt('Checkboxes'))
-            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
-            .listenTo(baton.app.props, 'change:layout', updateColorOption);
+                .option('layout', 'month', gt('Month'), { radio: true })
+                .option('layout', 'year', gt('Year'), { radio: true })
+                .option('layout', 'list', gt('List'), { radio: true })
+                .divider()
+                .header(gt('Options'))
+                .option('folderview', true, gt('Folder view'))
+                .option('showMiniCalendar', true, gt('Mini calendar'));
+
+            if (baton.app.props.get('layout') === 'month') dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
+
+            dropdown
+                .option('checkboxes', true, gt('Checkboxes'))
+                .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
+                .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
             if (capabilities.has('calendar-printing') && baton.app.props.get('layout') !== 'year') {
                 dropdown

@@ -41,7 +41,8 @@ define('io.ox/calendar/month/view', [
                 'click .appointment':      'onClickAppointment',
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
-                'mouseleave .appointment': 'onLeaveAppointment'
+                'mouseleave .appointment': 'onLeaveAppointment',
+                'mousewheel': 'onMousewheel'
             };
 
             if (_.device('touch')) {
@@ -55,10 +56,10 @@ define('io.ox/calendar/month/view', [
         }()),
 
         initialize: function (options) {
-            this.start = moment(options.start);
-            this.end = moment(options.start).endOf('month');
+            this.start = moment(options.start).startOf('month').startOf('week');
+            this.end = moment(options.start).endOf('month').endOf('week');
+            this.month = moment(options.start).startOf('month');
             this.folders = options.folders;
-            this.pane = options.pane;
             this.app = options.app;
             this.perspective = options.perspective;
             this.weekType = options.weekType;
@@ -88,20 +89,20 @@ define('io.ox/calendar/month/view', [
 
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
-                cT = $('[data-cid="' + cid + '"]', this.pane);
+                cT = this.$('[data-cid="' + cid + '"]');
             if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = util.cid(String(cid));
 
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     self.trigger('showAppointment', e, obj);
-                    self.pane.find('.appointment')
+                    this.$('.appointment')
                         .removeClass('current opac')
-                        .not($('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.pane))
+                        .not(this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]'))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac');
-                    $('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.pane).addClass('current');
+                    this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]').addClass('current');
                 } else {
-                    $('.appointment', self.pane).removeClass('opac');
+                    this.$('.appointment').removeClass('opac');
                 }
 
                 if (self.clickTimer === null && self.clicks === 0) {
@@ -139,7 +140,7 @@ define('io.ox/calendar/month/view', [
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
-                el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
+                el = this.$('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible'),
                 bg = el.data('background-color');
             el.addClass('hover');
             if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
@@ -148,11 +149,19 @@ define('io.ox/calendar/month/view', [
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
-                el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
+                el = this.$('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible'),
                 bg = el.data('background-color');
             el.removeClass('hover');
             if (bg) el.css('background-color', bg);
         },
+
+        onMousewheel: _.throttle(function (e) {
+            console.log(e);
+            var target = $(e.currentTarget),
+                scrollpane = target.closest('.list.abs');
+            if (scrollpane.prop('scrollHeight') > scrollpane.height) return;
+            this.perspective.gotoMonth(e.originalEvent.wheelDelta > 0 ? 'next' : 'prev');
+        }, 100),
 
         // handler for mobile month view day-change
         changeToSelectedDay: function (timestamp) {
@@ -169,113 +178,52 @@ define('io.ox/calendar/month/view', [
             return false;
         },
 
-        render: (function () {
-            function getRow(date) {
-                var row = $('<tr class="week">');
-                if (_.device('!smartphone')) {
-                    row.append(
-                        $('<td class="week-info">').append(
-                            $('<span>').addClass('cw').text(
-                                gt('CW %1$d', date.format('w'))
-                            )
-                        )
-                    );
-                }
-                return row;
-            }
+        render: function render() {
+            var self = this,
+                day = moment(this.start),
+                row = $('<tr class="week">');
 
-            function getEmptyCell() {
-                //#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-                return $('<td class="day-filler">').append($('<div class="sr-only">').text(gt('Empty table cell')));
-            }
-
-            function subtractDays(a, b) {
-                var result = (a - b) % 7;
-                if (result < 0) result += 7;
-                return result;
-            }
-
-            return function render() {
-                var self = this,
-                    day = moment(this.start),
-                    firstDayOfWeek = moment.localeData().firstDayOfWeek(),
-                    lastDayOfWeek = firstDayOfWeek + 6 % 7,
-                    row = getRow(day),
-                    i, end;
-
-                this.$el.empty().append(
-                    $('<caption class="week month-name">')
-                        .attr('id', this.start.format('YYYY-MM'))
+            // add days
+            for (; day.isBefore(this.end); day.add(1, 'day')) {
+                var dayCell = $('<td>');
+                row.append(
+                    dayCell.addClass('day')
+                        .attr({
+                            id: day.format('YYYY-M-D'),
+                            //#. %1$s is a date: october 12th 2017 for example
+                            title: gt('Selected - %1$s', day.format('ddd LL'))
+                        })
+                        .data('date', day.valueOf())
                         .append(
-                            $('<h1 class="unstyled">')
-                                .text(this.start.format('MMMM YYYY'))
+                            $('<div class="number" aria-hidden="true">').append(
+                                day.isSame(self.start, 'week') ? $('<span class="day-label">').text(day.format('ddd')) : '',
+                                day.date()
+                            ),
+                            $('<div class="list abs">')
                         )
                 );
 
-                // prepend empty days
-                end = subtractDays(day.day(), firstDayOfWeek);
-                for (i = 0; i < end; i++) row.append(getEmptyCell());
-                row.children().last().addClass('borderright');
+                if (day.isSame(moment(), 'day')) dayCell.addClass('today');
+                if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
+                if (!day.isSame(this.month, 'month')) dayCell.addClass('out');
 
-                // add days
-                for (; day.isBefore(this.end); day.add(1, 'day')) {
-                    var dayCell = $('<td>');
-                    if (!row) row = getRow(day);
-                    row.append(
-                        dayCell.addClass('day')
-                            .attr({
-                                id: day.format('YYYY-M-D'),
-                                //#. %1$s is a date: october 12th 2017 for example
-                                title: gt('Selected - %1$s', day.format('ddd LL'))
-                            })
-                            .data('date', day.valueOf())
-                            .append(
-                                $('<div class="number" aria-hidden="true">').text(day.date()),
-                                $('<div class="list abs">')
-                            )
-                    );
-
-                    if (day.date() === 1) dayCell.addClass('first');
-                    if (day.date() === 1 && day.day() === firstDayOfWeek) dayCell.addClass('forceleftborder');
-                    if (day.isSame(moment(), 'day')) dayCell.addClass('today');
-                    if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
-                    if (day.date() === 1 || day.day() === firstDayOfWeek) dayCell.addClass('borderleft');
-                    if (day.isSame(this.end, 'day')) dayCell.addClass('borderright');
-
-                    if (day.isSame(day.clone().endOf('week'), 'day')) {
-                        this.$el.append(row);
-                        row = undefined;
-                    }
+                if (day.isSame(day.clone().endOf('week'), 'day')) {
+                    this.$el.append(row);
+                    row = $('<tr class="week">');
                 }
+            }
 
-                // append empty days
-                end = subtractDays(lastDayOfWeek, this.end.day());
-                for (i = 0; i < end; i++) row.append(getEmptyCell().addClass('bordertop'));
-                if (row) this.$el.append(row);
+            if (_.device('smartphone')) {
+                this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
+                // on mobile we switch to the day view after a tap
+                // on a day-cell was performed
+                this.$el.on('tap', '.day', function () {
+                    self.changeToSelectedDay($(this).data('date'));
+                });
+            }
 
-                // set borders in the first row
-                this.$el
-                    .find('.week:not(.month-name)').first()
-                    .find('> .day').addClass('bordertop');
-                // set borders in the last row
-                this.$el
-                    .find('.week:last-child').addClass('no-border')
-                    .find('> .day').addClass('borderbottom');
-
-                if (_.device('smartphone')) {
-                    this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
-                    // on mobile we switch to the day view after a tap
-                    // on a day-cell was performed
-                    this.$el.on('tap', '.day', function () {
-                        self.changeToSelectedDay($(this).data('date'));
-                    });
-                } else {
-                    this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
-                }
-
-                return this;
-            };
-        }()),
+            return this;
+        },
 
         renderAppointment: function (a) {
             var self = this,
@@ -411,25 +359,6 @@ define('io.ox/calendar/month/view', [
             });
         }
     });
-
-    View.drawScaffold = function () {
-        var days = moment.weekdaysShort(),
-            dow = moment.localeData().firstDayOfWeek(),
-            tmp = [];
-        days = days.slice(dow, days.length).concat(days.slice(0, dow));
-        return $('<div class="abs">')
-            .append(
-                $('<div class="footer-container">').attr('aria-hidden', true).append(
-                    $('<div class="footer">').append(function () {
-                        _(days).each(function (day) {
-                            tmp.push($('<div class="weekday">').text(day));
-                        });
-                        return tmp;
-                    })
-                ),
-                $('<div class="scrollpane f6-target" tabindex="-1">')
-            );
-    };
 
     ext.point('io.ox/calendar/month/view/appointment').extend({
         id: 'default',
