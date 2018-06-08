@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds and removes a vacation notice', function (I) {
+Scenario.skip('adds and removes a vacation notice', function (I) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.see('Basic settings', '.rightside h1');
