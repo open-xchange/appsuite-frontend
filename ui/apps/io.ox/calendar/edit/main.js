@@ -124,7 +124,7 @@ define('io.ox/calendar/edit/main', [
 
                         self.considerSaved = true;
 
-                        self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
+                        self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
                             if (app.dropZone) app.dropZone.include();
