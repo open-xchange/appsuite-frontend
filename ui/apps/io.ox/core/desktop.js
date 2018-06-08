@@ -722,8 +722,7 @@ define('io.ox/core/desktop', [
         },
 
         getSavePoints: function () {
-            // disable restore on smartphone ftm
-            if (!saveRestoreEnabled() || _.device('smartphone')) return $.when([]);
+            if (!saveRestoreEnabled()) return $.when([]);
 
             return appCache.get('savepoints').then(function (list) {
                 list = list || [];
@@ -855,7 +854,9 @@ define('io.ox/core/desktop', [
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
                                     // restore
-                                    return this.failRestore(obj.point);
+                                    return this.failRestore(obj.point).then(function () {
+                                        app.set('restored', true);
+                                    });
                                 }
                             });
                         });
