@@ -41,8 +41,7 @@ define('io.ox/calendar/month/view', [
                 'click .appointment':      'onClickAppointment',
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
-                'mouseleave .appointment': 'onLeaveAppointment',
-                'mousewheel': 'onMousewheel'
+                'mouseleave .appointment': 'onLeaveAppointment'
             };
 
             if (_.device('touch')) {
@@ -156,7 +155,6 @@ define('io.ox/calendar/month/view', [
         },
 
         onMousewheel: _.throttle(function (e) {
-            console.log(e);
             var target = $(e.currentTarget),
                 scrollpane = target.closest('.list.abs');
             if (scrollpane.prop('scrollHeight') > scrollpane.height) return;
@@ -414,10 +412,11 @@ define('io.ox/calendar/month/view', [
                 .attr({ tabindex: 0 })
                 .addClass(classes)
                 .append(
-                    $('<div>')
-                    .addClass('appointment-content')
+                    $('<div class="appointment-content">')
+                    .addClass('')
                     .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
+                        util.isAllday(a) ? $() : $('<div class="start">').text(a.getMoment('startDate').format('LT')),
                         util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
                         a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
                         a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
