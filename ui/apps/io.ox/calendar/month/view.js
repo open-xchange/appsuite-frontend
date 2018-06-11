@@ -160,8 +160,8 @@ define('io.ox/calendar/month/view', [
             var target = $(e.target),
                 scrollpane = target.closest('.list.abs');
             if (scrollpane.prop('scrollHeight') > scrollpane.prop('clientHeight')) return;
-            this.perspective.gotoMonth(e.originalEvent.wheelDelta > 0 ? 'next' : 'prev');
-        }, 250, { trailing: false }),
+            this.perspective.gotoMonth(e.originalEvent.wheelDelta < 0 ? 'next' : 'prev');
+        }, 400, { trailing: false }),
 
         // handler for mobile month view day-change
         changeToSelectedDay: function (timestamp) {
