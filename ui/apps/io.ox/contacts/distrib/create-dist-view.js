@@ -114,6 +114,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 collection: this.baton.member,
                 baton: this.baton,
                 isMail: true,
+                strict: true,
                 empty: gt('This list has no members yet')
             }).render().$el);
         }
