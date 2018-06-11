@@ -95,6 +95,8 @@ define('io.ox/core/folder/selection', [], function () {
             if (this.view.app && this.view.app.props && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).parent().hasClass('folder-label')) return;
 
             if (e.type === 'contextmenu') e.stopPropagation();
+            //ignore keyboard contextmenu events
+            if (e.type === 'contextmenu' && e.which === 0) return;
 
             var items = this.getItems(),
                 current = $(e.currentTarget),
