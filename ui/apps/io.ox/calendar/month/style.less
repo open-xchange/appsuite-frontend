@@ -45,6 +45,8 @@
 
         .weekend { display: none; }
         &.weekends .weekend { display: table-cell; }
+        .cw { display: none; }
+        &.cw .cw { display: table-cell; }
     }
 
     .month {
@@ -71,18 +73,20 @@
 
         .week {
 
-            .day-filler {
-                background-color: @white;
-
-                &.bordertop   { border-top:   1px solid @monthview-border; }
-                &.borderright { border-right: 1px solid @monthview-border; }
-            }
-
             .day {
                 border-top: 1px solid @monthview-border;
                 border-right: 1px solid @monthview-border;
                 background-color: transparent;
                 position: relative;
+
+                &.cw {
+                    width: 80px;
+
+                    .number {
+                        font-weight: normal;
+                        color: #757575;
+                    }
+                }
 
                 .number {
                     position: absolute;
@@ -123,11 +127,12 @@
                     }
 
                     .appointment {
-                        background-color: #ddd!important;
+                        background-color: transparent!important;
                         color: #333!important;
+                        background-image: none;
 
                         &.hover {
-                            background-color: #aaa!important;
+                            background-color: #ccc!important;
                         }
                     }
                 }
@@ -248,12 +253,6 @@
                         color: #777;
                         .transition(color 0.2s linear);
                     }
-                }
-
-                .day-filler {
-                    border: 0;
-
-                    &.bordertop { border: 0; }
                 }
             }
 

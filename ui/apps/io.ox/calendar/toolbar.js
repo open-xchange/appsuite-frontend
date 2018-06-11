@@ -178,7 +178,10 @@ define('io.ox/calendar/toolbar', [
                 .option('folderview', true, gt('Folder view'))
                 .option('showMiniCalendar', true, gt('Mini calendar'));
 
-            if (baton.app.props.get('layout') === 'month') dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
+            if (baton.app.props.get('layout') === 'month') {
+                dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
+                dropdown.option('showMonthviewCW', true, gt('CW'));
+            }
 
             dropdown
                 .option('checkboxes', true, gt('Checkboxes'))

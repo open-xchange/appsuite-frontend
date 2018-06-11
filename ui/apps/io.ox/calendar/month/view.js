@@ -41,7 +41,8 @@ define('io.ox/calendar/month/view', [
                 'click .appointment':      'onClickAppointment',
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
-                'mouseleave .appointment': 'onLeaveAppointment'
+                'mouseleave .appointment': 'onLeaveAppointment',
+                'mousewheel': 'onMousewheel'
             };
 
             if (_.device('touch')) {
@@ -155,9 +156,9 @@ define('io.ox/calendar/month/view', [
         },
 
         onMousewheel: _.throttle(function (e) {
-            var target = $(e.currentTarget),
+            var target = $(e.target),
                 scrollpane = target.closest('.list.abs');
-            if (scrollpane.prop('scrollHeight') > scrollpane.height) return;
+            if (scrollpane.prop('scrollHeight') > scrollpane.height()) return;
             this.perspective.gotoMonth(e.originalEvent.wheelDelta > 0 ? 'next' : 'prev');
         }, 100),
 
@@ -179,10 +180,19 @@ define('io.ox/calendar/month/view', [
         render: function render() {
             var self = this,
                 day = moment(this.start),
-                row = $('<tr class="week">');
+                row;
 
             // add days
             for (; day.isBefore(this.end); day.add(1, 'day')) {
+                if (!row || day.isSame(day.clone().startOf('week'), 'day')) {
+                    row = $('<tr class="week">').append(
+                        $('<td class="day cw">').append(
+                            $('<span class="number">').text(gt('CW %1$d', day.format('w')))
+                        )
+                    );
+                    this.$el.append(row);
+                }
+
                 var dayCell = $('<td>');
                 row.append(
                     dayCell.addClass('day')
@@ -204,11 +214,6 @@ define('io.ox/calendar/month/view', [
                 if (day.isSame(moment(), 'day')) dayCell.addClass('today');
                 if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
                 if (!day.isSame(this.month, 'month')) dayCell.addClass('out');
-
-                if (day.isSame(day.clone().endOf('week'), 'day')) {
-                    this.$el.append(row);
-                    row = $('<tr class="week">');
-                }
             }
 
             if (_.device('smartphone')) {
@@ -413,7 +418,6 @@ define('io.ox/calendar/month/view', [
                 .addClass(classes)
                 .append(
                     $('<div class="appointment-content">')
-                    .addClass('')
                     .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
                         util.isAllday(a) ? $() : $('<div class="start">').text(a.getMoment('startDate').format('LT')),

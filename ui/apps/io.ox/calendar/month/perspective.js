@@ -35,7 +35,7 @@ define('io.ox/calendar/month/perspective', [
     _.extend(perspective, {
 
         scaffold:       $(),    // perspective
-        container:      $('<div class="month-container">'),    // container for table with month
+        container:      $('<div class="month-container f6-target" tabindex="-1">'),    // container for table with month
         monthInfo:      $('<span class="month-info">'),
         currentView:    null,    // the view with the current month
         views:          {},     // all month views
@@ -380,7 +380,7 @@ define('io.ox/calendar/month/perspective', [
 
             if (_.device('!smartphone')) {
                 toolbar.append(
-                    $('<div>').addClass('controls-container').append(
+                    $('<div class="controls-container">').append(
                         $('<a href="#" role="button" class="control prev">').attr('title', gt('Previous')).append(
                             $('<i class="fa fa-chevron-left" aria-hidden="true">')
                         )
@@ -408,6 +408,10 @@ define('io.ox/calendar/month/perspective', [
 
             app.props.on('change:showMonthviewWeekend', function (model, value) {
                 this.container.toggleClass('weekends', value);
+            }.bind(this));
+
+            app.props.on('change:showMonthviewCW', function (model, value) {
+                this.container.toggleClass('cw', value);
             }.bind(this));
 
             if (_.device('ie && ie <= 11')) {
