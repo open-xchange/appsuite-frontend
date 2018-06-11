@@ -235,27 +235,15 @@ define('io.ox/calendar/month/perspective', [
 
         // IE 11 needs a fixed height or appointments are not displayed
         calculateHeights: _.debounce(function () {
-            // no calculation if invisible(all lists get 0 height)
-            if (this.pane.filter(':visible').length === 0) return;
-            var height = (this.pane.height() * (1 / 7) - 26) + 'px';
-            this.pane.find('.list').css('height', height);
+            var height = Math.floor(this.container.height() / this.container.find('tr').length - 26) + 'px';
+            this.container.find('.list').css('height', height);
         }, 100),
-
-        /**
-         * wrapper for scrollTop funciton
-         * @param  {number} top scrollposition
-         * @return { number}     new scroll position
-         */
-        scrollTop: function (top) {
-            // scrollTop checks arity, so just passing an undefined top does not work here
-            return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
-        },
 
         updateColor: function (model) {
             if (!model) return;
             var color = util.getFolderColor(model.attributes),
-                container =  $('[data-folder="' + model.get('id') + '"]', this.pane);
-            $('[data-folder="' + model.get('id') + '"]', this.pane).css({
+                container =  $('[data-folder="' + model.get('id') + '"]', this.container);
+            $('[data-folder="' + model.get('id') + '"]', this.container).css({
                 'background-color': color,
                 'color': util.getForegroundColor(color)
             }).data('background-color', color);
@@ -264,10 +252,10 @@ define('io.ox/calendar/month/perspective', [
         },
 
         update: function (useCache) {
-            var day = $('#' + moment().format('YYYY-M-D'), this.pane);
+            var day = $('#' + moment().format('YYYY-M-D'), this.container);
 
             if (!day.hasClass('today')) {
-                $('.day.today', this.pane).removeClass('today');
+                $('.day.today', this.container).removeClass('today');
                 day.addClass('today');
             }
 

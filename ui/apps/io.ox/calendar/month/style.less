@@ -42,6 +42,7 @@
     .month-container {
         .flex(1);
         overflow: hidden;
+        outline: none;
 
         .weekend { display: none; }
         &.weekends .weekend { display: table-cell; }
@@ -119,7 +120,7 @@
                 }
 
                 &.out {
-                    background-color: #f5f5f5;
+                    background-color: rgba(238, 238, 238, 0.5);
 
                     .number {
                         color: #767676;
@@ -169,7 +170,6 @@
         }
 
         .appointment-content > * {
-            display: inline-block;
             margin-right: 4px;
         }
         .start {

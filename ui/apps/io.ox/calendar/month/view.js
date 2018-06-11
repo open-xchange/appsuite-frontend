@@ -42,7 +42,8 @@ define('io.ox/calendar/month/view', [
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
                 'mouseleave .appointment': 'onLeaveAppointment',
-                'mousewheel': 'onMousewheel'
+                'mousewheel': 'onMousewheel',
+                'DOMMouseScroll': 'onMousewheel'
             };
 
             if (_.device('touch')) {
@@ -158,9 +159,9 @@ define('io.ox/calendar/month/view', [
         onMousewheel: _.throttle(function (e) {
             var target = $(e.target),
                 scrollpane = target.closest('.list.abs');
-            if (scrollpane.prop('scrollHeight') > scrollpane.height()) return;
+            if (scrollpane.prop('scrollHeight') > scrollpane.prop('clientHeight')) return;
             this.perspective.gotoMonth(e.originalEvent.wheelDelta > 0 ? 'next' : 'prev');
-        }, 100),
+        }, 250, { trailing: false }),
 
         // handler for mobile month view day-change
         changeToSelectedDay: function (timestamp) {
@@ -215,6 +216,8 @@ define('io.ox/calendar/month/view', [
                 if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
                 if (!day.isSame(this.month, 'month')) dayCell.addClass('out');
             }
+
+            if (_.device('firefox') || _.device('ie && ie <= 11')) this.$('tr').css('height', (100 / this.$('tr').length + '%'));
 
             if (_.device('smartphone')) {
                 this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
@@ -420,10 +423,10 @@ define('io.ox/calendar/month/view', [
                     $('<div class="appointment-content">')
                     .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        util.isAllday(a) ? $() : $('<div class="start">').text(a.getMoment('startDate').format('LT')),
+                        util.isAllday(a) ? $() : $('<span class="start">').text(a.getMoment('startDate').format('LT')),
                         util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
-                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
+                        a.get('summary') ? $('<span class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
+                        a.get('location') ? $('<span class="location">').text(a.get('location') || '\u00A0') : ''
                     )
                 )
                 .attr({

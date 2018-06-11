@@ -180,7 +180,7 @@ define('io.ox/calendar/toolbar', [
 
             if (baton.app.props.get('layout') === 'month') {
                 dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
-                dropdown.option('showMonthviewCW', true, gt('CW'));
+                // dropdown.option('showMonthviewCW', true, gt('CW'));
             }
 
             dropdown
