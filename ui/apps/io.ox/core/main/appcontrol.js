@@ -271,7 +271,7 @@ define('io.ox/core/main/appcontrol', [
             initRefreshAnimation();
 
             ox.ui.apps.on('launch resume', function (model) {
-                $('#io-ox-launchgrid').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+                $('.launcher-dropdown').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
                 _.defer(function () {
                     $(document).trigger('resize');
                 });
