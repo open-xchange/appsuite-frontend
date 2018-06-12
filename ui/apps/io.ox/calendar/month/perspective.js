@@ -353,7 +353,7 @@ define('io.ox/calendar/month/perspective', [
                 })
                 .append(
                     toolbar,
-                    this.container.addClass(this.app.props.get('showMonthviewWeekend') ? 'weekends' : '')
+                    this.container.addClass(_.device('smartphone') || this.app.props.get('showMonthviewWeekend') ? 'weekends' : '')
                 );
 
             var refresh = function () {
