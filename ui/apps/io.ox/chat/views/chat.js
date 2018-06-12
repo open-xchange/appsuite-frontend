@@ -56,10 +56,12 @@ define('io.ox/chat/views/chat', [
             this.typing = {
                 $el: $('<div class="typing">'),
                 timer: {},
-                show: function (userId, name) {
+                show: function (userId) {
+                    var model = data.users.get(userId);
+                    if (!model || model.isMyself()) return;
                     this.reset(userId);
                     var $span = this.span(userId);
-                    if (!$span.length) this.add(userId, name);
+                    if (!$span.length) this.add(userId, model.getName());
                     this.timer[userId] = setTimeout(this.hide.bind(this), 5000, userId);
                 },
                 span: function (userId) {
@@ -72,21 +74,22 @@ define('io.ox/chat/views/chat', [
                 },
                 add: function (userId, name) {
                     this.$el.append($('<div class="name">').attr('data-user-id', userId).text(name + ' is typing'));
-                    this.$el.closest('.scrollpane').scrollTop(0xFFFFFF);
                 },
                 hide: function (userId) {
                     this.reset(userId);
                     this.span(userId).remove();
+                },
+                toggle: function (userId, state) {
+                    if (state) this.show(userId); else this.hide(userId);
                 }
             };
 
-            this.listenTo(events, 'typing:' + this.model.id, function (userId) {
-                var model = data.users.get(userId);
-                if (!model) return;
-                this.typing.show(model.id, model.getName());
+            this.listenTo(events, 'typing:' + this.model.id, function (userId, state) {
+                this.typing.toggle(userId, state);
             });
 
             this.$messages = $();
+            this.$editor = $();
         },
 
         render: function () {
@@ -117,7 +120,7 @@ define('io.ox/chat/views/chat', [
                     )
                 ),
                 $('<div class="controls abs">').append(
-                    $('<textarea class="form-control" placeholder="Enter message here">')
+                    this.$editor = $('<textarea class="form-control" placeholder="Enter message here">')
                 )
             );
 
@@ -181,13 +184,13 @@ define('io.ox/chat/views/chat', [
         onEditorKeydown: function (e) {
             if (e.which !== 13) return;
             e.preventDefault();
-            var editor = $(e.currentTarget);
-            this.onPostMessage(editor.val());
-            editor.val('').focus();
+            this.onPostMessage(this.$editor.val());
+            this.$editor.val('').focus();
         },
 
         onEditorInput: function () {
-            data.socket.emit('typing', { roomId: this.model.id });
+            var state = this.$editor.val() !== '';
+            data.socket.emit('typing', { roomId: this.model.id, state: state });
         },
 
         onPostMessage: function (body) {
@@ -228,10 +231,6 @@ define('io.ox/chat/views/chat', [
 
         onChangeDelivery: function (model) {
             this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
-        },
-
-        onTyping: function () {
-
         }
     });
 

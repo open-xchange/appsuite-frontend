@@ -15,7 +15,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
     'use strict';
 
-    var user_id = parseInt(_.url.hash('user_id'), 10) || ox.user_id,
+    var user_id = parseInt(_.url.hash('chatUser'), 10) || ox.user_id,
         chatHost = _.url.hash('chatHost') || 'devtank.de';
 
     var data = {
@@ -43,6 +43,16 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
             if (first && last) return first + ' ' + last;
             return first || last || '\u00a0';
+        },
+
+        getState: function () {
+            return this.get('state') || 'offline';
+        },
+
+        fetchState: function () {
+            if (this.has('state')) return;
+            $.get({ url: data.API_ROOT + '/users/' + this.get('id') + '/state' })
+                .done(function (state) { this.set('state', state); }.bind(this));
         }
     });
 
@@ -56,8 +66,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
                     id: item.internal_userid,
                     first_name: item.first_name,
                     last_name: item.last_name,
-                    image: !!item['570'],
-                    state: 'online'
+                    image: !!item['570']
                 };
             });
             return data.users.reset(result);
@@ -156,6 +165,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
     var MessageCollection = Backbone.Collection.extend({
         model: MessageModel,
+        comparator: 'sent',
         initialize: function (models, options) {
             this.roomId = options.roomId;
         },
@@ -278,6 +288,19 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
         getChannelsUnjoined: function () {
             return this.filter({ type: 'channel', joined: false });
+        },
+
+        fetchUnlessExists: function (roomId) {
+            var model = this.get(roomId);
+            if (model) return $.when(model);
+            return $.get({ url: this.url() + '/' + roomId }).then(this.add.bind(this));
+        },
+
+        joinChannel: function (roomId) {
+            var model = this.get(roomId);
+            if (!model || !model.isChannel()) return;
+            model.addMembers([user_id]);
+            model.set({ joined: true, open: true });
         }
     });
 
@@ -352,10 +375,14 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
     });
 
     socket.on('message:new', function (roomId, message) {
-        var model = data.chats.get(roomId);
-        if (!model) return;
-        model.messages.add(message);
-        model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
+        // stop typing
+        events.trigger('typing:' + roomId, message.senderId, false);
+        // fetch room unless it's already known
+        data.chats.fetchUnlessExists(roomId).done(function (model) {
+            // add new message to room
+            model.messages.add(message);
+            model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
+        });
     });
 
     socket.on('user:change:state', function (userId, state) {
@@ -363,9 +390,12 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         if (model) model.set('state', state);
     });
 
-    socket.on('typing', function (roomId, userId) {
-        events.trigger('typing:' + roomId, userId);
+    socket.on('typing', function (roomId, userId, state) {
+        events.trigger('typing:' + roomId, userId, state);
     });
+
+    // send heartbeat every minute
+    setInterval(function () { socket.emit('heartbeat'); }, 60000);
 
     return data;
 });

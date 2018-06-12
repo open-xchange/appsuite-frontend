@@ -24,15 +24,16 @@ define('io.ox/chat/views/state', ['io.ox/backbone/views/disposable'], function (
 
         initialize: function () {
             this.listenTo(this.model, 'change:state', this.onChangeState);
+            this.model.fetchState();
         },
 
         render: function () {
-            this.$el.addClass(this.model.get('state'));
+            this.$el.addClass(this.model.getState());
             return this;
         },
 
         onChangeState: function () {
-            var state = this.model.get('state');
+            var state = this.model.getState();
             this.$el.addClass(state).removeClass(_(states).without(state).join(' '));
         }
     });

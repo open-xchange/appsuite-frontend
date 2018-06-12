@@ -102,11 +102,8 @@ define('io.ox/chat/main', [
         },
 
         joinChannel: function (cmd) {
-            var channel = data.channels.get(cmd.id);
-            channel.set('joined', true);
-            var chatId = data.chats.length + 1;
-            data.chats.add({ id: chatId, type: 'channel', title: channel.getTitle(), members: [1, 2, 3, 4, 5], messages: [{ id: 1, body: 'Joined channel', type: 'system' }] });
-            this.showChat(chatId);
+            data.chats.joinChannel(cmd.id);
+            this.showChat(cmd.id);
         },
 
         showChat: function (id) {
