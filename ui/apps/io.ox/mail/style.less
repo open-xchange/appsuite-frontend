@@ -265,10 +265,11 @@
         &.loading { min-height: 80px; }
     }
 
-    .ios & {
+    .ios.smartphone & {
         section.body {
             // special fix for ios iframe handling, keep this!
             overflow-x: auto;
+            overflow-y: hidden; // added later, seems to prevent scroll bounce in mail detail frame
         }
     }
 
