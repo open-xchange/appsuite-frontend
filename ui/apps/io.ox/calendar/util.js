@@ -1071,10 +1071,10 @@ define('io.ox/calendar/util', [
 
         showRecurrenceDialog: function (model) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
-            if (model.get('recurrenceId')) {
+            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 var dialog = new dialogs.ModalDialog();
                 // first occurence or exception (we need to load the series master as the exception data doesn't work for changing the series )
-                if (model.hasFlag('first_occurrence') || model.get('id') !== model.get('seriesId')) {
+                if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else if (model.hasFlag('last_occurrence')) {
@@ -1295,6 +1295,9 @@ define('io.ox/calendar/util', [
         },
 
         hasFlag: function (data, flag) {
+            // support for arrays (used in multiple selection). returns true if all items in the array have the flag
+            if (_.isArray(data) && data.length > 0) return _(data).reduce(function (oldVal, item) { return oldVal && that.hasFlag(item, flag); }, true);
+
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;

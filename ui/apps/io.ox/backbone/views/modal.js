@@ -262,6 +262,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // otherwise we cannot idle the dialog in the action listener
             if (this.options.async && action !== 'cancel') this.busy();
             this.trigger(action);
+            // for general event listeners
+            this.trigger('action', action);
             // check if this.options is there, if the dialog was closed in the handling of the action this.options is empty and we run into a js error otherwise
             if ((this.options && !this.options.async) || action === 'cancel') this.close();
         },
@@ -301,6 +303,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         resume: function () {
             $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.$el.next().addBack().show();
+            // add marker class again(needed by yells for example)
+            $(document.body).addClass('modal-open');
             this.toggleAriaHidden(true);
             this.idle();
         }

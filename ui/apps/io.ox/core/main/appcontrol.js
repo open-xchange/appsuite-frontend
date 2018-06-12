@@ -28,8 +28,6 @@ define('io.ox/core/main/appcontrol', [
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
 
-    ox.on('launcher:toggleOverlay', toggleOverlay);
-
     var LauncherView = Backbone.View.extend({
         tagName: 'a',
         className: 'btn btn-link lcell',
@@ -220,9 +218,6 @@ define('io.ox/core/main/appcontrol', [
         className: 'dropdown',
         id: 'io-ox-launcher',
         initialize: function () {
-            this.listenTo(ox, 'launcher:toggleOverlay', function () {
-                this.$('[data-toggle="dropdown"]').dropdown('toggle');
-            });
             this.listenTo(this.collection, 'add remove', function () {
                 this.$el.empty();
                 this.render();
@@ -236,7 +231,12 @@ define('io.ox/core/main/appcontrol', [
                         return $('<li role="presentation">').append(
                             new LauncherView({ model: model, pos: i + 1 }).render().$el
                         );
-                    })
+                    }),
+                    _.device('smartphone') ? this.collection.where({ closable: true }).map(function (model) {
+                        return $('<li role="presentation">').append(
+                            new LauncherView({ model: model }).render().$el
+                        );
+                    }) : []
                 )
             );
             return this;
@@ -366,30 +366,6 @@ define('io.ox/core/main/appcontrol', [
             var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
             this.append($('<div id="io-ox-toprightbar">').append(taskbar));
             ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol').extend({
-        id: 'runningAppsMobile',
-        index: 1000,
-        draw: function () {
-            if (_.device('!smartphone')) return;
-
-            // add running app to menu
-            ox.ui.apps.on('add', function (model) {
-                if (model.get('closable')) {
-                    $('.launcher-dropdown').append(
-                        $('<li role="presentation">').append(
-                            new LauncherView({ model: model }).render().$el
-                        )
-                    );
-                }
-            });
-
-            // remove on close
-            ox.ui.apps.on('remove', function (model) {
-                $('.launcher-dropdown').find('[data-id="' + model.get('id') + '"]').parent().remove();
-            });
         }
     });
 

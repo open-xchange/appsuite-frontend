@@ -87,6 +87,8 @@ define('io.ox/search/view-template', [
                 var app = ox.ui.apps.get(id),
                     title = app ? app.get('title') : '';
 
+                if (app) titles[app.id] = title;
+
                 items.push(
                     $('<li>').append(
                         $('<a href="#" role="button" tabindex="-1">')

@@ -56,7 +56,7 @@ define('io.ox/backbone/mini-views/colorpicker', [
                             $('<td role="listitem">').append(
                                 item = $('<div tabindex="-1" class="colorpicker-item" role="option">')
                                     .data('value', color.value)
-                                    .attr({ 'data-name': this.name, title: color.name })
+                                    .attr({ 'data-name': this.name, title: color.name, 'data-value': color.value })
                                     .css('background-color', color.value)
                             )
                         );
@@ -69,9 +69,12 @@ define('io.ox/backbone/mini-views/colorpicker', [
             },
             setDropdownOverlay: function () {
                 colorpicker.__super__.setDropdownOverlay.call(this);
-                var self = this;
                 // use defer or dropdown toggle focusses the togglebutton again. This results in the closing of the dropdown.
-                _.defer(function () { self.$ul.find('td .colorpicker-item').first().focus(); });
+                _.defer(function () {
+                    var list = this.$ul.find('td .colorpicker-item'),
+                        selected = this.model ? list.filter('[data-value="' + this.model.get(this.name) + '"]') : undefined;
+                    return $(selected.length ? selected : list).first().focus();
+                }.bind(this));
             },
             onKeydownItem: function (e) {
                 if (e.which === 13) return $(e.target).trigger('click');

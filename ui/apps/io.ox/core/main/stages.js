@@ -277,6 +277,8 @@ define('io.ox/core/main/stages', [
                 //only load first app on small devices
                 if (index === 0) allUnavailable = false;
                 if (_.device('smartphone') && index > 0) return;
+                // WORKAROUND: refresh in 'edit' app created needles broken instance when at least a single intstance was restored
+                if (_.device('smartphone') && ox.ui.apps.where({ 'restored': true, 'name': details.name }).length) return;
                 // split app/call
                 var launch, method, options = _(hash).pick('folder', 'id');
                 debug('Auto launch:', details.app, options);

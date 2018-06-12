@@ -20,6 +20,10 @@ module.exports = actor({
         if (skipRefresh === true) return;
         this.click('#io-ox-refresh-icon');
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    },
+    openApp: function (name) {
+        this.click('#io-ox-launcher');
+        this.click(name, '#io-ox-launcher');
     }
 
 });

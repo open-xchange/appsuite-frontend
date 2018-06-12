@@ -32,11 +32,13 @@ define('io.ox/calendar/week/extensions', [
                 classes = '';
 
             function addColors(f) {
-                var color = util.getAppointmentColor(f, a);
+                var color = util.getAppointmentColor(f, a),
+                    foregroundColor = util.getForegroundColor(color);
                 if (!color) return;
                 self.css({
                     'background-color': color,
-                    'color': util.getForegroundColor(color)
+                    'color': foregroundColor,
+                    'border-left-color': foregroundColor === 'white' ? '' : foregroundColor
                 }).data('background-color', color);
                 self.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
                 if (util.canAppointmentChangeColor(f, a)) {

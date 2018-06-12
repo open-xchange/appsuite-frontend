@@ -308,6 +308,7 @@ h1.calendar-title {
     padding: 2px;
     margin: 0;
     list-style-type: none;
+    min-height: 40px;
 }
 
 .month-view .time{

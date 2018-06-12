@@ -742,25 +742,51 @@ define('io.ox/files/actions', [
      *  Whether the elements inside the collection are shareable
      */
     function isShareable(e, type) {
-        var returnValue = true;
-        _.each(e.baton.models, function (model) {
-            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
-            var folderModel = folderAPI.pool.getModel(id);
-            if (!folderModel.isShareable()) returnValue = false;
-            if (folderModel.is('trash')) returnValue = false;
-            if (!id) returnValue = false;
-            if (type === 'invite' && !folderModel.supportsInviteGuests()) returnValue = false;
-        });
+        var id, folderModel;
 
-        return returnValue;
+        // not possible for multi-selection
+        if (e.collection.has('multiple')) return false;
+        // check if this is a contact not a file, happens when contact is send as vcard
+        if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
+        // get folder id
+        if (e.collection.has('one')) {
+
+            // -> from the folder tree we get an array, in the list an obj so normalize
+            var dataObj = _.isArray(e.baton.data) ? e.baton.data[0] : e.baton.data;
+            id = e.collection.has('folders') ? dataObj.id : dataObj.folder_id;
+
+        } else if (e.baton.app) {
+            // use current folder
+            id = e.baton.app.folder.get();
+        }
+
+        if (!id) return false;
+        // general capability and folder check
+        folderModel = folderAPI.pool.getModel(id);
+        if (!folderModel.isShareable()) return false;
+        if (folderModel.is('trash')) return false;
+        return type === 'invite' ? folderModel.supportsInviteGuests() : true;
     }
+
+    new Action('io.ox/files/dropdown/share', {
+        requires: function (e) {
+            // usually this dropdown was always true and only removed in case the child actions are disabled.
+            // but this introduced jumping icons in the toolbar, therefore we check the dropdown/share too now to prevent this.
+            // note for the next one who is working in this area: a more elegant solution would be to wait until
+            // the child action from this dropdown are checked or something similar, so that we don't need
+            // to check it twice like now.
+            return isShareable(e, 'link') || isShareable(e, 'invite');
+        },
+        action: $.noop
+    });
 
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
     new Action('io.ox/files/actions/editShare', {
         requires: function (e) {
             if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            // we must check the real selection because in myShares we could have two items for one model
             if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
-            return isShareable(e, 'link') || isShareable(e, 'invite');
+            return true;
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
@@ -829,8 +855,9 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/share/revoke', {
         requires: function (e) {
             if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            // we must check the real selection because in myShares we could have two items for one model
             if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
-            return isShareable(e, 'link') || isShareable(e, 'invite');
+            return true;
         },
         action: _.throttle(function (baton) {
             require(['io.ox/files/share/permissions', 'io.ox/files/share/api'], function (permissions, shareApi) {

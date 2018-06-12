@@ -272,7 +272,11 @@ define('plugins/notifications/calendar/register', [
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
                     timerFunction = function () {
-                        subview.addNotifications(nextAlarm);
+                        if (nextAlarm.action === 'AUDIO') {
+                            playAlarm(nextAlarm);
+                        } else {
+                            subview.addNotifications(nextAlarm);
+                        }
                         nextAlarm = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];

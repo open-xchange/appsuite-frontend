@@ -319,7 +319,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             },
                             folder: model.get('into'),
                             module: 'mail',
-                            root: '1'
+                            root: '1',
+                            settings: settings,
+                            persistent: 'folderpopup'
                         });
                     }
 
@@ -384,7 +386,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             },
                             folder: model.get('into'),
                             module: 'mail',
-                            root: '1'
+                            root: '1',
+                            settings: settings,
+                            persistent: 'folderpopup'
                         });
                     }
 

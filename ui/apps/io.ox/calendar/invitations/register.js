@@ -788,7 +788,7 @@ define('io.ox/calendar/invitations/register', [
                     change = data.changes ? data.changes[0] : {},
                     eventData = change.deletedEvent || change.newEvent || change.currentEvent;
                 if (eventData) model = new models.Model(eventData);
-                self.model.set('imipMail', true, { silent: true });
+                self.model.set('imipMail', true);
                 return require(['io.ox/calendar/api', 'io.ox/calendar/util']).then(function (api, util) {
                     var extView = new ExternalView({
                         model: model,

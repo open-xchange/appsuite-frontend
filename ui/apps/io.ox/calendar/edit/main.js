@@ -124,7 +124,7 @@ define('io.ox/calendar/edit/main', [
 
                         self.considerSaved = true;
 
-                        self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
+                        self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
                             if (app.dropZone) app.dropZone.include();
@@ -386,7 +386,6 @@ define('io.ox/calendar/edit/main', [
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
-                        ox.trigger('launcher:toggleOverlay', false);
                     }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))

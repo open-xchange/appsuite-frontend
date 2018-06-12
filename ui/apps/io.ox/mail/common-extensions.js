@@ -643,6 +643,7 @@ define('io.ox/mail/common-extensions', [
                 };
 
                 view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
+                view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
                 view.$el.on('click', 'li.item', function (e) {
