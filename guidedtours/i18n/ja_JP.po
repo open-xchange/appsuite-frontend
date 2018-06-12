@@ -655,12 +655,13 @@ msgstr ""
 "を入力します。仕事にドキュメントを追加すれば、添付ファイルを作成できます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"アプリケーションを起動するには、メニューバーの左側にあるクィックアイコンを使"
-"用するか、アプリケーションランチャーメニュー内の項目をクリックします。"
+"アプリケーションを起動するには、メニュー バーの左側にある項目をクリックしま"
+"す。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -10689,10 +10690,11 @@ msgstr ""
 #~ "アプリケーションを起動するには、該当するタイルの見出しをクリックします。"
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
 #~ msgstr ""
-#~ "アプリケーションを起動するには、メニュー バーの左側にある項目をクリックし"
-#~ "ます。"
+#~ "アプリケーションを起動するには、メニューバーの左側にあるクィックアイコンを"
+#~ "使用するか、アプリケーションランチャーメニュー内の項目をクリックします。"
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "

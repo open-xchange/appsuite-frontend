@@ -681,12 +681,12 @@ msgstr ""
 "nazwy Uczestnicy. Do zadania możesz także dodać załączniki z dokumentami."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Aby uruchomić aplikację, kliknij ikonę szybkiego uruchamiania z lewej strony "
-"paska menu lub kliknij pozycję w menu uruchamiania aplikacji."
+"Aby uruchomić aplikację, kliknij pozycję w lewej górnej części paska menu."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -5841,9 +5841,11 @@ msgstr ""
 #~ msgstr "Aby uruchomić aplikację, kliknij nagłówek kafelka."
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
 #~ msgstr ""
-#~ "Aby uruchomić aplikację, kliknij pozycję w lewej górnej części paska menu."
+#~ "Aby uruchomić aplikację, kliknij ikonę szybkiego uruchamiania z lewej "
+#~ "strony paska menu lub kliknij pozycję w menu uruchamiania aplikacji."
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "

@@ -612,12 +612,11 @@ msgstr ""
 "附件。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"請使用選單列左邊的快速啟動圖示，或點擊應用程式啟動器選單中的項目即可啟動應用"
-"程式。"
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "要啟動應用程式，點選選單列左方的項目。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -7219,8 +7218,11 @@ msgstr ""
 #~ msgstr "要執行應用程式，點選磚塊的標題。"
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr "要啟動應用程式，點選選單列左方的項目。"
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "請使用選單列左邊的快速啟動圖示，或點擊應用程式啟動器選單中的項目即可啟動應"
+#~ "用程式。"
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "

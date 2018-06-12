@@ -664,12 +664,12 @@ msgstr ""
 "osiossa. Voit lisätä asiakirjoja tehtävän liitteiksi."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Käynnistä sovellus valikkopalkin vasemmalla puolella sijaitsevista "
-"pikakuvakkeista tai klikkaa sovelluksenkäynnistysvalikon alakohtaa."
+"Käynnistääksesi sovellus napsauta kohtaa valikkopalkin vasemmassa reunassa."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -5384,10 +5384,11 @@ msgstr ""
 #~ msgstr "Käynnistääksesi sovelluksen, napsauta sovellusikkunan otsikkoa."
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
 #~ msgstr ""
-#~ "Käynnistääksesi sovellus napsauta kohtaa valikkopalkin vasemmassa "
-#~ "reunassa."
+#~ "Käynnistä sovellus valikkopalkin vasemmalla puolella sijaitsevista "
+#~ "pikakuvakkeista tai klikkaa sovelluksenkäynnistysvalikon alakohtaa."
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "

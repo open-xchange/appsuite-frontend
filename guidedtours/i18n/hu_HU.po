@@ -677,12 +677,13 @@ msgstr ""
 "található mezőben. Mellékletként dokumentumok csatolhatók a feladathoz."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Az alkalmazás indításához használja a menüsáv bal oldalán található "
-"gyorsindító ikonokat vagy kattintson az alkalmazásindító menü egyik elemére."
+"Az alkalmazás indításához kattintson a menüsáv bal oldalán található "
+"bejegyzések egyikére."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -952,10 +953,12 @@ msgstr ""
 #~ "Létrehozás gombra."
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
 #~ msgstr ""
-#~ "Az alkalmazás indításához kattintson a menüsáv bal oldalán található "
-#~ "bejegyzések egyikére."
+#~ "Az alkalmazás indításához használja a menüsáv bal oldalán található "
+#~ "gyorsindító ikonokat vagy kattintson az alkalmazásindító menü egyik "
+#~ "elemére."
 
 #~ msgid ""
 #~ "To open the help, click the System menu icon on the upper right side of "

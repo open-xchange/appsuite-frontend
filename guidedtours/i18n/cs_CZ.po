@@ -663,12 +663,13 @@ msgstr ""
 "Účastníci. Dokumenty můžete k úkolu přidat jako přílohy."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Chcete-li spustit aplikaci, použijte ikony na levé straně lišty menu, nebo "
-"klikněte na položku v menu pro spouštění aplikací."
+"Chcete-li spustit aplikaci, klikněte na položku v levé horní části lišty s "
+"menu."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -12208,10 +12209,11 @@ msgstr ""
 #~ msgstr "Chcete-li spustit aplikaci, klikněte na nadpis dlaždice."
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
 #~ msgstr ""
-#~ "Chcete-li spustit aplikaci, klikněte na položku v levé horní části lišty "
-#~ "s menu."
+#~ "Chcete-li spustit aplikaci, použijte ikony na levé straně lišty menu, "
+#~ "nebo klikněte na položku v menu pro spouštění aplikací."
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
