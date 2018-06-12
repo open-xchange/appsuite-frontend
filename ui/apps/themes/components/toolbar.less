@@ -100,20 +100,25 @@
         position: absolute;
         top: 14px;
         max-width: 24%;
+
         .ellipsis();
 
         &.left {
             left: 8px;
-
             .fa-chevron-left { margin-right: 3px; }
         }
 
-        &.right { right: 16px; }
-
-        a:hover {
-            text-decoration: none;
+        a, a:hover {
             color: @link-color;
+            transition: opacity 180ms;
+            opacity: 1;
+            text-decoration: none;
+            .tapped & {
+                opacity: .5;
+            }
         }
+
+        &.right { right: 16px; }
     }
 
     .navbar-title {
