@@ -32,7 +32,7 @@ define('io.ox/calendar/print-compact', [
             subject: data.get('summary'),
             location: $.trim(data.get('location')),
             date: getDate(data.attributes),
-            participants: _(data.get('attendees')).where({ cuType: 'INDIVIDUAL' }).length
+            participants: _(data.get('attendees')).where({ cuType: 'INDIVIDUAL' }).concat(_(data.attendees).where({ cuType: undefined })).length
         };
     }
 

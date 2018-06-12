@@ -705,7 +705,7 @@ define('io.ox/calendar/actions', [
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
     }));
 
-    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({//ghj
+    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links-participant',
         ref: 'io.ox/calendar/links/inline-participants',
