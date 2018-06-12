@@ -25,10 +25,13 @@ define('io.ox/core/boot/login/token', [
         id: 'token',
         index: 200,
         login: function (baton) {
-            if (baton.hash.tokenSession || baton.hash.session) {
+            if (!baton.hash.tokenSession && !baton.hash.session) return;
+            return tokenLogin().then(function () {
                 baton.stopPropagation();
-                return tokenLogin();
-            }
+                ox.trigger('login:success');
+            }, function () {
+                ox.trigger('login:fail');
+            });
         }
     });
 
@@ -42,18 +45,17 @@ define('io.ox/core/boot/login/token', [
 
             util.debug('Token-based login ...', hash.tokenSession);
 
-            session.redeemToken(hash.tokenSession).then(
+            return session.redeemToken(hash.tokenSession).then(
                 success,
                 function fail(e) {
                     util.debug('Token-based FAIL', e);
                 }
             );
 
-        } else {
-
-            util.debug('Session-based login ...', hash.session);
-            success({ session: hash.session });
         }
+
+        util.debug('Session-based login ...', hash.session);
+        return success({ session: hash.session });
     }
 
     function success(data) {
@@ -62,13 +64,13 @@ define('io.ox/core/boot/login/token', [
         ox.secretCookie = hash.secretCookie === 'true';
 
         // set store cookie?
-        $.when(
+        return $.when(
             session.rampup(),
             hash.store === 'true' ? session.store() : $.when()
         )
         .always(function () {
             // fetch user config
-            config.user().done(whoami);
+            return config.user().then(whoami);
         });
     }
 
@@ -78,16 +80,11 @@ define('io.ox/core/boot/login/token', [
             hash.locale = hash.language;
             finalize(hash);
         } else {
-            http.GET({
+            return http.GET({
                 module: 'system',
                 params: { action: 'whoami' }
             })
-            .then(
-                finalize,
-                function fail() {
-                    ox.trigger('login:fail');
-                }
-            );
+            .then(finalize);
         }
     }
 
@@ -117,8 +114,6 @@ define('io.ox/core/boot/login/token', [
             user: null,
             user_id: null
         });
-
-        ox.trigger('login:success');
     }
 
     return tokenLogin;
