@@ -181,7 +181,8 @@ define('io.ox/calendar/month/view', [
         render: function render() {
             var self = this,
                 day = moment(this.start),
-                row;
+                row,
+                tbody = $('<tbody>');
 
             // add days
             for (; day.isBefore(this.end); day.add(1, 'day')) {
@@ -191,7 +192,7 @@ define('io.ox/calendar/month/view', [
                             $('<span class="number">').text(gt('CW %1$d', day.format('w')))
                         )
                     );
-                    this.$el.append(row);
+                    tbody.append(row);
                 }
 
                 var dayCell = $('<td>');
@@ -217,7 +218,22 @@ define('io.ox/calendar/month/view', [
                 if (!day.isSame(this.month, 'month')) dayCell.addClass('out');
             }
 
-            if (_.device('firefox') || _.device('ie && ie <= 11')) this.$('tr').css('height', (100 / this.$('tr').length + '%'));
+            this.$el.append(
+                $('<thead>').append(
+                    $('<tr>').append(
+                        function () {
+                            var labels = [], current = day.clone().startOf('week');
+                            for (var i = 0; i < 7; i++, current.add(1, 'day')) {
+                                labels.push($('<th>').text(current.format('ddd')));
+                            }
+                            return labels;
+                        }
+                    )
+                ),
+                tbody
+            );
+
+            if (_.device('firefox') || _.device('ie && ie <= 11')) this.$('tbody tr').css('height', (100 / this.$('tbody tr').length + '%'));
 
             if (_.device('smartphone')) {
                 this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
@@ -289,13 +305,6 @@ define('io.ox/calendar/month/view', [
                     }
                 }
             }, this);
-
-            if (_.device('safari')) {
-                // bug in safari causes the caption to disappear after new content has been added to a tablecell.
-                // just force rerendering of the caption to make it appear again
-                var caption = this.$('caption');
-                caption.css('transform', !!caption.css('transform') ? '' : 'translateZ(0)');
-            }
 
             // exit here if we are on a phone
             if (_.device('smartphone')) return;

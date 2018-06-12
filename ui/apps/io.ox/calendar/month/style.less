@@ -57,18 +57,18 @@
         table-layout: fixed;
 
         thead {
+            display: none;
+
             tr {
-                height: 43px;
+                height: 32px;
+                border-bottom: 1px solid #ccc;
             }
 
             th {
-                text-align: right;
-                padding-right: 5px;
+                text-align: center;
                 color: #767676;
                 font-size: 14px;
                 font-weight: normal;
-                line-height: 32px;
-                vertical-align: bottom;
             }
         }
 
@@ -186,31 +186,19 @@
     // Mobile
     @media (max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
-        .toolbar .info {
-            top: 10px;
-            left: 10px;
-            .ellipsis();
-            width: 45%;
+        .month-toolbar {
+            text-align: center;
+            font-size: 24px;
+            padding: 8px;
         }
 
-        .footer-container {
-            top: 0;
-            margin-left: 0;
-            overflow: hidden;
-
-            .footer {
-                left: 0;
-
-                .weekday {
-                    width: 100/7%;
-                    font-size: 15px;
-                }
-            }
-        }
-
-        .scrollpane {
+        .month {
             -webkit-user-select: none;
             top: 33px;
+
+            thead {
+                display: table-header-group;
+            }
 
             .week {
                 min-height: 40px;
@@ -231,14 +219,22 @@
                     }
 
                     .number {
-                        top: auto;
+                        top: 8px;
                         bottom: auto;
                         left: 0;
                         text-align: center;
                         color: rgba(1,1,1,.6);
-                        font-size: 20px;
-                        font-weight: 200;
+                        font-size: 18px;
+                        font-weight: 400;
                         background-color: transparent;
+
+                        .day-label {
+                            display: none;
+                        }
+                    }
+
+                    &.out .number {
+                        font-weight: 100;
                     }
 
                     &.today, &.today .number {

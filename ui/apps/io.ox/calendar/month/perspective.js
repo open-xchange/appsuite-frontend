@@ -383,10 +383,11 @@ define('io.ox/calendar/month/perspective', [
                             e.preventDefault();
                             this.gotoMonth('next');
                         }, this))
-                    ),
-                    this.monthInfo
+                    )
                 );
             }
+
+            toolbar.append(this.monthInfo);
 
             app.props.on('change:date', function (model, value) {
                 if (!this.container.is(':visible')) return;
