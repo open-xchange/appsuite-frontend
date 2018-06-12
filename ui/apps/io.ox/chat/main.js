@@ -111,20 +111,20 @@ define('io.ox/chat/main', [
 
         showChat: function (id) {
             var view = new ChatView({ room: id });
-            window.$rightside.empty().append(view.render().$el);
+            this.$rightside.empty().append(view.render().$el);
             view.scrollToBottom();
         },
 
         showRecentConversations: function () {
-            window.$rightside.empty().append(new History().render().$el);
+            this.$rightside.empty().append(new History().render().$el);
         },
 
         showChannels: function () {
-            window.$rightside.empty().append(new ChannelList().render().$el);
+            this.$rightside.empty().append(new ChannelList().render().$el);
         },
 
         showAllFiles: function () {
-            window.$rightside.empty().append(new FileList().render().$el);
+            this.$rightside.empty().append(new FileList().render().$el);
         },
 
         showFile: function (cmd) {
@@ -172,7 +172,7 @@ define('io.ox/chat/main', [
             var model = data.chats.get(id);
             if (!model) return;
             model.toggle(state);
-            if (state) this.showChat(id); else window.$rightside.empty();
+            if (state) this.showChat(id); else this.$rightside.empty();
         },
 
         addMember: function (id) {

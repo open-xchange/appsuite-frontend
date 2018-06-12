@@ -52,7 +52,6 @@ define('io.ox/chat/views/chat', [
 
             this.model.messages.fetch();
 
-
             // tracking typing
             this.typing = {
                 $el: $('<div class="typing">'),
@@ -86,6 +85,8 @@ define('io.ox/chat/views/chat', [
                 if (!model) return;
                 this.typing.show(model.id, model.getName());
             });
+
+            this.$messages = $();
         },
 
         render: function () {
@@ -109,7 +110,9 @@ define('io.ox/chat/views/chat', [
                 ),
                 $('<div class="scrollpane abs">').append(
                     $('<div class="conversation">').append(
-                        this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this),
+                        this.$messages = $('<div class="messages">').append(
+                            this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
+                        ),
                         this.typing.$el
                     )
                 ),
@@ -117,6 +120,7 @@ define('io.ox/chat/views/chat', [
                     $('<textarea class="form-control" placeholder="Enter message here">')
                 )
             );
+
             return this;
         },
 
@@ -196,11 +200,11 @@ define('io.ox/chat/views/chat', [
 
         onAdd: _.debounce(function (model, collection, options) {
             // render
-            this.$('.conversation .typing').insertBefore(
+            this.$messages.append(
                 options.changes.added.map(this.renderMessage.bind(this))
             );
             // too many messages?
-            var children = this.$('.conversation').children();
+            var children = this.$messages.children();
             if (children.length > MESSAGE_LIMIT) children.slice(0, children.length - MESSAGE_LIMIT).remove();
             // proper scroll position
             this.scrollToBottom();
