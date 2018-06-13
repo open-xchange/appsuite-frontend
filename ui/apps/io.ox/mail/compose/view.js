@@ -830,15 +830,17 @@ define('io.ox/mail/compose/view', [
                     app: this.app,
                     view: view
                 }),
+                win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
             // don't ask wether the app can be closed if we have unsaved data, we just want to send
             baton.model.set('autoDismiss', true);
 
+            win.busy();
             return extensionCascade(point, baton).then(function () {
                 //app is re-opened; we want to be asked before any unsaved data is discarded
                 if (baton.error) baton.model.set('autoDismiss', false);
-            });
+            }).always(win.idle.bind(win));
         },
 
         toggleTokenfield: function (e) {
