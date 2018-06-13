@@ -42,6 +42,7 @@ define('io.ox/calendar/month/view', [
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
                 'mouseleave .appointment': 'onLeaveAppointment',
+                'wheel': 'onMousewheel',
                 'mousewheel': 'onMousewheel',
                 'DOMMouseScroll': 'onMousewheel'
             };
@@ -160,7 +161,8 @@ define('io.ox/calendar/month/view', [
             var target = $(e.target),
                 scrollpane = target.closest('.list.abs');
             if (scrollpane.prop('scrollHeight') > scrollpane.prop('clientHeight')) return;
-            this.perspective.gotoMonth(e.originalEvent.wheelDelta < 0 ? 'next' : 'prev');
+            var delta = e.originalEvent.wheelDelta || e.originalEvent.deltaY || e.originalEvent.detail;
+            this.perspective.gotoMonth(delta < 0 ? 'next' : 'prev');
         }, 400, { trailing: false }),
 
         // handler for mobile month view day-change
