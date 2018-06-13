@@ -63,7 +63,9 @@ define('io.ox/files/actions/add-storage-account', [
 
         var dialog = this,
             availableServices = oauthAPI.services.filter(function (service) {
-                return _(service.get('availableScopes')).contains('drive') && _(filestorageApi.isStorageAvailable()).indexOf(service.id) >= 0;
+                return _(service.get('availableScopes')).contains('drive') &&
+                    (!service.keychainAPI || service.keychainAPI.canAdd()) &&
+                    _(filestorageApi.isStorageAvailable()).indexOf(service.id) >= 0;
             }),
             view = new OAuth.Views.ServicesListView({
                 collection: new Backbone.Collection(availableServices)
