@@ -110,7 +110,7 @@ define('io.ox/mail/detail/links', [
                 data.className = 'deep-link-files';
             } else if (/^(contacts|calendar|tasks)$/.test(data.app)) {
                 data.className = 'deep-link-' + data.app;
-            } else if (deepLinkWhitelist.test(data.app)) {
+            } else if (deepLinkWhitelist.test(data.app) || /^(io.ox\/mail)$/.test(data.app)) {
                 data.className = 'deep-link-app';
             }
             // add folder, id, perspective (jQuery's extend to skip undefined)
