@@ -16,7 +16,7 @@ define('io.ox/multifactor/api', [
     'use strict';
 
     var api = {
-        getStatus: function () {
+        getProviders: function () {
             var def = $.Deferred();
             // Do query to server for multifactor status
             http.GET({
@@ -28,12 +28,39 @@ define('io.ox/multifactor/api', [
             }, def.reject);
             return def;
         },
-        deleteDevice: function (provider, id) {
+        getDevices: function () {
+            return this.getProviders().then(function (data) {
+                var devices = [];
+                if (_.isArray(data.providers)) {
+                    data.providers.forEach(function (provider) {
+                        provider.devices.forEach(function (device) {
+                            device.provider = provider;
+                            devices.push(device);
+                        });
+                    });
+                }
+                return (devices);
+            });
+
+        },
+        deleteDevice: function (provider, id, code) {
             var def = $.Deferred();
             // Do query to server for multifactor status
             http.GET({
                 module: 'multifactor',
-                params: { action: 'delete', deviceId: id, providerName: provider }
+                params: { action: 'delete', deviceId: id, providerName: provider, secret_code: code }
+            }).then(function (data) {
+                console.log(data);
+                def.resolve(data);
+            }, def.reject);
+            return def;
+        },
+        beginAuth: function (provider, id) {
+            var def = $.Deferred();
+            // Do query to server for multifactor status
+            http.GET({
+                module: 'multifactor',
+                params: { action: 'begin', deviceId: id, providerName: provider }
             }).then(function (data) {
                 console.log(data);
                 def.resolve(data);

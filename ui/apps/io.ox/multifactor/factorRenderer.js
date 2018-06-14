@@ -9,17 +9,18 @@
  *
  * Copyright (C) 2016-2020 OX Software GmbH
  */
-define('io.ox/multifactor/settings/factorRenderer', [
-    'gettext!multifactor'
+define('io.ox/multifactor/factorRenderer', [
+    'gettext!multifactor',
+    'less!io.ox/multifactor/style'
 ], function (gt) {
     'use strict';
 
     // Create table entry for the device
-    function createTable(icon, type, device, provider) {
+    function createTable(icon, type, device) {
         var div = $('<div class="multifactordevice">')
         .attr('data-deviceId', device.id)
         .attr('data-deviceName', device.name)
-        .attr('data-provider', provider.name)
+        .attr('data-provider', device.provider.name)
         .on('click', function (e) {
             e.preventDefault();
             $('.multifactordevice').removeClass('selected');
@@ -38,32 +39,28 @@ define('io.ox/multifactor/settings/factorRenderer', [
     }
 
     // Create Table entry based on provider type
-    function getDeviceTable(provider, device) {
-        switch (provider.name) {
+    function getDeviceTable(device) {
+        switch (device.provider.name) {
             case 'SMS':
-                return createTable('fa-mobile', gt('SMS Text Messaging'), device, provider);
+                return createTable('fa-mobile', gt('SMS Text Messaging'), device);
             case 'EXAMPLE-MFA':
-                return createTable('fa-mobile', 'Example MFA', device, provider);
+                return createTable('fa-mobile', 'Example MFA', device);
             case 'U2F':
-                return createTable('fa-microchip', gt('U2F'), device, provider);
+                return createTable('fa-microchip', gt('U2F'), device);
             case 'YUBIKEY':
-                return createTable('fa-id-badge', gt('Yubikey'), device, provider);
+                return createTable('fa-id-badge', gt('Yubikey'), device);
             case 'TOTP':
-                return createTable('fa-google', gt('Google Authenticator'), device, provider);
+                return createTable('fa-google', gt('Google Authenticator'), device);
             default:
                 return $('<span>').append(gt('UNKNOWN'));
         }
     }
 
     var renderer = {
-        render: function (providers) {
+        render: function (devices) {
             var div = $('<div>').addClass('MultifactorDiv');
-            providers.forEach(function (provider) {
-                if (provider.devices && provider.devices.length > 0) {
-                    provider.devices.forEach(function (device) {
-                        div.append(getDeviceTable(provider, device));
-                    });
-                }
+            devices.forEach(function (device) {
+                div.append(getDeviceTable(device));
             });
             return div;
         }

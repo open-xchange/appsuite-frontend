@@ -18,19 +18,21 @@ define('io.ox/multifactor/settings/views/deleteMultifactorView', [
     'io.ox/backbone/views/modal',
     'io.ox/core/yell',
     'io.ox/multifactor/api',
+    'io.ox/multifactor/auth',
     'gettext!multifactor'
-], function (views, ext, mini, ModalView, yell, api, gt) {
+], function (views, ext, mini, ModalView, yell, api, auth, gt) {
 
     'use strict';
 
     var POINT = 'multifactor/settings/deleteMultifactor',
         INDEX = 0;
 
-    var dialog;
+    var def;
 
     function open(device) {
-        dialog = openModalDialog(device);
-        return dialog;
+        openModalDialog(device);
+        def = new $.Deferred();
+        return def;
     }
 
     function openModalDialog(device) {
@@ -53,10 +55,12 @@ define('io.ox/multifactor/settings/views/deleteMultifactorView', [
             var dialog = this;
             doDelete(this.model).done(function () {
                 dialog.close();
+                def.resolve();
             })
             .fail(function (e) {
                 dialog.idle();
                 if (e && e.length > 1) yell('error', e);
+                def.reject();
             });
         })
         .addButton()
@@ -79,7 +83,11 @@ define('io.ox/multifactor/settings/views/deleteMultifactorView', [
     );
 
     function doDelete(model) {
-        return api.deleteDevice(model.get('provider'), model.get('id'));
+        var def = $.Deferred();
+        auth.doAuthentication().then(function (auth) {
+            api.deleteDevice(model.get('provider'), model.get('id'), auth).then(def.resolve, def.reject);
+        }, def.reject);
+        return def;
     }
 
     return {

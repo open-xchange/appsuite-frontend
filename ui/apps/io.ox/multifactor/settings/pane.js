@@ -14,7 +14,7 @@ define('io.ox/multifactor/settings/pane', [
     'io.ox/backbone/views/extensible',
     'io.ox/core/settings/util',
     'io.ox/multifactor/api',
-    'io.ox/multifactor/settings/factorRenderer',
+    'io.ox/multifactor/factorRenderer',
     'settings!io.ox/multifactor',
     'gettext!multifactor',
     'less!io.ox/multifactor/settings/style'
@@ -63,28 +63,20 @@ define('io.ox/multifactor/settings/pane', [
 
     // Refresh the status div and update buttons
     function refresh(statusDiv) {
+        if (!statusDiv) {
+            statusDiv = $('.multifactorStatusDiv');
+        }
         statusDiv.empty();
-        api.getStatus().then(function (status) {
+        api.getDevices().then(function (status) {
             drawStatus(statusDiv, status);
         });
     }
 
-    // Returns true if any devices exist within any providers
-    function hasDevices(providers) {
-        var hasDevice = false;
-        providers.forEach(function (provider) {
-            if (provider.devices && provider.devices.length > 0) {
-                hasDevice = true;
-            }
-        });
-        return hasDevice;
-    }
-
     // Draw the status div, including proper buttons
-    function drawStatus(node, data) {
-        if (data) {
-            if (data.providers && hasDevices(data.providers)) {
-                node.append(factorRenderer.render(data.providers));
+    function drawStatus(node, devices) {
+        if (devices) {
+            if (devices && devices.length > 0) {
+                node.append(factorRenderer.render(devices));
                 addButtons(node, addButton, removeButton);
                 return;
             }
@@ -141,7 +133,9 @@ define('io.ox/multifactor/settings/pane', [
             toDelete = selected[0];
         }
         ox.load(['io.ox/multifactor/settings/views/deleteMultifactorView']).done(function (view) {
-            view.open(toDelete);
+            view.open(toDelete).then(function () {
+                refresh();
+            });
         });
     }
 
