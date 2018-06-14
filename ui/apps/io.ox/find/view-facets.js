@@ -15,8 +15,9 @@ define('io.ox/find/view-facets', [
     'io.ox/find/extensions-facets',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
+    'io.ox/core/api/account',
     'gettext!io.ox/core'
-], function (extensions, api, ext, gt) {
+], function (extensions, api, ext, accountAPI, gt) {
 
     'use strict';
 
@@ -133,25 +134,34 @@ define('io.ox/find/view-facets', [
 
         openFolderDialog: function () {
             var self = this,
-                is = self.is;
+                is = self.is,
+                manager = self.model.manager,
+                facet = manager.get('folder'),
+                value = facet.getValue(),
+                id = value.getOption().value,
+                type = self.baton.app.getModuleParam(),
+                folder = id || api.getDefaultFolder(module),
+                module = (type === 'files' ? 'infostore' : type);
 
-            function isAccount(data) {
-                var account = self.model.manager.get('account');
-                if (!account) return true;
-                return data.account_id === account.getValue().getOption().value;
+            function isIncompatible(data) {
+                if (module === 'mail') {
+                    // primary-only-facets like 'filename' and has_attachments
+                    if (accountAPI.isPrimary(data.id)) return false;
+                    return accountAPI.isPrimary(folder) && !accountAPI.isPrimary(data.id);
+                }
+                if (module === 'infostore') {
+                    // account-specific facets
+                    var account = self.model.manager.get('account');
+                    if (!account) return;
+                    return data.account_id !== account.getValue().getOption().value;
+                }
+                return false;
             }
 
             require(['io.ox/core/folder/picker'], function (picker) {
-                var manager = self.model.manager,
-                    facet = manager.get('folder'),
-                    type = self.baton.app.getModuleParam(),
-                    module = (type === 'files' ? 'infostore' : type),
-                    value = facet.getValue(),
-                    id = value.getOption().value;
-
                 picker({
                     async: true,
-                    folder: id || api.getDefaultFolder(module),
+                    folder: folder,
                     module: module,
                     root: type === 'files' ? '9' : '1',
                     flat: api.isFlat(module),
@@ -170,7 +180,7 @@ define('io.ox/find/view-facets', [
                             });
                     },
                     disable: function (data) {
-                        return !is('readable', data) || api.is('virtual', data) || !isAccount(data);
+                        return !is('readable', data) || api.is('virtual', data) || isIncompatible(data);
                     }
                 });
             });
