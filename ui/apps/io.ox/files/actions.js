@@ -1127,8 +1127,13 @@ define('io.ox/files/actions', [
                     e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
                 }
 
-                // returns false if one file/folder of the selection is in favorites
+                // returns false if one file/folder of the selection is in favorites or a 'local file' (see below)
                 var result =  _.some(e.context, function (element) {
+                    // check that we don't have a local file (upload file in mailcompose, view the file -> we have a local file)
+                    if (element.group === 'localFile') {
+                        return true;
+                    }
+
                     var isFavorite = _.find(favorites, function (elemId) {
                         if (elemId === element.id) {
                             return true;
@@ -1136,6 +1141,7 @@ define('io.ox/files/actions', [
                     });
                     return folderAPI.is('trash', element) || isFavorite;
                 });
+
                 return !result;
             }
             return true;
