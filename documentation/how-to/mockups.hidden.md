@@ -1,6 +1,6 @@
 ---
 title: Mockups and Wireframes
-description: 
+description:
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:ISV_Mockups_Wireframes
 ---
 
@@ -19,8 +19,8 @@ Here are some reasons, why YOU should think about using the power of mockups:
 
 This page contains needed informations, to easily build wireframes/mockups for the Open-Xchange OX App Suite application.
 
-IMPORTANT NOTE: To build/use the mockups, which get described in this article, you need to install a 3rd party software (Balsamiq) on your local PC/Laptop. 
-Balsamiq can be used in a trial period. 
+IMPORTANT NOTE: To build/use the mockups, which get described in this article, you need to install a 3rd party software (Balsamiq) on your local PC/Laptop.
+Balsamiq can be used in a trial period.
 Once you decide to constantly use it, you must purchase a license from their [website](http://balsamiq.com/products/mockups/).
 
 # What´s needed to build beautiful OX App Suite mockups ?

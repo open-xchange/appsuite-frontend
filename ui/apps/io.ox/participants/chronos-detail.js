@@ -145,12 +145,12 @@ define('io.ox/participants/chronos-detail', [
                 // get users
                 var users = _(list)
                     .filter(function (obj) {
-                        return obj.cuType === 'INDIVIDUAL' && obj.entity;
+                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && obj.entity;
                     });
                 // get external
                 var external = _(list)
                     .filter(function (obj) {
-                        return obj.cuType === 'INDIVIDUAL' && !obj.entity;
+                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
                     });
                 // get resources
                 var resources = _(list)

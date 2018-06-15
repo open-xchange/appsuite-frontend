@@ -266,7 +266,8 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3 col-xs-offset-2">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3">');
+                if (_.device('!smartphone')) node.addClass('col-xs-offset-2');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }

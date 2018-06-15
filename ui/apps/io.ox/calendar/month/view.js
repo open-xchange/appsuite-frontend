@@ -42,6 +42,7 @@ define('io.ox/calendar/month/view', [
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
                 'mouseleave .appointment': 'onLeaveAppointment',
+                'wheel': 'onMousewheel',
                 'mousewheel': 'onMousewheel',
                 'DOMMouseScroll': 'onMousewheel'
             };
@@ -160,7 +161,8 @@ define('io.ox/calendar/month/view', [
             var target = $(e.target),
                 scrollpane = target.closest('.list.abs');
             if (scrollpane.prop('scrollHeight') > scrollpane.prop('clientHeight')) return;
-            this.perspective.gotoMonth(e.originalEvent.wheelDelta < 0 ? 'next' : 'prev');
+            var delta = e.originalEvent.wheelDelta || e.originalEvent.deltaY || e.originalEvent.detail;
+            this.perspective.gotoMonth(delta < 0 ? 'next' : 'prev');
         }, 400, { trailing: false }),
 
         // handler for mobile month view day-change
@@ -432,7 +434,7 @@ define('io.ox/calendar/month/view', [
                     $('<div class="appointment-content">')
                     .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        util.isAllday(a) ? $() : $('<span class="start">').text(a.getMoment('startDate').format('LT')),
+                        util.isAllday(a) ? $() : $('<span class="start">').text(a.getMoment('startDate').tz(moment().tz()).format('LT')),
                         util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
                         a.get('summary') ? $('<span class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
                         a.get('location') ? $('<span class="location">').text(a.get('location') || '\u00A0') : ''

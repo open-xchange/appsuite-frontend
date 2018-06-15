@@ -11,11 +11,11 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Http.js
 _general example_
 
 ```javascript
-http.GET({ 
+http.GET({
         module: 'mail',
-        params: { 
-            action: 'all', 
-            folder: 'default0/INBOX' 
+        params: {
+            action: 'all',
+            folder: 'default0/INBOX'
         }
     });
 ```
@@ -58,4 +58,3 @@ _(list).map(function (item) {
 // resume & trigger refresh
 http.resume()
 ```
-

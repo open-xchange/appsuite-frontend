@@ -101,7 +101,7 @@ define('io.ox/calendar/print', [
         // chronos api
         if (data.startDate || data.endDate || data.attendees) {
             // get lists per confirmation state
-            var internal = _(data.attendees).where({ cuType: 'INDIVIDUAL' }),
+            var internal = _(data.attendees).where({ cuType: 'INDIVIDUAL' }).concat(_(data.attendees).where({ cuType: undefined })),
                 resources = _(data.attendees).where({ cuType: 'RESOURCE' }),
                 states = getConfirmationListsforAttendees(internal, resources),
                 numParticipants = _(states).reduce(function (sum, list) { return sum + list.length; }, 0);

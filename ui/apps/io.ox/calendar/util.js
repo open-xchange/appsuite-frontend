@@ -778,7 +778,7 @@ define('io.ox/calendar/util', [
                     ret[c.status].count++;
                     ret.count++;
                 // don't count groups or resources, ignore unknown states (the spec allows custom partstats)
-                } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && c.cuType === 'INDIVIDUAL') {
+                } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && (c.cuType === 'INDIVIDUAL' || !c.cuType)) {
                     ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())].count++;
                     ret.count++;
                 }
@@ -835,6 +835,7 @@ define('io.ox/calendar/util', [
 
             _.each(attendees, function (attendee) {
                 switch (attendee.cuType) {
+                    case undefined:
                     case 'INDIVIDUAL':
                         // internal user
                         if (attendee.entity) {
@@ -1207,7 +1208,7 @@ define('io.ox/calendar/util', [
                 attendee.members = user.members;
             }
             // not really needed. Added just for convenience. Helps if distibution list should be created
-            if (attendee.cuType === 'INDIVIDUAL') {
+            if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
                 attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
                 attendee.contact = {
                     display_name: user.display_name,

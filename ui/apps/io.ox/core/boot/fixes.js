@@ -89,54 +89,32 @@ define('io.ox/core/boot/fixes', [], function () {
             return this;
         };
         Modernizr.touch = true;
-        $('html').addClass('touch');
     } else {
         Modernizr.touch = false;
     }
 
-    // Standalone
-
-    if (_.device('standalone')) {
-        $('html').addClass('standalone');
-    }
-
-    // iOS
-
-    if (_.device('iOS')) {
-        $('html').addClass('ios');
-    }
+    // add some device properties to <html>
+    ['windows', 'macos', 'ios', 'android', 'touch', 'smartphone', 'retina', 'standalone'].forEach(function (property) {
+        if (_.device(property)) $('html').addClass(property);
+    });
 
     // ios8 ipad standalone fix (see bug 35087)
     if (_.device('standalone && ios >= 8') && navigator.userAgent.indexOf('iPad') > -1) {
         $('html').addClass('ios8-standalone-ipad-fix');
     }
 
-    if (_.device('smartphone')) {
-        $('html').addClass('smartphone');
-    }
-
-    // Android
-
-    if (_.device('Android')) {
-        $('html').addClass('android');
-        if (_.browser.chrome === 18 || !_.browser.chrome) {
-            $('html').addClass('legacy-chrome');
-        }
+    // Legacy chrome -> a) still relevant? b) can't we use device() for all checks?
+    if (_.device('Android') && (_.browser.chrome === 18 || !_.browser.chrome)) {
+        $('html').addClass('legacy-chrome');
     }
 
     // IE
     // so we can add browser specific css (currently only needed for IE)
     if (_.device('ie')) {
         $('html').addClass('internet-explorer');
-
         if (_.device('ie <= 11')) {
             $('html').addClass('ie11');
         }
-    }
-
-    // Retina displays
-    if (_.device('retina')) {
-        $('html').addClass('retina');
     }
 
     //

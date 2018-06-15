@@ -13,7 +13,7 @@ Every browser supports a different set of supported codecs and container formats
 
 # Figure out version of mediaelement.js
 
-We always try to integrate the latest version of mediaelement.js in order to get latest fixes. 
+We always try to integrate the latest version of mediaelement.js in order to get latest fixes.
 To figure out which version is integrated in your release, please run the following code:
 
 ```javascript

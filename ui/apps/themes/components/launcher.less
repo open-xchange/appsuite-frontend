@@ -280,13 +280,21 @@
     }
 }
 
-#io-ox-launcher .dropdown-menu {
+.launcher-dropdown.dropdown-menu {
 
     padding: @launcher-outer-spacing;
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
 
+    .smartphone & {
+        padding: 5px 0;
+        width: 100%;
+    }
+
     li {
         float: left;
+
+        .smartphone & { float: initial; }
+
         .fa { width: auto; }
         a:focus {
             i, .title { color: #fff; }
@@ -314,6 +322,7 @@
             height: 42px;
             flex-direction: row;
             padding: 0;
+            margin: 0;
         }
 
         cursor: pointer;
@@ -328,11 +337,12 @@
             width: @launcher-size;
             .smartphone & {
                 top: 11px;
-                left: 48px;
-                font-size: 15px;
-                text-align: left;
+                color: inherit;
+                font-size: 18px;
+                font-weight: 300;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                width: 100%;
             }
             .flex-center(row);
             &.upsell i {
