@@ -66,6 +66,28 @@ define('io.ox/multifactor/api', [
                 def.resolve(data);
             }, def.reject);
             return def;
+        },
+        beginRegistration: function (provider, name) {
+            var def = $.Deferred();
+            http.GET({
+                module: 'multifactor',
+                params: { action: 'startRegistration', providerName: provider, name: name }
+            }).then(function (data) {
+                console.log(data);
+                def.resolve(data);
+            }, def.reject);
+            return def;
+        },
+        finishRegistration: function (provider, id, confirmation) {
+            var def = $.Deferred();
+            http.GET({
+                module: 'multifactor',
+                params: { action: 'finishRegistration', deviceId: id, providerName: provider, secret_code: confirmation }
+            }).then(function (data) {
+                console.log(data);
+                def.resolve(data);
+            }, def.reject);
+            return def;
         }
     };
 

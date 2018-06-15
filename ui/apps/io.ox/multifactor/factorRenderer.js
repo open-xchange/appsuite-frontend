@@ -31,7 +31,7 @@ define('io.ox/multifactor/factorRenderer', [
         var row = $('<tr>');
         var iconCol = $('<td class="multifactorIcon">').append('<icon class="fa ' + icon + '">');
         var textCol = $('<td class="multifactorText">').append(type);
-        var detailCol = $('<td class="multifactorDetail">').append(gt('Name:') + device.name).append('<br/>').append(gt('ID:') + device.id);
+        var detailCol = $('<td class="multifactorDetail">').append(gt('Name:') + ' ' + device.name).append('<br/>').append(gt('ID:') + ' ' + device.id);
         return div.append(
             link.append(table.append(
                 row.append(iconCol).append(textCol).append(detailCol))));

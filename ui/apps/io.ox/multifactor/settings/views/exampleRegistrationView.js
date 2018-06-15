@@ -11,42 +11,52 @@
  * @author Greg Hill <greg.hill@open-xchange.com>
  */
 
-define('io.ox/multifactor/views/selectDeviceView', [
+define('io.ox/multifactor/settings/views/exampleRegistrationView', [
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'io.ox/multifactor/factorRenderer',
-    'io.ox/multifactor/deviceAuthenticator',
+    'io.ox/multifactor/api',
     'gettext!multifactor'
-], function (views, ext, mini, ModalView, renderer, deviceAuthenticator, gt) {
+], function (views, ext, mini, ModalView, api, gt) {
 
     'use strict';
 
-    var POINT = 'multifactor/views/selectDeviceView',
+    var POINT = 'multifactor/settings/views/exampleRegistrationView',
         INDEX = 0;
 
     var dialog;
     var def;
 
-    function open(device, _def) {
-        dialog = openModalDialog(device);
+    function open(provider, device, _def) {
+        dialog = openModalDialog(provider, device);
         def = _def;
         return dialog;
     }
 
-    function openModalDialog(devices) {
+    function openModalDialog(provider, device) {
 
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Additional Authentication Required'),
+            title: gt('Confirm Code'),
             width: 640,
-            model: new Backbone.Model({ 'devices': devices })
+            enter: 'OK',
+            model: new Backbone.Model({ device: device })
         })
         .build(function () {
         })
-        .addButton()
+        .addCancelButton()
+        .addButton({ label: gt('OK'), action: 'OK' })
+        .on('OK', function () {
+            var response = $('#verification').val();
+            if (response && response !== '') {
+                finalize(provider, device, response);
+            } else {
+                def.reject();
+            }
+            dialog.close();
+        })
         .on('cancel', function () {
             def.reject();
         })
@@ -58,7 +68,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append(gt('Please select a device to use for additional authentication'))
+                var label = $('<label>').append('This is just and example.  Pretend we sent a code to you somehow. Please enter the example verification code (0815)')
                 .append('<br>');
                 this.$body.append(
                     label
@@ -68,19 +78,22 @@ define('io.ox/multifactor/views/selectDeviceView', [
         {
             index: INDEX += 100,
             id: 'selection',
-            render: function (baton) {
+            render: function () {
+                var input = $('<input type="text" id="verification">');
                 var selection = $('<div class="multifactorSelector">')
-                .append(renderer.render(baton.model.get('devices')));
-                selection.find('.multifactordevice')
-                .on('click', function () {
-                    deviceAuthenticator.doAuth($(this).attr('data-provider'), $(this).attr('data-provider'), def);
-                    dialog.close();
-                });
+                .append(input);
                 this.$body.append(selection);
             }
         }
 
     );
+
+    function finalize(provider, device, response) {
+        api.finishRegistration(provider, device.id, response).then(function () {
+            console.log('done');
+            def.resolve();
+        }, def.reject);
+    }
 
     return {
         open: open

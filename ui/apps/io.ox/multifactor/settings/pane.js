@@ -15,10 +15,11 @@ define('io.ox/multifactor/settings/pane', [
     'io.ox/core/settings/util',
     'io.ox/multifactor/api',
     'io.ox/multifactor/factorRenderer',
+    'io.ox/core/yell',
     'settings!io.ox/multifactor',
     'gettext!multifactor',
     'less!io.ox/multifactor/settings/style'
-], function (ext, ExtensibleView, util, api, factorRenderer, settings, gt) {
+], function (ext, ExtensibleView, util, api, factorRenderer, yell, settings, gt) {
     'use strict';
 
     ext.point('io.ox/multifactor/settings/detail').extend({
@@ -140,7 +141,18 @@ define('io.ox/multifactor/settings/pane', [
     }
 
     function addMultifactor() {
-        console.log('add');
+        api.getProviders().then(function (data) {
+            if (data && data.providers) {
+                ox.load(['io.ox/multifactor/settings/views/addMultifactorView']).done(function (view) {
+                    view.open(data.providers).then(function () {
+                        refresh();
+                    });
+                });
+            } else {
+                yell('error', gt('Problem getting and multifactor providers'));
+            }
+
+        });
     }
 
 });
