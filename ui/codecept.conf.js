@@ -32,7 +32,7 @@ module.exports.config = {
         OpenXchange: _.extend({}, {
             require: './e2e/helper',
             mxDomain: 'ox-e2e-backend.novalocal',
-            serverURL: localConf.appserver.server
+            serverURL: localConf.appserver && localConf.appserver.server || process.env.LAUNCH_URL
         }, localConf.e2e.helpers.OpenXchange || {})
     },
     'include': {
