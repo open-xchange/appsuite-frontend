@@ -391,7 +391,7 @@ define('io.ox/core/settings/pane', [
             id: 'quickLaunch',
             index: INDEX += 100,
             render: function (baton) {
-                if (appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
+                if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
                 baton.$el.append(
                     new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
                 );
