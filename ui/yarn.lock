@@ -2,11 +2,12 @@
 # yarn lockfile v1
 
 
-"@open-xchange/codecept-helper@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.5.tgz#222066aa8dfc344da2e424c596cc3935f66c61f6"
+"@open-xchange/codecept-helper@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.6.tgz#2da550496d142412b655b6f0d87f21cc27580255"
   dependencies:
     axios "^0.18.0"
+    codeceptjs "^1.2.1"
     form-data "^2.3.2"
     soap "^0.24.0"
     underscore "^1.8.3"
@@ -907,7 +908,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeceptjs@^1.1.6:
+codeceptjs@^1.1.6, codeceptjs@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-1.2.1.tgz#61f7dd142f6da8bc459d4bbcd91b1f7ebc0c126e"
   dependencies:
