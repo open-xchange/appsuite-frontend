@@ -57,7 +57,9 @@ define('io.ox/multifactor/settings/views/addDevice', [
             startRegistration(provider, name);
             dialog.close();
         })
-        .open();
+        .open(function () {
+            $('#deviceName').focus();
+        });
     }
 
     ext.point(POINT).extend(
@@ -110,7 +112,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
             }
             if (view) {
                 require([view], function (regView) {
-                    regView.open(provider, resp.device, def);
+                    regView.open(provider, resp, def);
                 });
             }
         }

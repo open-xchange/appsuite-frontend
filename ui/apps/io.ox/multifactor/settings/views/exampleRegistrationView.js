@@ -28,8 +28,8 @@ define('io.ox/multifactor/settings/views/exampleRegistrationView', [
     var dialog;
     var def;
 
-    function open(provider, device, _def) {
-        dialog = openModalDialog(provider, device);
+    function open(provider, resp, _def) {
+        dialog = openModalDialog(provider, resp.device);
         def = _def;
         return dialog;
     }

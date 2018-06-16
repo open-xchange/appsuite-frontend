@@ -44,7 +44,7 @@ define('io.ox/multifactor/factorRenderer', [
             case 'SMS':
                 return createTable('fa-mobile', gt('SMS Text Messaging'), device);
             case 'EXAMPLE-MFA':
-                return createTable('fa-mobile', 'Example MFA', device);
+                return createTable('fa-id-card', 'Example MFA', device);
             case 'U2F':
                 return createTable('fa-microchip', gt('U2F'), device);
             case 'YUBIKEY':

@@ -94,7 +94,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 text = gt('Recieve a text message with a number pin');
                 break;
             case 'EXAMPLE-MFA':
-                icon = 'fa-mobile';
+                icon = 'fa-id-card';
                 text = gt('An example provider');
                 break;
             case 'U2F':
