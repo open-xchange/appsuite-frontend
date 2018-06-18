@@ -173,7 +173,7 @@ define('io.ox/core/main/appcontrol', [
     var QuickLaunchersCollection = Backbone.Collection.extend({
         initialize: function () {
             this.reload();
-            settings.on('change:apps/quickLaunch change:apps/quickLaunchCount', this.reload);
+            settings.on('change:apps/quickLaunch change:apps/quickLaunchCount', this.reload.bind(this));
             this.listenTo(ox.ui.apps, 'add reset', this.reload);
         },
         reload: function () {
