@@ -11,7 +11,7 @@
  * @author Greg Hill <greg.hill@open-xchange.com>
  */
 
-define('io.ox/multifactor/views/exampleProvider', [
+define('io.ox/multifactor/views/totpProvider', [
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
@@ -21,7 +21,7 @@ define('io.ox/multifactor/views/exampleProvider', [
 
     'use strict';
 
-    var POINT = 'multifactor/views/exampleProvider',
+    var POINT = 'multifactor/views/totpProvider',
         INDEX = 0;
 
     var dialog;
@@ -51,7 +51,7 @@ define('io.ox/multifactor/views/exampleProvider', [
         .addCancelButton()
         .addButton({ label: gt('OK'), action: 'OK' })
         .on('OK', function () {
-            var response = $('#verification').val();
+            var response = $('#authentication').val();
             if (response && response !== '') {
                 var resp = {
                     response: response,
@@ -68,7 +68,7 @@ define('io.ox/multifactor/views/exampleProvider', [
             def.reject();
         })
         .on('open', function () {
-            $('#verification').focus();
+            $('#authentication').focus();
         })
         .open();
     }
@@ -78,7 +78,7 @@ define('io.ox/multifactor/views/exampleProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append('Please enter the example verification code (0815)')
+                var label = $('<label>').append('Please enter the code on the authenticator application')
                 .append('<br>');
                 this.$body.append(
                     label
@@ -89,7 +89,7 @@ define('io.ox/multifactor/views/exampleProvider', [
             index: INDEX += 100,
             id: 'selection',
             render: function () {
-                var input = $('<input type="text" id="verification">');
+                var input = $('<input type="text" id="authentication">');
                 var selection = $('<div class="multifactorAuthDiv">')
                 .append(input);
                 this.$body.append(selection);

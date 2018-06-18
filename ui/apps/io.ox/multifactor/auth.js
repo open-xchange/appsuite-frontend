@@ -21,7 +21,7 @@ define('io.ox/multifactor/auth', [
 
     var auth = {
 
-        doAuthentication: function () {
+        getAuthentication: function () {
             var def = $.Deferred();
             api.getDevices().then(function (list) {
                 if (list && list.length > 0) {
@@ -29,7 +29,7 @@ define('io.ox/multifactor/auth', [
                         selectDeviceView.open(list, def);
                     } else {
                         var device = list[0];
-                        deviceAuthenticator.doAuth(device.provider.name, device.id, def);
+                        deviceAuthenticator.getAuth(device.provider.name, device.id, def);
                     }
                 } else {
                     def.reject();

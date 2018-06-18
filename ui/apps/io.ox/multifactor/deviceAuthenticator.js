@@ -31,14 +31,14 @@ define('io.ox/multifactor/deviceAuthenticator', [
         }
     }
 
-    function doAuth(providerName, deviceId, def) {
+    function getAuth(providerName, deviceId, def) {
         api.beginAuth(providerName, deviceId).then(function (data) {
             doDeviceAuth(providerName, deviceId, data, def);
         }, def.reject);
     }
 
     return {
-        doAuth: doAuth
+        getAuth: getAuth
     };
 
 });

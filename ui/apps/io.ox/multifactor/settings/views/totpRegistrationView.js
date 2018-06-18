@@ -98,6 +98,24 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
                     imageDiv.append(qr)
                 );
             }
+        },
+        {
+            index: INDEX += 100,
+            id: 'Prompt',
+            render: function () {
+                var label = $('<label>').append(gt('Please enter the code displayed in the authenticator to verify everything is configured properly.'));
+                this.$body.append(label);
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'verification',
+            render: function () {
+                var input = $('<input type="text" id="verification">');
+                var selection = $('<div class="verificationDev">')
+                .append(input);
+                this.$body.append(selection);
+            }
         }
     );
 

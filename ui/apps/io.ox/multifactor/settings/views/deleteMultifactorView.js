@@ -84,8 +84,11 @@ define('io.ox/multifactor/settings/views/deleteMultifactorView', [
 
     function doDelete(model) {
         var def = $.Deferred();
-        auth.doAuthentication().then(function (auth) {
-            api.deleteDevice(model.get('provider'), model.get('id'), auth).then(def.resolve, def.reject);
+        auth.getAuthentication().then(function (auth) {
+            api.deleteDevice(model.get('provider'), model.get('id'), auth.response).then(def.resolve, function () {
+                yell('error', gt('Unable to delete'));
+                def.reject();
+            });
         }, def.reject);
         return def;
     }

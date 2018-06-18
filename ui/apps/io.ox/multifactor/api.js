@@ -15,6 +15,12 @@ define('io.ox/multifactor/api', [
 
     'use strict';
 
+    function checkError(data) {
+        if (data && data.value === 'AUTHENTICATION_DENIED') {
+            return data.value;
+        }
+    }
+
     var api = {
         getProviders: function () {
             var def = $.Deferred();
@@ -50,7 +56,9 @@ define('io.ox/multifactor/api', [
                 module: 'multifactor',
                 params: { action: 'delete', deviceId: id, providerName: provider, secret_code: code }
             }).then(function (data) {
-                console.log(data);
+                if (checkError(data)) {
+                    def.reject(checkError(data));
+                }
                 def.resolve(data);
             }, def.reject);
             return def;
@@ -84,6 +92,20 @@ define('io.ox/multifactor/api', [
                 module: 'multifactor',
                 params: { action: 'finishRegistration', deviceId: id, providerName: provider, secret_code: confirmation }
             }).then(function (data) {
+                console.log(data);
+                def.resolve(data);
+            }, def.reject);
+            return def;
+        },
+        doAuth: function (provider, id, code) {
+            var def = $.Deferred();
+            http.GET({
+                module: 'multifactor',
+                params: { action: 'doAuth', deviceId: id, providerName: provider, secret_code: code }
+            }).then(function (data) {
+                if (checkError(data)) {
+                    def.reject(checkError(data));
+                }
                 console.log(data);
                 def.resolve(data);
             }, def.reject);

@@ -59,8 +59,31 @@ define('io.ox/multifactor/settings/pane', [
                 ));
                 refresh(statusDiv);
             }
+        },
+        {
+            id: 'test',
+            index: INDEX += 100,
+            render: function () {
+                var div = $('<div style="margin-top:50px;">');
+                var testButton = $('<button type="button" class="btn btn-default multifactorButton" data-action="remove-multifactor">')
+                .append($.txt(gt('Test verify')))
+                .on('click', tryVerify);
+                this.$el.append(div.append(testButton));
+            }
         }
     );
+
+    function tryVerify() {
+        require(['io.ox/multifactor/auth'], function (auth) {
+            auth.getAuthentication().then(function (result) {
+                api.doAuth(result.provider, result.id, result.response).then(function () {
+                    yell('success', 'Success');
+                }, function () {
+                    yell('error', 'Bad auth');
+                });
+            });
+        });
+    }
 
     // Refresh the status div and update buttons
     function refresh(statusDiv) {
