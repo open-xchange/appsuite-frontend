@@ -45,12 +45,12 @@ define('io.ox/multifactor/api', [
             });
 
         },
-        deleteDevice: function (provider, id, code) {
+        deleteDevice: function (deviceToDeleteProvider, deviceToDelete, provider, id, code) {
             var def = $.Deferred();
             // Do query to server for multifactor status
             http.PUT({
                 module: 'multifactor',
-                params: { action: 'delete', deviceId: id, providerName: provider, secret_code: code }
+                params: { action: 'delete', deviceToDelete: deviceToDelete, deviceToDeleteProvider: deviceToDeleteProvider, deviceId: id, providerName: provider, secret_code: code }
             }).then(function (data) {
                 if (checkError(data)) {
                     def.reject(checkError(data));
