@@ -23,16 +23,12 @@ define('io.ox/multifactor/api', [
 
     var api = {
         getProviders: function () {
-            var def = $.Deferred();
-            // Do query to server for multifactor status
-            http.GET({
-                module: 'multifactor',
-                params: { action: 'get' }
-            }).then(function (data) {
-                console.log(data);
-                def.resolve(data);
-            }, def.reject);
-            return def;
+            return $.when(
+                http.PUT({
+                    module: 'multifactor',
+                    params: { action: 'get' }
+                })
+            );
         },
         getDevices: function () {
             return this.getProviders().then(function (data) {
@@ -52,7 +48,7 @@ define('io.ox/multifactor/api', [
         deleteDevice: function (provider, id, code) {
             var def = $.Deferred();
             // Do query to server for multifactor status
-            http.GET({
+            http.PUT({
                 module: 'multifactor',
                 params: { action: 'delete', deviceId: id, providerName: provider, secret_code: code }
             }).then(function (data) {
@@ -64,42 +60,29 @@ define('io.ox/multifactor/api', [
             return def;
         },
         beginAuth: function (provider, id) {
-            var def = $.Deferred();
-            // Do query to server for multifactor status
-            http.GET({
-                module: 'multifactor',
-                params: { action: 'begin', deviceId: id, providerName: provider }
-            }).then(function (data) {
-                console.log(data);
-                def.resolve(data);
-            }, def.reject);
-            return def;
+            return $.when(
+                http.GET({
+                    module: 'multifactor',
+                    params: { action: 'begin', deviceId: id, providerName: provider }
+                }));
         },
         beginRegistration: function (provider, name) {
-            var def = $.Deferred();
-            http.GET({
-                module: 'multifactor',
-                params: { action: 'startRegistration', providerName: provider, name: name }
-            }).then(function (data) {
-                console.log(data);
-                def.resolve(data);
-            }, def.reject);
-            return def;
+            return $.when(
+                http.GET({
+                    module: 'multifactor',
+                    params: { action: 'startRegistration', providerName: provider, name: name }
+                }));
         },
         finishRegistration: function (provider, id, confirmation) {
-            var def = $.Deferred();
-            http.GET({
-                module: 'multifactor',
-                params: { action: 'finishRegistration', deviceId: id, providerName: provider, secret_code: confirmation }
-            }).then(function (data) {
-                console.log(data);
-                def.resolve(data);
-            }, def.reject);
-            return def;
+            return $.when(
+                http.POST({
+                    module: 'multifactor',
+                    params: { action: 'finishRegistration', deviceId: id, providerName: provider, secret_code: confirmation }
+                }));
         },
         doAuth: function (provider, id, code) {
             var def = $.Deferred();
-            http.GET({
+            http.POST({
                 module: 'multifactor',
                 params: { action: 'doAuth', deviceId: id, providerName: provider, secret_code: code }
             }).then(function (data) {

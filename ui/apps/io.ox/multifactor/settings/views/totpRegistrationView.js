@@ -60,6 +60,9 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
         .on('cancel', function () {
             def.reject();
         })
+        .on('open', function () {
+            $('#verification').focus();
+        })
         .open();
     }
 
@@ -80,7 +83,8 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             id: 'code',
             render: function (baton) {
                 console.log(baton);
-                var label = $('<label>').append(baton.model.get('result').resultParameters.sharedSecret)
+                var label = $('<label>').append(
+                    formatSharedSecret(baton.model.get('result').resultParameters.sharedSecret))
                 .append('<br>');
                 this.$body.append(
                     label
@@ -118,6 +122,11 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             }
         }
     );
+
+    function formatSharedSecret(secret) {
+        if (!secret) return '';
+        return secret.trim().replace(/(\w{4})/g, '$1 ').replace(/(^\s+|\s+$)/, '');
+    }
 
     function finalize(provider, device, response) {
         api.finishRegistration(provider, device.id, response).then(function () {
