@@ -159,11 +159,14 @@ define('io.ox/core/main/appcontrol', [
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 0);
             if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLauncherLimit, n);
+            return Math.min(this.quickLauncherLimit, ox.ui.apps.forLauncher().length, n);
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                str = settings.get('apps/quickLaunch', this.getQuickLauncherDefaults());
+                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).split(','),
+                str = _.chain(list).filter(function (o) {
+                    return ox.ui.apps.get(o.replace(/\/main$/, ''));
+                }).value().join(',');
             // We fill up the list with 'none' in case we have more slots than defaults
             return (str + new Array(count).join(',none')).split(',').slice(0, count);
         }
