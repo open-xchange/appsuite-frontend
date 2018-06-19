@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-19 14:00+0200\n"
+"PO-Revision-Date: 2018-06-19 14:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -5398,6 +5398,11 @@ msgid "Unicolor"
 msgstr "Einfarbig"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Standard"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
 msgstr "Mehrfarbig"
 
@@ -9327,6 +9332,10 @@ msgstr "Ende"
 msgid "Message"
 msgstr "Nachricht"
 
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "Erweiterte Optionen anzeigen"
+
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Days between notices to the same sender"
@@ -10231,10 +10240,6 @@ msgstr "Portal-Einstellungen"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Widget hinzufügen"
-
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Standard"
 
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
