@@ -157,6 +157,10 @@
     }
     #io-ox-quicklaunch > button {
         color: @appcontrol-launcher-color;
+        margin-top: initial;
+        & > .lcell > .icon {
+            margin-bottom: 4px;
+        }
     }
 
     &.open #io-ox-launcher > button,
@@ -182,7 +186,7 @@
             border-radius: 50%;
             position: absolute;
             z-index: 1;
-            top: 20px;
+            top: 18px;
             left: 33px;
         }
         .title { display: none; }
