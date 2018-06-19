@@ -700,7 +700,7 @@ define('io.ox/calendar/util', [
         },
 
         getAttendeeName: function (data) {
-            return data ? data.cn || data.mail || data.uri : '';
+            return data ? data.cn || data.email || data.uri : '';
         },
 
         getNote: function (data, prop) {
