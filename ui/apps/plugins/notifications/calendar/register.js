@@ -108,18 +108,21 @@ define('plugins/notifications/calendar/register', [
                         };
 
                         ox.launch('io.ox/calendar/main', options).done(function () {
-                            this.folders.add(options.folder);
+                            if (this.folders) this.folders.add(options.folder);
                             // no need for a redraw, just select the folder
-                            this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
-                            var currentPage =  this.pages.getCurrentPage();
+                            if (this.folderView) this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
+                            var currentPage = this.pages ? this.pages.getCurrentPage() : false;
                             // resume calendar app
-                            if (currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
+                            if (this.folders && this.folderView && currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
                                 var e = $.Event('click', { target: currentPage.perspective.main });
                                 currentPage.perspective.setNewStart = true;
                                 currentPage.perspective.showAppointment(e, options, { arrow: false });
                             } else {
                                 // perspective is not initialized yet on newly launched calendar app
                                 this.once('aftershow:done', function (perspective) {
+                                    this.folders.add(options.folder);
+                                    // no need for a redraw, just select the folder
+                                    this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
                                     var e = $.Event('click', { target: perspective.main });
                                     perspective.setNewStart = true;
                                     perspective.showAppointment(e, options, { arrow: false });
