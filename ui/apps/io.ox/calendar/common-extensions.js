@@ -97,7 +97,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         recurrence: function (baton) {
-            var recurrenceString = util.getRecurrenceString(baton.model);
+            var recurrenceString = util.getRecurrenceString(baton.model || baton.data);
             if (recurrenceString === '') return;
             this.append(
                 $('<div class="recurrence">').text(recurrenceString)
@@ -203,7 +203,7 @@ define('io.ox/calendar/common-extensions', [
 
         shownAs: function (baton) {
             // only show when marked as free
-            if (!util.hasFlag(baton.model, 'transparent')) return;
+            if (!util.hasFlag(baton.model || baton.data, 'transparent')) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Shown as')),

@@ -121,8 +121,8 @@ define('io.ox/calendar/edit/main', [
                                 self.getWindow().busy();
                             }
                         });
-
-                        self.considerSaved = true;
+                        // if initialModelData is given, we are using a restore point. Don't consider this as saved
+                        self.considerSaved = !opt.initialModelData;
 
                         self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
@@ -149,7 +149,8 @@ define('io.ox/calendar/edit/main', [
                             self.considerSaved = false;
                         });
 
-                        self.initialModelData = self.model.toJSON();
+                        // restore points give their old initial model data as options. This way the dirty check stays correct
+                        self.initialModelData = opt.initialModelData || self.model.toJSON();
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         //used by guided tours so they can show the next step when everything is ready
@@ -208,6 +209,20 @@ define('io.ox/calendar/edit/main', [
             getDirtyStatus: function () {
                 if (this.considerSaved) return false;
                 return !_.isEqual(this.model.toJSON(), this.initialModelData);
+            },
+
+            // clean up model so no empty values are saved and dirty check has no false positives
+            cleanUpModel: function () {
+                var data = this.model.toJSON(),
+                    self = this;
+
+                _(data).each(function (value, key) {
+                    // if value is undefined, '' or null and the key is not in the initial model data, we can omit it
+                    if (!value && !_(self.initialModelData).has(key)) {
+                        // use silent or miniviews add the attribute again with undefined value. We want to omit them here
+                        self.model.unset(key, { silent: true });
+                    }
+                });
             },
 
             onShowWindow: function () {
@@ -350,15 +365,22 @@ define('io.ox/calendar/edit/main', [
                     return {
                         description: gt('Appointment') + (summary ? ': ' + summary : ''),
                         module: 'io.ox/calendar/edit',
-                        point: this.model.attributes
+                        point:  {
+                            data: this.model.attributes,
+                            // save this so the dirty check works correctly after the restore
+                            initialModelData: this.initialModelData
+                        }
                     };
                 }
                 return false;
             },
 
             failRestore: function (point) {
-                this.edit(point, {
-                    mode: _.isUndefined(point.id) ? 'create' : 'edit'
+                // support for legacy restore points
+                var data = point.data || point;
+                this.edit(data, {
+                    mode: _.isUndefined(data.id) ? 'create' : 'edit',
+                    initialModelData: point.initialModelData
                 });
                 return $.when();
             },
@@ -379,6 +401,9 @@ define('io.ox/calendar/edit/main', [
             var self = this,
                 df = new $.Deferred();
 
+            // trigger blur inputfields so the model has current data and the dirty check is correct
+            $(document.activeElement).filter('input').trigger('change');
+            self.cleanUpModel();
             //be gently
             if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {

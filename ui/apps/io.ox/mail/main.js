@@ -1262,7 +1262,7 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Prefetch first 10 relevant (unseen) emails
+         * Prefetch first n relevant (unseen) emails
          */
         'prefetch': function (app) {
 

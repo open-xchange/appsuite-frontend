@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('adds and removes a vacation notice', function (I) {
+Scenario('adds and removes a vacation notice', function (I) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.see('Basic settings', '.rightside h1');
@@ -84,7 +84,7 @@ Scenario.skip('adds and removes a vacation notice', function (I) {
     I.seeElement('input[name="dateFrom"][disabled]');
     I.seeElement('input[name="dateUntil"][disabled]');
 
-    I.click('.modal-dialog .checkbox.custom.small');
+    I.click('Send vacation notice during this time only');
 
     I.waitForElement('input[name="dateFrom"]:not([disabled])');
     I.seeElement('input[name="dateFrom"]:not([disabled])');
