@@ -102,7 +102,7 @@ define('io.ox/files/common-extensions', [
                 // Bug-55575: Dropdown indicator shown when hovering over folder symbol
                 viewport: { selector: '.io-ox-files-main .list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
             }).on('dispose', function () {
-                $(this).tooltip('destroy');
+                $(this).parent().tooltip('destroy');
             });
         },
 
