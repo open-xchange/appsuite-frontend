@@ -24,13 +24,13 @@ define('io.ox/backbone/mini-views/alarms', [
     var standardTypes = ['DISPLAY', 'AUDIO'/*, 'EMAIL'*/],
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
-            'START-': gt.format('before start'),
+            'START-': gt('before start'),
             //#. Used in a selectbox when the reminder for an appointment is after the start time
-            'START': gt.format('after start'),
+            'START': gt('after start'),
             //#. Used in a selectbox when the reminder for an appointment is before the end time
-            'END-': gt.format('before end'),
+            'END-': gt('before end'),
             //#. Used in a selectbox when the reminder for an appointment is after the end time
-            'END': gt.format('after end')
+            'END': gt('after end')
         },
         predefinedSentences = {
             //#. Used to display reminders for appointments
