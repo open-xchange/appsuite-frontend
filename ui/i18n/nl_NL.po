@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-27 10:10+0100\n"
+"PO-Revision-Date: 2018-06-17 11:00+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -592,6 +592,10 @@ msgstr "Maak een foto"
 msgid "Webcam"
 msgstr "Webcam"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr "Camera wisselen"
+
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr ""
@@ -693,7 +697,6 @@ msgstr "Sluiten"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1806,10 +1809,11 @@ msgstr "Mappenoverzicht openen"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Mappen"
 
@@ -1950,11 +1954,6 @@ msgstr "Vorige"
 #: module:io.ox/wizards
 msgid "Next"
 msgstr "Volgende"
-
-#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Empty table cell"
-msgstr "Lege tabel cel"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
@@ -2245,6 +2244,10 @@ msgstr "Mappenoverzicht"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Mini calendar"
 msgstr "Mini agenda"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Weekends"
+msgstr "Weekeinden"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
@@ -3917,6 +3920,11 @@ msgstr ""
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Verbindingsfout (time-out). Probeer de pagina opnieuw te laden."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr ""
+"Er is iets mis gegaan.Sluit alstublieft dit tabblad en probeer het opnieuw."
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Waarschuwing!"
@@ -5455,6 +5463,11 @@ msgstr "Verversingsinterval"
 msgid "Default app after sign in"
 msgstr "Standaard-app na inloggen"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
+msgstr "Snel-start %s"
+
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
@@ -5984,6 +5997,15 @@ msgstr "De eerste 90 dagen zijn gratis."
 msgid "Get free upgrade"
 msgstr "Ontvang een gratis upgrade"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Sorry, er is geen voorbeeld beschikbaar."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"Om dit bestand af te drukken gebruikt u \"Afdrukken als PDF\" in de viewer."
+
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
@@ -6050,9 +6072,8 @@ msgstr "Grootte"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Map"
 
@@ -6779,10 +6800,6 @@ msgstr[1] "Deel geselecteerde bestanden"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
 msgstr "Selecteer de huidige map"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-msgid "Encrypt"
-msgstr "Coderen"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -7869,11 +7886,11 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Alle toekomstige berichten van de verzender worden verplaatst naar de gekozen"
-" map."
+"Alle toekomstige berichten van de verzender worden verplaatst naar de "
+"gekozen map."
 msgstr[1] ""
-"Alle toekomstige berichten van de verzenders van de geselecteerde"
-" e-mailberichten worden verplaatst naar de gekozen map."
+"Alle toekomstige berichten van de verzenders van de geselecteerde e-"
+"mailberichten worden verplaatst naar de gekozen map."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -8282,6 +8299,11 @@ msgstr "Sleep bijlagen hierheen"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "%s toegevoegd aan bijlagen."
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "One of the embedded images could not be used."
+msgstr "Eén van de ingesloten afbeeldingen kan niet gebruikt worden."
 
 #. generic erromessage if inserting an image into a mail failed.
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
@@ -12279,6 +12301,12 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Lege tabel cel"
+
+#~ msgid "Encrypt"
+#~ msgstr "Coderen"
 
 #~ msgid "You have to enter a username and password to subscribe."
 #~ msgstr "U moet een gebruikersnaam en wachtwoord ingeven om te abonneren."

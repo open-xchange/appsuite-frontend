@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-25 01:02+0200\n"
+"PO-Revision-Date: 2018-06-15 15:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -593,6 +593,10 @@ msgstr "Urobiť fotku"
 msgid "Webcam"
 msgstr "Webová kamera"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr "Prepnúť fotoaparát"
+
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr ""
@@ -694,7 +698,6 @@ msgstr "Zatvoriť"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1799,10 +1802,11 @@ msgstr "Otvoriť zobrazenie priečinka"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Priečinky"
 
@@ -1942,11 +1946,6 @@ msgstr "Predošlé"
 #: module:io.ox/wizards
 msgid "Next"
 msgstr "Ďalší"
-
-#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Empty table cell"
-msgstr "Prázdna bunka"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
@@ -2233,6 +2232,10 @@ msgstr "Zobrazenie priečinkov"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Mini calendar"
 msgstr "Minikalendár"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Weekends"
+msgstr "Víkendy"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
@@ -3913,6 +3916,11 @@ msgstr "Funkcia cookies vášho prehliadača je vypnutá. Prosím, zapnite ju."
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Uplynul časový limit pripojenia. Prosím, skúste stránku načítať znova."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr ""
+"Niečo nefungovalo. Prosím, zatvorte túto kartu prehliadača a skúste to znova."
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Upozornenie!"
@@ -4863,9 +4871,12 @@ msgstr "Požadovaná aplikácia momentálne nie je k dispozícii."
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
 msgid_plural "The below items were open last time you exited %1$s."
-msgstr[0] "Nižšie uvedená položka bola otvorená, keď ste naposledy ukončili %1$s."
-msgstr[1] "Nižšie uvedené položky boli otvorené, keď ste naposledy ukončili %1$s."
-msgstr[2] "Nižšie uvedené položky boli otvorené, keď ste naposledy ukončili %1$s."
+msgstr[0] ""
+"Nižšie uvedená položka bola otvorená, keď ste naposledy ukončili %1$s."
+msgstr[1] ""
+"Nižšie uvedené položky boli otvorené, keď ste naposledy ukončili %1$s."
+msgstr[2] ""
+"Nižšie uvedené položky boli otvorené, keď ste naposledy ukončili %1$s."
 
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "Please click \"Continue\" if you'd like to continue editing."
@@ -5448,6 +5459,11 @@ msgstr "Interval obnovenia"
 msgid "Default app after sign in"
 msgstr "Predvolená aplikácia po prihlásení"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
+msgstr "Rýchle spustenie %s"
+
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
@@ -5973,6 +5989,16 @@ msgstr "Prvých 90 dní je zadarmo."
 msgid "Get free upgrade"
 msgstr "Získajte aktualizáciu zadarmo"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Ľutujeme, nie je k dispozícii náhľad."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"Ak chcete tento súbor vytlačiť, použite v prehliadači možnosť „Tlačiť ako "
+"PDF“."
+
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
@@ -6039,9 +6065,8 @@ msgstr "Veľkosť"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Priečinok"
 
@@ -6767,10 +6792,6 @@ msgstr[2] "Zdieľať vybrané súbory"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
 msgstr "Zdieľať aktuálny priečinok"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-msgid "Encrypt"
-msgstr "Zašifrovať"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -8260,6 +8281,11 @@ msgstr "Sem presuňte prílohy"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Pridané súbory %s medzi prílohy."
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "One of the embedded images could not be used."
+msgstr "Jeden z vnorených obrázkov sa nepodarilo použiť."
 
 #. generic erromessage if inserting an image into a mail failed.
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
@@ -12255,6 +12281,12 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Prázdna bunka"
+
+#~ msgid "Encrypt"
+#~ msgstr "Zašifrovať"
 
 #~ msgid "You have to enter a username and password to subscribe."
 #~ msgstr ""

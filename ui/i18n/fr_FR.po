@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-28 22:06+0100\n"
+"PO-Revision-Date: 2018-06-18 10:36+0100\n"
 "Last-Translator: Nicolas Ternisien <nicolas@workshop-chapina.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -596,6 +596,10 @@ msgstr "Prendre une photo"
 msgid "Webcam"
 msgstr "Webcam"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr "Changer de caméra"
+
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr ""
@@ -697,7 +701,6 @@ msgstr "Fermer"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1815,10 +1818,11 @@ msgstr "Ouvrir la vue des dossiers"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Dossiers"
 
@@ -1961,11 +1965,6 @@ msgstr "Précédent"
 #: module:io.ox/wizards
 msgid "Next"
 msgstr "Suivant"
-
-#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Empty table cell"
-msgstr "Cellule de tableau vide"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
@@ -2253,6 +2252,10 @@ msgstr "Vue des dossiers"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Mini calendar"
 msgstr "Mini agenda"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Weekends"
+msgstr "Week-ends"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
@@ -3926,6 +3929,12 @@ msgstr ""
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Délai de la connexion dépassé. Veuillez recharger la page."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr ""
+"Quelque chose s'est mal passé. Veuillez fermer votre onglet de navigateur et"
+" réessayer."
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Avertissement !"
@@ -4887,8 +4896,8 @@ msgid_plural "The below items were open last time you exited %1$s."
 msgstr[0] ""
 "L'élément ci-dessous était ouvert la dernière fois que vous avez quitté %1$s."
 msgstr[1] ""
-"Les éléments ci-dessous étaient ouverts la dernière fois que vous avez quitté"
-" %1$s."
+"Les éléments ci-dessous étaient ouverts la dernière fois que vous avez "
+"quitté %1$s."
 
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "Please click \"Continue\" if you'd like to continue editing."
@@ -4899,11 +4908,11 @@ msgid "If you do not wish to keep the item, please click on the trash icon."
 msgid_plural ""
 "If you do not wish to keep an item, please click on the trash icon."
 msgstr[0] ""
-"Si vous ne souhaitez pas conserver l'élément, veuillez cliquer sur l'icône"
-" corbeille."
+"Si vous ne souhaitez pas conserver l'élément, veuillez cliquer sur l'icône "
+"corbeille."
 msgstr[1] ""
-"Si vous ne souhaitez pas conserver un élément, veuillez cliquer sur l'icône"
-" corbeille."
+"Si vous ne souhaitez pas conserver un élément, veuillez cliquer sur l'icône "
+"corbeille."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5474,6 +5483,11 @@ msgstr "Intervalle d'actualisation"
 msgid "Default app after sign in"
 msgstr "App par défaut après la connexion"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
+msgstr "Lanceur rapide %s"
+
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
@@ -6003,6 +6017,16 @@ msgstr "Les 90 premiers jours sont gratuits."
 msgid "Get free upgrade"
 msgstr "Obtenir une mise à jour gratuite"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Désolé, aucune prévisualisation disponible."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"Pour imprimer ce fichier, veuillez utiliser « Imprimer en PDF » dans"
+" l'afficheur."
+
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
@@ -6069,9 +6093,8 @@ msgstr "Taille"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Dossier"
 
@@ -6799,10 +6822,6 @@ msgstr[1] "Partager les fichiers sélectionnés"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
 msgstr "Partager le dossier courant"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-msgid "Encrypt"
-msgstr "Chiffrer"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -7891,11 +7910,11 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Tous les futurs messages de cet expéditeur seront déplacés dans le dossier"
-" sélectionné."
+"Tous les futurs messages de cet expéditeur seront déplacés dans le dossier "
+"sélectionné."
 msgstr[1] ""
-"Tous les futurs messages des expéditeurs des courriels sélectionnés seront"
-" déplacés dans le dossier sélectionné."
+"Tous les futurs messages des expéditeurs des courriels sélectionnés seront "
+"déplacés dans le dossier sélectionné."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -8315,6 +8334,11 @@ msgstr "Déposez les pièces jointes ici"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Ajout de %s aux pièces jointes."
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "One of the embedded images could not be used."
+msgstr "Impossible d'utiliser l'une des images incluses."
 
 #. generic erromessage if inserting an image into a mail failed.
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
@@ -12332,6 +12356,12 @@ msgstr "Inviter à %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Ajouter à %s"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Cellule de tableau vide"
+
+#~ msgid "Encrypt"
+#~ msgstr "Chiffrer"
 
 #~ msgid "You have to enter a username and password to subscribe."
 #~ msgstr ""

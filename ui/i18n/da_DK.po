@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-27 21:08+0100\n"
+"PO-Revision-Date: 2018-06-18 08:41+0000\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -589,6 +589,10 @@ msgstr "Tag et billede"
 msgid "Webcam"
 msgstr "Webcam"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr "Byt kamera"
+
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr "Brug piltaster for at navigere.  Tast enter for at vælge en dato."
@@ -688,7 +692,6 @@ msgstr "Luk"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1791,10 +1794,11 @@ msgstr "Åbn mappevisning"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Mapper"
 
@@ -1934,11 +1938,6 @@ msgstr "Foregående"
 #: module:io.ox/wizards
 msgid "Next"
 msgstr "Næste"
-
-#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Empty table cell"
-msgstr "Tomt tabelfelt"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
@@ -2223,6 +2222,10 @@ msgstr "Mappevisning"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Mini calendar"
 msgstr "Minikalender"
+
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Weekends"
+msgstr "Weekender"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
@@ -3883,6 +3886,10 @@ msgstr "Cookies er slået fra i din browser. Slå dem venligst til."
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Forbindelse udløbet.  Prøv venligst at genindlæse siden."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr "Noget gik galt.  Luk venligst dette browserfaneblad og prøv igen."
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Advarsel!"
@@ -4840,11 +4847,11 @@ msgid "If you do not wish to keep the item, please click on the trash icon."
 msgid_plural ""
 "If you do not wish to keep an item, please click on the trash icon."
 msgstr[0] ""
-"Hvis du ikke ønsker at beholde elementet, så klik venligst på"
-" papirkurvsikonet."
+"Hvis du ikke ønsker at beholde elementet, så klik venligst på "
+"papirkurvsikonet."
 msgstr[1] ""
-"Hvis du ikke ønsker at beholde et element, så klik venligst på"
-" papirkurvsikonet."
+"Hvis du ikke ønsker at beholde et element, så klik venligst på "
+"papirkurvsikonet."
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/plugins/portal/upsell/register.js module:plugins/portal
@@ -5410,6 +5417,11 @@ msgstr "Opdateringsfrekvens"
 msgid "Default app after sign in"
 msgstr "Standard program efter login"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Quick launch %s"
+msgstr "Hurtigstart %s"
+
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
@@ -5935,6 +5947,15 @@ msgstr "De første 90 dage er gratis."
 msgid "Get free upgrade"
 msgstr "Få en gratis opgradering"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Beklager.  Der er ingen forhåndsvisning."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"For at udskrive denne fil, vælg venligst »Udskriv som PDF« i fremviseren."
+
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
@@ -6001,9 +6022,8 @@ msgstr "Størrelse"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Mappe"
 
@@ -6717,10 +6737,6 @@ msgstr[1] "Del valgte filer"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
 msgstr "Del aktuel mappe"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-msgid "Encrypt"
-msgstr "Kryptér"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -7798,11 +7814,11 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Alle fremtidige beskeder fra afsenderen vil blive flyttet til den valgte"
-" mappe."
+"Alle fremtidige beskeder fra afsenderen vil blive flyttet til den valgte "
+"mappe."
 msgstr[1] ""
-"Alle fremtidige beskeder fra afsenderne af de valgte beskeder vil blive"
-" flyttet til den valgte mappe."
+"Alle fremtidige beskeder fra afsenderne af de valgte beskeder vil blive "
+"flyttet til den valgte mappe."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -8198,6 +8214,11 @@ msgstr "Slip vedhæftninger her"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Føjet %s til vedhæftninger."
+
+#. broken image inside a mail
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "One of the embedded images could not be used."
+msgstr "Et af de indlejrede billeder kunne ikke bruges."
 
 #. generic erromessage if inserting an image into a mail failed.
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
@@ -12165,6 +12186,12 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Tomt tabelfelt"
+
+#~ msgid "Encrypt"
+#~ msgstr "Kryptér"
 
 #~ msgid "You have to enter a username and password to subscribe."
 #~ msgstr "Du skal indtaste et brugernavn og en adgangskode for at abonnere."
