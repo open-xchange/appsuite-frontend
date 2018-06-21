@@ -208,7 +208,9 @@ define('io.ox/core/main/appcontrol', [
                 this.collection.map(function (model) {
                     return new LauncherView({
                         tagName: 'button',
-                        model: model, quicklaunch: true
+                        attributes: { tabindex: -1 },
+                        model: model,
+                        quicklaunch: true
                     }).render().$el.attr('tabindex', -1);
                 })
             );
