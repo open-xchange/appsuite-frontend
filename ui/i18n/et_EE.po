@@ -11769,6 +11769,20 @@ msgstr "täpne vaste (lubab DOS-laadset wildcard'i)"
 msgid "accepted"
 msgstr "kinnitatud"
 
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "never ends"
+msgid "after end"
+msgstr "ei lõpe kunagi"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s is a new contact"
+msgid "after start"
+msgstr "%1$s on uus kontakt"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "an exact, full match"
@@ -11802,6 +11816,19 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "tagasi"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s"
+msgid "before end"
+msgstr "%1$s %2$s"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "before start"
+msgstr "Töönädala alguspäev"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "blue"
@@ -13730,9 +13757,6 @@ msgstr "teie platvorm"
 
 #~ msgid "monthly"
 #~ msgstr "iga kuu"
-
-#~ msgid "never ends"
-#~ msgstr "ei lõpe kunagi"
 
 #~ msgid "no expiry date"
 #~ msgstr "ilma kehtivuse lõputa"

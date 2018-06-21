@@ -11646,6 +11646,20 @@ msgstr "täydellinen vastaavuus (sallii DOS-tyyppiset villit kortit)"
 msgid "accepted"
 msgstr "hyväksynyt"
 
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "never ends"
+msgid "after end"
+msgstr "ei pääty koskaan"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s after start."
+msgid "after start"
+msgstr "%1$s %2$s tapaamisen alusta."
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "an exact, full match"
@@ -11679,6 +11693,20 @@ msgstr "taivaansininen"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "takaisin"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s before end."
+msgid "before end"
+msgstr "%1$s %2$s ennen tapaamisen päättymistä."
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Week start"
+msgid "before start"
+msgstr "Viikko alkaa"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "blue"
@@ -15630,9 +15658,6 @@ msgstr "alustasi"
 
 #~ msgid "never"
 #~ msgstr "ei koskaan"
-
-#~ msgid "never ends"
-#~ msgstr "ei pääty koskaan"
 
 #~ msgid "next %1$s"
 #~ msgstr "seuraava %1$s "

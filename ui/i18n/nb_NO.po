@@ -11791,6 +11791,20 @@ msgstr "et fullt treff (tillater DOS-wildcards)"
 msgid "accepted"
 msgstr "akseptert"
 
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "never ends"
+msgid "after end"
+msgstr "slutter aldri"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s %3$s."
+msgid "after start"
+msgstr "%1$s %2$s %3$s."
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "an exact, full match"
@@ -11824,6 +11838,19 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "tilbake"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s."
+msgid "before end"
+msgstr "%1$s %2$s."
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "before start"
+msgstr "Arbeidsuken starter på"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "blue"
@@ -14379,9 +14406,6 @@ msgstr "plattformen din"
 
 #~ msgid "monthly"
 #~ msgstr "månedlig"
-
-#~ msgid "never ends"
-#~ msgstr "slutter aldri"
 
 #~ msgid "next %1$s"
 #~ msgstr "neste %1$s"

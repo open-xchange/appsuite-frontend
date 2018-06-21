@@ -12107,6 +12107,20 @@ msgstr ""
 msgid "accepted"
 msgstr "kabul edildi"
 
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "never ends"
+msgid "after end"
+msgstr "asla bitmez"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s %3$s."
+msgid "after start"
+msgstr "%1$s %2$s %3$s."
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "an exact, full match"
@@ -12144,6 +12158,19 @@ msgstr ""
 #, fuzzy
 msgid "back"
 msgstr "Geri bildirim "
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s."
+msgid "before end"
+msgstr "%1$s %2$s."
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+msgid "before start"
+msgstr "Başlangıç tarihi"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "blue"
@@ -14244,9 +14271,6 @@ msgstr "Platformunuz"
 
 #~ msgid "monthly"
 #~ msgstr "aylık"
-
-#~ msgid "never ends"
-#~ msgstr "asla bitmez"
 
 #~ msgid "next %1$s"
 #~ msgstr "sıradaki %1$s"
