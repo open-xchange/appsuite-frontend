@@ -89,6 +89,7 @@ define('io.ox/files/actions/share', [
         // error handler
         dialog.listenTo(view.model, 'error:sync', function (action) {
             if (action === 'read') return this.close();
+            if (action === 'update') return this.close();
             this.idle();
         });
 
@@ -106,7 +107,11 @@ define('io.ox/files/actions/share', [
 
         dialog
             .on('share', function () {
-                view.share().then(this.close, this.idle);
+                view.share().then(this.close, function () {
+                    // it can happen that the dialog is disposed already due to different error handlers, do not call idle in this case
+                    if (this && this.disposed === true) return;
+                    this.idle();
+                }.bind(this));
             })
             .on('remove', function () {
                 view.removeLink()
