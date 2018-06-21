@@ -60,6 +60,8 @@ define('io.ox/calendar/folder-select-support', [
             folderAPI.flat({ module: 'calendar', all: true }).then(function (data) {
                 initialList = _(data.private).pluck('id');
                 if (capabilities.has('edit_public_folders')) initialList.push('cal://0/allPublic');
+                // fallback if no object has been added. Maybe the case for guests
+                if (initialList.length === 0) initialList = _(data.shared).pluck('id');
                 setFolders.call(self, initialList);
                 // make sure that all checkmarks are rendered
                 _(self.folders).each(self.repaintNode.bind(self));
