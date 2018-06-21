@@ -221,13 +221,39 @@ define('io.ox/calendar/edit/extensions', [
                 folder: this.model.get('folder'),
 
                 done: function (id, dialog) {
-                    self.model.set('folder', id);
+
                     dialog.close();
+                    var model = folderAPI.pool.getModel(id),
+                        prevOrg = self.model.get('organizer').entity,
+                        previousModel = folderAPI.pool.getModel(self.model.get('folder'));
+
+                    self.model.set('folder', id);
+                    // check if we need to make changes to the appointment
+                    // needed when switch from shared to private or private to shared happens
+                    if (model.is('shared') || previousModel.is('shared')) {
+                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
+                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
+                            self.model.getAttendees().trigger('reset');
+                            // same organizer? No message needed (switched between shared calendars of the same user)
+                            if (prevOrg === self.model.get('organizer').entity) return;
+
+                            require(['io.ox/core/yell'], function (yell) {
+                                if (model.is('shared')) {
+                                    yell('info', gt('You are using a shared calendar. The calendar owner was added as organizer.'));
+                                } else {
+                                    yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
+                                }
+                            });
+                        });
+                    }
                 },
 
                 disable: function (data, options) {
-                    var create = folderAPI.can('create', data);
-                    return !create || (options && /^virtual/.test(options.folder));
+                    var create = folderAPI.can('create', data),
+                        // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
+                        allowed = !self.model.get('id') || folderAPI.is('public', data) || data.created_by === self.model.get('organizer').entity;
+
+                    return !create || !allowed || (options && /^virtual/.test(options.folder));
                 }
             });
         },

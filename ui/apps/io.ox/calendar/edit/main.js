@@ -313,8 +313,8 @@ define('io.ox/calendar/edit/main', [
                     return;
                 }
 
-                // update model with current data
-                if (data) this.model.set(data.toJSON());
+                // update model with current data (omit undefined)
+                if (data) this.model.set(_(data.toJSON()).omit(function (value) { return !value; }));
 
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {

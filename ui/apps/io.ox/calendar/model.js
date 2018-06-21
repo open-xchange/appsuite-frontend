@@ -323,6 +323,11 @@ define('io.ox/calendar/model', [
                     var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' }),
                         id = newAttendee.email ? { email:  newAttendee.email } : { entity: newAttendee.entity };
 
+                    if (options.resetStates) {
+                        self.getAttendees().each(function (model) {
+                            model.set('partStat', 'NEEDS-ACTION');
+                        });
+                    }
                     // Merge attributes or add
                     if (_(self.get('attendees')).findWhere(id)) {
                         _(self.get('attendees')).findWhere(id).partStat = 'ACCEPTED';
