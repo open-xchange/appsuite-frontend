@@ -173,6 +173,7 @@ define('io.ox/core/import/import', [
             this.$body.append(
                 $('<div class="help-block">').append(
                     gt('Ignoring existing appointments is helpful to import public holiday calendars, for example.'),
+                    $.txt(' '),
                     gt('Please note that other participants are removed on calendar import.')
                 )
             );
