@@ -11385,6 +11385,10 @@ msgstr ""
 "Sie verwenden derzeit %1$s von %2$s des für Sie verfügbaren Speicherplatzes. "
 "Sie haben noch %3$s zur Verfügung."
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "You are no longer using a shared calendar. You were added as organizer."
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
@@ -11393,6 +11397,11 @@ msgstr "Sie sind nicht direkt mit %s verbunden. %s hat folgenden Kontakte:"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Sie sind der Organisator"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid ""
+"You are using a shared calendar. The calendar owner was added as organizer."
+msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 msgid ""
