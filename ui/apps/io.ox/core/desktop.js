@@ -879,7 +879,7 @@ define('io.ox/core/desktop', [
         },
 
         reuse: function (cid) {
-            var app = apps.get(cid);
+            var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
             if (app) {
                 app.launch();
                 return true;
