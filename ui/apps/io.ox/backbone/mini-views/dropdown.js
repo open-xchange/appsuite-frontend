@@ -295,7 +295,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             );
         },
 
-        // used to manually prevent the popup from closing. Make sure to reset this or the popup stays open all the time
+        // used to manually prevent the popup from closing.The only exception is a direct click on the toggle button. Make sure to reset this or the popup stays open when you don't want to
         forceOpen: function (state) {
             this.$el.attr('forceOpen', state);
         },

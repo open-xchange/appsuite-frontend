@@ -63,7 +63,7 @@
 
             $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget));
 
-            // dropdowns can be manually prevented from closing.
+            // dropdowns can be manually prevented from closing. exception: direct click on the toggle button
             // used by special dropdowns, like notification area (should not close when a sidepopup is opened or the user clicks within it)
             // also used by tours
             if (e.isDefaultPrevented() || $parent.attr('forceOpen') === 'true') return;
@@ -150,6 +150,10 @@
             $parent.data('menu').find('.divider').remove();
         }
 
+        // direct click on the toggle button removes the force open state
+        if (e && ($parent[0] !== e.target || this === e.target)) {
+            $parent.attr('forceOpen', false);
+        }
         clearMenus();
 
         if (!isActive) {
