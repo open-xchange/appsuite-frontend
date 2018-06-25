@@ -143,7 +143,7 @@ define('io.ox/calendar/folder-select-support', [
         _.defer(this.app.trigger.bind(this.app, 'folders:change', this.folders));
     };
 
-    FolderSelection.prototype.repaintNode = _.debounce(function (id) {
+    FolderSelection.prototype.repaintNode = function (id) {
         if (!this.app || !this.app.treeView) {
             if (ox.debug) console.log('Cannot repaint node: ' + id);
             return;
@@ -152,9 +152,9 @@ define('io.ox/calendar/folder-select-support', [
         nodes.each(function () {
             var node = $(this).data('view');
             if (!node) return;
-            node.repaint();
+            _.delay(node.repaint.bind(node), 20);
         });
-    }, 1);
+    };
 
     return function (app) {
         app.folders = new FolderSelection(app);
