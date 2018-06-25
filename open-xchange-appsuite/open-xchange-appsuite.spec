@@ -12,7 +12,7 @@ BuildRequires: java-devel >= 1.7.0
 %endif
 BuildRequires:  nodejs >= 0.10.0
 Version:        @OXVERSION@
-%define         ox_release 42
+%define         ox_release 43
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -584,6 +584,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Tue Jun 19 2018 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2018-06-25 (4790)
 * Wed May 09 2018 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2018-05-09 (4744)
 * Mon Apr 16 2018 Markus Wagner <markus.wagner@open-xchange.com>

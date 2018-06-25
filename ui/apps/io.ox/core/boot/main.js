@@ -82,7 +82,7 @@ define('io.ox/core/boot/main', [
 
                 gettext.setLanguage('en_US');
 
-                var theme = _.url.hash('theme') || ox.serverConfig.signinTheme || 'login';
+                var theme = _.sanitize.option(_.url.hash('theme')) || ox.serverConfig.signinTheme || 'login';
                 util.debug('Load default language and theme ...', theme);
 
                 // theme
