@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.10.0-8) stable; urgency=medium
+
+  * Second candidate for 7.10.0 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 25 Jun 2018 13:39:55 +0000
+
 open-xchange-appsuite (7.10.0-7) stable; urgency=medium
 
   * First candidate for 7.10.0 release
