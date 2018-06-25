@@ -183,7 +183,9 @@ define('io.ox/mail/detail/content', [
             });
         },
 
-        checkLinks: function () {
+        checkLinks: function (baton) {
+            var shareLinkUrl = baton.data.headers['X-Open-Xchange-Share-URL'];
+
             each(this, 'a', function (node) {
                 var link = $(node),
                     href = link.attr('href') || '',
@@ -196,7 +198,9 @@ define('io.ox/mail/detail/content', [
                     // fix ID, i.e. replace the DOT (old notation) by a SLASH (new notation, 7.8.0)
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
                     link.addClass(data.className).data(data);
-                } else if (href.search(/^\s*mailto\:/i) > -1) {
+                    // if this is a sharing link add the generic deep link class so event handlers work properly and it doesn't get opened in a new tab
+                    if (shareLinkUrl && link.attr('href') === shareLinkUrl) link.addClass('deep-link-app');
+                } else if (href.search(/^\s*mailto:/i) > -1) {
                     // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();
@@ -748,7 +752,7 @@ define('io.ox/mail/detail/content', [
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
-                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
+                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?(\.[\w-]+)+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^\)]+\)$/gm,
                 defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
