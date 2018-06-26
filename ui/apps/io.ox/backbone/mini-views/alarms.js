@@ -160,9 +160,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm, index) {
-            console.log(index);
             index = (index || this.list.children().length) + 1;
-            console.log(index);
             if (!alarm || !alarm.trigger) return;
 
             var row, container, uid = _.uniqueId();
