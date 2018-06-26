@@ -23,28 +23,25 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('Create appointment with all fields', async function (I) {
+Scenario('Create appointment with all fields', async function (I) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
-    I.selectFolder('All my appointments');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test title');
     I.fillField('Location', 'test location');
-
-    //FIXME: checkOption does not work with custom checkboxes, working around but needs a better fix!
-    //I.checkOption('Private');
-    I.click({ css: '[data-extension-id="private_flag"] .toggle' });
+    I.selectOption('Visibility', 'Private');
 
     // // save
     var newAppointmentCID = await I.executeAsyncScript(function (done) {
-        require('io.ox/calendar/api').one('create', function (e, data) {
-            done(_.cid(data));
+        var api = require('io.ox/calendar/api');
+        api.once('create', function (data) {
+            done(api.cid(data));
         });
         // click here to make sure, that the create-listener is bound before the model is saved
         $('.io-ox-calendar-edit-window button[data-action="save"]').trigger('click');
@@ -58,14 +55,14 @@ Scenario.skip('Create appointment with all fields', async function (I) {
     I.waitForVisible('.week.dayview .appointment');
     expect(await I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
     expect(await I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
+    I.seeElement(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 2) week view
     I.clickToolbar('View');
     I.click('Week');
     I.waitForVisible('.week.weekview .appointment');
     expect(await I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
     expect(await I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
+    I.seeElement(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 3) month view
     I.clickToolbar('View');
     I.click('Month');
@@ -76,18 +73,18 @@ Scenario.skip('Create appointment with all fields', async function (I) {
     // // 4) list view
     I.clickToolbar('View');
     I.click('List');
-    I.waitForVisible(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
-    expect(await I.grabTextFrom(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .private-flag`);
+    I.waitForVisible(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
+    expect(await I.grabTextFrom(`.calendar-list-view li[data-cid^="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.calendar-list-view li[data-cid^="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.calendar-list-view li[data-cid^="${newAppointmentCID}"] .private-flag`);
 
     // // delete the appointment thus it does not create conflicts for upcoming appointments
-    I.click(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
+    I.click(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
     I.waitForVisible('[data-action="delete"]');
     I.click('Delete');
     I.waitForVisible('.io-ox-dialog-popup .modal-body');
     I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
+    I.waitForDetached(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
 
     I.logout();
 
