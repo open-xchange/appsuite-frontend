@@ -318,7 +318,7 @@ define('io.ox/core/folder/tree', [
             }
 
             function fixFocus() {
-                this.dropdown.$toggle.parents('li').focus();
+                this.dropdown.$toggle.parents('li').first().focus();
             }
 
             return function () {

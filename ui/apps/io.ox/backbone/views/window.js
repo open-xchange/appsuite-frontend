@@ -101,7 +101,7 @@ define('io.ox/backbone/views/window', [
                 $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('title', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', isNormal),
                 //#. window resize
                 $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', !isNormal),
-                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').append('<i class="fa fa-times" aria-hidden="true">') : ''
+                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">') : ''
             );
         },
 

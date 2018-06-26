@@ -35,7 +35,7 @@ define('io.ox/calendar/month/perspective', [
     _.extend(perspective, {
 
         scaffold:       $(),    // perspective
-        container:      $('<div class="month-container f6-target" tabindex="-1">'),    // container for table with month
+        container:      $('<div class="month-container f6-target scrollpane" tabindex="-1">'),    // container for table with month
         monthInfo:      $('<span class="month-info">'),
         currentView:    null,    // the view with the current month
         views:          {},     // all month views
@@ -415,12 +415,12 @@ define('io.ox/calendar/month/perspective', [
             this.main
                 .on('keydown', function (e) {
                     switch (e.which) {
-                        case 37:
-                            // left
+                        case 37: // left
+                        case 38: // up
                             self.gotoMonth('prev');
                             break;
-                        case 39:
-                            // right
+                        case 39: // right
+                        case 40: // down
                             self.gotoMonth('next');
                             break;
                         case 13:

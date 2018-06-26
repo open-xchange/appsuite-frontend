@@ -25,8 +25,7 @@ After(async function (users) {
 const { expect } = require('chai');
 
 Scenario('Opening multiple windows', async function (I, users) {
-    I.login();
-    I.openApp('Calendar');
+    I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 

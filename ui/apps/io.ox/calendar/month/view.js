@@ -41,10 +41,7 @@ define('io.ox/calendar/month/view', [
                 'click .appointment':      'onClickAppointment',
                 'dblclick .day':           'onCreateAppointment',
                 'mouseenter .appointment': 'onEnterAppointment',
-                'mouseleave .appointment': 'onLeaveAppointment',
-                'wheel': 'onMousewheel',
-                'mousewheel': 'onMousewheel',
-                'DOMMouseScroll': 'onMousewheel'
+                'mouseleave .appointment': 'onLeaveAppointment'
             };
 
             if (_.device('touch')) {

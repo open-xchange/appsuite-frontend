@@ -40,6 +40,7 @@
 
 @quicklaunch-stroke-width: 3px;
 @quicklaunch-stroke-width-retina: 3px;
+@quicklaunch-button-color: rgba(255, 255, 255, 0.70);
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
@@ -57,6 +58,8 @@
         .popover-content-signout { color: #333; }
     }
 }
+
+
 
 #io-ox-top-logo {
     list-style: none;
@@ -156,7 +159,7 @@
         }
     }
     #io-ox-quicklaunch > button {
-        color: @appcontrol-launcher-color;
+        color: @quicklaunch-button-color;
         margin-top: initial;
         & > .lcell > .icon {
             margin-bottom: 4px;

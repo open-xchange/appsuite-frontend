@@ -479,7 +479,7 @@ define('io.ox/backbone/views/datepicker', [
 
                 var tabbable = this.$(':input, :button'),
                     index = tabbable.index(e.target),
-                    lowOut = e.shiftKey && index === 0,
+                    lowOut = e.shiftKey && index === 0 && !!this.$target.length,
                     highOut = !e.shiftKey && index === tabbable.length - 1 && !!this.$target.length;
 
                 // apply focus trap

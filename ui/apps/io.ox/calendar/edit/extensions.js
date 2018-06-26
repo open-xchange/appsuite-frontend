@@ -610,12 +610,13 @@ define('io.ox/calendar/edit/extensions', [
                     '</div></div>')
                     .popover({
                         container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'
-                    });
+                    }),
+                guid = _.uniqueId('form-control-label-');
 
             this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Visibility')).append(helpNode),
-                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
+                $('<div>').append(
+                    $('<label class="simple">').attr('for', guid).text(gt('Visibility')).append(helpNode),
+                    new mini.SelectView({ id: guid, label: gt('Visibility'), name: 'class', model: this.model, list: [
                         { value: 'PUBLIC', label: gt('Standard') },
                         { value: 'CONFIDENTIAL', label: gt('Private') },
                         { value: 'PRIVATE', label: gt('Secret') }]
