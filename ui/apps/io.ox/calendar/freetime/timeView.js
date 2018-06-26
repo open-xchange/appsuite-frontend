@@ -738,7 +738,12 @@ define('io.ox/calendar/freetime/timeView', [
                         this.lassoStartTime = this.positionToTime(this.lassoStart);
                         this.lassoEndTime = this.positionToTime(this.lassoEnd);
                     }
-                    this.lassoNode.show();
+
+                    if (this.lassoEndTime < moment(this.model.get('startDate')).startOf('day').valueOf() || this.lassoStartTime > moment(this.model.get('startDate')).endOf(this.model.get('dateRange')).valueOf()) {
+                        this.lassoNode.hide();
+                    } else {
+                        this.lassoNode.show();
+                    }
                 } else {
                     this.lassoNode.hide();
                 }
