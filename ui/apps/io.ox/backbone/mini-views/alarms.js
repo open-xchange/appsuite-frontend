@@ -112,7 +112,7 @@ define('io.ox/backbone/mini-views/alarms', [
         initialize: function (options) {
             this.options = options || {};
             this.attribute = options.attribute || 'alarms';
-            this.list = $('<ul class="list-unstyled alarm-list">');
+            this.list = $('<div class="alarm-list">');
 
             if (this.model) {
                 this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
@@ -159,17 +159,26 @@ define('io.ox/backbone/mini-views/alarms', [
             var self = this;
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
-        createNodeFromAlarm: function (alarm) {
+        createNodeFromAlarm: function (alarm, index) {
+            console.log(index);
+            index = (index || this.list.children().length) + 1;
+            console.log(index);
             if (!alarm || !alarm.trigger) return;
 
-            var row, container;
+            var row, container, uid = _.uniqueId();
 
-            container = $('<li class="alarm-list-item">').append(row = $('<div class="item">')).data('id', alarm.uid);
+            // fieldset does not support display flex so we need an inner div to do this
+            container = $('<fieldset class="alarm-list-item">').data('id', alarm.uid).append(
+                //#. %1$d: is the number of the reminder
+                $('<legend class="sr-only">').text(gt('Reminder %1$d', index)),
+                row = $('<div class="item">'));
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="alarm-action">').text(alarm.action).val(alarm.action));
+                row.append($('<div class="alarm-action" tabindex="0">').text(alarm.action).val(alarm.action));
             } else {
                 row.append(
-                    $('<select class="form-control alarm-action">').append(
+                    //#. screenreader label for the reminder type (audio, notification, etc)
+                    $('<label class="sr-only">').attr('for', 'action-' + uid).text(gt('type')),
+                    $('<select class="form-control alarm-action">').attr('id', 'action-' + uid).append(
                         $('<option>').text(gt('Notification')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO')
                         // TODO enable when mw supports this
@@ -181,10 +190,14 @@ define('io.ox/backbone/mini-views/alarms', [
             if (alarm.trigger.duration) {
                 var selectbox, relatedbox;
                 row.append(
-                    selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
+                    //#. screenreader label for the reminder timeframe (15 minutes, etc)
+                    $('<label class="sr-only">').attr('for', 'time-' + uid).text(gt('timeframe')),
+                    selectbox = $('<select class="form-control alarm-time">').attr('id', 'time-' + uid).append(_.map(util.getReminderOptions(), function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     })),
-                    relatedbox = $('<select class="form-control alarm-related">').append(_.map(relatedLabels, function (key, val) {
+                    //#. screenreader label for the reminder timeframe relation (before start, after end, etc)
+                    $('<label class="sr-only">').attr('for', 'related-' + uid).text(gt('timeframe relation')),
+                    relatedbox = $('<select class="form-control alarm-related">').attr('id', 'related-' + uid).append(_.map(relatedLabels, function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
                 );
@@ -197,11 +210,11 @@ define('io.ox/backbone/mini-views/alarms', [
                 relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
                 selectbox.val(alarm.trigger.duration.replace('-', ''));
             } else {
-                row.append($('<div class="alarm-time">').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
+                row.append($('<div class="alarm-time" tabindex="0">').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(
-                $('<span role="button" tabindex="0" class="alarm-remove">').append($('<i class="alarm-remove fa fa-trash">'))
+                $('<button type="button" class="btn btn-link alarm-remove">').attr('aria-label', gt('Remove reminder')).append($('<i class="fa fa-trash">'))
             );
 
             return container;
@@ -258,7 +271,7 @@ define('io.ox/backbone/mini-views/alarms', [
             return this;
         },
         drawList: function () {
-            var node = $('<ul class="list-unstyled alarm--link-list">');
+            var node = $('<ul class="list-unstyled alarm-link-list">');
             _(this.model.get(this.attribute)).each(function (alarm) {
                 if (!alarm || !alarm.trigger) return;
                 var options = [], key;
