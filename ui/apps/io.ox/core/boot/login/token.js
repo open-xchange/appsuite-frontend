@@ -60,19 +60,30 @@ define('io.ox/core/boot/login/token', [
     }
 
     function success(data) {
+        // we use a new deferred here instead of returning $.when
+        // see bug 58910 !
+
+        var def = $.Deferred();
 
         ox.session = data.session;
         ox.secretCookie = hash.secretCookie === 'true';
 
-        // set store cookie?
-        return $.when(
+        // both, ramup and store are uncritical, they may
+        // fail but will not block the UI. So we use always
+        // The important call is the userconfig and whoami
+        // which will finally resolve the returned deferred
+        $.when(
             session.rampup(),
             hash.store === 'true' ? session.store() : $.when()
         )
         .then(function () {
             // fetch user config
-            return config.user().then(whoami);
+            config.user()
+                .then(whoami)
+                .then(def.resolve, def.reject);
         });
+
+        return def;
     }
 
     function whoami() {
