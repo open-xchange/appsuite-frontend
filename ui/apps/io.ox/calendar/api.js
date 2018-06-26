@@ -235,7 +235,8 @@ define('io.ox/calendar/api', [
                     var def, reqList = list;
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
-                            return !api.pool.getModel(util.cid(obj));
+                            var model = api.pool.getModel(util.cid(obj));
+                            return !model || (!model.has('attendees') && !model.has('calendarUser'));
                         });
                     }
 
