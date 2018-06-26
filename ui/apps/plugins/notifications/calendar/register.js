@@ -350,7 +350,6 @@ define('plugins/notifications/calendar/register', [
             var options = {
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
-                    fullModel: true,
                     smartRemove: true,
                     useApiCid: true,
                     apiEvents: {
