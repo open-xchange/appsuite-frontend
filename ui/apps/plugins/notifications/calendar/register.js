@@ -20,8 +20,9 @@ define('plugins/notifications/calendar/register', [
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
     'settings!io.ox/core',
-    'io.ox/core/tk/sounds-util'
-], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil) {
+    'io.ox/core/tk/sounds-util',
+    'io.ox/core/notifications'
+], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil, notifications) {
 
     'use strict';
 
@@ -106,6 +107,8 @@ define('plugins/notifications/calendar/register', [
                             id: model.get('id'),
                             perspective: 'week:week'
                         };
+
+                        if (_.device('smartphone')) notifications.dropdown.close();
 
                         ox.launch('io.ox/calendar/main', options).done(function () {
                             if (this.folders) this.folders.add(options.folder);
