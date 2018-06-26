@@ -82,6 +82,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/moment.js',
                             'apps/io.ox/core/viewer/main.js',
                             'apps/io.ox/core/main/icons.js',
+                            'apps/io.ox/core/extPatterns/stage.js',
+                            'apps/io.ox/core/sockets.js',
                             // missing for signin
                             'apps/io.ox/core/boot/config.js',
                             'apps/io.ox/core/boot/fixes.js',
@@ -129,7 +131,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/find/view-placeholder.js',
                             'apps/io.ox/core/desktop.js',
                             'apps/io.ox/core/api/apps.js',
-                            'apps/io.ox/core/extPatterns/stage.js',
                             'apps/io.ox/core/yell.js',
                             'apps/io.ox/core/notifications.js',
                             'apps/io.ox/core/commons.js',
