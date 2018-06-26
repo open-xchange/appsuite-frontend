@@ -117,9 +117,13 @@
                     color: #fff;
                     font-weight: bold;
                     background-color: @calendar-today;
+
+                    .day-label {
+                        color: white;
+                    }
                 }
 
-                &.out {
+                &.out:not(.today) {
                     background-color: rgba(238, 238, 238, 0.5);
 
                     .number {
