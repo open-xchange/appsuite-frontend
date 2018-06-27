@@ -24,7 +24,7 @@ define(['io.ox/core/extensions',
                     return r.method !== 'PUT' || String(r.url) !== '/api\\/multiple\\?/';
                 });
                 capStub = sinon.stub(capabilities, 'has');
-                capStub.withArgs('freebusy !alone').returns(true);
+                capStub.withArgs('freebusy !alone !guest').returns(true);
             });
 
             afterEach(function () {
