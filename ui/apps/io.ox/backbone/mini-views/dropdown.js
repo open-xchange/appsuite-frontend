@@ -214,7 +214,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         setup: function () {
-            this.$ul = this.options.$ul || $('<ul class="dropdown-menu" role="menu">');
+            this.$ul = this.options.$ul || this.$ul || $('<ul class="dropdown-menu" role="menu">');
             this.$placeholder = $('<div class="hidden">').attr('id', _.uniqueId('dropdown-placeholder-'));
             this.smart = this.options.smart;
             this.margin = this.options.margin || 8;
@@ -335,7 +335,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr({
+                this.$toggle = this.options.$toggle || this.$toggle || $('<a href="#" draggable="false">').attr({
                     'aria-label': ariaLabel,
                     'data-action': this.options.dataAction,
                     'title': this.options.title || null,

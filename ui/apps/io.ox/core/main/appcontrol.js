@@ -222,39 +222,31 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    var LaunchersView = Backbone.View.extend({
+    var LaunchersView = Dropdown.extend({
         tagName: 'li',
-        className: 'launcher',
-        initialize: function () {
-            this.listenTo(this.collection, 'add remove', function () {
-                this.$el.empty();
-                this.render();
-            });
-        },
-        render: function () {
-            var ul = $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
-                btn = $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                dropdown = new Dropdown({
-                    id: 'io-ox-launcher',
-                    $ul: ul,
-                    $toggle: btn
-                });
-
+        className: 'launcher dropdown',
+        id: 'io-ox-launcher',
+        $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
+        $toggle: $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+        update: function () {
+            this.$ul.empty();
             this.collection.forLauncher().forEach(function (model, i) {
-                dropdown.append(
+                this.append(
                     new LauncherView({ model: model, pos: i + 1 }).render().$el
                 );
-            });
+            }.bind(this));
             if (_.device('smartphone')) {
                 this.collection.where({ closable: true }).forEach(function (model) {
-                    dropdown.append(
+                    this.append(
                         new LauncherView({ model: model }).render().$el
                     );
-                });
+                }.bind(this));
             }
-
-            this.$el.append(dropdown.render().$el);
-            return this;
+        },
+        initialize: function () {
+            Dropdown.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.collection, 'add remove', this.update);
+            this.update();
         }
     });
 
@@ -354,8 +346,6 @@ define('io.ox/core/main/appcontrol', [
         id: 'launcher',
         index: 120,
         draw: function () {
-            // reverted for 7.10
-            //if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
                 collection: ox.ui.apps
             });
