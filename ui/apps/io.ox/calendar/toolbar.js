@@ -51,7 +51,6 @@ define('io.ox/calendar/toolbar', [
             mobile: 'hi',
             label: gt.pgettext('app', 'Scheduling'),
             title: gt('Find a free time'),
-            drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
         },
         'today': {

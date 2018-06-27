@@ -469,7 +469,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 650,
         nextTo: 'full_time',
         draw: function (baton) {
-            if (capabilities.has('freebusy !alone') && _.device('desktop')) {
+            if (capabilities.has('freebusy !alone !guest') && _.device('desktop')) {
                 this.append(
                     $('<div class="hidden-xs col-sm-6 find-free-time">').append(
                         $('<button type="button" class="btn btn-link">').text(gt('Find a free time'))
