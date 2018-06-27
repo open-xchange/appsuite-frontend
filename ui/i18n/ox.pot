@@ -199,6 +199,18 @@ msgstr ""
 msgid "Add reminder"
 msgstr ""
 
+#. %1$d: is the number of the reminder
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Reminder %1$d"
+msgstr ""
+
+#. screenreader label for the reminder type (audio, notification, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "type"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "Notification"
@@ -207,6 +219,23 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "Audio"
+msgstr ""
+
+#. screenreader label for the reminder timeframe (15 minutes, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "timeframe"
+msgstr ""
+
+#. screenreader label for the reminder timeframe relation (before start, after end, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "timeframe relation"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Remove reminder"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js
@@ -875,6 +904,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
+#: apps/io.ox/backbone/views/window.js
 #: apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar
 #: apps/io.ox/core/about/about.js
@@ -8895,6 +8925,8 @@ msgstr ""
 
 #: apps/io.ox/files/share/wizard.js
 #: module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Enter Password"
 msgstr ""
 
