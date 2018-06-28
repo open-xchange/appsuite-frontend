@@ -203,7 +203,7 @@ define('io.ox/core/folder/api', [
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
             if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
-            if (this.is('calendar') && this.is('private')) return this.supportsShares();
+            if (this.is('calendar') && this.is('private') && !this.supportsShares()) return false;
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
             return capabilities.has('read_create_shared_folders');
@@ -633,7 +633,7 @@ define('io.ox/core/folder/api', [
         .pipe(function (data) {
             // update/add model
             var model = pool.addModel(data);
-            if (options.isReload && _(model.changed).size()) {
+            if (_(model.changed).size()) {
                 // use module here, so apis only listen to their own folders
                 api.trigger('changesAfterReloading:' + model.get('module'), model);
             }
@@ -873,7 +873,7 @@ define('io.ox/core/folder/api', [
             cached = {};
 
         if (collection.fetched && options.cache === true) {
-            cached['private'] = collection.toJSON();
+            cached.private = collection.toJSON();
             ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
                 var collection = getFlatCollection(module, section);
                 if (collection.fetched) cached[section] = collection.toJSON();
@@ -927,7 +927,7 @@ define('io.ox/core/folder/api', [
                 collectionId;
 
             // inject public section if not presend
-            if (module === 'event' && !data['public']) data['public'] = [];
+            if (module === 'event' && !data.public) data.public = [];
 
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
@@ -1411,7 +1411,7 @@ define('io.ox/core/folder/api', [
     function reload() {
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             // register function call once
-            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false, isReload: true }), reload.wait);
+            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
             api.trigger('reload:' + id);
             reload.hash[id]();
         });

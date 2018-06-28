@@ -31,6 +31,8 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
             this.point = ext.point(this.point || this.options.point);
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
+            this.busy = busy.bind(this);
+            this.idle = idle.bind(this);
             // simplify debugging
             this.$el.attr('data-point', this.options.point);
         },
@@ -74,8 +76,38 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
 
         render: function () {
             return this.invoke('render');
+        },
+
+        disableFormElements: function () {
+            // disable all form elements; mark already disabled elements via CSS class
+            this.$(':input').each(function () {
+                if ($(this).attr('data-action') === 'cancel') return;
+                $(this).toggleClass('disabled', $(this).prop('disabled')).prop('disabled', true);
+            });
+        },
+
+        enableFormElements: function () {
+            // enable all form elements
+            this.$(':input').each(function () {
+                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+            });
         }
     });
+
+    function busy() {
+        this.disableFormElements();
+        this.activeElement = this.activeElement || document.activeElement;
+        this.$el.css('opacity', 0.50);
+        return this;
+    }
+
+    function idle() {
+        this.enableFormElements();
+        this.$el.css('opacity', '');
+        if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+        this.activeElement = null;
+        return this;
+    }
 
     return ExtensibleView;
 });

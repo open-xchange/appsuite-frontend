@@ -13,6 +13,7 @@
 
 define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/folder/api',
@@ -23,7 +24,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/print',
     'static/3rd.party/jquery-ui.min.js',
     'io.ox/calendar/week/extensions'
-], function (ext, api, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
+], function (ext, capabilities, api, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
 
     'use strict';
 
@@ -614,6 +615,10 @@ define('io.ox/calendar/week/view', [
          * @param  { MouseEvent } e mouseevents on day container
          */
         onLasso: function (e) {
+
+            // needless for guests
+            if (capabilities.has('guest')) return;
+
             var self = this,
                 getFolder = this.mode === 'day' && settings.get('mergeview') ? folderAPI.get($(e.target).closest('.day').attr('data-folder-cid') || this.folder().id) : $.when(this.folder());
 

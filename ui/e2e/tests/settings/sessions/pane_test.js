@@ -15,6 +15,14 @@
 
 Feature('Sessions settings');
 
+Before(async function (users) {
+    await users.create();
+});
+
+After(async function (users) {
+    await users.removeAll();
+});
+
 Scenario('lists all sessions', function (I) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/sessions']);

@@ -216,13 +216,13 @@ define('io.ox/mail/common-extensions', [
 
                 if (status) {
                     $el.append(
-                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').popover({
+                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
                             placement: _.device('smartphone') ? 'auto' : 'right',
                             trigger: 'focus hover',
                             content: util.getAuthenticityMessage(status, email)
                         })
                         .append(
-                            $('<i class="fa">').addClass(function () {
+                            $('<i class="fa" aria-hidden="true">').addClass(function () {
                                 if (status === 'neutral') return 'fa-question'; //fa-question
                                 if (status === 'fail') return 'fa-exclamation';
                                 return 'fa-check';
@@ -643,6 +643,7 @@ define('io.ox/mail/common-extensions', [
                 };
 
                 view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
+                view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
                 view.$el.on('click', 'li.item', function (e) {

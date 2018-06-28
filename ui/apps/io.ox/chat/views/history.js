@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/chat/data'], function (DisposableView, data) {
+define('io.ox/chat/views/history', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/views/chatAvatar',
+    'io.ox/chat/data'
+], function (DisposableView, ChatAvatar, data) {
 
     'use strict';
 
@@ -21,12 +25,12 @@ define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/ch
 
         initialize: function () {
 
-            this.collection = data.backbone.chats;
+            this.collection = data.chats;
 
             this.listenTo(this.collection, {
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:active': this.onChangeActive,
+                'change:open': this.onChangeOpen,
                 'change': this.onChange
             });
         },
@@ -50,28 +54,34 @@ define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/ch
         },
 
         renderItem: function (model) {
-            return $('<li>').append(
-                $('<div class="avatar">'),
-                $('<div class="title">').text(model.get('title')),
-                $('<div class="message">').text(model.getLastMessage()),
-                $('<div class="date">').text(model.getLastMessageDate())
-            );
+            return $('<li>')
+                .attr('data-cid', model.cid)
+                .append(
+                    new ChatAvatar({ model: model }).render().$el,
+                    $('<div class="title">').text(model.getTitle()),
+                    $('<div class="date">').text(model.getLastMessageDate()),
+                    $('<div class="body">').text(model.getLastMessage()),
+                    $('<button type="button" class="btn btn-default btn-action" >')
+                        .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
+                        .text('Open')
+                );
         },
 
         getNode: function (model) {
-            return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
+            return this.$('[data-cid="' + model.cid + '"]');
         },
 
         onAdd: function () {
 
         },
 
-        onRemove: function () {
-
+        onRemove: function (model) {
+            this.getNode(model).remove();
         },
 
-        onChangeActive: function () {
-
+        onChangeOpen: function (model, value) {
+            console.log('onChangeOpen', model, value);
+            if (value) this.onRemove(model);
         },
 
         onChange: function () {

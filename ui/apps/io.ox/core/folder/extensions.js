@@ -838,7 +838,7 @@ define('io.ox/core/folder/extensions', [
                 // guests might have no default folder
                 if (!folder) return;
                 this.link('folder', gt('Personal calendar'), function (e) {
-                    e.data = { folder: '1', module: 'event' };
+                    e.data = { folder: folder, module: 'event' };
                     addFolder(e);
                 });
             }

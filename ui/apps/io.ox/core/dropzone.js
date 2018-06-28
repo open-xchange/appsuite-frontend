@@ -135,8 +135,8 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         isScope: function (e) {
-            if (_.isUndefined(this.window)) this.window = this.$el.closest('.window-container');
-            return $(e.target).closest('.window-container').is(this.window);
+            if (_.isUndefined(this.window)) this.window = this.$el.closest('.window-container, .io-ox-viewer');
+            return $(e.target).closest('.window-container, .io-ox-viewer').is(this.window);
         },
 
         // overwrite for custom checks

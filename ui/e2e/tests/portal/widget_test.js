@@ -15,6 +15,14 @@ const expect = require('chai').expect;
 
 Feature('Portal widgets');
 
+Before(async function (users) {
+    await users.create();
+});
+
+After(async function (users) {
+    await users.removeAll();
+});
+
 Scenario('add and remove Inbox widget', async function (I) {
     I.login('app=io.ox/portal');
     I.waitForElement('[data-app-name="io.ox/portal"] .header', 20);

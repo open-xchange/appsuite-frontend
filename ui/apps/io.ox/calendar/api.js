@@ -210,7 +210,7 @@ define('io.ox/calendar/api', [
                             extendedEntities: true
                         },
                         data: list
-                    })['catch'](function (err) {
+                    }).catch(function (err) {
                         if (err.code !== 'CAL-5072') throw err;
                         // split list in half if error code suggested a too large list
                         var list1 = _(list).first(Math.ceil(list.length / 2)),
@@ -235,7 +235,8 @@ define('io.ox/calendar/api', [
                     var def, reqList = list;
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
-                            return !api.pool.getModel(util.cid(obj));
+                            var model = api.pool.getModel(util.cid(obj));
+                            return !model || (!model.has('attendees') && !model.has('calendarUser'));
                         });
                     }
 
@@ -464,11 +465,17 @@ define('io.ox/calendar/api', [
                 })
                 .then(processResponse)
                 .then(function (response) {
-                    if (!response.conflicts && response.updated && response.updated.length > 0) {
-                        // updates notification area for example
-                        // don't use api.pool.getModel as this returns undefined if the recurrence master was updated
-                        api.trigger('mark:invite:confirmed', response.updated[0]);
+                    if (!response.conflicts) {
+                        if (response.updated && response.updated.length) {
+                            // updates notification area for example
+                            // don't use api.pool.getModel as this returns undefined if the recurrence master was updated
+                            api.trigger('mark:invite:confirmed', response.updated[0]);
+                        } else if (response.updated && response.updated.length === 0) {
+                            // updates where possibly out of range, get new invites to remove invites and update data
+                            api.getInvites();
+                        }
                     }
+
                     return response;
                 });
             },

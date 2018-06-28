@@ -246,7 +246,9 @@ define('io.ox/contacts/view-detail', [
                     tagName: 'li',
                     model: new pModel.Participant(data),
                     halo: true,
-                    isMail: true
+                    isMail: true,
+                    // forces the use of the correct mailfield (disables fallback). User is no longer misslead by the ui showing a mail address, that is not used by this distributionlist
+                    strict: true
                 }).render().$el
             );
         }

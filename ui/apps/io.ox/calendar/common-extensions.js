@@ -97,7 +97,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         recurrence: function (baton) {
-            var recurrenceString = util.getRecurrenceString(baton.model);
+            var recurrenceString = util.getRecurrenceString(baton.model || baton.data);
             if (recurrenceString === '') return;
             this.append(
                 $('<div class="recurrence">').text(recurrenceString)
@@ -137,7 +137,7 @@ define('io.ox/calendar/common-extensions', [
 
             // we don't show details for private appointments in shared/public folders (see bug 37971)
             var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder);
-            if (util.isPrivate(data) && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
+            if (util.isPrivate(data) && data.createdBy.entity !== ox.user_id && !folderAPI.is('private', folder)) return;
 
             var node = $('<table class="details-table expandable-content">');
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
@@ -202,12 +202,12 @@ define('io.ox/calendar/common-extensions', [
         },
 
         shownAs: function (baton) {
+            // only show when marked as free
+            if (!util.hasFlag(baton.model || baton.data, 'transparent')) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Shown as')),
-                    $('<td>').append(
-                        $('<i class="fa fa-square shown_as" aria-hidden="true">').addClass(util.getShownAsClass(baton.model || baton.data)),
-                        $('<span class="detail shown-as">').text('\u00A0' + util.getShownAs(baton.model || baton.data))
+                    $('<td>').append(util.getShownAs(baton.model || baton.data)
                     )
                 )
             );

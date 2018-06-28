@@ -22,6 +22,30 @@ msgstr ""
 msgid "Server unreachable"
 msgstr ""
 
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "before start"
+msgstr ""
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "after start"
+msgstr ""
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "before end"
+msgstr ""
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "after end"
+msgstr ""
+
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js
@@ -175,6 +199,18 @@ msgstr ""
 msgid "Add reminder"
 msgstr ""
 
+#. %1$d: is the number of the reminder
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Reminder %1$d"
+msgstr ""
+
+#. screenreader label for the reminder type (audio, notification, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "type"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "Notification"
@@ -183,6 +219,23 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "Audio"
+msgstr ""
+
+#. screenreader label for the reminder timeframe (15 minutes, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "timeframe"
+msgstr ""
+
+#. screenreader label for the reminder timeframe relation (before start, after end, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "timeframe relation"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Remove reminder"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js
@@ -748,6 +801,11 @@ msgstr ""
 msgid "Webcam"
 msgstr ""
 
+#: apps/io.ox/backbone/views/capture-media.js
+#: module:io.ox/core
+msgid "Switch camera"
+msgstr ""
+
 #: apps/io.ox/backbone/views/datepicker.js
 #: module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
@@ -846,6 +904,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
+#: apps/io.ox/backbone/views/window.js
 #: apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar
 #: apps/io.ox/core/about/about.js
@@ -885,7 +944,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js
@@ -1736,6 +1794,16 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+msgid "You are using a shared calendar. The calendar owner was added as organizer."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+msgid "You are no longer using a shared calendar. You were added as organizer."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr ""
 
@@ -2343,6 +2411,7 @@ msgstr ""
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
 #: apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 #: apps/io.ox/tasks/main.js
@@ -2543,12 +2612,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
-msgstr ""
-
-#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-#: apps/io.ox/calendar/month/view.js
-#: module:io.ox/calendar
-msgid "Empty table cell"
 msgstr ""
 
 #. %1$s is a date: october 12th 2017 for example
@@ -2914,6 +2977,11 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js
 #: module:io.ox/calendar
 msgid "Mini calendar"
+msgstr ""
+
+#: apps/io.ox/calendar/toolbar.js
+#: module:io.ox/calendar
+msgid "Weekends"
 msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js
@@ -3751,6 +3819,13 @@ msgstr ""
 msgid "Shared address books"
 msgstr ""
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr ""
+
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js
@@ -3788,13 +3863,6 @@ msgstr ""
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 msgid "Empty"
-msgstr ""
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js
-#: module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
 msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
@@ -4947,6 +5015,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js
 #: module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
 msgstr ""
 
 #: apps/io.ox/core/boot/warning.js
@@ -6684,6 +6757,13 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Default"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
 msgid "Multicolor"
 msgstr ""
 
@@ -7461,7 +7541,6 @@ msgstr ""
 #: module:io.ox/files
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js
 #: apps/io.ox/find/extensions-api.js
 #: apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
@@ -8307,11 +8386,6 @@ msgstr[1] ""
 msgid "Share current folder"
 msgstr ""
 
-#: apps/io.ox/files/favorite/toolbar.js
-#: module:io.ox/core
-msgid "Encrypt"
-msgstr ""
-
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core
@@ -8851,6 +8925,8 @@ msgstr ""
 
 #: apps/io.ox/files/share/wizard.js
 #: module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Enter Password"
 msgstr ""
 
@@ -11153,6 +11229,11 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js
+#: module:io.ox/mail
+msgid "Show advanced options"
+msgstr ""
+
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: module:io.ox/mail
@@ -12219,11 +12300,6 @@ msgstr ""
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Add widget"
-msgstr ""
-
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Default"
 msgstr ""
 
 #. %1$s is the title of the item, which should be colored

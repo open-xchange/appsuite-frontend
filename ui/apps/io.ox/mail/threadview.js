@@ -92,10 +92,10 @@ define('io.ox/mail/threadview', [
 
             var keepPrefix = baton.view.collection.length === 1,
                 data = baton.view.model.toJSON(),
-                subject = util.getSubject(api.threads.subject(data) || data.subject, keepPrefix);
+                subject = baton.view.threaded ? api.threads.subject(data) || data.subject : data.subject;
 
             this.append(
-                $('<h1 class="subject">').text(subject)
+                $('<h1 class="subject">').text(util.getSubject(subject, keepPrefix))
             );
         }
     });

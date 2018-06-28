@@ -697,9 +697,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                     toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                     isDriveFile = model.isFile(),
+                    toolbarTmp = toolbar.clone().empty(),
                     baton = Ext.Baton({
                         context: this,
-                        $el: toolbar,
+                        $el: toolbarTmp,
                         model: model,
                         models: isDriveFile ? [model] : null,
                         data: isDriveFile ? model.toJSON() : origData,
@@ -728,7 +729,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 });
                 // set device type
                 Util.setDeviceClass(this.$el);
-                toolbar.empty().append(pageNavigation);
                 // enable only the link set for the current app
                 _.each(toolbarPoint.keys(), function (id) {
                     if (id === appName) {
@@ -753,8 +753,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                         );
                     }
                 }));
-                var ret = toolbarPoint.invoke('draw', toolbar, baton);
+
+                var ret = toolbarPoint.invoke('draw', toolbarTmp, baton);
                 $.when.apply(self, ret.value()).done(function () {
+                    toolbar.empty().append(pageNavigation).append(toolbarTmp.children());
                     self.currentlyDrawn = null;
                     if (self.nextToDraw) {
                         var temp = self.nextToDraw;

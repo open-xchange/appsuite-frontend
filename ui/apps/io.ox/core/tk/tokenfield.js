@@ -398,10 +398,6 @@ define('io.ox/core/tk/tokenfield', [
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
 
-                        if (_.device('smartphone') && label.css('max-width') !== 'none') {
-                            // subtract size of right-aligned control (mail compose).
-                            label.css('max-width', label.width() - 16 + 'px');
-                        }
                         // a11y: set title
                         node.attr('aria-label', function () {
                             var token = model.get('token'),

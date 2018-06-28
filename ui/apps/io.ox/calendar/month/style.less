@@ -15,89 +15,64 @@
 
     * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
-    .abs {
-        overflow: hidden;
+    // overwrite display:block from page controller
+    &.io-ox-pagecontroller.page.current {
+        .flex-display();
+        .flex-direction(column);
     }
 
-    .footer-container {
-        position: absolute;
-        top: 7px;
-        margin-left: @monthview-cw-width;
-        width: auto;
+    .month-toolbar {
+        .flex(0 0 auto);
 
-        .footer {
-            left: 0;
-            padding-top: 12px;
+        .controls-container {
+            padding: 17px 0 0 8px;
+            height: 56px;
+            width: auto;
+        }
 
-            .weekday {
-                width: 100/7%;
-                text-align: right;
-                padding-right: 5px;
+        .month-info {
+            margin-left: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            padding-top: 8px;
+            user-select: none;
+        }
+    }
+
+    .month-container {
+        .flex(1);
+        overflow: hidden;
+        outline: none;
+
+        .weekend { display: none; }
+        &.weekends .weekend { display: table-cell; }
+        .cw { display: none; }
+        &.cw .cw { display: table-cell; }
+    }
+
+    .month {
+
+        height: 100%;
+        width: 100%;
+        table-layout: fixed;
+
+        thead {
+            display: none;
+
+            tr {
+                height: 32px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            th {
+                text-align: center;
                 color: #767676;
                 font-size: 14px;
+                font-weight: normal;
             }
-        }
-    }
-
-    .controls-container { padding-top: @default-padding; }
-
-    .scrollpane {
-        outline: 0;
-        position: absolute;
-        top: @weekview-footer-height + 11px;
-        right: 0;
-        bottom: 0;
-        left: 0;
-
-        .overflow-y(scroll);
-        .backface-visibility(hidden);
-
-        .smartphone & {
-            .month {
-                // 102 = caption-height (100) + border (2)
-                height: ~"calc(100% - 102px)";
-
-                .list.abs {
-                    overflow: hidden;
-                }
-            }
-        }
-
-        .month {
-            width: 100%;
         }
 
         .week {
-            padding-left: @monthview-cw-width;
-
-            .week-info {
-                left: 0;
-                width: @monthview-cw-width;
-                padding: 5px 10px 13px 1px;
-                font-size: 11px;
-                line-height: 1.0em;
-                text-align: right;
-                color: @hc-gray;
-                margin-left: 10px;
-                font-weight: normal;
-                .ellipsis();
-                vertical-align: baseline;
-
-                &.no-border { border: 0; }
-
-                .cw {
-                    right: 13px;
-                    top: 5px;
-                    z-index: 1;
-                }
-            }
-
-            .day-filler {
-                background-color: @white;
-
-                &.bordertop   { border-top:   1px solid @monthview-border; }
-                &.borderright { border-right: 1px solid @monthview-border; }
-            }
 
             .day {
                 border-top: 1px solid @monthview-border;
@@ -105,66 +80,75 @@
                 background-color: transparent;
                 position: relative;
 
-                &.bordertop    { border-top:    1px solid @monthview-border; }
-                &.borderbottom { border-bottom: 1px solid @monthview-border; }
-                &.borderleft   { border-left:   1px solid @monthview-border; }
-                &.borderright  { border-right:  1px solid @monthview-border; }
+                &.cw {
+                    width: 80px;
 
-                &.first { border-left: none; }
-
-                &.forceleftborder { border-left: 1px solid @monthview-border; }
+                    .number {
+                        font-weight: normal;
+                        color: #757575;
+                    }
+                }
 
                 .number {
                     position: absolute;
-                    color: #767676;
-                    text-align: right;
-                    right: 0;
-                    top: 0;
-                    padding: 5px 7px;
+                    color: #333;
+                    font-weight: bold;
+                    text-align: center;
+                    right: 1px;
+                    top: 1px;
+                    padding: 3px 8px;
                     z-index: 1;
-                    font-size: 11px;
-                    line-height: 1em;
+                    font-size: 12px;
+                    line-height: 16px;
                     background-color: transparent;
                     .user-select(none);
                     cursor: default;
+
+                    .day-label {
+                        font-weight: normal;
+                        color: #717171;
+                        margin-right: 4px;
+                    }
                 }
+
+                &.weekend .number { color: #a00; }
 
                 &.today .number {
                     color: #fff;
                     font-weight: bold;
                     background-color: @calendar-today;
+
+                    .day-label {
+                        color: white;
+                    }
                 }
 
-                &.weekend:not(.today) .number { color: #a00; }
+                &.out:not(.today) {
+                    background-color: rgba(238, 238, 238, 0.5);
+
+                    .number {
+                        color: #717171;
+                        font-weight: normal;
+                    }
+
+                    .appointment {
+                        background-color: transparent!important;
+                        color: #333!important;
+                        background-image: none;
+
+                        &.hover {
+                            background-color: #ccc!important;
+                        }
+                    }
+                }
 
                 .list {
-                    top: 20px;
-                    margin: 2px;
+                    top: 24px;
+                    bottom: 1px;
+                    margin: 0 1px;
                     .overflow-y(auto);
                     z-index: 0;
                 }
-            }
-        }
-
-        .month-name {
-            text-align: center;
-            font-size: 20px;
-            min-height: 40px;
-            height: 100px;
-            color: black;
-            font-weight: bold;
-
-            // need one pixel here. otherwise, the bottom border of the table above will be within the view
-            margin-top: 1px;
-
-            @media (min-height: 850px) { font-size: 35px; }
-
-            h1 {
-                position: relative;
-                top: 50%;
-                -webkit-transform: translateY(-50%);
-                -ms-transform: translateY(-50%);
-                transform: translateY(-50%);
             }
         }
 
@@ -172,12 +156,12 @@
 
     // Appointment
     .appointment {
-        line-height: 14px;
+        line-height: 23px;
+        border-bottom: 0;
         margin-bottom: 1px;
         white-space: nowrap;
         cursor: pointer;
         background-color: @appointment-reserved;
-        opacity: 0.85;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
 
@@ -185,64 +169,40 @@
             height: 100%;
             width: 100%;
             font-size: 12px;
-            padding: 2px 0;
+            padding: 0 4px;
             .ellipsis();
         }
 
         .appointment-content > * {
-            padding-left: 5px;
-            display: inline;
+            margin-right: 4px;
+        }
+        .start {
+            min-width: 32px;
+            display: inline-block;
+            text-align: right;
         }
 
         .private-flag {
-            float: left;
-            font-size: 15px;
-        }
-    }
-
-    @media (min-width: 1281px) {
-        @adjusted-width: @monthview-cw-width * 1.25;
-
-        .footer-container { margin-left: @adjusted-width; }
-
-        .scrollpane .week {
-            padding-left: @adjusted-width;
-
-            .week-info {
-                width: @adjusted-width;
-                min-width: @adjusted-width;
-            }
+            font-size: 14px;
         }
     }
 
     // Mobile
     @media (max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
-        .toolbar .info {
-            top: 10px;
-            left: 10px;
-            .ellipsis();
-            width: 45%;
+        .month-toolbar {
+            text-align: center;
+            font-size: 24px;
+            padding: 8px;
         }
 
-        .footer-container {
-            top: 0;
-            margin-left: 0;
-            overflow: hidden;
-
-            .footer {
-                left: 0;
-
-                .weekday {
-                    width: 100/7%;
-                    font-size: 15px;
-                }
-            }
-        }
-
-        .scrollpane {
+        .month {
             -webkit-user-select: none;
             top: 33px;
+
+            thead {
+                display: table-header-group;
+            }
 
             .week {
                 min-height: 40px;
@@ -263,14 +223,22 @@
                     }
 
                     .number {
-                        top: auto;
+                        top: 8px;
                         bottom: auto;
                         left: 0;
                         text-align: center;
                         color: rgba(1,1,1,.6);
-                        font-size: 20px;
-                        font-weight: 200;
+                        font-size: 18px;
+                        font-weight: 400;
                         background-color: transparent;
+
+                        .day-label {
+                            display: none;
+                        }
+                    }
+
+                    &.out .number {
+                        font-weight: 100;
                     }
 
                     &.today, &.today .number {
@@ -283,15 +251,9 @@
                         top: 50%;
                         font-size: 12px;
                         text-align: center;
-                        color: #777;
+                        color: #767676;
                         .transition(color 0.2s linear);
                     }
-                }
-
-                .day-filler {
-                    border: 0;
-
-                    &.bordertop { border: 0; }
                 }
             }
 

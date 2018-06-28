@@ -471,6 +471,46 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail/body/iframe').extend({
+        id: 'max-size',
+        index: 1200,
+        after: 'content',
+        draw: function (baton) {
+
+            this.on('load', function () {
+                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
+                _.defer(function () {
+
+                    var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
+                    if (!isTruncated) return;
+
+                    var url = 'api/mail?' + $.param({
+                        action: 'get',
+                        view: 'document',
+                        forceImages: true,
+                        folder: baton.data.folder_id,
+                        id: baton.data.id,
+                        session: ox.session
+                    });
+
+                    $(this.contentDocument)
+                        .find('body .mail-detail-content')
+                        .append(
+                            $('<div class="max-size-warning">').append(
+                                $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
+                                $('<a role="button" target="_blank">').attr('href', url).text(
+                                    // external images shown?
+                                    baton.model.get('modified') !== 1 ?
+                                        gt('Show entire message') :
+                                        gt('Show entire message including all external images')
+                                )
+                            )
+                        );
+                }.bind(this));
+            });
+        }
+    });
+
 
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
@@ -491,37 +531,6 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    ext.point('io.ox/mail/detail/body').extend({
-        id: 'max-size',
-        index: 1200,
-        after: 'content',
-        draw: function (baton) {
-
-            var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
-            if (!isTruncated) return;
-
-            var url = 'api/mail?' + $.param({
-                action: 'get',
-                view: 'document',
-                forceImages: true,
-                folder: baton.data.folder_id,
-                id: baton.data.id,
-                session: ox.session
-            });
-
-            this.append(
-                $('<div class="max-size-warning">').append(
-                    $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
-                    $('<a role="button" target="_blank">').attr('href', url).text(
-                        // external images shown?
-                        baton.model.get('modified') !== 1 ?
-                            gt('Show entire message') :
-                            gt('Show entire message including all external images')
-                    )
-                )
-            );
-        }
-    });
 
     var pool = Pool.create('mail');
 

@@ -64,7 +64,7 @@ define('io.ox/core/main/designs', ['settings!io.ox/core'], function (settings) {
     function applyDesign(design) {
         switch (design) {
             // unicolor
-            case 'blue':
+            case 'primary':
             // multicolor
             // falls through
             case 'night':
@@ -79,7 +79,7 @@ define('io.ox/core/main/designs', ['settings!io.ox/core'], function (settings) {
                 startTimeDependentDesign();
                 break;
             default:
-                setClass('blue');
+                setClass('primary');
         }
     }
 

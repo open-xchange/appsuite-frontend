@@ -65,6 +65,8 @@ define('io.ox/core/notifications', [
 
             // focus applauncher when closed and counter is 0 (notifcation icon is not there when counter is 0)
             this.dropdown.$el.on('hidden.bs.dropdown', function () {
+                // close sidepopups if open
+                self.closeSidepopup();
                 if (self.model.get('count') === 0) $('#io-ox-launcher .launcher-btn').focus();
             });
 

@@ -223,6 +223,13 @@
     }
 }
 
+// macos and ios specific styles
+html.macos, html.ios {
+    .mail-item.list-view .list-item .from .person {
+        font-weight: bold;
+    }
+}
+
 .swipe-option-cell {
     position: absolute;
     width: 100%;
@@ -265,10 +272,11 @@
         &.loading { min-height: 80px; }
     }
 
-    .ios & {
+    .ios.smartphone & {
         section.body {
             // special fix for ios iframe handling, keep this!
             overflow-x: auto;
+            overflow-y: hidden; // added later, seems to prevent scroll bounce in mail detail frame
         }
     }
 
@@ -612,6 +620,10 @@
 
     .selected:not(:focus) .contact-picture {
         -webkit-filter: saturate(0);
+    }
+
+    .selected:not(:focus) .gray {
+        color: #333333;
     }
 
     .from {

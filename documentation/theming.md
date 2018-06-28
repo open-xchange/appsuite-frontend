@@ -71,3 +71,49 @@ Since 7.2.1, all URLs are relative to the source .less file in which they are co
 
 Old themes must be updated if they change an image from the default theme: All styles from the default theme which refer to a changed image must be overwritten in the custom theme. This way the URLs resolve to the new image.
 
+## Replacing the logo
+
+One of the most common theme changes which requires editing `style.css` is changing the logo in the top right corner. The logo is displayed as the background image for an element with the ID _io-ox-top-logo-small_. A theme can therefore change the size and URL of the image:
+
+```
+#io-ox-top-logo-small {
+    width: 60px;
+    height: 22px;
+    margin: 8px 13px 0 13px;
+    background-image: url(path/to/mylogo.png);
+}
+```
+
+The file `mylogo.png` is expected to be in the same directory as style.css. Reference the entire path to the file, relative to the folder containing your ui, but without the leading slash. For example, the Core reference would be `apps/themes/default/logo-small.png`. If you want to place the image somewhere else, then use a relative path in url().
+
+### Mobile and retina screens
+
+Almost any mobile device and some newer desktop devices use retina screens. These screens do have a very high pixel density which offer very sharp text rendering. To offer sharp and correctly sized images on retina screens there is and additional CSS directive encapsulated in a media query which must be set in your custom theme.
+
+```
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+     only screen and (-moz-min-device-pixel-ratio: 1.5),
+     only screen and (min-device-pixel-ratio: 1.5),
+     only screen and (min-resolution: 240dppx) {
+     #io-ox-top-logo-small {
+         background-size: 60px 22px;
+         background-image: url('apps/themes/default/logo-large.png');
+    }
+}
+```
+
+**It is important that you provide your brand logo in two sizes**, the standard size of 60x22px and a large version with doubled pixel sizes of 120x44px. All retina devices will use the large logo and scale it down the CSS pixel size of 60x22px. This will result in a sharp image as the retina screen can make use of the additional available pixels in the source image.
+
+**Important note:** Your logo must not be wider than 70px (including margins) for mobile devices. Otherwise the toolbar will be broken on mobile devices as the large logo will cause a line wrap in the toolbar. If you need a larger logo use a custom, smaller one for mobiles.
+
+Always test your theme on mobiles, too. You can emulate popular screen sizes with the Google Chrome Dev-Tools.
+
+Remember that images in OX App Suite are served by the web server and not by the application server. This means that images need to be packaged separately (for dedicated web servers) and installed in `/var/www/appsuite/` (or similar, depending on the target platform) instead of `/opt/open-xchange/appsuite/`.
+
+### Replacing Favicons and mobile homescreen icons
+
+Note: This chapter is not about changing AppSuite icons which are used in the application like the brand on the upper right.
+
+AppSuite ships with a standard set of icons containing a favicon and a set of touch icons which are mainly used by iOS and Android devices. These icons are used as default for all devices and browsers as long as you don't deliver your own icons with your theme. To provide your own icons, put them into your theme's directory, e.g. `apps/themes/icons/theme-name`.
+
+**Attention**: Safari and Internet Explorer do not support dynamic changes to the favicon for a webpage. This means, the default icon will be shown even if a custom favicon is provided within a custom theme. To enable the right favicon for a theme on Safari and IE, the overall standard favicon.ico located under `apps/themes/icons/default` on the web server must be replaced with a custom version.

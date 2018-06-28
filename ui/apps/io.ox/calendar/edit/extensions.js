@@ -221,13 +221,39 @@ define('io.ox/calendar/edit/extensions', [
                 folder: this.model.get('folder'),
 
                 done: function (id, dialog) {
-                    self.model.set('folder', id);
+
                     dialog.close();
+                    var model = folderAPI.pool.getModel(id),
+                        prevOrg = self.model.get('organizer').entity,
+                        previousModel = folderAPI.pool.getModel(self.model.get('folder'));
+
+                    self.model.set('folder', id);
+                    // check if we need to make changes to the appointment
+                    // needed when switch from shared to private or private to shared happens
+                    if (model.is('shared') || previousModel.is('shared')) {
+                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
+                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
+                            self.model.getAttendees().trigger('reset');
+                            // same organizer? No message needed (switched between shared calendars of the same user)
+                            if (prevOrg === self.model.get('organizer').entity) return;
+
+                            require(['io.ox/core/yell'], function (yell) {
+                                if (model.is('shared')) {
+                                    yell('info', gt('You are using a shared calendar. The calendar owner was added as organizer.'));
+                                } else {
+                                    yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
+                                }
+                            });
+                        });
+                    }
                 },
 
                 disable: function (data, options) {
-                    var create = folderAPI.can('create', data);
-                    return !create || (options && /^virtual/.test(options.folder));
+                    var create = folderAPI.can('create', data),
+                        // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
+                        allowed = !self.model.get('id') || folderAPI.is('public', data) || data.created_by === self.model.get('organizer').entity;
+
+                    return !create || !allowed || (options && /^virtual/.test(options.folder));
                 }
             });
         },
@@ -443,7 +469,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 650,
         nextTo: 'full_time',
         draw: function (baton) {
-            if (capabilities.has('freebusy !alone') && _.device('desktop')) {
+            if (capabilities.has('freebusy !alone !guest') && _.device('desktop')) {
                 this.append(
                     $('<div class="hidden-xs col-sm-6 find-free-time">').append(
                         $('<button type="button" class="btn btn-link">').text(gt('Find a free time'))
@@ -525,7 +551,7 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed',
         draw: function (baton) {
 
-            var typeahead = new AddParticipantView({
+            baton.parentView.addParticipantsView = baton.parentView.addParticipantsView || new AddParticipantView({
                 apiOptions: {
                     contacts: true,
                     users: true,
@@ -539,8 +565,8 @@ define('io.ox/calendar/edit/extensions', [
                 scrollIntoView: true
             });
 
-            this.append(typeahead.$el);
-            typeahead.render().$el.addClass('col-xs-12');
+            this.append(baton.parentView.addParticipantsView.$el);
+            baton.parentView.addParticipantsView.render().$el.addClass('col-xs-12');
         }
     });
 
@@ -584,12 +610,13 @@ define('io.ox/calendar/edit/extensions', [
                     '</div></div>')
                     .popover({
                         container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'
-                    });
+                    }),
+                guid = _.uniqueId('form-control-label-');
 
             this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Visibility')).append(helpNode),
-                    new mini.SelectView({ label: gt('Visibility'), name: 'class', model: this.model, list: [
+                $('<div>').append(
+                    $('<label class="simple">').attr('for', guid).text(gt('Visibility')).append(helpNode),
+                    new mini.SelectView({ id: guid, label: gt('Visibility'), name: 'class', model: this.model, list: [
                         { value: 'PUBLIC', label: gt('Standard') },
                         { value: 'CONFIDENTIAL', label: gt('Private') },
                         { value: 'PRIVATE', label: gt('Secret') }]
@@ -785,7 +812,8 @@ define('io.ox/calendar/edit/extensions', [
                         data.dialog.close();
 
                         e.data.model.set({ startDate: appointment.startDate });
-
+                        // use initialrendering attribute to avoid autoscrolling
+                        e.data.app.view.addParticipantsView.initialRendering = true;
                         e.data.model.getAttendees().reset(appointment.attendees);
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({

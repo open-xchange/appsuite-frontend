@@ -15,14 +15,40 @@ const expect = require('chai').expect;
 
 Feature('Mail Portal widgets');
 
-Scenario('adding a mail containing XSS code', async function (I) {
-    I.login('app=io.ox/mail', { prefix: 'io.ox/portal/xss_mail' });
-    I.waitForElement({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
+Before(async function (users) {
+    await users.create();
+});
+
+After(async function (users) {
+    await users.removeAll();
+});
+
+
+Scenario('adding a mail containing XSS code', async function (I, users) {
+    let [user] = users;
+    await I.haveMail({
+        attachments: [{
+            content: '<img src="x" onerror="alert(1337);">\r\n',
+            content_type: 'text/plain',
+            raw: true,
+            disp: 'inline'
+        }],
+        from: [[user.get('displayname'), user.get('primaryEmail')]],
+        sendtype: 0,
+        subject: 'Test subject <img src="x" onerror="alert(666);">',
+        to: [[user.get('displayname'), user.get('primaryEmail')]]
+    });
+
+    I.login('app=io.ox/mail');
+    I.waitForVisible('.io-ox-mail-window');
+
+    // click on first email
+    I.click('.io-ox-mail-window .leftside ul li.list-item');
+
     I.clickToolbar({ css: '.io-ox-mail-window .classic-toolbar [data-action="more"]' });
     I.click('Add to portal', '.dropdown.open .dropdown-menu');
 
-    I.click('#io-ox-launcher button.launcher-btn');
-    I.click('Portal', { css: '#io-ox-launcher' });
+    I.openApp('Portal');
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
     I.waitForDetached({ css: '.widgets .widget.io-ox-busy' }, 20);
 

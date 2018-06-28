@@ -20,8 +20,9 @@ define('plugins/notifications/calendar/register', [
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
     'settings!io.ox/core',
-    'io.ox/core/tk/sounds-util'
-], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil) {
+    'io.ox/core/tk/sounds-util',
+    'io.ox/core/notifications'
+], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil, notifications) {
 
     'use strict';
 
@@ -107,19 +108,24 @@ define('plugins/notifications/calendar/register', [
                             perspective: 'week:week'
                         };
 
+                        if (_.device('smartphone')) notifications.dropdown.close();
+
                         ox.launch('io.ox/calendar/main', options).done(function () {
-                            this.folders.add(options.folder);
+                            if (this.folders) this.folders.add(options.folder);
                             // no need for a redraw, just select the folder
-                            this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
-                            var currentPage =  this.pages.getCurrentPage();
+                            if (this.folderView) this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
+                            var currentPage = this.pages ? this.pages.getCurrentPage() : false;
                             // resume calendar app
-                            if (currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
+                            if (this.folders && this.folderView && currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
                                 var e = $.Event('click', { target: currentPage.perspective.main });
                                 currentPage.perspective.setNewStart = true;
                                 currentPage.perspective.showAppointment(e, options, { arrow: false });
                             } else {
                                 // perspective is not initialized yet on newly launched calendar app
                                 this.once('aftershow:done', function (perspective) {
+                                    this.folders.add(options.folder);
+                                    // no need for a redraw, just select the folder
+                                    this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
                                     var e = $.Event('click', { target: perspective.main });
                                     perspective.setNewStart = true;
                                     perspective.showAppointment(e, options, { arrow: false });
@@ -272,7 +278,11 @@ define('plugins/notifications/calendar/register', [
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
                     timerFunction = function () {
-                        subview.addNotifications(nextAlarm);
+                        if (nextAlarm.action === 'AUDIO') {
+                            playAlarm(nextAlarm);
+                        } else {
+                            subview.addNotifications(nextAlarm);
+                        }
                         nextAlarm = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
@@ -343,7 +353,6 @@ define('plugins/notifications/calendar/register', [
             var options = {
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
-                    fullModel: true,
                     smartRemove: true,
                     useApiCid: true,
                     apiEvents: {

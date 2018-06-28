@@ -30,4 +30,11 @@ module.exports = function (grunt) {
             }
         }
     });
+
+    grunt.registerTask('serve:e2e', [
+        'copy:specs_e2e_fixtures',
+        'connect:server:mock',
+        'watch'
+    ]);
+
 };

@@ -661,9 +661,7 @@ msgstr ""
 #, fuzzy
 #| msgid ""
 #| "To launch an app, click on an entry on the left side of the menu bar."
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr "Rakenduse käivitamiseks klõpsake kirjel menüüriba vasakul poolel."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours

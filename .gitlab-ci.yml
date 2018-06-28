@@ -272,6 +272,8 @@ run e2e tests:
   script:
     - cd ui
     - yarn e2e
+  tags:
+    - shm
   artifacts:
     paths:
       - ui/build/e2e/

@@ -157,6 +157,9 @@ define('io.ox/files/share/listview', [
                 // the link to render the context menu with it's entries
                 link = 'io.ox/core/file/contextmenu/myshares';
 
+            // no contextmenu event on small devices
+            if (_.device('smartphone')) { return; }
+
             if (!list) return;
 
             // turn cids into proper objects

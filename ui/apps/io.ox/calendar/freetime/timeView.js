@@ -510,7 +510,7 @@ define('io.ox/calendar/freetime/timeView', [
 
         onChangeWorkingHours: function () {
             var numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth();
-            this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 + numberOfDays);
+            this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 * numberOfDays);
             // correct lasso positions
             // use time based lasso positions to calculate because they is unaffected by display changes
             if (this.lassoNode && this.lassoStart) {
@@ -738,7 +738,12 @@ define('io.ox/calendar/freetime/timeView', [
                         this.lassoStartTime = this.positionToTime(this.lassoStart);
                         this.lassoEndTime = this.positionToTime(this.lassoEnd);
                     }
-                    this.lassoNode.show();
+
+                    if (this.lassoEndTime < moment(this.model.get('startDate')).startOf('day').valueOf() || this.lassoStartTime > moment(this.model.get('startDate')).endOf(this.model.get('dateRange')).valueOf()) {
+                        this.lassoNode.hide();
+                    } else {
+                        this.lassoNode.show();
+                    }
                 } else {
                     this.lassoNode.hide();
                 }

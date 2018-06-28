@@ -90,6 +90,8 @@ define('io.ox/core/desktop', [
             return this.get('title');
         },
 
+        getWindow: $.noop,
+
         saveRestorePoint: $.noop,
 
         call: $.noop
@@ -720,8 +722,7 @@ define('io.ox/core/desktop', [
         },
 
         getSavePoints: function () {
-            // disable restore on smartphone ftm
-            if (!saveRestoreEnabled() || _.device('smartphone')) return $.when([]);
+            if (!saveRestoreEnabled()) return $.when([]);
 
             return appCache.get('savepoints').then(function (list) {
                 list = list || [];
@@ -797,15 +798,40 @@ define('io.ox/core/desktop', [
                         return ox.load(requirements).then(function (m) {
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
-                            if (_.device('!smartphone') && app.options.floating) {
-                                var model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name }),
+                            if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
+                                var model, win;
+                                if (app.options.floating) {
+                                    model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
                                     win = new FloatingWindow.TaskbarElement({ model: model }).render();
-                                FloatingWindow.collection.add(model);
+                                    FloatingWindow.collection.add(model);
+                                } else {
+                                    win = FloatingWindow.addNonFloatingApp(app, { lazyload: true });
+                                    model = win.model;
+                                }
                                 win.listenToOnce(model, 'lazyload', function () {
                                     var oldId = obj.id;
-                                    // copy app options over to window model
-                                    model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
-                                    app.launch({ floatingWindowModel: model }).then(function () {
+                                    if (app.options.floating) {
+                                        // copy app options over to window model
+                                        model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
+                                        app.launch({ floatingWindowModel: model }).then(function () {
+                                            // update unique id
+                                            obj.id = this.get('uniqueID');
+                                            if (this.failRestore) {
+                                                // restore
+                                                return this.failRestore(obj.point);
+                                            }
+                                            return $.when();
+                                        }).done(function () {
+                                            // replace restore point with old id with restore point with new id (prevents duplicates)
+                                            self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
+                                                sp.push(obj);
+                                                self.setSavePoints(sp);
+                                                if (model.get('quitAfterLaunch')) model.trigger('quit');
+                                            });
+                                        });
+                                        return;
+                                    }
+                                    app.launch().then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
                                         if (this.failRestore) {
@@ -818,7 +844,6 @@ define('io.ox/core/desktop', [
                                         self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                             sp.push(obj);
                                             self.setSavePoints(sp);
-                                            if (model.get('quitAfterLaunch')) model.trigger('quit');
                                         });
                                     });
                                 });
@@ -829,7 +854,9 @@ define('io.ox/core/desktop', [
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
                                     // restore
-                                    return this.failRestore(obj.point);
+                                    return this.failRestore(obj.point).then(function () {
+                                        app.set('restored', true);
+                                    });
                                 }
                             });
                         });
@@ -852,7 +879,7 @@ define('io.ox/core/desktop', [
         },
 
         reuse: function (cid) {
-            var app = apps.get(cid);
+            var app = ox.ui.apps.find(function (m) { return m.cid === cid; });
             if (app) {
                 app.launch();
                 return true;

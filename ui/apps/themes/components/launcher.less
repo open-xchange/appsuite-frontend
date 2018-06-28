@@ -15,6 +15,10 @@
 @appcontrol-height-smartphone:          48px;
 @appcontrol-launcher-height-smartphone: 48px;
 
+@appcontrol-border-color:               rgba(0, 0, 0, 0.90);
+@appcontrol-launcher-color:             @white;
+@appcontrol-launcher-color-highlight:   @white;
+
 @launcher-fg:       #666;
 @launcher-bg:       #fff;
 @launcher-fg-hover: #666;
@@ -36,6 +40,7 @@
 
 @quicklaunch-stroke-width: 3px;
 @quicklaunch-stroke-width-retina: 3px;
+@quicklaunch-button-color: rgba(255, 255, 255, 0.70);
 
 @svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
@@ -53,6 +58,8 @@
         .popover-content-signout { color: #333; }
     }
 }
+
+
 
 #io-ox-top-logo {
     list-style: none;
@@ -87,7 +94,7 @@
     z-index: 12;
     color: #fff;
     height: @appcontrol-height - 1;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.90);
+    border-bottom: 1px solid @appcontrol-border-color;
     padding: 0;
     display: flex;
     align-content: center;
@@ -99,7 +106,7 @@
         right: 0;
         z-index: -1;
         height: @appcontrol-height - 1;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.90);
+        border-bottom: 1px solid @appcontrol-border-color;
         opacity: 0;
         .smartphone & {
             height:  @appcontrol-height-smartphone - 1;
@@ -132,7 +139,7 @@
         & > button {
             // styles for fa-icon
             font-size: 18px;
-            color: #fff;
+            color: @appcontrol-launcher-color;
             padding: 2px 16px 0px 16px;
             width: 48px;
             // svg styles
@@ -148,12 +155,14 @@
         }
         button {
             outline:0;
+            &:hover, &:focus { color: @appcontrol-launcher-color-highlight; }
         }
     }
     #io-ox-quicklaunch > button {
-        color: rgba(255, 255, 255, 0.70);
-        &:hover, &:focus {
-            color: #fff;
+        color: @quicklaunch-button-color;
+        margin-top: initial;
+        & > .lcell > .icon {
+            margin-bottom: 4px;
         }
     }
 
@@ -180,7 +189,7 @@
             border-radius: 50%;
             position: absolute;
             z-index: 1;
-            top: 20px;
+            top: 18px;
             left: 33px;
         }
         .title { display: none; }
@@ -255,11 +264,12 @@
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
-                color: #fff;
+                color: @appcontrol-launcher-color;
 
-                 &:hover, &:focus {
+                &:hover, &:focus {
                     background: rgba(0, 0, 0, .3);
                     outline: 0;
+                    color: @appcontrol-launcher-color-highlight;
                 }
             }
         }
@@ -280,13 +290,21 @@
     }
 }
 
-#io-ox-launcher .dropdown-menu {
+.launcher-dropdown.dropdown-menu {
 
     padding: @launcher-outer-spacing;
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
 
+    .smartphone & {
+        padding: 5px 0;
+        width: 100%;
+    }
+
     li {
         float: left;
+
+        .smartphone & { float: initial; }
+
         .fa { width: auto; }
         a:focus {
             i, .title { color: #fff; }
@@ -314,6 +332,7 @@
             height: 42px;
             flex-direction: row;
             padding: 0;
+            margin: 0;
         }
 
         cursor: pointer;
@@ -328,11 +347,12 @@
             width: @launcher-size;
             .smartphone & {
                 top: 11px;
-                left: 48px;
-                font-size: 15px;
-                text-align: left;
+                color: inherit;
+                font-size: 18px;
+                font-weight: 300;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                width: 100%;
             }
             .flex-center(row);
             &.upsell i {
@@ -470,6 +490,7 @@
         #io-ox-launcher {
 
             & > button {
+                // obsolete? button has always class launcher-btn
                 height: 44px; //@appcontrol-height-smartphone;
                 width: 100%; // @appcontrol-height-smartphone;
                 padding: 0;

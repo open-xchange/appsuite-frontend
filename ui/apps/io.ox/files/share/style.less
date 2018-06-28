@@ -238,12 +238,12 @@
         display: flex;
         flex-direction: column;
 
+        // also used for edge... no support for resize css attribute...
         &.IE11 {
-            max-height: 184px; /* workaround for IE11 with resizing the contact list */
             .share-options {
                 &.IE {
-                    min-width: inherit;
-                    max-width: inherit;
+                    min-width: 100%;
+                    max-width: 100%;
                 }
             }
         }

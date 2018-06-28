@@ -690,13 +690,13 @@ msgstr ""
 "Partecipanti. È possibile aggiungere all'attività documenti come allegati."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+#, fuzzy
+#| msgid ""
+#| "To launch an app, click on an entry on the left side of the menu bar."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Per avviare un'applicazione, utilizza le icone di avvio rapido a sinistra "
-"della barra dei menu o fai clic su un voce all'interno del menu di avvio "
-"delle applicazioni."
+"Per avviare un'applicazione, fare clic su una voce a sinistra della barra "
+"dei menu."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -7633,10 +7633,12 @@ msgstr ""
 #~ msgstr "Per avviare un'applicazione, fare clic sul titolo di un riquadro."
 
 #~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
 #~ msgstr ""
-#~ "Per avviare un'applicazione, fare clic su una voce a sinistra della barra "
-#~ "dei menu."
+#~ "Per avviare un'applicazione, utilizza le icone di avvio rapido a sinistra "
+#~ "della barra dei menu o fai clic su un voce all'interno del menu di avvio "
+#~ "delle applicazioni."
 
 #~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "

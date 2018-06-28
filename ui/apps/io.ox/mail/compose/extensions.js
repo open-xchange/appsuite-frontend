@@ -465,6 +465,8 @@ define('io.ox/mail/compose/extensions', [
                     dropdown.link('settings', gt('Manage signatures'), function () {
                         var options = { id: 'io.ox/mail/settings/signatures' };
                         ox.launch('io.ox/settings/main', options).done(function () {
+                            // minimize this window, so it doesn't overlap the setting the user wants to manage now
+                            if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
                             this.setSettingsPane(options);
                         });
                     });

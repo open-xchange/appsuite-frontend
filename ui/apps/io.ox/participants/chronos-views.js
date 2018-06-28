@@ -116,7 +116,7 @@ define('io.ox/participants/chronos-views', [
 
         setRows: function (mail, extra) {
             if (!this.options.hideMail) {
-                if (!extra && this.model.get('cuType') === 'INDIVIDUAL' && !this.model.get('entity') && capabilities.has('gab')) {
+                if (!extra && (this.model.get('cuType') === 'INDIVIDUAL' || !this.model.get('cuType')) && !this.model.get('entity') && capabilities.has('gab')) {
                     extra = gt('External contact');
                 } else {
                     extra = extra || TYPE_LABELS[this.model.get('cuType')] || '';
@@ -151,6 +151,7 @@ define('io.ox/participants/chronos-views', [
                 extra = null;
 
             switch (this.model.get('cuType')) {
+                case undefined:
                 case 'INDIVIDUAL':
                     // set organizer
                     if (this.isOrganizer()) {

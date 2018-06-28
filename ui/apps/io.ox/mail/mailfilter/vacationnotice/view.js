@@ -276,7 +276,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 this.$body.append(
                     $('<div>').append(
                         $('<button type="button" class="btn btn-link">')
-                        .text('Show advanced options')
+                        .text(gt('Show advanced options'))
                         .on('click', onClick)
                     ),
                     baton.branch('advanced', this, $('<div class="form-group">').hide())

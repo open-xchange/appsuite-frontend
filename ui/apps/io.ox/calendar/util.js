@@ -700,7 +700,7 @@ define('io.ox/calendar/util', [
         },
 
         getAttendeeName: function (data) {
-            return data ? data.cn || data.mail || data.uri : '';
+            return data ? data.cn || data.email || data.uri : '';
         },
 
         getNote: function (data, prop) {
@@ -778,7 +778,7 @@ define('io.ox/calendar/util', [
                     ret[c.status].count++;
                     ret.count++;
                 // don't count groups or resources, ignore unknown states (the spec allows custom partstats)
-                } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && c.cuType === 'INDIVIDUAL') {
+                } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && (c.cuType === 'INDIVIDUAL' || !c.cuType)) {
                     ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())].count++;
                     ret.count++;
                 }
@@ -835,6 +835,7 @@ define('io.ox/calendar/util', [
 
             _.each(attendees, function (attendee) {
                 switch (attendee.cuType) {
+                    case undefined:
                     case 'INDIVIDUAL':
                         // internal user
                         if (attendee.entity) {
@@ -1073,6 +1074,7 @@ define('io.ox/calendar/util', [
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 var dialog = new dialogs.ModalDialog();
+                // first occurence or exception (we need to load the series master as the exception data doesn't work for changing the series )
                 if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
@@ -1206,7 +1208,7 @@ define('io.ox/calendar/util', [
                 attendee.members = user.members;
             }
             // not really needed. Added just for convenience. Helps if distibution list should be created
-            if (attendee.cuType === 'INDIVIDUAL') {
+            if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
                 attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
                 attendee.contact = {
                     display_name: user.display_name,
@@ -1294,6 +1296,9 @@ define('io.ox/calendar/util', [
         },
 
         hasFlag: function (data, flag) {
+            // support for arrays (used in multiple selection). returns true if all items in the array have the flag
+            if (_.isArray(data) && data.length > 0) return _(data).reduce(function (oldVal, item) { return oldVal && that.hasFlag(item, flag); }, true);
+
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;

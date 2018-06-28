@@ -173,9 +173,10 @@ define('io.ox/participants/model', [
         },
 
         getTarget: function (opt) {
-            opt = _.extend({ fallback: false }, opt);
+            opt = _.extend({ fallback: false, strict: false }, opt);
             if (opt.fallback && this.is('list')) return 'distribution_list';
-            return this.get(this.get('field')) || this.getEmail();
+            // strict option forces the use of the specified field. Prevents missleading information (user thinks theres a mail address, when there's actually non in the specific field)
+            return opt.strict ? this.get(this.get('field')) : this.get(this.get('field')) || this.getEmail();
         },
 
         getFieldString: function () {

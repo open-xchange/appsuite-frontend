@@ -29,25 +29,25 @@ define('io.ox/chat/views/chatList', [
                 'remove': this.onRemove,
                 'change:title': this.onChangeTitle,
                 'change:unseen': this.onChangeUnseen,
-                'change:modified': this.onChangeModified
+                'change:modified': this.onChangeModified,
+                'change:open': this.onChangeOpen
             });
         },
 
         render: function () {
-            this.$el.append(
-                this.getItems().map(this.renderItem, this)
-            );
+            // rendering happens via onAdd
+            this.collection.fetch();
             return this;
         },
 
         renderItem: function (model) {
             return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
-                .attr('data-id', model.id)
+                .attr('data-cid', model.cid)
                 .toggleClass('unseen', model.get('unseen') > 0)
                 .append(
                     this.renderIcon(model),
                     $('<span class="label label-default">').text(model.get('unseen')),
-                    $('<div class="title">').text(model.get('title'))
+                    $('<div class="title">').text(model.getTitle())
                 );
         },
 
@@ -55,7 +55,7 @@ define('io.ox/chat/views/chatList', [
             switch (model.get('type')) {
                 case 'private':
                     return $('<span class="btn-icon">').append(
-                        new StateView({ model: model.members.at(0) }).render().$el.addClass('small')
+                        new StateView({ model: model.getFirstMember() }).render().$el.addClass('small')
                     );
                 case 'group':
                     return $('<i class="fa fa-group btn-icon" aria-hidden="true">');
@@ -66,23 +66,27 @@ define('io.ox/chat/views/chatList', [
         },
 
         getItems: function () {
-            return this.collection.getActive();
+            return this.collection.getOpen();
         },
 
         getNode: function (model) {
-            return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
+            return this.$('[data-cid="' + model.cid + '"]');
         },
 
-        onAdd: function (model) {
-            this.$el.prepend(this.renderItem(model));
-        },
+        onAdd: _.debounce(function (model, collection, options) {
+            this.$el.prepend(
+                options.changes.added
+                .filter(function (model) { return model.isOpen(); })
+                .map(this.renderItem, this)
+            );
+        }, 1),
 
         onRemove: function (model) {
             this.getNode(model).remove();
         },
 
         onChangeTitle: function (model) {
-            this.getNode(model).find('.title').text(model.get('title') || '\u00A0');
+            this.getNode(model).find('.title').text(model.getTitle() || '\u00A0');
         },
 
         onChangeUnseen: function (model) {
@@ -95,6 +99,14 @@ define('io.ox/chat/views/chatList', [
                 hasFocus = node[0] === document.activeElement;
             this.$el.prepend(node);
             if (hasFocus) node.focus();
+        },
+
+        onChangeOpen: function (model, value) {
+            if (value) {
+                this.$el.prepend(this.renderItem(model));
+            } else {
+                this.onRemove(model);
+            }
         }
     });
 

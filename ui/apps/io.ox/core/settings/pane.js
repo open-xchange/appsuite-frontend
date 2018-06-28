@@ -74,7 +74,7 @@ define('io.ox/core/settings/pane', [
 
                         var availableThemes = settingOptions.get('themes') || {};
                         // until we get translated themes from backend
-                        if (availableThemes['default']) availableThemes['default'] = gt('Default Theme');
+                        if (availableThemes.default) availableThemes.default = gt('Default Theme');
                         // sort
                         return _(availableThemes)
                             .chain()
@@ -88,7 +88,7 @@ define('io.ox/core/settings/pane', [
                             {
                                 label: gt('Unicolor'),
                                 options: [
-                                    { label: gt('Blue'), value: 'blue' }
+                                    { label: gt('Default'), value: 'primary' }
                                 ]
                             },
                             {
@@ -391,7 +391,7 @@ define('io.ox/core/settings/pane', [
             id: 'quickLaunch',
             index: INDEX += 100,
             render: function (baton) {
-                if (appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
+                if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
                 baton.$el.append(
                     new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
                 );

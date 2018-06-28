@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-10 14:06+1000\n"
+"PO-Revision-Date: 2018-06-19 11:00+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.8\n"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -322,10 +322,9 @@ msgstr "%1$s 已移动到 %3$s 的 %2$s 位置"
 
 #. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-#, fuzzy, c-format
-#| msgid "Login must not be empty."
+#, c-format
 msgid "%1$s must not be empty."
-msgstr "登入字段不得为空"
+msgstr "%1$s 绝不能空。"
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -488,16 +487,12 @@ msgid "5 minutes"
 msgstr "5 分钟"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#, fuzzy
-#| msgid "Cannot move folder into itself."
 msgid "A folder cannot be moved into itself"
-msgstr "不能移动文件夹到同一地方。"
+msgstr "一个文件夹不能移动到自己里面"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#, fuzzy
-#| msgid "Tasks can not be moved to or out of shared folders"
 msgid "A folder cannot be moved to one of its subfolders"
-msgstr "任务无法移入或移出共享文件夹。"
+msgstr "一个文件夹不能移动到它其中一个子文件夹里面"
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "A new version for \"%1$s\" has been added."
@@ -1066,17 +1061,12 @@ msgstr "所有未来约会"
 
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy
-#| msgid "All future messages from %1$s will be moved to the selected folder."
-#| msgid_plural ""
-#| "All future messages from the senders of the selected mails will be moved "
-#| "to the selected folder."
 msgid ""
 "All future messages from the sender will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "所有来自发送人的未来消息，将会移到选定的文件夹里。"
+msgstr[0] "所有未来来自发送人的消息，将会移动到选定文件夹里。"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "All groups"
@@ -1722,7 +1712,6 @@ msgstr "照相机%1$s"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1997,11 +1986,12 @@ msgid "Client onboarding"
 msgstr "客户登上中"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -2661,6 +2651,7 @@ msgstr "拒绝"
 msgid "Declined"
 msgstr "已拒绝"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "默认"
@@ -3655,11 +3646,6 @@ msgstr "空文件夹"
 msgid "Empty name and description found."
 msgstr "找到空的名称和描述。"
 
-#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-msgid "Empty table cell"
-msgstr "空白表单单元格"
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Empty trash"
 msgstr "清空垃圾"
@@ -3675,10 +3661,8 @@ msgid "Enable %1$s"
 msgstr "启用 %1$s"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "Enable Plugin"
 msgid "Enable Links"
-msgstr "启用插件"
+msgstr "启用链接"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
@@ -3687,10 +3671,6 @@ msgstr "启用或停用自动转发"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Enable or disable vacation notice"
 msgstr "启用或停用假期通知"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-msgid "Encrypt"
-msgstr "加密"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "End"
@@ -3731,6 +3711,7 @@ msgid "Ends with"
 msgstr "以此结尾："
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Enter Password"
 msgstr "输入密码"
 
@@ -4279,9 +4260,8 @@ msgstr "Flickr"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "文件夹"
 
@@ -4325,8 +4305,8 @@ msgstr "文件夹指定动作"
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 #: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "文件夹"
 
@@ -4830,7 +4810,7 @@ msgstr "如果您更改密码，您将会注销。请确定所有东西皆关闭
 msgid "If you do not wish to keep the item, please click on the trash icon."
 msgid_plural ""
 "If you do not wish to keep an item, please click on the trash icon."
-msgstr[0] ""
+msgstr[0] "如果您不希望保留此项目，请单击垃圾桶图标。"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -6579,9 +6559,8 @@ msgstr[0] "找到 %1$d 个自动完成条目"
 
 #. broken image inside a mail
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
-#, fuzzy
 msgid "One of the embedded images could not be used."
-msgstr "无法上载此文件。"
+msgstr "无法使用嵌入的图像之一。"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -7111,7 +7090,7 @@ msgstr ""
 
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "Please click \"Continue\" if you'd like to continue editing."
-msgstr ""
+msgstr "如果您想继续编辑，请单击「继续」。"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7641,10 +7620,8 @@ msgstr "紫色/洋红"
 
 #. %s is the number of the quicklauncher (1-3)
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Quick launch 1"
 msgid "Quick launch %s"
-msgstr "快速启动1"
+msgstr "快速启动％s"
 
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Quick reply: %1$s"
@@ -7934,6 +7911,13 @@ msgstr "再次提醒我"
 msgid "Reminder"
 msgstr "提醒"
 
+#. %1$d: is the number of the reminder
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Reminder date %1$s"
+msgid "Reminder %1$d"
+msgstr "提醒日期 %1$s "
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Reminder date"
@@ -8027,6 +8011,12 @@ msgstr "移除链接"
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove member"
 msgstr "移除成员"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Remove all reminders"
+msgid "Remove reminder"
+msgstr "移除所有提醒"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -8792,6 +8782,12 @@ msgstr "购物车"
 msgid "Show"
 msgstr "显示为"
 
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Advanced settings"
+msgid "Show advanced options"
+msgstr "进阶设置"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show all calendars"
 msgstr "显示所有日历"
@@ -8976,7 +8972,7 @@ msgstr "登出"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from all clients"
-msgstr ""
+msgstr "从所有客户端注销"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Sign out now"
@@ -9053,6 +9049,10 @@ msgstr "有些设置（语言、时区、主题）必须要重载页面或重新
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "在重认证 %s 户口时发生一些错误。"
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr "出了一些问题，请关闭此浏览器选项卡并重试。"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "抱歉，现在无法连接到 %s。"
@@ -9070,10 +9070,8 @@ msgid "Sorry, there is no preview available for this image."
 msgstr "抱歉，此图像没有预览可用。"
 
 #: apps/io.ox/core/viewer/main.js module:io.ox/core
-#, fuzzy
-#| msgid "Sorry, there is no preview available for this file."
 msgid "Sorry, there is no preview available."
-msgstr "抱歉，此文件没有预览可用。"
+msgstr "抱歉，没有预览可用。"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
@@ -9326,6 +9324,10 @@ msgstr "支持从 Chrome %1$d、Firefox %2$d、IE ％3$d、和 Safari %4$d 开�
 msgid "Suspicious and unclassified emails only"
 msgstr "只有可疑和不机密的电子邮件"
 
+#: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
+msgid "Switch camera"
+msgstr "切换摄像头"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "切换至母文件夹。"
@@ -9568,7 +9570,7 @@ msgstr "对于共享日历中的所有用户，约会都是可见的。"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
 msgid "The below item was open last time you exited %1$s."
 msgid_plural "The below items were open last time you exited %1$s."
-msgstr[0] ""
+msgstr[0] "以下项目于您上一次离开 %1$s 时打开。"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
@@ -9634,7 +9636,7 @@ msgstr "因为文件 \"%1$s\" 超出 infostore 限额 %2$s，所以未能上载�
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
-msgstr "因为文件 \"%1$s\" 超出最大文件体积 %2$s，所以未能上载。"
+msgstr "因为文件 \"%1$s\" 超出最大文件体积 %2$s，所以未能上载"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -10210,7 +10212,7 @@ msgstr "要导航于 %1$s 之间，只需单击新应用程序执行器图标。
 
 #: apps/io.ox/core/viewer/main.js module:io.ox/core
 msgid "To print this file, please use \"Print as PDF\" in the viewer."
-msgstr ""
+msgstr "要打印此文件，请在检视器中使用“以PDF格式打印”。"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -10834,6 +10836,10 @@ msgstr "工作周开始于"
 msgid "Weekday"
 msgstr "工作日"
 
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+msgid "Weekends"
+msgstr "周末"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Weekly"
@@ -11033,6 +11039,10 @@ msgid ""
 "%3$s left. "
 msgstr "您当前正使用 %2$s 可用磁盘空间的 %1$s。您剩下 %3$s。"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "You are no longer using a shared calendar. You were added as organizer."
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
@@ -11041,6 +11051,11 @@ msgstr "您不是直接连接到 %s。这些人是链接到 %s 的："
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "您是组织者"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid ""
+"You are using a shared calendar. The calendar owner was added as organizer."
+msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 msgid ""
@@ -11398,6 +11413,20 @@ msgstr "完全匹配（允许DOS风格的通配符）"
 msgid "accepted"
 msgstr "已接受"
 
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "never ends"
+msgid "after end"
+msgstr "永不结束"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s after start."
+msgid "after start"
+msgstr "开始后 %2$s 发送 %1$s。"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "an exact, full match"
@@ -11431,6 +11460,20 @@ msgstr "蔚蓝色"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "返回"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s before end."
+msgid "before end"
+msgstr "结束前 %2$s 发送 %1$s。"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Week start"
+msgid "before start"
+msgstr "工作周开始于"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "blue"
@@ -11943,6 +11986,20 @@ msgstr "3 个月"
 msgid "thumbnail"
 msgstr "缩图"
 
+#. screenreader label for the reminder timeframe (15 minutes, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Blocked time frame"
+msgid "timeframe"
+msgstr "封锁的时间框架"
+
+#. screenreader label for the reminder timeframe relation (before start, after end, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Estimated Duration:"
+msgid "timeframe relation"
+msgstr "预估持续时间："
+
 #. title of toggle button within password field
 #: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 msgid "toggle password visibility"
@@ -11955,6 +12012,11 @@ msgstr "明天"
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "tonight"
 msgstr "今晚"
+
+#. screenreader label for the reminder type (audio, notification, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "type"
+msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "unconfirmed"
@@ -12567,6 +12629,12 @@ msgstr "您的平台"
 #~ msgid "All contacts"
 #~ msgstr "添加联系人"
 
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "所有来自发送人的未来消息，将会移到选定的文件夹里。"
+
 #~ msgid ""
 #~ "All future messages from the senders of the selected mails will be moved "
 #~ "to the selected folder."
@@ -13043,6 +13111,9 @@ msgstr "您的平台"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "加拿大元"
+
+#~ msgid "Cannot move folder into itself."
+#~ msgstr "不能移动文件夹到同一地方。"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "不能移动系统文件夹。"
@@ -14066,6 +14137,9 @@ msgstr "您的平台"
 #~ msgid "Employee ID:"
 #~ msgstr "员工 ID："
 
+#~ msgid "Empty table cell"
+#~ msgstr "空白表单单元格"
+
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "清空文件夹... 可能需时片刻。"
 
@@ -14088,6 +14162,9 @@ msgstr "您的平台"
 
 #~ msgid "Enable Infostore Hover"
 #~ msgstr "启用信息存储悬停窗口"
+
+#~ msgid "Enable Plugin"
+#~ msgstr "启用插件"
 
 #~ msgid "Enable Tasks Hover"
 #~ msgstr "启用任务悬停窗口"
@@ -14125,6 +14202,9 @@ msgstr "您的平台"
 #~ msgstr ""
 #~ "启用离线访问电子邮件，日历，任务和联系人文件夹。使用Microsoft Outlook离线"
 #~ "功能所做的任何更改会在您下次上网时自动同步："
+
+#~ msgid "Encrypt"
+#~ msgstr "加密"
 
 #, fuzzy
 #~ msgid "End Presentation"
@@ -14252,9 +14332,6 @@ msgstr "您的平台"
 
 #~ msgid "Estimated Costs:"
 #~ msgstr "预估成本："
-
-#~ msgid "Estimated Duration:"
-#~ msgstr "预估持续时间："
 
 #~ msgid "Estonia"
 #~ msgstr "爱沙尼亚"
@@ -15022,6 +15099,9 @@ msgstr "您的平台"
 #~ msgid "Load all mails. This might take some time."
 #~ msgstr "加载所有邮件，可能需时片刻。"
 
+#~ msgid "Login must not be empty."
+#~ msgstr "登入字段不得为空"
+
 #~ msgid "Logout now"
 #~ msgstr "现在注销"
 
@@ -15567,6 +15647,9 @@ msgstr "您的平台"
 #~ msgid "Pull To Refresh"
 #~ msgstr "下拉刷新"
 
+#~ msgid "Quick launch 1"
+#~ msgstr "快速启动1"
+
 #~ msgid "Quick launch 2"
 #~ msgstr "快速启动2"
 
@@ -15987,6 +16070,10 @@ msgstr "您的平台"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "抱歉，加载文档失败。"
+
+#, fuzzy
+#~ msgid "Sorry, the audio file could not be played."
+#~ msgstr "无法上载此文件。"
 
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
@@ -17323,9 +17410,6 @@ msgstr "您的平台"
 
 #~ msgid "never"
 #~ msgstr "从不"
-
-#~ msgid "never ends"
-#~ msgstr "永不结束"
 
 #~ msgid "new"
 #~ msgstr "新"

@@ -17,8 +17,9 @@ define('io.ox/core/folder/picker', [
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/core'
-], function (TreeView, mailAPI, api, dialogs, ModalDialog, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/capabilities'
+], function (TreeView, mailAPI, api, dialogs, ModalDialog, gt, capabilities) {
 
     'use strict';
 
@@ -136,7 +137,7 @@ define('io.ox/core/folder/picker', [
             .addCancelButton()
             .addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
 
-        if (o.createFolderButton) {
+        if (!(capabilities.has('guest') && o.flat) && o.createFolderButton) {
             dialog.addAlternativeButton({ action: 'create', label: o.createFolderText || gt('Create folder') });
         }
 

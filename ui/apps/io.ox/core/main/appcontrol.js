@@ -17,18 +17,17 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/core/main/icons',
+    'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, ext, capabilities, icons, settings, gt) {
+], function (http, upsell, ext, capabilities, icons, Dropdown, settings, gt) {
 
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
-
-    ox.on('launcher:toggleOverlay', toggleOverlay);
 
     var LauncherView = Backbone.View.extend({
         tagName: 'a',
@@ -160,11 +159,14 @@ define('io.ox/core/main/appcontrol', [
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 0);
             if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLauncherLimit, n);
+            return Math.min(this.quickLauncherLimit, ox.ui.apps.forLauncher().length, n);
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                str = settings.get('apps/quickLaunch', this.getQuickLauncherDefaults());
+                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).split(','),
+                str = _.chain(list).filter(function (o) {
+                    return ox.ui.apps.get(o.replace(/\/main$/, ''));
+                }).value().join(',');
             // We fill up the list with 'none' in case we have more slots than defaults
             return (str + new Array(count).join(',none')).split(',').slice(0, count);
         }
@@ -173,9 +175,12 @@ define('io.ox/core/main/appcontrol', [
     // reverted for 7.10
     var QuickLaunchersCollection = Backbone.Collection.extend({
         initialize: function () {
-            var self = this;
+            this.reload();
+            settings.on('change:apps/quickLaunch change:apps/quickLaunchCount', this.reload.bind(this));
+            this.listenTo(ox.ui.apps, 'add reset', this.reload);
+        },
+        reload: function () {
             this.reset(this.fetch());
-            settings.on('change:apps/quickLaunch change:apps/quickLaunchCount', function () { self.reset(self.fetch()); });
         },
         fetch: function () {
             var apps = api.getQuickLauncherItems().map(function (o) {
@@ -206,7 +211,9 @@ define('io.ox/core/main/appcontrol', [
                 this.collection.map(function (model) {
                     return new LauncherView({
                         tagName: 'button',
-                        model: model, quicklaunch: true
+                        attributes: { tabindex: -1 },
+                        model: model,
+                        quicklaunch: true
                     }).render().$el.attr('tabindex', -1);
                 })
             );
@@ -215,31 +222,31 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    var LaunchersView = Backbone.View.extend({
+    var LaunchersView = Dropdown.extend({
         tagName: 'li',
-        className: 'dropdown',
+        className: 'launcher dropdown',
         id: 'io-ox-launcher',
-        initialize: function () {
-            this.listenTo(ox, 'launcher:toggleOverlay', function () {
-                this.$('[data-toggle="dropdown"]').dropdown('toggle');
-            });
-            this.listenTo(this.collection, 'add remove', function () {
-                this.$el.empty();
-                this.render();
-            });
+        $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
+        $toggle: $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+        update: function () {
+            this.$ul.empty();
+            this.collection.forLauncher().forEach(function (model, i) {
+                this.append(
+                    new LauncherView({ model: model, pos: i + 1 }).render().$el
+                );
+            }.bind(this));
+            if (_.device('smartphone')) {
+                this.collection.where({ closable: true }).forEach(function (model) {
+                    this.append(
+                        new LauncherView({ model: model }).render().$el
+                    );
+                }.bind(this));
+            }
         },
-        render: function () {
-            this.$el.append(
-                $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                $('<ul class="dropdown-menu dropdown-menu-right launcher-dropdown" role="menu">').append(
-                    this.collection.forLauncher().map(function (model, i) {
-                        return $('<li role="presentation">').append(
-                            new LauncherView({ model: model, pos: i + 1 }).render().$el
-                        );
-                    })
-                )
-            );
-            return this;
+        initialize: function () {
+            Dropdown.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.collection, 'add remove', this.update);
+            this.update();
         }
     });
 
@@ -264,7 +271,7 @@ define('io.ox/core/main/appcontrol', [
             initRefreshAnimation();
 
             ox.ui.apps.on('launch resume', function (model) {
-                $('#io-ox-launchgrid').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+                $('.launcher-dropdown').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
                 _.defer(function () {
                     $(document).trigger('resize');
                 });
@@ -339,8 +346,6 @@ define('io.ox/core/main/appcontrol', [
         id: 'launcher',
         index: 120,
         draw: function () {
-            // reverted for 7.10
-            //if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
                 collection: ox.ui.apps
             });
@@ -370,74 +375,10 @@ define('io.ox/core/main/appcontrol', [
     });
 
     ext.point('io.ox/core/appcontrol').extend({
-        id: 'runningAppsMobile',
-        index: 1000,
-        draw: function () {
-            if (_.device('!smartphone')) return;
-
-            // add running app to menu
-            ox.ui.apps.on('add', function (model) {
-                if (model.get('closable')) {
-                    $('.launcher-dropdown').append(
-                        $('<li role="presentation">').append(
-                            new LauncherView({ model: model }).render().$el
-                        )
-                    );
-                }
-            });
-
-            // remove on close
-            ox.ui.apps.on('remove', function (model) {
-                $('.launcher-dropdown').find('[data-id="' + model.get('id') + '"]').parent().remove();
-            });
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol').extend({
         id: 'show',
         index: 10000,
         draw: function () {
             this.attr('role', 'banner').show();
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol').extend({
-        id: 'metrics',
-        draw: function () {
-            require(['io.ox/metrics/main'], function (metrics) {
-                // toolbar actions
-                $('#io-ox-appcontrol .taskbar').on('mousedown', 'li', function (e) {
-                    // click within dropdown
-                    if ($(e.target).closest('div.hidden').length) return;
-                    metrics.trackEvent({
-                        app: 'core',
-                        target: 'banner/taskbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('id')
-                    });
-                });
-
-                metrics.watch({
-                    node: $('#io-ox-appcontrol'),
-                    selector: '#io-ox-top-logo',
-                    type: 'click'
-                }, {
-                    app: 'core',
-                    target: 'banner/logo',
-                    type: 'click',
-                    action: ''
-                });
-
-                $(document.documentElement).on('mousedown', '.halo-link', function () {
-                    var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
-                    metrics.trackEvent({
-                        app: 'core',
-                        type: 'click',
-                        action: 'halo',
-                        detail: _.last(app.get('name').split('/'))
-                    });
-                });
-            });
         }
     });
 

@@ -85,7 +85,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
 
                         // render time input
-                        self.nodes.timeField = $('<input type="text" class="form-control time-field">');
+                        self.nodes.timeField = $('<input type="text" class="form-control time-field">').attr('id', _.uniqueId('form-control-label-'));
 
                         // render timezone badge
                         var timezone = self.chronos ? self.model.getMoment(self.attribute) : moment.tz(self.model.get(self.options.timezoneAttribute)),
@@ -127,7 +127,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             dayFieldLabel,
                             self.nodes.a11yDate,
                             self.nodes.timeField,
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
+                            $('<label class="sr-only">').attr('for', self.nodes.timeField.attr('id')).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
                             self.nodes.a11yTime,
                             timezoneContainer
                         ];

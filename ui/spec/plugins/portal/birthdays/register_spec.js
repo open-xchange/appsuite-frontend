@@ -31,9 +31,9 @@ define([
 
         beforeEach(function () {
             //update testdata
-            testData[0].birthday = new moment.utc().subtract(1, 'day').valueOf();   //yesterday
-            testData[1].birthday = new moment.utc().valueOf();                      //today
-            testData[2].birthday = new moment.utc().add(1, 'day').valueOf();        //tomorrow
+            testData[0].birthday = new moment.utc(1483574400000).subtract(1, 'day').valueOf();   //yesterday
+            testData[1].birthday = new moment.utc(1483574400000).valueOf();                      //today
+            testData[2].birthday = new moment.utc(1483574400000).add(1, 'day').valueOf();        //tomorrow
             this.node = $('<div>');
             this.baton = ext.Baton();
         });
@@ -43,12 +43,18 @@ define([
         });
 
         describe('with a list of birthdays', function () {
+            var clock;
             beforeEach(function () {
+                //TODO: this is an object in later versions of sinon
+                clock = sinon.useFakeTimers(1483574400000, 'Date');
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
                 return invokeDraw.call(this);
+            });
+            afterEach(function () {
+                clock.restore();
             });
 
             it('should draw content', function () {
@@ -58,7 +64,6 @@ define([
                 expect(this.node.find('li')).to.have.length(5);
             });
             it('should not draw year if its year 1', function () {
-                //FIXME: this test fails every year at 12.06. +- 1 day
                 expect($(this.node.find('.accent')[4]).text()).to.equal('12.6.');
             });
             it('should recognize yesterday/today/tomorrow', function () {

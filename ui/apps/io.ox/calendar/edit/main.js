@@ -121,10 +121,10 @@ define('io.ox/calendar/edit/main', [
                                 self.getWindow().busy();
                             }
                         });
+                        // if initialModelData is given, we are using a restore point. Don't consider this as saved
+                        self.considerSaved = !opt.initialModelData;
 
-                        self.considerSaved = true;
-
-                        self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
+                        self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
                             if (app.dropZone) app.dropZone.include();
@@ -149,7 +149,8 @@ define('io.ox/calendar/edit/main', [
                             self.considerSaved = false;
                         });
 
-                        self.initialModelData = self.model.toJSON();
+                        // restore points give their old initial model data as options. This way the dirty check stays correct
+                        self.initialModelData = opt.initialModelData || self.model.toJSON();
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         //used by guided tours so they can show the next step when everything is ready
@@ -201,13 +202,27 @@ define('io.ox/calendar/edit/main', [
             create: function (data) {
                 data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
-                if (!data['class']) data['class'] = 'PUBLIC';
+                if (!data.class) data.class = 'PUBLIC';
                 this.edit(data, { mode: 'create' });
             },
 
             getDirtyStatus: function () {
                 if (this.considerSaved) return false;
                 return !_.isEqual(this.model.toJSON(), this.initialModelData);
+            },
+
+            // clean up model so no empty values are saved and dirty check has no false positives
+            cleanUpModel: function () {
+                var data = this.model.toJSON(),
+                    self = this;
+
+                _(data).each(function (value, key) {
+                    // if value is undefined, '' or null and the key is not in the initial model data, we can omit it
+                    if (!value && !_(self.initialModelData).has(key)) {
+                        // use silent or miniviews add the attribute again with undefined value. We want to omit them here
+                        self.model.unset(key, { silent: true });
+                    }
+                });
             },
 
             onShowWindow: function () {
@@ -298,8 +313,8 @@ define('io.ox/calendar/edit/main', [
                     return;
                 }
 
-                // update model with current data
-                if (data) this.model.set(data.toJSON());
+                // update model with current data (omit undefined)
+                if (data) this.model.set(_(data.toJSON()).omit(function (value) { return !value; }));
 
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {
@@ -350,15 +365,22 @@ define('io.ox/calendar/edit/main', [
                     return {
                         description: gt('Appointment') + (summary ? ': ' + summary : ''),
                         module: 'io.ox/calendar/edit',
-                        point: this.model.attributes
+                        point:  {
+                            data: this.model.attributes,
+                            // save this so the dirty check works correctly after the restore
+                            initialModelData: this.initialModelData
+                        }
                     };
                 }
                 return false;
             },
 
             failRestore: function (point) {
-                this.edit(point, {
-                    mode: _.isUndefined(point.id) ? 'create' : 'edit'
+                // support for legacy restore points
+                var data = point.data || point;
+                this.edit(data, {
+                    mode: _.isUndefined(data.id) ? 'create' : 'edit',
+                    initialModelData: point.initialModelData
                 });
                 return $.when();
             },
@@ -379,6 +401,9 @@ define('io.ox/calendar/edit/main', [
             var self = this,
                 df = new $.Deferred();
 
+            // trigger blur inputfields so the model has current data and the dirty check is correct
+            $(document.activeElement).filter('input').trigger('change');
+            self.cleanUpModel();
             //be gently
             if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -386,7 +411,6 @@ define('io.ox/calendar/edit/main', [
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
-                        ox.trigger('launcher:toggleOverlay', false);
                     }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))

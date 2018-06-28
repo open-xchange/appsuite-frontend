@@ -1262,7 +1262,7 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Prefetch first 10 relevant (unseen) emails
+         * Prefetch first n relevant (unseen) emails
          */
         'prefetch': function (app) {
 
@@ -1564,7 +1564,8 @@ define('io.ox/mail/main', [
             };
 
             app.supportsTextPreviewConfiguration = function () {
-                return support && account.isPrimary(app.folder.get());
+                var id = app.folder.get();
+                return support && (account.isPrimary(id) || id === 'virtual/all-unseen');
             };
 
             app.useTextPreview = function () {

@@ -51,7 +51,6 @@ define('io.ox/calendar/toolbar', [
             mobile: 'hi',
             label: gt.pgettext('app', 'Scheduling'),
             title: gt('Find a free time'),
-            drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
         },
         'today': {
@@ -170,16 +169,23 @@ define('io.ox/calendar/toolbar', [
             .option('layout', 'week:day', gt('Day'), { radio: true });
             if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true });
             dropdown.option('layout', 'week:week', gt('Week'), { radio: true })
-            .option('layout', 'month', gt('Month'), { radio: true })
-            .option('layout', 'year', gt('Year'), { radio: true })
-            .option('layout', 'list', gt('List'), { radio: true })
-            .divider()
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'))
-            .option('showMiniCalendar', true, gt('Mini calendar'))
-            .option('checkboxes', true, gt('Checkboxes'))
-            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
-            .listenTo(baton.app.props, 'change:layout', updateColorOption);
+                .option('layout', 'month', gt('Month'), { radio: true })
+                .option('layout', 'year', gt('Year'), { radio: true })
+                .option('layout', 'list', gt('List'), { radio: true })
+                .divider()
+                .header(gt('Options'))
+                .option('folderview', true, gt('Folder view'))
+                .option('showMiniCalendar', true, gt('Mini calendar'));
+
+            if (baton.app.props.get('layout') === 'month') {
+                dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
+                // dropdown.option('showMonthviewCW', true, gt('CW'));
+            }
+
+            dropdown
+                .option('checkboxes', true, gt('Checkboxes'))
+                .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
+                .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
             if (capabilities.has('calendar-printing') && baton.app.props.get('layout') !== 'year') {
                 dropdown
@@ -220,6 +226,11 @@ define('io.ox/calendar/toolbar', [
                     list = list[0];
                     // add flags to draw items correctly
                     list.flags = this.listView.selection.getNode(this.listView.selection.get()).attr('data-flags') || '';
+                } else if (list.length > 1) {
+                    // add flags
+                    list = _(list).map(function (item) {
+                        return _.extend(item, { flags: app.listView.selection.getNode(util.cid(item)).attr('data-flags') || '' });
+                    });
                 }
                 // disable visible buttons
                 toolbarView.disableButtons();

@@ -30,11 +30,12 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
+    'io.ox/core/attachments/backbone',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer, attachmentModel) {
 
     'use strict';
 
@@ -266,7 +267,8 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3 col-xs-offset-2">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3">');
+                if (_.device('!smartphone')) node.addClass('col-xs-offset-2');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -565,7 +567,9 @@ define('io.ox/mail/compose/view', [
                     self.model.set(data);
 
                     var attachmentCollection = self.model.get('attachments');
-                    attachmentCollection.reset(attachments);
+                    attachmentCollection.reset(_(attachments).map(function (attachment) {
+                        return new attachmentModel.Model(attachment);
+                    }));
                     var content = attachmentCollection.at(0).get('content'),
                         content_type = attachmentCollection.at(0).get('content_type');
 
@@ -781,7 +785,6 @@ define('io.ox/mail/compose/view', [
                     this.app.getWindow().floating.toggle(true);
                 } else if (_.device('smartphone')) {
                     this.app.getWindow().resume();
-                    ox.trigger('launcher:toggleOverlay', false);
                 }
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
@@ -831,15 +834,17 @@ define('io.ox/mail/compose/view', [
                     app: this.app,
                     view: view
                 }),
+                win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
             // don't ask wether the app can be closed if we have unsaved data, we just want to send
             baton.model.set('autoDismiss', true);
 
+            win.busy();
             return extensionCascade(point, baton).then(function () {
                 //app is re-opened; we want to be asked before any unsaved data is discarded
                 if (baton.error) baton.model.set('autoDismiss', false);
-            });
+            }).always(win.idle.bind(win));
         },
 
         toggleTokenfield: function (e) {

@@ -21,7 +21,7 @@ define('io.ox/core/extPatterns/dnd', [
     // wrapper to create full size DropZones and DropHandlers via ext points
     var UploadZone = function (options) {
 
-        var args = $.makeArray(arguments).shift(),
+        var args = $.makeArray(arguments).slice(1),
             point = ext.point(options.ref),
             included = false,
             dropZone;

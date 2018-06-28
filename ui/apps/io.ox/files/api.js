@@ -112,7 +112,10 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
+            return !this.isFolder() && this.isDriveItem();
+        },
+        isDriveItem: function () {
+            return (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
         isSVG: function (type) {
@@ -1467,16 +1470,16 @@ define('io.ox/files/api', [
 
         var formData = new FormData();
 
+        // add data
+        formData.append('json', JSON.stringify(data));
+        // store folder here for error handling. cannot restore data from formData in Safari or IE
+        formData.folder = data.folder_id;
+
         if ('filename' in options) {
             formData.append('file', options.file, options.filename);
         } else if ('file' in options) {
             formData.append('file', options.file);
         }
-
-        // add data
-        formData.append('json', JSON.stringify(data));
-        // store folder here for error handling. cannot restore data from formData in Safari or IE
-        formData.folder = data.folder_id;
 
         return http.UPLOAD({
             module: options.module,

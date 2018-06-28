@@ -214,7 +214,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         setup: function () {
-            this.$ul = this.options.$ul || $('<ul class="dropdown-menu" role="menu">');
+            this.$ul = this.options.$ul || this.$ul || $('<ul class="dropdown-menu" role="menu">');
             this.$placeholder = $('<div class="hidden">').attr('id', _.uniqueId('dropdown-placeholder-'));
             this.smart = this.options.smart;
             this.margin = this.options.margin || 8;
@@ -295,7 +295,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             );
         },
 
-        // used to manually prevent the popup from closing. Make sure to reset this or the popup stays open all the time
+        // used to manually prevent the popup from closing.The only exception is a direct click on the toggle button. Make sure to reset this or the popup stays open when you don't want to
         forceOpen: function (state) {
             this.$el.attr('forceOpen', state);
         },
@@ -335,7 +335,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr({
+                this.$toggle = this.options.$toggle || this.$toggle || $('<a href="#" draggable="false">').attr({
                     'aria-label': ariaLabel,
                     'data-action': this.options.dataAction,
                     'title': this.options.title || null,

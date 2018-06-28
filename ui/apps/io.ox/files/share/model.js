@@ -201,7 +201,10 @@ define('io.ox/files/share/model', [
                     // SCR-97: BREAKPOINT one line beneath for debugging
                     return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
                         .done(this.send.bind(this))
-                        .fail(yell);
+                        .fail(function (error) {
+                            yell(error);
+                            self.trigger('error:sync', 'update', error);
+                        });
                 // no default
             }
         },

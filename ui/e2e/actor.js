@@ -1,5 +1,6 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
+
 module.exports = actor({
     //remove previously created appointments by appointment title
     removeAllAppointments: async function (title) {

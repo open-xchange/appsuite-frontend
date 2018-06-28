@@ -107,7 +107,7 @@ define('io.ox/mail/compose/sharing', [
         id: 'password',
         index: 300,
         render: function () {
-            var model = this.sharingModel, passContainer;
+            var model = this.sharingModel, passContainer, guid;
 
             function toggleState() {
                 if (model.get('usepassword')) return passContainer.find('input').prop('disabled', false);
@@ -118,7 +118,9 @@ define('io.ox/mail/compose/sharing', [
                 $('<div class="password-wrapper">').append(
                     //#. checkbox label to determine if a password should be used
                     new mini.CustomCheckboxView({ name: 'usepassword', model: model, label: gt('Use password') }).render().$el.addClass('use-password'),
+                    $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('share-password-label-') }),
                     passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
+                        .find('input').attr('id', guid)
                 )
             );
             model.on('change:usepassword', toggleState);

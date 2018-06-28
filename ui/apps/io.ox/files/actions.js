@@ -523,7 +523,10 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
-                action(baton.data);
+                // initially the description in not in the reduced data in the pool that is used here, get the fileModel
+                api.get(baton.data).done(function (fileModel) {
+                    action(fileModel);
+                });
             });
         }
     });
@@ -739,25 +742,51 @@ define('io.ox/files/actions', [
      *  Whether the elements inside the collection are shareable
      */
     function isShareable(e, type) {
-        var returnValue = true;
-        _.each(e.baton.models, function (model) {
-            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
-            var folderModel = folderAPI.pool.getModel(id);
-            if (!folderModel.isShareable()) returnValue = false;
-            if (folderModel.is('trash')) returnValue = false;
-            if (!id) returnValue = false;
-            if (type === 'invite' && !folderModel.supportsInviteGuests()) returnValue = false;
-        });
+        var id, folderModel;
 
-        return returnValue;
+        // not possible for multi-selection
+        if (e.collection.has('multiple')) return false;
+        // check if this is a contact not a file, happens when contact is send as vcard
+        if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
+        // get folder id
+        if (e.collection.has('one')) {
+
+            // -> from the folder tree we get an array, in the list an obj so normalize
+            var dataObj = _.isArray(e.baton.data) ? e.baton.data[0] : e.baton.data;
+            id = e.collection.has('folders') ? dataObj.id : dataObj.folder_id;
+
+        } else if (e.baton.app) {
+            // use current folder
+            id = e.baton.app.folder.get();
+        }
+
+        if (!id) return false;
+        // general capability and folder check
+        folderModel = folderAPI.pool.getModel(id);
+        if (!folderModel.isShareable()) return false;
+        if (folderModel.is('trash')) return false;
+        return type === 'invite' ? folderModel.supportsInviteGuests() : true;
     }
+
+    new Action('io.ox/files/dropdown/share', {
+        requires: function (e) {
+            // usually this dropdown was always true and only removed in case the child actions are disabled.
+            // but this introduced jumping icons in the toolbar, therefore we check the dropdown/share too now to prevent this.
+            // note for the next one who is working in this area: a more elegant solution would be to wait until
+            // the child action from this dropdown are checked or something similar, so that we don't need
+            // to check it twice like now.
+            return isShareable(e, 'link') || isShareable(e, 'invite');
+        },
+        action: $.noop
+    });
 
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
     new Action('io.ox/files/actions/editShare', {
         requires: function (e) {
             if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            // we must check the real selection because in myShares we could have two items for one model
             if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
-            return isShareable(e, 'link') || isShareable(e, 'invite');
+            return true;
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
@@ -826,8 +855,9 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/share/revoke', {
         requires: function (e) {
             if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            // we must check the real selection because in myShares we could have two items for one model
             if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
-            return isShareable(e, 'link') || isShareable(e, 'invite');
+            return true;
         },
         action: _.throttle(function (baton) {
             require(['io.ox/files/share/permissions', 'io.ox/files/share/api'], function (permissions, shareApi) {
@@ -886,52 +916,59 @@ define('io.ox/files/actions', [
                             });
 
                         } else {
-                            permissionsToKeep = shareModel.getPermissions().filter(function (item) {
-                                if (item.type === 'anonymous' || ox.user_id === item.entity) {
-                                    return true;
+                            shareModel.reload().done(function () {
+                                permissionsToKeep = shareModel.getPermissions().filter(function (item) {
+                                    if (item.type === 'anonymous' || ox.user_id === item.entity) {
+                                        return true;
+                                    }
+                                    return false;
+                                });
+
+                                shareModel.setPermissions(permissionsToKeep);
+
+                                if (model.isFolder()) {
+                                    folderAPI.get(model.get('id')).done(function (folderDesc) {
+                                        folderModel = new folderAPI.FolderModel(folderDesc);
+                                        newPermissionList = folderModel.get('permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        folderAPI
+                                            .update(folderModel.get('id'), { permissions: newPermissionList })
+                                            .done(function () {
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
+                                } else {
+                                    api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
+                                        fileModel = new api.Model(fileDesc);
+                                        newPermissionList = fileModel.get('object_permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        api
+                                            .update(fileDesc, {
+                                                object_permissions: newPermissionList,
+                                                'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
+                                            })
+                                            .done(function () {
+                                                fileModel.destroy.bind(fileModel);
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
                                 }
-                                return false;
                             });
-
-                            shareModel.setPermissions(permissionsToKeep);
-
-                            if (model.isFolder()) {
-                                folderAPI.get(model.get('id')).done(function (folderDesc) {
-                                    folderModel = new folderAPI.FolderModel(folderDesc);
-                                    newPermissionList = folderModel.get('permissions').filter(function (item) {
-                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                    });
-                                    folderAPI
-                                        .update(folderModel.get('id'), { permissions: newPermissionList })
-                                        .done(yell('success', gt('Revoked access.')))
-                                        .fail(function (error) {
-                                            yell(error);
-                                        });
-                                });
-                            } else {
-                                api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
-                                    fileModel = new api.Model(fileDesc);
-                                    newPermissionList = fileModel.get('object_permissions').filter(function (item) {
-                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                    });
-                                    newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
-                                        return !!_.where(permissionsToKeep, { entity: item.entity }).length;
-                                    });
-                                    api
-                                        .update(fileDesc, {
-                                            object_permissions: newPermissionList,
-                                            'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
-                                        })
-                                        .done(function () {
-                                            fileModel.destroy.bind(fileModel);
-                                            yell('success', gt('Revoked access.'));
-                                        })
-                                        .fail(function (error) {
-                                            yell(error);
-                                        });
-                                });
-                            }
                         }
+                    })
+                    .fail(function (error) {
+                        yell(error);
                     });
                 }
             });
@@ -1090,8 +1127,13 @@ define('io.ox/files/actions', [
                     e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
                 }
 
-                // returns false if one file/folder of the selection is in favorites
+                // returns false if one file/folder of the selection is in favorites or a 'local file' (see below)
                 var result =  _.some(e.context, function (element) {
+                    // check that we don't have a local file (upload file in mailcompose, view the file -> we have a local file)
+                    if (element.group === 'localFile') {
+                        return true;
+                    }
+
                     var isFavorite = _.find(favorites, function (elemId) {
                         if (elemId === element.id) {
                             return true;
@@ -1099,6 +1141,7 @@ define('io.ox/files/actions', [
                     });
                     return folderAPI.is('trash', element) || isFavorite;
                 });
+
                 return !result;
             }
             return true;

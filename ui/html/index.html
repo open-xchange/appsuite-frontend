@@ -28,9 +28,11 @@
 
         <link rel="stylesheet" href="<%= base %>/apps/themes/login/login.css">
         <style type="text/css">
+
             html, body { background-color: #fff; margin: 0; padding: 0; border: 0; }
             body { overflow: hidden; }
-            #timeout-error {
+
+            #showstopper {
                 position: relative;
                 display: none;
                 text-align: center;
@@ -38,10 +40,12 @@
                 font-size: 16px;
             }
 
-            #timeout-reload {
+            #showstopper .reload {
                 display: block;
                 margin: 16px;
             }
+
+            #showstopper .timeout, #showstopper .session { display: none; }
 
             .throbber {
                 position: absolute;
@@ -113,8 +117,9 @@
               <div class="bounce2"></div>
               <div class="bounce3"></div>
             </div>
-            <div id="timeout-error">
-
+            <div id="showstopper">
+                <div class="timeout"></div>
+                <div class="session"></div>
             </div>
         </div>
         <!-- Core Panel -->
@@ -240,17 +245,25 @@
         </div>
         <script>
             /* inject correct language here at the very start manually*/
-          (function () {
-            var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-              messages = {
-                'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
-                'de': ['Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.', 'Neu laden'],
-                'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina']
-              };
-
-            var msg = messages[language] || messages['en'];
-            document.getElementById('timeout-error').innerHTML = '<span>' + msg[0] +'</span><br><a href="#" class="timeout-reload">' + msg[1] + '</a>';
-          }());
+            (function () {
+                var language = (navigator.language || navigator.userLanguage).substr(0, 2),
+                    messages = {
+                        timeout: {
+                            'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
+                            'de': ['Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.', 'Neu laden'],
+                            'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina']
+                        },
+                        session: {
+                            'en': ['Something went wrong. Please close this browser tab and try again.'],
+                            'de': ['Es gab einen Fehler. Bitte schließen Sie dieses Browser-Tab und versuchen es erneut.']
+                        }
+                    };
+                for (var type in messages) {
+                    var msg = messages[type][language] || messages[type].en;
+                    document.querySelector('#showstopper .' + type).innerHTML = '<span>' + msg[0] +'</span>' +
+                        (msg[1] ? '<br><a href="#" class="reload">' + msg[1] + '</a>' : '');
+                }
+            }());
         </script>
         <script src="<%= base %>/boot.js"></script>
         <noscript>

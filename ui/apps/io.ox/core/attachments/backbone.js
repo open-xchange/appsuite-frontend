@@ -42,7 +42,7 @@ define('io.ox/core/attachments/backbone', [
         };
     };
 
-    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?|ppsx?|txt)$/i,
+    var regIsDocument = /\.((?:doc|dot|pot|pps|ppt|xls|xlt)[mx]?|o[dt][cfgipst]|odm|pdf|ppam?|rtf|txt|xlam?|xlsb)$/i,
         regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f)$/i;
 
     var previewFetcher = {
