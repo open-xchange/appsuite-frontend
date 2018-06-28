@@ -782,6 +782,12 @@
         return (s || '').replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
     };
 
+    _.sanitize = {
+        option: function (value) {
+            return (value || '').replace(/[^a-z0-9:._-]/ig, '').trim();
+        }
+    };
+
     window.assert = function (value, message) {
         if (!ox.debug || value) return;
         console.error(message || 'Assertion failed!');

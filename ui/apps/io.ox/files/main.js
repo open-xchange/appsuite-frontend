@@ -462,7 +462,7 @@ define('io.ox/files/main',
                 win.show();
             })
             .done(function () {
-                var pers = map(options.perspective || _.url.hash('perspective') || app.props.get('layout'));
+                var pers = map(options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout'));
                 ox.ui.Perspective.show(app, pers);
             });
     });

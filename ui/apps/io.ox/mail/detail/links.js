@@ -151,29 +151,32 @@ define('io.ox/mail/detail/links',
 
         var node = $(this), data = node.data(), address, name, tmp, params = {};
 
-        // has data?
-        if (data.address) {
-            // use existing address and name
-            address = data.address;
-            name = data.name || data.address;
-        } else {
-            // parse mailto string
-            // cut off leading "mailto:" and split at "?"
-            tmp = node.attr('href').substr(7).split(/\?/, 2);
-            // address
-            address = tmp[0];
-            // use link text as display name
-            name = node.text();
-            // process additional parameters; all lower-case (see bug #31345)
-            params = _.deserialize(tmp[1]);
-            for (var key in params) params[key.toLowerCase()] = params[key];
-        }
+        require(['io.ox/mail/sanitizer'], function (sanitizer) {
 
-        // go!
-        ox.registry.call('mail-compose', 'compose', {
-            to: [[name, address]],
-            subject: params.subject || '',
-            attachments: [{ content: params.body || '', disp: 'inline' }]
+            // has data?
+            if (data.address) {
+                // use existing address and name
+                address = data.address;
+                name = data.name || data.address;
+            } else {
+                // parse mailto string
+                // cut off leading "mailto:" and split at "?"
+                tmp = node.attr('href').substr(7).split(/\?/, 2);
+                // address
+                address = tmp[0];
+                // use link text as display name
+                name = node.text();
+                // process additional parameters; all lower-case (see bug #31345)
+                params = _.deserialize(tmp[1]);
+                for (var key in params) params[key.toLowerCase()] = params[key];
+            }
+
+            // go!
+            ox.registry.call('mail-compose', 'compose', {
+                to: [[name, address]],
+                subject: params.subject || '',
+                attachments: [{ content: sanitizer.sanitize({ content: params.body || '', content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content, disp: 'inline' }]
+            });
         });
     });
 

@@ -499,7 +499,7 @@ define('io.ox/calendar/main',
                     win.on({
                         'search:query': function () {
                             // switch to supported perspective
-                            lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                            lastPerspective = lastPerspective || app.props.get('layout') || _.sanitize.option(_.url.hash('perspective'));
                             if (lastPerspective !== SEARCH_PERSPECTIVE) {
                                 // fluent option: do not write to user settings
                                 app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
@@ -509,7 +509,7 @@ define('io.ox/calendar/main',
                         },
                         'search:cancel': function () {
                             // switch back to perspective used before
-                            var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                            var currentPerspective = _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
                             if (lastPerspective && lastPerspective !== currentPerspective)
                                 app.props.set('layout', lastPerspective);
                             // disable
@@ -620,7 +620,7 @@ define('io.ox/calendar/main',
             .done(function () {
 
                 // app perspective
-                var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+                var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
 
                 if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
                     lastPerspective = 'week:day';
