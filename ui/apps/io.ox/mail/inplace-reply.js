@@ -89,18 +89,21 @@ define('io.ox/mail/inplace-reply', [
             // progress
             this.setProgress(70);
             // escape plain text content since we always send HTML
-            content = _.escape(content).replace(/\n/g, '<br>');
-            // append quoted content of original message
-            content += '<br>' + data.attachments[0].content;
-            // pick other stuff we need
-            data = _(data).pick('from', 'to', 'cc', 'bcc', 'headers', 'priority', 'vcard', 'subject', 'sendtype', 'csid', 'msgref');
-            data.attachments = [{ id: 1, content_type: getContentType(), content: content }];
-            getProperDisplayName(data.from[0]).done(function (from) {
-                data.from[0] = from;
-                // go!
-                api.send(data)
-                    .done(this.onSendComplete.bind(this, cid))
-                    .fail(this.onSendFail.bind(this));
+            require(['io.ox/mail/detail/content'], function (proc) {
+                if (this.content_type === 'text/plain') data.attachments[0].content = proc.transformForHTMLEditor(data.attachments[0].content);
+                content = _.escape(content).replace(/\n/g, '<br>');
+                // append quoted content of original message
+                content += '<br>' + data.attachments[0].content;
+                // pick other stuff we need
+                data = _(data).pick('from', 'to', 'cc', 'bcc', 'headers', 'priority', 'vcard', 'subject', 'sendtype', 'csid', 'msgref');
+                data.attachments = [{ id: 1, content_type: getContentType(), content: content }];
+                getProperDisplayName(data.from[0]).done(function (from) {
+                    data.from[0] = from;
+                    // go!
+                    api.send(data)
+                        .done(this.onSendComplete.bind(this, cid))
+                        .fail(this.onSendFail.bind(this));
+                }.bind(this));
             }.bind(this));
         },
 
@@ -181,6 +184,7 @@ define('io.ox/mail/inplace-reply', [
 
             // remember cid
             this.cid = options.cid;
+            this.content_type = options.content_type;
 
             // store numberOfRecipients to label the button correctly
             this.numberOfRecipients = options.numberOfRecipients;

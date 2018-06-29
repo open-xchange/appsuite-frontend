@@ -79,9 +79,10 @@ define('io.ox/mail/actions', [
                 // hide inline link
                 link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
 
+            if (!view.$el.hasClass('expanded')) view.toggle(cid);
             require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
                 view.$('section.body').before(
-                    new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
+                    new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients, content_type: baton.data.content_type })
                     .on('send', function (cid) {
                         view.$el.closest('.thread-view-control').data('open', cid);
                     })
