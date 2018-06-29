@@ -1,3 +1,9 @@
+open-xchange-appsuite-help (7.10.0-10) stable; urgency=medium
+
+  * Fourth candidate for 7.10.0 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 29 Jun 2018 12:36:37 +0000
+
 open-xchange-appsuite-help (7.10.0-9) stable; urgency=medium
 
   * Third candidate for 7.10.0 release
