@@ -148,8 +148,9 @@ define('io.ox/backbone/mini-views/common', [
             // use long delay here as safari messes up the focus order
         }, 200),
         onKeyPress: function (e) {
-            // Windows Key / Left ⌘ / Chromebook Search key
-            if (e.which !== 91) return;
+            // Mac left alt / Windows Key / Chromebook Search key
+            var match = _.device('macos') ? e.which === 18 : e.which === 91;
+            if (!match) return;
             this.toggle(e, e.type === 'keydown');
         },
         toggle: function (state) {
