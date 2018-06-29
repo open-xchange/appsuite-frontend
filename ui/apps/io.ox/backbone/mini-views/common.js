@@ -396,7 +396,7 @@ define('io.ox/backbone/mini-views/common', [
         InputView.extend({
             format: 'l',
             onChange: function () {
-                var t = +moment(this.$el.val(), this.format).utc(true);
+                var t = moment(this.$el.val(), this.format).valueOf();
                 this.model.set(this.name, t);
             },
             update: function () {
@@ -404,7 +404,7 @@ define('io.ox/backbone/mini-views/common', [
                 this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
             },
             getFormattedDate: function (date) {
-                return moment(date).utc(true).format(this.format);
+                return moment(date).format(this.format);
             },
             render: function () {
                 InputView.prototype.render.call(this);
@@ -415,7 +415,7 @@ define('io.ox/backbone/mini-views/common', [
                         new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
                             .attachTo(view.$el)
                             .on('select', function (date) {
-                                view.model.set(view.name, date.utc(true).valueOf());
+                                view.model.set(view.name, date.valueOf());
                             });
                     });
                 });
