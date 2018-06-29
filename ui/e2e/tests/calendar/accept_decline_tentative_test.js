@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
@@ -25,7 +25,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointments with participant who will accept/decline/accept tentative', function (I, users) {
+Scenario('Create appointments with participants who will accept/decline/accept tentative', function (I, users) {
     let [user] = users;
 
     I.haveSetting('io.ox/core//autoOpenNotification', false);
@@ -203,5 +203,7 @@ Scenario('Create appointments with participant who will accept/decline/accept te
     I.waitForElement('.rightside .participant a.declined[title="' + users[2].userdata.primaryEmail + '"]');
     // accept tentative
     I.waitForElement('.rightside .participant a.tentative[title="' + users[3].userdata.primaryEmail + '"]');
+
+    I.logout();
 
 });
