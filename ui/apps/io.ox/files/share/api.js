@@ -171,6 +171,7 @@ define('io.ox/files/share/api', [
                 data: _(data).pick('module', 'folder', 'item')
             }).then(function (data, timestamp) {
                 api.trigger('new:link');
+                ox.trigger('please:refresh');
                 return { data: data, timestamp: timestamp };
             });
         },
@@ -225,6 +226,7 @@ define('io.ox/files/share/api', [
             }).then(function (result) {
                 api.trigger('remove:link', data);
                 api.trigger('remove:link:' + data.module + ':' + data.folder + (data.item ? ':' + data.item : ''));
+                ox.trigger('please:refresh');
                 return result;
             });
         },
