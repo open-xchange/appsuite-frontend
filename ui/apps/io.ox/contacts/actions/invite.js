@@ -12,8 +12,9 @@
  */
 
 define('io.ox/contacts/actions/invite', [
-    'io.ox/contacts/api'
-], function (api) {
+    'io.ox/contacts/api',
+    'io.ox/contacts/util'
+], function (api, util) {
 
     'use strict';
 
@@ -25,12 +26,12 @@ define('io.ox/contacts/actions/invite', [
             if (obj.distribution_list && obj.distribution_list.length) {
                 distLists.push(obj);
                 return;
-            } else if (obj.internal_userid || obj.user_id) {
+            } else if ((obj.internal_userid || obj.user_id) && (obj.field === 'email1' || !obj.field)) {
                 // internal user
                 return { type: 1, id: obj.internal_userid || obj.user_id };
             }
             // external user
-            return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
+            return { type: 5, display_name: obj.display_name, mail: obj[obj.field] || obj.mail || obj.email1 || obj.email2 || obj.email3 };
         }
 
         function filterContact(obj) {
@@ -72,9 +73,17 @@ define('io.ox/contacts/actions/invite', [
                     }
                 });
                 distLists = _.difference(distLists, externalParticipants);
+                distLists = util.validateDistributionList(distLists);
 
                 return api.getList(distLists)
                     .then(function (obj) {
+                        // make sure we use the mail address given in the distributionlist
+                        obj = _(obj).map(function (contact, index) {
+                            if (distLists[index].mail_field) {
+                                contact.field = 'email' + distLists[index].mail_field;
+                            }
+                            return contact;
+                        });
                         var resolvedContacts = _.chain([].concat(obj, externalParticipants))
                             .map(mapContact)
                             .flatten(true)

@@ -19,12 +19,13 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/contacts/api',
     'io.ox/core/http',
     'io.ox/core/util',
+    'io.ox/contacts/util',
     'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, pViews, contactAPI, http, util, gt) {
+], function (ext, Typeahead, pModel, pViews, contactAPI, http, util, contactsUtil, gt) {
 
     'use strict';
 
@@ -320,8 +321,12 @@ define('io.ox/core/tk/tokenfield', [
                         // bundle and delay the pModel fetch calls
                         http.pause();
 
+                        contactsUtil.validateDistributionList(e.attrs.model.get('distribution_list'));
+
                         var models = _.chain(e.attrs.model.get('distribution_list'))
-                            .filter(function (m) { return !!m.mail; })
+                            .filter(function (m) {
+                                return !!m.mail;
+                            })
                             .map(function (m) {
                                 m.type = 5;
                                 var model = new uniqPModel({
