@@ -76,7 +76,7 @@ define('io.ox/core/boot/login/token', [
             session.rampup(),
             hash.store === 'true' ? session.store() : $.when()
         )
-        .then(function () {
+        .always(function () {
             // fetch user config
             config.user()
                 .then(whoami)
