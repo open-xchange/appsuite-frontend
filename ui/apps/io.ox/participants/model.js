@@ -176,7 +176,8 @@ define('io.ox/participants/model', [
             opt = _.extend({ fallback: false, strict: false }, opt);
             if (opt.fallback && this.is('list')) return 'distribution_list';
             // strict option forces the use of the specified field. Prevents missleading information (user thinks theres a mail address, when there's actually non in the specific field)
-            return opt.strict ? this.get(this.get('field')) : this.get(this.get('field')) || this.getEmail();
+            // mail_field = 0 means independent contact, which lacks specific mailfields and need the fallback in any case. So we need an exact check here
+            return opt.strict && !(this.get('mail_field') === 0 && this.get('mail')) ? this.get(this.get('field')) : this.get(this.get('field')) || this.getEmail();
         },
 
         getFieldString: function () {
@@ -330,14 +331,22 @@ define('io.ox/participants/model', [
                 var isDistributionList = getValue(participant, 'mark_as_distributionlist');
                 participant = isDistributionList ? getValue(participant, 'distribution_list') : participant;
 
-                var models = [], defs = [];
+                var models = [], defs = [], omittedContacts = [];
                 _.each([].concat(participant), function (data) {
                     // check if model
                     var mod = data instanceof self.model ? data : new self.model(data);
+                    if (self.options.needsMail) {
+                        // yep mail_field = 0 is possible
+                        if (mod.get('mail_field') !== undefined && !mod.get('mail')) {
+                            omittedContacts.push(mod);
+                            return;
+                        }
+                    }
                     models.push(mod);
                     // wait for fetch, then add to collection
                     defs.push(mod.loading);
                 });
+                util.validateDistributionList(omittedContacts);
 
                 return $.when.apply($, defs).then(function () {
                     models = _(models).sortBy(function (obj) { return obj.get('last_name'); });

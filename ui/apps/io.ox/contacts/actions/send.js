@@ -11,7 +11,10 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/contacts/actions/send', ['io.ox/contacts/api'], function (api) {
+define('io.ox/contacts/actions/send', [
+    'io.ox/contacts/api',
+    'io.ox/contacts/util'
+], function (api, util) {
 
     'use strict';
 
@@ -29,6 +32,9 @@ define('io.ox/contacts/actions/send', ['io.ox/contacts/api'], function (api) {
             }
         })
         .then(function (list) {
+            // check distribution lists for valid mail addresses (causes yell if found)
+            util.validateDistributionList(_.chain(list).filter(function (obj) { return obj.distribution_list; }).map(function (obj) { return obj.distribution_list; }).flatten().value());
+
             // set recipient
             return _.chain(list)
                 .map(function (obj) {
