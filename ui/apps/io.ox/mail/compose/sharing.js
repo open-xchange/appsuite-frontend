@@ -38,6 +38,14 @@ define('io.ox/mail/compose/sharing', [
                     text = '';
 
                 switch (unit) {
+                    case 'm':
+                        text = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', count), count);
+                        value = count * 60000;
+                        break;
+                    case 'h':
+                        text = gt.format(gt.ngettext('%1$d hour', '%1$d hours', count), count);
+                        value = count * 3600000;
+                        break;
                     case 'd':
                         text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
                         value = count * 86400000;
