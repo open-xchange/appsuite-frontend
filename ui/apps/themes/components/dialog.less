@@ -431,6 +431,22 @@
         .btn.pull-right { margin-left: 8px; }
     }
 
+    &.mobile-dialog {
+        .modal-dialog {
+            width: 96%;
+        }
+        .modal-footer {
+            .row {
+                [class*="col-"] { margin-left: 0; }
+
+                .btn {
+                    width: 100%;
+                    margin: 2px 0;
+                }
+            }
+        }
+    }
+
     &.maximize {
         .modal-dialog {
             height: 100%;
