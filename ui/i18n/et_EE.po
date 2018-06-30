@@ -87,6 +87,7 @@ msgstr "%1$d faili on hiljuti muudetud"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d tund"
@@ -116,6 +117,7 @@ msgstr[1] "%1$d sõnumit valitud"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minut"
@@ -333,6 +335,11 @@ msgstr "%1$s muutis olekut:"
 #: apps/io.ox/files/upload/view.js
 msgid "%1$s completed"
 msgstr "%1$s valmis"
+
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -9289,6 +9296,10 @@ msgstr "Nutitelefoni seaded:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
