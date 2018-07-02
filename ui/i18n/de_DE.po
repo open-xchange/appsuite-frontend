@@ -187,7 +187,7 @@ msgstr "%1$d gesamt"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "%1$d unread"
-msgstr "%$d ungelesen"
+msgstr "%1$d ungelesen"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
