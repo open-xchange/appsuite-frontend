@@ -96,8 +96,9 @@ define('io.ox/calendar/list/listview', [
         id: 'private',
         index: 200,
         draw: function (baton) {
+            if (!util.isPrivate(baton.model)) return;
             this.append(
-                $('<i class="fa fa-lock private-flag" aria-hidden="true">').toggle(util.isPrivate(baton.model))
+                $('<i class="fa private-flag" aria-hidden="true">').addClass(util.isPrivate(baton.model, true) ? 'fa-user-circle' : 'fa-lock')
             );
         }
     });
