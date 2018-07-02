@@ -413,7 +413,7 @@ define('io.ox/core/tk/vgrid', [
             responsiveChange = true;
         });
 
-        // make resizalbe (unless touch device)
+        // make resizable (unless touch device)
         if (!_.device('touch')) {
             node.append(
                 $('<div class="resizebar">').on('mousedown', this, onResize)
@@ -1351,6 +1351,8 @@ define('io.ox/core/tk/vgrid', [
         function onContainerFocus() {
             var items = container.children(),
                 tabbable = items.filter('[tabindex="0"]:first');
+            // avoid crazy infinite loops on ie
+            if (_.device('IE') && !tabbable.length) return;
             if (tabbable.length) tabbable.focus(); else items.first().click();
         }
 
