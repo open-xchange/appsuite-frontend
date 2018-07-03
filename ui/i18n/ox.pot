@@ -2628,6 +2628,12 @@ msgstr ""
 msgid "%1$s (Tentative)"
 msgstr ""
 
+#: apps/io.ox/calendar/month/view.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
+msgid "Confidential"
+msgstr ""
+
 #: apps/io.ox/calendar/print-compact.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -3524,11 +3530,6 @@ msgstr ""
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 msgid "Do you want to edit this and all future appointments or just this appointment within the series?"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Confidential"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js

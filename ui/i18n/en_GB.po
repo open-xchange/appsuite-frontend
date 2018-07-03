@@ -2196,7 +2196,8 @@ msgstr "Compose new email"
 msgid "Conditions"
 msgstr "Conditions"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Confidential"
 

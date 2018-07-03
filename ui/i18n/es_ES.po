@@ -2208,7 +2208,8 @@ msgstr "Redactar nuevo correo electrónico"
 msgid "Conditions"
 msgstr "Condiciones"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Confidencial"
 

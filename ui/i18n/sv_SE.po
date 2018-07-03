@@ -2199,7 +2199,8 @@ msgstr "Skriv nytt meddelande"
 msgid "Conditions"
 msgstr "Villkor"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Hemlig"
 

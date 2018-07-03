@@ -2270,7 +2270,8 @@ msgstr "Yeni eposta oluştur"
 msgid "Conditions"
 msgstr "Durumlar"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr ""
 

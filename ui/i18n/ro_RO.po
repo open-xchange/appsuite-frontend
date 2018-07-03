@@ -2227,7 +2227,8 @@ msgstr "Compune un mail nou"
 msgid "Conditions"
 msgstr "Condiții"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Confidențial"
 

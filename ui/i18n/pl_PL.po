@@ -2229,7 +2229,8 @@ msgstr "Nowa wiadomość e-mail"
 msgid "Conditions"
 msgstr "Warunki"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Poufny"
 

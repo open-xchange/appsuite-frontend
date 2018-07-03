@@ -2144,7 +2144,8 @@ msgstr "撰写新邮件"
 msgid "Conditions"
 msgstr "条件"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "机密"
 

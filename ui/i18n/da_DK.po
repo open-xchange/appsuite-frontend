@@ -2199,7 +2199,8 @@ msgstr "Skriv ny e-mail"
 msgid "Conditions"
 msgstr "Betingelser"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Fortrolig"
 
