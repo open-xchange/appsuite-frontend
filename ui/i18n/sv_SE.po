@@ -1,13 +1,13 @@
-# Anneli Axelsson <anneli@bureau-cornavin.com>, 2008, 2009.
-# Samantha Whitsitt <samantha@bureau-cornavin.com>, 2008.
-# Arve Eriksson <arve@bureau-cornavin.com>, 2013, 2014, 2015, 2016, 2017.
+# Anneli Axelsson <anneli@workshop-chapina.com>, 2008, 2009.
+# Samantha Whitsitt <samantha@workshop-chapina.com>, 2008.
+# Arve Eriksson <arve@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-27 16:05+0200\n"
-"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
+"PO-Revision-Date: 2018-07-03 16:04+0200\n"
+"Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -2589,8 +2589,9 @@ msgid "Postcode"
 msgstr "Postnummer"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Town"
-msgstr "Ort"
+#: apps/io.ox/contacts/print.js
+msgid "City"
+msgstr "Stad"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "State"
@@ -2969,10 +2970,6 @@ msgstr "Annan"
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Snabbmeddelanden"
-
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
-msgid "City"
-msgstr "Stad"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -4285,7 +4282,7 @@ msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
 msgstr ""
-"Visste du att du kan ta %1$s med deg? Klicka på den här ikonen och välj "
+"Visste du att du kan ta %1$s med dig? Bara klicka på den här ikonen och välj "
 "\"Anslut din enhet\" från menyn."
 
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4304,13 +4301,23 @@ msgstr "Logga in igen för att fortsätta"
 msgid "Restore applications"
 msgstr "Återställ program"
 
+#. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"Följande program kan återställas. Ta bort återställningspunkten om du inte "
-"vill återställa från den."
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Nedanstående objekt var öppet när du senast avslutade %1$s."
+msgstr[1] "Nedanstående objekt var öppna när du senast avslutade %1$s."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Klicka på \"Fortsätt\" om du vill fortsätta att redigera."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] "Om du inte vill behålla objektet, klicka på papperskorgsikonen."
+msgstr[1] "Om du inte vill behålla ett objekt, klicka på papperskorgsikonen."
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -5362,6 +5369,15 @@ msgstr "De första 90 dagarna är gratis."
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Få gratis uppgradering"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Tyvärr finns ingen förhandsgranskning."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"För att skriva ut den här filen, använd \"Skriv ut som PDF\" i visaren."
 
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
@@ -7230,9 +7246,9 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Alla nya meddelanden från %1$s kommer flyttas till den valda mappen."
+"Alla nya meddelanden från %1$s kommer att flyttas till den valda mappen."
 msgstr[1] ""
-"Alla nya meddelanden från avsändarna av de markerade meddelandena kommer "
+"Alla nya meddelanden från avsändarna av de markerade meddelandena kommer att "
 "flyttas till den valda mappen."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
@@ -11209,21 +11225,1271 @@ msgstr "Bjud in till %s"
 msgid "Add on %s"
 msgstr "Lägg till på %s"
 
-#~ msgid ""
-#~ "Use up and down keys to change the time. Close selection by pressing ESC "
-#~ "key."
-#~ msgstr ""
-#~ "Använd upp- och nedåtpilarna för att ändra tiden. Stäng med ESC-tangenten."
+#~ msgid "Notify %1$s before start."
+#~ msgstr "Avisera %1$s innan start."
 
-#~ msgid "Line %1$d: %2$s"
-#~ msgstr "Rad %1$d: %2$s"
+#~ msgid "Notify %1$s after start."
+#~ msgstr "Avisera %1$s efter start."
+
+#~ msgid "Notify %1$s before end."
+#~ msgstr "Avisera %1$s före slut."
+
+#~ msgid "Notify %1$s after end."
+#~ msgstr "Avisera %1$s efter slut."
+
+#~ msgid "Notify at %1$s."
+#~ msgstr "Avisera %1$s."
+
+#~ msgid "Notify at start."
+#~ msgstr "Avisera vid start."
+
+#~ msgid "Notify at end."
+#~ msgstr "Avisera vid slut."
+
+#~ msgid "Play sound %1$s before start."
+#~ msgstr "Spela upp ljud %1$s före start."
+
+#~ msgid "Play sound %1$s after start."
+#~ msgstr "Spela upp ljud %1$s efter start."
+
+#~ msgid "Play sound %1$s before end."
+#~ msgstr "Spela upp ljud %1$s före slut."
+
+#~ msgid "Play sound %1$s after end."
+#~ msgstr "Spela upp ljud %1$s efter slut."
+
+#~ msgid "Play sound at %1$s."
+#~ msgstr "Spela upp ljud %1$s."
+
+#~ msgid "Play sound at start."
+#~ msgstr "Spela upp ljud vid start."
+
+#~ msgid "Play sound at end."
+#~ msgstr "Spela upp ljud vid slut."
+
+#~ msgid "%1$s %2$s before start."
+#~ msgstr "%1$s %2$s före start."
+
+#~ msgid "%1$s %2$s after start."
+#~ msgstr "%1$s %2$s efter start."
+
+#~ msgid "%1$s %2$s before end."
+#~ msgstr "%1$s %2$s före slut."
+
+#~ msgid "%1$s %2$s after end."
+#~ msgstr "%1$s %2$s efter slut."
+
+#~ msgid "%1$s at %2$s."
+#~ msgstr "%1$s på %2$s."
+
+#~ msgid "%1$s at start."
+#~ msgstr "%1$s vid start."
+
+#~ msgid "%1$s at end."
+#~ msgstr "%1$s vid slut."
+
+#~ msgid "Add reminder"
+#~ msgstr "Lägg till påminnelse"
+
+#~ msgid "Audio"
+#~ msgstr "Ljud"
+
+#~ msgid "Edit reminders"
+#~ msgstr "Redigera opminnelser"
+
+#~ msgid "Drag to reorder items"
+#~ msgstr "Dra för att sortera objekt"
+
+#~ msgid "Please grant access to your webcam first."
+#~ msgstr "Ge åtkomst till din webbkamera först."
+
+#~ msgid "Requesting device information. Please wait..."
+#~ msgstr "Begär enhetsinformation. Vänta…"
+
+#~ msgid "Currently there are no compatible webcams available on your device."
+#~ msgstr ""
+#~ "För närvarande finns inga kompatibla webbkameror tillgängliga på din "
+#~ "enhet."
+
+#~ msgid "Take a photo"
+#~ msgstr "Ta ett foto"
+
+#~ msgid "Webcam"
+#~ msgstr "Webbkamera"
+
+#~ msgid "Switch camera"
+#~ msgstr "Byt kamera"
+
+#~ msgid "Edit image"
+#~ msgstr "Redigera bild"
+
+#~ msgid "Take photo"
+#~ msgstr "Ta foto"
+
+#~ msgid "Rotate image"
+#~ msgstr "Rotera bild"
+
+#~ msgid "New search ... (prototype)"
+#~ msgstr "Ny sökning … (prototyp)"
+
+#~ msgid "After"
+#~ msgstr "Efter"
+
+#~ msgid "Before"
+#~ msgstr "Före"
+
+#~ msgid "Shrink"
+#~ msgstr "Krymp"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximera"
 
 #~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
+#~ "Do you want to decline the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr "Vill du neka hela serien ell bara ett möte inom serien?"
+
+#~ msgid "Participant related actions"
+#~ msgstr "Deltagarrelaterade åtgärder"
+
+#~ msgid "You are currently acting on behalf of the calendar owner."
+#~ msgstr "Du agerar för närvarande åt kalenderns ägare."
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just this appointment within "
+#~ "the series?"
+#~ msgstr "Vill du ta bort hela serien eller bara detta möte i serien?"
+
+#~ msgid "This appointment"
+#~ msgstr "Detta möte"
+
+#~ msgid ""
+#~ "Do you want to delete this and all future appointments or just this "
+#~ "appointment within the series?"
 #~ msgstr ""
-#~ "Visste du att du kan ta OX App Suite med deg? Klicka på den här ikonen "
-#~ "och välj \"Anslut din enhet\" från menyn."
+#~ "Vill du radera detta och alla framtida möten, eller bara detta möte i "
+#~ "serien?"
+
+#~ msgid "All future appointments"
+#~ msgstr "Alla framtida möten"
+
+#~ msgid "My Google Calendar"
+#~ msgstr "Min Google-kalender"
+
+#~ msgid "iCal URL"
+#~ msgstr "iCal URL"
+
+#~ msgid "Subscribe to iCal feed"
+#~ msgstr "Prenumerera på iCal-flöde"
+
+#~ msgid "iCal feed has been imported successfully"
+#~ msgstr "iCal-flöde importerades"
+
+#~ msgid "Secret"
+#~ msgstr "Hemligt"
+
+#~ msgid "Sent by"
+#~ msgstr "Skickat av"
+
+#~ msgid "Select calendar"
+#~ msgstr "Välj kalender"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Skapa ny kalender"
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "I din tidszon (%1$s): %2$s (Varaktighet: %3$s)"
+
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Mötet är synligt för alla användare i delade kalendrar."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "I delade kalendrar visas mötet som en enkel tidslucka för användare som "
+#~ "inte deltar."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Mötet är inte alls synligt i delade kalendrar för användare som inte "
+#~ "deltar. Ingen hänsyn tas till mötet vid kontroller för krockar, och syns "
+#~ "inte i schemaläggningsvyn. Detta alternativet kan inte användas om mötet "
+#~ "blockerar resurser."
+
+#~ msgid "Visibility"
+#~ msgstr "Synlighet"
+
+#~ msgid "Appointment color"
+#~ msgstr "Mötets färg"
+
+#~ msgid "Show as free"
+#~ msgstr "Visa som ledig"
+
+#~ msgid "Edit Appointment"
+#~ msgstr "Redigera möte"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Observera att sändlistor inte får innehålla resurser."
+
+#~ msgid "Next week"
+#~ msgstr "Nästa vecka"
+
+#~ msgid "Next month"
+#~ msgstr "Nästa månad"
+
+#~ msgid "Show fine grid"
+#~ msgstr "Visa fint rutnät"
+
+#~ msgid "Date range"
+#~ msgstr "Datumintervall"
+
+#~ msgid "Blocked time frame"
+#~ msgstr "Blockerat tidsintervall"
+
+#~ msgid "Could not get appointment information"
+#~ msgstr "Kunde inte hämta information om möte"
+
+#~ msgid "Error: Failed to load appointments"
+#~ msgstr "Fel: Kunde inte läsa in möten"
+
+#~ msgid "Load appointments until %1$s"
+#~ msgstr "Läs in möten fram till %1$s"
+
+#~ msgid "Could't load appointment data."
+#~ msgstr "Kunde inte läsa mötesdata."
+
+#~ msgid "No appointment selected"
+#~ msgstr "Inget möte valt"
+
+#~ msgid "%1$s appointments selected"
+#~ msgstr "%1$s möten valda"
+
+#~ msgid "Calendar account error"
+#~ msgstr "Fel i kalenderkonto"
+
+#~ msgid "Try again"
+#~ msgstr "Försök igen"
+
+#~ msgid "Refreshing calendar might take some time..."
+#~ msgstr "Kalenderuppdatering kan ta en stund…"
+
+#~ msgid "Successfully refreshed calendar"
+#~ msgstr "Uppdaterade kalender"
+
+#~ msgid "Appointment options"
+#~ msgstr "Mötesalternativ"
+
+#~ msgid "Show next month"
+#~ msgstr "Visa nästa månad"
+
+#~ msgid "Show previous month"
+#~ msgstr "Visa föregående månad"
+
+#~ msgid ""
+#~ "You cannot mark the appointment as secret, when blocking a ressource."
+#~ msgstr "Du får inte märka mötet som hemligt när en resurs blockeras."
+
+#~ msgid "%1$d minutes"
+#~ msgstr "%1$d minuter"
+
+#~ msgctxt "noun"
+#~ msgid "View"
+#~ msgstr "Vy"
+
+#~ msgid "Time scale"
+#~ msgstr "Tidsskala"
+
+#~ msgid "Show birthday calendar"
+#~ msgstr "Visa födelsedagskalender"
+
+#~ msgid "Birthday calendar"
+#~ msgstr "Födelsedagskalender"
+
+#~ msgid "Workweek view"
+#~ msgstr "Arbetsveckovy"
+
+#~ msgid "Week start"
+#~ msgstr "Veckostart"
+
+#~ msgid "Workweek length"
+#~ msgstr "Arbetsveckans längd"
+
+#~ msgid "Default reminder for all-day appointments"
+#~ msgstr "Förvald påminnelse för heldagsmöten"
+
+#~ msgid "Default reminder for appointments in birthday calendar"
+#~ msgstr "Förvald påminnelse för möten i födelsedagskalender"
+
+#~ msgid "Add calendar"
+#~ msgstr "Lägg till kalender"
+
+#~ msgid "The integration of the subscribed calendars might take a while."
+#~ msgstr "Integrering av kalendrarna du prenumererar på kan ta en stund."
+
+#~ msgid "subscribe to calendar"
+#~ msgstr "prenumerera på kalender"
+
+#~ msgid "Mini calendar"
+#~ msgstr "Minikalender"
+
+#~ msgid "Weekends"
+#~ msgstr "Helger"
+
+#~ msgid "light red"
+#~ msgstr "ljusröd"
+
+#~ msgid "light orange"
+#~ msgstr "ljusorange"
+
+#~ msgid "light yellow"
+#~ msgstr "ljusgul"
+
+#~ msgid "light olive"
+#~ msgstr "ljusoliv"
+
+#~ msgid "light cyan"
+#~ msgstr "ljus-cyan"
+
+#~ msgid "light azure"
+#~ msgstr "ljusasurblå"
+
+#~ msgid "light indigo"
+#~ msgstr "ljusindigo"
+
+#~ msgid "light purple"
+#~ msgstr "ljuslila"
+
+#~ msgid "light magenta"
+#~ msgstr "ljusmagenta"
+
+#~ msgid "light pink"
+#~ msgstr "ljusrosa"
+
+#~ msgid "light gray"
+#~ msgstr "ljusgrå"
+
+#~ msgid "olive"
+#~ msgstr "oliv"
+
+#~ msgid "green"
+#~ msgstr "grön"
+
+#~ msgid "cyan"
+#~ msgstr "cyan"
+
+#~ msgid "azure"
+#~ msgstr "asurblå"
+
+#~ msgid "blue"
+#~ msgstr "blå"
+
+#~ msgid "indigo"
+#~ msgstr "indigo"
+
+#~ msgid "magenta"
+#~ msgstr "magenta"
+
+#~ msgid "dark red"
+#~ msgstr "mörkröd"
+
+#~ msgid "dark orange"
+#~ msgstr "mörkorange"
+
+#~ msgid "dark yellow"
+#~ msgstr "mörkgul"
+
+#~ msgid "dark olive"
+#~ msgstr "mörkoliv"
+
+#~ msgid "dark cyan"
+#~ msgstr "mörk-cyan"
+
+#~ msgid "dark azure"
+#~ msgstr "mörkasurblå"
+
+#~ msgid "dark indigo"
+#~ msgstr "mörkindigo"
+
+#~ msgid "dark purple"
+#~ msgstr "mörklila"
+
+#~ msgid "dark magenta"
+#~ msgstr "mörkmagenta"
+
+#~ msgid "dark pink"
+#~ msgstr "mörkrosa"
+
+#~ msgid "dark gray"
+#~ msgstr "mörkgrå"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just this appointment within the "
+#~ "series?"
+#~ msgstr "Vill du redigera hela serien eller bara detta möte i serien?"
+
+#~ msgid ""
+#~ "Do you want to edit this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr ""
+#~ "Vill du redigera detta och alla framtida möten eller bara detta möte i "
+#~ "serien?"
+
+#~ msgid "Confidential"
+#~ msgstr "Hemlig"
+
+#~ msgid "Recurrence"
+#~ msgstr "Upprepning"
+
+#~ msgid "Merge"
+#~ msgstr "Slå ihop"
+
+#~ msgid "Split"
+#~ msgstr "Dela upp"
+
+#~ msgid "Click to merge all folders into one column"
+#~ msgstr "Klicka för att slå ihop alla mappar till en kolumn"
+
+#~ msgid "Click to split all folders into separate columns"
+#~ msgstr "Klicka för att dela upp alla mappar till separata kolumner"
+
+#~ msgid "Next year"
+#~ msgstr "Nästa år"
+
+#~ msgid "First name must not be empty for internal users"
+#~ msgstr "Förnamn får inte vara tomt för interna användare"
+
+#~ msgid "Last name must not be empty for internal users"
+#~ msgstr "Efternamn får inte vara tomt för interna användare"
+
+#~ msgid "Something went wrong. Please close this browser tab and try again."
+#~ msgstr "Något gick snett. Stäng webbläsarfliken och försök igen."
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalender"
+
+#~ msgid "Export selected"
+#~ msgstr "Exportera markerade"
+
+#~ msgid "Format: %1$s"
+#~ msgstr "Format: %1$s"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "Observera att andra deltagare tas bort vid kalenderexport."
+
+#~ msgid "No export format available"
+#~ msgstr "Inget exporteringsformat tillgängligt"
+
+#~ msgid "Subscribe to IMAP folders"
+#~ msgstr "Prenumerera på IMAP-mappar"
+
+#~ msgid "A folder cannot be moved into itself"
+#~ msgstr "En mapp kan inte flyttas till sig själv"
+
+#~ msgid "A folder cannot be moved to one of its subfolders"
+#~ msgstr "En mapp kan inte flyttas till en av dess underliggande mappar"
+
+#~ msgid "Last updated"
+#~ msgstr "Senast uppdaterad"
+
+#~ msgid "iCal feed"
+#~ msgstr "iCal-flöde"
+
+#~ msgid "Google subscription"
+#~ msgstr "Google-prenumeration"
+
+#~ msgid "Calendars of interest"
+#~ msgstr "Intressanta kalendrar"
+
+#~ msgid "Do you really want to delete calendar \"%s\"?"
+#~ msgstr "Vill du verkligen radera kalendern \"%s\"?"
+
+#~ msgid ""
+#~ "This calendar is shared with others. It won't be available for them any "
+#~ "more."
+#~ msgstr ""
+#~ "Den här kalendern har delats med andra. Den kommer inte vara tillgänglig "
+#~ "för dem längre."
+
+#~ msgid "All my public appointments"
+#~ msgstr "Alla mina publika möten"
+
+#~ msgid "Archive old messages"
+#~ msgstr "Arkivera gamla meddelanden"
+
+#~ msgid "Delete forever"
+#~ msgstr "Radera för alltid"
+
+#~ msgid "Restore"
+#~ msgstr "Återställ"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Tillstånd / Bjud in folk"
+
+#~ msgid "Show in Drive"
+#~ msgstr "Visa i Drive"
+
+#~ msgid "Refresh this calendar"
+#~ msgstr "Uppdatera denna kalender"
+
+#~ msgid "Show all calendars"
+#~ msgstr "Visa alla kalendrar"
+
+#~ msgid "Show this calendar only"
+#~ msgstr "Visa endast denna kalender"
+
+#~ msgid "Select all messages"
+#~ msgstr "Välj alla meddelanden"
+
+#~ msgid "Subscribe to address book"
+#~ msgstr "Prenumerera på adressbok"
+
+#~ msgid "Personal calendar"
+#~ msgstr "Privat kalender"
+
+#~ msgid "Subscribe to calendar"
+#~ msgstr "Prenumerera på kalender"
+
+#~ msgid "Browse calendars of interest"
+#~ msgstr "Bläddra bland intressanta kalendrar"
+
+#~ msgid "Google calendar"
+#~ msgstr "Google-kalender"
+
+#~ msgid "Subscribe via URL (iCal)"
+#~ msgstr "Prenumerera via URL (iCal)"
+
+#~ msgid "Import calendar"
+#~ msgstr "Importera kalender"
+
+#~ msgid "Imported calendar"
+#~ msgstr "Importerad kalender"
+
+#~ msgid "New calendar name"
+#~ msgstr "Nytt kalendernamn"
+
+#~ msgid "Ignore existing appointments"
+#~ msgstr "Ignorera befintliga möten"
+
+#~ msgid ""
+#~ "Ignoring existing appointments is helpful to import public holiday "
+#~ "calendars, for example."
+#~ msgstr ""
+#~ "Att ignorera befintliga möten underlättar import av t.ex. kalendrar för "
+#~ "allmänna högtider."
+
+#~ msgid "Please note that other participants are removed on calendar import."
+#~ msgstr "Observera att andra deltagare tas bort vid kalenderimport."
+
+#~ msgid "You must enter a folder name"
+#~ msgstr "Du måste ange ett mappnamn"
+
+#~ msgid "Navigate to:"
+#~ msgstr "Navigera till:"
+
+#~ msgctxt "app"
+#~ msgid "Notes"
+#~ msgstr "Anteckningar"
+
+#~ msgid "Connect this Device"
+#~ msgstr "Anslut denna enhet"
+
+#~ msgid ""
+#~ "There are currently no compatible media devices available on your device."
+#~ msgstr ""
+#~ "Det finns för närvarande inga kompatibla mediaenheter tillgängliga på din "
+#~ "enhet."
+
+#~ msgid ""
+#~ "Access to your media devices has been denied. Please refer to your "
+#~ "browser help pages for how to reset authorization."
+#~ msgstr ""
+#~ "Åtkomst till dina mediaenheter har nekats. Se din webbläsares hjälpsidor "
+#~ "för information om hur du återställer behörighet."
+
+#~ msgid "This feature isn't available for non-secure connections."
+#~ msgstr "Den här funktionen är inte tillgänglig för osäkra anslutningar."
+
+#~ msgid "Microphone %1$s"
+#~ msgstr "Mikrofon %1$s"
+
+#~ msgid "Camera %1$s"
+#~ msgstr "Kamera %1$s"
+
+#~ msgid "Unknown %1$s"
+#~ msgstr "Okänd %1$s"
+
+#~ msgid ""
+#~ "Unfortunately your browser doesn't support listing available media "
+#~ "devices."
+#~ msgstr ""
+#~ "Din webbläsare stödjer tyvärr inte visning av lista över tillgängliga "
+#~ "mediaenheter."
+
+#~ msgid "Unicolor"
+#~ msgstr "Enfärgad"
+
+#~ msgid "Multicolor"
+#~ msgstr "Flerfärgad"
+
+#~ msgid "Purple/Magenta"
+#~ msgstr "Lila/Magenta"
+
+#~ msgid "Automatic"
+#~ msgstr "Automatisk"
+
+#~ msgid "Time-dependent"
+#~ msgstr "Tidsberoende"
+
+#~ msgid "Design"
+#~ msgstr "Design"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "Snabbstart %s"
+
+#~ msgid "Manage browser permissions now"
+#~ msgstr "Hantera webbläsartillstånd nu"
+
+#~ msgid "%1$s must not be empty."
+#~ msgstr "%1$s får inte vara tomt."
+
+#~ msgid ""
+#~ "\n"
+#~ " Please download the file using the button below."
+#~ msgstr ""
+#~ "\n"
+#~ " Ladda ned filen genom att använda knappen nedanför."
+
+#~ msgid "Download %1$s"
+#~ msgstr "Ladda ned %1$s"
+
+#~ msgid "Downlad"
+#~ msgstr "Ladda ned"
+
+#~ msgid "There is no preview for this file type."
+#~ msgstr "Det finns ingen förhandsgranskning för den här filtypen."
+
+#~ msgid ""
+#~ "Restored into multiple folders:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Återställd till flera mappar:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Restored into folder:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Återställd till mapp:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Delar länk skapad för filen \"%1$s\""
+#~ msgstr[1] "Delar länk skapad för %2$d objekt"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Delar länk skapad för mappen \"%1$s\""
+#~ msgstr[1] "Delar länk skapad för %2$d objekt"
+
+#~ msgid "Add folder"
+#~ msgstr "Lägg till mapp"
+
+#~ msgid "Edit Share"
+#~ msgstr "Redigera delning"
+
+#~ msgid "%1$d seconds"
+#~ msgstr "%1$d sekunder"
+
+#~ msgid "Duration per image"
+#~ msgstr "Varaktighet per bild"
+
+#~ msgid "Advanced settings"
+#~ msgstr "Avancerade inställningar"
+
+#~ msgid "Internal and external users"
+#~ msgstr "Interna och externa användare"
+
+#~ msgid "External users"
+#~ msgstr "Externa användare"
+
+#~ msgid "Share with subfolders"
+#~ msgstr "Dela med undermappar"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Lägg till i favoriter"
+
+#~ msgid "Inspect certificate"
+#~ msgstr "Inspektera certifikat"
+
+#~ msgid ""
+#~ "All future messages from the sender will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Alla nya meddelanden från avsändaren kommer att flyttas till den "
+#~ "markerade mappen."
+#~ msgstr[1] ""
+#~ "Alla nya meddelanden från avsändarna av de markerade meddelandena kommer "
+#~ "att flyttas till den markerade mappen."
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Nyss redigerade utkast med bilagor kan inte raderas förrän du stänger "
+#~ "motsvarande meddelandefönster."
+
+#~ msgid "Authentication details"
+#~ msgstr "Autentiseringsdetaljer"
+
+#~ msgid "Category name"
+#~ msgstr "Kategorinamn"
+
+#~ msgid "Warning:"
+#~ msgstr "Varning:"
+
+#~ msgid "Note:"
+#~ msgstr "OBS:"
+
+#~ msgid "Enable Links"
+#~ msgstr "Aktivera länkar"
+
+#~ msgid "Links have been disabled to protect you against potential spam!"
+#~ msgstr "Länkar har avaktiverats för att skydda dig mot eventuell skräppost!"
+
+#~ msgid ""
+#~ "see attached|see attachment|see included|is attached|attached is|are "
+#~ "attached|attached are|attached to this email|attached to this message|I'm "
+#~ "attaching|I am attaching|I've attached|I have attached|I attach|I "
+#~ "attached|find attached|find the attached|find included|find the included|"
+#~ "attached file|see the attached|see attachments|attached files|see the "
+#~ "attachment"
+#~ msgstr ""
+#~ "se bifogad|se bilaga|se inkluderad|är bifogad|bifogat är|är bifogade|"
+#~ "bifogat är|bifogat i meddelandet|bifogat i detta meddelande|jag bifogar|"
+#~ "jag bifogar|jag har bifogat|jag har bifogat|jag bifogar|jag bifogade|se "
+#~ "bilaga|se den bifogade|se inkluderad|se inkluderat|bifogad fil|se den "
+#~ "bifogade|se bilagor|bifogade filer|se bilagan"
+
+#~ msgid "Forgot attachment?"
+#~ msgstr "Glömde du bilagan?"
+
+#~ msgid "Send without attachment"
+#~ msgstr "Skicka utan bilaga"
+
+#~ msgid "It appears as if you forgot to attach a file."
+#~ msgstr "Du verkar ha glömt att bifoga en fil."
+
+#~ msgid "You mentioned \"%s\" in your email, but there are no files attached."
+#~ msgstr ""
+#~ "Du nämnde \"%s\" i ditt meddelande, men det finns inga bifogade filer."
+
+#~ msgid ""
+#~ "This email just contains your email address as sender. Your real name is "
+#~ "not used."
+#~ msgstr ""
+#~ "Detta meddelande innehåller bara din e-postadress som avsändare. Ditt "
+#~ "riktiga namn används inte."
+
+#~ msgid "One of the embedded images could not be used."
+#~ msgstr "En av de inbäddade bilderna kunde inte användas."
+
+#~ msgid "Use password"
+#~ msgstr "Använd lösenord"
+
+#~ msgid "Receive notification when someone finished downloading file(s)"
+#~ msgstr "Få avisering när någon har laddat ned fil(er)"
+
+#~ msgid "Receive notification when the link expires"
+#~ msgstr "Få avisering när länken går ut"
+
+#~ msgid "Receive notification when someone accesses the file(s)"
+#~ msgstr "Få avisering när någon kommer åt filen(-erna)"
+
+#~ msgid "%1$s options"
+#~ msgstr "%1$s alternativ"
+
+#~ msgctxt "verb"
+#~ msgid "Unflag"
+#~ msgstr "Avflagga"
+
+#~ msgid "Email content"
+#~ msgstr "Meddelandets innehåll"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Snabbsvar: %1$s"
+
+#~ msgid "Auto forwarding is active"
+#~ msgstr "Autovidarebefordran är aktiv"
+
+#~ msgid "Unable to load your auto forward settings. Please retry later."
+#~ msgstr ""
+#~ "Kunde inte läsa in dina autovidarebefordransinställningar. Försök igen "
+#~ "senare."
+
+#~ msgid "Auto forward"
+#~ msgstr "Autovidarebefordran"
+
+#~ msgid "Enable or disable auto forward"
+#~ msgstr "Aktivera eller avaktivera autovidarebefordran"
+
+#~ msgid "Your vacation notice is active"
+#~ msgstr "Din semesternotis är aktiv"
+
+#~ msgid "The time frame is in the past."
+#~ msgstr "Tidsintervallet är i det förflutna."
+
+#~ msgid "Unable to load your vacation notice. Please retry later."
+#~ msgstr "Kunde inte läsa in din semesternotis. Försök igen senare."
+
+#~ msgid "Vacation notice"
+#~ msgstr "Semesternotis"
+
+#~ msgid "Default sender"
+#~ msgstr "Förvald avsändare"
+
+#~ msgid "Enable or disable vacation notice"
+#~ msgstr "Aktivera eller avaktivera semesternotis"
+
+#~ msgid "Message"
+#~ msgstr "Meddelande"
+
+#~ msgid "Days between notices to the same sender"
+#~ msgstr "Dagar mellan notiser till samma avsändare"
+
+#~ msgctxt "settings"
+#~ msgid "Mail Compose"
+#~ msgstr "Skriv meddelande"
+
+#~ msgid "Behavior"
+#~ msgstr "Beteende"
+
+#~ msgid ""
+#~ "You can import all existing signatures from the previous product "
+#~ "generation at once."
+#~ msgstr ""
+#~ "Du kan importera alla befintliga signaturer från föregående "
+#~ "produktgeneration samtidigt."
+
+#~ msgid "No preview available"
+#~ msgstr "Ingen förhandsgranskning tillgänglig"
+
+#~ msgid "Default signature for replies or forwards"
+#~ msgstr "Förvald signatur för svar eller vidarebefordringar"
+
+#~ msgid "Text preview"
+#~ msgstr "Textförhandsgranskning"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Detta är ett misstänkt meddelande eftersom vi inte kunde verifiera att "
+#~ "det verkligen kommer från %1$s."
+
+#~ msgid "We could not verify that this email is from %1$s."
+#~ msgstr "Vi kunde inte verifiera att detta meddelande är från %1$s."
+
+#~ msgid "We could verify that this email is from %1$s."
+#~ msgstr "Vi kunde verifiera att detta meddelande är från %1$s."
+
+#~ msgid "Search in"
+#~ msgstr "Sök i"
+
+#~ msgid "Current folder"
+#~ msgstr "Aktuell mapp"
+
+#~ msgid "Contains words"
+#~ msgstr "Innehåller ord"
+
+#~ msgid "Has attachments"
+#~ msgstr "Har bilagor"
+
+#~ msgctxt "dropdown"
+#~ msgid "Sort"
+#~ msgstr "Sortera efter"
+
+#~ msgid "All messages in this folder"
+#~ msgstr "Alla meddelanden i den här mappen"
+
+#~ msgctxt "dropdown"
+#~ msgid "All"
+#~ msgstr "Alla"
+
+#~ msgid "Connect this device"
+#~ msgstr "Anslut denna enhet"
+
+#~ msgid "Signed in as"
+#~ msgstr "Inloggad som"
+
+#~ msgid ""
+#~ "The widget \"%s\" was disabled as the account might have been removed or "
+#~ "is no longer available."
+#~ msgstr ""
+#~ "Komponenten \"%s\" avaktiverades eftersom kontot kan ha tagits bort eller "
+#~ "är inte längre tillgängligt."
+
+#~ msgid "Default"
+#~ msgstr "Förval"
+
+#~ msgid "Security"
+#~ msgstr "Säkerhet"
+
+#~ msgid "Active clients"
+#~ msgstr "Aktiva klienter"
+
+#~ msgid "Certificates"
+#~ msgstr "Certifikat"
+
+#~ msgid "Remove certificate"
+#~ msgstr "Ta bort certifikat"
+
+#~ msgid "Do you really want to remove this certificate?"
+#~ msgstr "Vill du verkligen ta bort det här certifikatet?"
+
+#~ msgid "The certificate list is empty"
+#~ msgstr "Certifikatlistan är tom"
+
+#~ msgid "Fingerprint"
+#~ msgstr "Fingeravtryck"
+
+#~ msgid "Untrust certificate %1$s"
+#~ msgstr "Sluta lita på certifikatet %1$s"
+
+#~ msgid "Untrust"
+#~ msgstr "Sluta lita på"
+
+#~ msgid "Trust certificate %1$s"
+#~ msgstr "Lita på certifikatet %1$s"
+
+#~ msgid "Trust"
+#~ msgstr "Lita på"
+
+#~ msgid "Remove certificate %1$s"
+#~ msgstr "Ta bort certifikatet %1$s"
+
+#~ msgid "Common name"
+#~ msgstr "Standardnamn"
+
+#~ msgid "Expired"
+#~ msgstr "Utgått"
+
+#~ msgid "Failure reason"
+#~ msgstr "Anledning för misslyckande"
+
+#~ msgid "Hostname"
+#~ msgstr "Värdnamn"
+
+#~ msgid "Issued by"
+#~ msgstr "Utfärdat av"
+
+#~ msgid "Issued on"
+#~ msgstr "Utfärdat den"
+
+#~ msgid "Serial number"
+#~ msgstr "Serienummer"
+
+#~ msgid "Signature"
+#~ msgstr "Signatur"
+
+#~ msgid "Trusted"
+#~ msgstr "Betrodd"
+
+#~ msgid "Certificate details"
+#~ msgstr "Certifikatdetaljer"
+
+#~ msgid "Trust certificate"
+#~ msgstr "Lita på certifikat"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#~ msgid "Mac"
+#~ msgstr "Mac"
+
+#~ msgid "iOS"
+#~ msgstr "iOS"
+
+#~ msgid "Android"
+#~ msgstr "Android"
+
+#~ msgid "Chrome"
+#~ msgstr "Chrome"
+
+#~ msgid "Safari"
+#~ msgstr "Safari"
+
+#~ msgid "Firefox"
+#~ msgstr "Firefox"
+
+#~ msgid "Edge"
+#~ msgstr "Edge"
+
+#~ msgid "Internet Explorer"
+#~ msgstr "Internet Explorer"
+
+#~ msgid "Opera"
+#~ msgstr "Opera"
+
+#~ msgid "Chromium"
+#~ msgstr "Chromium"
+
+#~ msgid "Addressbook"
+#~ msgstr "Adressbok"
+
+#~ msgid "Calendar/Addressbook"
+#~ msgstr "Kalender/Adressbok"
+
+#~ msgid "Thunderbird Lightning"
+#~ msgstr "Thunderbird Lightning"
+
+#~ msgid "eM Client"
+#~ msgstr "eM Client"
+
+#~ msgid "Appsuite eM Client"
+#~ msgstr "Appsuite eM Client"
+
+#~ msgid "CalDav"
+#~ msgstr "CalDav"
+
+#~ msgid "CardDav"
+#~ msgstr "CardDav"
+
+#~ msgid "DAVdroid"
+#~ msgstr "DAVdroid"
+
+#~ msgid "CalDav/CardDav"
+#~ msgstr "CalDav/CardDav"
+
+#~ msgid "Exchange Active Sync"
+#~ msgstr "Exchange Active Sync"
+
+#~ msgid "Unknown application"
+#~ msgstr "Okänt program"
+
+#~ msgid "Unknown device"
+#~ msgstr "Okänd enhet"
+
+#~ msgid "Now active"
+#~ msgstr "Nu aktiv"
+
+#~ msgid "Do you really want to sign out from that device?"
+#~ msgstr "Vill du verkligen logga ut från den enheten?"
+
+#~ msgid "You are currently signed in with the following devices"
+#~ msgstr "Du är för närvarande inloggad med följande enheter"
+
+#~ msgid "Sign out from all clients"
+#~ msgstr "Logga ut från alla klienter"
+
+#~ msgid ""
+#~ "Do you really want to sign out from all clients except the current one?"
+#~ msgstr "Vill du verkligen logga ut från alla klienter förutom den aktuella?"
+
+#~ msgid "Show email authenticity"
+#~ msgstr "Visa meddelandets äkthet"
+
+#~ msgid "Disabled"
+#~ msgstr "Avaktiverad"
+
+#~ msgid "Suspicious and unclassified emails only"
+#~ msgstr "Endast misstänkta och oklassificerade meddelanden"
+
+#~ msgid "All emails"
+#~ msgstr "Alla meddelanden"
+
+#~ msgid "App Launcher"
+#~ msgstr "Programstartare"
+
+#~ msgid ""
+#~ "To navigate between the %1$s applications, just click on the new App "
+#~ "Launcher icon."
+#~ msgstr ""
+#~ "För att navigera mellan %1$s-programmen, klicka bara på den nya "
+#~ "Programstartarikonen."
+
+#~ msgid "Click on the application that you would like to use."
+#~ msgstr "Klicka på programmet som du vill använda."
+
+#~ msgid "New Windows"
+#~ msgstr "Nya fönster"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "Meddelanden kommer visas i ett nytt fönster. Dessa fönster kan maximeras, "
+#~ "minimeras och stängas."
+
+#~ msgid ""
+#~ "Windows you have minimized will appear in all applications for easy "
+#~ "access. You can maximize a window again by clicking on it."
+#~ msgstr ""
+#~ "Fönster som du har minimerat kommer visas i alla program för enkel "
+#~ "åtkomst. Du kan maximera ett fönster igen genom att klicka på det."
+
+#~ msgid "What's new"
+#~ msgstr "Nyheter"
+
+#~ msgid "To learn more about the new and improved features you can visit "
+#~ msgstr ""
+#~ "För att läsa mer om de nya och förbättrade funktionerna kan du besöka "
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Nyheter i %1$s 7.10.0"
+
+#~ msgid ""
+#~ "Welcome to %1$s.\n"
+#~ "We've made some exciting changes to %1$s. This quick tour will guide you "
+#~ "through some of the new and improved features."
+#~ msgstr ""
+#~ "Välkommen till %1$s.\n"
+#~ "Vi har infört några häftiga ändringar i %1$s. Denna snabba rundtur kommer "
+#~ "visa dig några av de nya och förbättrade funktionerna."
+
+#~ msgid "Never show again"
+#~ msgstr "Visa aldrig igen"
+
+#~ msgid "Open in calendar"
+#~ msgstr "Öppna i kalender"
+
+#~ msgid "Remove all reminders"
+#~ msgstr "Ta bort alla påminnelser"
+
+#~ msgid "Appointment reminder"
+#~ msgstr "Mötespåminnelse"
+
+#~ msgid "Encrypt"
+#~ msgstr "Kryptera"
+
+#~ msgid "Show Links"
+#~ msgstr "Visa länkar"
+
+#~ msgid "Add attachment"
+#~ msgstr "Lägg till bilaga"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "iCal-flöde importerades"
+
+#~ msgid "Change color"
+#~ msgstr "Ändra färg"
+
+#~ msgid "Town"
+#~ msgstr "Ort"
+
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal-flöde"
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Ignorera befintliga möten. Underlättar import av till exempel kalendrar "
+#~ "för allmänna högtider."
+
+#~ msgid "Internal & external users"
+#~ msgstr "Interna & externa användare"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Alla nya meddelanden från avsändarna av de markerade meddelandena kommer "
+#~ "flyttas till den valda mappen."
+
+#~ msgid "never"
+#~ msgstr "aldrig"
+
+#~ msgid "Use Password"
+#~ msgstr "Använd lösenord"
+
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s-alternativ"
+
+#~ msgid "Account is being created"
+#~ msgstr "Kontot skapas"
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Detta kan vara ett phishing-meddelande eftersom vi inte kunde verifiera "
+#~ "att det verkligen kom från %1$s."
+
+#~ msgid "in"
+#~ msgstr "om"
+
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Endast farliga meddelanden"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Farliga och betrodda meddelanden"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Farliga, betrodda och giltiga meddelanden"
+
+#~ msgid "Add new reminder"
+#~ msgstr "Lägg till ny påminnelse"
+
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "Autentisering misslyckades. Fyll i inloggning och lösenord."
+
+#~ msgid "Public"
+#~ msgstr "Allmän"
+
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "Mötet är synligt för alla användare i delade mappar."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "I delade mappar visas mötet som ett enkelt tidsobjekt för användare som "
+#~ "inte deltar."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Mötet syns inte för användare i delade mappar som inte deltar. Ingen "
+#~ "hänsyn tas till mötet i fråga om schemaläggningskrockar, och det visas "
+#~ "inte i schemaläggningsvyn."
+
+#~ msgid "Birthday"
+#~ msgstr "Födelsedag"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Lista över allmänna kalendrar och händelser"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Snabbstart 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Snabbstart 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Snabbstart 3"
 
 #~ msgid ""
 #~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
@@ -11234,89 +12500,158 @@ msgstr "Lägg till på %s"
 #~ msgstr[1] ""
 #~ "Filerna kan inte laddas upp eftersom den överskrider kvoten på %1$s"
 
-#~ msgid "continue if any of these condition is met"
-#~ msgstr "fortsätt om något av dessa villkor uppfylls"
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Detta meddelande kommer från en betrodd avsändare."
 
-#~ msgid "Size (bytes)"
-#~ msgstr "Storlek (byte)"
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "Detta kan vara phishing eftersom vi inte kunde verifiera att meddelandet "
+#~ "verkligen kommer från %1$s."
+
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Detta meddelande skickades från %1$s."
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr ""
+#~ "Vi kunde inte verifiera att detta meddelande verkligen är från %1$s."
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Utgår: %1$d"
+
+#~ msgid "Has Attachment"
+#~ msgstr "Har bilaga"
+
+#~ msgid "Show message authenticity"
+#~ msgstr "Visa meddelandets äkthet"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Endast farliga"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Farliga och betrodda"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Bekräfta alla påminnelser"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s av %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s-klient för Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s-klient för Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s-klient för Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s av %2$s"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Dela ut %1$s \"%2$s\""
+
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "stäng för %1$s"
+
+#, fuzzy
+#~| msgid "Currently refreshing"
+#~ msgid "Current session"
+#~ msgstr "Uppdaterar nu"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Visste du att du kan ta OX App Suite med deg? Klicka på den här ikonen "
+#~ "och välj \"Anslut din enhet\" från menyn."
+
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Vill du verkligen ta bort kontot?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Vill du verkligen ta bort den här versionen?"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Deadline är %1$s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s av %2$s"
 
 #~ msgid "Header exists"
 #~ msgstr "Huvud finns"
 
-#~ msgid "Prettify plain text mails"
-#~ msgstr "Pynta e-post i klartext"
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "Lade till %1$s."
+
+#, fuzzy
+#~| msgid "Other Address"
+#~ msgid "Other clients"
+#~ msgstr "Övrig adress"
+
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Ta bort från mottagarlista"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Dela ut %1$s \"%2$s\""
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Följande program kan återställas. Ta bort återställningspunkten om du "
+#~ "inte vill återställa från den."
+
+#, fuzzy
+#~| msgid "Unknown action: %1$s"
+#~ msgid "Unknown Operating System"
+#~ msgstr "Okänd åtgärd: %1$s"
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Okänd avsändare"
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Okänd avsändare"
 
 #~ msgid "via"
 #~ msgstr "via"
-
-#~ msgid "in"
-#~ msgstr "om"
-
-#~ msgid "Configure %1$s"
-#~ msgstr "Anpassa %1$s"
-
-#~ msgid "Loop once only"
-#~ msgstr "Spela bara en gång"
-
-#~ msgid "Keep looping endlessly"
-#~ msgstr "Upprepa ändlöst"
-
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "Bildvisning / Autouppspelningsläge"
-
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "Autouppspelningspaus i sekunder"
-
-#~ msgid "Copy message to folder"
-#~ msgstr "Kopiera meddelande till mapp"
-
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "fortsätt om något av dessa villkor uppfylls."
-
-#~ msgid "original timezone"
-#~ msgstr "ursprunglig tidszon"
-
-#~ msgid "Rule applies from"
-#~ msgstr "Regel gäller från"
-
-#~ msgid "Rule applies until"
-#~ msgstr "Regel gäller till"
-
-#~ msgid "Rule applies on"
-#~ msgstr "Regel gäller den"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "Regeln gäller inte den"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "Regeln gäller inte från"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "Regeln gäller inte tills"
-
-#~ msgid "Apply rule if any condition is met."
-#~ msgstr "Tillämpa regeln om något villkor möts."
-
-#~ msgid "Content"
-#~ msgstr "Innehåll"
-
-#~ msgid "Envelope - To"
-#~ msgstr "Kuvert - Till"
-
-#~ msgid "Flag mail with"
-#~ msgstr "Flagga meddelande med"
-
-#~ msgid "Reply All"
-#~ msgstr "Svara alla"
-
-#~ msgid "Sender address"
-#~ msgstr "Avsändaradress"
-
-#~ msgid "Sender/From"
-#~ msgstr "Avsändare/Från"
-
-#~ msgid "Tag mail with"
-#~ msgstr "Etikettera meddelande med"
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -11362,6 +12697,11 @@ msgstr "Lägg till på %s"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s e-brev, %2$s oläst"
 #~ msgstr[1] "%1$s e-brev, %2$s oläst"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s av %2$s"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
@@ -11860,9 +13200,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Add cipher code"
 #~ msgstr "Lägg till skifferkod"
 
-#~ msgid "Add folder"
-#~ msgstr "Lägg till mapp"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Lägg till mappmeny"
 
@@ -11891,10 +13228,6 @@ msgstr "Lägg till på %s"
 #~ msgstr "Avancerade facettblock öppnades."
 
 #, fuzzy
-#~ msgid "Advanced options"
-#~ msgstr "Avancerade inställningar"
-
-#, fuzzy
 #~| msgid "Advanced Facets"
 #~ msgid "Advanced user?"
 #~ msgstr "Avancerade facetter"
@@ -11911,13 +13244,6 @@ msgstr "Lägg till på %s"
 #~| msgid "Add contact"
 #~ msgid "All contacts"
 #~ msgstr "Lägg till medlem"
-
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr ""
-#~ "Alla nya meddelanden från avsändarna av de markerade meddelandena kommer "
-#~ "flyttas till den valda mappen."
 
 #~ msgid "All internal users"
 #~ msgstr "Alla interna användare"
@@ -12089,6 +13415,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Applications"
 #~ msgstr "Program"
 
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Tillämpa regeln om något villkor möts."
+
 #~ msgid "Apply to all messages?"
 #~ msgstr "Verkställ för alla meddelanden?"
 
@@ -12187,6 +13516,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Radbryt klartext automatiskt efter tecknet:"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Autouppspelningspaus i sekunder"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -12583,6 +13915,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Configuration for user %1$s could not be found in context %2$d"
 #~ msgstr "Konfiguration för användare %1$s kunde inte hittas i kontext %2$d "
 
+#~ msgid "Configure %1$s"
+#~ msgstr "Anpassa %1$s"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Anpassa dina inkorgflikar"
 
@@ -12613,6 +13948,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Contact not found! Context %1$d"
 #~ msgstr "Kontakt hittas ej! Kontext %1$d"
 
+#~ msgid "Content"
+#~ msgstr "Innehåll"
+
 #~ msgid "Context is locked."
 #~ msgstr "Kontext är låst."
 
@@ -12634,6 +13972,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Copy (CC) to"
 #~ msgstr "Kopia (CC) till"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Kopiera meddelande till mapp"
 
 #~ msgid ""
 #~ "Corrupt AJP package #%1$d: First two bytes do not indicate a package from "
@@ -12741,14 +14082,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Could not retrieve file: %s"
 #~ msgstr "Kunde inte hämta filen: %s"
-
-#~| msgid "Could not save file to the file store."
-#~ msgid "Could not save auto forward"
-#~ msgstr "Kunde inte spara automatisk vidarebefordran"
-
-#~| msgid "Could not load contacts"
-#~ msgid "Could not save vacation notice"
-#~ msgstr "Kunde inte spara semesternotis"
 
 #~ msgid "Could not translate a single column title. Is this a valid CSV file?"
 #~ msgstr "Kunde inte översätta en enda kolumn. Är detta en giltig CSV-fil?"
@@ -12892,9 +14225,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Delete all accounts"
 #~ msgstr "Ta bort alla konton"
 
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "Ta bort alla meddelanden i den här mappen"
-
 #~ msgid "Delete exceptions: %1$s"
 #~ msgstr "Ta bort undantag: %1$s"
 
@@ -12930,9 +14260,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Direktlänk: %1$s"
-
-#~ msgid "Disabled"
-#~ msgstr "Avaktiverad"
 
 #~ msgid "Display Name"
 #~ msgstr "Skärmnamn"
@@ -12972,9 +14299,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Dra och släpp"
-
-#~ msgid "Drive Client"
-#~ msgstr "Drive-klient"
 
 #~ msgid "Driver class missing."
 #~ msgstr "Driver-klassen saknas."
@@ -13218,6 +14542,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Entire thread"
 #~ msgstr "Hela tråden"
 
+#~ msgid "Envelope - To"
+#~ msgstr "Kuvert - Till"
+
 #~ msgid "Error communicating with mbean in server: %s"
 #~ msgstr "Ett fel uppstod i kommunikationen med mbean i server: %s"
 
@@ -13295,6 +14622,11 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Lämna helskärmsläge"
+
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "Skicka som vCard"
 
 #~ msgid "Extended view"
 #~ msgstr "Utökad vy"
@@ -13451,6 +14783,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Flag %1$s could not be changed due to following reason: %2$s"
 #~ msgstr "Flagga %1$s kunde inte ändras på grund av följande orsak: %2$s"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Flagga meddelande med"
 
 #~ msgid "Folder %1$s (%2$d) is not a task folder."
 #~ msgstr "Mappen %1$s (%2$d) är ingen uppgiftsmapp."
@@ -14103,6 +15438,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Just open %1$s"
 #~ msgstr "Deadline är %1$s"
 
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Upprepa ändlöst"
+
 #, fuzzy
 #~| msgid "waiting"
 #~ msgid "Kuwait"
@@ -14133,6 +15471,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Liked a link: %s"
 #~ msgstr "Gillade en länk: %s"
 
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Rad %1$d: %2$s"
+
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"
 #~ msgstr "Radbryt när text-e-post skickas efter "
@@ -14156,10 +15497,8 @@ msgstr "Lägg till på %s"
 #~ msgid "Logout now"
 #~ msgstr "Logga ut nu"
 
-#, fuzzy
-#~| msgid "March"
-#~ msgid "Mac"
-#~ msgstr "Mars"
+#~ msgid "Loop once only"
+#~ msgstr "Spela bara en gång"
 
 #~ msgid "Mail Details"
 #~ msgstr "Brevdetaljer"
@@ -14222,9 +15561,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Mailfilter updated"
 #~ msgstr "E-postfilter uppdaterat"
-
-#~ msgid "Main window"
-#~ msgstr "Huvudfönster"
 
 #~ msgid ""
 #~ "Malformed token or a unsupported token. Got %s but expected %s in .po "
@@ -14493,6 +15829,11 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "Namn och e-postadresser"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Drive-klient"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Navigeringsraden"
@@ -15014,6 +16355,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "Tryck [enter] för att välja när du vill få nästa påminnelse"
 
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Pynta e-post i klartext"
+
 #~ msgid "Prev"
 #~ msgstr "Granska"
 
@@ -15164,11 +16508,11 @@ msgstr "Lägg till på %s"
 #~ msgid "Remove facet"
 #~ msgstr "Ta bort facett"
 
-#~ msgid "Remove from recipient list"
-#~ msgstr "Ta bort från mottagarlista"
-
 #~ msgid "Remove on cache failed"
 #~ msgstr "Borttagandet på cacheminnet misslyckades."
+
+#~ msgid "Reply All"
+#~ msgstr "Svara alla"
 
 #~ msgid "Reply to"
 #~ msgstr "Svar till"
@@ -15213,6 +16557,24 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Root folder must not be modified or deleted"
 #~ msgstr "Rotmappen får inte ändras eller tas bort"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Regel gäller från"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Regeln gäller inte från"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Regeln gäller inte den"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Regeln gäller inte tills"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Regel gäller den"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Regel gäller till"
 
 #~ msgid "Running applications"
 #~ msgstr "Program som körs"
@@ -15305,9 +16667,6 @@ msgstr "Lägg till på %s"
 #~ msgid "SearchIterator NULL"
 #~ msgstr "SearchIterator NULL"
 
-#~ msgid "Searched in"
-#~ msgstr "Sökte i"
-
 #~ msgid "Searching for objects"
 #~ msgstr "Hitta objekt"
 
@@ -15336,6 +16695,12 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Send feedback"
 #~ msgstr "Lämna synpunkter"
+
+#~ msgid "Sender address"
+#~ msgstr "Avsändaradress"
+
+#~ msgid "Sender/From"
+#~ msgstr "Avsändare/Från"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Skicka e-post till en kontakt"
@@ -15476,9 +16841,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Sidebar"
 #~ msgstr "Sidoraden"
 
-#~ msgid "Signature"
-#~ msgstr "Signatur"
-
 #~ msgid "Signature position"
 #~ msgstr "Signaturposition"
 
@@ -15493,11 +16855,17 @@ msgstr "Lägg till på %s"
 #~ msgid "Simple phone list"
 #~ msgstr "Telefonlista"
 
+#~ msgid "Size (bytes)"
+#~ msgstr "Storlek (byte)"
+
 #~ msgid "Skip this step"
 #~ msgstr "Hoppa över det här steget"
 
 #~ msgid "Slideshow"
 #~ msgstr "Bildspel"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Bildvisning / Autouppspelningsläge"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
@@ -15642,6 +17010,9 @@ msgstr "Lägg till på %s"
 #~| msgid "Enable"
 #~ msgid "Tablet"
 #~ msgstr "Aktivera"
+
+#~ msgid "Tag mail with"
+#~ msgstr "Etikettera meddelande med"
 
 #~ msgid "Target and source folder cannot be equal in context %1$s"
 #~ msgstr "Mål- och ursprungsmappen kan inte vara lika i kontext %1$s"
@@ -17271,9 +18642,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Unknown action value: %1$s"
 #~ msgstr "Okänt åtgärdsvärde: %1$s"
 
-#~ msgid "Unknown action: %1$s"
-#~ msgstr "Okänd åtgärd: %1$s"
-
 #~ msgid "Unknown color label: %1$s"
 #~ msgstr "Okänd färgetikett: %1$s"
 
@@ -17458,6 +18826,12 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Använd sidoraden för att välja ett objekt för att visa dess innehåll "
 #~ "eller utföra åtgärder."
+
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Använd upp- och nedåtpilarna för att ändra tiden. Stäng med ESC-tangenten."
 
 #~ msgid ""
 #~ "User %1$s grants invalid permissions on shared folder %2$s in context "
@@ -17895,9 +19269,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Your session %s expired. Please start a new browser session."
 #~ msgstr "Din session %s har upphört. Starta en ny browser-session."
 
-#~ msgid "Your vacation notice has been saved"
-#~ msgstr "Din semesternotis sparades"
-
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "Zoom: %1$d%"
 
@@ -18031,6 +19402,12 @@ msgstr "Lägg till på %s"
 #~ msgid "collapsed"
 #~ msgstr "ihopfällt"
 
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "fortsätt om något av dessa villkor uppfylls"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "fortsätt om något av dessa villkor uppfylls."
+
 #~ msgid "daily"
 #~ msgstr "varje dag"
 
@@ -18161,6 +19538,9 @@ msgstr "Lägg till på %s"
 #~ msgid "optional password"
 #~ msgstr "valfritt lösenord"
 
+#~ msgid "original timezone"
+#~ msgstr "ursprunglig tidszon"
+
 #~ msgid "process subsequent rules"
 #~ msgstr "behandla efterföljande regler"
 
@@ -18202,6 +19582,11 @@ msgstr "Lägg till på %s"
 
 #~ msgid "weekly"
 #~ msgstr "varje vecka"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "Huvudfönster"
 
 #~ msgid "work days"
 #~ msgstr "arbetsdagar"

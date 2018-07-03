@@ -1,13 +1,13 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2009, 2010, 2012.
-# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
+# Andres Herrera <andres@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-27 15:41+0200\n"
-"Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
-"Language-Team: Spanish <es@bureau-cornavin.com>\n"
-"Language: es_ES\n"
+"PO-Revision-Date: 2018-07-03 16:10+0200\n"
+"Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
+"Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1105,7 +1105,7 @@ msgstr "Por favor, seleccione una hora para la cita"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Find a free time"
-msgstr "Encontrar una hora libre"
+msgstr "Buscar tiempo libre"
 
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 msgid "Description has been copied"
@@ -2608,7 +2608,8 @@ msgid "Postcode"
 msgstr "Código postal"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Town"
+#: apps/io.ox/contacts/print.js
+msgid "City"
 msgstr "Ciudad"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2990,10 +2991,6 @@ msgid "Messenger"
 msgstr "Mensajería"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-msgid "City"
-msgstr "Ciudad"
-
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -3287,8 +3284,7 @@ msgstr "Esta plataforma no está admitida actualmente."
 msgid ""
 "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
 msgstr ""
-"Los admitidos comienzan con Chrome %1$d, Firefox %2$d, IE %3$d, y Safari "
-"%4$d."
+"Se admiten a partir de Chrome %1$d, Firefox %2$d, IE %3$d, y Safari %4$d."
 
 #. 'Google Chrome' is a brand and should not be translated
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3647,11 +3643,11 @@ msgstr "Nueva carpeta"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Calendar name"
-msgstr "Nombre"
+msgstr "Nombre de calendario"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "Address book name"
-msgstr "Título"
+msgstr "Nombre de libreta de direcciones"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -3873,7 +3869,7 @@ msgstr "Vaciar la papelera"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
-msgstr "Eliminar todos los mensajes"
+msgstr "Borrar todos los mensajes"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Download entire folder"
@@ -4318,8 +4314,8 @@ msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
 msgstr ""
-"¿Sabe que puede llevar %1$s con usted? presione este icono y elija 'Conectar "
-"a su dispositivo' en el menú."
+"¿Sabía que puede llevar %1$s con usted? Simplemente presione en este icono y "
+"elija \"Conectar su dispositivo\" en el menú."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4337,13 +4333,31 @@ msgstr "Por favor, inicie de nuevo la sesión para continuar"
 msgid "Restore applications"
 msgstr "Restaurar las aplicaciones"
 
+#. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"Las siguientes aplicaciones se pueden restaurar. Basta con eliminar el punto "
-"de restauración si no desea que sean restauradas."
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+"El elemento siguiente estaba abierto la última vez que cerró la sesión de "
+"%1$s."
+msgstr[1] ""
+"Los elementos siguientes estaban abiertos la última vez que cerró la sesión "
+"de %1$s."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Por favor, presione \"Continuar\" si quiere continuar la edición."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Si no desea conservar el elemento, por favor presione en el icono de "
+"papelera."
+msgstr[1] ""
+"Si no desea conservar un elemento, por favor presione en el icono de "
+"papelera."
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -5397,6 +5411,15 @@ msgstr "Los primeros 90 días son gratis."
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Obtener actualización gratuita"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Lo siento, no hay vista previa disponible."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"Para imprimir este archivo, por favor use \"Imprimir como PDF\" en el visor."
 
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
@@ -8766,7 +8789,7 @@ msgstr "Estilo de fuente predeterminado"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
-msgstr "Así es como se verá el texto del mensaje."
+msgstr "Así es cómo se verá el texto de su mensaje."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -8910,7 +8933,7 @@ msgstr "Asignar categoría"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgctxt "verb"
 msgid "Flag"
-msgstr "Marca"
+msgstr "Marcar"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -9231,7 +9254,7 @@ msgstr "Premium"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
-msgstr "Conectar su dispositivo"
+msgstr "Conexión de su dispositivo"
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -11287,12 +11310,1291 @@ msgstr "Invitar a %s"
 msgid "Add on %s"
 msgstr "Añadir a %s"
 
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
+#~ msgid "Notify %1$s before start."
+#~ msgstr "Notificar %1$s antes del inicio."
+
+#~ msgid "Notify %1$s after start."
+#~ msgstr "Notificar %1$s después del inicio."
+
+#~ msgid "Notify %1$s before end."
+#~ msgstr "Notificar %1$s antes de finalizar."
+
+#~ msgid "Notify %1$s after end."
+#~ msgstr "Notificar %1$s después de finalizar."
+
+#~ msgid "Notify at %1$s."
+#~ msgstr "Notificar el %1$s."
+
+#~ msgid "Notify at start."
+#~ msgstr "Notificar al inicio."
+
+#~ msgid "Notify at end."
+#~ msgstr "Notificar al finalizar."
+
+#~ msgid "Play sound %1$s before start."
+#~ msgstr "Reproducir sonido %1$s antes del inicio."
+
+#~ msgid "Play sound %1$s after start."
+#~ msgstr "Reproducir sonido %1$s después del inicio."
+
+#~ msgid "Play sound %1$s before end."
+#~ msgstr "Reproducir sonido %1$s antes de finalizar."
+
+#~ msgid "Play sound %1$s after end."
+#~ msgstr "Reproducir sonido %1$s después de finalizar."
+
+#~ msgid "Play sound at %1$s."
+#~ msgstr "Reproducir sonido el %1$s."
+
+#~ msgid "Play sound at start."
+#~ msgstr "Reproducir sonido al inicio."
+
+#~ msgid "Play sound at end."
+#~ msgstr "Reproducir sonido al finalizar."
+
+#~ msgid "%1$s %2$s before start."
+#~ msgstr "%1$s %2$s antes del inicio."
+
+#~ msgid "%1$s %2$s after start."
+#~ msgstr "%1$s %2$s después del inicio."
+
+#~ msgid "%1$s %2$s before end."
+#~ msgstr "%1$s %2$s antes de finalizar."
+
+#~ msgid "%1$s %2$s after end."
+#~ msgstr "%1$s %2$s después de finalizar."
+
+#~ msgid "%1$s at %2$s."
+#~ msgstr "%1$s el %2$s."
+
+#~ msgid "%1$s at start."
+#~ msgstr "%1$s al inicio."
+
+#~ msgid "%1$s at end."
+#~ msgstr "%1$s al finalizar."
+
+#~ msgid "Add reminder"
+#~ msgstr "Añadir recordatorio"
+
+#~ msgid "Audio"
+#~ msgstr "Sonido"
+
+#~ msgid "Edit reminders"
+#~ msgstr "Editar recordatorios"
+
+#~ msgid "Drag to reorder items"
+#~ msgstr "Arrastrar para reordenar elementos"
+
+#~ msgid "Please grant access to your webcam first."
+#~ msgstr "Por favor, conceda antes acceso a su webcam."
+
+#~ msgid "Requesting device information. Please wait..."
+#~ msgstr "Recopilando información de dispositivo. Por favor, espere..."
+
+#~ msgid "Currently there are no compatible webcams available on your device."
 #~ msgstr ""
-#~ "¿Sabe que puede llevar OX App Suite con usted? presione este icono y "
-#~ "elija 'Conectar a su dispositivo' en el menú."
+#~ "Actualmente no hay webcams compatibles disponibles en su dispositivo."
+
+#~ msgid "Take a photo"
+#~ msgstr "Tomar una fotografía"
+
+#~ msgid "Webcam"
+#~ msgstr "Webcam"
+
+#~ msgid "Switch camera"
+#~ msgstr "Cambiar de cámara"
+
+#~ msgid "Edit image"
+#~ msgstr "Editar imagen"
+
+#~ msgid "Take photo"
+#~ msgstr "Tomar fotografía"
+
+#~ msgid "Rotate image"
+#~ msgstr "Rotar imagen"
+
+#~ msgid "New search ... (prototype)"
+#~ msgstr "Nueva búsqueda ... (prototipo)"
+
+#~ msgid "After"
+#~ msgstr "Después de"
+
+#~ msgid "Before"
+#~ msgstr "Antes de"
+
+#~ msgid "Shrink"
+#~ msgstr "Contraer"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximizar"
+
+#~ msgid ""
+#~ "Do you want to decline the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr "¿Quiere rechazar toda la serie o solo una cita de la serie?"
+
+#~ msgid "Participant related actions"
+#~ msgstr "Acciones relacionadas con el participante"
+
+#~ msgid "You are currently acting on behalf of the calendar owner."
+#~ msgstr "Actualmente está actuando en nombre del propietario del calendario."
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just this appointment within "
+#~ "the series?"
+#~ msgstr "¿Quiere borrar toda la serie o solo una cita de la serie?"
+
+#~ msgid "This appointment"
+#~ msgstr "Esta cita"
+
+#~ msgid ""
+#~ "Do you want to delete this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr ""
+#~ "¿Quiere borrar esta cita y todas las citas futuras o solo esta cita de la "
+#~ "serie?"
+
+#~ msgid "All future appointments"
+#~ msgstr "Todas las citas futuras"
+
+#~ msgid "My Google Calendar"
+#~ msgstr "Mi Google Calendar"
+
+#~ msgid "iCal URL"
+#~ msgstr "URL de iCal"
+
+#~ msgid "Subscribe to iCal feed"
+#~ msgstr "Suscribirse a feed iCal"
+
+#~ msgid "iCal feed has been imported successfully"
+#~ msgstr "El feed iCal se importó con éxito"
+
+#~ msgid "Secret"
+#~ msgstr "Secreta"
+
+#~ msgid "Sent by"
+#~ msgstr "Enviado por"
+
+#~ msgid "Select calendar"
+#~ msgstr "Seleccionar calendario"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Crear nuevo calendario"
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "En su zona horaria (%1$s): %2$s (Duración: %3$s)"
+
+#~ msgid "Standard"
+#~ msgstr "Estándar"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr ""
+#~ "La cita es visible para todos los usuarios de calendarios compartidos."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "En calendarios compartidos, la cita se muestra como un bloque de tiempo "
+#~ "sencillo para los usuarios que no asisten."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "La cita no es visible en absoluto para los usuarios que no asisten de "
+#~ "calendarios compartidos. La cita no se toma en consideración para "
+#~ "conflictos, y no aparece en la vista de planificación. Esta opción no se "
+#~ "puede usar si la cita bloquea recursos."
+
+#~ msgid "Visibility"
+#~ msgstr "Visibilidad"
+
+#~ msgid "Appointment color"
+#~ msgstr "Color de la cita"
+
+#~ msgid "Show as free"
+#~ msgstr "Mostrar como libre"
+
+#~ msgid "Edit Appointment"
+#~ msgstr "Editar cita"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr ""
+#~ "Por favor, tenga en cuenta que las listas de distribución no pueden "
+#~ "contener recursos."
+
+#~ msgid "Next week"
+#~ msgstr "Semana siguiente"
+
+#~ msgid "Next month"
+#~ msgstr "Mes siguiente"
+
+#~ msgid "Show fine grid"
+#~ msgstr "Mostrar rejilla fina"
+
+#~ msgid "Date range"
+#~ msgstr "Rango de fechas"
+
+#~ msgid "Blocked time frame"
+#~ msgstr "Período de tiempo bloqueado"
+
+#~ msgid "Could not get appointment information"
+#~ msgstr "No se pudo obtener información de la cita"
+
+#~ msgid "Error: Failed to load appointments"
+#~ msgstr "Error: Fallo al cargar citas"
+
+#~ msgid "Load appointments until %1$s"
+#~ msgstr "Cargar citas hasta %1$s"
+
+#~ msgid "Could't load appointment data."
+#~ msgstr "No se pudieron cargar datos de la cita."
+
+#~ msgid "No appointment selected"
+#~ msgstr "No hay cita seleccionada"
+
+#~ msgid "%1$s appointments selected"
+#~ msgstr "%1$s citas seleccionadas"
+
+#~ msgid "Calendar account error"
+#~ msgstr "Error de cuenta de calendario"
+
+#~ msgid "Try again"
+#~ msgstr "Intentar de nuevo"
+
+#~ msgid "Refreshing calendar might take some time..."
+#~ msgstr "La actualización del calendario puede llevar algo de tiempo..."
+
+#~ msgid "Successfully refreshed calendar"
+#~ msgstr "Calendario actualizado con éxito"
+
+#~ msgid "Appointment options"
+#~ msgstr "Opciones de cita"
+
+#~ msgid "Show next month"
+#~ msgstr "Mostrar mes siguiente"
+
+#~ msgid "Show previous month"
+#~ msgstr "Mostrar mes anterior"
+
+#~ msgid ""
+#~ "You cannot mark the appointment as secret, when blocking a ressource."
+#~ msgstr "No puede marcar citas como secretas cuando se bloquea un recurso."
+
+#~ msgid "%1$d minutes"
+#~ msgstr "%1$d minutos"
+
+#~ msgctxt "noun"
+#~ msgid "View"
+#~ msgstr "Vista"
+
+#~ msgid "Time scale"
+#~ msgstr "Escala de tiempo"
+
+#~ msgid "Show birthday calendar"
+#~ msgstr "Mostrar calendario de cumpleaños"
+
+#~ msgid "Birthday calendar"
+#~ msgstr "Calendario de cumpleaños"
+
+#~ msgid "Workweek view"
+#~ msgstr "Vista de semana laboral"
+
+#~ msgid "Week start"
+#~ msgstr "Comienzo de semana"
+
+#~ msgid "Workweek length"
+#~ msgstr "Longitud de semana laboral"
+
+#~ msgid "Default reminder for all-day appointments"
+#~ msgstr "Recordatorio predeterminado para citas de día completo"
+
+#~ msgid "Default reminder for appointments in birthday calendar"
+#~ msgstr "Recordatorio predeterminado para citas del calendario de cumpleaños"
+
+#~ msgid "Add calendar"
+#~ msgstr "Añadir calendario"
+
+#~ msgid "The integration of the subscribed calendars might take a while."
+#~ msgstr "La integración de los calendarios suscritos puede tomar un tiempo."
+
+#~ msgid "subscribe to calendar"
+#~ msgstr "suscribirse a calendario"
+
+#~ msgid "Mini calendar"
+#~ msgstr "Mini calendario"
+
+#~ msgid "Weekends"
+#~ msgstr "Fines de semana"
+
+#~ msgid "light red"
+#~ msgstr "rojo claro"
+
+#~ msgid "light orange"
+#~ msgstr "naranja claro"
+
+#~ msgid "light yellow"
+#~ msgstr "amarillo claro"
+
+#~ msgid "light olive"
+#~ msgstr "verde oliva claro"
+
+#~ msgid "light cyan"
+#~ msgstr "cian claro"
+
+#~ msgid "light azure"
+#~ msgstr "celeste claro"
+
+#~ msgid "light indigo"
+#~ msgstr "índigo claro"
+
+#~ msgid "light purple"
+#~ msgstr "púrpura claro"
+
+#~ msgid "light magenta"
+#~ msgstr "magenta claro"
+
+#~ msgid "light pink"
+#~ msgstr "rosa claro"
+
+#~ msgid "light gray"
+#~ msgstr "gris claro"
+
+#~ msgid "olive"
+#~ msgstr "verde oliva"
+
+#~ msgid "green"
+#~ msgstr "verde"
+
+#~ msgid "cyan"
+#~ msgstr "cian"
+
+#~ msgid "azure"
+#~ msgstr "celeste"
+
+#~ msgid "blue"
+#~ msgstr "azul"
+
+#~ msgid "indigo"
+#~ msgstr "índigo"
+
+#~ msgid "magenta"
+#~ msgstr "magenta"
+
+#~ msgid "dark red"
+#~ msgstr "rojo oscuro"
+
+#~ msgid "dark orange"
+#~ msgstr "naranja oscuro"
+
+#~ msgid "dark yellow"
+#~ msgstr "amarillo oscuro"
+
+#~ msgid "dark olive"
+#~ msgstr "verde oliva oscuro"
+
+#~ msgid "dark cyan"
+#~ msgstr "cian oscuro"
+
+#~ msgid "dark azure"
+#~ msgstr "celeste oscuro"
+
+#~ msgid "dark indigo"
+#~ msgstr "índigo oscuro"
+
+#~ msgid "dark purple"
+#~ msgstr "púrpura oscuro"
+
+#~ msgid "dark magenta"
+#~ msgstr "magenta oscuro"
+
+#~ msgid "dark pink"
+#~ msgstr "rosa oscuro"
+
+#~ msgid "dark gray"
+#~ msgstr "gris oscuro"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just this appointment within the "
+#~ "series?"
+#~ msgstr "¿Quiere editar toda la serie o solo esta cita de la serie?"
+
+#~ msgid ""
+#~ "Do you want to edit this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr ""
+#~ "¿Quiere editar esta y todas las citas futuras o solo esta cita de la "
+#~ "serie?"
+
+#~ msgid "Confidential"
+#~ msgstr "Confidencial"
+
+#~ msgid "Recurrence"
+#~ msgstr "Repetición"
+
+#~ msgid "Merge"
+#~ msgstr "Mezclar"
+
+#~ msgid "Split"
+#~ msgstr "Separar"
+
+#~ msgid "Click to merge all folders into one column"
+#~ msgstr "Presionar para mezclar todas las carpetas en una única columna"
+
+#~ msgid "Click to split all folders into separate columns"
+#~ msgstr "Presionar para separar todas las carpetas en columnas distintas"
+
+#~ msgid "Next year"
+#~ msgstr "Año siguiente"
+
+#~ msgid "First name must not be empty for internal users"
+#~ msgstr "El nombre de pila de los usuarios internos no debe estar vacío"
+
+#~ msgid "Last name must not be empty for internal users"
+#~ msgstr "El apellido de los usuarios internos no debe estar vacío"
+
+#~ msgid "Something went wrong. Please close this browser tab and try again."
+#~ msgstr ""
+#~ "Algo ha ido mal. Por favor, cierre esta pestaña del navegador e inténtelo "
+#~ "de nuevo."
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalendar"
+
+#~ msgid "Export selected"
+#~ msgstr "Exportación seleccionada%1$d seleccionados"
+
+#~ msgid "Format: %1$s"
+#~ msgstr "Formato: %1$s"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Por favor, tenga en cuenta que los otros participantes se eliminan al "
+#~ "exportar el calendario."
+
+#~ msgid "No export format available"
+#~ msgstr "No hay formatos de exportación disponibles"
+
+#~ msgid "Subscribe to IMAP folders"
+#~ msgstr "Suscribirse a carpetas IMAP"
+
+#~ msgid "A folder cannot be moved into itself"
+#~ msgstr "No se puede mover una carpeta a sí misma"
+
+#~ msgid "A folder cannot be moved to one of its subfolders"
+#~ msgstr "No se puede mover una carpeta a una de sus subcarpetas"
+
+#~ msgid "Last updated"
+#~ msgstr "Última actualización"
+
+#~ msgid "iCal feed"
+#~ msgstr "Feed iCal"
+
+#~ msgid "Google subscription"
+#~ msgstr "Suscripción a Google"
+
+#~ msgid "Calendars of interest"
+#~ msgstr "Calendarios de interés"
+
+#~ msgid "Do you really want to delete calendar \"%s\"?"
+#~ msgstr "¿De verdad quiere borrar el calendario \"%s\"?"
+
+#~ msgid ""
+#~ "This calendar is shared with others. It won't be available for them any "
+#~ "more."
+#~ msgstr ""
+#~ "Este calendario está compartido con otros. Dejará de estar disponible "
+#~ "para ellos."
+
+#~ msgid "All my public appointments"
+#~ msgstr "Todas mis citas públicas"
+
+#~ msgid "Archive old messages"
+#~ msgstr "Archivar mensajes antiguos"
+
+#~ msgid "Delete forever"
+#~ msgstr "Borrar para siempre"
+
+#~ msgid "Restore"
+#~ msgstr "Restaurar"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Permisos / Invitar personas"
+
+#~ msgid "Show in Drive"
+#~ msgstr "Mostrar en Drive"
+
+#~ msgid "Refresh this calendar"
+#~ msgstr "Actualizar este calendario"
+
+#~ msgid "Show all calendars"
+#~ msgstr "Mostrar todos los calendarios"
+
+#~ msgid "Show this calendar only"
+#~ msgstr "Mostrar solo este calendario"
+
+#~ msgid "Select all messages"
+#~ msgstr "Seleccionar todos los mensajes"
+
+#~ msgid "Subscribe to address book"
+#~ msgstr "Suscribirse a libreta de direcciones"
+
+#~ msgid "Personal calendar"
+#~ msgstr "Calendario personal"
+
+#~ msgid "Subscribe to calendar"
+#~ msgstr "Suscribirse a calendario"
+
+#~ msgid "Browse calendars of interest"
+#~ msgstr "Navegar por calendarios de interés"
+
+#~ msgid "Google calendar"
+#~ msgstr "Calendario de Google"
+
+#~ msgid "Subscribe via URL (iCal)"
+#~ msgstr "Suscribirse vía URL (iCal)"
+
+#~ msgid "Import calendar"
+#~ msgstr "Importar calendario"
+
+#~ msgid "Imported calendar"
+#~ msgstr "Calendario importado"
+
+#~ msgid "New calendar name"
+#~ msgstr "Nuevo nombre de calendario"
+
+#~ msgid "Ignore existing appointments"
+#~ msgstr "Ignorar citas existentes"
+
+#~ msgid ""
+#~ "Ignoring existing appointments is helpful to import public holiday "
+#~ "calendars, for example."
+#~ msgstr ""
+#~ "Ignorar citas existentes es útil para importar calendarios de "
+#~ "festividades públicas, por ejemplo."
+
+#~ msgid "Please note that other participants are removed on calendar import."
+#~ msgstr ""
+#~ "Por favor, tenga en cuenta se eliminan los otros participantes al "
+#~ "importar el calendario."
+
+#~ msgid "You must enter a folder name"
+#~ msgstr "Debe introducir un nombre de carpeta"
+
+#~ msgid "Navigate to:"
+#~ msgstr "Navegar a:"
+
+#~ msgctxt "app"
+#~ msgid "Notes"
+#~ msgstr "Notas"
+
+#~ msgid "Connect this Device"
+#~ msgstr "Conectar este dispositivo"
+
+#~ msgid ""
+#~ "There are currently no compatible media devices available on your device."
+#~ msgstr ""
+#~ "Actualmente no hay dispositivos de medios disponibles en su dispositivo."
+
+#~ msgid ""
+#~ "Access to your media devices has been denied. Please refer to your "
+#~ "browser help pages for how to reset authorization."
+#~ msgstr ""
+#~ "El acceso a sus dispositivos de medios ha sido denegado. Por favor, "
+#~ "consulte la páginas de ayuda de su navegador para ver cómo reiniciar la "
+#~ "autorización."
+
+#~ msgid "This feature isn't available for non-secure connections."
+#~ msgstr "Esta característica no está disponible para conexiones inseguras."
+
+#~ msgid "Microphone %1$s"
+#~ msgstr "Micrófono %1$s"
+
+#~ msgid "Camera %1$s"
+#~ msgstr "Cámara %1$s"
+
+#~ msgid "Unknown %1$s"
+#~ msgstr "Desconocido %1$s"
+
+#~ msgid ""
+#~ "Unfortunately your browser doesn't support listing available media "
+#~ "devices."
+#~ msgstr ""
+#~ "Desgraciadamente, su navegador no admite el listado de dispositivos de "
+#~ "medios disponibles."
+
+#~ msgid "Unicolor"
+#~ msgstr "Unicolor"
+
+#~ msgid "Multicolor"
+#~ msgstr "Multicolor"
+
+#~ msgid "Purple/Magenta"
+#~ msgstr "Púrpura/Magenta"
+
+#~ msgid "Automatic"
+#~ msgstr "Automático"
+
+#~ msgid "Time-dependent"
+#~ msgstr "Dependiente del tiempo"
+
+#~ msgid "Design"
+#~ msgstr "Diseñar"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "Lanzador rápido %s"
+
+#~ msgid "Manage browser permissions now"
+#~ msgstr "Administrar ahora permisos del navegador"
+
+#~ msgid "%1$s must not be empty."
+#~ msgstr "%1$s no debe estar vacío."
+
+#~ msgid ""
+#~ "\n"
+#~ " Please download the file using the button below."
+#~ msgstr ""
+#~ "\n"
+#~ " Por favor, descargue el archivo usando el botón inferior."
+
+#~ msgid "Download %1$s"
+#~ msgstr "Descargar %1$s"
+
+#~ msgid "Downlad"
+#~ msgstr "Descargar"
+
+#~ msgid "There is no preview for this file type."
+#~ msgstr "No hay vista previa para este tipo de archivo."
+
+#~ msgid ""
+#~ "Restored into multiple folders:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Restaurado en múltiples carpetas:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Restored into folder:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Restaurado en carpeta:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Enlace de compartido creado para el archivo \"%1$s\""
+#~ msgstr[1] "Enlaces de compartidos creados para los %2$d elementos"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Enlace de compartido creado para la carpeta \"%1$s\""
+#~ msgstr[1] "Enlaces de compartidos creados para %2$d elementos"
+
+#~ msgid "Add folder"
+#~ msgstr "Añadir carpeta"
+
+#~ msgid "Edit Share"
+#~ msgstr "Editar compartido"
+
+#~ msgid "%1$d seconds"
+#~ msgstr "%1$d segundos"
+
+#~ msgid "Duration per image"
+#~ msgstr "Duración por imagen"
+
+#~ msgid "Advanced settings"
+#~ msgstr "Ajustes avanzados"
+
+#~ msgid "Internal and external users"
+#~ msgstr "Usuarios internos y externos"
+
+#~ msgid "External users"
+#~ msgstr "Usuarios externos"
+
+#~ msgid "Share with subfolders"
+#~ msgstr "Compartir con subcarpetas"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Añadir a Favoritos"
+
+#~ msgid "Inspect certificate"
+#~ msgstr "Inspeccionar certificado"
+
+#~ msgid ""
+#~ "All future messages from the sender will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Todos los mensajes futuros del remitente se moverán a la carpeta "
+#~ "seleccionada."
+#~ msgstr[1] ""
+#~ "Todos los mensajes futuros de los remitentes de los correos seleccionados "
+#~ "se moverán a la carpeta seleccionada."
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Los borradores actualmente editados con adjuntos no se pueden borrar "
+#~ "hasta que usted cierre la ventana de redacción correspondiente."
+
+#~ msgid "Authentication details"
+#~ msgstr "Detalles de autenticación"
+
+#~ msgid "Category name"
+#~ msgstr "Nombre de categoría"
+
+#~ msgid "Warning:"
+#~ msgstr "Aviso:"
+
+#~ msgid "Note:"
+#~ msgstr "Nota:"
+
+#~ msgid "Enable Links"
+#~ msgstr "Activar enlaces"
+
+#~ msgid "Links have been disabled to protect you against potential spam!"
+#~ msgstr ""
+#~ "¡Los enlaces han sido desactivados para protegerlo contra posibles "
+#~ "mensajes no deseados!"
+
+#~ msgid ""
+#~ "see attached|see attachment|see included|is attached|attached is|are "
+#~ "attached|attached are|attached to this email|attached to this message|I'm "
+#~ "attaching|I am attaching|I've attached|I have attached|I attach|I "
+#~ "attached|find attached|find the attached|find included|find the included|"
+#~ "attached file|see the attached|see attachments|attached files|see the "
+#~ "attachment"
+#~ msgstr ""
+#~ "ver adjunto|se incluye|está adjuntado|va adjuntado|están adjuntados|van "
+#~ "adjuntados|adjuntado a este correo|adjuntado a este mensaje|le adjunto|te "
+#~ "adjunto|he adjuntado|adjuntado|adjunto|adjuntado|puede encontrar adjunto|"
+#~ "puede encontrar el adjunto|puede encontrar incluido|puede encontrar el "
+#~ "adjunto|archivo adjunto|vea el adjunto|vea los adjuntos|archivos adjuntos|"
+#~ "véase el adjunto"
+
+#~ msgid "Forgot attachment?"
+#~ msgstr "¿Olvidó el adjunto?"
+
+#~ msgid "Send without attachment"
+#~ msgstr "Enviar sin adjunto"
+
+#~ msgid "It appears as if you forgot to attach a file."
+#~ msgstr "Parece que ha olvidado adjuntar un archivo."
+
+#~ msgid "You mentioned \"%s\" in your email, but there are no files attached."
+#~ msgstr "Ha mencionado \"%s\" en su correo, pero no hay archivos adjuntos."
+
+#~ msgid ""
+#~ "This email just contains your email address as sender. Your real name is "
+#~ "not used."
+#~ msgstr ""
+#~ "Este correo solo contiene su dirección de correo como remitente. No se "
+#~ "está usando su nombre real."
+
+#~ msgid "One of the embedded images could not be used."
+#~ msgstr "Una de las imágenes incrustadas no se pudo usar."
+
+#~ msgid "Use password"
+#~ msgstr "Usar contraseña"
+
+#~ msgid "Receive notification when someone finished downloading file(s)"
+#~ msgstr ""
+#~ "Recibir una notificación cuando alguien termine de descargar el archivo o "
+#~ "los archivos"
+
+#~ msgid "Receive notification when the link expires"
+#~ msgstr "Recibir notificación cuando el enlace caduque"
+
+#~ msgid "Receive notification when someone accesses the file(s)"
+#~ msgstr ""
+#~ "Recibir notificación cuando alguien acceda al archivo o a los archivos"
+
+#~ msgid "%1$s options"
+#~ msgstr "Opciones de %1$s"
+
+#~ msgctxt "verb"
+#~ msgid "Unflag"
+#~ msgstr "Desmarcar"
+
+#~ msgid "Email content"
+#~ msgstr "Contenido del correo"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Respuesta rápida: %1$s"
+
+#~ msgid "Auto forwarding is active"
+#~ msgstr "El reenvío automático está activo"
+
+#~ msgid "Unable to load your auto forward settings. Please retry later."
+#~ msgstr ""
+#~ "No se pudieron cargar sus ajustes de reenvío automático. Por favor, "
+#~ "inténtelo más tarde."
+
+#~ msgid "Auto forward"
+#~ msgstr "Reenvío automático"
+
+#~ msgid "Enable or disable auto forward"
+#~ msgstr "Activar o desactivar el reenvío automático"
+
+#~ msgid "Your vacation notice is active"
+#~ msgstr "Su aviso de ausencia está activo"
+
+#~ msgid "The time frame is in the past."
+#~ msgstr "El rango de tiempo está en el pasado."
+
+#~ msgid "Unable to load your vacation notice. Please retry later."
+#~ msgstr ""
+#~ "No se pudo cargar su aviso de ausencia. Por favor, inténtelo más tarde."
+
+#~ msgid "Vacation notice"
+#~ msgstr "Aviso de ausencia"
+
+#~ msgid "Default sender"
+#~ msgstr "Remitente predeterminado"
+
+#~ msgid "Enable or disable vacation notice"
+#~ msgstr "Activar o desactivar el aviso de ausencia"
+
+#~ msgid "Message"
+#~ msgstr "Mensaje"
+
+#~ msgid "Days between notices to the same sender"
+#~ msgstr "Días entre avisos al mismo remitente"
+
+#~ msgctxt "settings"
+#~ msgid "Mail Compose"
+#~ msgstr "Redactar correo"
+
+#~ msgid "Behavior"
+#~ msgstr "Comportamiento"
+
+#~ msgid ""
+#~ "You can import all existing signatures from the previous product "
+#~ "generation at once."
+#~ msgstr ""
+#~ "Puede importar todas las firmas existentes de la anterior generación del "
+#~ "producto al mismo tiempo."
+
+#~ msgid "No preview available"
+#~ msgstr "No hay vista previa disponible"
+
+#~ msgid "Default signature for replies or forwards"
+#~ msgstr "Firma predeterminada para respuestas o reenvíos"
+
+#~ msgid "Text preview"
+#~ msgstr "Vista previa del texto"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Este es un correo electrónico sospechoso porque no se pudo verificar que "
+#~ "realmente provenga de %1$s."
+
+#~ msgid "We could not verify that this email is from %1$s."
+#~ msgstr "No pudimos verificar que este correo provenga de %1$s."
+
+#~ msgid "We could verify that this email is from %1$s."
+#~ msgstr "Se ha verificado que este correo proviene de %1$s."
+
+#~ msgid "Search in"
+#~ msgstr "Buscar en"
+
+#~ msgid "Current folder"
+#~ msgstr "Carpeta actual"
+
+#~ msgid "Contains words"
+#~ msgstr "Contiene palabras"
+
+#~ msgid "Has attachments"
+#~ msgstr "Tiene adjuntos"
+
+#~ msgctxt "dropdown"
+#~ msgid "Sort"
+#~ msgstr "Ordenar"
+
+#~ msgid "All messages in this folder"
+#~ msgstr "Todos los mensajes de esta carpeta"
+
+#~ msgctxt "dropdown"
+#~ msgid "All"
+#~ msgstr "Todos"
+
+#~ msgid "Connect this device"
+#~ msgstr "Conectar este dispositivo"
+
+#~ msgid "Signed in as"
+#~ msgstr "Conectado como"
+
+#~ msgid ""
+#~ "The widget \"%s\" was disabled as the account might have been removed or "
+#~ "is no longer available."
+#~ msgstr ""
+#~ "El widget \"%s\" se desactivó ya que la cuenta podría haber sido "
+#~ "eliminada o ya no está disponible."
+
+#~ msgid "Default"
+#~ msgstr "Predeterminado"
+
+#~ msgid "Security"
+#~ msgstr "Seguridad"
+
+#~ msgid "Active clients"
+#~ msgstr "Clientes activos"
+
+#~ msgid "Certificates"
+#~ msgstr "Certificados"
+
+#~ msgid "Remove certificate"
+#~ msgstr "Eliminar certificado"
+
+#~ msgid "Do you really want to remove this certificate?"
+#~ msgstr "¿De verdad quiere eliminar este certificado?"
+
+#~ msgid "The certificate list is empty"
+#~ msgstr "La lista de certificados está vacía"
+
+#~ msgid "Fingerprint"
+#~ msgstr "Huella dactilar"
+
+#~ msgid "Untrust certificate %1$s"
+#~ msgstr "Desconfiar del certificado %1$s"
+
+#~ msgid "Untrust"
+#~ msgstr "Desconfiar"
+
+#~ msgid "Trust certificate %1$s"
+#~ msgstr "Confiar en el certificado %1$s"
+
+#~ msgid "Trust"
+#~ msgstr "Confiar"
+
+#~ msgid "Remove certificate %1$s"
+#~ msgstr "Eliminar certificado %1$s"
+
+#~ msgid "Common name"
+#~ msgstr "Nombre común"
+
+#~ msgid "Expired"
+#~ msgstr "Caducado"
+
+#~ msgid "Failure reason"
+#~ msgstr "Motivo del fallo"
+
+#~ msgid "Hostname"
+#~ msgstr "Nombre de equipo"
+
+#~ msgid "Issued by"
+#~ msgstr "Emitido por"
+
+#~ msgid "Issued on"
+#~ msgstr "Emitido el"
+
+#~ msgid "Serial number"
+#~ msgstr "Número de serie"
+
+#~ msgid "Signature"
+#~ msgstr "Firma"
+
+#~ msgid "Trusted"
+#~ msgstr "De confianza"
+
+#~ msgid "Certificate details"
+#~ msgstr "Detalles del certificado"
+
+#~ msgid "Trust certificate"
+#~ msgstr "Confiar en certificado"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#~ msgid "Mac"
+#~ msgstr "Mac"
+
+#~ msgid "iOS"
+#~ msgstr "iOS"
+
+#~ msgid "Android"
+#~ msgstr "Android"
+
+#~ msgid "Chrome"
+#~ msgstr "Chrome"
+
+#~ msgid "Safari"
+#~ msgstr "Safari"
+
+#~ msgid "Firefox"
+#~ msgstr "Firefox"
+
+#~ msgid "Edge"
+#~ msgstr "Edge"
+
+#~ msgid "Internet Explorer"
+#~ msgstr "Internet Explorer"
+
+#~ msgid "Opera"
+#~ msgstr "Opera"
+
+#~ msgid "Chromium"
+#~ msgstr "Chromium"
+
+#~ msgid "Addressbook"
+#~ msgstr "Libreta de direcciones"
+
+#~ msgid "Calendar/Addressbook"
+#~ msgstr "Calendario / Libreta de direcciones"
+
+#~ msgid "Thunderbird Lightning"
+#~ msgstr "Thunderbird Lightning"
+
+#~ msgid "eM Client"
+#~ msgstr "Cliente eM"
+
+#~ msgid "Appsuite eM Client"
+#~ msgstr "Cliente eM de Appsuite"
+
+#~ msgid "CalDav"
+#~ msgstr "CalDav"
+
+#~ msgid "CardDav"
+#~ msgstr "CardDav"
+
+#~ msgid "DAVdroid"
+#~ msgstr "DAVdroid"
+
+#~ msgid "CalDav/CardDav"
+#~ msgstr "CalDav/CardDav"
+
+#~ msgid "Exchange Active Sync"
+#~ msgstr "Exchange Active Sync"
+
+#~ msgid "Unknown application"
+#~ msgstr "Aplicación desconocida"
+
+#~ msgid "Unknown device"
+#~ msgstr "Dispositivo desconocido"
+
+#~ msgid "Now active"
+#~ msgstr "Activo ahora"
+
+#~ msgid "Do you really want to sign out from that device?"
+#~ msgstr "¿De verdad quiere desconectarse desde ese dispositivo?"
+
+#~ msgid "You are currently signed in with the following devices"
+#~ msgstr "Actualmente está conectado con los siguientes dispositivos"
+
+#~ msgid "Sign out from all clients"
+#~ msgstr "Cerrar sesión en todos los clientes"
+
+#~ msgid ""
+#~ "Do you really want to sign out from all clients except the current one?"
+#~ msgstr ""
+#~ "¿De verdad quiere desconectarse desde todos los clientes excepto el "
+#~ "actual?"
+
+#~ msgid "Show email authenticity"
+#~ msgstr "Mostrar autenticidad del correo"
+
+#~ msgid "Disabled"
+#~ msgstr "Desactivado"
+
+#~ msgid "Suspicious and unclassified emails only"
+#~ msgstr "Solo correos electrónicos sospechosos y no clasificados"
+
+#~ msgid "All emails"
+#~ msgstr "Todos los correos"
+
+#~ msgid "App Launcher"
+#~ msgstr "Lanzador de aplicaciones"
+
+#~ msgid ""
+#~ "To navigate between the %1$s applications, just click on the new App "
+#~ "Launcher icon."
+#~ msgstr ""
+#~ "Para navegar entre las aplicaciones de %1$s, simplemente presione en el "
+#~ "nuevo icono del Lanzador de aplicaciones."
+
+#~ msgid "Click on the application that you would like to use."
+#~ msgstr "Presione en la aplicación que le gustaría usar."
+
+#~ msgid "New Windows"
+#~ msgstr "Nuevas ventanas"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "Los correos electrónicos aparecerán en una nueva ventana. Estas ventanas "
+#~ "se pueden maximizar, minimizar y cerrar."
+
+#~ msgid ""
+#~ "Windows you have minimized will appear in all applications for easy "
+#~ "access. You can maximize a window again by clicking on it."
+#~ msgstr ""
+#~ "Las ventanas que haya minimizado aparecerán en todas las aplicaciones "
+#~ "para facilitar el acceso. Puede maximizar una ventana nuevamente "
+#~ "presionando en ella."
+
+#~ msgid "What's new"
+#~ msgstr "Qué hay de nuevo"
+
+#~ msgid "To learn more about the new and improved features you can visit "
+#~ msgstr ""
+#~ "Para aprender más sobre las características nuevas y mejoradas, puede "
+#~ "visitar "
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Qué hay de nuevo en %1$s 7.10.0"
+
+#~ msgid ""
+#~ "Welcome to %1$s.\n"
+#~ "We've made some exciting changes to %1$s. This quick tour will guide you "
+#~ "through some of the new and improved features."
+#~ msgstr ""
+#~ "Bienvenido a %1$s.\n"
+#~ "Hemos realizado algunos cambios emocionantes en %1$s. Esta visita guiada "
+#~ "rápida le conducirá a través de algunas de las características nuevas y "
+#~ "mejoradas."
+
+#~ msgid "Never show again"
+#~ msgstr "No mostrar de nuevo"
+
+#~ msgid "Open in calendar"
+#~ msgstr "Abrir en calendario"
+
+#~ msgid "Remove all reminders"
+#~ msgstr "Eliminar todos los recordatorios"
+
+#~ msgid "Appointment reminder"
+#~ msgstr "Recordatorio de cita"
+
+#~ msgid "Encrypt"
+#~ msgstr "Cifrar"
+
+#~ msgid "Show Links"
+#~ msgstr "Mostrar enlaces"
+
+#~ msgid "Add attachment"
+#~ msgstr "Añadir adjunto"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "El feed iCal se ha importado satisfactoriamente"
+
+#~ msgid "Change color"
+#~ msgstr "Cambiar color"
+
+#~ msgid "Town"
+#~ msgstr "Ciudad"
+
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal-Feed"
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Ignorar citas existentes. Útil para importar calendarios de vacaciones "
+#~ "públicos, por ejemplo."
+
+#~ msgid "Internal & external users"
+#~ msgstr "Usuarios internos y externos"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Todos los mensajes futuros de los remitentes de los correos seleccionados "
+#~ "serán trasladados a la carpeta seleccionada."
+
+#~ msgid "never"
+#~ msgstr "nunca"
+
+#~ msgid "Use Password"
+#~ msgstr "Usar contraseña"
+
+#~ msgid "%1$s Options"
+#~ msgstr "Opciones de %1$s"
+
+#~ msgid "Account is being created"
+#~ msgstr "La cuenta se está creando"
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Este podría ser un correo falso porque no se pudo verificar que realmente "
+#~ "provenga de %1$s."
+
+#~ msgid "in"
+#~ msgstr "en"
+
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "ActiveSync de Exchange"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Solo correos peligrosos"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Correos peligrosos y confiables"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Correo peligrosos, confiables y válidos"
+
+#~ msgid "Add new reminder"
+#~ msgstr "Añadir nuevo recordatorio"
+
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "Autenticación fallida. Por favor, introduzca usuario y contraseña."
+
+#~ msgid "Public"
+#~ msgstr "Pública"
+
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr ""
+#~ "La cita está visible para todos los usuarios de carpetas compartidas."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "En carpetas compartidas, la cita se muestra como un rango de tiempo "
+#~ "simple para los usuarios que no asisten."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "La cita no está visible en absoluto para los usuarios de carpetas "
+#~ "compartidas que no asisten. La cita no se tiene en cuenta para conflictos "
+#~ "y no aparece en la vista de planificación."
+
+#~ msgid "Birthday"
+#~ msgstr "Cumpleaños"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Lista de calendarios y eventos públicos"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Lanzamiento rápido 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Lanzamiento rápido 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Lanzamiento rápido 3"
 
 #~ msgid ""
 #~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
@@ -11303,99 +12605,152 @@ msgstr "Añadir a %s"
 #~ msgstr[1] ""
 #~ "Los archivos no se pueden cargar porque superan el límite de cuota de %1$s"
 
-#~ msgid "via"
-#~ msgstr "vía"
-
-#~ msgid "in"
-#~ msgstr "en"
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "El mensaje es de un remitente de confianza."
 
 #~ msgid ""
-#~ "Use up and down keys to change the time. Close selection by pressing ESC "
-#~ "key."
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
 #~ msgstr ""
-#~ "Use las teclas arriba y abajo para cambiar la hora. Termine la selección "
-#~ "presionando la tecla ESC."
+#~ "Este podría ser un correo falso porque no hemos podido verificar que "
+#~ "realmente sea de %1$s."
 
-#~ msgid "Line %1$d: %2$s"
-#~ msgstr "Línea %1$d: %2$s"
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Este correo ha sido enviado por %1$s."
 
-#~ msgid "continue if any of these condition is met"
-#~ msgstr "continuar si alguna de estas condiciones se cumple"
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "No hemos podido verificar que este correo sea realmente de %1$s."
 
-#~ msgid "Size (bytes)"
-#~ msgstr "Tamaño (bytes)"
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Caducidad: %1$d"
+
+#~ msgid "Has Attachment"
+#~ msgstr "Tiene adjunto"
+
+#~ msgid "Show message authenticity"
+#~ msgstr "Mostrar autenticidad del mensaje"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Solo peligroso"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Peligroso y confiable"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Acusar recibo de todos los recordatorios"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s de %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "Cliente de %s para Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "Cliente de %s para Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "Cliente de %s para Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s de %2$s"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Compartir %1$s \"%2$s\""
+
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "cerrar por %1$s"
+
+#, fuzzy
+#~| msgid "Current Costs:"
+#~ msgid "Current session"
+#~ msgstr "Costes actuales:"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "¿Sabe que puede llevar OX App Suite con usted? presione este icono y "
+#~ "elija 'Conectar a su dispositivo' en el menú."
+
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "¿Está seguro de querer borrar esta cuenta?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "¿De verdad quiere borrar esta versión?"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Vence el %1$s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s de %2$s"
 
 #~ msgid "Header exists"
 #~ msgstr "Existe encabezado"
 
-#~ msgid "Prettify plain text mails"
-#~ msgstr "Embellecer correos de texto sencillo"
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "Añadido %1$s."
 
-#~ msgid "Configure %1$s"
-#~ msgstr "Configurar %1$s"
+#, fuzzy
+#~| msgid "Others"
+#~ msgid "Other clients"
+#~ msgstr "Otros"
 
-#~ msgid "Loop once only"
-#~ msgstr "Repetir solo una vez"
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Borrar de la lista de destinatarios"
 
-#~ msgid "Keep looping endlessly"
-#~ msgstr "Repetir indefinidamente"
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Compartir %1$s \"%2$s\""
 
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "Modo de presentación / Reproducción automática"
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Las siguientes aplicaciones se pueden restaurar. Basta con eliminar el "
+#~ "punto de restauración si no desea que sean restauradas."
 
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "Detención de reproducción automática en segundos"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Remitente desconocido"
 
-#~ msgid "Copy message to folder"
-#~ msgstr "Copiar mensaje a la carpeta"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Remitente desconocido"
 
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "continuar si se cumple cualquiera de estas condiciones."
-
-#~ msgid "original timezone"
-#~ msgstr "zona horaria original"
-
-#~ msgid "Rule applies from"
-#~ msgstr "La regla se aplica desde"
-
-#~ msgid "Rule applies until"
-#~ msgstr "La regla se aplica hasta"
-
-#~ msgid "Rule applies on"
-#~ msgstr "La regla se aplica el"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "La regla no se aplica a"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "La regla no se aplica desde"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "La regla no se aplica hasta"
-
-#~ msgid "Apply rule if any condition is met."
-#~ msgstr "Aplicar regla si se cumple alguna condición"
-
-#~ msgid "Content"
-#~ msgstr "Contenido"
-
-#~ msgid "Envelope - To"
-#~ msgstr "Sobre - Para"
-
-#~ msgid "Flag mail with"
-#~ msgstr "Marcar correo con"
-
-#~ msgid "Reply All"
-#~ msgstr "Responder a todos"
-
-#~ msgid "Sender address"
-#~ msgstr "Dirección de remite"
-
-#~ msgid "Sender/From"
-#~ msgstr "Remitente/De"
-
-#~ msgid "Tag mail with"
-#~ msgstr "Etiquetar correo con"
+#~ msgid "via"
+#~ msgstr "vía"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -11535,6 +12890,11 @@ msgstr "Añadir a %s"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s correo, %2$s no leído(s)"
 #~ msgstr[1] "%1$s correos, %2$s no leído(s)"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s de %2$s"
 
 #~ msgid "%1$s set your status to %2$s on your behalf for this appointment:"
 #~ msgstr ""
@@ -12173,9 +13533,6 @@ msgstr "Añadir a %s"
 #~ msgid "Add file"
 #~ msgstr "Añadir ficheros"
 
-#~ msgid "Add folder"
-#~ msgstr "Añadir carpeta"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Añadir menú de carpeta"
 
@@ -12234,10 +13591,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Advanced facets block was opened."
 #~ msgstr "El bloque de filtros de búsqueda avanzados se abrió."
-
-#, fuzzy
-#~ msgid "Advanced options"
-#~ msgstr "Ajustes avanzados"
 
 #, fuzzy
 #~| msgid "Advanced Facets"
@@ -12437,13 +13790,6 @@ msgstr "Añadir a %s"
 #~| msgid "All my contacts"
 #~ msgid "All contacts"
 #~ msgstr "Todos mis contactos"
-
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr ""
-#~ "Todos los mensajes futuros de los remitentes de los correos seleccionados "
-#~ "serán trasladados a la carpeta seleccionada."
 
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Todas las horas se muestran en la zona horaria %1$s"
@@ -13022,6 +14368,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Aplicar una plantilla (opcional)"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Aplicar regla si se cumple alguna condición"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "¿Aplicar a todos los mensajes?"
@@ -13617,6 +14966,9 @@ msgstr "Añadir a %s"
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Dividir el texto plano automáticamente tras el carácter:"
 
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Detención de reproducción automática en segundos"
+
 #~ msgid "Autorefresh:"
 #~ msgstr "Autorefresco:"
 
@@ -14156,6 +15508,9 @@ msgstr "Añadir a %s"
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "Configuración dañada. Por favor, informe al administrador."
 
+#~ msgid "Configure %1$s"
+#~ msgstr "Configurar %1$s"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Configure sus pestañas de la bandeja de entrada"
 
@@ -14189,6 +15544,9 @@ msgstr "Añadir a %s"
 #~ msgid "Contact overview"
 #~ msgstr "Vista general de contacto"
 
+#~ msgid "Content"
+#~ msgstr "Contenido"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -14208,6 +15566,9 @@ msgstr "Añadir a %s"
 #~ msgid "Copy (CC) to"
 #~ msgstr "Copia (CC) para "
 
+#~ msgid "Copy message to folder"
+#~ msgstr "Copiar mensaje a la carpeta"
+
 #~ msgid "Copy to"
 #~ msgstr "Copiar a"
 
@@ -14219,12 +15580,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "No se pudieron cargar todos los participantes de esta tarea."
-
-#~ msgid "Could not save auto forward"
-#~ msgstr "No se pudo guardar el reenvío automático"
-
-#~ msgid "Could not save vacation notice"
-#~ msgstr "No se pudo guardar el aviso de ausencia"
 
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "No se pudieron cargar todas las imágenes de contactos."
@@ -14333,9 +15688,6 @@ msgstr "Añadir a %s"
 #~| msgid "Macao"
 #~ msgid "Curacao"
 #~ msgstr "Macao"
-
-#~ msgid "Current Costs:"
-#~ msgstr "Costes actuales:"
 
 #~ msgid "Current Date"
 #~ msgstr "Fecha actual"
@@ -14495,9 +15847,6 @@ msgstr "Añadir a %s"
 #~ msgid "Delete all accounts"
 #~ msgstr "Borrar todas las cuentas"
 
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "Borrar todos los mensajes de esta carpeta"
-
 #~ msgid "Delete drawing object"
 #~ msgstr "Borrar objeto de dibujo"
 
@@ -14580,9 +15929,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Disable all"
 #~ msgstr "Desactivar todo"
-
-#~ msgid "Disabled"
-#~ msgstr "Desactivado"
 
 #~ msgid "Display Name"
 #~ msgstr "Nombre a mostrar"
@@ -14732,9 +16078,6 @@ msgstr "Añadir a %s"
 #~ msgid "Drawing position"
 #~ msgstr "Posición del dibujo"
 
-#~ msgid "Drive Client"
-#~ msgstr "Cliente de Drive"
-
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "Suelte aquí para subir un <b class='dndignore'>nuevo adjunto</b>"
 
@@ -14828,9 +16171,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Ecuador"
 #~ msgstr "Ecuador"
-
-#~ msgid "Edit Appointment"
-#~ msgstr "Editar cita"
 
 #~ msgid "Edit Furigana"
 #~ msgstr "Editar Furigana"
@@ -14988,9 +16328,6 @@ msgstr "Añadir a %s"
 #~ msgid "End date is before start date"
 #~ msgstr "La fecha de fin es anterior a la de comienzo"
 
-#~ msgid "End date:"
-#~ msgstr "Fecha de fin:"
-
 #~ msgid "End of Slides"
 #~ msgstr "Fin de las diapositivas"
 
@@ -15098,6 +16435,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Entire thread"
 #~ msgstr "Hilo completo"
+
+#~ msgid "Envelope - To"
+#~ msgstr "Sobre - Para"
 
 #~ msgid "Equatorial Guinea"
 #~ msgstr "Guinea Ecuatorial"
@@ -15342,6 +16682,11 @@ msgstr "Añadir a %s"
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Salir del modo de pantalla completa"
 
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "Enviar como vCard"
+
 #~ msgid "Extended view"
 #~ msgstr "Vista extendida"
 
@@ -15473,6 +16818,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Flag #%d"
 #~ msgstr "Marca #%d"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Marcar correo con"
 
 #~ msgid "Flags"
 #~ msgstr "Marcas"
@@ -16238,6 +17586,9 @@ msgstr "Añadir a %s"
 #~ msgid "Kazakhstan"
 #~ msgstr "Kazajstán"
 
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Repetir indefinidamente"
+
 #~ msgid "Kenya"
 #~ msgstr "Kenia"
 
@@ -16329,6 +17680,9 @@ msgstr "Añadir a %s"
 #~ msgid "Liked a link: %s"
 #~ msgstr "Marcó \"Me gusta\" en un enlace: %s"
 
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Línea %1$d: %2$s"
+
 #~ msgid "Line Spacing"
 #~ msgstr "Espaciado entre líneas"
 
@@ -16395,6 +17749,9 @@ msgstr "Añadir a %s"
 #~ msgid "Long"
 #~ msgstr "Largo"
 
+#~ msgid "Loop once only"
+#~ msgstr "Repetir solo una vez"
+
 #~ msgid "Luxembourg"
 #~ msgstr "Luxemburgo"
 
@@ -16409,11 +17766,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "MM/dd/yyyy"
 #~ msgstr "MM/dd/aaaa"
-
-#, fuzzy
-#~| msgid "March"
-#~ msgid "Mac"
-#~ msgstr "marzo"
 
 #~ msgid "Macao"
 #~ msgstr "Macao"
@@ -16459,9 +17811,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Mailing list %s"
 #~ msgstr "Lista de correo %s"
-
-#~ msgid "Main window"
-#~ msgstr "Ventana principal"
 
 #~ msgid "Malawi"
 #~ msgstr "Malawi"
@@ -16704,6 +18053,11 @@ msgstr "Añadir a %s"
 #~ msgid "Namibia"
 #~ msgstr "Namibia"
 
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Cliente de Drive"
+
 #~ msgid "Nauru"
 #~ msgstr "Nauru"
 
@@ -16860,9 +18214,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "No hay plantillas coincidentes en este servidor"
-
-#~ msgid "No participants available"
-#~ msgstr "Ningún participante disponible"
 
 #~ msgid "No resources available"
 #~ msgstr "Ningún recurso disponible"
@@ -17131,9 +18482,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Other task folders"
 #~ msgstr "Otras carpetas de tareas"
-
-#~ msgid "Others"
-#~ msgstr "Otros"
 
 #~ msgid "Outlook file"
 #~ msgstr "Fichero Outlook"
@@ -17620,6 +18968,9 @@ msgstr "Añadir a %s"
 #~ "Pulse [Intro] para seleccionar el momento en que desea que se le recuerde "
 #~ "de nuevo"
 
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Embellecer correos de texto sencillo"
+
 #~ msgid "Prev"
 #~ msgstr "Anterior"
 
@@ -17691,9 +19042,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Proposed changes for appointment: %1$s"
 #~ msgstr "Cambios propuestos para la cita: %1$s"
-
-#~ msgid "Public"
-#~ msgstr "Pública"
 
 #~ msgid "Public contacts"
 #~ msgstr "Contactos públicos"
@@ -17829,9 +19177,6 @@ msgstr "Añadir a %s"
 #~ msgid "Remove facet"
 #~ msgstr "Borrar filtro de búsqueda"
 
-#~ msgid "Remove from recipient list"
-#~ msgstr "Borrar de la lista de destinatarios"
-
 #~ msgid "Remove participant"
 #~ msgstr "Eliminar participante"
 
@@ -17849,6 +19194,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Renminbi"
 #~ msgstr "Yuan"
+
+#~ msgid "Reply All"
+#~ msgstr "Responder a todos"
 
 #~ msgid "Reply to"
 #~ msgstr "Responder a"
@@ -17915,6 +19263,24 @@ msgstr "Añadir a %s"
 
 #~ msgid "Route Planning"
 #~ msgstr "Planificación de rutas"
+
+#~ msgid "Rule applies from"
+#~ msgstr "La regla se aplica desde"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "La regla no se aplica desde"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "La regla no se aplica a"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "La regla no se aplica hasta"
+
+#~ msgid "Rule applies on"
+#~ msgstr "La regla se aplica el"
+
+#~ msgid "Rule applies until"
+#~ msgstr "La regla se aplica hasta"
 
 #~ msgid "Rules"
 #~ msgstr "Reglas"
@@ -18059,9 +19425,6 @@ msgstr "Añadir a %s"
 #~ msgid "Search:"
 #~ msgstr "Buscar:"
 
-#~ msgid "Searched in"
-#~ msgstr "Buscado en"
-
 #~ msgid "Searching for objects"
 #~ msgstr "Búsqueda de objetos"
 
@@ -18073,9 +19436,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Secure mail connection"
 #~ msgstr "Conexión segura de correo"
-
-#~ msgid "Security"
-#~ msgstr "Seguridad"
 
 #~ msgid "Select Attachments"
 #~ msgstr "Seleccionar adjuntos"
@@ -18172,6 +19532,12 @@ msgstr "Añadir a %s"
 
 #~ msgid "Send feedback"
 #~ msgstr "Enviar comentario"
+
+#~ msgid "Sender address"
+#~ msgstr "Dirección de remite"
+
+#~ msgid "Sender/From"
+#~ msgstr "Remitente/De"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Envío de un correo electrónico a un contacto"
@@ -18377,9 +19743,6 @@ msgstr "Añadir a %s"
 #~ msgid "Sierra Leone"
 #~ msgstr "Sierra Leona"
 
-#~ msgid "Signature"
-#~ msgstr "Firma"
-
 #~ msgid "Signature position"
 #~ msgstr "Posición de la firma"
 
@@ -18420,6 +19783,9 @@ msgstr "Añadir a %s"
 #~ msgid "Site"
 #~ msgstr "Sitio"
 
+#~ msgid "Size (bytes)"
+#~ msgstr "Tamaño (bytes)"
+
 #~ msgid "Size:"
 #~ msgstr "Tamaño:"
 
@@ -18428,6 +19794,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Slideshow"
 #~ msgstr "Presentación"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Modo de presentación / Reproducción automática"
 
 #~ msgid "Slovakia"
 #~ msgstr "Eslovaquia"
@@ -18786,6 +20155,9 @@ msgstr "Añadir a %s"
 
 #~ msgid "Tabs example"
 #~ msgstr "Ejemplo de pestañas"
+
+#~ msgid "Tag mail with"
+#~ msgstr "Etiquetar correo con"
 
 #~ msgid "Tags"
 #~ msgstr "Etiquetas"
@@ -19796,9 +21168,6 @@ msgstr "Añadir a %s"
 #~ msgid "Tile"
 #~ msgstr "Ficha"
 
-#~ msgid "Time Range"
-#~ msgstr "Rango de tiempo"
-
 #~ msgid "Time range for the calender view"
 #~ msgstr "Rango de tiempo para la vista de calendario"
 
@@ -20374,6 +21743,13 @@ msgstr "Añadir a %s"
 #~ "Cierre la ventana del navegador. Esto evita cualquier acceso no "
 #~ "autorizado a sus datos del software colaborativo."
 
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Use las teclas arriba y abajo para cambiar la hora. Termine la selección "
+#~ "presionando la tecla ESC."
+
 #~ msgid "Users"
 #~ msgstr "Usuarios"
 
@@ -20443,9 +21819,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Islas Vírgenes Británicas"
-
-#~ msgid "Visibility"
-#~ msgstr "Visibilidad"
 
 #~ msgid "Visual effects"
 #~ msgstr "Efectos visuales"
@@ -20572,17 +21945,9 @@ msgstr "Añadir a %s"
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "¿Qué dispositivo desea configurar?"
 
-#, fuzzy
-#~| msgid "Windows are shown as"
-#~ msgid "Windows Phone"
-#~ msgstr "Las ventanas se muestran como"
-
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "Trabajo"
-
-#~ msgid "Workweek View"
-#~ msgstr "Vista de semana laboral"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "¿Quiere crear una serie de citas para el siguiente cumpleaños?"
@@ -20821,9 +22186,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "Su sesión ha expirado. Tiene que cerrar esta ventana."
-
-#~ msgid "Your vacation notice has been saved"
-#~ msgstr "Su aviso de ausencia se ha guardado"
 
 #~ msgid "ZIP"
 #~ msgstr "CP"
@@ -21071,9 +22433,6 @@ msgstr "Añadir a %s"
 #~ msgid "absent on business"
 #~ msgstr "ausente por trabajo"
 
-#~ msgid "after"
-#~ msgstr "después de"
-
 #~ msgid "after %1$d appointment"
 #~ msgid_plural "after %1$d appointments"
 #~ msgstr[0] "tras la %1$d cita"
@@ -21130,6 +22489,12 @@ msgstr "Añadir a %s"
 
 #~ msgid "confirmed-spam"
 #~ msgstr "correo no deseado confirmado"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "continuar si alguna de estas condiciones se cumple"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "continuar si se cumple cualquiera de estas condiciones."
 
 #~ msgid "created by %s"
 #~ msgstr "creado por %s"
@@ -21253,9 +22618,6 @@ msgstr "Añadir a %s"
 #~ msgid "i18n test string - do not translate this"
 #~ msgstr "i18n test string - do not translate this"
 
-#~ msgid "iCalendar"
-#~ msgstr "iCalendar"
-
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
@@ -21367,6 +22729,9 @@ msgstr "Añadir a %s"
 #~ msgid "organized by %s"
 #~ msgstr "organizado por %s"
 
+#~ msgid "original timezone"
+#~ msgstr "zona horaria original"
+
 #~ msgid "predefined"
 #~ msgstr "predefinido"
 
@@ -21472,6 +22837,11 @@ msgstr "Añadir a %s"
 
 #~ msgid "weekly"
 #~ msgstr "semanal"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "Ventana principal"
 
 #~ msgid "work days"
 #~ msgstr "días laborables"
