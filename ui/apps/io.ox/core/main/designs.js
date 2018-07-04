@@ -19,7 +19,7 @@ define('io.ox/core/main/designs', ['settings!io.ox/core'], function (settings) {
     if (_.device('ie <= 11')) return;
 
     // feature toggle; default: on
-    if (!settings.get('features/user-designs', true)) return;
+    if (!settings.get('features/userDesigns', true)) return;
 
     var tick;
 

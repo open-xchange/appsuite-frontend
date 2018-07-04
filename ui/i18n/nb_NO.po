@@ -87,6 +87,7 @@ msgstr "%1$d filer har blitt endret nylig"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d time"
@@ -116,6 +117,7 @@ msgstr[1] "%1$d meldinger valgt"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minutt"
@@ -335,6 +337,11 @@ msgstr "%1$s endret sin status:"
 #: apps/io.ox/files/upload/view.js
 msgid "%1$s completed"
 msgstr "%1$s fullført"
+
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -2237,7 +2244,8 @@ msgstr "Opprett ny e-post"
 msgid "Conditions"
 msgstr "Betingelser"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr ""
 
@@ -9299,6 +9307,10 @@ msgstr "Innstillinger for smarttelefon:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"

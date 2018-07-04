@@ -95,7 +95,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         getToday: function () {
-            return moment.utc().startOf('day');
+            return moment().startOf('day');
         },
 
         //

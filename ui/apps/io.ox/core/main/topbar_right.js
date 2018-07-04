@@ -322,6 +322,7 @@ define('io.ox/core/main/topbar_right', [
             contactAPI.on('reset:image update:image', updatePicture);
             // via my contact data
             userAPI.on('reset:image:' + ox.user_id + ' update:image:' + ox.user_id, updatePicture);
+            userAPI.on('update', updatePicture);
 
             function updatePicture() {
                 a.empty().append(

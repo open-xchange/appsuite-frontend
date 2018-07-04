@@ -139,7 +139,7 @@ define('plugins/portal/calendar/register', [
         },
 
         preview: function (baton) {
-            var collection = baton.collection;
+            var collection = baton.collection.filter(function (model) { return model.getTimestamp('startDate') > _.now(); });
 
             if (collection.length === 0) {
                 this.append(
@@ -150,7 +150,7 @@ define('plugins/portal/calendar/register', [
                 );
             } else {
                 this.append(new EventsView({
-                    collection: collection
+                    collection: baton.collection
                 }).render().$el);
             }
         },

@@ -408,9 +408,8 @@ define('io.ox/mail/detail/view', [
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
                     // trigger click on body when theres a click in the iframe -> to close dropdownscorrectly etc
-                    html.on('click', function () {
-                        $('body').trigger('click');
-                    });
+                    html.on('keydown', onKeyDown)
+                        .on('click', onClick);
 
                     $(this.contentDocument)
                         .find('head').append('<style>' + contentStyle + '</style>').end()
@@ -421,6 +420,14 @@ define('io.ox/mail/detail/view', [
                         .trigger('resize');
                 }.bind(this));
             });
+
+            var onKeyDown = function (e) {
+                if (e.which !== 27) return;
+                // Sets focus on escape to the list view
+                this.closest('.window-container').find('.folder-tree .folder.selected, .list-item.selectable.selected').last().focus();
+            }.bind(this);
+
+            function onClick() { $('body').trigger('click'); }
 
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins

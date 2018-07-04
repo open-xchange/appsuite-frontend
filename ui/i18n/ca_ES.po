@@ -89,6 +89,7 @@ msgstr "Heu modificat %1$d fitxers recentment"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
@@ -122,6 +123,7 @@ msgstr[1] "%1$d missatges seleccionats"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
@@ -348,6 +350,11 @@ msgstr ""
 #, fuzzy
 msgid "%1$s completed"
 msgstr "Data completada"
+
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -2296,7 +2303,8 @@ msgstr "Redacta un nou correu electrònic"
 msgid "Conditions"
 msgstr "Condicions"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr ""
 
@@ -9589,6 +9597,10 @@ msgstr "Configuració mòbil"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"

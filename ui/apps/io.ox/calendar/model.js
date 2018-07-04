@@ -152,7 +152,8 @@ define('io.ox/calendar/model', [
                     args.push('FREQ=MONTHLY');
                     if (self.get('days')) {
                         args.push('BYDAY=' + days);
-                        args.push('BYSETPOS=' + this.get('day_in_month'));
+                        var pos = this.get('day_in_month');
+                        args.push('BYSETPOS=' + (pos === 5 ? -1 : pos));
                     } else {
                         args.push('BYMONTHDAY=' + this.get('day_in_month'));
                     }
@@ -209,7 +210,9 @@ define('io.ox/calendar/model', [
                     if (rrule.bymonthday) {
                         changes.day_in_month = parseInt(rrule.bymonthday, 10) || 0;
                     } else if (rrule.byday) {
-                        changes.day_in_month = parseInt(rrule.bysetpos, 10) || 0;
+                        var pos = rrule.bysetpos;
+                        if (pos === -1) pos = 5;
+                        changes.day_in_month = parseInt(pos, 10) || 0;
                         changes.days = 1 << this.days.indexOf(rrule.byday);
                     } else {
                         changes.day_in_month = date.date();

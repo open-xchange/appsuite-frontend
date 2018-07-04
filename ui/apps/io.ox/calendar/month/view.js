@@ -432,7 +432,10 @@ define('io.ox/calendar/month/view', [
                     .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
                         util.isAllday(a) ? $() : $('<span class="start">').text(a.getMoment('startDate').tz(moment().tz()).format('LT')),
-                        util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        util.isPrivate(a) ? $('<span class="private-flag">').append(
+                            $('<i class="fa" aria-hidden="true">').addClass(util.isPrivate(a, true) ? 'fa-user-circle' : 'fa-lock'),
+                            $('<span class="sr-only">').text(util.isPrivate(a, true) ? gt('Confidential') : gt('Private'))
+                        ) : '',
                         a.get('summary') ? $('<span class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
                         a.get('location') ? $('<span class="location">').text(a.get('location') || '\u00A0') : ''
                     )

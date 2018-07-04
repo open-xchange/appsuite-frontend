@@ -43,6 +43,9 @@ define('io.ox/settings/security/settings/pane', [
                     new ExtensibleView({ point: 'io.ox/settings/security/settings/detail/general', model: settings })
                     .build(function () {
                         this.listenTo(this.model, 'change', this.model.saveAndYell.bind(this.model, undefined));
+                        this.listenTo(this.model, 'change:autoLogout', function () {
+                            ox.autoLogout.restart();
+                        });
                     })
                     .inject({
                         getAutoLogoutOptions: function () {

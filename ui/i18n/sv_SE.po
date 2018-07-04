@@ -91,6 +91,7 @@ msgstr "%1$d filer har ändrats nyligen"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d timme"
@@ -120,6 +121,7 @@ msgstr[1] "%1$d meddelanden markerade"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minut"
@@ -323,6 +325,11 @@ msgstr "%1$s ändrade status:"
 #: apps/io.ox/files/upload/view.js
 msgid "%1$s completed"
 msgstr "%1$s färdigt"
+
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -2192,7 +2199,8 @@ msgstr "Skriv nytt meddelande"
 msgid "Conditions"
 msgstr "Villkor"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr "Hemlig"
 
@@ -9174,6 +9182,16 @@ msgstr "Smartphone-inställningar:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+#, fuzzy
+#| msgid ""
+#| "The object could not be detached because the update to an underlying "
+#| "object failed."
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Objektet kunde inte avlägsnas på grund av att uppdateringen av ett "
+"underliggande objekts misslyckades."
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -17668,13 +17686,6 @@ msgstr "din plattform"
 #~ msgstr ""
 #~ "Numret till höger om e-postens rubrik motsvarar mängden e-post i en tråd. "
 #~ "För att öppna tråden, klicka på numret."
-
-#~ msgid ""
-#~ "The object could not be detached because the update to an underlying "
-#~ "object failed."
-#~ msgstr ""
-#~ "Objektet kunde inte avlägsnas på grund av att uppdateringen av ett "
-#~ "underliggande objekts misslyckades."
 
 #~ msgid ""
 #~ "The object you requested can not be found. Try again. Context %1$d Folder "
