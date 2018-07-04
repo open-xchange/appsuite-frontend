@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.8.4-37) stable; urgency=medium
+
+  * Build for patch 2018-07-09 (4819)
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 04 Jul 2018 10:32:12 +0000
+
 open-xchange-dynamic-theme (7.8.4-36) stable; urgency=medium
 
   * Build for patch 2018-06-28 (4822)
