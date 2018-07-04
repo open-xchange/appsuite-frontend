@@ -85,8 +85,8 @@ $(window).load(function () {
             // fail handlers will take over
             if (e.requireType === 'timeout' && $('#background-loader').is(':visible')) {
                 $('.throbber').hide();
-                $('#timeout-error').show();
-                $('.timeout-reload').on('click', function (e) {
+                $('#showstopper, #showstopper .timeout').show();
+                $('#showstopper .reload').on('click', function (e) {
                     e.preventDefault();
                     _.url.hash({ 'waitSeconds': 30 });
                     location.reload();

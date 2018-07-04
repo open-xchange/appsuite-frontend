@@ -30,7 +30,8 @@ define('io.ox/core/boot/login/token', [
                 baton.stopPropagation();
                 ox.trigger('login:success');
             }, function () {
-                ox.trigger('login:fail');
+                util.debug('Session-based login FAILED', hash.session);
+                ox.trigger('login:fail:session-based');
             });
         }
     });
