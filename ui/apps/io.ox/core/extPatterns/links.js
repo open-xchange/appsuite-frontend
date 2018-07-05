@@ -53,10 +53,12 @@ define('io.ox/core/extPatterns/links', [
                     href: '#',
                     'data-action': self.id,
                     'draggable': options.draggable || false,
-                    'role': 'menuitem',
+                    'role': self.role || 'menuitem',
                     'data-section': self.section || 'default',
+                    'data-section-description': self.sectionDescription,
                     'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
-                    'data-ref': self.ref
+                    'data-ref': self.ref,
+                    'tabindex': -1
                 };
                 var a = preRendered.a.clone()
                     .addClass(self.cssClasses || 'io-ox-action-link');
@@ -68,7 +70,7 @@ define('io.ox/core/extPatterns/links', [
                 // add icon or text? (icons are prefered over labels)
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
-                    a.append(preRendered.i.clone().addClass(self.icon));
+                    a.append(preRendered.i.clone().addClass(self.icon).attr('aria-hidden', 'true'));
                     attr.title = self.title || self.label || '';
                 } else if (self.label) {
                     // add text. add title unless it matches content
@@ -99,8 +101,8 @@ define('io.ox/core/extPatterns/links', [
             };
 
         this.draw = this.draw || function (baton) {
-
-            baton = ext.Baton.ensure(baton);
+            // clone was introduced as a fix for b54827
+            baton = _.clone(ext.Baton.ensure(baton));
             var link = drawDefault(baton);
 
             this.append(
@@ -119,7 +121,6 @@ define('io.ox/core/extPatterns/links', [
                     .tooltip('destroy')
                     .addClass('disabled')
                     .attr('aria-disabled', true)
-                    .removeAttr('href')
                 );
                 // call customize? (call after append; must be self - not this)
                 if (self.customize) self.customize.call(link, baton);
@@ -261,10 +262,13 @@ define('io.ox/core/extPatterns/links', [
                         count++;
                     }
                 });
+                nav.find('li > a').attr('tabindex', -1);
+                nav.find('li > a:first').attr('tabindex', 0);
                 // empty?
                 if (count === 0) nav.addClass('empty').removeAttr('role');
             })
-            .then(function () {
+            // pipe vs then
+            .pipe(function () {
                 return nav;
             });
     };
@@ -357,13 +361,15 @@ define('io.ox/core/extPatterns/links', [
     function injectDividers(node) {
         // loop over all items and visually group by "section"
         var currentSection = '',
-            $li = $('<li class="divider" role="separator">');
+            $li = $('<li class="divider" role="separator">'),
+            $section = $('<li class="dropdown-header">');
         node.children('li').each(function () {
-            var node = $(this), section = node.children('a').attr('data-section');
+            var node = $(this), link = node.children('a'), section = link.attr('data-section'), description = link.attr('data-section-description');
             // add divider?
             if (section === undefined) return;
             if (currentSection !== '' && currentSection !== section) {
                 node.before($li.clone());
+                if (description) node.before($section.clone().text(description));
             }
             currentSection = section;
         });
@@ -401,12 +407,13 @@ define('io.ox/core/extPatterns/links', [
             if (isSmartphone) all.children().filter('[data-prio="none"]').parent().remove();
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
-                var dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
-                            .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions')).append(
-                                isSmartphone && !extension.compactDropdown ?
-                                    $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
-                                    $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
-                        ),
+                var dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="-1">')
+                    .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions'))
+                    .append(
+                        isSmartphone && !extension.compactDropdown ?
+                            $().add($.txt(gt('Actions'))).add($('<i class="fa fa-caret-down" aria-hidden="true">')) :
+                            $('<span class="sr-only">').text(gt('Actions')).add($('<i class="fa fa-bars" aria-hidden="true">'))
+                    ),
                     node = $('<ul class="dropdown-menu pull-right" role="menu">')
                         .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
                         .append(lo);
@@ -503,8 +510,10 @@ define('io.ox/core/extPatterns/links', [
         };
     };
 
-    var drawDropDownItems = function (options, baton, args) {
-        var ul = this.data('ul'), closer;
+    var drawDropDownItems = function (options, baton, args, ul) {
+        ul = this.data('ul') || ul;
+        var closer;
+
         // race-condition
         if (!ul) return;
         // special handling for mobile menus, otherwise the "closer"
@@ -520,6 +529,8 @@ define('io.ox/core/extPatterns/links', [
             // remove items with 'none' prio
             if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
             baton.$el.parent().trigger('ready');
+            // make sure the closer is at the last position
+            if (closer) baton.$el.append(closer);
             delete baton.$el;
         });
     };
@@ -536,22 +547,23 @@ define('io.ox/core/extPatterns/links', [
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul = $('<ul class="dropdown-menu" role="menu">');
+            ul = $('<ul class="dropdown-menu" role="menu">'),
+            dropdownView = new MiniViewDropdown({
+                el: node.addClass('dropdown'),
+                $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
+                    'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
+                })
+                .append(
+                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
+                ),
+                $ul: ul
+            });
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
-        this.append(new MiniViewDropdown({
-            el: node.addClass('dropdown'),
-            $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
-                'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
-            })
-            .append(
-                options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
-                options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
-            ),
-            $ul: ul
-        }).render().$el);
+        this.append(dropdownView.render().$el);
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 
@@ -559,7 +571,7 @@ define('io.ox/core/extPatterns/links', [
         if (baton.model) {
             node.on('show.bs.dropdown', { options: options, baton: baton, args: args }, beforeOpenDropDown);
         } else {
-            _.defer(drawDropDownItems.bind(node), options, baton, args);
+            _.defer(drawDropDownItems.bind(node), options, baton, args, dropdownView.$ul);
         }
 
         // usual customizations
@@ -583,7 +595,7 @@ define('io.ox/core/extPatterns/links', [
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
         wrap = !!_.defaultValue(options.wrap, true);
-        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap).done(function () {
+        drawLinks(options, new Collection(baton.data), null, baton, [], wrap).done(function () {
             // if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
             if (!baton.$el) return;
             if (options.emptyCallback && baton.$el.hasClass('empty')) options.emptyCallback();
@@ -686,14 +698,14 @@ define('io.ox/core/extPatterns/links', [
                                 a.tooltip({ trigger: 'hover' });
                             }
                         } else {
-                            a.addClass('disabled').attr({ 'aria-disabled': true }).on('click', preventDefault);
+                            a.addClass('disabled').attr('aria-disabled', true).on('click', preventDefault);
                         }
                     }
                 });
         }
 
         function icon() {
-            return $('<i class="fa fa-magic">');
+            return $('<i class="fa fa-magic" aria-hidden="true">');
         }
 
         return function ActionGroup(id, extension) {

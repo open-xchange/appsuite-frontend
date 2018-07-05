@@ -24,17 +24,17 @@ define([
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                            '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearch) + '}');
+                        '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearch) + '}');
                 });
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                            '{ "timestamp":1368791630910,"data": {"id": 13371, "folder_id": 555123456, "title": "Pommes kaufen"}}');
+                        '{ "timestamp":1368791630910,"data": {"id": 13371, "folder_id": 555123456, "title": "Pommes kaufen"}}');
                 });
                 this.node = $('<div>');
                 this.baton = ext.Baton();
-                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                return def._wrapped[0].then(function () {
-                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton)._wrapped[0];
+                return def.then(function () {
+                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton).value();
                 }.bind(this));
             });
 
@@ -45,25 +45,25 @@ define([
                 expect(this.node.children()).to.have.length(1);
                 expect(this.node.children().first().is('ul')).to.be.true;
             });
-            it.skip('draw all Tasks', function () {
+            it('draw all Tasks', function () {
                 expect(this.node.find('li.item')).to.have.length(2);
                 expect($(this.node.find('.bold')[0]).text()).to.equal('Pommes kaufen');
                 expect($(this.node.find('.bold')[1]).text()).to.equal('Nase putzen');
-                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am 17.5.2013 11:53');
-                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am 17.5.2013 11:53');
+                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am 17.5.2013, 11:53');
+                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am 17.5.2013, 11:53');
             });
         });
         describe('should not draw', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                            '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearchEdge) + '}');
+                        '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearchEdge) + '}');
                 });
                 this.node = $('<div>');
                 this.baton = ext.Baton();
-                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                return def._wrapped[0].then(function () {
-                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton)._wrapped[0];
+                return def.then(function () {
+                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton).value();
                 }.bind(this));
             });
 
@@ -87,13 +87,13 @@ define([
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                            '{ "timestamp":1368791630910,"data": []}');
+                        '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');
                 this.baton = ext.Baton();
-                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                return def._wrapped[0].then(function () {
-                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton)._wrapped[0];
+                return def.then(function () {
+                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton).value();
                 }.bind(this));
             });
 

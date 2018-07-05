@@ -52,24 +52,63 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         timer = null;
 
+    // Timer wrapping function to enable pausing
+    function Timer(callback, delay) {
+        var id,
+            start,
+            remaining = delay;
+
+        this.pause = function () {
+            window.clearTimeout(id);
+            remaining -= new Date() - start;
+        };
+
+        this.resume = function () {
+            start = new Date();
+            window.clearTimeout(id);
+            id = window.setTimeout(callback, remaining);
+        };
+
+        this.clear = function () {
+            window.clearTimeout(id);
+        };
+
+        this.resume();
+    }
+
     function remove() {
-        clearTimeout(timer);
+        if (timer) timer.clear();
         $('.io-ox-alert').trigger('notification:removed').remove();
-        $(document).off('.yell');
+        $('body').off('.yell');
     }
 
     function click(e) {
-
         var alert = $('.io-ox-alert');
         if (alert.length === 0) return;
 
         if (_.device('smartphone')) return remove();
+
+        if (e.type === 'keydown') {
+            // close on escape or enter and space on close button
+            if ($(e.target).closest('.close').length || e.which === 27) {
+                if (e.which === 13 || e.which === 32 || e.which === 27) return remove();
+            }
+            return;
+        }
 
         // close if clicked outside notifications
         if (!$.contains(alert.get(0), e.target)) return remove();
 
         // click on close?
         if ($(e.target).closest('.close').length) return remove();
+    }
+
+    function pause() {
+        if (timer) timer.pause();
+    }
+
+    function resume() {
+        if (timer) timer.resume();
     }
 
     function screenreaderMessage(message) {
@@ -98,7 +137,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         var o = {
                 duration: 0,
                 focus: false,
-                type: 'info'
+                type: 'info',
+                closeOnClick: true
             },
             // there is a special yell for displaying conflicts for filestorages correctly
             useConflictsView = false,
@@ -148,18 +188,22 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             // avoid empty yells
             if (!o.message) return;
 
-            clearTimeout(timer);
-            timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+            if (timer) timer.clear();
+            timer = o.duration === -1 ? null : new Timer(remove, o.duration || durations[o.type] || 5000);
             // replace existing alert?
             alert = $('.io-ox-alert');
             //prevent double binding
             //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
             //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although it should not)
-            $(document).off('.yell');
-            _.defer(function () {
-                // use defer not to run into drag&drop
-                $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
-            });
+            $('body').off('.yell');
+
+            // closeOnClick: whether the yell is closed on the following events
+            if (o.closeOnClick) {
+                _.defer(function () {
+                    // use defer not to run into drag&drop
+                    $('body').on(_.device('touch') ? 'tap.yell' : 'mousedown.yell keydown.yell', click);
+                });
+            }
 
             var node = $('<div tabindex="-1" class="io-ox-alert">').addClass('io-ox-alert-' + o.type),
                 content, wordbreak, text;
@@ -177,12 +221,18 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
             if (alert.length) {
                 node.addClass('appear');
+                // trigger a 'notification:removed' when the yell node is
+                // removed from dom like in remove() for a consistent behavior
+                // e.g. when the yell is closed by an new yell
+                alert.trigger('notification:removed');
                 alert.remove();
             }
 
             node.append(
                 $('<div class="icon">').append($('<i aria-hidden="true">').addClass(icons[o.type] || 'fa fa-fw'))
-            );
+            )
+            .mouseover(pause)  // Pause timer when user hovers over notification
+            .mouseout(resume);
 
             // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
             _.defer(function () {
@@ -195,11 +245,14 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                 );
             });
 
-            node.append(
-                $('<a href="#" role="button" class="close">').append(
-                    $('<i class="fa fa-times" aria-hidden="true">'),
-                    $('<span class="sr-only">').text(gt('Close this notification')))
-            );
+            // closeOnClick: only show a close button when the yell can be closed on click
+            if (o.closeOnClick) {
+                node.append(
+                    $('<button type="button" class="btn btn-link close">').attr('title', gt('Close this notification')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
+                    )
+                );
+            }
 
             // yell would be behind modal dialogs, because those are attached to the body node
             // this also applies for the wizard

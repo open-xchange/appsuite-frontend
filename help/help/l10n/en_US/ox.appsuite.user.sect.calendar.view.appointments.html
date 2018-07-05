@@ -36,54 +36,46 @@
 <a class="indexterm" name="id-1.8.9.9.2"></a><a class="indexterm" name="id-1.8.9.9.3"></a><a class="indexterm" name="id-1.8.9.9.4"></a><div class="concept">
 <a name="ox.appsuite.user.concept.calendar.view.appointments.color"></a><p id="ox.appsuite.user.concept.calendar.view.appointments.color">In a calendar view, the appointment display is defined by the following details:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">The color scheme set: classic colors, dark colors, custom colors</p></li>
-<li class="listitem"><p role="presentation">Your availability displayed during the appointment duration: Booked, Tentative, Absent or Free</p></li>
+<li class="listitem"><p role="presentation">Your availability displayed during the appointment duration: Reserved, Free</p></li>
 <li class="listitem"><p role="presentation">Your appointment confirmation status: Accepted, Tentative, Declined</p></li>
-<li class="listitem"><p role="presentation">Visibility of the appointment's subject and description: Private or visible for other users</p></li>
+<li class="listitem"><p role="presentation">Visibility of the appointment in shared calendars for users who are no participants: Standard, Private, Secret</p></li>
+<li class="listitem"><p role="presentation">If there is enough space, icons for the following appointments are displayed in the Day, Workweek and Week calendar view: serial appointment, appointment with participants, private appointment, secret appointment, tentative appointment</p></li>
 </ul>
 <p>The display is distinguished by the colors, icons and different shadings.</p>
 </div>
-<p id="ox.appsuite.user.concept.calendar.view.appointments.classiccolors"></p>
-<h4 class="title">Display for the color schemes Classic colors or Dark colors</h4>
-<p>Depending on the selected scheme, the appointments are displayed in the following colors:</p>
-<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Tentative: yellow</p></li>
-<li class="listitem"><p role="presentation">Free: green</p></li>
-<li class="listitem"><p role="presentation">Booked: blue</p></li>
-<li class="listitem"><p role="presentation">Absent: red</p></li>
-</ul>
-<p>Depending on the appointment confirmation status, the appointments are displayed as follows:</p>
-<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Accepted appointments are displayed in the color of the availability</p></li>
-<li class="listitem"><p role="presentation">Tentatively accepted appointments are marked with the text addition <span class="guilabel"><strong>Tentative</strong></span>.</p></li>
-<li class="listitem">
-<p role="presentation">Declined appointments are displayed in light gray with crossed subject.</p>
-<p role="presentation"><span class="phrase"><strong>Tip:</strong></span> In the calendar settings, you can define whether declined appointments are displayed.</p>
-</li>
-</ul>
-<p>Private appointments are displayed in gray and are marked with the <span class="guibutton"><strong>Private</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.view.appointments.classiccolors.private"><img src="../../images/appsuite_user_icon_private.png"></span> .</p>
 <p id="ox.appsuite.user.concept.calendar.view.appointments.customcolors"></p>
-<h4 class="title">Display for the color scheme Custom color</h4>
-<p>Depending on the selected scheme, the appointments are displayed in the following colors and patterns:</p>
+<h4 class="title">Display of appointments that are visible to all</h4>
+<p>Depending on the displayed availability, public appointments are displayed in the following colors and patterns:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Tentative: Selected color with small diagonal stripes</p></li>
 <li class="listitem"><p role="presentation">Free: Selected color with broad diagonal stripes</p></li>
 <li class="listitem"><p role="presentation">Booked: Selected color</p></li>
-<li class="listitem">
-<p role="presentation">Absent: Selected color </p>
-<p role="presentation"><span class="phrase"><strong>Tip:</strong></span> You can use a color of your choice for <span class="guilabel"><strong>Absent</strong></span></p>
-</li>
 </ul>
-<p>If you do not select a color, the default color light blue is used. Depending on the appointment confirmation status, the appointments are displayed as follows:</p>
+<p>If you do not select a color, the color of the calendar is used. Depending on the appointment confirmation status, public appointments are displayed as follows:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Accepted appointments are displayed in the color and pattern of the availability</p></li>
-<li class="listitem"><p role="presentation">Tentatively accepted appointments are displayed in light gray.</p></li>
+<li class="listitem"><p role="presentation">Tentatively accepted appointments are displayed with question marks.</p></li>
 <li class="listitem">
 <p role="presentation">Declined appointments are displayed in light gray with crossed subject.</p>
 <p role="presentation"><span class="phrase"><strong>Tip:</strong></span> In the calendar settings, you can define whether declined appointments are displayed.</p>
 </li>
 </ul>
-<p>Private appointments are displayed in gray and are marked with the <span class="guibutton"><strong>Private</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.view.appointments.customcolors.private"><img src="../../images/appsuite_user_icon_private.png"></span> .</p>
+<p>
+        </p>
+<p id="ox.appsuite.user.concept.calendar.view.appointments.private"></p>
+<h4 class="title">Private or secret appointments display</h4>
+<p>Private and secret appointments are displayed as follows:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Private appointments are displayed in gray and are marked with the <span class="guibutton"><strong>Private</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.view.appointments.classiccolors.private"><img src="../../images/appsuite_user_icon_private.png"></span> .</p>
+<p role="presentation">Users that are no participants can only view the appointment date in shared calendars.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Secret appointments are displayed in gray and are marked with the <span class="guibutton"><strong>Private</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.view.appointments.classiccolors.secret"><img src="../../images/appsuite_user_icon_private.png"></span> .</p>
+<p role="presentation">Users that are no participants can not view the appointment in shared calendars. Secret appointments are not considered for the conflict handling. Secret appointments are not displayed in the scheduling view.</p>
+</li>
+</ul>
+<p>
+        </p>
 <p class="title">Also see</p>
 <ul class="itemizedlist" id="ox.appsuite.user.concept.calendar.view.appointments.color.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.view.calendar.html">Displaying appointments in a calendar view</a></p></li></ul>
 <p id="ox.appsuite.user.concept.calendar.view.appointments.color.parent">Parent topic: <a class="xref" href="ox.appsuite.user.sect.calendar.view.html">Viewing Appointments</a></p>

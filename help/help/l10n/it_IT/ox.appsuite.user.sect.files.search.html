@@ -1,13 +1,13 @@
 <html lang="it">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Ricercare file</title>
+<title>9.7. Cercare i file</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Manuale utente">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Capitolo 9. File">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.5.10. Lavorare con le versioni">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. Accedere ai file con WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.6.11. Lavorare con le versioni">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.8. Accedere ai file con WebDAV">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,13 +31,15 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">File</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.files.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.6. Ricercare file</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.7. Cercare i file</h2></div></div></div>
+<a class="indexterm" name="id-1.10.13.2"></a><a class="indexterm" name="id-1.10.13.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p id="ox.appsuite.user.concept.files.search">Per cercare i file, è possibile utilizzare i seguenti criteri di ricerca:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">termini di ricerca per nomi dei file, descrizioni dei file</p></li>
+<li class="listitem"><p role="presentation">cartelle in cui sarà eseguita la ricerca</p></li>
 <li class="listitem"><p role="presentation">tipo di file: tutto, audio, documenti, immagini, altro, video</p></li>
 <li class="listitem"><p role="presentation">dimensione del file</p></li>
+<li class="listitem"><p role="presentation">periodo di tempo dell'ultima modifica, relativo alla data attuale: ultima settima, ultimo mese, ultimo anno</p></li>
 <li class="listitem"><p role="presentation">tipo di cartella: tutto, privata, pubblica, condivisa</p></li>
 </ul>
 <p>
@@ -46,15 +48,7 @@
 <div class="task" id="ox.appsuite.user.task.files.search">
 <p class="title">Come cercare i file:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">Fare clic sull'icona <span class="guibutton"><strong>Inizia ricerca</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> o nel campo di inserimento della barra di ricerca. Il pulsante della cartella indica le cartelle nelle quali sarà eseguita la ricerca. Il menu a tendina <span class="guibutton"><strong>Opzioni</strong></span> offre funzioni per limitare la ricerca.</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.files.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_click.png" alt="Il campo di inserimento"></div></div></div>
-</li>
-<li class="step"><p role="presentation">Per selezionare una cartella per la ricerca, fare clic sul pulsante della cartella.<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Se si seleziona <span class="guibutton"><strong>Tutte le cartelle</strong></span>, saranno analizzate tutte le cartelle private, pubbliche e condivise e le sottocartelle.</p></li>
-<li class="listitem"><p role="presentation">Se si seleziona una cartella specifica o la cartella, sarà analizzata solo questa cartella, ma non le sottocartelle.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Fare clic sul campo di inserimento <span class="guibutton"><strong>Cerca</strong></span> nella barra dei menu. Saranno visualizzate icone aggiuntive.</p></li>
 <li class="step">
 <p role="presentation">Digitare un termine di ricerca nel campo di inserimento. Si aprirà il menu di ricerca.</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.files.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_searchmenue.png" alt="Il menu di ricerca"></div></div></div>
@@ -68,15 +62,22 @@
           </p>
 <p role="presentation">I risultati di ricerca sono visualizzati nell'elenco mostrato nell'area di visualizzazione.</p>
 </li>
-<li class="step"><p role="presentation">Sono disponibili le seguenti opzioni per raffinare il risultato della ricerca:<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Per raffinare il risultato della ricerca, digitare ulteriori termini di ricerca: per rimuovere un termine di ricerca, fare clic sull'icona <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> accanto al termine di ricerca. </p></li>
-<li class="listitem"><p role="presentation">Per cercare in un'altra cartella, fare clic sul pulsante della cartella. Seleziona una cartella.</p></li>
-<li class="listitem"><p role="presentation">Per limitare la ricerca alle cartelle private, pubbliche o condivise, fare clic su <span class="guibutton"><strong>Opzioni</strong></span>. Selezionare un tipo di cartella.</p></li>
-<li class="listitem"><p role="presentation">Per limitare la ricerca a file specifici, fare clic su <span class="guibutton"><strong>Opzioni</strong></span>. Selezionare un tipo.</p></li>
-<li class="listitem"><p role="presentation">Per limitare la ricerca ai file con una dimensione specifica, fare clic su <span class="guibutton"><strong>Opzioni</strong></span>. Selezionare la dimensione di un file.</p></li>
+<li class="step"><p role="presentation">Per selezionare una cartella per la ricerca, fare clic sull'icona <span class="guibutton"><strong>Opzioni</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>nel campo di inserimento. La cartella sulla quale si esegue la ricerca è visualizzata nel menu a tendina <span class="guibutton"><strong>Cartella</strong></span>. Per selezionare un'altra cartella, aprire il menu a tendina.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Se si seleziona <span class="guibutton"><strong>Tutte le cartelle</strong></span>, saranno analizzate tutte le cartelle private, pubbliche e condivise e le sottocartelle.</p>
+<p role="presentation">Per limitare la ricerca alle cartelle private, pubbliche o condivise, fare clic su <span class="guibutton"><strong>Opzioni</strong></span>. Selezionare un tipo.</p>
+</li>
+<li class="listitem"><p role="presentation">Se si seleziona una cartella specifica o la cartella, sarà analizzata solo questa cartella, ma non le sottocartelle.</p></li>
 </ul>
           </p></li>
-<li class="step"><p role="presentation">Per terminare la ricerca, fare clic sull'icona <span class="guibutton"><strong>Annulla ricerca</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
+<li class="step"><p role="presentation">Sono disponibili le seguenti opzioni per limitare la ricerca a file specifici:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Per cercare file specifici, fare clic sull'icona <span class="guibutton"><strong>Opzioni</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.type"><img src="../../images/appsuite_user_icon_dropdown.png"></span> nel campo di inserimento. Aprire il menu a tendina <span class="guibutton"><strong>Tipo di file</strong></span>. Selezionare un tipo.</p></li>
+<li class="listitem"><p role="presentation">Per limitare la ricerca ai file con una dimensione specifica, fare clic su <span class="guibutton"><strong>Opzioni</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.size"><img src="../../images/appsuite_user_icon_dropdown.png"></span>nel campo di inserimento. Aprire il menu a tendina <span class="guibutton"><strong>Dimensione file</strong></span>. Selezionare una dimensione.</p></li>
+<li class="listitem"><p role="presentation">Per cercare i file che sono stati modificati all'interno di uno specifico periodo di tempo, fare clic sull'icona <span class="guibutton"><strong>Opzioni</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.date"><img src="../../images/appsuite_user_icon_dropdown.png"></span> nel campo di inserimento. Aprire il menu a tendina <span class="guibutton"><strong>Data</strong></span>. Selezionare un valore.</p></li>
+</ul>
+          </p></li>
+<li class="step"><p role="presentation">Per raffinare il risultato della ricerca, digitare ulteriori termini di ricerca. Per rimuovere un termine di ricerca, fare clic sull'icona <span class="guibutton"><strong>Rimuovi</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> accanto al termine di ricerca.</p></li>
+<li class="step"><p role="presentation">Per terminare la ricerca, fare clic sull'icona <span class="guibutton"><strong>Chiudi</strong></span><span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.files.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.concept.files.search.parent">Argomento principale: <a class="xref" href="ox.appsuite.user.chap.files.html"><i><span class="phrase">File</span></i></a></p>

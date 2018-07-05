@@ -4,7 +4,7 @@ icon: fa-cog
 description: Server settings (property files), config cascade and how they affect the ui
 ---
 
-There a plenty of available *[serverside-configuration possibilities](https://documentation.open-xchange.com/components/middleware/config/7.8.4/#mode=all)* that partly affects ui in different ways.
+There a plenty of available *[serverside-configuration possibilities](https://documentation.open-xchange.com/latest/middleware/configuration/properties.html)* that partly affects ui in different ways.
 
 # General Config
 

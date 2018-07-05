@@ -16,7 +16,7 @@
 module.exports = function (grunt) {
 
     var momentLanguages = [];
-    grunt.file.expand({ cwd: 'bower_components/moment/locale/' }, '*.js').forEach(function (file) {
+    grunt.file.expand({ cwd: 'node_modules/moment/locale/' }, '*.js').forEach(function (file) {
         momentLanguages.push(file.split('.').shift());
     });
 

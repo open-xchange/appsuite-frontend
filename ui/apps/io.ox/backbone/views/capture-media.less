@@ -1,0 +1,68 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+.capture-media.modal.flex {
+
+    .io-ox-busy {
+        z-index: 1;
+    }
+
+    .modal-body {
+        min-height: 500px;
+        .smartphone & {
+            min-height: initial;
+        }
+    }
+
+    .modal-body > * {
+        margin-bottom: 8px;
+    }
+
+    .stream-container {
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        //min-width: 100%;
+        min-height: 466px;
+        .smartphone & {
+            min-height: initial;
+        }
+
+        background-color: @light-silver;
+        border: solid 1px @light-silver;
+        margin-bottom: 0;
+        &.io-ox-busy:before {
+            color: @dark-silver;
+        }
+    }
+
+    .switchcamera {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        font-size: 24px;
+    }
+
+    .hint {
+        text-align: center;
+    }
+
+    &.blank {
+        .modal-body { .flex-center(); };
+        .stream-container, .devices { display: none; }
+    }
+    &:not(.blank) {
+        .hint { display: none; }
+    }
+
+}

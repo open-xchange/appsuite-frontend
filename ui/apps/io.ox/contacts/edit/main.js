@@ -15,6 +15,7 @@ define('io.ox/contacts/edit/main', [
     'io.ox/contacts/edit/view-form',
     'io.ox/contacts/model',
     'gettext!io.ox/contacts',
+    'io.ox/core/api/user',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/core/extPatterns/dnd',
@@ -24,7 +25,7 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/a11y',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil, a11y, settings) {
+], function (view, model, gt, userApi, ext, util, dnd, capabilities, notifications, coreUtil, a11y, settings) {
 
     'use strict';
 
@@ -39,9 +40,10 @@ define('io.ox/contacts/edit/main', [
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
-            title: 'Edit Contact',
+            title: gt('Edit Contact'),
             userContent: true,
-            closable: true
+            closable: true,
+            floating: !_.device('smartphone')
         });
 
         app.setLauncher(function () {
@@ -49,8 +51,10 @@ define('io.ox/contacts/edit/main', [
             var def = $.Deferred();
             var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
-                title: 'Edit Contact',
-                chromeless: true
+                chromeless: true,
+                floating: !_.device('smartphone'),
+                closable: true,
+                title: gt('Edit Contact')
             });
 
             app.setWindow(win);
@@ -69,17 +73,23 @@ define('io.ox/contacts/edit/main', [
                     var considerSaved = false;
 
                     function cont(contact) {
-
                         // fix "display_name only" contacts, e.g. in collected addresses folder
                         var data = contact.toJSON();
                         if (($.trim(data.first_name) + $.trim(data.yomiFirstName) === '') &&
                             ($.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
                             contact.set('last_name', coreUtil.unescapeDisplayName(contact.get('display_name')), { silent: true });
                         }
-                        app.setTitle(getTitle(contact));
-                        win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
+
+                        if (app.userMode) {
+                            app.setTitle(gt('My contact data'));
+                        } else {
+                            app.setTitle(getTitle(contact));
+                            win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
+                        }
+
                         app.contact = contact;
-                        editView = new view.ContactEditView({ model: contact, app: app });
+                        var editViewtoUse = app.userMode ? view.protectedMethods.createContactEdit('io.ox/core/user') : view.ContactEditView;
+                        editView = new editViewtoUse({ model: contact, app: app });
                         container.append(
                             editView.render().$el
                         );
@@ -100,6 +110,7 @@ define('io.ox/contacts/edit/main', [
                             var invalid = false, field;
                             if (error && error.model) {
                                 _(error.model.attributeValidity).each(function (valid, id) {
+
                                     if (!valid && !invalid) {
                                         field = container.find('[data-field="' + id + '"]');
                                         invalid = true;
@@ -110,7 +121,18 @@ define('io.ox/contacts/edit/main', [
                             win.idle();
 
                             if (invalid) {
-                                notifications.yell('error', gt('Some fields contain invalid data'));
+                                if (error && _.isArray(error.error)) {
+                                    // specific errors
+                                    var allErrors = '';
+                                    _(error.error).each(function (err) {
+                                        // concat issues
+                                        allErrors += err + '\n';
+                                    });
+                                    if (allErrors) notifications.yell('error', allErrors);
+                                } else {
+                                    // unspecific case
+                                    notifications.yell('error', gt('Some fields contain invalid data'));
+                                }
                                 // set error marker and scroll
                                 field = field.addClass('has-error').get(0);
                                 if (field) field.scrollIntoView();
@@ -127,7 +149,7 @@ define('io.ox/contacts/edit/main', [
                         function fnToggleSave(isDirty) {
                             var node = win.nodes.footer.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
-                            if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
+                            node.prop('disabled', !isDirty);
                         }
 
                         if (!data.id) {
@@ -157,12 +179,11 @@ define('io.ox/contacts/edit/main', [
                             }
                             considerSaved = true;
                             win.idle();
-                            if (app.dropZone) app.dropZone.remove();
                             app.quit();
                         });
 
                         if (settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
-
+                            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'
                             }, editView);
@@ -199,7 +220,10 @@ define('io.ox/contacts/edit/main', [
 
                     // create model & view
                     if (data.id) {
-                        model.factory.realm('edit').retain().get({
+                        app.userMode = data.id === data.user_id;
+                        var factory = app.userMode ? model.protectedMethods.buildFactory('io.ox/core/user/model', userApi) : model.factory;
+
+                        factory.realm('edit').retain().get({
                             id: data.id,
                             folder: data.folder_id
                         })
@@ -235,8 +259,9 @@ define('io.ox/contacts/edit/main', [
 
             if (data) {
                 // hash support
-                app.setState(data.id ? { folder: data.folder_id, id: data.id }
-                                     : { folder: data.folder_id });
+                app.setState(data.id
+                    ? { folder: data.folder_id, id: data.id }
+                    : { folder: data.folder_id });
                 cont(data);
             } else {
                 cont({ folder_id: app.getState().folder, id: app.getState().id });
@@ -250,6 +275,11 @@ define('io.ox/contacts/edit/main', [
 
             if (getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    } else if (_.device('smartphone')) {
+                        app.getWindow().resume();
+                    }
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
@@ -276,12 +306,15 @@ define('io.ox/contacts/edit/main', [
 
         app.failSave = function () {
             if (this.contact) {
-                var title = this.contact.get('display_name');
-                return {
-                    description: gt('Contact') + (title ? ': ' + title : ''),
-                    module: 'io.ox/contacts/edit',
-                    point: this.contact.attributes
-                };
+                var title = this.contact.get('display_name'),
+                    savePoint = {
+                        description: gt('Contact') + (title ? ': ' + title : ''),
+                        module: 'io.ox/contacts/edit',
+                        point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited'),
+                        passPointOnGetApp: true
+                    };
+
+                return savePoint;
             }
             return false;
         };
@@ -299,7 +332,7 @@ define('io.ox/contacts/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.contacts.gui.create.html';
+            return this.userMode ? 'ox.appsuite.user.sect.firststeps.personaldata.html' : 'ox.appsuite.user.sect.contacts.gui.create.html';
         };
 
         ext.point('io.ox/contacts/edit/main/model').extend({

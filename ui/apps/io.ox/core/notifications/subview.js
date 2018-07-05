@@ -30,7 +30,8 @@ define('io.ox/core/notifications/subview', [
                 itemNode = $('<ul class="items list-unstyled">'),
                 extensionPoints = model.get('extensionPoints'),
                 desktopNotificationFor = model.get('showNotificationFor'),
-                specific = model.get('specificDesktopNotification');
+                specific = model.get('specificDesktopNotification'),
+                self = this;
 
             //make sure it's only displayed once
             model.set('showNotificationFor', null);
@@ -64,13 +65,12 @@ define('io.ox/core/notifications/subview', [
                     node.append(
                         $('<div class="notification-item-actions">').append(
                             $('<button type="button" class="btn btn-link clear-single-button fa fa-times" data-action="clear-single">')
-                                .attr({
-                                    'aria-label': gt('Hide this notification')
-                                }).on('click', function () {
+                                .attr('aria-label', gt('Hide this notification'))
+                                .on('click', function () {
                                     view.hide(requestedModel);
                                 })
-                            )
-                        );
+                        )
+                    );
                 }
 
                 node.appendTo(itemNode);
@@ -90,15 +90,21 @@ define('io.ox/core/notifications/subview', [
                             drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
+                    }, function () {
+                        // if list fails (insufficient permissions etc) we try again with get requests, this way we can at least show working alarms
+                        model.set('useListRequest', false);
+                        viewNode.empty();
+                        ext.point('io.ox/core/notifications/default/main').invoke('draw', self, baton);
                     });
                 } else {
                     var defs = [];
                     for (i = 0; i < max && items[i]; i++) {
-                        //mail needs unseen attribute, shouldn't bother other apis
-                        //extend with empty object to not overwrite the model
-                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i])));
+                        // mail needs unseen attribute, shouldn't bother other apis
+                        // extend with empty object to not overwrite the model
+                        // if get fails, hide the reminder
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i]), _(view.hide).bind(view, items[i])));
                     }
-                    $.when.apply($, defs).then(function () {
+                    $.when.apply($, defs).always(function () {
                         itemNode.idle();
                     });
                 }
@@ -190,19 +196,22 @@ define('io.ox/core/notifications/subview', [
                 if (apiEvents.add) {
                     api.on(apiEvents.add, function () {
                         //strip off the event parameter
-                        self.addNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.addNotifications.apply(self, items);
                     });
                 }
                 if (apiEvents.remove) {
                     api.on(apiEvents.remove, function () {
                         //strip off the event parameter
-                        self.removeNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.removeNotifications.apply(self, items);
                     });
                 }
                 if (apiEvents.reset) {
                     api.on(apiEvents.reset, function () {
                         //strip off the event parameter
-                        self.resetNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.resetNotifications.apply(self, items);
                     });
                 }
             }
@@ -273,7 +282,7 @@ define('io.ox/core/notifications/subview', [
                 this.collection.remove(obj);
 
                 //use a timer to unhide the model
-                if (time) {
+                if (_.isNumber(time)) {
                     setTimeout(function () {
                         self.hiddenCollection.remove(obj);
                         //don't add twice
@@ -338,10 +347,6 @@ define('io.ox/core/notifications/subview', [
                 newItems = _.difference(newIds, oldIds),
                 model = this.model;
             if (newItems.length) {
-                if (!_.device('smartphone') && model.get('autoOpen')) {
-                    this.trigger('autoopen', { numberOfNewItems: newItems.length, subviewId: model.get('id'), itemIds: newItems });
-                }
-
                 if (model.get('desktopNotificationSupport')) {
                     var generic = model.get('genericDesktopNotification'),
                         specific = model.get('specificDesktopNotification');
@@ -357,9 +362,13 @@ define('io.ox/core/notifications/subview', [
                         model.set('showNotificationFor', newItems[0]);
                     }
                 }
+                return true;
             }
         },
         addNotifications: function (items, silent) {
+
+            if (!items) return;
+
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
@@ -368,15 +377,38 @@ define('io.ox/core/notifications/subview', [
                 return;
             }
             items = this.checkHidden(items);
-            this.checkNew(items);
+            var newModels = this.checkNew(items, this.collection);
             this.collection.add(items, { silent: silent });
+            if (newModels && !_.device('smartphone') && this.model.get('autoOpen')) {
+                this.trigger('autoopen');
+            }
         },
         removeNotifications: function (items, silent) {
+
+            if (!items) return;
+
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
             //stop here if nothing changes, to prevent event triggering and redrawing
             if (items.length === 0 || (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
+                return;
+            }
+
+            // smartRemove removes the item without redrawing (manual remove of the nodes)
+            if (this.model.get('smartRemove')) {
+                this.collection.remove(items, { silent: true });
+                var self = this;
+
+                _(items).each(function (item) {
+                    if (item.get) item = item.attributes;
+                    self.$el.find('[data-cid="' + _.cid(item) + '"]').remove();
+                });
+
+                if (this.collection.size() === 0) {
+                    this.render(this.$el.parent());
+                }
+                this.trigger('responsive-remove');
                 return;
             }
             this.collection.remove(items, { silent: silent });
@@ -390,8 +422,11 @@ define('io.ox/core/notifications/subview', [
                 return;
             }
             items = this.checkHidden(items);
-            this.checkNew(items);
+            var newModels = this.checkNew(items);
             this.collection.reset(items, { silent: silent });
+            if (newModels && !_.device('smartphone') && this.model.get('autoOpen')) {
+                this.trigger('autoopen');
+            }
         },
         onClick: function (e) {
             if ((!(this.model.get('detailview'))) ||
@@ -403,19 +438,20 @@ define('io.ox/core/notifications/subview', [
             var cid = e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
                 fullModel = this.model.get('fullModel'),
-                sidepopupNode = notifications.nodes.sidepopup,
-                status = notifications.getStatus();
+                sidepopupNode = notifications.sidepopupNode,
+                getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
+                self = this;
+
             // toggle?
-            if (status === 'sidepopup' && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
-                //sidepopup.close();
+            if (notifications.model.get('sidepopup') && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
                 notifications.closeSidepopup();
             } else {
                 notifications.closeSidepopup();
                 var data;
                 if (api && !fullModel) {
-                    data = api.get(_.extend({}, _.cid(cid), { unseen: true }));
+                    data = api.get(_.extend({}, getCid(cid), { unseen: true }));
                 } else {
-                    data = this.collection.get(_.cid(cid)).attributes;
+                    data = this.collection.get(getCid(cid)).attributes;
                 }
                 if (!data) {
                     return;
@@ -423,10 +459,10 @@ define('io.ox/core/notifications/subview', [
                 if (_.isString(this.model.get('detailview'))) {
                     require([this.model.get('detailview')], function (detailview) {
                         //extend with empty object to not overwrite the model
-                        notifications.openSidepopup(cid, detailview, data);
+                        notifications.openSidepopup(cid, detailview, data, self.model.get('detailviewOptions'));
                     });
                 } else {
-                    notifications.openSidepopup(cid, this.model.get('detailview'), data);
+                    notifications.openSidepopup(cid, this.model.get('detailview'), data, this.model.get('detailviewOptions'));
                 }
             }
         }

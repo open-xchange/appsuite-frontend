@@ -110,8 +110,9 @@ define('io.ox/mail/toolbar', [
             label: gt('Set category'),
             ref: 'io.ox/mail/actions/category',
             customize: function (baton) {
+                if (!mailSettings.get('categories/enabled')) return;
                 require(['io.ox/mail/categories/picker'], function (picker) {
-                    picker(this, { props: baton.app.props, data: baton.data });
+                    picker.attach(this, { props: baton.app.props, data: baton.data });
                 }.bind(this));
             }
         },
@@ -129,10 +130,18 @@ define('io.ox/mail/toolbar', [
         'flag': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-star-o',
+            icon: 'fa fa-star',
             //#. Verb: (to) flag messages
             label: gt.pgettext('verb', 'Flag'),
             ref: 'io.ox/mail/actions/flag'
+        },
+        'unflag': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-star-o',
+            //#. Verb: (to) unflag messages
+            label: gt.pgettext('verb', 'Unflag'),
+            ref: 'io.ox/mail/actions/unflag'
         },
         'archive': {
             prio: 'hi',
@@ -248,6 +257,78 @@ define('io.ox/mail/toolbar', [
         ref: 'io.ox/mail/classic-toolbar/links'
     }));
 
+    // view dropdown
+    ext.point('io.ox/mail/classic-toolbar').extend({
+        id: 'view-dropdown',
+        index: 10000,
+        draw: function (baton) {
+
+            if (_.device('smartphone')) return;
+
+            //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
+            .header(gt('Layout'))
+            .option('layout', 'vertical', gt('Vertical'), { radio: true });
+            // offer compact view only on desktop
+            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
+            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
+            .option('layout', 'list', gt('List'), { radio: true })
+            .divider();
+
+            // feature: tabbed inbox
+            if (capabilities.has('mail_categories') && !_.device('smartphone')) {
+                dropdown
+                .header(gt('Inbox'))
+                .option('categories', true, gt('Use categories'))
+                //#. term is followed by a space and three dots (' …')
+                //#. the dots refer to the term 'Categories' right above this dropdown entry
+                //#. so user reads it as 'Configure Categories'
+                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
+                .divider();
+            }
+
+            dropdown
+            .header(gt('Options'))
+            .option('folderview', true, gt('Folder view'));
+            if (settings.get('selectionMode') !== 'alternative') {
+                dropdown.option('checkboxes', true, gt('Checkboxes'));
+            }
+            if (baton.app.supportsTextPreview()) {
+                dropdown.option('textPreview', true, gt('Text preview'));
+            }
+            dropdown
+            .option('contactPictures', true, gt('Contact pictures'))
+            .option('exactDates', true, gt('Exact dates'))
+            .option('alwaysShowSize', true, gt('Message size'))
+            .divider();
+
+            if (capabilities.has('mailfilter_v2')) {
+                dropdown.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
+            }
+
+            if (settings.get('folder/mailattachments', {}).all) {
+                dropdown.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
+            }
+
+            dropdown
+            .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
+            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
+
+            this.append(
+                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
+            );
+
+            toggleTextPreview();
+            baton.app.on('folder:change', toggleTextPreview);
+
+            function toggleTextPreview() {
+                dropdown.$('[data-name="textPreview"]').toggle(baton.app.supportsTextPreviewConfiguration());
+            }
+
+            updateContactPicture.call(dropdown);
+        }
+    });
+
     // local mediator
     function updateContactPicture() {
         // disposed?
@@ -279,58 +360,10 @@ define('io.ox/mail/toolbar', [
         });
     }
 
-    // view dropdown
-    ext.point('io.ox/mail/classic-toolbar').extend({
-        id: 'view-dropdown',
-        index: 10000,
-        draw: function (baton) {
-
-            if (_.device('smartphone')) return;
-
-            //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'), { radio: true });
-            // offer compact view only on desktop
-            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
-            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
-            .option('layout', 'list', gt('List'), { radio: true })
-            .divider();
-
-            // feature: tabbed inbox
-            if (capabilities.has('mail_categories') && !_.device('smartphone')) {
-                dropdown
-                .header(gt('Inbox'))
-                .option('categories', true, gt('Use categories'))
-                 //#. term is followed by a space and three dots (' …')
-                 //#. the dots refer to the term 'Categories' right above this dropdown entry
-                 //#. so user reads it as 'Configure Categories'
-                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
-                .divider();
-            }
-
-            dropdown
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'))
-            .option('checkboxes', true, gt('Checkboxes'))
-            .option('contactPictures', true, gt('Contact pictures'))
-            .option('exactDates', true, gt('Exact dates'))
-            .option('alwaysShowSize', true, gt('Message size'))
-            .divider()
-            .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
-            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
-
-            if (settings.get('folder/mailattachments', {}).all) {
-                dropdown.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
-            }
-
-            this.append(
-                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
-            );
-
-            updateContactPicture.call(dropdown);
-        }
-    });
+    function onOpenVacationNotice(e) {
+        e.preventDefault();
+        require(['io.ox/mail/mailfilter/vacationnotice/view'], function (view) { view.open(); });
+    }
 
     // classic toolbar
     ext.point('io.ox/mail/mediator').extend({

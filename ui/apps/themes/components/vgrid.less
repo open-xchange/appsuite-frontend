@@ -14,13 +14,12 @@
 
 /* vGrid */
 .vgrid {
-    outline: none;
+    outline: 0;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: -1px;
-
     .user-select(none);
 
     .vgrid-scrollpane {
@@ -30,25 +29,13 @@
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
 
-        &.has-focus > div {
-            outline: none;
-
-            & .vgrid-cell { outline: none; }
-
-            & .vgrid-cell.selected {
-
+        &.has-focus {
+            .vgrid-cell.selected {
                 background-color: @selected-background;
-
-                * { color: #fff !important; }
-            }
-        }
-
-        > div:focus {
-
-            & .vgrid-cell.selected {
-                background-color: @selected-background;
-
-                * { color: #fff !important; }
+                * { color: @grid-selected-color; }
+                i { color: @grid-selected-checkbox-color; }
+                &:hover { background-color: lighten(@selected-background, 2%) }
+                &:focus { background-color: @selected-focussed-background; }
             }
         }
     }
@@ -66,7 +53,7 @@
         right: -3px;
     }
 
-    @toolbar-height: 45px;
+    @toolbar-height: 40px;
 
     .vgrid-toolbar {
         position: absolute;
@@ -114,8 +101,6 @@
             .folder-count {
                 font-size: 13px;
                 color: #767676;
-
-                html.high-contrast & { color: @hc-gray; }
             }
         }
 
@@ -180,6 +165,7 @@
 }
 
 .vgrid-cell {
+    outline: 0;
     overflow: hidden;
     position: absolute;
     right: 0;
@@ -188,34 +174,30 @@
     padding: 10px 18px;
     color: @text-color;
     background-color: @background; /* resolves hw accel anti-aliasing */
-
-    * { .ellipsis(); }
-
-    &.selectable,
-    &.hover {
-        cursor: pointer;
-
-        &:hover { background-color: mix(@text-color, @background, 1000%/255); }
+    * {
+        .ellipsis();
+        -webkit-font-smoothing: antialiased;
     }
+
+    &.selectable { cursor: pointer; }
 
     &.vgrid-label {
         font-weight: bold;
         text-align: center;
         line-height: 1em;
-        padding: 5px 13px 4px 13px;
+        padding: 5px 16px 4px 16px;
         background-color: mix(@text-color, @background, 100%/15);
         border-bottom: 1px solid mix(@text-color, @background, 300%/15);
         cursor: pointer;
         .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
 
         &.left { text-align: left; }
-
     }
 
+    &:hover { background: #f7f7f7; }
     &.selected {
-        background-color: #ddd;
-
-        * { -webkit-font-smoothing: antialiased; }
+        &:hover { background-color: lighten(@selected-unfocussed-background, 2%); }
+        background-color: @selected-unfocussed-background;
     }
 
     &.relative { position: relative; }
@@ -247,14 +229,14 @@
         padding: 12px 0 0 16px;
 
         i.fa:before {
-            color: #767676;
+            color: @grid-checkbox-color;
             font-size: 18px;
             content: "\f096"; // fa-check-square-o
         }
     }
 
     &.selected .vgrid-cell-checkbox i.fa:before {
-        color: #767676;
+        color: @grid-checkbox-color;
         content: "\f14a"; // fa-check-square-o
     }
 

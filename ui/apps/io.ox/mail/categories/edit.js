@@ -24,6 +24,34 @@ define('io.ox/mail/categories/edit', [
 
     function isEnabled() { return settings.get('categories/enabled'); }
 
+    function onCategoryChange() {
+        $(this).parent().find('.name.sr-only').text($(this).val().trim());
+    }
+
+    function drawCategoryItems(model) {
+        var guid = _.uniqueId('category-item');
+        return $('<div class="category-item">').attr('data-id', model.get('id')).append(
+            $('<div class="checkbox custom">').append(
+                $('<label>').attr('for', guid).append(
+                    $('<input type="checkbox" class="sr-only">').attr('id', guid)
+                        .prop({ 'checked': model.isEnabled(), 'disabled': !model.can('disable') })
+                        .toggleClass('disabled', !model.can('disable')),
+                    $('<i class="toggle" aria-hidden="true">'),
+                    $('<span class="name">').text(model.get('name') || '').toggleClass('sr-only', model.can('rename'))
+                )
+            ),
+            model.can('rename')
+                ? [
+                    $('<label class="sr-only">').attr('for', 'i-' + guid).text(gt('Category name')),
+                    $('<input type="text" class="form-control name">').attr({ id: 'i-' + guid, placeholder: gt('Name') })
+                        .val(model.get('name'))
+                        .on('keyup change', onCategoryChange)]
+                : $(),
+            // optional description block
+            model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
+        );
+    }
+
     return {
 
         open: function () {
@@ -32,33 +60,27 @@ define('io.ox/mail/categories/edit', [
                 async: true,
                 collection: api.collection,
                 enter: 'save',
-                focus: '.form-inline',
                 maximize: false,
                 point: 'io.ox/mail/categories/edit',
                 title: gt('Configure categories')
             })
             .inject({
                 onSave: function () {
-                    this.collection
-                        .update(
-                            // set category
-                            this.$('.category-item')
-                                .map(function () {
-                                    var $node = $(this),
-                                        $name = $node.find('.name');
-                                    return {
-                                        id: $node.attr('data-id'),
-                                        name: $name.is('input') ? $name.val().trim() : $name.text(),
-                                        enabled: $node.find('[type="checkbox"]').prop('checked')
-                                    };
-                                })
-                                .toArray()
-                        )
-                        .done(function () {
-                            // ensure enabled categories
-                            settings.set('categories/enabled', true);
-                        })
-                        .always(this.close.bind(this));
+                    this.collection.update(
+                        // set category
+                        this.$('.category-item').map(function () {
+                            return {
+                                id: $(this).attr('data-id'),
+                                name: $(this).find('.name').text(),
+                                enabled: $(this).find('[type="checkbox"]').prop('checked')
+                            };
+                        }).toArray()
+                    )
+                    .done(function () {
+                        // ensure enabled categories
+                        settings.set('categories/enabled', true);
+                    })
+                    .always(this.close.bind(this));
 
                 },
                 onToggle: function () {
@@ -79,49 +101,8 @@ define('io.ox/mail/categories/edit', [
             })
             .extend({
                 'default': function () {
-                    this.$body.addClass('mail-categories-dialog');
-                },
-                'form-inline-container': function () {
-                    this.$body.append(
-                        this.$container = $('<form class="form-inline-container">')
-                    );
-                },
-                'form-inline': function () {
-                    var guid = _.uniqueId('form-control-label-');
-                    this.$container.append(
-                        this.collection.map(function (model) {
-                            return $('<form class="form-inline">').append(
-                                // inputs
-                                $('<div class="form-group category-item center-childs">')
-                                    .attr('data-id', model.get('id'))
-                                    .append(
-                                        // read only
-                                        model.can('rename') ? $() : [
-                                            $('<label class="center-childs">').attr('for', guid).append(
-                                                $('<input type="checkbox" class="status">')
-                                                    .prop('checked', model.isEnabled())
-                                                    .attr({ 'id': guid, 'disabled': !model.can('disable') })
-                                                    .toggleClass('disabled', !model.can('disable')),
-                                                $('<div class="name form-control">').text(model.get('name'))
-                                            )
-                                        ]
-                                    )
-                                    .append(
-                                        // changable
-                                        !model.can('rename') ? $() : [
-                                            $('<input type="checkbox" class="status">')
-                                                .prop('checked', model.isEnabled())
-                                                .attr('disabled', !model.can('disable'))
-                                                .toggleClass('disabled', !model.can('disable')),
-                                            $('<input type="text" class="form-control name">')
-                                                .attr({ placeholder: gt('Name') })
-                                                .val(model.get('name'))
-                                        ]
-                                    ),
-                                // optional description block
-                                model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
-                            );
-                        })
+                    this.$body.addClass('mail-categories-dialog').append(
+                        this.collection.map(drawCategoryItems)
                     );
                 },
                 'locked-hint': function () {

@@ -21,8 +21,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
     'io.ox/core/capabilities',
-    'io.ox/core/settings/util'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util) {
+    'io.ox/core/settings/util',
+    'settings!io.ox/core'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util, coreSettings) {
 
     'use strict';
 
@@ -30,8 +31,8 @@ define.async('io.ox/mail/accounts/view-form', [
         model,
 
         optionsServerType = [
-            { label: gt.noI18n('IMAP'), value: 'imap' },
-            { label: gt.noI18n('POP3'), value: 'pop3' }
+            { label: 'IMAP', value: 'imap' },
+            { label: 'POP3', value: 'pop3' }
         ],
 
         serverTypePorts = {
@@ -40,13 +41,13 @@ define.async('io.ox/mail/accounts/view-form', [
         },
 
         optionsRefreshRatePop = [
-            { label: gt.noI18n('3'), value: '3' },
-            { label: gt.noI18n('5'), value: '5' },
-            { label: gt.noI18n('10'), value: '10' },
-            { label: gt.noI18n('15'), value: '15' },
-            { label: gt.noI18n('30'), value: '30' },
-            { label: gt.noI18n('60'), value: '60' },
-            { label: gt.noI18n('360'), value: '360' }
+            { label: '3', value: '3' },
+            { label: '5', value: '5' },
+            { label: '10', value: '10' },
+            { label: '15', value: '15' },
+            { label: '30', value: '30' },
+            { label: '60', value: '60' },
+            { label: '360', value: '360' }
         ],
 
         optionsAuthType = [
@@ -113,7 +114,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
                 //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
                 if (!capabilities.has('pop3') && !this.model.get('id')) {
-                    optionsServerType = [{ label: gt.noI18n('IMAP'), value: 'imap' }];
+                    optionsServerType = [{ label: 'IMAP', value: 'imap' }];
                 }
 
                 //check if login and mailaddress are synced
@@ -170,11 +171,6 @@ define.async('io.ox/mail/accounts/view-form', [
                     _.each(portDefaults, function (value, key) {
                         model.set(key, value);
                     });
-                }
-
-                // setting mail_protocol default if dsc account
-                if (settings.get('dsc/enabled', false) && self.model.get('id') === undefined) {
-                    model.set('mail_protocol', 'imap');
                 }
 
                 function syncLogin(model, value) {
@@ -234,9 +230,6 @@ define.async('io.ox/mail/accounts/view-form', [
 
                 // disable E-mail address if any oauth is used
                 if (isMail_oauth || isTransport_oauth) self.$el.find('#primary_address').prop('disabled', true);
-
-                // disable account name if dsc
-                if (accountAPI.getDSCRootFolderForId(model.get('id'))) self.$el.find('#name').prop('disabled', true);
 
                 if (isMail_oauth) self.$el.find('.data_incoming').hide();
                 if (isTransport_oauth) self.$el.find('.data_outgoing').hide();
@@ -325,11 +318,11 @@ define.async('io.ox/mail/accounts/view-form', [
                                 notifications.yell('error', gt('Username must not be empty.'));
                             } else if (data.code === 'SVL-0002') {
                                 notifications.yell('error',
-                                   //#. %1$s the missing request parameter
-                                   //#, c-format
-                                   gt('Please enter the following data: %1$s', _.noI18n(data.error_params[0])));
+                                    //#. %1$s the missing request parameter
+                                    //#, c-format
+                                    gt('Please enter the following data: %1$s', data.error_params[0]));
                             } else {
-                                notifications.yell('error', _.noI18n(data.error));
+                                notifications.yell('error', data.error);
                             }
                             self.dialog.idle();
                         }
@@ -355,15 +348,21 @@ define.async('io.ox/mail/accounts/view-form', [
                                             .css('margin', '10px')
                                             .text(warn.error);
                                 });
+                                var dialog = new dialogs.ModalDialog();
                                 self.dialog.pause();
 
-                                new dialogs.ModalDialog()
+                                // new dialogs.ModalDialog()
+                                dialog
                                     .header(
                                         $('<h4>').text(gt('Warnings'))
                                     )
                                     .build(function () {
                                         this.getContentNode().append(messages);
-                                    })
+                                    });
+
+                                if (/SSL/.test(error.code) && coreSettings.get('security/manageCertificates')) dialog.addSuccessButton('inspect', gt('Inspect certificate'));
+
+                                dialog
                                     .addPrimaryButton('proceed', gt('Ignore Warnings'))
                                     .addButton('cancel', gt('Cancel'))
                                     .show()
@@ -371,6 +370,10 @@ define.async('io.ox/mail/accounts/view-form', [
                                         self.dialog.resume();
                                         if (action === 'proceed') {
                                             saveAccount();
+                                        } else if (action === 'inspect') {
+                                            require(['io.ox/settings/security/certificates/settings/utils']).done(function (certUtils) {
+                                                certUtils.openExaminDialog(error, self.dialog);
+                                            });
                                         } else {
                                             self.dialog.idle();
                                         }
@@ -397,12 +400,11 @@ define.async('io.ox/mail/accounts/view-form', [
                     self = this;
 
                 picker({
+                    async: true,
                     context: 'account',
-                    done: function (target) {
+                    done: function (target, dialog) {
                         self.model.set(property, target, { validate: true });
-                    },
-                    close: function () {
-                        self.dialog.resume();
+                        dialog.close();
                     },
                     folder: id,
                     module: 'mail',
@@ -629,8 +631,8 @@ define.async('io.ox/mail/accounts/view-form', [
                                 new InputView({ model: model, id: 'primary_address', mandatory: true }).render().$el
                             )
                         ),
-                        // unified inbox, disabled for DSC as well
-                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') || settings.get('dsc/enabled') ?
+
+                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ?
                         $() :
                         group(
                             checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
@@ -667,23 +669,12 @@ define.async('io.ox/mail/accounts/view-form', [
                 changeTransportAuth.call(view);
             }
 
-            // don't show folder settings if this is a new account or we are in a DSC environment
-            if (model.get('id') !== undefined && (model.get('id') === 0 || !settings.get('dsc/enabled'))) {
+            // don't show folder settings if this is a new account
+            if (model.get('id') !== undefined) {
                 this.append(serverSettingsFolder);
             }
         }
     });
-
-    // debugging
-    /*ext.point(POINT + '/pane').extend({
-        index: 200,
-        id: 'dsc',
-        draw: function (baton) {
-            if (!settings.get('dsc/enabled')) return;
-            console.log('draw', this, baton);
-
-        }
-    });*/
 
     return accountAPI.getDefaultDisplayName().then(function (name) {
         defaultDisplayName = name;

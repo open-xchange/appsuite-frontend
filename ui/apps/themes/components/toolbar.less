@@ -33,8 +33,6 @@
         i {
             color: @toolbar-button-color;
 
-            html.high-contrast & { color: @black; }
-
             &.accent-color {
                 background-color: @toolbar-button-accent;
                 color: @white;
@@ -49,13 +47,9 @@
         &:hover {
             text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
 
-            html.high-contrast & { background-color: @black; }
-
             i {
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
-
-                html.high-contrast & { color: @white; }
 
                 &.accent-color {
                     background-color: darken(@toolbar-button-accent, 10%);
@@ -63,8 +57,8 @@
                 }
             }
         }
-
-        @media (min-width: 481px), (min-device-width: 481px) {
+        // brackets needed or addition will not perform correctly. => Rule is ignored
+        @media (min-width: (@smartphone-breakpoint + 1)), (min-device-width: (@smartphone-breakpoint + 1)) {
             &:focus {
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
@@ -86,10 +80,6 @@
             color: #eee;
             cursor: default;
 
-            html.high-contrast & {
-                color: @hc-gray; // HC
-            }
-
             &.accent-color {
                 background-color: #fff;
                 border-color: #fff;
@@ -104,18 +94,28 @@
 
 .mobile-navbar {
     text-align: center;
-    font-size: 15px;
+    font-size: 16px;
 
     .navbar-action {
         position: absolute;
-        top: 10px;
+        top: 14px;
         max-width: 24%;
+
         .ellipsis();
 
         &.left {
-            left: 3px;
-
+            left: 8px;
             .fa-chevron-left { margin-right: 3px; }
+        }
+
+        a, a:hover {
+            color: @link-color;
+            transition: opacity 180ms;
+            opacity: 1;
+            text-decoration: none;
+            .tapped & {
+                opacity: .5;
+            }
         }
 
         &.right { right: 16px; }
@@ -123,7 +123,7 @@
 
     .navbar-title {
         .ellipsis();
-        margin: 10px 24%;
+        margin: 14px 24%;
         font-weight: 500;
     }
 }
@@ -132,7 +132,7 @@
     position: fixed;
     bottom: 0;
     background-color: #fff;
-    height: @toolbar-height;
+    height: @mobile-toolbar-height;
     z-index: 10;
     margin: 0;
     border-top: 1px solid #ccc;
@@ -140,10 +140,10 @@
 
     .list-unstyled > li, .io-ox-action-link.mobile-toolbar-action {
         display: inline-block;
-        font-size: 20px;
-        line-height: @toolbar-height;
+        font-size: 22px;
+        line-height: @mobile-toolbar-height;
         width: 19.9%;
-        height: @toolbar-height;
+        height: @mobile-toolbar-height;
         text-align: center;
         margin: 0;
         vertical-align: middle;
@@ -161,12 +161,17 @@
     }
 }
 
+.smartphone .classic-toolbar-visible .window-content, .abs.below-toolbar { top: @mobile-toolbar-height; }
 .classic-toolbar-visible .window-content, .abs.below-toolbar { top: @toolbar-height; }
 
 .bottom-toolbar.bottom-toolbar-visible .window-content { bottom: @toolbar-height; }
 .chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
-.chromeless-window .window-body.mobile-toolbar-visible { bottom: @toolbar-height; }
+.chromeless-window .window-body.mobile-toolbar-visible { bottom: @mobile-toolbar-height; }
 .chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: 64px; }
+
+.smartphone .mobile-navbar {
+    height: @mobile-toolbar-height;
+}
 
 .classic-toolbar, .inline-toolbar, .mobile-navbar {
 
@@ -180,10 +185,6 @@
     padding: 0;
     .user-select(none);
 
-    html.high-contrast & {
-        border-color: @hc-border-color;
-    }
-
     & > li {
 
         list-style: none;
@@ -192,7 +193,7 @@
         float: left; // to support pull-right while keeping items in-order (a11y)
         height: 100%;
 
-        & > a {
+        & > a, & > button {
 
             height: 100%;
             display: inline-block;
@@ -203,7 +204,7 @@
             outline: 0;
 
             i { text-decoration: none; }
-            &:focus { background-color: #eee; }
+            &:focus { background-color: #eee; text-decoration: none; }
 
             &.disabled {
                 color: @toolbar-link-disabled-color;
@@ -213,6 +214,10 @@
                 // fix for phablets
                 padding: @toolbar-vertical-padding @default-padding - 2;
             }
+        }
+        & > button {
+            font-size: 13px;
+            text-align:left;
         }
     }
 
@@ -334,20 +339,16 @@
     }
 }
 
-.secondary-toolbar { font-size: 13px; }
-
-// landscape fullscreen on iPhone
-// iOS will go fullscreen and show an overaly with own buttons
-// we need to position our buttons around them
-@media (height: 320px) and (orientation:landscape) {
-    .window-head .toolbar-button { float: right; }
+.secondary-toolbar {
+    font-size: 13px;
+    overflow: hidden;
 }
 
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     .toolbar-button { margin: 0; }
 

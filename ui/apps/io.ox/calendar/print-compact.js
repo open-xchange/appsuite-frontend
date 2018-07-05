@@ -26,44 +26,14 @@ define('io.ox/calendar/print-compact', [
         return strings.dateStr + ' ' + strings.timeStr;
     }
 
-    // used to get participants in groups
-    function load(data) {
-        var list = data.participants,
-            groups = [],
-            participants = [];
-
-        // split user groups and participants, remove resources
-        _(list).each(function (item) {
-            if (item.type === 1 || item.type === 5) {
-                participants.push(item.id);
-            }
-            if (item.type === 2) {
-                groups.push({ id: item.id });
-            }
-        });
-
-        return groupAPI.getList(groups)
-            .pipe(function (groupList) {
-                var usersInGroups = _.chain(groupList).pluck('members').flatten().uniq().value(),
-                    all = _.chain().union(usersInGroups, participants).uniq().value();
-                // if the current user is the only participant we don't show the number
-                if (all.length === 1 && all[0] === ox.user_id) {
-                    all = [];
-                }
-                return all.length;
-            });
-    }
-
     function process(data) {
-        return load(data).pipe(function (participants) {
-            return {
-                original: data,
-                subject: data.title,
-                location: $.trim(data.location),
-                date: getDate(data),
-                participants: participants
-            };
-        });
+        return {
+            original: data,
+            subject: data.get('summary'),
+            location: $.trim(data.get('location')),
+            date: getDate(data.attributes),
+            participants: _(data.get('attendees')).where({ cuType: 'INDIVIDUAL' }).concat(_(data.attendees).where({ cuType: undefined })).length
+        };
     }
 
     return {
@@ -81,7 +51,7 @@ define('io.ox/calendar/print-compact', [
                     participants: gt('Participants')
                 },
 
-                title: selection.length === 1 ? selection[0].title : undefined,
+                title: selection.length === 1 ? selection[0].get('summary') : undefined,
 
                 process: process,
                 selection: selection,

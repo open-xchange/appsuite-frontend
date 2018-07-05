@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
- /**
+/**
  ext.point("io.ox/keychain/api").extend({
     id: ...,
     displayName: ...,
@@ -47,16 +47,13 @@
 
 define('io.ox/keychain/api', [
     'io.ox/core/extensions',
-    'io.ox/core/event',
     'io.ox/core/http',
     'gettext!io.ox/keychain'
-], function (ext, Events, http, gt) {
+], function (ext, http, gt) {
 
     'use strict';
 
-    var api = {}, data;
-
-    Events.extend(api);
+    var api = _.extend({}, Backbone.Events), data;
 
     function byIndex(a, b) {
         return a.index - b.index;
@@ -177,6 +174,17 @@ define('io.ox/keychain/api', [
             params: {
                 action: 'migrate',
                 password: oldPassword
+            }
+        });
+    };
+
+    // clean up used to simulate an "ignore" in case
+    // password was changed, see Bug #56412
+    api.cleanUp = function () {
+        return http.GET({
+            module: 'recovery/secret',
+            params: {
+                action: 'clean_up'
             }
         });
     };

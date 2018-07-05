@@ -31,8 +31,7 @@ define('io.ox/settings/apps/settings/pane', [
         id: 'external/apps',
         title: gt('External Apps'),
         ref: 'io.ox/settings/apps',
-        index: 100,
-        advancedMode: true
+        index: 100
     });
 
     var OAuthView = Backbone.View.extend({

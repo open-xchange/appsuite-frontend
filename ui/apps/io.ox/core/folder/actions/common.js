@@ -25,6 +25,24 @@ define('io.ox/core/folder/actions/common', [
 
     return {
 
+        selectOnly: function (e) {
+            var app = ox.ui.apps.get('io.ox/calendar');
+            if (app.folders.isSingleSelection()) app.folders.reset();
+            else app.folders.setOnly(e.data.folder.id);
+        },
+
+        refreshCalendar: function (e) {
+            notifications.yell('warning', gt('Refreshing calendar might take some time...'));
+            require(['io.ox/calendar/api'], function (calendarApi) {
+                calendarApi.refreshCalendar(e.data.folder.id).then(function () {
+                    notifications.yell('success', gt('Successfully refreshed calendar'));
+                }, notifications.yell).always(function () {
+                    folderAPI.pool.unfetch(e.data.folder.id);
+                    folderAPI.refresh();
+                });
+            });
+        },
+
         markFolderSeen: function (e) {
             mailAPI.allSeen(e.data.folder);
         },

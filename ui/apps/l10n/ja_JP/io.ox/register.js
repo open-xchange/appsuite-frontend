@@ -87,7 +87,7 @@ define('l10n/ja_JP/io.ox/register', [
 
         // Edit view
         // change order only if language is set to japanese
-        // this file is also loaded for other languages if the setting alwaysShowFurigana is set to true
+        // this file is also loaded for other languages if the setting io.ox/contacts/features/furigana is set to true
         if (ox.language === 'ja_JP') {
             ext.point(ref + '/edit/personal')
                 .replace({ id: 'last_name', index: 200 })
@@ -265,7 +265,7 @@ define('l10n/ja_JP/io.ox/register', [
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });
 
     // add japanese labels and thumbindex only if language is set to japanese
-    // this file is also loaded for other languages if the setting alwaysShowFurigana is set to true
+    // this file is also loaded for other languages if the setting io.ox/contacts/features/furigana is set to true
     if (ox.language !== 'ja_JP') return;
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
@@ -309,13 +309,13 @@ define('l10n/ja_JP/io.ox/register', [
                 hasLatin = _(keys).any(function (char) { return char === 'A～Z'; }),
                 // add thumb index for other characters
                 otherThumb = new baton.Thumb({
-                    label: _.noI18n('その他'),
+                    label: 'その他',
                     text: 'その他',
                     enabled: function () { return hasOther; }
                 }),
                 // add thumb index for ABC
                 abcThumb = new baton.Thumb({
-                    label: _.noI18n('A～Z'),
+                    label: 'A～Z',
                     text: 'A～Z',
                     enabled: function () { return hasLatin; }
                 });

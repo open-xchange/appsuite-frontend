@@ -27,7 +27,7 @@ define('io.ox/mail/actions/copyMove', [
 
         multiple: function (o) {
             require(['io.ox/core/folder/actions/move'], function (move) {
-                var folderId, createRule;
+                var folderId, createRule, runFlag;
                 function generateRule() {
                     require(['io.ox/mail/mailfilter/settings/filter'
                     ], function (filter) {
@@ -42,16 +42,17 @@ define('io.ox/mail/actions/copyMove', [
                                 preparedTest = { id: 'anyof', tests: [] };
                                 _.each(senderList, function (item) {
                                     if (opt.filterDefaults.tests.address) {
-                                        preparedTest.tests.push({ comparison: 'all', headers: ['From'], id: 'address', values: [item] });
+                                        preparedTest.tests.push({ comparison: 'is', headers: ['from'], id: 'address', addresspart: 'all', values: [item] });
                                     } else {
                                         preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
                                     }
                                 });
                             } else {
                                 preparedTest = opt.filterDefaults.tests.address ? {
-                                    comparison: 'all',
-                                    headers: ['From'],
+                                    comparison: 'is',
+                                    headers: ['from'],
                                     id: 'address',
+                                    addresspart: 'all',
                                     values: [senderList[0]]
                                 } : {
                                     comparison: 'contains',
@@ -77,14 +78,13 @@ define('io.ox/mail/actions/copyMove', [
                 .uniq()
                 .value();
 
-                var infoText = gt.format(
+                var infoText =
                     //#. informs user about the consequences when creating a rule for selected mails
-                    //#. %1$s represents a email address
                     gt.ngettext(
-                        'All future messages from %1$s will be moved to the selected folder.',
+                        'All future messages from the sender will be moved to the selected folder.',
                         'All future messages from the senders of the selected mails will be moved to the selected folder.',
                         senderList.length
-                    ), _.escape(senderList[0]));
+                    );
 
                 move.item({
                     all: o.list,
@@ -102,10 +102,10 @@ define('io.ox/mail/actions/copyMove', [
 
                         dialog.on('ok', function () { folderId = tree.selection.get(); });
 
-                        if (!capabilities.has('mailfilter_v2') || o.type !== 'move') return;
+                        if (_.device('small') || !capabilities.has('mailfilter_v2') || o.type !== 'move') return;
 
-                        dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
-                        var checkbox = dialog.getFooter().find('[data-action="create-rule"]'),
+                        dialog.addCheckbox({ label: gt('Create filter rule'), action: 'create-rule', className: '', status: false });
+                        var checkbox = dialog.$footer.find('[name="create-rule"]'),
                             infoblock = $('<div class="help-block">');
                         // modify footer and place infoblock
                         checkbox.closest('.checkbox').addClass('checkbox-block text-left')
@@ -125,8 +125,9 @@ define('io.ox/mail/actions/copyMove', [
                         });
                     },
                     pickerClose: function () {
-                        if (o.type === 'move' && createRule && folderId) {
+                        if (!runFlag && o.type === 'move' && createRule && folderId) {
                             generateRule();
+                            runFlag = true;
                         }
                     }
                 });

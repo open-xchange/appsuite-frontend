@@ -122,8 +122,8 @@ define('io.ox/participants/views', [
         setRows: function (mail, extra) {
             if (!this.options.hideMail) {
                 extra = extra || TYPE_LABELS[this.model.get('type')] || '';
-                this.nodes.$mail.text(gt.noI18n(mail));
-                this.nodes.$extra.text(gt.noI18n(extra));
+                this.nodes.$mail.text(mail);
+                this.nodes.$extra.text(extra);
                 if (mail && extra) {
                     this.$el.addClass('three-rows');
                 }
@@ -147,8 +147,7 @@ define('io.ox/participants/views', [
         },
 
         setTypeStyle: function () {
-
-            var mail = this.model.getTarget(),
+            var mail = this.model.getTarget({ strict: this.options.strict }),
                 extra = null;
 
             if (mail && this.options.field && this.model.getFieldString()) {
@@ -260,7 +259,8 @@ define('io.ox/participants/views', [
                 closeButton: true,
                 hideMail: this.options.hideMail,
                 asHtml: this.options.asHtml,
-                isMail: this.options.isMail
+                isMail: this.options.isMail,
+                strict: this.options.strict
             });
 
             view.on('render', function () {

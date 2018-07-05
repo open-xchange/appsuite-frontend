@@ -13,23 +13,27 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+@widget-color-default: @widget-color-black;
+
 @widget-color-black: #333;
 @widget-color-red: #e30000;
 @widget-color-orange: #ce3c00;
 @widget-color-lightgreen: darken(@green-light, 26%);
 @widget-color-green: darken(@green, 2%);
 @widget-color-lightblue: darken(@blue-light, 36%);
-@widget-color-blue: darken(@blue, 8%);
+@widget-color-blue: #38579e;
 @widget-color-purple: @purple;
 @widget-color-pink: darken(@pink, 10%);
 @widget-color-gray: darken(@gray-light, 10%);
 
 .io-ox-portal {
+
     @spacing: 16px;
     @vert-spacing: 16px;
-    @line-height: 18px;
-    @lines: 18;
+    @line-height: 16px;
+    @lines: 20;
     @widget-padding: 16px;
+    background-color: #eee;
 
     padding: 16px (16px - @spacing) 16px 16px;
     overflow: auto;
@@ -45,20 +49,26 @@
     }
 
     h1.greeting {
-        font-family: @light-font-family;
-        font-weight: 300;
+        font-weight: bold;
         font-size: 24px;
-        line-height: 28px;
+        line-height: 32px;
         color: #333;
         margin: 0;
     }
 
     .greeting-phrase { margin: 0 16px 0 0; }
 
-    .signin {
+    .signin,
+    .signin > label {
         font-size: 13px;
+        line-height: 16px;
+        font-weight: normal;
         color: #555;
         white-space: nowrap;
+    }
+
+    .add-widget .fa-plus {
+        margin-right: 8px;
     }
 
     .widgets {
@@ -70,17 +80,17 @@
     }
 
     .widget {
-        outline: none;
+        outline: 0;
         position: relative;
         display: inline-block;
         width: 300px;
-        height: @line-height * @lines + 16px + @vert-spacing;
-        border-width: 0 @spacing @vert-spacing 0;
-        border-style: solid;
-        border-color: transparent;
+        height: @line-height * @lines + 24px + @vert-spacing;
+        border: 0;
+        margin: 0 16px 16px 0;
         float: left;
         background-clip: padding-box;
         overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
         .transition(background-color 0.3s linear);
         .user-select(none);
 
@@ -88,15 +98,15 @@
         .decoration {
             height: 100%;
             .user-select(none);
-            border: solid transparent 1px;
-            background-color: #f5f5f5;
+            border: 0;
+            background-color: white;
 
             .title {
                 .ellipsis();
                 width: 90%;
                 display: inline-block;
                 font-size: 16px;
-                font-weight: normal;
+                font-weight: bold;
             }
         }
 
@@ -129,30 +139,16 @@
         }
 
         .mixin-widget-color(@widget-color) {
-
             h2, .accent { color: @widget-color; }
-
             .action { background-color: @widget-color; }
-
             &.inverse {
                 background-color: @widget-color;
                 h2, .accent { color: @white; }
                 .decoration { background-color: @widget-color; }
             }
-
-            html.high-contrast & {
-
-                h2, .accent { color: @black; }
-
-                .action {
-                    color: white;
-                    background-color: @black;
-                }
-
-                &.inverse .decoration { background-color: @black; }
-            }
         }
 
+        &.widget-color-default    { .mixin-widget-color(@widget-color-default);    }
         &.widget-color-black      { .mixin-widget-color(@widget-color-black);      }
         &.widget-color-red        { .mixin-widget-color(@widget-color-red);        }
         &.widget-color-orange     { .mixin-widget-color(@widget-color-orange);     }
@@ -177,12 +173,6 @@
                 &:hover, &:focus {
                     background-color: rgba(0, 0, 0, 0.40);
                 }
-            }
-
-            html.high-contrast & {
-                color: @black;
-
-                .decoration { background-color: #f5f5f5; }
             }
         }
 
@@ -209,33 +199,23 @@
 
             position: absolute;
             right: @widget-padding;
-            bottom: @widget-padding;
+            bottom: @widget-padding + 4px;
             left: @widget-padding;
-            top: @line-height * 4;
+            top: @line-height * 4 + 4px;
             line-height: @line-height;
             overflow: hidden;
             z-index: 10;
             .transition(opacity 0.3s linear);
 
             &.pointer { cursor: pointer; }
-
             &.centered { text-align: center; }
-
             .bold { font-weight: bold; }
-
-            li .bold { line-height: 1em; }
-
             .italic { font-style: italic; }
-
-            .gray {
-                color: rgba(0, 0, 0, 0.6);
-
-                html.high-contrast & { color: @black; }
-            }
+            .gray { color: rgba(0, 0, 0, 0.6); }
 
             &:focus {
                 background-color: rgba(0, 0, 0, 0.10);
-                outline: none;
+                outline: 0;
             }
         }
 
@@ -264,24 +244,25 @@
         &:focus {
             text-decoration: underline;
             color: @white;
-            outline: none;
+            outline: 0;
         }
     }
 
     h2 {
         position: relative;
         font-size: 20px;
-        padding: @widget-padding;
+        padding: 11px @widget-padding 13px @widget-padding;
         margin: 0;
         font-weight: bold;
-        line-height: 26px;
-        height: 57px;
+        line-height: 32px;
+        height: 56px;
         z-index: 2;
         cursor: move;
         .transition(color 0.3s linear);
         white-space: nowrap;
 
         .disable-widget {
+            font-size: 14px;
             float: right;
             width: 52px;
             padding: 14px 0;
@@ -350,15 +331,6 @@
             background-color: rgba(0, 0, 0, 0.60);
             border-top: 1px solid rgba(0, 0, 0, 0.70);
 
-            html.high-contrast & {
-                background-color: @black;
-                color: @white;
-
-               .fa-times { color: @white; }
-
-                &:hover .fa-times { color: @hc-gray; }
-            }
-
             .disable-widget {
 
                 .fa-times { color: rgba(255, 255, 255, 0.50); }
@@ -386,7 +358,7 @@
 
         &:focus {
             background-color: rgba(0, 0, 0, 0.10);
-            outline: none;
+            outline: 0;
         }
     }
 
@@ -512,6 +484,7 @@
         @spacing: 14px;
         padding: 0;
         overflow: visible;
+        background-color: white;
 
         h1.greeting {
             margin: 14px 0 0 10px;
@@ -520,7 +493,8 @@
 
             .greeting-phrase { display: block; }
 
-            .signin {
+            .signin,
+            .signin > label {
                 font-size: 12px;
                 color: #aaa;
                 white-space: normal;
@@ -539,14 +513,13 @@
             float: none;
             margin: 0;
             padding: @spacing;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ddd;
+            box-shadow: none;
 
             .content { position: static; }
 
             .decoration {
                 height: auto;
-                background-color: transparent;
-                border: 0 none;
             }
 
             &.requires-setup { background-color: transparent; }
@@ -595,10 +568,10 @@
 }
 
 .io-ox-portal .widget {
-    @media all and (min-width: 560px ) { width: 100% / 2; }
-    @media all and (min-width: 840px ) { width: 100% / 3 - 0.05%; /* -0.50% = floating fix */ }
-    @media all and (min-width: 1120px) { width: 100% / 4 - 0.05%; /* -0.50% = floating fix */ }
-    @media all and (min-width: 1400px) { width: 100% / 5 - 0.05%; /* -0.50% = floating fix */ }
+    @media all and (min-width: 540px ) { width: ~"calc(50.0% - 16px)"; }
+    @media all and (min-width: 960px ) { width: ~"calc(33.3% - 16px)"; }
+    @media all and (min-width: 1280px) { width: ~"calc(25.0% - 16px)"; }
+    @media all and (min-width: 1750px) { width: ~"calc(20.0% - 16px)"; }
 }
 
 /* Settings */
@@ -612,7 +585,7 @@
         margin-bottom: 16px;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
         .controls {
             padding-left: 0;
@@ -647,7 +620,7 @@
             .ellipsis();
         }
 
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
             a[data-action="toggle"] {
                 color: #000000;
@@ -667,6 +640,7 @@
         }
     }
 
+    .widget-color-default    { color: @widget-color-default; }
     .widget-color-black      { color: @widget-color-black; }
     .widget-color-red        { color: @widget-color-red; }
     .widget-color-orange     { color: @widget-color-orange; }
@@ -696,9 +670,10 @@
                 width: 28px;
                 height: 22px;
                 border: 1px solid rgba(0, 0, 0, 0.2);
-                .border-radius(@border-radius-base);
+                border-radius: @border-radius-base;
             }
 
+            .color-default { background-color: @widget-color-default; }
             .color-black { background-color: @widget-color-black; }
             .color-red { background-color: @widget-color-red; }
             .color-orange { background-color: @widget-color-orange; }
@@ -761,7 +736,6 @@
         position: relative;
         display: inline-block;
         vertical-align: middle;
-
         .btn { margin-left:5px; }
     }
 }

@@ -145,7 +145,7 @@ define('io.ox/tasks/edit/view', [
 
             // Disable Save Button if title is empty on startup
             if (!self.$el.find('input.title-field').val()) {
-                app.getWindow().nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
+                app.getWindow().nodes.outer.find('.btn[data-action="save"]').prop('disabled', true);
             }
             //look if there is data beside the default values to trigger autoexpand (only in edit mode)
             if (self.model.get('id')) {
@@ -154,11 +154,11 @@ define('io.ox/tasks/edit/view', [
 
             // Toggle disabled state of save button
             function fnToggleSave(value) {
-                var node = app.getWindow().nodes.header.find('.btn[data-action="save"]');
+                var node = app.getWindow().nodes.outer.find('.btn[data-action="save"]');
                 node.prop('disabled', value === '');
             }
             //delegate some events
-            self.$el.delegate('.title-field', 'keyup blur', function () {
+            self.$el.on('keyup blur', '.title-field', function () {
                 var value = $(this).val(),
                     title = value;
                 if (!title) {

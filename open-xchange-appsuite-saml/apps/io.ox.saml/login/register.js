@@ -1,5 +1,8 @@
 define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handlers'], function (ext) {
     if (ox.serverConfig.samlLogin) {
+        //we want to handle session based errors ourselves
+        ox.off('login:fail:session-based');
+
         ext.point('io.ox/core/boot/login').extend({
             id: 'saml',
             after: 'autologin',

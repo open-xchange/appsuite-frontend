@@ -22,9 +22,6 @@ define('io.ox/core/folder/node', [
 
     'use strict';
 
-    // angle caret chevron
-    var ICON = 'caret';
-
     var TreeNodeView = DisposableView.extend({
 
         tagName: 'li',
@@ -106,7 +103,10 @@ define('io.ox/core/folder/node', [
 
         onAdd: function (model) {
             // filter first
-            if (!this.getFilter()(model)) return;
+            if (!this.getFilter()(model)) {
+                this.renderEmpty();
+                return;
+            }
             // add
             var node = this.getTreeNode(model);
             this.$.subfolders.append(node.render().$el);
@@ -116,7 +116,7 @@ define('io.ox/core/folder/node', [
         },
 
         onRemove: function (model) {
-            this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]').remove();
+            this.$.subfolders.children('[data-id="' + $.escape(model.attributes && model.attributes.id ? model.attributes.id : model.id) + '"]').remove();
             // we do not update models if the DOM is empty! (see bug 43754)
             this.renderEmpty();
         },
@@ -228,17 +228,12 @@ define('io.ox/core/folder/node', [
         // respond to new sub-folders
         onChangeSubFolders: function () {
             // has subfolders?
-            var hasSubFolders = this.hasSubFolders(), isOpen = this.isOpen();
+            var hasSubFolders = this.hasSubFolders(), isOpen = this.isOpen(), icon = 'fa-fw';
+            if (hasSubFolders) icon = isOpen ? 'fa-caret-down' : 'fa-caret-right';
             // update arrow
             this.$.arrow
             .toggleClass('invisible', !hasSubFolders)
-            .html(
-                /*eslint-disable no-nested-ternary */
-                hasSubFolders ?
-                    (isOpen ? '<i class="fa fa-' + ICON + '-down" aria-hidden="true">' : '<i class="fa fa-' + ICON + '-right" aria-hidden="true">') :
-                    '<i class="fa fa-fw" aria-hidden="true">'
-                /*eslint-enable no-nested-ternary */
-            );
+            .html($('<i class="fa" aria-hidden="true">').addClass(icon));
             // a11y
             if (hasSubFolders && !this.options.headless) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');
             // toggle subfolder node
@@ -273,9 +268,11 @@ define('io.ox/core/folder/node', [
 
         // get a new TreeNode instance
         getTreeNode: function (model) {
+            var modelId = model.id || model.attributes.id;
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = { folder: model.id, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this };
+                namespace = o.namespace || o.folder.indexOf('virtual/favorites') === 0 ? 'favorite' : '',
+                options = { folder: modelId, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this, namespace: namespace };
             return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
@@ -326,6 +323,7 @@ define('io.ox/core/folder/node', [
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
+                namespace: '',                  // used for unique ids for open/close state of favorites
                 contextmenu_id: this.folder,    // use this id for the context menu
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
@@ -335,10 +333,10 @@ define('io.ox/core/folder/node', [
             }, options);
 
             // also set: folder, parent, tree
-
             this.model = api.pool.getModel(o.model_id);
             this.noSelect = !this.model.can('read');
-            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder) || this.folder === 'cal://0/allPublic';
+
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.realNames = options.tree.realNames;
@@ -349,13 +347,14 @@ define('io.ox/core/folder/node', [
             this.$el.data('view', this);
 
             // inherit "open"
-            if (_(o.tree.open).contains(this.folder)) o.open = true;
+            if (_(o.tree.open).contains((o.namespace ? o.namespace + ':' : '') + this.folder)) o.open = true;
 
             // collection changes
             if (o.subfolders) {
                 this.listenTo(this.collection, {
                     'add':     this.onAdd,
                     'remove':  this.onRemove,
+                    'change:subscribed': this.onReset,
                     'reset':   this.onReset,
                     'sort':    this.onSort
                 });
@@ -380,8 +379,6 @@ define('io.ox/core/folder/node', [
                 offset = 22;
             }
 
-            var dsc = !!this.model.get('isDSC');
-
             // draw scaffold
             this.$el
                 .attr({
@@ -389,12 +386,13 @@ define('io.ox/core/folder/node', [
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
+                    'data-namespace': o.namespace,
                     'aria-label': this.getTitle()
                 })
                 .append(
                     this.$.selectable = $('<div class="folder-node" aria-hidden="true">').css('padding-left', (o.level * this.indentation) + offset).append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
                         $('<div class="folder-label">').append(this.$.label = $('<div role="presentation">').text(this.getTitle())),
                         this.$.counter = $('<div class="folder-counter">'),
                         this.$.buttons = $('<div class="folder-buttons">')
@@ -422,11 +420,6 @@ define('io.ox/core/folder/node', [
 
             if (this.noSelect && o.level > 0) this.$el.addClass('no-select');
             if (this.isVirtual) this.$el.addClass('virtual');
-
-            // add special icon for DSC folders which will be shown in case an error occurs on the account
-            if (dsc) {
-                //this.renderStatusIcon();
-            }
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
             if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app) {
@@ -465,29 +458,34 @@ define('io.ox/core/folder/node', [
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
-        showStatusIcon: function (error) {
+        showStatusIcon: function (message, event, data) {
+
             var self = this;
 
             if (this.$.accountLink) {
-                if (error) this.$.accountLink.attr('title', error);
+                if (message) this.$.accountLink.attr('title', message);
                 return;
             }
 
             this.$.selectable.append(this.$.accountLink = $('<a href="#" class="account-link">')
-                .attr('data-dsc', this.options.model_id)
-                .append('<i class="fa fa-exclamation-triangle">'))
-                .on('click', function (e) {
-                    e.preventDefault();
-                    self.options.tree.trigger('accountlink:dsc', self.options.model_id);
-                });
-            if (error) {
-                this.$.accountLink.attr('title', error);
+                .attr('data-id', this.options.model_id)
+                .append('<i class="fa fa-exclamation-triangle">'));
+
+            this.$.accountLink.on('click', function (e) {
+                e.preventDefault();
+                self.options.tree.trigger(event, data);
+            });
+            if (message) {
+                this.$.accountLink.attr('title', message);
             }
         },
 
         hideStatusIcon: function () {
-            this.$.accountLink.remove();
-            this.$.accountLink = null;
+            if (this.$.accountLink) {
+                this.$.accountLink.remove();
+                this.$.accountLink = null;
+            }
+
         },
 
         renderCounter: function () {
@@ -555,7 +553,8 @@ define('io.ox/core/folder/node', [
             this.$el.attr({
                 'data-id': this.folder,
                 'data-model': this.options.model_id,
-                'data-contextmenu-id': this.options.contextmenu_id
+                'data-contextmenu-id': this.options.contextmenu_id,
+                'data-favorite': this.options.inFavorites
             });
         },
 
@@ -567,6 +566,11 @@ define('io.ox/core/folder/node', [
             if (this.options.empty !== false) return;
             // only show if not empty, i.e. has subfolder
             this.$el.toggleClass('empty', this.isEmpty());
+
+            // show favorites tree node if only files exists in favorites
+            if (this.model.get('id') === 'virtual/favorites/infostore') {
+                this.$el.toggleClass('show-anyway', !!this.collection.length);
+            }
         },
 
         renderIcon: function () {
@@ -590,6 +594,9 @@ define('io.ox/core/folder/node', [
                 switch (this.folder) {
                     case 'virtual/myshares':
                         iconClass = 'visible myshares';
+                        break;
+                    case 'virtual/favorites/infostore':
+                        iconClass = 'visible myfavorites';
                         break;
                     case allAttachmentsFolder:
                         iconClass = 'visible attachments';
@@ -616,8 +623,10 @@ define('io.ox/core/folder/node', [
             this.renderCounter();
             this.renderIcon();
             this.onChangeSubFolders();
-            ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
-            return this;
+            if (this.model) {
+                ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+                return this;
+            }
         },
 
         destroy: function () {

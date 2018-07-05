@@ -46,7 +46,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
 
         tagName: 'div',
 
-        className: 'expertmode favorite-view',
+        className: 'favorite-view',
 
         events: {
             'click button': 'openDialog',
@@ -79,11 +79,9 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
 
         render: function () {
             this.$el.append(
-                $('<div class="form-group">').append(
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-8">').append(
-                            $('<button type="button" class="btn btn-primary">').text(gt('Add timezone'))
-                        )
+                $('<div class="form-group buttons">').append(
+                    $('<button type="button" class="btn btn-primary">').append(
+                        $('<i class="fa fa-plus" aria-hidden="true">'), $.txt(gt('Add timezone'))
                     )
                 ),
                 $('<div class="form-group">').append(
@@ -103,7 +101,9 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                 .addButton('cancel', gt('Cancel'), 'cancel')
                 .build(function () {
                     this.getContentNode().append(
+                        $('<label for="settings-timezone">').text(gt('Time zone')),
                         new TimezonePicker({
+                            id: 'settings-timezone',
                             name: 'timezone',
                             model: model,
                             className: 'form-control'
@@ -134,6 +134,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
             this.model.set('favoriteTimezones', list);
             // make sure, that a timezone which is deleted is not rendered in the week view as timezone label anymore
             this.model.set('renderTimezones', _.intersection(list, this.model.get('renderTimezones', [])));
+            this.model.save();
         }
 
     });

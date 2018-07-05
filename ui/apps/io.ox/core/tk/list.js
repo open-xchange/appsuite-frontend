@@ -13,10 +13,11 @@
 
 define('io.ox/core/tk/list', [
     'io.ox/backbone/disposable',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/tk/list-selection',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extensions'
-], function (DisposableView, Selection, dnd, ext) {
+], function (DisposableView, ContextMenuUtils, Selection, dnd, ext) {
 
     'use strict';
 
@@ -29,7 +30,7 @@ define('io.ox/core/tk/list', [
             39: 'cursor:right',
             40: 'cursor:down'
         },
-    // PULL TO REFRESH constants
+        // PULL TO REFRESH constants
         PTR_START =           5,    // Threshold when pull-to-refresh starts
         PTR_TRIGGER =       150,    // threshold when refresh is done
         PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
@@ -45,12 +46,12 @@ define('io.ox/core/tk/list', [
 
         scaffold: $(
             '<li class="list-item">' +
-            '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"/></div>' +
+            '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
             '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
 
-        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
+        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
 
         // disabled by default via 'hidden class'
         notification: $('<li class="abs notification hidden" role="presentation"></li>'),
@@ -58,7 +59,7 @@ define('io.ox/core/tk/list', [
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
             '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
-            '<i id="ptr-spinner" class="fa fa-refresh"/></div></div>'
+            '<i id="ptr-spinner" class="fa fa-refresh" aria-hidden="true"></i></div></div>'
         ),
 
         onItemFocus: function () {
@@ -80,6 +81,11 @@ define('io.ox/core/tk/list', [
             if (!e.pageX) return;
             // restore focus
             this.restoreFocus();
+        },
+
+        // note: empty function that is overridden in listview.js
+        onContextMenu: function () {
+            return;
         },
 
         restoreFocus: function (greedy) {
@@ -104,12 +110,18 @@ define('io.ox/core/tk/list', [
 
         onItemKeydown: function (e) {
             if (keyEvents[e.which]) this.trigger(keyEvents[e.which], e);
+            ContextMenuUtils.macOSKeyboardHandler(e);
+            if (e.isKeyboardEvent) this.onContextMenu(e);
         },
 
         // use throttle instead of debouce in order to respond during scroll momentum
         onScroll: _.throttle(function () {
-
-            if (this.isBusy || this.complete || !this.loader.collection || !this.$el.is(':visible')) return;
+            if (this.complete) {
+                this.removeBusyIndicator();
+                this.isBusy = false;
+                return;
+            }
+            if (this.isBusy || !this.loader.collection || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
@@ -128,13 +140,6 @@ define('io.ox/core/tk/list', [
 
         }, 20),
 
-        // ensure first selected node is not scrolled out
-        onSelect: function (ids) {
-            var id = ids[0], node = this.selection.getNode(id);
-            if (!node.length) return;
-            node.intoView(this.$el);
-        },
-
         onLoad: function () {
             this.idle();
             // trigger scroll event after initial load
@@ -148,13 +153,14 @@ define('io.ox/core/tk/list', [
 
         // load more data (wraps paginate call)
         processPaginate: function () {
-            if (!this.options.pagination || this.isBusy || this.complete) return;
+            // Bug 54793: this.complete could be undefined
+            if (!this.options.pagination || this.isBusy || !!this.complete) return;
             this.paginate();
         },
 
         // support for custom keys, e.g. needed to identify threads or folders
         getCompositeKey: function (model) {
-            return model.cid;
+            return model.isFolder && model.isFolder() ? 'folder.' + model.get('id') : model.cid;
         },
 
         // called when the view model changes (not collection models)
@@ -166,6 +172,8 @@ define('io.ox/core/tk/list', [
             this.idle();
             this.toggleComplete(false);
             this.getItems().remove();
+            delete this.currentLabel;
+            this.$('.list-item-label').remove();
             if (this.selection) this.selection.reset();
             this.$el.scrollTop(0);
         },
@@ -191,10 +199,11 @@ define('io.ox/core/tk/list', [
         },
 
         onReset: function () {
+            var self = this;
             this.empty();
-            this.$el.append(
-                this.collection.map(this.renderListItem, this)
-            );
+            this.collection.each(function (model) {
+                self.$el.append(self.renderListItem(model, true));
+            });
             this.trigger('reset', this.collection, this.firstReset);
             if (this.firstReset) {
                 this.trigger('first-reset', this.collection);
@@ -204,6 +213,7 @@ define('io.ox/core/tk/list', [
                 this.trigger('first-content', this.collection);
                 this.firstContent = false;
             }
+            this.trigger('listview:reset');
         },
 
         // bundle draws
@@ -211,8 +221,14 @@ define('io.ox/core/tk/list', [
             this.queue.add(model).render();
         },
 
-        onRemove: function (model) {
+        lastElementOfLabel: function (li) {
+            var prev = li.prev(), next = li.next(), label = li.attr('data-label');
+            if (prev.attr('data-label') === label) return false;
+            if (next.attr('data-label') === label) return false;
+            return true;
+        },
 
+        onRemove: function (model) {
             var children = this.getItems(),
                 cid = this.getCompositeKey(model),
                 li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
@@ -226,6 +242,10 @@ define('io.ox/core/tk/list', [
             }
 
             if (this.selection) this.selection.remove(cid, li);
+
+            // remove label if this is the last element of that label
+            if (this.options.labels && this.lastElementOfLabel(li)) li.prev().remove();
+
             li.remove();
 
             this.trigger('remove-mobile');
@@ -291,22 +311,31 @@ define('io.ox/core/tk/list', [
                 return node && parseInt(node.getAttribute('data-index'), 10);
             }
 
-            // fix for bugs #51594 and #51596
-            // [L3] Drive opens wrong files directly after upload - wrong link in UI
-            //
             return function () {
                 // needless cause added models not drawn yet (debounced renderListItems)
                 if (this.queue.list.length) return;
 
-                var items, detached, sorted;
+                var dom, sorted, i, j, length, node, reference, index, done = {};
 
                 // sort all nodes by index
-                items = this.getItems();
-                if (items.length > 1) {
-                    detached = items.detach();
-                    sorted = _.sortBy(detached, getIndex);
+                dom = this.getItems().toArray();
+                sorted = _(dom).sortBy(getIndex);
 
-                    this.$el.append(sorted);
+                // apply sorting (step by step to keep focus)
+                // the arrays "dom" and "sorted" always have the same length
+                for (i = 0, j = 0, length = sorted.length; i < length; i++) {
+                    node = sorted[i];
+                    reference = dom[j];
+                    // mark as processed
+                    done[i] = true;
+                    // same element?
+                    if (node === reference) {
+                        // fast forward "j" if pointing at processed items
+                        do { index = getIndex(dom[++j]); } while (done[index]);
+                    } else if (reference) {
+                        // change position in dom
+                        this.el.insertBefore(node, reference);
+                    }
                 }
             };
         }()),
@@ -461,7 +490,7 @@ define('io.ox/core/tk/list', [
                 selection: true,
                 scrollable: true,
                 swipe: false,
-                scrollto: false
+                labels: false
             }, options);
 
             var events = {}, dndEnabled = false, self = this;
@@ -473,6 +502,7 @@ define('io.ox/core/tk/list', [
                     'focus .list-item': 'onItemFocus',
                     'blur .list-item': 'onItemBlur',
                     'click': 'onKeepFocus',
+                    'contextmenu': 'onContextMenu',
                     'keydown .list-item': 'onItemKeydown'
                 };
 
@@ -514,6 +544,10 @@ define('io.ox/core/tk/list', [
             // enable drag & drop; avoid enabling dnd twice
             if (this.options.draggable && !dndEnabled) {
                 dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            }
+
+            if (this.options.labels) {
+                this.filter = function () { return !$(this).hasClass('list-item-label'); };
             }
 
             this.ref = this.ref || options.ref;
@@ -559,10 +593,6 @@ define('io.ox/core/tk/list', [
             if (this.options.pagination) {
                 // respond to window resize (see bug 37728)
                 $(window).on('resize.list-view', this.onScroll.bind(this));
-            }
-
-            if (this.options.scrollto) {
-                this.on('selection:add', _.debounce(this.onSelect.bind(this), 100));
             }
 
             this.on('dispose', function () {
@@ -752,11 +782,31 @@ define('io.ox/core/tk/list', [
             return li;
         },
 
-        renderListItem: function (model) {
+        getPreviousLabel: function (li) {
+            var elem = li;
+            while (elem.length > 0 && !elem.hasClass('list-item-label')) elem = elem.prev();
+            return elem.text();
+        },
+
+        renderListLabel: function (label) {
+            return $('<li class="list-item list-item-label">')
+                .text(label);
+        },
+
+        renderListItem: function (model, drawlabels) {
             var li = this.createListItem(),
                 baton = this.getBaton(model);
+            // prepend label if necessary
+            if (drawlabels && this.options.labels) {
+                var label = this.getLabel(model);
+                if (this.currentLabel !== label) {
+                    this.$el.append(this.renderListLabel(label));
+                    this.currentLabel = label;
+                }
+            }
             // add cid and full data
             li.attr({ 'data-cid': this.getCompositeKey(model), 'data-index': model.get('index') });
+            if (this.options.labels) li.attr('data-label', this.getLabel(model));
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
@@ -772,17 +822,29 @@ define('io.ox/core/tk/list', [
             this.queue.iterate(function (model) {
 
                 var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
-                    li = this.renderListItem(model);
+                    li = this.renderListItem(model, false), modelLabel, listLabel;
 
                 // insert or append
                 if (index < children.length) {
-                    children.eq(index).before(li);
+                    var childAfter = children.eq(index);
+                    if (this.options.labels) {
+                        modelLabel = this.getLabel(model);
+                        listLabel = this.getPreviousLabel(childAfter);
+                        if (modelLabel !== listLabel) childAfter = childAfter.prev();
+                    }
+                    childAfter.before(li);
                     // scroll position might have changed due to insertion
                     if (li[0].offsetTop <= this.el.scrollTop) {
                         this.el.scrollTop += li.outerHeight(true);
                     }
                 } else {
                     this.$el.append(li);
+                }
+
+                if (this.options.labels) {
+                    listLabel = this.getPreviousLabel(li);
+                    modelLabel = this.getLabel(model);
+                    if (modelLabel !== listLabel) li.before(this.renderListLabel(modelLabel));
                 }
 
                 // forward event

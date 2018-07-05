@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment'], function (common, date, moment) {
+define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment'], function (common, AlarmsView, date, moment) {
 
     'use strict';
 
@@ -44,7 +44,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             });
 
             it('has a model', function () {
-                expect(this.view.model).to.be.defined;
+                expect(this.view.model).to.exist;
             });
 
             it('references itself via data("view")', function () {
@@ -252,12 +252,147 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             });
         });
 
+        describe('AlarmsView', function () {
+            beforeEach(function () {
+                this.model = new Backbone.Model({
+                    summary: 'Pizza Essen',
+                    description: 'Lecker Lecker!',
+                    alarms: [{
+                        action: 'DISPLAY',
+                        description: 'Pizza Essen',
+                        trigger: { duration: '-PT15M', related: 'START' }
+                    }, {
+                        action: 'AUDIO',
+                        trigger: { duration: '-PT30M', related: 'START' }
+                    }, {
+                        action: 'EMAIL',
+                        attendee: 'mailto:miss.test@test.com',
+                        description: 'Lecker Lecker!',
+                        summary: 'Pizza Essen',
+                        trigger: { duration: '-PT2H', related: 'START' }
+                    }]
+                });
+                this.view = new AlarmsView.alarmsView({ model: this.model });
+                this.view.render();
+            });
+
+            afterEach(function () {
+                delete this.model;
+                delete this.view;
+            });
+
+            it('should draw nodes', function () {
+                this.view.$el.find('button').length.should.equal(1);
+                this.view.$el.find('.alarm-list').length.should.equal(1);
+            });
+
+            it('should create nodes from the model', function () {
+                this.view.$el.find('.alarm-list-item').length.should.equal(3);
+            });
+
+            it('should create new alarm when button is clicked', function () {
+                this.view.$el.find('button').trigger('click');
+                this.view.$el.find('.alarm-list-item').length.should.equal(4);
+            });
+
+            it('should remove alarms when button is clicked', function () {
+                this.view.$el.find('.alarm-remove:first').trigger('click');
+                this.view.$el.find('.alarm-list-item').length.should.equal(2);
+            });
+
+            it('should update the model correctly', function () {
+                this.view.$el.find('.alarm-remove:last').trigger('click');
+                // change must be triggered manually when the value is changed using javascript.
+                this.view.$el.find('.alarm-action:last').val('DISPLAY').trigger('change');
+                this.view.$el.find('.alarm-time:first').val('PT1H').trigger('change');
+                this.model.get('alarms').should.deep.equal([{
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT1H', related: 'START' },
+                    description: 'Pizza Essen'
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT30M', related: 'START' },
+                    description: 'Pizza Essen'
+                }]);
+            });
+
+            it('should be able to handle non standard alarms', function () {
+                this.model.set('alarms', [{
+                    action: 'SMS',
+                    description: 'Machete improvisiert',
+                    trigger: { duration: '-PT15M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT55M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: 'PT55M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { dateTime: '20170708T220000Z' }
+                }]);
+
+                this.view.render();
+                var items = this.view.$el.find('.alarm-list-item');
+
+                items.length.should.equal(4);
+
+                $(items[0]).find('.alarm-action').text().should.equal('SMS');
+
+                $(items[1]).find('.alarm-time').val().should.equal('PT55M');
+                $(items[1]).find('.alarm-time option:last').text().should.equal(new moment.duration('-PT55M').humanize());
+
+                $(items[2]).find('.alarm-time').val().should.equal('PT55M');
+                $(items[2]).find('.alarm-time option:last').text().should.equal(new moment.duration('PT55M').humanize());
+
+                $(items[3]).find('.alarm-time').text().should.equal(new moment('20170708T220000Z').format('LLL'));
+            });
+
+            it('should create missing data but preserve the rest', function () {
+                this.model.set('alarms', [{
+                    uid: 1234,
+                    action: 'SMS',
+                    description: 'Machete improvisiert',
+                    trigger: { duration: '-PT15M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: 'PT55M', related: 'END' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { dateTime: '20170708T220000Z' }
+                }, {
+                    uid: 1337,
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT55M' },
+                    wurst: 'Im Brötchen mit Senf'
+                }]);
+
+                this.view.render().updateModel();
+                var alarms = this.model.get('alarms');
+
+                alarms.length.should.equal(4);
+
+                alarms[0].action.should.equal('SMS');
+                alarms[0].description.should.equal('Machete improvisiert');
+                alarms[0].trigger.related.should.equal('START');
+                alarms[0].uid.should.equal(1234);
+
+                alarms[1].trigger.duration.should.equal('PT55M');
+                alarms[1].trigger.related.should.equal('END');
+                alarms[1].description.should.equal('Pizza Essen');
+
+                alarms[2].trigger.dateTime.should.equal('20170708T220000Z');
+
+                alarms[3].wurst.should.equal('Im Brötchen mit Senf');
+            });
+        });
+
         describe('DateView', function () {
 
             beforeEach(function () {
                 this.date = moment.utc({ year: 2012, month: 1, date: 5 });
                 this.model = new Backbone.Model({ test: this.date.valueOf() });
-                this.view = new date.DateView({ name: 'test', model: this.model });
+                this.view = new date.DateSelectView({ name: 'test', model: this.model });
                 this.view.render();
             });
 
@@ -273,8 +408,8 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
                 expect(this.view.$el.find('div > select').length).to.equal(3);
             });
 
-            it('contains 0001 as fallback year', function () {
-                expect(this.view.$el.find('.year').children().first().attr('value')).to.equal('0001');
+            it('contains 1604 as fallback year', function () {
+                expect(this.view.$el.find('.year').children().first().attr('value')).to.equal('1604');
             });
 
             it('contains an empty option for month', function () {
@@ -317,20 +452,20 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             });
 
             it('updates the model (without a year)', function () {
-                this.view.$el.find('.year').val('0001').trigger('change');
+                this.view.$el.find('.year').val('1604').trigger('change');
                 this.view.$el.find('.month').val('0').trigger('change');
                 this.view.$el.find('.date').val('29').trigger('change');
-                expect(this.model.get('test')).to.equal(-62133177600000); // 0001-01-29
+                expect(this.model.get('test')).to.equal(-11547446400000); // 1604-01-29
             });
 
             it('handles non-existent days correctly (without a year)', function () {
                 // start end of January
-                this.model.set('test', moment.utc({ year: 1, month: 0, date: 31 }).valueOf());
-                expect(this.view.value()).to.equal('0001-01-31');
+                this.model.set('test', moment.utc({ year: 1604, month: 0, date: 31 }).valueOf());
+                expect(this.view.value()).to.equal('1604-01-31');
                 // jump to February
                 this.view.$el.find('.month').val('1').trigger('change');
-                expect(this.view.value()).to.equal('0001-02-28');
-                expect(this.model.get('test')).to.equal(-62130585600000); // 0001-02-28Error while detecting browser, using fallback
+                expect(this.view.value()).to.equal('1604-02-29');
+                expect(this.model.get('test')).to.equal(-11544768000000); // 1604-02-29 Error while detecting browser, using fallback
             });
         });
 

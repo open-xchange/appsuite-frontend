@@ -14,7 +14,6 @@
 /* global tinyMCE: true */
 
 define('io.ox/core/tk/contenteditable-editor', [
-    'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
     'io.ox/core/tk/textproc',
@@ -24,7 +23,7 @@ define('io.ox/core/tk/contenteditable-editor', [
     'settings!io.ox/mail',
     'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
+], function (capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -42,25 +41,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             ed.on('keydown', function (e) {
                 // pressed enter?
-                if (e.which === 13) {
-                    splitContent(ed, e);
-                }
-            });
-
-            ext.point('3rd.party/emoji/editor_css').each(function (point) {
-                var url = ed.convertURL(require.toUrl(point.css));
-                ed.contentCSS.push(url);
-            });
-        }
-    });
-
-    ext.point(POINT + '/setup').extend({
-        id: 'emoji',
-        index: INDEX += 100,
-        draw: function (ed) {
-            ext.point('3rd.party/emoji/editor_css').each(function (point) {
-                var url = ed.convertURL(require.toUrl(point.css));
-                ed.contentCSS.push(url);
+                if (!e.shiftKey && e.which === 13) splitContent(ed, e);
             });
         }
     });
@@ -231,6 +212,32 @@ define('io.ox/core/tk/contenteditable-editor', [
         ed.focus();
     }
 
+    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
+    // See Bug #56677
+    function scrollOnCursorUp(ed) {
+        var scrollable = $(ed).closest('.scrollable'),
+            bottom = scrollable.offset().top + 40,
+            selection = window.getSelection(),
+            range = selection.getRangeAt(0),
+            rect = range.getBoundingClientRect(),
+            top = rect.top,
+            container;
+        // for empty lines we get no valid rect
+        if (top === 0) {
+            if (selection.modify) {
+                selection.modify('extend', 'backward', 'character');
+                range = selection.getRangeAt(0);
+                rect = range.getBoundingClientRect();
+                range.collapse();
+                top = rect.top + rect.height;
+            } else {
+                container = range.commonAncestorContainer;
+                top = $(container).offset().top + container.clientHeight;
+            }
+        }
+        if (top > 0 && top < bottom) scrollable[0].scrollTop += top - scrollable.offset().top - 40;
+    }
+
     function lookupTinyMCELanguage() {
         var lookup_lang = ox.language,
             tinymce_langpacks = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
@@ -255,17 +262,19 @@ define('io.ox/core/tk/contenteditable-editor', [
         el.append(
             el = $('<div class="contenteditable-editor">').attr({
                 'data-editor-id': editorId
-            }).append(
+            })
+            .append(
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
-                    .attr({ 'aria-label': gt('Rich Text Area. Press ALT-F10 for toolbar') })
-                    .css('margin-bottom', '32px')
+                    .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
+                    //.css('margin-bottom', '32px')
+                    .toggleClass('simple-linebreaks', mailSettings.get('compose/simpleLineBreaks', false))
             )
         );
 
         opt = _.extend({
-            toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
-            advanced: 'styleselect | fontselect fontsizeselect | forecolor backcolor | link image',
+            toolbar1: '*undo *redo | bold italic underline | bullist numlist outdent indent',
+            advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
@@ -273,7 +282,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             skin: 'lightgray'
         }, opt);
 
-        editor.addClass(opt['class']);
+        editor.addClass(opt.class);
 
         opt.toolbar1 += ' | ' + opt.advanced;
 
@@ -284,11 +293,15 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         // remove unsupported stuff
         if (!capabilities.has('emoji')) {
-            opt.toolbar1 = opt.toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.toolbar2 = opt.toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
-            opt.toolbar3 = opt.toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar1 = opt.toolbar1.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
+            opt.toolbar2 = opt.toolbar2.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
+            opt.toolbar3 = opt.toolbar3.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
             opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
         }
+
+        // store a copy of original toolbar to adjust toolbar in DOM later
+        var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
+        opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
         var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
 
@@ -328,11 +341,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             font_formats: mailUtil.getFontFormats(),
             fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
-            // simpleLineBreaks = true -> false -> enter insert <br>
-            // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
-            // this one is stored in mail settings
-            forced_root_block: mailSettings.get('simpleLineBreaks', true) ? /* false */ 'p' : 'p',
-
+            forced_root_block: 'div',
             forced_root_block_attrs: { 'style': defaultStyle.string, 'class': 'default-style' },
 
             browser_spellcheck: true,
@@ -376,12 +385,23 @@ define('io.ox/core/tk/contenteditable-editor', [
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
-                    // toolbar is rendere immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
+                    // toolbar is rendered immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
                     _.defer(function () {
                         // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                         toolbar.find('span.mce-txt').attr('tabindex', -1);
+                        // adjust toolbar
+                        var widgets = toolbar.find('.mce-widget');
+                        originalToolbarConfig.split(' ').forEach(function (id, index) {
+                            widgets.eq(index).attr('data-name', id);
+                            if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
+                        });
+                        // find empty groups
+                        toolbar.find('.mce-btn-group').each(function () {
+                            $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
+                        });
                     });
                 });
+
             }
         };
 
@@ -402,42 +422,43 @@ define('io.ox/core/tk/contenteditable-editor', [
             });
         };
 
-        var resizeEditor = _.debounce(function () {
-                if (el === null) return;
+        function resizeEditor() {
 
-                var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
+            if (el === null) return;
 
-                if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
-                    var containerHeight = el.parent().parent().height();
-                    editor.css('min-height', containerHeight - composeFieldsHeight - 32);
-                    return;
-                } else if (_.device('smartphone')) {
+            var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
 
-                    editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
-                    return;
-                }
-
-                var h = $(window).height(),
-                    top = editor.offset().top,
-                    bottomMargin = (el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 104);
-
-                editor.css('min-height', h - top - bottomMargin + 'px');
-                if (opt.css) editor.css(opt.css);
-
-                var t = $(fixed_toolbar + ' > div'),
-                    w = $(fixed_toolbar).next().outerWidth();
-
-                if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
-                if (w) $(fixed_toolbar).css('width', w);
+            if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
+                var containerHeight = el.parent().parent().height();
+                editor.css('min-height', containerHeight - composeFieldsHeight - 32);
                 return;
-            }, 30),
+            } else if (_.device('smartphone')) {
+
+                editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
+                return;
+            }
+
+            var h = $(window).height(),
+                top = editor.offset().top,
+                container = el.closest('.io-ox-mail-compose-window, .floating-window-content, .modal-content'),
+                bottomMargin = container.hasClass('header-top') ? 39 : 80,
+                bottomOffset = h - container.height() - container.offset().top;
+
+            editor.css('min-height', h - top - bottomMargin - bottomOffset + 'px');
+            if (opt.css) editor.css(opt.css);
+
+            var t = $(fixed_toolbar + ' > div'),
+                w = $(fixed_toolbar).next().outerWidth();
+
+            if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
+            if (w) $(fixed_toolbar).css('width', w);
+        }
+
+        var resizeEditorDebounced = _.debounce(resizeEditor, 30),
 
             set = function (str) {
-                var text = emoji.processEmoji(str, function (text, lib) {
-                    if (!lib.loaded) return;
-                    ed.setContent(text);
-                });
-                ed.setContent(text);
+
+                ed.setContent(str);
 
                 // Remove all position: absolute and white-space: nowrap inline styles
                 // This is a fix for the infamous EUROPCAR mail bugs
@@ -470,18 +491,16 @@ define('io.ox/core/tk/contenteditable-editor', [
 
                 // get raw content
                 var content = ed.getContent({ format: 'raw' });
-                // convert emojies
-                content = emoji.imageTagsToUnified(content);
                 // strip data attributes (incl. bogus attribute)
                 content = stripDataAttributes(content);
                 // clean up
                 content = content
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
+                    .replace(/(<div>(<br>)?<\/div>)+$/, '');
 
                 // remove trailing white-space, line-breaks, and empty paragraphs
                 content = content.replace(
-                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+                    /(\s|&nbsp;|\0x20|<br\/?>|<div( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/div>)*$/g, ''
                 );
 
                 // remove trailing white-space
@@ -524,7 +543,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         this.setPlainText = function (str) {
             // clean up
             str = trimEnd(str);
-            if (!str) return;
+            if (_.isUndefined(str)) return;
             require(['io.ox/mail/detail/content'], function (proc) {
                 set(proc.text2html(str));
                 ed.undoManager.clear();
@@ -552,19 +571,19 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.appendContent = function (str) {
             var content = this.getContent();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            content = content.replace(/^(<p><br><\/p>){2,}/, '').replace(/(<p><br><\/p>)+$/, '') + '<p><br></p>' + str;
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
+            content = content.replace(/^(<div><br><\/div>){2,}/, '').replace(/(<div><br><\/div>)+$/, '') + '<div><br></div>' + str;
             if (/^<blockquote/.test(content)) {
-                content = '<p><br></p>' + content;
+                content = '<div><br></div>' + content;
             }
             this.setContent(content);
         };
 
         this.prependContent = function (str) {
             var content = this.getContent();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            content = str + '<p><br></p>' + content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
-            content = '<p><br></p>' + content;
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
+            content = str + '<div><br></div>' + content.replace(/^(<div><br><\/div>)+/, '').replace(/(<div><br><\/div>){2,}$/, '');
+            content = '<div><br></div>' + content;
             this.setContent(content);
         };
 
@@ -572,11 +591,23 @@ define('io.ox/core/tk/contenteditable-editor', [
             var content = '';
             // normalise
             data = _.isString(data) ? { content: data } : data;
+            data.content = data.content.replace(/^(<div><br><\/div>)+/, '').replace(/(<div><br><\/div>){2,}$/, '');
             // concat content parts
             if (data.content) content += data.content;
-            if (type === 'above' && data.cite) content += ('\n\n' + data.cite);
-            if (data.quote) content += ('\n\n' + data.quote || '');
-            if (type === 'below' && data.cite) content += ('\n\n' + data.cite);
+            else content += '<div><br></div>';
+            if (type === 'above' && data.cite) content += data.cite;
+            if (data.quote) {
+                // backend appends &nbsp; to the quote which are wrapped in a paragraph by the ui. remove those.
+                data.quote = data.quote.replace(/<div><br>(&nbsp;|&#160;)<\/div>/, '');
+                content += (data.quote || '');
+            }
+            if (type === 'below' && data.cite) {
+                // add a blank line between the quoted text and the signature below
+                // but only, if the sigature is directly after the quoted text
+                // then, the user can always insert text between the quoted text and the signature but has no unnecessary empty lines
+                if (!/<div><br><\/div>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<div><br></div>';
+                content += data.cite;
+            }
             this.setContent(content);
         };
 
@@ -585,9 +616,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             var content = this.getContent(),
                 index = content.indexOf('<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
-            if (content.substring(0, 15) === '<blockquote><p>') index = 0;
+            if (content.substring(0, 15) === '<blockquote><div>') index = 0;
             // special case: switching between signatures in such a mail
-            if (content.substring(0, 23) === '<p><br></p><blockquote>') index = 0;
+            if (content.substring(0, 23) === '<div><br></div><blockquote>') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
@@ -599,15 +630,23 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         this.insertPrevCite = function (str) {
             var data = this.getContentParts();
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
             // add cite
             data.cite = str;
             this.setContentParts(data, 'above');
         };
 
+        this.insertPostCite = function (str) {
+            var data = this.getContentParts();
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
+            // add cite
+            data.cite = str;
+            this.setContentParts(data, 'below');
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
-            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            str = (/^<div/i).test(str) ? str : '<div>' + ln2br(str) + '</div>';
             // exists?
             if ((pos = content.indexOf(str)) > -1) {
                 // replace content
@@ -677,16 +716,15 @@ define('io.ox/core/tk/contenteditable-editor', [
             el.show();
             // set display to empty sting because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
-            resizeEditor();
-            $(window).on('resize.tinymce', resizeEditor);
-            $(window).on('orientationchange.tinymce', function () {
-                _.delay(resizeEditor, 50);
-            });
+            window.toolbar = $(fixed_toolbar);
+            $(window).on('resize.tinymce xorientationchange.tinymce', resizeEditorDebounced);
+            $(window).on('changefloatingstyle.tinymce', resizeEditor);
+            resizeEditorDebounced();
         };
 
         this.hide = function () {
             el.hide();
-            $(window).off('resize.tinymce orientationchange.tinymce');
+            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce');
         };
 
         (function () {
@@ -694,6 +732,15 @@ define('io.ox/core/tk/contenteditable-editor', [
             var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode(),
                 fixed = false,
                 top = 14;
+
+            // keep fixed toolbar in window, when window is dragged
+            if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
+                opt.app.get('window').floating.on('move', function () {
+                    if (fixed) {
+                        toolbar.css('top', opt.view.$el.parent().offset().top);
+                    }
+                });
+            }
 
             scrollPane.on('scroll', function () {
                 if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
@@ -734,6 +781,10 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
+
+        // track cursor up; needs to be done via setTimeout otherwise the selection is not yet updated
+        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) setTimeout(scrollOnCursorUp, 0, this); });
+
     }
 
     return Editor;

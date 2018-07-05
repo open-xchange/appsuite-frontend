@@ -26,12 +26,11 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
-    'settings!io.ox/core',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, coreSettings, attachments, http, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments, http, DOMPurify) {
 
     'use strict';
 
@@ -46,10 +45,10 @@ define('io.ox/contacts/view-detail', [
 
     function getDescription(data) {
 
-        function single(index, value, translated) {
+        function single(index, value) {
             var params = new Array(index);
-            params[index - 1] = translated ? value : _.noI18n(value);
-            return { format: _.noI18n('%' + index + '$s'), params: params };
+            params[index - 1] = value;
+            return { format: '%' + index + '$s', params: params };
         }
 
         var count, desc;
@@ -70,7 +69,7 @@ define('io.ox/contacts/view-detail', [
         if (data.position || data.profession) {
             return {
                 format: join(', ', data.position ? '%1$s' : '', data.profession ? '%2$s' : ''),
-                params: [_.noI18n(data.position), _.noI18n(data.profession)]
+                params: [data.position, data.profession]
             };
         }
 
@@ -78,11 +77,15 @@ define('io.ox/contacts/view-detail', [
 
     }
 
+    function hideAddressBook() {
+        return ox.ui.apps._indexOf('io.ox/contacts') < 0;
+    }
+
     function createText(format, classes) {
         return _.aprintf(
             format.format,
             function (index) {
-                return $('<span>').addClass(classes[index]).text(_.noI18n(format.params[index]));
+                return $('<span>').addClass(classes[index]).text(format.params[index]);
             },
             function (text) {
                 return $.txt(text);
@@ -109,7 +112,7 @@ define('io.ox/contacts/view-detail', [
         id: 'inline-actions',
         draw: function (baton) {
             if (api.looksLikeResource(baton.data)) return;
-            if (coreSettings.get('features/hideAddressBook')) return;
+            if (hideAddressBook()) return;
             ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
         }
     });
@@ -160,7 +163,7 @@ define('io.ox/contacts/view-detail', [
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
-                    $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
+                    $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')).hide(),
                     name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
@@ -196,7 +199,7 @@ define('io.ox/contacts/view-detail', [
                         section.empty();
                         _(data).each(function (a) {
                             // draw
-                            buildDropdown(section, _.noI18n(a.filename), a);
+                            buildDropdown(section, a.filename, a);
                         });
                         if (data.length > 1) {
                             buildDropdown(section, gt('All attachments'), data).find('a').removeClass('attachment-item');
@@ -243,7 +246,9 @@ define('io.ox/contacts/view-detail', [
                     tagName: 'li',
                     model: new pModel.Participant(data),
                     halo: true,
-                    isMail: true
+                    isMail: true,
+                    // forces the use of the correct mailfield (disables fallback). User is no longer misslead by the ui showing a mail address, that is not used by this distributionlist
+                    strict: true
                 }).render().$el
             );
         }
@@ -342,8 +347,7 @@ define('io.ox/contacts/view-detail', [
             $(this).append(
                 $('<dt>').text(model.fields[id]),
                 $('<dd>').append(
-                    $('<a>', { href: 'mailto:' + address })
-                        .text(_.noI18n(address))
+                    $('<a>').attr('href', 'mailto:' + address).text(address)
                         .on('click', { email: address, display_name: name }, clickMail)
                 )
             );
@@ -440,15 +444,13 @@ define('io.ox/contacts/view-detail', [
             var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
 
             $(this).append(
+                address,
                 $('<a class="maps-service" target="_blank" rel="noopener">')
                 .attr('href', services[service].url + query)
                 .append(
-                    address,
-                    $('<p>').append(
-                        $('<i class="fa fa-external-link" aria-hidden="true">'),
-                        //#. %1$s is a map service, like "Google Maps"
-                        $.txt(' ' + gt('Open in %1$s', services[service].label))
-                    )
+                    $('<i class="fa fa-external-link" aria-hidden="true">'),
+                    //#. %1$s is a map service, like "Google Maps"
+                    $.txt(' ' + gt('Open in %1$s', services[service].label))
                 )
             );
         };
@@ -712,7 +714,7 @@ define('io.ox/contacts/view-detail', [
     // only applies to resource because they have a "description" field.
     // contacts just have a "note"
 
-    var regPhone = /(\+?[\d\x20\/()]{4,})/g,
+    var regPhone = /(\+?[\d\x20/()]{4,})/g,
         regClean = /[^+0-9]/g;
 
     ext.point('io.ox/contacts/detail/content').extend({
@@ -754,7 +756,7 @@ define('io.ox/contacts/view-detail', [
 
             // this is also used by halo, so we might miss a folder id
             if (!id) return;
-            if (coreSettings.get('features/hideAddressBook')) return;
+            if (hideAddressBook()) return;
 
             // don't show folders path for folder 6 if global address book is disabled
             if (String(id) === '6' && !capabilities.has('gab')) return;

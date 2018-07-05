@@ -78,10 +78,10 @@ define('plugins/portal/birthdays/register', [
 
         preview: function (baton) {
 
-            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
+            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button">').attr('aria-label', gt('Press [enter] to jump to complete list of Birthdays.')),
                 hash = {},
                 contacts = baton.data,
-                numOfItems = _.device('smartphone') ? 5 : 15;
+                numOfItems = _.device('smartphone') ? 5 : 8;
 
             // ignore broken birthdays
             contacts = _(contacts).filter(function (contact) {
@@ -118,10 +118,16 @@ define('plugins/portal/birthdays/register', [
 
                     if (!isDuplicate(name, birthday, hash)) {
                         $list.append(
-                            $('<li class="line">').append(
-                                birthday.isSame(today, 'day') ? $('<span class="bold">').append('<i class="cake fa fa-birthday-cake">') : $(),
-                                $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(_.noI18n(birthdayText))
+                            $('<li class="item">').append(
+                                api.pictureHalo(
+                                    $('<div class="picture">').text(util.getInitials(contact)),
+                                    contact,
+                                    { width: 32, height: 32, fallback: false }
+                                ),
+                                $('<div class="bold ellipsis">').text(name).prepend(
+                                    birthday.isSame(today, 'day') ? $('<div class="cake">').append('<i class="fa fa-birthday-cake">') : $()
+                                ),
+                                $('<div class="accent">').text(birthdayText)
                             )
                         );
                         markDuplicate(name, birthday, hash);
@@ -152,7 +158,7 @@ define('plugins/portal/birthdays/register', [
                         $('<div class="buy-a-gift">').append(
                             $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
                             $.txt(' '),
-                            $('<i class="fa fa-external-link">')
+                            $('<i class="fa fa-external-link" aria-hidden="true">')
                         )
                     );
                 }
@@ -187,9 +193,9 @@ define('plugins/portal/birthdays/register', [
                                     contact,
                                     { width: 48, height: 48 }
                                 ),
-                                $('<div class="name">').text(_.noI18n(name)),
+                                $('<div class="name">').text(name),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.year() === 1 ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l'))), $.txt(' '),
+                                    $('<span class="date">').text(birthday.format((birthday.year() === 1 || birthday.year() === 1604) ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l')), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

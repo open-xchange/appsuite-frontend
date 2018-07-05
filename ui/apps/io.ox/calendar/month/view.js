@@ -13,63 +13,95 @@
 
 define('io.ox/calendar/month/view', [
     'io.ox/core/extensions',
+    'io.ox/calendar/api',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/month/style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, folderAPI, util, gt, settings) {
+], function (ext, api, folderAPI, util, gt, settings) {
 
     'use strict';
 
     var View = Backbone.View.extend({
 
-        tagName:        'tr',
-        className:      'week',
-        weekStart:      0,      // week start moment
-        weekEnd:        0,      // week ends moment
-        folder:         null,
+        tagName:        'table',
+        className:      'month',
+        start:          null,   // moment of start of the month
+        folders:        null,
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         pane:           $(),
         type:           '',
         limit:          1000,
 
-        events: {
-            'click .appointment':      'onClickAppointment',
-            'dblclick .day':           'onCreateAppointment',
-            'mouseenter .appointment': 'onEnterAppointment',
-            'mouseleave .appointment': 'onLeaveAppointment'
-        },
+        events: (function () {
+            var events = {
+                'click .appointment':      'onClickAppointment',
+                'dblclick .day':           'onCreateAppointment',
+                'mouseenter .appointment': 'onEnterAppointment',
+                'mouseleave .appointment': 'onLeaveAppointment'
+            };
+
+            if (_.device('touch')) {
+                _.extend(events, {
+                    'swipeleft': 'onSwipe',
+                    'swiperight': 'onSwipe'
+                });
+            }
+
+            return events;
+        }()),
 
         initialize: function (options) {
-            this.collection.on('reset', this.renderAppointments, this);
-            this.weekStart = moment(options.day);
-            this.weekEnds = moment(this.weekStart).add(1, 'week');
-            this.folder = options.folder;
-            this.pane = options.pane;
+            this.start = moment(options.start).startOf('month').startOf('week');
+            this.end = moment(options.start).endOf('month').endOf('week');
+            this.month = moment(options.start).startOf('month');
+            this.folders = options.folders;
             this.app = options.app;
             this.perspective = options.perspective;
             this.weekType = options.weekType;
         },
 
+        setCollection: function (collection) {
+            if (this.collection === collection) return;
+
+            if (this.collection) this.stopListening(this.collection);
+            this.collection = collection;
+
+            this.renderAppointments();
+
+            this
+                .listenTo(this.collection, 'change', this.renderAppointments, this)
+                .listenTo(this.collection, 'add remove reset', _.debounce(this.renderAppointments), this);
+        },
+
+        getRequestParams: function () {
+            return {
+                start: this.start.valueOf(),
+                end: this.end.valueOf(),
+                folders: _(this.folders).pluck('id'),
+                view: 'month'
+            };
+        },
+
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
-                cT = $('[data-cid="' + cid + '"]', this.pane);
+                cT = this.$('[data-cid="' + cid + '"]');
             if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(String(cid));
+                    obj = util.cid(String(cid));
 
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     self.trigger('showAppointment', e, obj);
-                    self.pane.find('.appointment')
+                    this.$('.appointment')
                         .removeClass('current opac')
-                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
+                        .not(this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]'))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac');
-                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
+                    this.$('[data-master-id="' + obj.folder + '.' + obj.id + '"]').addClass('current');
                 } else {
-                    $('.appointment', self.pane).removeClass('opac');
+                    this.$('.appointment').removeClass('opac');
                 }
 
                 if (self.clickTimer === null && self.clicks === 0) {
@@ -85,7 +117,9 @@ define('io.ox/calendar/month/view', [
                     clearTimeout(self.clickTimer);
                     self.clicks = 0;
                     self.clickTimer = null;
-                    self.trigger('openEditAppointment', e, obj);
+                    api.get(obj).done(function (model) {
+                        self.trigger('openEditAppointment', e, model.attributes);
+                    });
                 }
             }
         },
@@ -97,114 +131,133 @@ define('io.ox/calendar/month/view', [
             // EXC_BAD_ACCESS (SIGSEGV). See bug 42111
             if (_.device('safari')) document.getSelection().collapse(true);
 
-            this.app.folder.can('create').done(function (create) {
+            if (!$(e.target).hasClass('list')) return;
 
-                if (!create) return;
-                if (!$(e.target).hasClass('list')) return;
-
-                this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
-
-            }.bind(this));
+            this.trigger('createAppointment', e, $(e.currentTarget).data('date'));
         },
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = _.cid(String($(e.currentTarget).data('cid')));
-            $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
+            var cid = util.cid(String($(e.currentTarget).data('cid'))),
+                el = this.$('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible'),
+                bg = el.data('background-color');
+            el.addClass('hover');
+            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = _.cid(String($(e.currentTarget).data('cid')));
-            $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
+            var cid = util.cid(String($(e.currentTarget).data('cid'))),
+                el = this.$('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible'),
+                bg = el.data('background-color');
+            el.removeClass('hover');
+            if (bg) el.css('background-color', bg);
         },
+
+        onMousewheel: _.throttle(function (e) {
+            var target = $(e.target),
+                scrollpane = target.closest('.list.abs');
+            if (scrollpane.prop('scrollHeight') > scrollpane.prop('clientHeight')) return;
+            var delta = e.originalEvent.wheelDelta || e.originalEvent.deltaY || e.originalEvent.detail;
+            this.perspective.gotoMonth(delta < 0 ? 'next' : 'prev');
+        }, 400, { trailing: false }),
 
         // handler for mobile month view day-change
         changeToSelectedDay: function (timestamp) {
-            var d = moment(timestamp);
-            // set refDate for app to selected day and change
+            // set date for app to selected day and change
             // perspective afterwards
-            this.app.refDate = d;
+            this.app.setDate(timestamp);
             ox.ui.Perspective.show(this.app, 'week:day', { animation: 'slideleft' });
         },
 
-        render: function () {
-            // TODO: fix this workaround
-            var list = util.getWeekScaffold(this.weekStart),
-                firstFound = false,
-                self = this,
-                // needs clearfix or text is aligned to middle instead of baseline
-                weekinfo = $('<td class="week-info clearfix">')
-                    .append(
-                        $('<span>').addClass('cw').text(
-                            gt('CW %1$d', this.weekStart.format('w'))
+        onSwipe: function (e) {
+            e.preventDefault();
+            if (e.type === 'swipeleft') this.perspective.gotoMonth('next');
+            if (e.type === 'swiperight') this.perspective.gotoMonth('prev');
+            return false;
+        },
+
+        render: function render() {
+            var self = this,
+                day = moment(this.start),
+                row,
+                tbody = $('<tbody>');
+
+            // add days
+            for (; day.isBefore(this.end); day.add(1, 'day')) {
+                if (!row || day.isSame(day.clone().startOf('week'), 'day')) {
+                    row = $('<tr class="week">').append(
+                        $('<td class="day cw">').append(
+                            $('<span class="number">').text(gt('CW %1$d', day.format('w')))
                         )
                     );
-
-            _(list.days).each(function (day, i) {
-                if (day.isFirst) {
-                    firstFound = true;
+                    tbody.append(row);
                 }
 
-                var dayCell = $('<td>')
-                .addClass((day.isFirst ? ' first' : '') +
-                    (day.isFirst && i === 0 ? ' forceleftborder' : '') +
-                    (day.isToday ? ' today' : '') +
-                    (day.isWeekend ? ' weekend' : '') +
-                    (day.isFirst || i === 0 ? ' borderleft' : '') +
-                    (day.isLast ? ' borderright' : '') +
-                    /*eslint-disable no-nested-ternary */
-                    (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '') +
-                    /*eslint-enable no-nested-ternary */
-                    (list.hasLast && !firstFound ? ' borderbottom' : '')
-                );
-
-                if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
-                    this.$el.append(dayCell.addClass('day-filler').append($('<div class="sr-only">').text(gt('Empty table cell'))));
-                } else {
-                    this.$el.append(
-                        dayCell
-                        .addClass('day')
+                var dayCell = $('<td>');
+                row.append(
+                    dayCell.addClass('day')
                         .attr({
-                            id: moment(day.timestamp).format('YYYY-M-D'),
+                            id: day.format('YYYY-M-D'),
                             //#. %1$s is a date: october 12th 2017 for example
-                            title: gt('Selected - %1$s', moment(day.timestamp).format('ddd LL'))
+                            title: gt('Selected - %1$s', day.format('ddd LL'))
                         })
-                        .data('date', day.timestamp)
+                        .data('date', day.valueOf())
                         .append(
-                            $('<div class="number" aria-hidden="true">').text(day.date),
+                            $('<div class="number" aria-hidden="true">').append(
+                                day.isSame(self.start, 'week') ? $('<span class="day-label">').text(day.format('ddd')) : '',
+                                day.date()
+                            ),
                             $('<div class="list abs">')
                         )
-                    );
-                }
-            }, this);
+                );
+
+                if (day.isSame(moment(), 'day')) dayCell.addClass('today');
+                if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
+                if (!day.isSame(this.month, 'month')) dayCell.addClass('out');
+            }
+
+            this.$el.append(
+                $('<thead>').append(
+                    $('<tr>').append(
+                        function () {
+                            var labels = [], current = day.clone().startOf('week');
+                            for (var i = 0; i < 7; i++, current.add(1, 'day')) {
+                                labels.push($('<th>').text(current.format('ddd')));
+                            }
+                            return labels;
+                        }
+                    )
+                ),
+                tbody
+            );
+
+            if (_.device('firefox') || _.device('ie && ie <= 11')) this.$('tbody tr').css('height', (100 / this.$('tbody tr').length + '%'));
 
             if (_.device('smartphone')) {
+                this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
                 // on mobile we switch to the day view after a tap
                 // on a day-cell was performed
                 this.$el.on('tap', '.day', function () {
                     self.changeToSelectedDay($(this).data('date'));
                 });
-            } else {
-                this.$el.prepend(weekinfo);
             }
-            this.renderAppointments();
+
             return this;
         },
 
         renderAppointment: function (a) {
             var self = this,
-                el = $('<div>')
-                    .addClass('appointment')
-                    .data('app', a)
+                el = $('<div class="appointment" data-extension-point="io.ox/calendar/month/view/appointment">')
+                    .data('event', a)
                     .attr({
                         'data-cid': a.cid,
-                        'data-extension-point': 'io.ox/calendar/month/view/appointment',
+                        'data-master-id': util.cid({ id: a.get('id'), folder: a.get('folder') }),
                         'data-composite-id': a.cid
                     });
 
             ext.point('io.ox/calendar/month/view/appointment')
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folder: self.folder, app: self.app })));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folders: self.folders, app: self.app })));
             return el;
         },
 
@@ -214,42 +267,29 @@ define('io.ox/calendar/month/view', [
         },
 
         renderAppointments: function () {
-            var self = this,
-                tempDate;
-            // clear first
+            var self = this;
             $('.appointment, .fa-circle', this.$el).remove();
 
             // loop over all appointments
             this.collection.each(function (model) {
 
                 // is declined?
-                if (util.getConfirmationStatus(model.attributes) === 2 && !settings.get('showDeclinedAppointments', false)) return;
+                if (util.getConfirmationStatus(model) === 'DECLINED' && !settings.get('showDeclinedAppointments', false)) return;
 
-                var startMoment = moment(model.get('start_date')),
-                    endMoment = moment(model.get('end_date')),
-                    maxCount = 7;
+                var startMoment = model.getMoment('startDate'),
+                    endMoment = model.getMoment('endDate'),
+                    maxCount = 31;
 
                 // fix full-time values
-                if (model.get('full_time')) {
-                    startMoment.utc().local(true);
-                    endMoment.utc().local(true).subtract(1, 'millisecond');
-                }
+                if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
 
                 // reduce to dates inside the current week
-                startMoment = moment.max(startMoment, this.weekStart).clone();
-                endMoment = moment.min(endMoment, this.weekEnds).clone();
+                startMoment = moment.max(startMoment, this.start).clone();
+                endMoment = moment.min(endMoment, this.end).clone();
 
                 if (_.device('smartphone')) {
                     var cell = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el);
-                    if (tempDate === undefined) {
-                        // first run, draw
-                        this.renderAppointmentIndicator(cell);
-                    } else if (!startMoment.isSame(tempDate, 'day')) {
-                        // one mark per day is enough
-                        this.renderAppointmentIndicator(cell);
-                    }
-                    // remember for next run
-                    tempDate = startMoment.clone();
+                    this.renderAppointmentIndicator(cell.empty());
                 } else {
                     // draw across multiple days
                     while (maxCount >= 0) {
@@ -308,40 +348,31 @@ define('io.ox/calendar/month/view', [
                     $('.list', this).append(
                         ui.draggable.show()
                     );
-                    var app = ui.draggable.data('app').attributes,
-                        s = moment(app.start_date),
-                        start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }).valueOf(),
-                        end = start + app.end_date - app.start_date;
-                    if (app.start_date !== start || app.end_date !== end) {
-                        app.start_date = start;
-                        app.end_date = end;
+                    var cid = ui.draggable.data('cid'),
+                        event = api.pool.getModel(cid).clone(),
+                        s = event.getMoment('startDate'),
+                        start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }),
+                        end = start.clone().add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
+                    if (event.getTimestamp('startDate') !== start.valueOf() || event.getTimestamp('endDate') !== end.valueOf()) {
+                        // save for update calculations
+                        if (event.has('rrule')) {
+                            event.set({
+                                oldStartDate: event.getMoment('startDate'),
+                                oldEndDate: event.getMoment('endDate')
+                            }, { silent: true });
+                        }
+                        var format = util.isAllday(event) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                        event.set({
+                            startDate: { value: start.format(format), tzid: event.get('startDate').tzid },
+                            endDate: { value: end.format(format), tzid: event.get('endDate').tzid }
+                        }, { silent: true });
                         ui.draggable.busy().draggable('disable');
-                        self.trigger('updateAppointment', app);
+                        self.trigger('updateAppointment', event);
                     }
                 }
             });
         }
     });
-
-    View.drawScaffold = function () {
-        var days = moment.weekdaysShort(),
-            dow = moment.localeData().firstDayOfWeek(),
-            tmp = [];
-        days = days.slice(dow, days.length).concat(days.slice(0, dow));
-        return $('<div>')
-            .addClass('abs')
-            .append(
-                $('<div class="footer-container">').attr('aria-hidden', true).append(
-                    $('<div class="footer">').append(function () {
-                        _(days).each(function (day) {
-                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
-                        });
-                        return tmp;
-                    })
-                ),
-                $('<div class="scrollpane f6-target" tabindex="-1">')
-            );
-    };
 
     ext.point('io.ox/calendar/month/view/appointment').extend({
         id: 'default',
@@ -349,32 +380,41 @@ define('io.ox/calendar/month/view', [
         draw: function (baton) {
             var self = this,
                 a = baton.model,
-                folder = baton.folder,
+                folder = folderAPI.pool.getModel(a.get('folder')).toJSON(),
                 conf = 1,
-                confString = _.noI18n('%1$s'),
+                confString = '%1$s',
                 classes = '';
 
-            function addColorClasses(f) {
-                self.addClass(util.getAppointmentColorClass(f, a.attributes));
-                if (util.canAppointmentChangeColor(f, a.attributes)) {
+            function addColors(f) {
+                var color = util.getAppointmentColor(f, a);
+                if (!color) return;
+                self.css({
+                    'background-color': color,
+                    'color': util.getForegroundColor(color)
+                }).data('background-color', color);
+
+                self.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
+
+                if (util.canAppointmentChangeColor(f, a)) {
                     self.attr('data-folder', f.id);
                 }
             }
 
-            var folder_id = a.get('folder_id');
-            if (String(folder.id) === String(folder_id)) {
-                addColorClasses(folder);
-            } else if (folder_id !== undefined) {
-                folderAPI.get(folder_id).done(addColorClasses);
+            var folderId = a.get('folder');
+            if (String(folder.id) === String(folderId)) {
+                addColors(folder);
+            } else if (folderId !== undefined) {
+                folderAPI.get(folderId).done(addColors);
             }
 
-            if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
+            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
                 classes = 'private';
             } else {
-                conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
+                var canModifiy = folderAPI.can('write', folder, a.attributes) && util.allowedToEdit(a, { synced: true, folderData: folder });
+                conf = util.getConfirmationStatus(a);
+                classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
-                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                    (canModifiy ? ' modify' : '');
                 if (conf === 3) {
                     confString =
                         //#. add confirmation status behind appointment title
@@ -388,24 +428,18 @@ define('io.ox/calendar/month/view', [
                 .attr({ tabindex: 0 })
                 .addClass(classes)
                 .append(
-                    $('<div>')
-                    .addClass('appointment-content')
-                    .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
+                    $('<div class="appointment-content">')
+                    .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('title') ? $('<div class="title">').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
-                        a.get('location') ? $('<div class="location">').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
+                        util.isAllday(a) ? $() : $('<span class="start">').text(a.getMoment('startDate').tz(moment().tz()).format('LT')),
+                        util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        a.get('summary') ? $('<span class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
+                        a.get('location') ? $('<span class="location">').text(a.get('location') || '\u00A0') : ''
                     )
                 )
                 .attr({
                     'data-extension': 'default'
                 });
-
-            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
-                if (!isBossy) {
-                    self.removeClass('modify');
-                }
-            });
         }
     });
 

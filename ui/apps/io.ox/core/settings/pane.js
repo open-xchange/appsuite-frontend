@@ -13,7 +13,9 @@
 
 define('io.ox/core/settings/pane', [
     'io.ox/core/extensions',
-    'io.ox/backbone/views',
+    'io.ox/backbone/views/extensible',
+    'io.ox/backbone/views/disposable',
+    'io.ox/backbone/mini-views/common',
     'io.ox/core/settings/util',
     'io.ox/core/api/apps',
     'io.ox/core/capabilities',
@@ -23,335 +25,504 @@ define('io.ox/core/settings/pane', [
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
-    'io.ox/backbone/mini-views/timezonepicker'
-], function (ext, views, util, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
+    'io.ox/backbone/mini-views/timezonepicker',
+    'io.ox/core/main/appcontrol'
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
 
     'use strict';
 
-    var point = views.point('io.ox/core/settings/entry'),
-        SettingView = point.createView({ tagName: 'form', className: 'form-horizontal' }),
-        MINUTES = 60000;
+    var INDEX = 0,
+        MINUTES = 60000,
+        availableApps = apps.forLauncher().map(function (o) {
+            return {
+                label: o.getTitle(),
+                value: o.get('path')
+            };
+        }).concat([{ label: gt('None'), value: 'none' }]);
 
-    function checkbox() {
-        return $('<div class="col-sm-offset-4 col-sm-8">').append(util.checkbox.apply(null, arguments));
+    // Check that the app exists in available applications
+    function getAvailablePath(app) {
+        return _(availableApps).findWhere({ 'value': app }) ? app : '';
     }
 
-    function reload(e) {
-        e.preventDefault();
-        location.reload();
-    }
-
-    function openUserSettings() {
-        require(['io.ox/core/settings/user'], function (settingsUser) {
-            settingsUser.openModalDialog();
-        });
-    }
-
+    // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
-        index: 50,
-        id: 'extensions',
-        draw: function () {
-            settings.on('change:highcontrast', function (value) {
-                $('html').toggleClass('high-contrast', value);
-            });
-            settings.on('change', function (setting) {
-
-                var showNotice = _(['language', 'timezone', 'theme']).some(function (attr) {
-                    return setting === attr;
-                });
-
-                settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
-                    function success() {
-
-                        if (showNotice) {
-                            notifications.yell(
-                                'success',
-                                gt('The setting requires a reload or relogin to take effect.')
-                            );
-                        }
-                    }
-                );
-            });
-            this.addClass('settings-container').append(
-                // headline
-                util.header(gt('Basic settings')),
-                // help text
-                $('<div class="help-block">')
-                .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
-                .css('margin-bottom', '24px')
-                .append(
-                    $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
-                )
-            );
-
-            new SettingView({ model: settings }).render().$el.appendTo(this);
-        }
-    });
-
-    // My contact data
-    point.basicExtend({
-        id: 'my-contact-data',
-        index: '10000',
-        draw: function () {
-
-            // check if users can edit their own data (see bug 34617)
-            if (settings.get('user/internalUserEdit', true) === false) return;
-
-            this.append(
-                $('<div data-extension-id="my-contact-data">').append(
-                    $('<div class="form-group">').append(
-                        $('<label class="control-label col-sm-4">'),
-                        $('<div class="col-sm-6">').append(
-                            $('<button type="button" class="btn btn-default">')
-                                .text(gt('My contact data') + ' ...')
-                                .on('click', openUserSettings)
-                        )
-                    )
-                )
-            );
-        }
-    });
-
-    // Change password
-    if (capabilities.has('edit_password')) {
-        point.basicExtend({
-            id: 'change-password',
-            index: '11000',
-            draw: function () {
-                this.append(
-                    $('<div data-extension-id="change-password">').append(
-                        $('<div class="form-group">').append(
-                            $('<label class="control-label col-sm-4">'),
-                            $('<div class="col-sm-6">').append(
-                                $('<button type="button" class="btn btn-default">')
-                                .text(gt('Change password') + ' ...')
-                                .on('click', userSettings.changePassword)
-                            )
-                        )
-                    )
-                );
-            }
-        });
-    }
-
-    point.extend({
-        id: 'language',
         index: 100,
-        className: 'form-group',
-        render: function () {
-            if (!settings.isConfigurable('language')) return;
-            var options = _.map(ox.serverConfig.languages, function (key, val) { return { label: key, value: val }; });
-            this.listenTo(this.baton.model, 'change:language', function (language) {
-                _.setCookie('language', language);
-            });
-            this.$el.append(util.select('language', gt('Language'), this.baton.model, options));
+        id: 'view',
+        draw: function () {
+            this.append(
+                new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings })
+                .inject({
+
+                    showNoticeFields: ['language', 'timezone', 'theme'],
+
+                    showNotice: function (attr) {
+                        return _(this.showNoticeFields).some(function (id) {
+                            return id === attr;
+                        });
+                    },
+
+                    reloadHint: gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.'),
+
+                    getLanguageOptions: function () {
+                        return _(ox.serverConfig.languages).map(function (key, val) {
+                            return { label: key, value: val };
+                        });
+                    },
+
+                    getThemeOptions: function () {
+
+                        var availableThemes = settingOptions.get('themes') || {};
+                        // until we get translated themes from backend
+                        if (availableThemes.default) availableThemes.default = gt('Default Theme');
+                        // sort
+                        return _(availableThemes)
+                            .chain()
+                            .map(function (key, val) { return { label: key, value: val }; })
+                            .sortBy(function (obj) { return obj.label.toLowerCase(); })
+                            .value();
+                    },
+
+                    getDesigns: function () {
+                        return [
+                            {
+                                label: gt('Unicolor'),
+                                options: [
+                                    { label: gt('Default'), value: 'primary' }
+                                ]
+                            },
+                            {
+                                label: gt('Multicolor'),
+                                options: [
+                                    { label: gt('Indigo'), value: 'night' },
+                                    { label: gt('Green'), value: 'twilight' },
+                                    { label: gt('Turquoise'), value: 'dawn' },
+                                    { label: gt('Blue'), value: 'day' },
+                                    { label: gt('Purple/Magenta'), value: 'dusk' }
+                                ]
+                            },
+                            {
+                                //.# Option label for the automatic theme changer (changes theme depending on time)
+                                label: gt('Automatic'),
+                                options: [
+                                    { label: gt('Time-dependent'), value: 'time' }
+                                ]
+                            }
+                        ];
+                    },
+
+                    hasMoreThanOneTheme: function () {
+                        return _(settingOptions.get('themes')).size() > 1;
+                    },
+
+                    getRefreshOptions: function () {
+                        return [
+                            { label: gt('5 minutes'), value: 5 * MINUTES },
+                            { label: gt('10 minutes'), value: 10 * MINUTES },
+                            { label: gt('15 minutes'), value: 15 * MINUTES },
+                            { label: gt('30 minutes'), value: 30 * MINUTES }
+                        ];
+                    },
+
+                    openUserSettings: function () {
+                        require(['io.ox/core/settings/user'], function (settingsUser) {
+                            settingsUser.openModalDialog();
+                        });
+                    }
+                })
+                .render().$el
+            );
         }
     });
 
-    // Timezones
-    (function () {
-        point.extend({
-            id: 'timezones',
-            index: 200,
-            className: 'form-group',
+    ext.point('io.ox/core/settings/detail/view').extend(
+        //
+        // Header
+        //
+        {
+            id: 'header',
+            index: INDEX += 100,
             render: function () {
-                var guid = _.uniqueId('form-control-label-');
+                this.$el.addClass('settings-container').append(
+                    util.header(gt('Basic settings'))
+                );
+            }
+        },
+        //
+        // Events handlers
+        //
+        {
+            id: 'onchange',
+            index: INDEX += 100,
+            render: function () {
+                this.listenTo(settings, 'change', function (attr) {
+                    var showNotice = this.showNotice(attr);
+                    settings.saveAndYell(undefined, { force: !!showNotice }).then(
+                        function success() {
+                            if (!showNotice) return;
+                            notifications.yell('success', gt('The setting requires a reload or relogin to take effect.'));
+                        }
+                    );
+                });
+            }
+        },
+        //
+        // Hint on reload
+        //
+        {
+            id: 'hint',
+            index: INDEX += 100,
+            render: function () {
+
                 this.$el.append(
-                    $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Time zone')),
-                    $('<div class="col-sm-6">').append(
-                        new TimezonePicker({
-                            name: 'timezone',
-                            model: this.baton.model,
-                            id: guid,
-                            className: 'form-control',
-                            showFavorites: true
-                        }).render().$el
+                    $('<div class="help-block">').text(this.reloadHint + ' ').css('margin-bottom', '24px')
+                    .append(
+                        $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
+                    )
+                );
+
+                function reload(e) {
+                    e.preventDefault();
+                    location.reload();
+                }
+            }
+        },
+        //
+        // Fieldset/first
+        //
+        {
+            index: INDEX += 100,
+            id: 'fieldset/first',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('fieldset/first', this, $('<fieldset role="presentation">'))
+                );
+            }
+        },
+        //
+        // Fieldset/second
+        //
+        {
+            index: INDEX += 100,
+            id: 'fieldset/second',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('fieldset/second', this, $('<fieldset role="presentation">'))
+                );
+            }
+        },
+        //
+        // Fieldset/second
+        //
+        {
+            index: INDEX += 100,
+            id: 'fieldset/third',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('fieldset/third', this, $('<fieldset role="presentation">'))
+                );
+            }
+        },
+        //
+        // Buttons
+        //
+        {
+            id: 'buttons',
+            render: function () {
+
+                var $group = $('<div class="form-group buttons">');
+
+                // check if users can edit their own data (see bug 34617)
+                if (settings.get('user/internalUserEdit', true)) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('My contact data') + ' ...')
+                            .on('click', this.openUserSettings)
+                    );
+                }
+
+                if (capabilities.has('edit_password')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('Change password') + ' ...')
+                            .on('click', userSettings.changePassword)
+                    );
+                }
+
+                if ($group.children().length) this.$el.append($group);
+            }
+        }
+    );
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/first').extend(
+        //
+        // Language
+        //
+        {
+            id: 'language',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                if (!settings.isConfigurable('language')) return;
+
+                baton.$el.append(
+                    util.compactSelect('language', gt('Language'), this.model, this.getLanguageOptions())
+                );
+
+                this.listenTo(this.model, 'change:language', function (language) {
+                    _.setCookie('language', language);
+                });
+            }
+        },
+        //
+        // Timezone
+        //
+        {
+            id: 'timezone',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                if (!settings.isConfigurable('timezone')) return;
+
+                baton.$el.append(
+                    $('<div class="form-group row">').append(
+                        $('<div class="col-md-6">').append(
+                            $('<label for="settings-timezone">').text(gt('Time zone')),
+                            new TimezonePicker({
+                                name: 'timezone',
+                                model: this.model,
+                                id: 'settings-timezone',
+                                showFavorites: true
+                            }).render().$el
+                        )
                     )
                 );
             }
-        });
-    }());
+        },
+        //
+        // Theme
+        //
+        {
+            id: 'theme',
+            index: INDEX += 100,
+            render: function (baton) {
 
-    // Themes
-    (function () {
+                if (!settings.isConfigurable('theme')) return;
+                if (!this.hasMoreThanOneTheme()) return;
 
-        var availableThemes = settingOptions.get('themes') || {};
-
-        //  until we get translated themes from backend
-        if (availableThemes['default']) availableThemes['default'] = gt('Default Theme');
-
-        if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
-            point.extend({
-                id: 'theme',
-                index: 400,
-                className: 'form-group',
-                render: function () {
-                    var options = _(availableThemes).chain().map(function (key, val) {
-                        return { label: key, value: val };
-                    }).sortBy(function (obj) {
-                        return obj.label.toLowerCase();
-                    }).value();
-
-                    this.$el.append(util.select('theme', gt('Theme'), this.baton.model, options));
-                }
-            });
-        }
-
-        point.extend({
-            id: 'highcontrast',
-            index: 401,
-            className: 'form-group',
-            render: function () {
-                this.$el.append(checkbox('highcontrast', gt('High contrast theme'), this.baton.model));
+                baton.$el.append(
+                    util.compactSelect('theme', gt('Theme'), this.model, this.getThemeOptions())
+                );
             }
-        });
+        },
+        //
+        // Design
+        //
+        {
+            id: 'design',
+            index: INDEX += 100,
+            render: function (baton) {
 
-    }());
+                // don't offer for IE11 as some design don't work technically
+                if (_.device('ie <= 11')) return;
+                if (!settings.get('features/userDesigns', true)) return;
+                // works only for default theme
+                if (this.hasMoreThanOneTheme()) return;
 
-    // Refresh interval
-    (function () {
-        if (!settings.isConfigurable('refreshInterval')) return;
-
-        point.extend({
+                baton.$el.append(
+                    util.compactSelect('design', gt('Design'), this.model, this.getDesigns(), { groups: true })
+                );
+            }
+        },
+        //
+        // Refresh Interval
+        //
+        {
             id: 'refreshInterval',
-            index: 300,
-            className: 'form-group',
-            render: function () {
-                this.$el.append(
-                    util.select('refreshInterval', gt('Refresh interval'), this.baton.model, [
-                        { label: gt('5 minutes'), value: 5 * MINUTES },
-                        { label: gt('10 minutes'), value: 10 * MINUTES },
-                        { label: gt('15 minutes'), value: 15 * MINUTES },
-                        { label: gt('30 minutes'), value: 30 * MINUTES }
-                    ])
+            index: INDEX += 100,
+            render: function (baton) {
+                if (!settings.isConfigurable('refreshInterval')) return;
+
+                baton.$el.append(
+                    util.compactSelect('refreshInterval', gt('Refresh interval'), this.model, this.getRefreshOptions())
                 );
             }
-        });
-    }());
-
-    // Auto Start App
-    (function () {
-        if (!settings.isConfigurable('autoStart')) return;
-
-        var options =  _(appAPI.getFavorites()).map(function (app) {
-            return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
-        });
-        if (options.length <= 1) return;
-        options.push({ label: gt('None'), value: 'none' });
-
-        point.extend({
-            id: 'autoStart',
-            index: 500,
-            className: 'form-group',
-            render: function () {
-                this.$el.append(util.select('autoStart', gt('Default app after sign in'), this.baton.model, options));
-            }
-        });
-    }());
-
-    // Auto Logout
-    (function () {
-        if (!settings.isConfigurable('autoLogout')) return;
-
-        point.extend({
-            id: 'autoLogout',
-            index: 600,
-            className: 'form-group',
-            render: function () {
-                this.$el.append(
-                    util.select('autoLogout', gt('Automatic sign out'), this.baton.model, [
-                        { label: gt('disable'), value: 0 },
-                        { label: gt('5 minutes'), value: 5 * MINUTES },
-                        { label: gt('10 minutes'), value: 10 * MINUTES },
-                        { label: gt('15 minutes'), value: 15 * MINUTES },
-                        { label: gt('30 minutes'), value: 30 * MINUTES }
-                    ])
-                );
-            }
-        });
-    }());
-
-    // Auto open notification area
-    (function () {
-        if (settings.isConfigurable('autoOpenNotificationarea')) {
-            point.extend({
-                id: 'autoOpenNotification',
-                index: 700,
-                className: 'form-group',
-                render: function () {
-
-                    //change old settings values to new ones
-                    var value = this.baton.model.get('autoOpenNotification');
-                    if (value === 'always' || value === 'noEmail') {
-                        this.baton.model.set('autoOpenNotification', true);
-                    } else if (value === 'Never') {
-                        this.baton.model.set('autoOpenNotification', false);
-                    }
-                    this.$el.append(checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.baton.model));
-                }
-            });
         }
-    }());
+    );
 
-    // Show desktop notifications
-    (function () {
-        point.extend({
-            id: 'showDesktopNotifications',
-            index: 800,
-            className: 'form-group',
+    var QuickLaunchModel = Backbone.Model.extend({
+        initialize: function () {
+            appcontrol.getQuickLauncherItems().forEach(function (item, i) {
+                this.set('apps/quickLaunch' + i, getAvailablePath(item));
+            }.bind(this));
+        },
+        toString: function () {
+            return _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
+                return this.get('apps/quickLaunch' + i);
+            }.bind(this)).join(',');
+        }
+    });
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
+
+        //
+        // Auto start
+        //
+        {
+            id: 'autoStart',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                if (!settings.isConfigurable('autoStart')) return;
+                if (availableApps <= 2) return;
+
+                baton.$el.append(
+                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
+                );
+            }
+        },
+
+        // Quicklaunch apps
+        {
+            id: 'quickLaunch',
+            index: INDEX += 100,
+            render: function (baton) {
+                if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
+                baton.$el.append(
+                    new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
+                );
+            }
+        }
+    );
+
+    var quickLauncherSettingsView = DisposableView.extend({
+        initialize: function (options) {
+            this.listenTo(this.model, 'change', function () {
+                options.settings.set('apps/quickLaunch', this.model.toString());
+            });
+        },
+        render: function () {
+            this.$el.append(
+                _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
+                    //#. %s is the number of the quicklauncher (1-3)
+                    return this.getMultiSelect('apps/quickLaunch' + i, gt('Quick launch %s', i + 1), { pos: i });
+                }, this)
+            );
+            return this;
+        },
+        getMultiSelect: function (name, label, options) {
+            options = options || {};
+            var id = 'settings-' + name,
+                view = new mini.SelectView({ id: id, name: name, model: this.model, list: this.appsForPos(options.pos), pos: options.pos }),
+                appsForPos = this.appsForPos.bind(this);
+
+            view.listenTo(this.model, 'change', function () {
+                this.options.list = appsForPos(this.options.pos);
+                this.$el.empty();
+                this.render();
+            });
+
+            return $('<div class="form-group row">').append(
+                $('<div class="col-md-6">').append(
+                    $('<label>').attr('for', id).text(label),
+                    view.render().$el
+                )
+            );
+        },
+        appsForPos: function (pos) {
+            // This function filters the select box, in order to prevent duplicate quicklaunchers
+            return _.range(appcontrol.getQuickLauncherCount())
+                .filter(function (i) { return i !== pos; })
+                .map(function (i) { return this.model.get('apps/quickLaunch' + i); }, this)
+                .reduce(function (acc, app) {
+                    return acc.filter(function (a) { return a.value !== app || app === 'none'; });
+                }, availableApps);
+        }
+    });
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/third').extend(
+        //
+        // Data fixes
+        //
+        {
+            id: 'data-fixes',
+            index: INDEX += 100,
             render: function () {
-                // don't show setting if not supported, to not confuse users
-                var self = this,
-                    // add ask now link (by design browsers only allow asking if there was no decision yet)
-                    //#. Opens popup to decide if desktop notifications should be shown
-                    requestLink = desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" role="button">').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
-                        e.preventDefault();
-                        desktopNotifications.requestPermission(function (result) {
-                            if (result === 'granted') {
-                                settings.set('showDesktopNotifications', true).save();
-                            } else if (result === 'denied') {
-                                settings.set('showDesktopNotifications', false).save();
-                            }
-                        });
-                    }) : false;
+                // change old settings values to new ones
+                switch (this.model.get('autoOpenNotification')) {
+                    case 'always': // falls through
+                    case 'noEmail': this.model.set('autoOpenNotification', true); break;
+                    case 'Never': this.model.set('autoOpenNotification', false); break;
+                    // no default
+                }
+            }
+        },
+        //
+        // Request Link for desktop notifications
+        //
+        {
+            id: 'request-notifications',
+            index: INDEX += 100,
+            render: function () {
+                var self = this;
+                // add ask now link (by design browsers only allow asking if there was no decision yet)
+                this.$requestLink =
+                    //#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
+                    $('<a href="#" role="button" class="request-desktop-notifications">').text(gt('Manage browser permissions now')).on('click', onClick);
 
-                if (desktopNotifications.isSupported()) {
-                    this.baton.model.on('change:showDesktopNotifications', function (value) {
-                        if (value === true) {
-                            desktopNotifications.requestPermission(function (result) {
-                                if (result !== 'denied') return;
-                                // revert if user denied the permission
-                                // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
-                                // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
-                                notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
-                                self.baton.model.set('showDesktopNotifications', false);
-                                if (requestLink) {
-                                    // remove request link because it is useless. We cannot trigger requestPermission if the user denied. It has to be enabled via the browser settings.
-                                    requestLink.remove();
-                                    requestLink = null;
-                                }
-                            });
+                function onClick(e) {
+                    e.preventDefault();
+                    desktopNotifications.requestPermission(function (result) {
+                        if (result !== 'default') self.$requestLink.hide();
+                        switch (result) {
+                            case 'granted': settings.set('showDesktopNotifications', true).save(); break;
+                            case 'denied': settings.set('showDesktopNotifications', false).save(); break;
+                            // no default
                         }
                     });
-                    this.$el.append(checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.baton.model, requestLink));
                 }
-            }
-        });
-    }());
 
-    // Accessibility feature toggle
-    (function () {
-        point.extend({
-            id: 'accessibilityFeatures',
-            index: 900,
-            className: 'form-group',
-            render: function () {
-                var value = this.baton.model.get('features/accessibility');
-                if (value === '' || value === undefined) {
-                    this.baton.model.set('features/accessibility', true);
+                if (desktopNotifications.isSupported()) {
+                    this.listenTo(this.model, 'change:showDesktopNotifications', function (value) {
+                        if (value !== true) return;
+                        var view = this;
+                        desktopNotifications.requestPermission(function (result) {
+                            if (result !== 'default') self.$requestLink.hide();
+                            if (result !== 'denied' || view.disposed) return;
+                            // revert if user denied the permission
+                            // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
+                            // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
+                            notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
+                            view.model.set('showDesktopNotifications', false, { silent: true });
+                        });
+                    });
+
+                    this.$requestLink = $('<br>').add(this.$requestLink);
                 }
-                this.$el.append(checkbox('features/accessibility', gt('Use accessibility improvements'), this.baton.model));
+                if (desktopNotifications.getPermissionStatus().match(/granted|denied/)) this.$requestLink.hide();
             }
-        });
-    }());
+        },
+        //
+        // Options
+        //
+        {
+            id: 'options',
+            render: function (baton) {
+                var options = [
+                    util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
+                    util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink)
+                ];
+
+                //if (ox.debug) options.push(util.checkbox('coloredIcons', 'Debug: Colored icons in application launcher', this.model));
+
+                baton.$el.append($('<div class="form-group">').append(options));
+            }
+        }
+    );
 });

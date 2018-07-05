@@ -12,9 +12,8 @@
  */
 
 define('io.ox/find/view-token', [
-    'io.ox/backbone/mini-views/dropdown',
-    'io.ox/mail/compose/extensions'
-], function (Dropdown, mailextensions) {
+    'io.ox/backbone/mini-views/dropdown'
+], function (Dropdown) {
 
     'use strict';
 
@@ -42,9 +41,6 @@ define('io.ox/find/view-token', [
                 .append(
                     this.model.isPerson() ? this.getDropdown() : this.getNameNode()
                 );
-            if (this.model.isPerson()) {
-                this.addImage();
-            }
             // TODO: reset calculated width (https://github.com/sliptree/bootstrap-tokenfield/issues/155)
             this.api.update();
             return this;
@@ -70,11 +66,6 @@ define('io.ox/find/view-token', [
             this.ui.dropdown.$el.find('.dropdown-menu').css('left', left);
         },
 
-        addImage: function () {
-            this.$el.find('.contact-image').remove();
-            mailextensions.tokenPicture.call(this.$el, this.model);
-        },
-
         getDropdown: function () {
             if (!this.model.isPerson()) return $();
 
@@ -89,10 +80,11 @@ define('io.ox/find/view-token', [
                 dropdown = new Dropdown({
                     model: ddmodel,
                     tagName: 'div',
+                    classname: 'facets',
                     label: function () {
                         return [
                             $('<span class="token-type">').text(value.getTokenType()),
-                            $('<i aria-hidden="true" class="fa fa-caret-down">'),
+                            $('<i class="fa fa-caret-down" aria-hidden="true">'),
                             $('<span class="token-name">').text(value.getDisplayName())
                         ];
                     }

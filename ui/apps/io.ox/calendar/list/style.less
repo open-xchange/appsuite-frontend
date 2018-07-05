@@ -11,18 +11,57 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-.calendar-list-view {
+.chronos-item {
 
-    .search-view .vgrid-cell.calendar .date {display: block; }
+    .search-view .list-item-content.calendar .date { display: block; }
 
     .vgrid.editable .vgrid-cell { padding-left: 48px; }
 
-    .vgrid-cell {
+    &.visible-selection.has-focus .list-item.selected * { color: #fff!important; }
+
+    .notification.empty {
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .list-item {
+        padding-bottom: 0;
+        padding-top: 0;
+        border: none;
+    }
+
+    .tail {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        text-align: center;
+    }
+
+    .busy-indicator {
+        padding: 0;
+        height: 46px;
+    }
+
+    .list-item.list-item-label {
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 21px;
+        color: #3c73aa;
+        padding: 14px 13px 7px 48px;;
+    }
+
+    .list-item-checkmark { margin-top: 10px; }
+
+    .list-item-content {
 
         &.calendar {
             height: 70px; /* = 3 rows */
+            font-size: 13px;
+            padding: 10px 0px;
+            color: #333;
 
-            .vgrid-cell-checkbox { padding-top: 10px; }
+            * {
+                .ellipsis();
+            }
 
             .contentContainer { padding-left: 10px; }
 
@@ -37,11 +76,27 @@
                 height: 1em;
                 float: right;
                 margin-left: 1em;
-                .border-radius(@border-radius-base);
+                border-radius: @border-radius-base;
             }
 
-           &.declined .title,
-           &.declined .location { text-decoration: line-through; }
+            &.declined .title,
+            &.declined .location { text-decoration: line-through; }
+
+            .private-flag {
+                color: #AAA;
+                float: left;
+                font-size: 13pt;
+                margin-right: 2px;
+            }
+
+            .title {
+                font-weight: 700;
+                white-space: pre;
+            }
+
+            .location {
+                color: #767676;
+            }
 
             .time {
                 position: relative;
@@ -52,11 +107,12 @@
                 .fragment {
                     text-overflow: clip;
                     margin-right: 5px;
+                    color: #555;
                 }
 
             }
 
-            .time:after {
+            .time > .color-label {
                 content: "";
                 width: 20px;
                 position: absolute;
@@ -66,47 +122,39 @@
             }
 
             .date { display: none; }
-        }
 
-        .custom_shown_as {
-            &.reserved:after  { background-color: @appointment-reserved;  }
-            &.temporary:after { background-color: @appointment-temporary; }
-            &.absent:after    { background-color: @appointment-absent;    } /* red */
-            &.free:after      { background-color: @appointment-free;      }
+            &.reserved .custom_shown_as > .color-label { background-color: @appointment-reserved; }
+            &.free     .custom_shown_as > .color-label { background-color: @appointment-free; }
+            &.declined .custom_shown_as > .color-label { background-color: @appointment-declined; }
         }
     }
 }
 
-.custom-colors .calendar-list-view .vgrid-cell {
-    .custom_shown_as {
-        .generate-color-label(@counter) when (@counter > 0) {
-            .generate-color-label((@counter - 1));
-
-            &.color-label-@{counter} {
-                @color-label-bg-mod: ~"color-label-bg-@{counter}";
-                @color-label-bg-light: lighten(@@color-label-bg-mod, @custom-color-pattern-pct);
-
-
-                &:after {
-                    background-color: ~"@{color-label-bg-@{counter}}";
-                }
-
-                &.free:after {
-                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
-                }
-
-                &.temporary:after {
-                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
-                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
-                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
-                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
-                }
-            }
-        }
-
-        .generate-color-label(10);
+.calendar-list-view {
+    .folder-info {
+        text-align: center;
+        margin: 0 30px;
+        .ellipsis();
     }
+
+    .folder-count {
+        font-size: 13px;
+        color: #767676;
+    }
+}
+
+.calendar-list-view .list-item-content.free .custom_shown_as.white > .color-label {
+    @color-label-bg-light: rgba(255, 255, 255, 0.2);
+    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+}
+
+.calendar-list-view .list-item-content.free .custom_shown_as.black > .color-label {
+    @color-label-bg-dark: rgba(0, 0, 0, 0.1);
+    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-dark 25px, @color-label-bg-dark 50px);
 }

@@ -32,8 +32,12 @@ define('io.ox/tours/mail', [
         .step()
             .title(gt('Composing a new E-Mail'))
             .content(gt('To compose a new E-Mail, click on Compose in the toolbar.'))
-            .hotspot('[data-ref="io.ox/mail/actions/compose"]:visible')
+            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:visible:first')
             .on('next', function () {
+                if (composeApp) {
+                    if (composeApp.getWindow().floating.model.get('minimized')) composeApp.getWindow().floating.model.set('minimized', false);
+                    return;
+                }
                 ox.registry.call('mail-compose', 'compose').then(function (result) {
                     composeApp = result.app;
                 });
@@ -47,40 +51,50 @@ define('io.ox/tours/mail', [
             .title(gt('Entering the recipient\'s name'))
             .content(gt('Enter the recipient\'s name into the recipients field. As soon as you typed the first letters, suggestions from the address books are displayed. To accept a recipient suggestion, click on it.'))
             .waitFor('.io-ox-mail-compose-window.ready')
-            .hotspot('[data-extension-id=to] .tokenfield.to')
-            .on('ready', function () {
-                //clean up
-                //HACK: add ready class, to have some class to waitFor
-                $('.io-ox-mail-compose-window').removeClass('ready');
+            .hotspot('.active [data-extension-id=to] .tokenfield.to')
+            .on('back', function () {
+                if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
+                    composeApp.getWindow().floating.onMinimize();
+                }
             })
             .end()
         .step()
             .title(gt('Entering the subject'))
             .content(gt('Enter the subject into the subject field.'))
-            .hotspot('[data-extension-id=subject] input')
+            .hotspot('.active [data-extension-id=subject] input')
             .end()
         .step()
             .title(gt('Further functions'))
             .content(gt('In this area you can find further functions, e.g. for adding attachments.'))
-            .spotlight('[data-extension-id=composetoolbar]')
+            .spotlight('.active [data-extension-id=composetoolbar]')
             .end()
         .step()
             .title(gt('Entering the E-Mail text'))
             .content(gt('Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.'))
             .referTo('.io-ox-mail-compose-container')
             // use editor class so the selector fits for html and plain text editor
-            .spotlight('.mail-compose-contenteditable-fields, .io-ox-mail-compose.container .editor')
+            .spotlight('.active .mail-compose-contenteditable-fields,.active  .io-ox-mail-compose.container .editor')
             .end()
         .step()
             .title(gt('Sending the E-Mail'))
             .content(gt('To send the E-Mail, click on Send'))
-            .hotspot('.io-ox-mail-compose-window button[data-action=send]')
+            .hotspot('.io-ox-mail-compose-window.active button[data-action=send]')
+            .on('before:show', function () {
+                if (composeApp && composeApp.getWindow().floating.model.get('minimized')) {
+                    composeApp.getWindow().floating.model.set('minimized', false);
+                }
+            })
             .end()
         .step()
+            .on('before:show', function () {
+                if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
+                    composeApp.getWindow().floating.onMinimize();
+                }
+            })
             .title(gt('Sorting your E-Mails'))
             .content(gt('To sort the E-Mails, click on Sort by. Select a sort criteria.'))
             .waitFor('.io-ox-mail-window')
-            .spotlight('.list-view-control > .toolbar > .dropdown')
+            .hotspot('.list-view-control > .toolbar > .dropdown:last')
             .navigateTo('io.ox/mail/main')
             .end()
         .step()
@@ -135,6 +149,7 @@ define('io.ox/tours/mail', [
                 //prevent app from asking about changed content
                 composeApp.model.dirty(false);
                 composeApp.quit();
+                composeApp = null;
             }
         })
         .start();

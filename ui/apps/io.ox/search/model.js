@@ -417,9 +417,9 @@ define('io.ox/search/model', [
                         }
                     }
                 }, function () {
-                    return {
+                    throw new Error({
                         message: error.virtual
-                    };
+                    });
                 });
             },
             getFacets: function () {
@@ -487,18 +487,18 @@ define('io.ox/search/model', [
                 tmppool.folder.values.custom.name = undefined;
 
                 tmplist[0].value = 'custom';
-                this.set({
-                    query: '',
-                    autocomplete: [],
-                    active: [],
-                    pool: this.isMandatory('account') ? {} : tmppool,
-                    poollist: this.isMandatory('account') ? [] : tmplist,
-                    pooldisabled: {},
-                    start: 0
-                },
+                this.set(
                     {
-                        silent: true
-                    });
+                        query: '',
+                        autocomplete: [],
+                        active: [],
+                        pool: this.isMandatory('account') ? {} : tmppool,
+                        poollist: this.isMandatory('account') ? [] : tmplist,
+                        pooldisabled: {},
+                        start: 0
+                    },
+                    { silent: true }
+                );
                 if (!opt.silent) this.trigger('reset');
             }
         }

@@ -8,10 +8,12 @@
  *
  * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Matthias Biggeleben <richard.petersen@open-xchange.com>
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/combobox', [], function () {
+define('io.ox/backbone/mini-views/combobox', [
+    'io.ox/core/util'
+], function (util) {
 
     'use strict';
 
@@ -22,6 +24,8 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
             'focus input': 'onFocus',
             'keydown input': 'onKeydown',
             'keyup input': 'onKeyup',
+            'mousedown .dropdown-menu': 'onMousedownMenu',
+            'mouseup .dropdown-menu': 'onMouseupMenu',
             'mousedown .dropdown-menu li': 'onClickOption'
         },
 
@@ -84,6 +88,7 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
         },
 
         onBlur: function () {
+            if (this.preventBlur) return;
             this.$input.attr({
                 'aria-expanded': false,
                 'aria-activedescendant': null
@@ -94,7 +99,8 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
         },
 
         onFocus: function () {
-            var pos = this.$input.position();
+            var pos = this.$input.position(),
+                dropdownOpen = this.$dropdown.is(':visible');
             this.$input.attr('aria-expanded', true);
             this.$dropdown
                 .css({
@@ -103,9 +109,36 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
                 })
                 .show();
             this.updateQuery();
+            var scrollTarget = this.$dropdown.find('strong').first();
+            if (!dropdownOpen && scrollTarget.length === 1) this.scrollIntoView(scrollTarget);
+        },
+
+        onMousedownMenu: function (e) {
+            var clickX = e.offsetX,
+                innerWidth = this.$('li').first().outerWidth(),
+                outerWidth = innerWidth + util.getScrollBarWidth();
+            // prevent clicks on scrollbar
+            if (clickX >= innerWidth && clickX <= outerWidth) {
+                this.preventBlur = true;
+                e.preventDefault();
+
+                // IE and edge doe not trigger a mouse-up event and the input looses focus. Do it manually a short time after
+                if (_.browser.ie || _.browser.edge) {
+                    var self = this;
+                    _.defer(function () {
+                        self.$input.focus();
+                        self.preventBlur = false;
+                    });
+                }
+            }
+        },
+
+        onMouseupMenu: function () {
+            this.preventBlur = false;
         },
 
         onClickOption: function (e) {
+            this.preventBlur = false;
             this.index = $(e.currentTarget).closest('li').index();
             this.select();
             this.onBlur();
@@ -115,22 +148,20 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
             if (!_.isUndefined(this.index)) this.index += incr;
             if (this.index < 0) this.index = this.opt.options.length - 1;
             if (this.index >= this.opt.options.length) this.index = 0;
-            // no index set. try to select matching option. if none is available, select the first option
+            // no index set. try to select matching option.
             if (_.isUndefined(this.index)) {
                 var val = this.$input.val();
                 this.index = _(this.opt.options).findIndex(function (option) {
                     return option.name.toLowerCase().indexOf(val.toLowerCase()) === 0;
                 });
-                if (this.index < 0) {
-                    if (incr < 0) this.index = this.opt.options.length - 1;
-                    else this.index = 0;
-                }
             }
             this.$dropdown.find('.active').removeClass('active');
-            var target = this.$dropdown.children().eq(this.index);
-            target.addClass('active');
-            this.$input.attr('aria-activedescendant', target.attr('id'));
-            this.scrollIntoView(target);
+            if (this.index >= 0) {
+                var target = this.$dropdown.children().eq(this.index);
+                target.addClass('active');
+                this.$input.attr('aria-activedescendant', target.attr('id'));
+                this.scrollIntoView(target);
+            }
         },
 
         scrollIntoView: function (target) {

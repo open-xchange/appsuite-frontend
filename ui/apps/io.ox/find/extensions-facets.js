@@ -78,6 +78,11 @@ define('io.ox/find/extensions-facets', [
                 dropdown = new Dropdown({
                     model: ddmodel,
                     tagName: 'li',
+                    className: 'facets dropdown pull-left',
+                    attributes: {
+                        'data-dropdown': 'view',
+                        role: 'presentation'
+                    },
                     caret: true,
                     label: gt('Options')
                 });
@@ -96,9 +101,7 @@ define('io.ox/find/extensions-facets', [
             });
 
             // dom
-            this.append(
-                dropdown.render().$el.addClass('pull-left').attr('data-dropdown', 'view')
-            );
+            this.append(dropdown.render().$el);
         },
 
         item: function (baton, facet) {
@@ -109,10 +112,7 @@ define('io.ox/find/extensions-facets', [
 
             // divider label
             dropdown.$ul.append(
-                $('<li class="dropdown-header">')
-                .text(
-                   facet.getName()
-                )
+                $('<li class="dropdown-header">').text(facet.getName())
             );
 
             _.each(facet.get('values').models, function (value) {
@@ -131,9 +131,7 @@ define('io.ox/find/extensions-facets', [
                     // option vs. link
                     dropdown.option(id, option.id, label);
 
-                    if (conflicting) {
-                        dropdown.$ul.children().last().addClass('conflicting');
-                    }
+                    if (conflicting) dropdown.$ul.children().last().find('a').addClass('disabled');
                 });
             });
         },
@@ -148,8 +146,11 @@ define('io.ox/find/extensions-facets', [
                     caret: true,
                     label: value.getOption().name || value.getDisplayName(),
                     attributes: {
-                        'data-facet': facet.get('id')
-                    }
+                        'data-facet': facet.get('id'),
+                        'data-dropdown': 'view',
+                        role: 'presentation'
+                    },
+                    className: 'facets dropdown pull-left'
                 }),
                 last;
 
@@ -187,10 +188,7 @@ define('io.ox/find/extensions-facets', [
                     // divider label
                     if (option.item && option.item.detail) {
                         dropdown.$ul.append(
-                            $('<li class="dropdown-header">')
-                            .text(
-                               option.item.detail
-                            )
+                            $('<li class="dropdown-header">').text(option.item.detail)
                         );
                     }
                 }
@@ -205,9 +203,7 @@ define('io.ox/find/extensions-facets', [
             });
 
             // dom
-            this.append(
-                dropdown.render().$el.addClass('pull-left').attr('data-dropdown', 'view')
-            );
+            this.append(dropdown.render().$el);
         },
 
         help: (function () {
@@ -223,7 +219,7 @@ define('io.ox/find/extensions-facets', [
                 if (!target) return;
                 var helpView = new HelpView({ href: target });
                 if (helpView.$el.hasClass('hidden')) return;
-                this.append($('<li class="pull-right">').append(
+                this.append($('<li class="pull-right" role="presentation">').append(
                     helpView.render().$el
                 ));
             };

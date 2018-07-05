@@ -11,6 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+/* eslint no-useless-escape: 0 */
 
 define(['io.ox/core/util'], function (util) {
 
@@ -195,6 +196,14 @@ define(['io.ox/core/util'], function (util) {
         });
 
         describe('getAddresses', function () {
+
+            it('recognizes a simple address', function () {
+                expect(util.getAddresses('email1@domain.tld')).to.deep.equal(['email1@domain.tld']);
+            });
+
+            it('recognizes a simple address without domain part', function () {
+                expect(util.getAddresses('email1')).to.deep.equal(['email1']);
+            });
 
             it('recognizes comma-separated addresses', function () {
                 expect(util.getAddresses('email1@domain.tld,email2@domain.tld,email3@domain.tld'))

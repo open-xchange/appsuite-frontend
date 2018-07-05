@@ -11,9 +11,28 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
+
 ul.io-ox-portal-birthdays .cake {
     padding-right: 4px;
-    display: inline;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.io-ox-portal-birthdays {
+    li {
+        position: relative;
+        padding-left: 48px;
+        .picture {
+            position: absolute;
+            left: 0;
+            .picture(32px, 32px);
+            .flex-center;
+            color: rgba(0, 0, 0, 0.70);
+            background-color: #eee;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    }
 }
 
 div.io-ox-portal-birthdays {
@@ -36,7 +55,6 @@ div.io-ox-portal-birthdays {
         margin-bottom: 13px;
         clear: both;
         cursor: pointer;
-
         .name { font-weight: bold; }
 
         .picture {

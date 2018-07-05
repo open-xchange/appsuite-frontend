@@ -54,6 +54,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // ensure correct width on smartphone
             if (_.device('smartphone') && options.width >= 320) {
                 options.width = '95%';
+                options.maximize = '95%';
             }
             this.context = options.context;
             // the original constructor will call initialize()
@@ -81,7 +82,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
             this.$el.on('hidden.bs.modal', this.close);
             // apply max height if maximize is given as number
-            if (_.isNumber(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
+            if (_.isNumber(options.maximize) || _.isString(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
                 var helpPlaceholder = $('<a class="io-ox-context-help">');
@@ -138,10 +139,23 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         open: function () {
-            var o = this.options;
-            this.render().$el.appendTo('body');
+            var o = this.options,
+                self = this;
+            if (o.render !== false) this.render().$el.appendTo('body');
             // remember previous focus
             this.previousFocus = o.previousFocus || $(document.activeElement);
+            if (_.device('smartphone')) {
+                // rebuild button section for mobile devices
+                this.$el.addClass('mobile-dialog');
+                this.$footer.rowfluid = $('<div class="row">');
+                this.$footer.append(this.$footer.rowfluid);
+                this.$buttons = this.$footer.find('button');
+                _.each(this.$buttons, function (buttonNode) {
+                    self.$footer.rowfluid.prepend($(buttonNode).addClass('btn-medium'));
+                    $(buttonNode).wrap('<div class="col-xs-12 col-md-3">');
+                });
+            }
+
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
@@ -167,7 +181,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         disableFormElements: function () {
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
-                if ($(this).attr('data-action') === 'cancel') return;
+                if ($(this).attr('data-action') === 'cancel' || $(this).attr('data-state') === 'manual') return;
                 $(this).toggleClass('disabled', $(this).prop('disabled')).prop('disabled', true);
             });
         },
@@ -175,12 +189,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         enableFormElements: function () {
             // enable all form elements
             this.$(':input').each(function () {
-                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+                if ($(this).attr('data-state') === 'manual') return;
+                $(this).prop('disabled', false).removeClass('disabled');
             });
         },
 
-        build: function (fn) {
-            fn.call(this);
+        hideBody: function () {
+            this.$('.modal-body').hide();
+            this.$('.modal-footer').css('border-top', 0);
             return this;
         },
 
@@ -219,6 +235,24 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             );
         },
 
+        addCheckbox: function (options) {
+            var o = _.extend({ className: 'pull-left' }, options),
+                id = _.uniqueId('custom-');
+            this.$footer.prepend(
+                $('<div class="checkbox custom">').append(
+                    $('<label>').attr('for', id).prepend(
+                        $('<input type="checkbox" class="sr-only">')
+                            .attr({ 'id': id, 'name': o.action })
+                            .prop('checked', o.status),
+                        $('<i class="toggle" aria-hidden="true">'),
+                        $.txt(o.label || '\u00a0')
+                    )
+                )
+                .addClass(o.className)
+            );
+            return this;
+        },
+
         onAction: function (e) {
             this.invokeAction($(e.currentTarget).attr('data-action'));
         },
@@ -228,6 +262,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // otherwise we cannot idle the dialog in the action listener
             if (this.options.async && action !== 'cancel') this.busy();
             this.trigger(action);
+            // for general event listeners
+            this.trigger('action', action);
             // check if this.options is there, if the dialog was closed in the handling of the action this.options is empty and we run into a js error otherwise
             if ((this.options && !this.options.async) || action === 'cancel') this.close();
         },
@@ -236,6 +272,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (e.which !== 13) return;
             if (!this.options.enter) return;
             if (!$(e.target).is('input:text, input:password')) return;
+            e.preventDefault();
             this.invokeAction(this.options.enter);
         },
 
@@ -247,6 +284,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
+            if (this.$footer.find('[data-action="cancel"]').length > 0) this.trigger('cancel');
             this.close();
         },
 
@@ -265,7 +303,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         resume: function () {
             $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.$el.next().addBack().show();
+            // add marker class again(needed by yells for example)
+            $(document.body).addClass('modal-open');
             this.toggleAriaHidden(true);
+            this.idle();
         }
     });
 

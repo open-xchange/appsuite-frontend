@@ -29,7 +29,7 @@ define('plugins/portal/contacts/register', [
             return api.get({ folder: props.folder_id, id: props.id }).then(function (data) {
                 baton.data = data;
             }, function (e) {
-                return e.code === 'CON-0125' ? 'remove' : e;
+                throw e.code === 'CON-0125' ? 'remove' : e;
             });
         },
 

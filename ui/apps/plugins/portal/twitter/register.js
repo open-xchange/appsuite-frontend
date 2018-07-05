@@ -282,11 +282,12 @@ define('plugins/portal/twitter/register', [
             keychain.submodules.twitter.off('create', null, this);
             keychain.submodules.twitter.on('create', function () {
                 baton.model.node.find('h2 .fa-twitter').replaceWith($('<span class="title">').text(gt('Twitter')));
+                baton.model.node.find('h2 .sr-only').remove();
                 baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
                 refreshWidget();
             }, this);
             if (this.hasClass('widget-color-custom')) return;
-            this.find('h2:first').prepend($('<i class="fa fa-twitter" aria-hidden="true">'));
+            this.find('h2:first').append($('<i class="fa fa-twitter" aria-hidden="true">'));
             this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-twitter');
         },

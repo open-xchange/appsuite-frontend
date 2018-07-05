@@ -108,7 +108,7 @@ define('io.ox/notes/toolbar', [
             var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 0 });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbarView.render().$el
+                toolbarView.render().$el
             );
 
             function updateCallback($toolbar) {

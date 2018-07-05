@@ -29,7 +29,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     });
 
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
             var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
@@ -57,7 +57,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             } else {
                 this.model.set(this.name, this.$el.val());
             }
-
+            // force validation
+            this.onKeyup();
         },
         onKeyup: function () {
             var state;
@@ -75,36 +76,36 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     });
 
     var drawDeleteButton = function (type) {
-        return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o">'));
+        return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o" aria-hidden="true">'));
     };
 
     var drawCondition = function (o) {
         if (o.layout === '3') {
-            return $('<li>').addClass('filter-settings-view row layout-3 ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
-                $('<div>').addClass('col-sm-2 doubleline').append(
-                    $('<span>').addClass('list-title').text(o.title)
+            return $('<li class="filter-settings-view row layout-3">').addClass(o.addClass).attr('data-test-id', o.conditionKey).append(
+                $('<div class="col-sm-2 doubleline">').append(
+                    $('<span class="list-title">').text(o.title)
                 ),
-                $('<div>').addClass('col-sm-10').append(
-                    $('<div>').addClass('row').append(
-                        $('<div>').addClass('col-sm-4 dualdropdown').append(
-                            $('<div>').addClass('row').append(
+                $('<div class="col-sm-10">').append(
+                    $('<div class="row flex">').append(
+                        $('<div class="col-sm-4 dualdropdown">').append(
+                            $('<div class="row">').append(
                                 $('<label class="col-sm-4">').text(gt('Header')),
-                                $('<div>').addClass('col-sm-8').append(
+                                $('<div class="col-sm-8">').append(
                                     new DropdownLinkView(o.seconddropdownOptions).render().$el
                                 )
                             ),
-                            $('<div>').addClass('row').append(
+                            $('<div class="row">').append(
                                 $('<label class="col-sm-4">').text(gt('Part')),
-                                $('<div>').addClass('col-sm-8').append(
+                                $('<div class="col-sm-8">').append(
                                     new DropdownLinkView(o.thirddropdownOptions).render().$el
                                 )
                             )
                         ),
-                        $('<div>').addClass('col-sm-3 dropdownadjust').append(
+                        $('<div class="col-sm-3">').append(
                             new DropdownLinkView(o.dropdownOptions).render().$el
                         ),
-                        $('<div>').addClass('col-sm-5 doubleline').append(
-                            $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
+                        $('<div class="col-sm-5 doubleline">').append(
+                            $('<label class="sr-only">').attr('for', o.inputId).text(o.inputLabel),
                             new Input(o.inputOptions).render().$el,
                             o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
                         )
@@ -115,24 +116,24 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         }
 
         if (o.secondInputId) {
-            return $('<li>').addClass('filter-settings-view row ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
-                $('<div>').addClass('col-sm-4 doubleline').append(
-                    $('<span>').addClass('list-title').text(o.title)
+            return $('<li class="filter-settings-view row">').addClass(o.addClass).attr('data-test-id', o.conditionKey).append(
+                $('<div class="col-sm-4 doubleline">').append(
+                    $('<span class="list-title">').text(o.title)
                 ),
-                $('<div>').addClass('col-sm-8').append(
-                    $('<div>').addClass('row').append(
-                        $('<label for="' + o.inputId + '" class="col-sm-4 control-label" >').text(gt('Name')),
-                        $('<div>').addClass('first-label inline-input col-sm-8').append(
+                $('<div class="col-sm-8">').append(
+                    $('<div class="row">').append(
+                        $('<label class="col-sm-4 control-label">').attr('for', o.inputId).text(gt('Name')),
+                        $('<div class="first-label inline-input col-sm-8">').append(
                             new Input(o.inputOptions).render().$el,
                             o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
                         )
                     ),
-                    $('<div>').addClass('row').append(
-                        $('<div>').addClass('col-sm-4').append(
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-4">').append(
                             new DropdownLinkView(o.dropdownOptions).render().$el
                         ),
                         $('<div class="col-sm-8">').append(
-                            $('<label for="' + o.secondInputId + '" class="sr-only">').text(o.secondInputLabel),
+                            $('<label class="sr-only">').attr('for', o.secondInputId).text(o.secondInputLabel),
                             new Input(o.secondInputOptions).render().$el,
                             o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
                         )
@@ -141,20 +142,20 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 drawDeleteButton('test')
             );
         }
-        return $('<li>').addClass('filter-settings-view row ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
-            $('<div>').addClass('col-sm-4 singleline').append(
-                $('<span>').addClass('list-title').text(o.title)
+        return $('<li class="filter-settings-view row">').addClass(o.addClass).attr('data-test-id', o.conditionKey).append(
+            $('<div class="col-sm-4 singleline">').append(
+                $('<span class="list-title">').text(o.title)
             ),
-            $('<div>').addClass('col-sm-8').append(
-                $('<div>').addClass('row').append(
-                    o.seconddropdownOptions ? $('<div>').addClass('col-sm-2').append(
+            $('<div class="col-sm-8">').append(
+                $('<div class="row">').append(
+                    o.seconddropdownOptions ? $('<div class="col-sm-2">').append(
                         new DropdownLinkView(o.seconddropdownOptions).render().$el
                     ) : [],
                     $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
                         o.dropdownOptions ? new DropdownLinkView(o.dropdownOptions).render().$el : []
                     ),
                     $('<div class="col-sm-8">').append(
-                        $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
+                        $('<label class="sr-only">').attr('for', o.inputId).text(o.inputLabel),
                         new Input(o.inputOptions).render().$el,
                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
                     )
@@ -288,7 +289,6 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         opt.model.on('change:comparison', function (m, value) {
             if (!_.contains(emptyValuesAllowed, value)) {
                 input.prop('disabled', false);
-                opt.model.set('values', opt.defaults.values, { silent: true });
                 if (opt.defaults.id !== 'header') opt.model.set('headers', opt.defaults.headers);
 
             } else {

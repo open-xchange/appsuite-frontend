@@ -39,7 +39,7 @@ define('io.ox/tours/portal', [
         .step()
             .title(gt('Drag and drop'))
             .content(gt('To change the layout, drag a square\'s title to another position and drop it there.'))
-            .spotlight('.widget:first')
+            .spotlight('.widget:visible:first')
             .end()
         .step()
             .title(gt('Closing a square'))

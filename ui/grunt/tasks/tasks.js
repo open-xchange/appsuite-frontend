@@ -12,16 +12,17 @@
  */
 
 'use strict';
+/* global Promise */
 
 module.exports = function (grunt) {
 
     // displays the execution time of grunt tasks
     if (grunt.option('benchmark') || grunt.config('local.benchmark')) require('time-grunt')(grunt);
 
-    grunt.registerTask('bootjs', ['newer:copy:ox', 'newer:concat:bootjs']);
+    grunt.registerTask('bootjs', ['copy:build_ox', 'concat:bootjs']);
 
-    grunt.registerTask('lint', ['newer:eslint:all', 'newer:jsonlint:all']);
-    grunt.registerTask('lint:specs', ['newer:eslint:all', 'newer:jsonlint:specs']);
+    grunt.registerTask('lint', ['newer:eslint:all']);
+    grunt.registerTask('lint:specs', ['newer:eslint:all']);
 
     //Override the default tasks
 
@@ -29,9 +30,44 @@ module.exports = function (grunt) {
     grunt.registerTask('copy_build', grunt.util.runPrefixedSubtasksFor('copy', 'build'));
 
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'concat', 'newer:less']);
+    grunt.registerTask('build', ['lint', 'workaround_fetch', 'copy_build', 'compile_po', 'concat', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
+    grunt.registerTask('dist', ['clean', 'copy_build', 'compile_po', 'concat', 'newer:less', 'uglify', 'copy_dist', 'create_i18n_properties']);
 
-    grunt.registerTask('refresh', 'force an update and reload the broweser', ['force_update', 'send_livereload']);
+    grunt.registerTask('force_update', ['bootjs', 'copy:build_base']);
+
+    grunt.registerTask('workaround_fetch', function () {
+        var appserver = require('appserver'),
+            mirrorFile = appserver.tools.mirrorFile,
+            config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
+            done = this.async();
+        Promise.all([
+            config.prefixes[0] + 'apps/io.ox/office/tk/definitions.less',
+            config.prefixes[0] + 'apps/io.ox/office/tk/icons/definitions.less',
+            config.prefixes[0] + 'apps/io.ox/office/tk/icons/definitions.less',
+            config.prefixes[0] + 'apps/io.ox/office/tk/icons/docs-icons.less',
+            config.prefixes[0] + 'apps/oxguard/tour/style.less'
+        ].map(function (fileName) {
+            if (grunt.file.exists(fileName)) return;
+            return mirrorFile(fileName, fileName.replace(config.prefixes[0], 'v=7.x.x/'), config);
+        })).then(done);
+    });
+    grunt.registerTask('prefetch:static', function () {
+        var appserver = require('appserver'),
+            mirrorFile = appserver.tools.mirrorFile,
+            config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
+            fileName = grunt.option('output'),
+            done = this.async();
+        mirrorFile(fileName, fileName.replace(config.prefixes[0], 'v=7.x.x/'), config)
+            .then(done);
+    });
+    grunt.registerTask('prefetch:appsLoad', function () {
+        var appserver = require('appserver'),
+            mirrorFile = appserver.tools.mirrorFile,
+            config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
+            fileName = grunt.option('output'),
+            done = this.async();
+        mirrorFile(fileName, fileName.replace(config.prefixes[0] + 'apps/', 'api/apps/load/v=7.x.x,'), config)
+            .then(done);
+    });
 };

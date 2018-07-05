@@ -46,7 +46,7 @@ define('plugins/portal/userSettings/register', [
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/yell'], function (dialogs, http, yell) {
 
-            var isGuest = capabilities.has('guest-test'),
+            var isGuest = capabilities.has('guest'),
                 oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
                 minLength = settings.get('password/minLength', 4),
                 maxLength = settings.get('password/maxLength', 0),
@@ -91,32 +91,25 @@ define('plugins/portal/userSettings/register', [
                     pwContainer = [strengthBarWrapper, $('<div class=password-hint-container>').append(hintText)];
                 }
 
-                var currentPasswordString = gt('Your current password');
-                if (isGuest) {
-                    //#. Hint to leave an input field empty if the user does not already have a password
-                    var guestHint = gt('Leave empty if you have none');
-                    currentPasswordString = currentPasswordString + ' (' + guestHint + ')';
-                }
+                var currentPasswordString = gt('Your current password'),
+                    guid = _.uniqueId('form-control-label-');
+
                 this.getContentNode().append(
-                    $('<label class="password-change-label">').text(currentPasswordString),
-                    oldPass = $('<input type="password" class="form-control current-password">'),
-                    $('<label class="password-change-label">').text(gt('New password')),
-                    newPass = $('<input type="password" class="form-control new-password">'),
-                    $('<label class="password-change-label">').text(gt('Repeat new password')),
-                    newPass2 = $('<input type="password" class="form-control repeat-new-password">'),
+                    $('<label class="password-change-label">').attr('for', guid).text(currentPasswordString).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
+                    oldPass = $('<input type="password" class="form-control current-password">').attr('id', guid).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
+                    $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('New password')),
+                    newPass = $('<input type="password" class="form-control new-password">').attr('id', guid),
+                    $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Repeat new password')),
+                    newPass2 = $('<input type="password" class="form-control repeat-new-password">').attr('id', guid),
                     pwContainer,
-                    $('<div class="alert alert-info">')
-                        .css('margin', '14px 0')
-                        .text(
-                            gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
-                        )
-                    ).css('max-height', '500px');
-                if (showStrength) {
-                    newPass.on('keyup', updateStrength);
-                }
+                    $('<div class="alert alert-info">').css('margin', '14px 0').css('max-height', '500px').text(
+                        gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
+                    ).toggle(!isGuest)
+                );
+                if (showStrength) newPass.on('keyup', updateStrength);
 
             })
-            .addPrimaryButton('change', gt('Change password and sign out'))
+            .addPrimaryButton('change', isGuest ? gt('Change password') : gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
 
@@ -147,7 +140,10 @@ define('plugins/portal/userSettings/register', [
                         node.find('input[type="password"]').val('');
                         dialog.close();
                         dialog = null;
-                        main.logout();
+                        //no need to logut guests
+                        if (!isGuest) {
+                            main.logout();
+                        }
                     })
                     .fail(function (error) {
                         yell(error);
@@ -224,15 +220,13 @@ define('plugins/portal/userSettings/register', [
         title: gt('User data'),
 
         preview: function () {
-            var content;
+            var content = $('<div class="content">');
             if (internalUserEdit) {
-                this.append(
-                    content = $('<div class="content">').append(
-                        // user data
-                        $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
-                        .on('click keypress', { fn: changeUserData }, keyClickFilter)
+                content.append(
+                    // user data
+                    $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
+                    .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
-                    )
                 );
             }
             // password
@@ -243,6 +237,7 @@ define('plugins/portal/userSettings/register', [
                     .on('click keypress', { fn: changePassword }, keyClickFilter)
                 );
             }
+            this.append(content);
         }
     });
 

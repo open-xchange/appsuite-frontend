@@ -31,7 +31,9 @@ define('io.ox/files/share/model', [
                 password: '',
                 temporary: false,
                 expires: 2,
-                url: ''
+                url: '',
+                is_new: false,
+                includeSubfolders: true // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
             };
         },
 
@@ -48,10 +50,12 @@ define('io.ox/files/share/model', [
         getChanges: function () {
             var original = this.originalAttributes, changes = {};
             _(this.attributes).each(function (val, id) {
-                if (!_.isEqual(val, original[id])) changes[id] = val;
+                if (!_.isEqual(val, original[id])) {
+                    changes[id] = val;
+                }
             });
             // limit to relevant attributes
-            return _(changes).pick('expiry_date', 'password', 'temporary', 'secured');
+            return _(changes).pick('expiry_date', 'includeSubfolders', 'password', 'temporary', 'secured');
         },
 
         hasChanges: function () {
@@ -100,8 +104,10 @@ define('io.ox/files/share/model', [
                 targets.push(target);
             });
 
-            // secial data for getlink request
+            // special data for `getLink` request
             data = targets[0];
+
+            data.includeSubfolders = this.get('includeSubfolders');
 
             if (this.get('secured') && this.get('password') !== '') {
                 data.password = this.get('password');
@@ -134,17 +140,46 @@ define('io.ox/files/share/model', [
             } else {
                 data.expiry_date = null;
             }
-            return data;
 
+            return data;
         },
 
         sync: function (action, model) {
             var self = this;
             switch (action) {
                 case 'read':
-                    return api.getLink(this.toJSON()).then(function (data, timestamp) {
+                    return api.getLink(this.toJSON()).then(function (result) {
+                        var data = result.data,
+                            timestamp = result.timestamp;
+                        // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
+                        //
+                        // api call returns e.g.
+                        //
+                        // data : {
+                        //     entity              : 51
+                        //     is_new              : true
+                        //     includeSubfolders   : false
+                        //     url                 : "http://192.168.56.104/ajax/share/00d5202f00d9bd750d5202e0d9bd469e91c3683567561468/1/8/MjUw"
+                        // }
+                        // SCR-97: BREAKPOINT one line beneath for debugging
                         self.set(_.extend(data, { lastModified: timestamp }), { '_inital': true });
+
+                        //  - Searching for why new data fields like `includeSubfolders` could not be saved persistently finally
+                        //    led to `self.setOriginal()` that does not set the original `data` object 3 lines above at all.
+                        //  - The fallback of `self.setOriginal` ... `this.originalAttributes = data || _.clone(this.attributes);`
+                        //    in this case is misleading for it's false safety.
+                        //  - Though it's obvious now, finding this single source of misbehavior has consumed more than 1 day.
+                        //
+                        // self.setOriginal(data);  // ... and it DOES even work as expected (always triggers a server call, even
+                        //                          // though no data got changed), but it is useless due to an entirely corrupted
+                        //                          // model ... thus `self.setOriginal();` will remain but the next step has to be
+                        //                          // hacking `this.originalAttributes`.
+                        //
                         self.setOriginal();
+
+                        if ('includeSubfolders' in data) {
+                            self.originalAttributes.includeSubfolders = data.includeSubfolders;
+                        }
                         return data.url;
                     }).fail(function (error) {
                         yell(error);
@@ -162,19 +197,27 @@ define('io.ox/files/share/model', [
                         delete data.password;
                     }
                     // update only if there are relevant changes
+                    //
+                    // SCR-97: BREAKPOINT one line beneath for debugging
                     return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
                         .done(this.send.bind(this))
-                        .fail(yell);
+                        .fail(function (error) {
+                            yell(error);
+                            self.trigger('error:sync', 'update', error);
+                        });
                 // no default
             }
         },
 
+        // SCR-97: BREAKPOINT one line beneath for debugging
         send: function () {
             if (_.isEmpty(this.get('recipients'))) return;
             api.sendLink(this.toJSON()).fail(yell);
         },
 
-        validate: function (attr) {
+        validate: function (attr, options) {
+            // special case: bug 53466
+            if (options._event === 'change') return;
             if (attr.secured === true && _.isEmpty(attr.password)) {
                 return gt('Please set password');
             }

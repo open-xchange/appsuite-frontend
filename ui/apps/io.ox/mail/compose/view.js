@@ -26,6 +26,7 @@ define('io.ox/mail/compose/view', [
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
+    'io.ox/core/attachments/backbone',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
@@ -33,7 +34,7 @@ define('io.ox/mail/compose/view', [
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, sanitizer) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
 
     'use strict';
 
@@ -94,6 +95,11 @@ define('io.ox/mail/compose/view', [
             id: 'sender',
             index: INDEX += 100,
             draw: extensions.sender
+        },
+        {
+            id: 'sender-realname',
+            index: INDEX += 100,
+            draw: extensions.senderRealName
         },
         {
             id: 'to',
@@ -260,7 +266,8 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="col-xs-5 col-md-5 col-md-offset-1">');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3">');
+                if (_.device('!smartphone')) node.addClass('col-xs-offset-2');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -274,7 +281,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7 col-md-6">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
                 );
             }
         }
@@ -286,6 +293,7 @@ define('io.ox/mail/compose/view', [
         draw: function (baton) {
             var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
+            extensions.attachmentSharing.call(node, baton);
             node.appendTo(this);
         }
     });
@@ -421,7 +429,7 @@ define('io.ox/mail/compose/view', [
                             id = base.last(),
                             folder = base.without(id).join(mailAPI.separator),
                             // use JSlob to save the draft ID so it can be used as a restore point.
-                            idSavePoints =  coreSettings.get('savepoints', []);
+                            idSavePoints = coreSettings.get('savepoints', []);
 
                         idSavePoints.push({
                             module: 'io.ox/mail/compose',
@@ -463,7 +471,7 @@ define('io.ox/mail/compose/view', [
             delete obj.mode;
 
             if (obj.initial === false) {
-                obj.attachments = new Backbone.Collection(_.clone(obj.attachments));
+                obj.attachments = new Attachments.Collection(_.clone(obj.attachments));
                 this.model.set(obj);
                 obj = null;
                 return $.when();
@@ -552,6 +560,9 @@ define('io.ox/mail/compose/view', [
                         address[0] = settings.get(['customDisplayNames', address[1], 'name'], address[0]);
                     }
 
+                    // recover notification option (boolean)
+                    if (mode === 'edit') data.disp_notification_to = !!data.disp_notification_to;
+
                     self.model.set(data);
 
                     var attachmentCollection = self.model.get('attachments');
@@ -586,7 +597,8 @@ define('io.ox/mail/compose/view', [
                         self.model.set('attachments', attachmentCollection);
                         obj = data = attachmentCollection = null;
                     });
-                }).fail(function () {
+                })
+                .fail(function () {
                     // Mark model as clean to prevent save/discard dialog when server side error occurs
                     self.clean();
                 });
@@ -624,9 +636,8 @@ define('io.ox/mail/compose/view', [
             // get mail
             var mail = this.model.getMailForDraft();
 
-            // never append vcard when saving as draft
-            // backend will append vcard for every send operation (which save as draft is)
-            delete mail.vcard;
+            // disabled for fix of bug 56704
+            //delete mail.vcard;
 
             var view = this,
                 baton = new ext.Baton({
@@ -766,6 +777,12 @@ define('io.ox/mail/compose/view', [
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
+
+                if (this.app.getWindow && this.app.getWindow().floating) {
+                    this.app.getWindow().floating.toggle(true);
+                } else if (_.device('smartphone')) {
+                    this.app.getWindow().resume();
+                }
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
@@ -969,17 +986,14 @@ define('io.ox/mail/compose/view', [
         },
 
         getParagraph: function (text, isHTML) {
-            //use div for html cause innerHTML for p tags with nested tags fail
-            var node = (/(<([^>]+)>)/ig).test(text) ? $('<div>') : $('<p>');
-            node.addClass('io-ox-signature')
-                .append(!!isHTML ? text : this.editor.ln2br(text));
+            var node = $('<div class="io-ox-signature">').append(!!isHTML ? text : this.editor.ln2br(text));
             return $('<div>').append(node).html();
         },
 
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p[^>]*class="default-style"[^>]*><br><\/p>)+/, '');
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<div[^>]*class="default-style"[^>]*><br><\/div>)+/, '');
             var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },

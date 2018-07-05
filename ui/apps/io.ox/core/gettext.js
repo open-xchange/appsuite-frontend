@@ -81,13 +81,14 @@ define('io.ox/core/gettext', function () {
 
         function gettext(text) {
             var str = get(text) || text;
+            str = _.url.hash('debug-i18n') ? markTranslated(str) : str;
             return printf(str, arguments, 1);
         }
 
         if (_.url.hash('debug-i18n')) {
             gettext.format = function (text, params) {
                 var args = _.isArray(params) ? [text].concat(params) :
-                        Array.prototype.slice.call(arguments);
+                    Array.prototype.slice.call(arguments);
                 for (var i = 0; i < args.length; i++) {
                     var arg = String(args[i]);
                     if (isTranslated(arg)) {
@@ -117,6 +118,11 @@ define('io.ox/core/gettext', function () {
         gettext.ngettext = function (/* singular, plural, n */) {
             var args = Array.prototype.concat.apply([''], arguments);
             return npgettext.apply(null, args);
+        };
+
+        gettext.ngettextf = function (/* singular, plural, n */) {
+            var str = this.ngettext.apply(this, arguments);
+            return this.format(str, arguments[2]);
         };
 
         gettext.getDictionary = function () {

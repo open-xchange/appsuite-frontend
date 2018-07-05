@@ -56,7 +56,7 @@
         .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
 
         &:not(.mce-open) {
-            .border-radius(@border-radius-base);
+            border-radius: @border-radius-base;
             .user-select(none);
         }
 
@@ -82,7 +82,7 @@
         padding-bottom:2px;
         padding-top:1px;
 
-        &:focus { background-color: #ddd; outline: 1px solid blue; }
+        &:focus { background-color: #ddd; outline: 1px solid @outline-color; }
         &:hover { background-color: #ddd; }
     }
 }
@@ -105,8 +105,8 @@
 }
 
 .mce-floatpanel.mce-window {
-    .box-shadow(0 5px 25px -5px #000);
-    .border-radius(@border-radius-base);
+    box-shadow: 0 5px 25px -5px #000;
+    border-radius: @border-radius-base;
 }
 
 .mce-colorbutton:hover .mce-open {
@@ -115,11 +115,43 @@
 }
 .mce-window-head, .mce-foot { border-color: #e5e5e5; }
 
-/* emoji plugin */
-.mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }
 
-.mce-container *:not(.emoji) .mce-menu-item:hover,
-.mce-container *:not(.emoji) .mce-menu-item.mce-selected,
-.mce-container *:not(.emoji) .mce-menu-item:focus { background-color: #0081c2; }
+// all the menu hover and active/selected states
+.mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }
+.mce-container *:not(.emoji) {
+    .mce-menu-item {
+        &:hover, &:focus, &:active,
+        &.mce-selected {
+            .mce-text, .mce-ico { color: #333; }
+            color: #333;
+            background-color: #e6e6e6;
+        }
+    }
+    .mce-menu-item-normal {
+        &.mce-active, &.mce-active .mce-text,
+        &.mce-active .mce-text:hover {
+            color: #333;
+            background-color: #e6e6e6;
+        }
+    }
+}
 
 .mce-grid.mce-colorbutton-grid td.mce-grid-cell div { line-height: 11px; }
+
+// overflow hidden is needed so the focus outline is rendered correctly in firefox
+.mce-container [data-name="fontsizeselect"] button { width: 72px; overflow: hidden }
+
+/* do not show toolbar separators in small windows */
+.floating-window.width-xs:not(.maximized) .mce-btn-group {
+    border-left: 0;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.floating-window.width-xs:not(.maximized) .mce-btn-group-visible-xs:not(:last-of-type) {
+    border-right: 1px solid #d9d9d9;
+    padding-right: 8px;
+    margin-right: 7px;
+}
+
+.floating-window .mce-content-body { margin-bottom: 16px; }

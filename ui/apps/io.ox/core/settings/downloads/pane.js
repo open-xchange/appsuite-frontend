@@ -38,10 +38,11 @@ define('io.ox/core/settings/downloads/pane', [
         });
     });
 
+    // disabled with 7.10
     /*
      * Default download: Updater
      */
-    if (capabilities.has('oxupdater') && driveClientsSettings.get('standaloneWindowsClient') !== true) {
+    /*if (capabilities.has('oxupdater') && driveClientsSettings.get('standaloneWindowsClient') !== true) {
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
             id: 'updater',
             index: 100,
@@ -53,7 +54,7 @@ define('io.ox/core/settings/downloads/pane', [
                         $('<p>').append(
                             $('<i class="fa fa-download" aria-hidden="true">'),
                             $.txt(' '),
-                            $('<a>', { href: href, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file (for Windows)'))
+                            $('<a target="_blank" class="action">', { href: href, download: '' }).text(gt('Download installation file (for Windows)'))
                         ),
                         $('<p>').text(
                             gt('When executing the downloaded file, an installation wizard will be launched. ' +
@@ -62,26 +63,22 @@ define('io.ox/core/settings/downloads/pane', [
                             'You can download the updates from within the Updater.')
                         )
                     ),
-                    $('<section>')
-                        .addClass(products['com.openexchange.outlook.updater.oxtender2'] ? '' : 'hidden')
-                        .append(
-                            $('<h2>').text(gt('Connector for Microsoft Outlook®')),
-                            $('<p>').text(
-                                gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
+                    $('<section>').addClass(products['com.openexchange.outlook.updater.oxtender2'] ? '' : 'hidden').append(
+                        $('<h2>').text(gt('Connector for Microsoft Outlook®')),
+                        $('<p>').text(
+                            gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
                         )
                     ),
-                    $('<section>')
-                        .addClass(products['com.openexchange.oxnotifier'] ? '' : 'hidden')
-                        .append(
-                            $('<h2>').text(gt('Notifier')),
-                            $('<p>').text(
-                                gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
+                    $('<section>').addClass(products['com.openexchange.oxnotifier'] ? '' : 'hidden').append(
+                        $('<h2>').text(gt('Notifier')),
+                        $('<p>').text(
+                            gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
                         )
                     )
                 );
             }
         });
-    }
+    }*/
 
     // add OX Drive download links
     if (capabilities.has('drive')) {
@@ -100,13 +97,13 @@ define('io.ox/core/settings/downloads/pane', [
             // fallback
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 
-            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform + '">')
+            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image">')
+                .addClass(platform)
                 .css('background-image', 'url(' + imagePath + lang + '_' + platform + '.png)');
 
-            return $('<a class="shoplink">').attr({
-                href: url,
-                target: '_blank'
-            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
+            return $('<a class="shoplink" target="_blank">').attr('href', url).append(
+                $img,
+                $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
         };
 
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
@@ -117,38 +114,35 @@ define('io.ox/core/settings/downloads/pane', [
                 // "standalone" takes care of custom branded drive clients that run without the updater
                 var standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
                     hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
-                    windowsClientUrl = standaloneClient ?
-                        ox.apiRoot + linkTo.Windows + '?session=' + ox.session :
-                        ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session,
-                    windowsClientLabel = standaloneClient ?
-                        //.# String will include the product name, "OX Drive for Windows"
-                        gt.format(gt('%s client for Windows'), productName) :
-                        //.# String will include the product name, "OX Drive for Windows"
-                        gt.format(gt('%s client for Windows (Installation via the OX Updater)'), productName);
+                    windowsClientUrl = ox.apiRoot + linkTo.Windows + '?session=' + ox.session,
+                    //.# String will include the product name, i.e. "OX Drive for Windows"
+                    windowsClientLabel = gt.format(gt('%s client for Windows'), productName);
 
                 this.append(
                     $('<section class="oxdrive">').append(
-                        $('<h2>').text(productName),
-                        hasWindowsClient ? $('<div class="shop-link-container">').append(
-                            $.txt(windowsClientLabel),
-                            $('<br>'),
-                            $('<i class="fa fa-download" aria-hidden="true">'),
-                            $('<a>', { href: windowsClientUrl, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file'))
-                        ) : [],
-                        $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Mac OS"
-                            gt.format(gt('%s client for Mac OS'), productName),
-                            getShopLinkWithImage('mac_os', linkTo['Mac OS'])
-                        ),
-                        $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Mac OS"
-                            gt.format(gt('%s client for iOS'), productName),
-                            getShopLinkWithImage('iOS', linkTo.iOS)
-                        ),
-                        $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Mac OS"
-                            gt.format(gt('%s client for Android'), productName),
-                            getShopLinkWithImage('Android', linkTo.Android)
+                        $('<fieldset>').append(
+                            $('<legend class="sectiontitle">').append($('<h2>').text(productName)),
+                            hasWindowsClient ? $('<div class="shop-link-container">').append(
+                                $.txt(windowsClientLabel),
+                                $('<br>'),
+                                $('<i class="fa fa-download" aria-hidden="true">'),
+                                $('<a class="action" target="_blank">', { href: windowsClientUrl, download: '' }).text(gt('Download installation file'))
+                            ) : [],
+                            $('<div class="shop-link-container">').append(
+                                //.# String will include the product name, "OX Drive for Mac OS"
+                                gt.format(gt('%s client for Mac OS'), productName),
+                                getShopLinkWithImage('mac_os', linkTo['Mac OS'])
+                            ),
+                            $('<div class="shop-link-container">').append(
+                                //.# String will include the product name, i.e. "OX Drive for iOS"
+                                gt.format(gt('%s client for iOS'), productName),
+                                getShopLinkWithImage('iOS', linkTo.iOS)
+                            ),
+                            $('<div class="shop-link-container">').append(
+                                //.# String will include the product name, i.e. "OX Drive for Android"
+                                gt.format(gt('%s client for Android'), productName),
+                                getShopLinkWithImage('Android', linkTo.Android)
+                            )
                         )
                     )
                 );
@@ -166,8 +160,7 @@ define('io.ox/core/settings/downloads/pane', [
         id: 'io.ox/core/downloads',
         index: 300,
         title: gt('Downloads'),
-        pane: 'io.ox/core/settings/downloads/pane',
-        advancedMode: false
+        pane: 'io.ox/core/settings/downloads/pane'
     });
 
     ext.point('io.ox/core/settings/downloads/pane').extend({

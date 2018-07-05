@@ -450,9 +450,9 @@ define('io.ox/core/commons', [
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
 
             function apply(id) {
-                return app.folder.set(id).then(null, function () {
+                return app.folder.set(id).then(_.identity, function () {
                     // fallback to default on error
-                    return app.folder.setDefault();
+                    return $.when(app.folder.setDefault());
                 });
             }
 
@@ -681,19 +681,19 @@ define('io.ox/core/commons', [
             if (coreSettings.get('upsell/premium/folderView/closedByUser')) return;
 
             var container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
-                    $('<div class="header">').append(
-                        gt('Premium features'),
-                        $('<a href="#" role="button" class="pull-right">').append(
-                            $('<i class="fa fa-times" aria-hidden="true">'),
-                            $('<span class="sr-only">').text(gt('Close premium features'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $(this).closest('.premium-toolbar').collapse('hide');
-                            coreSettings.set('upsell/premium/folderView/closedByUser', true).save();
-                        })
+                $('<div class="header">').append(
+                    gt('Premium features'),
+                    $('<a href="#" role="button" class="pull-right">').append(
+                        $('<i class="fa fa-times" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close premium features'))
                     )
-                );
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        $(this).closest('.premium-toolbar').collapse('hide');
+                        coreSettings.set('upsell/premium/folderView/closedByUser', true).save();
+                    })
+                )
+            );
 
             ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
 
@@ -738,12 +738,14 @@ define('io.ox/core/commons', [
     };
 
     // factory
-    $.createViewContainer = function (baton, api, getter) {
+    $.createViewContainer = function (baton, api, getter, options) {
 
-        var data = baton instanceof ext.Baton ? baton.data : baton,
+        options = options || {};
+        var cidGetter = options.cidGetter || _.ecid,
+            data = baton instanceof ext.Baton ? baton.data : baton,
             cid = _.cid(data),
-            ecid = _.ecid(data),
-            shortecid = 'recurrence_position' in data ? _.ecid({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
+            ecid = cidGetter(data),
+            shortecid = 'recurrenceID' in data ? cidGetter({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
@@ -754,7 +756,8 @@ define('io.ox/core/commons', [
 
                 if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
-                    if (!data.id) {
+                    var createevent = !data.id;
+                    if (createevent) {
                         data.id = arguments[1].id;
                     }
                     // get fresh object
@@ -764,6 +767,7 @@ define('io.ox/core/commons', [
                         } else {
                             baton = data;
                         }
+                        baton.isCreateEvent = createevent;
                         if (node) node.triggerHandler('redraw', baton);
                     });
                 }
@@ -801,7 +805,7 @@ define('io.ox/core/commons', [
             api.on('delete update', redraw);
         } else {
             // single item
-            folderAPI.on('update', checkFolder, { cid: cid, folder: data.folder_id });
+            folderAPI.on('update', checkFolder, { cid: cid, folder: data.folder_id || data.folder });
             api.on('delete:' + ecid + (shortecid ? ' delete:' + shortecid : ''), remove);
             api.on('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
             api.on('move:' + ecid, move);

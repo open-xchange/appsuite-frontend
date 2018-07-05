@@ -58,13 +58,13 @@ define('plugins/portal/client-onboarding/register', [
                             //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
                             //#. %1$s the product name
                             //#, c-format
-                             gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
+                            gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
                         ),
                         $('<div class="paragraph text-justify devices">').css(style.devices)
                             .append(
-                                $('<i class="fa fa-fw fa-mobile">'),
-                                $('<i class="fa fa-fw fa-tablet">'),
-                                $('<i class="fa fa-fw fa-laptop">')
+                                $('<i class="fa fa-fw fa-mobile" aria-hidden="true">'),
+                                $('<i class="fa fa-fw fa-tablet" aria-hidden="true">'),
+                                $('<i class="fa fa-fw fa-laptop" aria-hidden="true">')
                             ),
                         $('<div class="paragraph">').append(
                             $('<a role="button" class="action">')

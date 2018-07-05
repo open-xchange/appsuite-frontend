@@ -67,6 +67,7 @@ define('io.ox/core/page-controller', [], function () {
 
             if (opt.startPage) {
                 self.setCurrentPage(opt.name);
+
             }
         }
         /*
@@ -94,7 +95,8 @@ define('io.ox/core/page-controller', [], function () {
 
             var opt = _.extend({ from: current, animation: _.device('smartphone') ? 'slideleft' : 'pop', disableAnimations: false }, options || {}),
                 $toPage = pages[to].$el,
-                $fromPage = pages[opt.from].$el;
+                $fromPage = pages[opt.from].$el,
+                def = $.Deferred();
 
             // Android's native UI standard is pop, so we use this too
             opt.animation = _.device('android') ? 'pop' : opt.animation;
@@ -140,6 +142,7 @@ define('io.ox/core/page-controller', [], function () {
                             $(this).removeClass('io-ox-core-animation in ' + opt.animation);
                             $toPage.trigger('pageshow', { from: opt.from, to: opt.to });
                             $(this).find('.taptrap').remove();
+                            def.resolve();
                         });
                     // prevent leaking
                     tapTrap = null;
@@ -162,6 +165,8 @@ define('io.ox/core/page-controller', [], function () {
 
             showNavbar(to);
             showToolbar(to);
+            ox.ui.apps.trigger('layout', app);
+            return def;
         };
 
         /**

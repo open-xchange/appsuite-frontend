@@ -19,7 +19,7 @@ define('io.ox/mail/actions/delete', [
     'gettext!io.ox/mail',
     'io.ox/mail/api',
     'io.ox/core/notifications'
-], function (folderAPI, settings, account, gt, api, notifications) {
+], function (folderAPI, settings, accountAPI, gt, api, notifications) {
 
     'use strict';
 
@@ -32,53 +32,67 @@ define('io.ox/mail/actions/delete', [
     }
 
     api.on('delete:fail:quota', function (e, error, list) {
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog()
-                .header(
-                    $('<h4>').text(gt('Mail quota exceeded'))
-                )
-                .append(
+        require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
+            new ModalDialogView({
+                title: gt('Mail quota exceeded'),
+                focus: '.btn-primary',
+                previousFocus: $('[data-ref="io.ox/mail/listview"]')
+            })
+            .on('delete', function () {
+                // true -> force
+                api.remove(list, list, true);
+            })
+            .addCancelButton()
+            .addButton({ action: 'delete', label: gt('Delete') })
+            .build(function () {
+                this.$body.append(
                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                     $('<div>').text(getQuestion(list))
-                )
-                .addPrimaryButton('delete', gt('Delete'), 'delete')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .on('delete', function () {
-                    // true -> force
-                    api.remove(list, list, true);
-                })
-                .show();
+                );
+            })
+            .open();
         });
     });
 
+    function ignoreCurrentlyEdited(list) {
+        var hash = {};
+        _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
+            // ignore not fully initialised (minimized) restore point instances
+            if (!app.view) return;
+            hash[app.view.model.get('msgref')] = true;
+        });
+        if (!Object.keys(hash).length) return list;
+        return _.filter(list, function (mail) {
+            if (!accountAPI.is('drafts', mail.folder_id)) return true;
+            if (!mail.attachment) return true;
+            return !hash[mail.msgref];
+        });
+    }
+
     return {
 
-        multiple: function (list) {
+        multiple: function (list, baton) {
 
-            var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 
-            var showPrompt = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
-                return account.is('trash', o.folder_id);
-            });
+            var all = list.slice(),
+                shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
+                showPrompt = !shiftDelete && (settings.get('removeDeletedPermanently') || _(list).any(function (o) {
+                    return accountAPI.is('trash', o.folder_id);
+                }));
 
-            // this probably needs to be done server-side
-            // far too much delay when rushing through folders
-            // and deleting unimportant unseen stuff, e.g. spam mail
-
-            // function remove(l, a) {
-            //     var spamList = _(l).filter(function (o) {
-            //         return account.is('spam', o.folder_id);
-            //     });
-
-            //     if (spamList && spamList.length > 0) {
-            //         return api.markRead(spamList).always(function () {
-            //             return api.remove(l, a);
-            //         });
-            //     } else {
-            //         return api.remove(l, a);
-            //     }
-            // }
+            // pragmatic approach for bug 55442 cause mail is so special (weak spot: empty folder)
+            list = ignoreCurrentlyEdited(list);
+            if (all.length !== list.length) {
+                notifications.yell({
+                    headline: gt('Note'),
+                    type: 'info',
+                    message: gt('Currently edited drafts with attachments can not be deleted until you close the correspondig mail compose window.')
+                });
+                // no messages left
+                if (!list.length) return;
+                all = list.slice();
+            }
 
             if (showPrompt) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -94,10 +108,11 @@ define('io.ox/mail/actions/delete', [
                                 // trigger back event, used for mobile swipe delete reset
                                 ox.trigger('delete:canceled', list);
                             }
+
                         });
                 });
             } else {
-                api.remove(list, all).fail(function (e) {
+                api.remove(list, all, shiftDelete).fail(function (e) {
                     // mail quota exceeded? see above
                     if (e.code === 'MSG-0039') return;
                     notifications.yell(e);

@@ -28,6 +28,11 @@ define('io.ox/mail/compose/inline-images', [
         inlineImage: function (data) {
             try {
                 if ('FormData' in window) {
+                    // image broken, don't upload it and show error message
+                    if (data.file.size === 0 && data.file.type === '' && !data.file.name) {
+                        //#. broken image inside a mail
+                        return $.Deferred().reject({ error: {}, message: gt('One of the embedded images could not be used.') });
+                    }
                     var formData = new FormData();
                     // avoid the generic blob filename
                     if (!data.file.name) {
@@ -108,8 +113,7 @@ define('io.ox/mail/compose/inline-images', [
     return {
         api: api,
         show: function () {
-            var noBusy = (_.browser.IE && _.browser.IE < 10), // IE9 upload fails if window becomes busy
-                dialog = new dialogs.ModalDialog({ async: true, noBusy: noBusy }),
+            var dialog = new dialogs.ModalDialog({ async: true }),
                 baton =  new ext.Baton({ $: {} }),
                 def = $.Deferred(),
                 form;
@@ -137,9 +141,7 @@ define('io.ox/mail/compose/inline-images', [
                         popup.idle();
                     };
 
-                if (!noBusy) {
-                    popup.busy();
-                }
+                popup.busy();
 
                 if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));

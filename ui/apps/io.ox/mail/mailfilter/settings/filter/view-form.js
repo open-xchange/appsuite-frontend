@@ -16,8 +16,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
-    'io.ox/backbone/mini-views/dropdown'
-], function (notifications, gt, ext, mini, Dropdown) {
+    'io.ox/backbone/mini-views/dropdown',
+    'settings!io.ox/core'
+], function (notifications, gt, ext, mini, Dropdown, coreSettings) {
 
     'use strict';
 
@@ -41,7 +42,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         renderWarningForEmptyTests = function (node) {
-            var warning = $('<div>').addClass('alert alert-info').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
+            var warning = $('<div class="alert alert-info">').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
             node.append(warning);
         },
 
@@ -69,7 +70,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     _(options.sort).map(function (value) {
                         if (value === options.skip) return;
                         return $('<li>').append(
-                            $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
+                            $('<a href="#" data-action="change-dropdown-value" role="menuitemradio">').attr('data-value', value).data(options).append(
                                 $.txt(values[value])
                             )
                         );
@@ -250,6 +251,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return indicatorKey;
                 }
 
+                function returnTzOffset(timeValue) {
+                    return moment.tz(timeValue, coreSettings.get('timezone')).format('Z').replace(':', '');
+                }
+
                 if (testsPart.tests && testsPart.tests.length === 0) {
                     this.model.set('test', { id: 'true' });
 
@@ -261,9 +266,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         this.model.set('test', { id: 'true' });
                     }
 
-                    // clear zone option in currentdate condition for single test if no special zone is set
+                    // set zone option in currentdate condition for single test if "original" is set
                     if (testsPart.zone === 'original' && testsPart.id === 'currentdate') {
-                        delete this.model.attributes.test.zone;
+                        this.model.attributes.test.zone = returnTzOffset(testsPart.datevalue[0]);
                     }
                 }
 
@@ -271,13 +276,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     _.each(this.model.attributes.test.tests, function (test, key) {
 
-                        // clear zone option in currentdate condition for multiple tests if no special zone is set
-                        if (test.zone === 'original' && test.id === 'currentdate') self.model.attributes.test.tests[key].zone = null;
+                        // set zone option in currentdate condition for multiple tests if "original" zone is set
+                        if (test.zone === 'original' && test.id === 'currentdate') self.model.attributes.test.tests[key].zone = returnTzOffset(test.datevalue[0]);
 
-                        // clear zone option in currentdate condition for multiple nested tests if no special zone is set
+                        // set zone option in currentdate condition for multiple nested tests if "original" zone is set
                         if (test.tests && !_.isEmpty(test.tests)) {
                             _.each(test.tests, function (nestedTest, nestedKey) {
-                                if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = null;
+                                if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = returnTzOffset(nestedTest.datevalue[0]);
                             });
                         }
                     });
@@ -353,7 +358,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return;
                 }
 
-                 // create condition
+                // create condition
                 if (data.type === 'condition') {
                     testArray = _.copy(this.model.get('test'));
 
@@ -388,6 +393,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
 
             setModel: function (type, model, num) {
+
+                // this.subModelHasError = model.validationError !== null;
+
                 if (type === 'test') {
                     var testArray = _.copy(this.model.get(type));
                     if (checkForMultipleTests(this.el).length > 1) {
@@ -559,7 +567,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     point.invoke('draw', conditionList, baton, conditionKey, cmodel, filterValues, condition, addClass);
                 });
 
-                 // inintial validation to disable save button
+                // inintial validation to disable save button
                 if (!cmodel.isValid()) {
                     _.each(cmodel.validationError.split(' '), function (name) {
                         conditionList.find('[data-test-id=' + conditionKey + '] input[name="' + name + '"]').closest('.row').addClass('has-error');
@@ -617,8 +625,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
             });
 
-            var headlineTest = $('<legend>').addClass('sectiontitle expertmode conditions').text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
+            var headlineTest = $('<legend>').addClass('sectiontitle conditions').text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass('sectiontitle actions').text(gt('Actions')),
                 notificationConditions = $('<div class="notification-for-conditions">'),
                 notificationActions = $('<div class="notification-for-actions">');
 
@@ -725,10 +733,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 drawcheckbox = function (value) {
                     var guid = _.uniqueId('form-control-label-');
-                    return $('<div class="control-group mailfilter checkbox">').append(
+                    return $('<div class="control-group mailfilter checkbox custom">').append(
                         $('<div class="controls">'),
                         $('<label>').attr('for', guid).text(gt('Process subsequent rules')).prepend(
-                            $('<input type="checkbox">').attr({ id: guid, 'checked': value })
+                            $('<input type="checkbox" class="sr-only">').attr('id', guid).prop('checked', value),
+                            $('<i class="toggle" aria-hidden="true">')
                         )
                     );
                 },
@@ -759,6 +768,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             if (!target.find('[type="checkbox"]').length) {
                 _.defer(function () {
                     target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
+                    baton.view.$el.trigger('toggle:saveButton');
                 });
             }
 

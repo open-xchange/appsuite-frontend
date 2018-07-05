@@ -32,7 +32,7 @@ define('io.ox/metrics/main', [
 
     function isEnabled() {
         // disable when doNotTrack is enabled
-        if (settings.get('tracking/donottrack', false) && util.doNotTrack()) return false;
+        if (util.doNotTrack()) return false;
         // disable for tests
         if (_.device('karma')) return false;
         // disable durin development
@@ -83,7 +83,7 @@ define('io.ox/metrics/main', [
         },
         // register listener
         watch: function (options, data) {
-            options.node.delegate(options.selector, options.type, data, metrics.trackEvent);
+            options.node.on(options.type, options.selector, data, metrics.trackEvent);
         },
         // util
         getUserHash: function () {

@@ -44,9 +44,6 @@ define([
             this.node.find('input[name="showDeclinedAppointments"]').should.have.length(1);
             this.node.find('input[name="showDeclinedAppointments"]').parent().text().should.be.equal(gt('Show declined appointments'));
 
-            this.node.find('select[id="defaultReminder"]').should.have.length(1);
-            this.node.find('select[id="defaultReminder"]').children().should.have.length(21);
-
             this.node.find('input[name="markFulltimeAppointmentsAsFree"]').should.have.length(1);
             this.node.find('input[name="markFulltimeAppointmentsAsFree"]').parent().text().should.be.equal(gt('Mark all day appointments as free'));
 

@@ -18,101 +18,13 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, settings, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, fileSettings, gt) {
 
     'use strict';
-
-    //
-    // drawing utility functions
-    //
-
-    function a(action, text) {
-        return $('<a href="#" role="menuitem">')
-            .attr('data-action', action).text(text)
-            // always prevent default
-            .on('click', $.preventDefault);
-    }
-
-    function disable(node) {
-        return node.attr('aria-disabled', true).removeAttr('tabindex').addClass('disabled');
-    }
-
-    function addLink(node, options) {
-        var link = a(options.action, options.text);
-        if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
-        node.append($('<li role="presentation">').append(link));
-        return link;
-    }
-
-    function divider() {
-        this.append(
-            $('<li class="divider" role="separator">')
-        );
-    }
-
-    function header(label) {
-        this.append(
-            $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(label)
-        );
-    }
-
-    var ColorSelectionView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'custom-colors',
-        events: {
-            'click .color-label': 'select',
-            'remove': 'onRemove'
-        },
-        initialize: function () {
-            this.listenTo(this.model, 'change:meta', this.update);
-        },
-        update: function () {
-            //toggle active class
-            $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
-        },
-        select: function (e) {
-            var meta = _.extend({},
-                this.model.get('meta'),
-                { color_label: $(e.currentTarget).data('index') }
-            );
-
-            api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
-                require(['io.ox/core/notifications'], function (notifications) {
-                    notifications.yell(error);
-                });
-            });
-
-            //prevent dialog from closing
-            e.stopPropagation();
-            e.preventDefault();
-        },
-        render: function (util) {
-            var folderColor = util.getFolderColor({ meta: this.model.get('meta') }),
-                self = this;
-
-            _(_.range(1, 11)).each(function (colorNumber) {
-                self.$el.append(
-                    $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
-                    .addClass('color-label-' + colorNumber)
-                    .addClass(folderColor === colorNumber ? 'active' : '')
-                    .attr({
-                        'data-index': colorNumber,
-                        'aria-checked': folderColor === colorNumber,
-                        'aria-label': util.getColorLabel(colorNumber)
-                    })
-                    .append('<i class="fa fa-check">')
-                );
-            });
-
-            return this;
-        },
-        onRemove: function () {
-            this.stopListening();
-        }
-    });
 
     var extensions = {
 
@@ -123,7 +35,7 @@ define('io.ox/core/folder/contextmenu', [
 
             if (baton.module !== 'mail') return;
 
-            addLink(this, {
+            contextUtils.addLink(this, {
                 action: 'markfolderread',
                 data: { folder: baton.data.id, app: baton.app },
                 enabled: api.can('write', baton.data),
@@ -139,7 +51,7 @@ define('io.ox/core/folder/contextmenu', [
 
             if (baton.module !== 'mail') return;
 
-            addLink(this, {
+            contextUtils.addLink(this, {
                 action: 'move-all-messages',
                 data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
@@ -155,7 +67,7 @@ define('io.ox/core/folder/contextmenu', [
 
             if (baton.module !== 'mail') return;
 
-            addLink(this, {
+            contextUtils.addLink(this, {
                 action: 'expunge',
                 data: { folder: baton.data.id },
                 enabled: api.can('delete', baton.data),
@@ -184,13 +96,12 @@ define('io.ox/core/folder/contextmenu', [
                 var id = baton.data.id;
                 if (account.is('archive', id)) return;
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'archive',
                     data: { id: id },
                     enabled: api.can('delete', baton.data),
                     handler: handler,
-                    //#. Verb: (to) archive messages
-                    text: gt.pgettext('verb', 'Archive')
+                    text: gt('Archive old messages')
                 });
             };
 
@@ -208,7 +119,7 @@ define('io.ox/core/folder/contextmenu', [
             if (isTrash) label = gt('Empty trash');
             else if (baton.module === 'mail') label = gt('Delete all messages');
 
-            addLink(this, {
+            contextUtils.addLink(this, {
                 action: 'clearfolder',
                 data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
@@ -241,7 +152,7 @@ define('io.ox/core/folder/contextmenu', [
                 // not within trash
                 if (api.is('trash', baton.data)) return;
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'add-subfolder',
                     data: { app: baton.app, folder: baton.data.id, module: baton.module },
                     enabled: true,
@@ -263,10 +174,13 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
+                var folderId = baton.data.id || baton.app.folder.get(),
+                    model = api.pool.getModel(folderId);
 
                 if (!api.can('rename', baton.data)) return;
+                if (api.is('trash', model.toJSON())) return;
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'rename',
                     data: { id: baton.data.id },
                     enabled: true,
@@ -283,20 +197,54 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
-                    remove(e.data.id, { isDSC: account.isDSC(e.data.id) });
+                    remove(e.data.id);
                 });
             }
 
             return function (baton) {
 
                 if (!api.can('remove:folder', baton.data)) return;
-
-                addLink(this, {
+                var folderId = baton.data.id || baton.app.folder.get(),
+                    model = api.pool.getModel(folderId);
+                contextUtils.addLink(this, {
                     action: 'delete',
                     data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
-                    text: gt('Delete')
+                    text: api.is('trash', model.toJSON()) ? gt('Delete forever') : gt('Delete')
+                });
+            };
+        }()),
+
+        //
+        // Restore folder
+        //
+        restoreFolder: (function () {
+
+            return function (baton) {
+
+                function handler(e) {
+                    ox.load(['io.ox/files/api', 'io.ox/files/actions/restore']).done(function (filesApi, action) {
+                        var model = new filesApi.Model(api.pool.getModel(e.data.id).toJSON());
+                        var key = e.data.listView.getCompositeKey(model);
+
+                        // the file model of files and folders
+                        var convertedModel = filesApi.resolve([key], false);
+                        action(convertedModel);
+                    });
+                }
+
+                if (!/^(infostore)$/.test(baton.module)) return;
+                if (!api.is('trash', baton.data)) return;
+                if (!api.can('restore:folder', baton.data)) return;
+                if (String(fileSettings.get('folder/trash')) !== baton.data.folder_id) return;
+
+                contextUtils.addLink(this, {
+                    action: 'restore',
+                    data: { id: baton.data.id, listView: baton.app.listView },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Restore')
                 });
             };
         }()),
@@ -314,13 +262,52 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
-                if (!/^(mail|infostore)$/.test(baton.module)) return;
+                if (!/^(mail)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (!api.can('remove:folder', baton.data)) return;
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'move',
                     data: { id: baton.data.id },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Move')
+                });
+            };
+        }()),
+
+        //
+        // Move - only for Drive
+        //
+        moveDrive: (function () {
+
+            function handler(e) {
+                e.preventDefault();
+                var id = e.data.id;
+                ox.load(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).done(function (filesApi, action) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+
+                    // id from the model must be a compositeKey
+                    var key = e.data.listView.getCompositeKey(model);
+                    var convertedModel = filesApi.resolve([key]);
+
+                    action.invoke('io.ox/files/actions/move', null, ext.Baton({
+                        models: convertedModel,
+                        data: convertedModel[0]
+                    }));
+                });
+            }
+
+            return function (baton) {
+
+                if (!/^(infostore)$/.test(baton.module)) return;
+                if (_.device('smartphone')) return;
+                if (!api.can('remove:folder', baton.data)) return;
+                if (baton.favorite) return false;
+
+                contextUtils.addLink(this, {
+                    action: 'move',
+                    data: { id: baton.data.id, listView: baton.app.listView },
                     enabled: true,
                     handler: handler,
                     text: gt('Move')
@@ -347,7 +334,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 //we don't allow folder download on external storages see Bug 40979
                 var isEnabled = !filestorage.isExternal(baton.data);
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'zip',
                     data: { id: baton.data.id },
                     enabled: isEnabled,
@@ -363,9 +350,8 @@ define('io.ox/core/folder/contextmenu', [
         exportData: (function () {
 
             function handler(e) {
-                require(['io.ox/core/export/export'], function (exporter) {
-                    //module,folderid
-                    exporter.show(e.data.baton.data.module, e.data.baton.data.id);
+                require(['io.ox/core/export'], function (exportDialog) {
+                    exportDialog.open(e.data.baton.data.module, { folder: e.data.baton.data.id });
                 });
             }
 
@@ -376,7 +362,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (baton.data.total === 0) return;
                 if (!_.isNumber(baton.data.total) && baton.data.total !== null) return;
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'export',
                     data: { baton: baton },
                     enabled: true,
@@ -403,7 +389,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (_.device('ios || android')) return;
                 if (!api.can('import', baton.data)) return;
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'import',
                     data: { baton: baton },
                     enabled: true,
@@ -437,11 +423,12 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
+                // permissions and sharing in context menu not for files
+                if (baton.data.filename) return;
+
                 if (_.device('smartphone')) return;
                 // trash or subfolders do not support sharing or permission changes
                 if (api.is('trash', baton.data)) return;
-
-                if (account.isDSC(baton.data.id)) return;
 
                 // check if folder can be shared
                 var id = String(baton.data.id),
@@ -456,22 +443,21 @@ define('io.ox/core/folder/contextmenu', [
                 // stop if neither invites or links are supported
                 if (!supportsInternal && !showInvitePeople && !showGetLink) return;
 
-                header.call(this, gt('Sharing'));
+                contextUtils.header.call(this, gt('Sharing'));
 
                 if (supportsInternal || showInvitePeople) {
-                    addLink(this, {
+                    contextUtils.addLink(this, {
                         action: 'invite',
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: invite,
-                        // Using concat notation to avoid necessity for new translations right before the release
-                        text: showInvitePeople ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
+                        text: showInvitePeople ? gt('Permissions / Invite people') : gt('Permissions')
                     });
                 }
 
                 // "Create sharing link" doesn't work for mail folders
                 if (showGetLink) {
-                    addLink(this, {
+                    contextUtils.addLink(this, {
                         action: 'get-link',
                         data: { app: baton.app, id: id },
                         enabled: true,
@@ -479,6 +465,36 @@ define('io.ox/core/folder/contextmenu', [
                         text: gt('Create sharing link')
                     });
                 }
+            };
+        }()),
+
+        //
+        // Favorite "show in Drive" is only for files
+        //
+        showInDrive: (function () {
+            function handler(e) {
+                e.preventDefault();
+                require(['io.ox/files/api'], function (filesAPI) {
+                    var models = filesAPI.pool.get('detail').get(e.data.cid);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({
+                        models: models,
+                        app: this.view.app,
+                        alwaysChange: true
+                    }));
+                });
+            }
+
+            return function (baton) {
+                if (baton.data.folder_name) return;
+
+                if (_.device('smartphone')) return;
+                contextUtils.addLink(this, {
+                    action: 'showInDrive',
+                    data: { cid: baton.data.cid },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Show in Drive')
+                });
             };
         }()),
 
@@ -499,8 +515,15 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+                if (baton.module !== 'calendar') return;
 
-                addLink(this, {
+                // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
+                var provider = baton.data['com.openexchange.calendar.provider'],
+                    extendedProperties = baton.data['com.openexchange.calendar.extendedProperties'] || {},
+                    usedForSync = extendedProperties.usedForSync || {};
+                if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
+
+                contextUtils.addLink(this, {
                     action: 'properties',
                     data: { baton: baton, id: String(baton.data.id) },
                     enabled: true,
@@ -532,7 +555,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 var hidden = api.is('hidden', baton.data);
 
-                addLink(this, {
+                contextUtils.addLink(this, {
                     action: 'hide',
                     data: { id: baton.data.id, state: hidden, view: baton.view },
                     enabled: true,
@@ -547,27 +570,87 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!/^calendar$/.test(baton.module)) return;
-                if (!api.is('private', baton.data)) return;
+                var extProps = baton.data['com.openexchange.calendar.extendedProperties'];
+                if (extProps && extProps.color && extProps.color.proected === false) return;
 
-                if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
-                    var listItem, container = this.parent();
+                var listItem, container = this.parent();
 
-                    this.append(
-                        listItem = $('<li role="presentation">')
+                this.append(listItem = $('<li role="presentation">'));
+
+                require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
+                    listItem.append(
+                        new ColorPicker({
+                            model: api.pool.getModel(baton.data.id),
+                            getValue: function () {
+                                return calendarUtil.getFolderColor(this.model.attributes);
+                            },
+                            setValue: function (value) {
+                                // make sure existing properties are not overwritten
+                                api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': _(_.copy(this.model.get('com.openexchange.calendar.extendedProperties') || {})).extend({ color: { value: value } }) }).fail(function (error) {
+                                    require(['io.ox/core/notifications'], function (notifications) {
+                                        notifications.yell(error);
+                                    });
+                                });
+                            }
+                        }).render().$el
                     );
-
-                    require(['io.ox/calendar/util'], function (calendarUtil) {
-                        listItem.append(
-                            new ColorSelectionView({
-                                model: api.pool.getModel(baton.data.id)
-                            }).render(calendarUtil).$el
-                        );
-                        // trigger ready to recompute bounds of smart dropdown
-                        container.trigger('ready');
-                    });
-                }
+                    // trigger ready to recompute bounds of smart dropdown
+                    container.trigger('ready');
+                });
             };
-        })()
+        })(),
+
+        //
+        // manual refresh calendar data from external provider
+        //
+        refreshCalendar: function (baton) {
+            // only in calendar module
+            if (!/^calendar$/.test(baton.module)) return;
+            // check if folder supports cache updates ("cached" capability is present)
+            if (!api.can('sync:cache', baton.data)) return;
+
+            contextUtils.addLink(this, {
+                action: 'refresh-calendar',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.refreshCalendar,
+                text: gt('Refresh this calendar')
+            });
+        },
+
+        //
+        // Only select that calendar folder
+        //
+        selectOnly: function (baton) {
+            if (!/^calendar$/.test(baton.module)) return;
+            var isOnly = baton.view.$el.hasClass('single-selection');
+            contextUtils.addLink(this, {
+                action: 'select-only',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.selectOnly,
+                text: isOnly ? gt('Show all calendars') : gt('Show this calendar only')
+            });
+        },
+
+        // not used in folder contextmenu
+        // but in the "select all" menu in listview
+        selectAll: function (baton) {
+            if (baton.module !== 'mail') return;
+
+            contextUtils.addLink(this, {
+                action: 'selectall',
+                data: { folder: baton.data.id, app: baton.app },
+                enabled: true,
+                handler: function () {
+                    baton.listView.selection.selectAll();
+                    baton.listView.trigger('selection:showHint');
+                },
+                text: gt('Select all messages')
+            });
+        },
+
+        divider: contextUtils.divider
     };
 
     //
@@ -591,6 +674,11 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.move
         },
         {
+            id: 'moveDrive',
+            index: 1250,
+            draw: extensions.moveDrive
+        },
+        {
             id: 'publications',
             index: 1300,
             draw: extensions.publish
@@ -603,7 +691,7 @@ define('io.ox/core/folder/contextmenu', [
         {
             id: 'divider-1',
             index: 1450,
-            draw: divider
+            draw: contextUtils.divider
         },
         // -----------------------------------------------
         {
@@ -614,7 +702,7 @@ define('io.ox/core/folder/contextmenu', [
         {
             id: 'divider-2',
             index: 1600,
-            draw: divider
+            draw: contextUtils.divider
         },
         // -----------------------------------------------
         {
@@ -625,7 +713,7 @@ define('io.ox/core/folder/contextmenu', [
         {
             id: 'divider-3',
             index: 2100,
-            draw: divider
+            draw: contextUtils.divider
         },
         // -----------------------------------------------
         {
@@ -646,7 +734,7 @@ define('io.ox/core/folder/contextmenu', [
         {
             id: 'divider-4',
             index: 3400,
-            draw: divider
+            draw: contextUtils.divider
         },
         // -----------------------------------------------
         {
@@ -672,28 +760,49 @@ define('io.ox/core/folder/contextmenu', [
         {
             id: 'divider-5',
             index: 4500,
-            draw: divider
+            draw: contextUtils.divider
         },
         // -----------------------------------------------
+
         {
-            id: 'properties',
+            id: 'refresh-calendar',
             index: 6100,
-            draw: extensions.properties
+            draw: extensions.refreshCalendar
+        },
+        {
+            id: 'select-only',
+            index: 6200,
+            draw: extensions.selectOnly
         },
         {
             id: 'toggle',
-            index: 6200,
+            index: 6300,
             draw: extensions.toggle
         },
         {
+            id: 'showInDrive',
+            index: 6400,
+            draw: extensions.showInDrive
+        },
+        {
             id: 'empty',
-            index: 6300,
+            index: 6500,
             draw: extensions.empty
         },
         {
             id: 'delete',
-            index: 6500,
+            index: 6600,
             draw: extensions.removeFolder
+        },
+        {
+            id: 'restore',
+            index: 6600,
+            draw: extensions.restoreFolder
+        },
+        {
+            id: 'properties',
+            index: 6700,
+            draw: extensions.properties
         }
     );
 
@@ -710,8 +819,8 @@ define('io.ox/core/folder/contextmenu', [
 
     return {
         extensions: extensions,
-        addLink: addLink,
-        disable: disable,
-        divider: divider
+        addLink: contextUtils.addLink,
+        disable: contextUtils.disable,
+        divider: contextUtils.divider
     };
 });

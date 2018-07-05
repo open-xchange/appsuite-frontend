@@ -132,7 +132,7 @@ define('io.ox/core/tk/vgrid', [
             row.node.add(row.node.find('div, span, p, td')).not('.ignoreheight').each(function () {
                 var node = $(this);
                 if (node.children().length === 0 && node.text() === '') {
-                    node.text(_.noI18n('\u00A0'));
+                    node.text('\u00A0');
                 }
             });
             row.node.find('img').each(function () {
@@ -211,6 +211,7 @@ define('io.ox/core/tk/vgrid', [
             'mouseup.resize': function () {
                 $(this).off('mousemove.resize mouseup.resize');
                 e.data.updateSettings('width/' + _.display(), width);
+                $(document).trigger('resize');
             }
         });
     };
@@ -304,7 +305,7 @@ define('io.ox/core/tk/vgrid', [
                         .on('click keydown', { grid: this }, fnClickCheckbox)
                 )
                 .prependTo(node),
-        // item template
+            // item template
             templateOptions = { tempDrawContainer: container };
         if (options.templateOptions) {
             templateOptions = _.extend(templateOptions, options.templateOptions);
@@ -425,11 +426,6 @@ define('io.ox/core/tk/vgrid', [
         // tabindex or containeronfocus is called when clicked
         label.node.addClass('vgrid-label').attr({ tabindex: -1, 'aria-hidden': 'true' });
 
-        // fix mobile safari bug (all content other than position=static is cut off)
-        if (_.device('iOS && Safari')) {
-            container.css('webkitTransform', 'translate3d(0, 0, 0)');
-        }
-
         // IE focus fix for bug 31617.
         // "The focus event does not bubble in Internet Explorer"
         // http://api.jquery.com/focus/
@@ -514,7 +510,7 @@ define('io.ox/core/tk/vgrid', [
                 labels.textIndex[text] = i;
             }
             // reloop to get proper height
-            return $.when.apply($, defs).pipe(function () {
+            return $.when.apply($, defs).then(function () {
                 var i, obj, node, top,
                     //isVisible is only needed in for loop; visible selectors are slow, avoid them if possible
                     isVisible = $i > 0 ? container.show().is(':visible') : undefined,
@@ -928,6 +924,7 @@ define('io.ox/core/tk/vgrid', [
             resize();
             currentOffset = null;
             initialized = true;
+            $(document).trigger('resize');
             // load all IDs
             return loadAll();
         };

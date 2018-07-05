@@ -14,8 +14,9 @@
 define('io.ox/core/folder/util', [
     'io.ox/core/api/account',
     'settings!io.ox/mail',
-    'settings!io.ox/core'
-], function (account, mailSettings, coreSettings) {
+    'settings!io.ox/core',
+    'settings!io.ox/calendar'
+], function (account, mailSettings, coreSettings, calSettings) {
 
     'use strict';
 
@@ -30,9 +31,32 @@ define('io.ox/core/folder/util', [
 
     function getDefaultFolder(type) {
         type = type || 'mail';
+        if (type === 'calendar') return calSettings.get('chronos/defaultFolderId');
         return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 
+    var pool;
+
+    function registerPool(folderPool) {
+        pool = folderPool;
+    }
+
+    function isInMyFilesFolder(data, visitedFolders) {
+        // folderpool not registered yet. Check not possible, require folderapi once to register the pool
+        if (!pool) return false;
+        // false if no data
+        // avoid infinite loops due to ring structures
+        visitedFolders = visitedFolders || [];
+        if (!data || _(data).indexOf(visitedFolders) !== -1) return false;
+
+        if (data.id.toString() === getDefaultFolder('infostore').toString()) {
+            return true;
+        } else if (data.folder_id && pool.models[data.folder_id]) {
+            visitedFolders.push(data.id);
+            return isInMyFilesFolder(pool.models[data.folder_id].attributes, visitedFolders);
+        }
+        return false;
+    }
     //
     // Is?
     //
@@ -71,6 +95,9 @@ define('io.ox/core/folder/util', [
                 return data.type === 1;
             case 'public':
                 // special file folder: regard as public
+                if (data.module === 'infostore' && data.type === 2 && !/^(10|14|15)$/.test(data.id)) {
+                    return !isInMyFilesFolder(data);
+                }
                 return data.type === 2 || /^(10|14|15)$/.test(data.id);
             case 'shared':
                 return data.type === 3;
@@ -198,7 +225,8 @@ define('io.ox/core/folder/util', [
             isAdmin = perm(rights, 28) === 1,
             isMail = data.module === 'mail',
             // is my folder ?
-            compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0;
+            creator = obj ? _.firstOf(obj.created_by, obj.createdBy ? obj.createdBy.entity : undefined, 0) : undefined,
+            compareValue = (obj && ox.user_id !== creator) ? 1 : 0;
         // switch
         switch (action) {
             case 'read':
@@ -237,6 +265,7 @@ define('io.ox/core/folder/util', [
                 return (bits & 4) === 4 || (bits & 64) === 64;
             case 'delete:folder':
             case 'remove:folder':
+            case 'restore:folder':
                 // must be admin; system and default folder cannot be deleted
                 return isAdmin && !isSystem && !is('defaultfolder', data);
             case 'move:folder':
@@ -278,6 +307,8 @@ define('io.ox/core/folder/util', [
                 return supports('STORE_SEEN', data);
             case 'add:version':
                 return supports('file_versions', data);
+            case 'sync:cache':
+                return supports('cached', data);
             default:
                 return false;
         }
@@ -286,7 +317,7 @@ define('io.ox/core/folder/util', [
     // simple generic check to see if the folder supports a capability
     // supports models and objects containing folder data
     function supports(capability, data) {
-        return data.get ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
+        return data instanceof Backbone.Model ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
     }
 
     /*
@@ -301,6 +332,7 @@ define('io.ox/core/folder/util', [
     }
 
     return {
+        registerPool: registerPool,
         perm: perm,
         bits: bits,
         supports: supports,

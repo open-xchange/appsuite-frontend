@@ -18,9 +18,10 @@
     position: absolute;
     width: 8px;
     height: 8px;
-    z-index: 999;
+    // one more than dropdown z-index
+    z-index: 100001;
     background-color: @hotspot-color;
-    .border-radius(50%);
+    border-radius: 50%;
 
     &:before {
         content: '';

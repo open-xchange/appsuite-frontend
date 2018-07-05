@@ -113,10 +113,9 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
                 //do not show confirmation dialog
                 describe('should resolve', function () {
                     it('if file extensions does not change', function () {
-                        return $.when(util.confirmDialog('nameOne.txt', 'nameTwo.txt'),
-                                util.confirmDialog('nameOne', 'nameTwo')).done(function () {
-                                    expect(container.children().length).to.equal(0);
-                                });
+                        return $.when(util.confirmDialog('nameOne.txt', 'nameTwo.txt'), util.confirmDialog('nameOne', 'nameTwo')).done(function () {
+                            expect(container.children().length).to.equal(0);
+                        });
                     });
                     it('if filename on server is not set yet', function () {
                         return util.confirmDialog('nameOne.txt').done(function () {

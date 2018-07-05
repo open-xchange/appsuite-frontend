@@ -22,7 +22,6 @@ define('io.ox/find/main', [
     'use strict';
 
     var INVALID = $.Deferred().reject('please launch app first'),
-        FOLDERWHITELIST = { 'virtual/all-my-appointments': true },
         cid = function (app) {
             var parts = [
                 app.getName(),
@@ -125,6 +124,8 @@ define('io.ox/find/main', [
                 if (!app.get('inplace')) return;
                 // reset on folder click
                 app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.cancel);
+                // reset on sidepanel close (lazy)
+                app.listenTo(app.get('parent').props, 'change:folderview', app.cancel);
             },
 
             'enable-disable-toggle': function (app) {
@@ -241,10 +242,10 @@ define('io.ox/find/main', [
 
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
-                            module: app.getModuleParam(),
+                            module: app.getModuleParam() === 'calendar' ? 'chronos' : app.getModuleParam(),
                             mode: 'search',
-                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
-                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
+                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_SEARCH_PAGE_SIZE || defaultLoader.PRIMARY_PAGE_SIZE,
+                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_SEARCH_PAGE_SIZE || defaultLoader.SECONDARY_PAGE_SIZE,
                             isBad: $.noop,
                             fetch: function (p) {
                                 var self = this,
@@ -289,20 +290,16 @@ define('io.ox/find/main', [
                             },
                             cid: searchcid
                         });
-
                         // disable cache also for modules with collection loader
                         parent.listView.on('collection:load', function () {
                             if (this.loader.mode !== 'search') return;
                             this.collection.expire();
                         });
-
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
                             var view = app.view.model,
                                 // remember original setCollection
                                 setCollection = parent.listView.setCollection;
-                            // hide sort options
-                            parent.listControl.$el.find('.grid-options:first').hide();
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
                             // wrap setCollection
@@ -317,8 +314,6 @@ define('io.ox/find/main', [
                         app.on({
                             'find:idle': function () {
                                 if (mode === 'search') {
-                                    // show sort options
-                                    parent.listControl.$el.find('.grid-options:first').show();
                                     // reset collection loader
                                     parent.listView.connect(defaultLoader);
                                     parent.listView.load();
@@ -383,9 +378,8 @@ define('io.ox/find/main', [
         };
 
         app.updateState = function (folderid) {
-            var notWhitelisted = !FOLDERWHITELIST[folderid];
             // is folder unsupported?
-            app.trigger(folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
+            app.trigger(folderAPI.isVirtual(folderid) ? 'view:disable' : 'view:enable');
         };
 
         // parent app id
@@ -557,7 +551,7 @@ define('io.ox/find/main', [
                         }
 
                         // mandatory
-                        if (app.isMandatory('account') && !manager.findWhere({ id: 'account' })) {
+                        if (app.isMandatory('account') && !(manager.findWhere({ id: 'account' }) && manager.findWhere({ id: 'account' }).getActive().length)) {
                             facets.push({
                                 facet: 'account',
                                 filter: null,

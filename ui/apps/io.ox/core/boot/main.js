@@ -77,7 +77,7 @@ define.async('io.ox/core/boot/main', [
 
             // set page title now
             ox.on('language', function (lang, gt) {
-                util.setPageTitle(ox.serverConfig.pageTitle + ' ' + gt.pgettext('word', 'Sign in'));
+                ox.trigger('change:document:title', gt.pgettext('word', 'Sign in'));
             });
 
             gettext.setLanguage('en_US');
@@ -187,7 +187,7 @@ define.async('io.ox/core/boot/main', [
             config.user().done(function () {
                 // apply session data (again) & page title
                 if (data) session.set(data);
-                util.setPageTitle(ox.serverConfig.pageTitle);
+                ox.trigger('change:document:title');
                 // load UI
                 exports.loadUI();
             });
@@ -199,7 +199,8 @@ define.async('io.ox/core/boot/main', [
             } // Otherwise continue thru the other login stages
         },
 
-        'login:fail:session-based': function () {
+        'login:fail:session-based': function (baton) {
+            baton.stopPropagation();
             $('.throbber').hide();
             $('#showstopper, #showstopper .session').show();
         }

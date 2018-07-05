@@ -28,13 +28,9 @@ define('io.ox/files/actions/add-storage-account', [
     'use strict';
 
     function createAccount(service) {
-        var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-            return !account.hasScopes('drive');
-        })[0] || new OAuth.Account.Model({
+        var account = new OAuth.Account.Model({
             serviceId: service.id,
-            //#. %1$s is the display name of the account
-            //#. e.g. My Xing account
-            displayName: gt('My %1$s account', service.get('displayName'))
+            displayName: oauthAPI.chooseDisplayName(service)
         });
 
         // if only the filestorage account is missing there is no need for Oauth authorization.
@@ -51,8 +47,6 @@ define('io.ox/files/actions/add-storage-account', [
         }
 
         return account.enableScopes('drive').save().then(function (res) {
-            // add new account after it has been created succesfully
-            oauthAPI.accounts.add(account);
             return filestorageApi.createAccountFromOauth(res);
         }).then(function () {
             yell('success', gt('Account added successfully'));
@@ -63,9 +57,7 @@ define('io.ox/files/actions/add-storage-account', [
 
         var dialog = this,
             availableServices = oauthAPI.services.filter(function (service) {
-                return _(service.get('availableScopes')).contains('drive') &&
-                    (!service.keychainAPI || service.keychainAPI.canAdd()) &&
-                    _(filestorageApi.isStorageAvailable()).indexOf(service.id) >= 0;
+                return _(service.get('availableScopes')).contains('drive') && _(filestorageApi.isStorageAvailable()).indexOf(service.id) >= 0;
             }),
             view = new OAuth.Views.ServicesListView({
                 collection: new Backbone.Collection(availableServices)
@@ -99,7 +91,7 @@ define('io.ox/files/actions/add-storage-account', [
     }
 
     return function () {
-        return new dialogs.ModalDialog({ width: 570 })
+        return new dialogs.ModalDialog({ width: 574 })
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close')
             .build(drawContent)

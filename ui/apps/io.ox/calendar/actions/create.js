@@ -16,16 +16,17 @@ define('io.ox/calendar/actions/create', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/user',
     'io.ox/contacts/util',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
-    'settings!io.ox/core'
-], function (api, dialogs, userAPI, util, gt, settings) {
+    'settings!io.ox/calendar'
+], function (api, dialogs, userAPI, util, calendarUtil, gt, settings) {
 
     'use strict';
 
     function openEditDialog(params) {
-        ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+        ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/model']).done(function (edit, models) {
             edit.getApp().launch().done(function () {
-                this.create(params);
+                this.create(new models.Model(params));
             });
         });
     }
@@ -35,8 +36,8 @@ define('io.ox/calendar/actions/create', [
         userAPI.get({ id: folder.created_by }).done(function (user) {
 
             var fullname = util.getFullName(user);
-
-            new dialogs.ModalDialog()
+            // standard 500px is too small in some languages (e.g. german)
+            new dialogs.ModalDialog({ width: '550' })
             .header(
                 $('<h4>').text(gt('Appointments in shared calendars'))
             )
@@ -53,8 +54,8 @@ define('io.ox/calendar/actions/create', [
                 openEditDialog(params);
             })
             .on('invite', function () {
-                params.participants = [{ id: user.id, type: 1 }];
-                params.folder_id = settings.get('folder/calendar');
+                params.attendees = calendarUtil.createAttendee(user);
+                params.folder = settings.get('chronos/defaultFolderId');
                 openEditDialog(params);
             })
             .show();
@@ -63,25 +64,55 @@ define('io.ox/calendar/actions/create', [
 
     return function (baton, obj) {
 
+        obj = obj || {};
         // FIXME: if this action is invoked by the menu button, both
         // arguments are the same (the app)
         var params = {
-            folder_id: baton.app.folder.get(),
-            participants: []
+            folder: obj.folder || baton.app.folder.get()
         };
 
-        if (obj && obj.start_date) {
+        if (obj && obj.startDate) {
             _.extend(params, obj);
-        } else if (baton.app.props.get('layout') !== 'list') {
-            var refDate = baton.app.refDate ? moment(baton.app.refDate) : moment();
+        } else {
+            var refDate = moment().startOf('hour').add(1, 'hours'),
+                perspective = baton.app.getWindow().getPerspective(),
+                now = _.now(), range;
 
-            refDate.minutes(0).seconds(0).milliseconds(0);
-            params.start_date = refDate.valueOf();
-            params.end_date = refDate.add(1, 'hours').valueOf();
+            switch (perspective.name) {
+                case 'week':
+                    range = calendarUtil.getCurrentRangeOptions();
+                    break;
+                case 'month':
+                    range = {
+                        rangeStart: perspective.current,
+                        rangeEnd: moment(perspective.current).endOf('month')
+                    };
+                    break;
+                case 'year':
+                    range = {
+                        rangeStart: moment({ year: perspective.year }),
+                        rangeEnd: moment({ year: perspective.year }).endOf('year')
+                    };
+                    break;
+                default:
+            }
+
+            if (range && (moment(range.rangeStart).valueOf() > now || now > moment(range.rangeEnd).valueOf())) {
+                // use first visible date if today is not visible
+                refDate = moment(range.rangeStart).hours(10);
+            }
+
+            params.startDate = { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() };
+            params.endDate = { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() };
         }
 
         // show warning for shared folders
-        api.get(params.folder_id).done(function (folder) {
+        api.get(params.folder).then(function (folder) {
+            if (api.can('create', folder)) return folder;
+            params.folder = settings.get('chronos/defaultFolderId');
+            return api.get(params.folder);
+        }).done(function (folder) {
+            if (!api.can('create', folder)) return;
             if (api.is('shared', folder)) showDialog(params, folder); else openEditDialog(params);
         });
     };

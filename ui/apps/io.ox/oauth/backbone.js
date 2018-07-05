@@ -13,8 +13,9 @@
 
 define('io.ox/oauth/backbone', [
     'io.ox/core/http',
+    'io.ox/core/yell',
     'less!io.ox/oauth/style'
-], function (http) {
+], function (http, yell) {
     'use strict';
 
     var generateId = function () {
@@ -60,6 +61,7 @@ define('io.ox/oauth/backbone', [
             var callbackName = 'oauth' + generateId(),
                 params = {
                     action: 'init',
+                    action_hint: 'reauthorize',
                     serviceId: account.get('serviceId'),
                     displayName: account.get('displayName'),
                     cb: callbackName,
@@ -81,14 +83,18 @@ define('io.ox/oauth/backbone', [
                 popupWindow.location = interaction.authUrl;
 
                 return def;
-            }).then(function () {
+            }).then(function (res) {
+                var def = $.Deferred();
                 delete window['callback_' + callbackName];
                 popupWindow.close();
+                if (res.error) return def.reject(res);
+                return def.resolve(res);
+            }).then(function () {
                 account.enableScopes(account.get('enabledScopes'));
                 account.set('enabledScopes', account.get('wantedScopes'));
                 account.unset('wantedScopes');
                 return account;
-            });
+            }, yell);
         },
         sync: function (method, model, options) {
             switch (method) {
@@ -138,10 +144,14 @@ define('io.ox/oauth/backbone', [
                             model.set(res);
                             return res;
                         });
+                    }).then(function (res) {
+                        return require(['io.ox/oauth/keychain']).then(function (oauthAPI) {
+                            oauthAPI.accounts.add(model);
+                            return res;
+                        });
                     }).done(options.success).fail(options.error);
                 case 'update':
                     return model.reauthorize({ force: false }).then(function () {
-                        if (!model.changed.displayName) return;
                         return http.PUT({
                             module: 'oauth/accounts',
                             params: {
@@ -226,12 +236,9 @@ define('io.ox/oauth/backbone', [
         render: function () {
             var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
             this.$el.append(
-                $('<button>').addClass('btn btn-default').append(
-                    $('<i class="service-icon fa">')
-                        .addClass('logo-' + shortId),
-                    $('<div>')
-                        .addClass('service-label')
-                        .text(this.model.get('displayName'))
+                $('<button type="button" class="btn btn-default">').append(
+                    $('<i class="service-icon fa">').addClass('logo-' + shortId),
+                    $('<div class="service-label">').text(this.model.get('displayName'))
                 ).data({
                     cid: this.model.cid
                 })
@@ -265,7 +272,7 @@ define('io.ox/oauth/backbone', [
 
             var service = this.collection.get($(ev.currentTarget).data('cid'));
             this.trigger('select', service);
-            this.trigger('select:' + service.id, service);
+            this.trigger('select:' + service.get('type'), service);
         }
     });
 

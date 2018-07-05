@@ -22,11 +22,12 @@ define('io.ox/core/permissions/permissions', [
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
     'io.ox/core/tk/typeahead',
+    'io.ox/core/settings/util',
     'io.ox/participants/model',
     'io.ox/participants/views',
     'gettext!io.ox/core',
     'less!io.ox/core/permissions/style'
-], function (ext, notifications, BreadcrumbView, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+], function (ext, notifications, BreadcrumbView, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, settingsUtil, pModel, pViews, gt) {
 
     'use strict';
 
@@ -223,7 +224,7 @@ define('io.ox/core/permissions/permissions', [
             } else {
                 this.append(
                     $('<div class="pull-left contact-picture group">').append(
-                        $('<i class="fa fa-group">')
+                        $('<i class="fa fa-group" aria-hidden="true">')
                     )
                 );
             }
@@ -238,7 +239,7 @@ define('io.ox/core/permissions/permissions', [
             this.append(
                 $('<div class="entity">').append(
                     node = $('<div>').append(
-                        $('<span class="name">').text(_.noI18n(baton.name)),
+                        $('<span class="name">').text(baton.name),
                         baton.model.get('entity') === baton.view.options.owner ? $('<span class="owner">').text(gt('Owner')) : $(),
                         // quick change
                         addRoles(baton)
@@ -248,16 +249,16 @@ define('io.ox/core/permissions/permissions', [
 
             options = $('<div>').append(
                 // folder rights
-                gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                    addDropdown('folder', baton), $.txt(_.noI18n('. ')),
+                gt('Folder permissions'), $.txt(': '),
+                addDropdown('folder', baton), $.txt('. '),
                 // object rights
-                gt('Object permissions'), $.txt(_.noI18n(': ')),
-                addDropdown('read', baton), $.txt(_.noI18n(', ')),
-                addDropdown('write', baton), $.txt(_.noI18n(', ')),
-                addDropdown('delete', baton), $.txt(_.noI18n('. ')),
+                gt('Object permissions'), $.txt(': '),
+                addDropdown('read', baton), $.txt(', '),
+                addDropdown('write', baton), $.txt(', '),
+                addDropdown('delete', baton), $.txt('. '),
                 // admin
-                gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                    addDropdown('admin', baton), $.txt(_.noI18n('. ')));
+                gt('The user has administrative rights'), $.txt(': '),
+                addDropdown('admin', baton), $.txt('. '));
             if (baton.admin) {
                 options.addClass('readwrite');
             } else {
@@ -392,7 +393,7 @@ define('io.ox/core/permissions/permissions', [
                         .filter(function (obj) { return obj.group === false; })
                         .pluck('entity')
                         .value(),
-                        cascadePermissionsFlag = false;
+                        cascadeModel = new Backbone.Model({ cascadePermissionsFlag: false });
 
                     dialog.getContentNode().addClass('scrollpane').busy();
 
@@ -417,19 +418,11 @@ define('io.ox/core/permissions/permissions', [
                             }
                         });
 
-                        var buildCheckbox = function () {
-                                var checkbox = $('<input type="checkbox">')
-                                .on('change', function () {
-                                    cascadePermissionsFlag = checkbox.prop('checked');
-                                });
-                                checkbox.prop('checked', cascadePermissionsFlag);
-                                return checkbox;
-
-                            },
-                            checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
-                                $('<label>').text(gt('Apply to all subfolders')).prepend(
-                                    buildCheckbox()
-                                )
+                        var checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
+                                settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), cascadeModel).on('change', function (e) {
+                                    var input = e.originalEvent.srcElement;
+                                    cascadeModel.set('cascadePermissionsFlag', input.checked);
+                                })
                             ),
                             view = new Typeahead({
                                 apiOptions: {
@@ -493,7 +486,7 @@ define('io.ox/core/permissions/permissions', [
                             promise.reject();
                             return dialog.idle();
                         }
-                        api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadePermissionsFlag }).then(
+                        api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadeModel.get('cascadePermissionsFlag') }).then(
                             function success() {
                                 collection.off();
                                 dialog.close();

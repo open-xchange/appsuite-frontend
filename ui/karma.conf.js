@@ -59,11 +59,12 @@ module.exports = function (config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['PhantomJS'],
+        browsers: (process.env.BROWSERS || 'ChromeHeadless').split(' '),
 
-        phantomjsLauncher: {
-            options: {
-                viewportSize: { width: 1024, height: 768 }
+        customLaunchers: {
+            DockerHeadless: {
+                base: 'ChromiumHeadless',
+                flags: ['--no-sandbox']
             }
         },
 

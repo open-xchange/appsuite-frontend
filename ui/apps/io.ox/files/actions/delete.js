@@ -58,10 +58,10 @@ define('io.ox/files/actions/delete', [
 
         var dialog = new dialogs.ModalDialog(),
             deleteNotice = gt.ngettext(
-            'Do you really want to delete this item?',
-            'Do you really want to delete these items?',
-            list.length
-        ),
+                'Do you really want to delete this item?',
+                'Do you really want to delete these items?',
+                list.length
+            ),
             shareNotice = gt.ngettext('This file (or folder) is shared with others. It won\'t be available for them any more.',
                 'Some files/folder are shared with others. They won\'t be available for them any more.',
                 list.length

@@ -134,6 +134,7 @@ define('io.ox/core/settings', [
         };
 
         var applyDefaults = function () {
+            // Note: This does not support a "deep" extend
             return require([path + '/settings/defaults']).then(function (defaults) {
                 tree = _.extend({}, defaults, tree);
             });
@@ -220,13 +221,11 @@ define('io.ox/core/settings', [
             if (detached) return $.when();
 
             return http.PUT({ module: 'jslob', params: { action: 'list' }, data: [path] })
-                .done(function (data) {
+                .then(function (data) {
                     tree = data[0].tree;
                     meta = data[0].meta;
                     saved = JSON.parse(JSON.stringify(tree));
                     applyDefaults();
-                })
-                .then(function () {
                     self.trigger('reload', tree, meta);
                     return { tree: tree, meta: meta };
                 });
@@ -273,6 +272,9 @@ define('io.ox/core/settings', [
                     .done(function () {
                         saved = JSON.parse(JSON.stringify(data));
                         self.trigger('save');
+                    })
+                    .fail(function (e) {
+                        if (ox.debug) console.error('jslob:set', e);
                     })
                     .always(function () {
                         delete pending[path];

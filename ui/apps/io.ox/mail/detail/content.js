@@ -12,25 +12,21 @@
  */
 
 /* global blankshield:true */
-/*jshint scripturl:true*/
 
 define('io.ox/mail/detail/content', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/util',
-    'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/mail/detail/links',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, coreUtil, emoji, ext, capabilities, links, settings, gt) {
+], function (api, util, coreUtil, ext, capabilities, links, settings, gt) {
 
     'use strict';
 
-    var regHTML = /^text\/html$/i,
-        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
-        regIsURL = /^https?:\S+$/i;
+    var regHTML = /^text\/html$/i;
 
     //
     // Extensions
@@ -56,16 +52,6 @@ define('io.ox/mail/detail/content', [
             baton.source = util.replaceImagePrefix(baton.source);
         },
 
-        emoji: function (baton) {
-            if (baton.isText) return;
-            if (baton.processedEmoji) return;
-            baton.processedEmoji = false;
-            baton.source = emoji.processEmoji(baton.source, function (text, lib) {
-                baton.processedEmoji = !lib.loaded;
-                baton.source = text;
-            });
-        },
-
         plainTextLinks: function (baton) {
             if (baton.isLarge) return;
             // Jericho HTML Parser produces stupid links if text and url is identical. simple pattern.
@@ -78,11 +64,12 @@ define('io.ox/mail/detail/content', [
         },
 
         linkTarget: function (baton) {
+
             baton.source = baton.source
-                // fix missing protocol
-                .replace(/(<a.*?href=("|'))www\./g, '$1http://www.')
+                // add missing http protocol prefix
+                .replace(/<a[^>]*href=(?:"|')((?!https?:\/\/)[^'">]+)(?:"|')[^>]*>/g, addMissingProtocol)
                 // fix targets
-                .replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
+                .replace(/<a[^>]*href\s*=\s*(?:"|')(https?:\/\/[^>]+)(?:"|')[^>]*>/g, setLinkTarget);
         },
 
         whitespace: function (baton) {
@@ -130,7 +117,7 @@ define('io.ox/mail/detail/content', [
         },
 
         disableLinks: function (baton) {
-            if (!util.isMalicious(baton.data)) return;
+            if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
             $(this).addClass('disable-links').on('click', function () { return false; });
         },
 
@@ -236,7 +223,7 @@ define('io.ox/mail/detail/content', [
                 var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
                 var blockquoteId = _.uniqueId('collapsed-blockquote-');
-                var ellipsisButton = $('<button class="bqt">').attr('title', gt('Show quoted text')).append(
+                var ellipsisButton = $('<button type="button" class="bqt">').attr('title', gt('Show quoted text')).append(
                     $('<span aria-hidden="true">').text('...')
                 );
                 if (!_.browser.Chrome) {
@@ -245,7 +232,7 @@ define('io.ox/mail/detail/content', [
                         'aria-expanded': false
                     });
                 }
-                $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
+                $(node).addClass('collapsed-blockquote').hide().attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         ellipsisButton,
@@ -259,7 +246,7 @@ define('io.ox/mail/detail/content', [
                 );
             });
             // delegate
-            $(this).on('click keydown', '.blockquote-toggle', explandBlockquote);
+            $(this).on('click keydown', '.blockquote-toggle', expandBlockquote);
         },
 
         checkSimple: function () {
@@ -299,12 +286,6 @@ define('io.ox/mail/detail/content', [
     });
 
     ext.point('io.ox/mail/detail/source').extend({
-        id: 'emoji',
-        index: 300,
-        process: extensions.emoji
-    });
-
-    ext.point('io.ox/mail/detail/source').extend({
         id: 'plain-text-links',
         index: 300,
         process: extensions.plainTextLinks
@@ -333,7 +314,7 @@ define('io.ox/mail/detail/content', [
         index: 700,
         enabled: settings.get('maliciousCheck'),
         process: function (baton) {
-            if (!util.isMalicious(baton.data)) return;
+            if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
             baton.source = baton.source
                 .replace(/.*/g, extensions.linkDisable)
                 .replace(/.*/g, extensions.linkRemoveRef)
@@ -415,20 +396,20 @@ define('io.ox/mail/detail/content', [
         process: extensions.formSubmit
     });
 
-    // commented out DUE TO BUGS! (27.01.2016)
-    // ext.point('io.ox/mail/detail/content').extend({
-    //     id: 'lazyload-images',
-    //     index: 1200,
-    //     process: function () {
-    //         $(this).find('img[src!=""]').each(function () {
-    //             var img = $(this);
-    //             img.attr({
-    //                 'data-original': img.attr('src'),
-    //                 'src': '//:0'
-    //             }).addClass('lazyload');
-    //         });
-    //     }
-    // });
+    // forward image load event to trigger resize in view
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'image-load',
+        index: 1200,
+        process: function () {
+            var self = this;
+            $(self).find('img[src!=""]').each(function () {
+                var img = $(this);
+                img.on('load error', function () {
+                    $(self).trigger('imageload');
+                });
+            });
+        }
+    });
 
     //
     // Beautify
@@ -455,12 +436,6 @@ define('io.ox/mail/detail/content', [
             }
         },
         {
-            id: 'emojis',
-            process: function (baton) {
-                baton.data = insertEmoticons(baton.data);
-            }
-        },
-        {
             id: 'text-to-html',
             process: function (baton) {
                 baton.data = this.text2html(baton.data, { blockquotes: true, images: true, links: true });
@@ -471,45 +446,20 @@ define('io.ox/mail/detail/content', [
             process: function (baton) {
                 baton.data = baton.data.replace(/^\s*(<br\s*\/?>\s*)+/g, '');
             }
+        },
+        {
+            id: 'white-space',
+            process: function (baton) {
+                // maintain spaces after opening tags as well as subsequent spaces (see bug 56851)
+                baton.data = baton.data.replace(/((>) |( ) )/g, '$1&nbsp;');
+            }
         }
     );
+
 
     //
     // Helper IIFEs
     //
-
-    var insertEmoticons = (function () {
-
-        var emotes = {
-            ':-)': '&#x1F60A;',
-            ':)': '&#x1F60A;',
-            ';-)': '&#x1F609;',
-            ';)': '&#x1F609;',
-            ':-D': '&#x1F603;',
-            ':D': '&#x1F603;',
-            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
-            ':-|': '&#x1F614;',
-            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
-            ':|': '&#x1F614;',
-            ':-(': '&#x1F61E;',
-            ':(': '&#x1F61E;'
-        };
-
-        var regex = /(&quot)?([:;]-?[(|)D])(\W|$)/g;
-
-        return function (text) {
-            if (settings.get('displayEmoticons') && capabilities.has('emoji')) {
-                text = text.replace(regex, function (all, quot, match) {
-                    // if we hit &quot;-) we just return
-                    if (quot) return all;
-                    // otherwise find emote
-                    var emote = $('<div>').html(emotes[match]).text();
-                    return !emote ? match : emote;
-                });
-            }
-            return text;
-        };
-    }());
 
     var fixAbsolutePositions = (function () {
 
@@ -556,45 +506,17 @@ define('io.ox/mail/detail/content', [
     // Helpers
     //
 
-    function beautifyText(text) {
-        text = $.trim(text)
-            // remove line breaks
-            .replace(/[\n\r]/g, '')
-            // remove leading BR
-            .replace(/^\s*(<br\s*\/?>\s*)+/g, '')
-            // reduce long BR sequences
-            .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
-            // combine split block quotes
-            .replace(/<\/blockquote>\s*(<br\/?>\s*)*<blockquote[^>]+>/g, '<br><br>')
-            // add markup for email addresses
-            .replace(regMailComplexReplace, function () {
-                var args = _(arguments).toArray();
-                // need to ignore line breaks, i.e. <br> tags inside this pattern (see Bug 28960)
-                if (/<br\/?>/.test(args[0])) return args[0];
-                // ignore if display name is again mail address
-                if (/@/.test(args[2])) return args[0];
-                return '<a href="mailto:' + args[6] + '" target="_blank">' + args[2] + (args[3] || '') + '</a>';
-            });
-
-        // split source to safely ignore tags
-        text = _(text.split(/(<[^>]+>)/))
-            .map(function (line) {
-                // ignore tags
-                if (line[0] === '<') return line;
-                // ignore URLs
-                if (regIsURL.test(line)) return line;
-                // process plain text
-                line = insertEmoticons(line);
-                return line;
-            })
-            .join('');
-
-        return text;
-    }
-
     function setLinkTarget(match /*, link*/) {
         //replace or add link target to '_blank'
         return (/target/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank">');
+    }
+
+    function addMissingProtocol(match, url) {
+        // other protocol (mailto:, ftp://, ...)
+        if (/^[^:.#]+:/.test(url)) return match;
+        // anchor link
+        if (/^#/.test(url)) return match;
+        return match.replace(url, 'http://' + url);
     }
 
     // helper: use native functions to avoid jQuery caches;
@@ -625,15 +547,17 @@ define('io.ox/mail/detail/content', [
         return str;
     }
 
-    function explandBlockquote(e) {
+    function expandBlockquote(e) {
         if (e.which === 13 || e.which === 23 || e.type === 'click') {
             e.preventDefault();
             e.stopPropagation();
-            var self = this;
-            $(this).hide().prev().slideDown('fast', function () {
-                $(e.delegateTarget).trigger('resize');
-                $(self).remove();
-            });
+            $(this).hide().prev().show();
+            // needed for FF to handle the resize
+            _.delay(function () {
+                $(e.delegateTarget).trigger('resize').trigger('toggle-blockquote');
+            }, 20);
+
+            $(this).remove();
         }
     }
 
@@ -642,16 +566,13 @@ define('io.ox/mail/detail/content', [
 
         extensions: extensions,
 
-        get: function (data, options) {
+        get: function (data, options, flow) {
 
             if (!data || !data.attachments) {
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
-                // was: beautifyPlainText = settings.get('beautifyPlainText'),
-                // true until bug 52294 gets fixed
-                beautifyPlainText = true,
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }), content,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 
@@ -672,8 +593,8 @@ define('io.ox/mail/detail/content', [
                     if (attachment.content_type === baton.type) {
                         // add content parts
                         baton.source += attachment.content;
-                    } else if (baton.type === 'text/plain' && beautifyPlainText && isImage.test(attachment.content_type)) {
-                        // add images if text and using beautifyPlainText
+                    } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type)) {
+                        // add images if text
                         baton.source += '\n!(api/image/mail/picture?' +
                             $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 }) +
                             ')\n';
@@ -705,13 +626,8 @@ define('io.ox/mail/detail/content', [
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'mail-detail-content plain-text noI18n';
-                    baton.source = beautifyPlainText ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
+                    baton.source = that.beautifyPlainText(baton.source);
                     content.innerHTML = baton.source;
-                    // process emoji now (and don't do it again)
-                    baton.processedEmoji = true;
-                    emoji.processEmoji(baton.source, function (html) {
-                        content.innerHTML = html;
-                    });
                 }
 
                 // process content
@@ -728,7 +644,7 @@ define('io.ox/mail/detail/content', [
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
+            return { content: content, isLarge: baton.isLarge, type: baton.type };
         },
 
         beautifyPlainText: function (str) {
@@ -738,24 +654,21 @@ define('io.ox/mail/detail/content', [
         },
 
         transformForHTMLEditor: function (str) {
-            return this.text2html(str, { blockquotes: true, links: true, lists: true, rulers: true });
+            return this.text2html(str, { blockquotes: true, links: true });
         },
 
         // convert plain text to html
-        // supports blockquotes and lists
+        // supports blockquotes
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*/,
-                regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
-                regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
+            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*\n?/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
+                regText = /^[^\n]*(\n(?![ ]*(> ))[^\n]*)*\n?/,
                 regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
                 regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?(\.[\w-]+)+)/g,
-                regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
-                regImage = /^!\([^\)]+\)$/gm,
-                defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
+                regImage = /^!\([^)]+\)$/gm,
+                defaults = { blockquotes: true, images: true, links: true };
 
             function exec(regex, str) {
                 var match = regex.exec(str);
@@ -764,7 +677,7 @@ define('io.ox/mail/detail/content', [
 
             function parse(str, options) {
 
-                var out = '', match, start;
+                var out = '', match;
 
                 options = options || defaults;
 
@@ -778,40 +691,19 @@ define('io.ox/mail/detail/content', [
                         continue;
                     }
 
-                    if (options.lists && (match = exec(regIsUnordered, str))) {
-                        str = str.substr(match.length);
-                        match = match.replace(/^../gm, '');
-                        match = parse(match, options).replace(/<br><ul>/g, '<ul>').replace(/<br>/g, '</li><li>');
-                        out += '<ul><li>' + match + '</li></ul>';
-                        continue;
-                    }
-
-                    if (options.lists && (match = exec(regIsOrdered, str))) {
-                        str = str.substr(match.length);
-                        start = parseInt(match, 10);
-                        match = match.replace(/^\d+\. /gm, '');
-                        match = parse(match, options).replace(/<br>(<ol[^>]*>)/g, '$1').replace(/<br>/g, '</li><li>');
-                        out += '<ol start="' + start + '"><li>' + match + '</li></ol>';
-                        continue;
-                    }
-
                     if (match = exec(regNewline, str)) {
                         str = str.substr(match.length);
-                        out += match.replace(/\n/g, '<br>');
+                        out += match.replace(/\n/g, '<div><br></div>');
                         continue;
                     }
 
                     if (match = exec(regText, str)) {
                         // advance
-                        str = str.substr(match.length + (options.lists ? 1 : 0));
+                        str = str.substr(match.length);
                         // escape first (otherwise we escape our own markup later)
                         // however, we just escape < (not quotes, not closing brackets)
                         // we add a \r to avoid &lt; become part of URLs
                         match = match.replace(/</g, '\r&lt;');
-                        // rulers
-                        if (options.rulers) {
-                            match = match.replace(regRuler, replaceRuler);
-                        }
                         // images
                         if (options.images) {
                             match = match.replace(regImage, replaceImage);
@@ -829,7 +721,12 @@ define('io.ox/mail/detail/content', [
                                 });
                         }
                         // remove \r and replace newlines
-                        out += match.replace(/\r/g, '').replace(/\n/g, '<br>');
+                        out += '<div>' + match
+                            .replace(/\r/g, '')
+                            .replace(/\n+/g, function (all) {
+                                return '</div>' + new Array(all.length).join('<div><br></div>') + '<div>';
+                            })
+                            + '</div>';
                         continue;
                     }
 
@@ -839,16 +736,9 @@ define('io.ox/mail/detail/content', [
                     }
                 }
 
-                return out;
-            }
+                out = out.replace(/<div><\/div>/g, '');
 
-            function replaceRuler(str) {
-                switch (str[0]) {
-                    case '=':
-                        return '<hr style="height: 0; border: 0; border-top: 3px double #555; margin: 8px 0;">';
-                    default:
-                        return '<hr style="height: 0; border: 0; border-top: 1px solid #aaa; margin: 8px 0;">';
-                }
+                return out;
             }
 
             function replaceImage(str) {

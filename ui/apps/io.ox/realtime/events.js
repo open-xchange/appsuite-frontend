@@ -16,12 +16,11 @@
  * Use this only, if the 'rt' capability is present.
  */
 
-define('io.ox/realtime/events',
-    [
-        'io.ox/realtime/rt',
-        'io.ox/realtime/tab_id',
-        'io.ox/core/http'
-    ],
+define('io.ox/realtime/events', [
+    'io.ox/realtime/rt',
+    'io.ox/realtime/tab_id',
+    'io.ox/core/http'
+],
 function (rt, tabId, http) {
     'use strict';
 

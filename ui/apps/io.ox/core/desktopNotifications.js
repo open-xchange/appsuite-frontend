@@ -85,6 +85,7 @@ define('io.ox/core/desktopNotifications', [
         //just for convenience since the show function asks automatically if desktop notifications are supported
         requestPermission: function (callback) {
             if (supported) {
+                // https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins
                 Notification.requestPermission(callback);
             } else {
                 callback('unsupported');

@@ -21,33 +21,46 @@
         padding-top: 6px;
     }
 }
+
 .io-ox-mail-compose {
+
     // baseline adjustment
-    padding-top: @default-padding;
+    padding-top: 8px;
 
     & > .mail-compose-fields > .row {
 
         margin-bottom: 10px;
 
-        &.sender .dropdown { padding-top: 8px; }
+        // first
+        &.sender {
+            .maillabel, .dropdown { padding-top: 10px; }
+        }
+
+        &.sender-realname {
+            display: none;
+            margin-bottom: 16px;
+            color: #767676;
+        }
 
         div.dropdown {
             display: inline-block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
 
             &.signatures { margin-right: 15px; }
         }
 
-        .shareAttachments div.dropdown {
-            margin-bottom: 0px;
+        &.subject {
+            margin-bottom: 15px;
+            .maillabel { padding-top: 5px; }
+            input {
+                padding-top: 3px;
+                font-weight: bold;
+            }
+
         }
 
-        &.subject input { font-weight: bold; }
-
         &.attachments {
-
             .inplace-dropzone { margin: 0 15px; }
-
             .io-ox-core-tk-attachment-list { clear: both; }
         }
 
@@ -65,13 +78,19 @@
             font-weight: bold;
             line-height: 20px;
             display: inline-block;
-            padding-top: 6px;
+            padding-top: 5px;
+            margin-bottom: 4px;
         }
+    }
+
+    & > .mail-compose-fields.no-realname {
+        .sender { margin-bottom: 6px };
+        .sender-realname { display: block };
     }
 
     .sender {
         .name { color: #333; }
-        .address { color: @link-color; }
+        .address { color: @link-color; }
     }
 
     .header {
@@ -88,7 +107,7 @@
     .recipient-actions {
 
         position: absolute;
-        top: 7px;
+        top: 5px;
         right: 16px;
 
         a {
@@ -108,7 +127,7 @@
     .open-addressbook-popup {
         font-size: 18px;
         position: absolute;
-        top: 2px;
+        top: 1px;
         right: 24px;
         padding: 2px;
         color: @hc-gray;
@@ -153,7 +172,7 @@
         overflow-x: auto;
 
         &.mce-edit-focus {
-            outline: none;
+            outline: 0;
             .form-control-focus();
         }
 
@@ -254,80 +273,46 @@
         }
     }
 
-    .shareAttachments {
-
-        > ul {
-            margin-left: 16px;
+    .attachments {
+        header {
+            display: flex;
+            align-items: center;
+            min-height: 30px;
         }
+        .toggle-details { white-space: nowrap; }
+        // pull right
+        .toggle-mode { margin-left: auto; }
 
-        > div {
-            margin-right: 16px;
+    }
+
+    .attachments .share-attachments {
+
+        display: flex;
+        align-items: center;
+        padding-left: 32px;
+        button {
+            margin-top: 2px;
         }
+    }
+}
 
-        .input-group {
-            width: 25%;
-            display: inline-table;
-            top: 10px;
-        }
-
-        .io-ox-inline-links {
-            display: inline;
-            font-family: @normal-font-family;
+.share-attachments-view-dialog {
+    legend {
+        display: block;
+        width: 100%;
+        margin: 0;
+        border: 0;
+        padding: 0;
+        h2 {
             font-size: 13px;
-
-            li {
-                padding-top: 3px;
-            }
-
-            a {
-                text-decoration: underline;
-            }
-
-            a[data-action="shareAttachmentseDisable"] {
-                text-decoration: none;
-                font-weight: bold;
-            }
-
-            .fa-check, a[data-action="shareAttachmentseDisable"] {
-                color: #FF6E00;
-            }
-
-            .fa-check {
-                margin-right: 5px;
-            }
-        }
-
-        .dropdownlink, .checkbox {
-            display: inline;
-            position: relative;
-
-            a:hover {
-                text-decoration: none;
-            }
-
-            a i.fa-caret-down {
-                color: inherit;
-                display: inline-block;
-                margin-left: 5px;
-            }
-
-        }
-
-    }
-
-    .show-share-attachments {
-
-        margin-top: -12px;
-
-        .toggle-mode {
-            padding-top: 12px;
+            line-height: 24px;
+            font-weight: 700;
+            color: #666666;
         }
     }
-
-    .mail-attachment-list header .toggle-details {
-        padding-top: 3px;
+    .password-wrapper, fieldset {
+        margin-top: 24px;
     }
-
 }
 
 .smartphone {
@@ -340,7 +325,7 @@
             padding:8px 16px;
             border:0;
 
-            &:focus { outline: none; }
+            &:focus { outline: 0; }
         }
 
         & > .mail-compose-fields > .row {
@@ -417,8 +402,9 @@
                 }
             }
 
-            // This should be removed when autocomplete is rendered inplace
-            .twitter-typeahead { display:block !important; }
+            .twitter-typeahead {
+                width: 9em;
+            }
 
             .form-control {
                 padding-top: 7px;
@@ -460,7 +446,7 @@
         }
         textarea.editable, .mce-content-body.editable {
             border: none;
-            outline: none;
+            outline: 0;
 
             &.mce-edit-focus:focus { box-shadow: none; }
         }

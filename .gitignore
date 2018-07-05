@@ -1,4 +1,5 @@
 .DS_Store
+.idea
 ui/.project
 ui/watch.sh
 ui/node_modules

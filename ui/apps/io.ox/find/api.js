@@ -62,7 +62,7 @@ define('io.ox/find/api', [
         }),
         columns = {
             mail: {
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655',
+                columns: http.defaultColumns.mail.search,
                 extendColumns: 'io.ox/mail/api/list'
             },
             files: {
@@ -78,8 +78,8 @@ define('io.ox/find/api', [
                 extendColumns: 'io.ox/contacts/api/list'
             },
             calendar: {
-                columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
-                extendColumns: 'io.ox/calendar/api/list'
+                fields: 'color,createdBy,endDate,flags,folder,id,location,recurrenceId,seriesId,startDate,summary,timestamp',
+                extendFields: 'io.ox/calendar/api/fields'
             }
         },
         simpleCache = new cache.SimpleCache('find/autocomplete');
@@ -87,12 +87,10 @@ define('io.ox/find/api', [
     function getColumns(options) {
         var module = options.params.module,
             data = columns[module],
-            obj = {
-                params: {
-                    columns: apiFactory.extendColumns(data.extendColumns, module, data.columns)
-                }
-            };
-        return obj;
+            params = {};
+        if (data.extendColumns && data.columns) params.columns = apiFactory.extendColumns(data.extendColumns, module, data.columns);
+        if (data.extendFields && data.fields) params.fields = apiFactory.extendColumns(data.extendFields, module, data.fields);
+        return { params: params };
     }
 
     // get default options

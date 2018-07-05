@@ -17,18 +17,10 @@ define('io.ox/calendar/edit/timezone-dialog', [
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
-    'io.ox/backbone/mini-views/common'
-], function (ext, dialogs, gt, coreSettings, TimezonePicker, mini) {
+    'io.ox/calendar/util'
+], function (ext, dialogs, gt, coreSettings, TimezonePicker, util) {
 
     'use strict';
-
-    var TimezoneModel = Backbone.Model.extend({
-        defaults: {
-            startTimezone: coreSettings.get('timezone'),
-            endTimezone: coreSettings.get('timezone'),
-            convertTime: false
-        }
-    });
 
     ext.point('io.ox/calendar/edit/timezone-dialog').extend({
         id: 'start-date-selection',
@@ -70,66 +62,10 @@ define('io.ox/calendar/edit/timezone-dialog', [
         }
     });
 
-    ext.point('io.ox/calendar/edit/timezone-dialog').extend({
-        id: 'start-end-notice',
-        index: 300,
-        draw: function (baton) {
-            var node = $('<div class="form-group">');
-
-            function drawNotice() {
-                node.empty();
-                if (baton.model.get('startTimezone') !== baton.model.get('endTimezone')) {
-                    node.text(gt('If you select different timezones, the appointment\'s start and end dates are saved in the timezone of the appointment\'s start date. A different end date timezone only allows a convenient conversion.'));
-                }
-            }
-
-            baton.model.on({
-                'change:startTimezone': drawNotice,
-                'change:endTimezone': drawNotice
-            });
-            this.append(node);
-            drawNotice();
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/timezone-dialog').extend({
-        id: 'keep-utc',
-        index: 400,
-        draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-');
-            this.append(
-                $('<div class="form-group">').append(
-                    $('<div class="checkbox">').append(
-                        $('<label>').attr('for', guid).text(gt('Convert the entered start and end dates to match the modified timezones')).prepend(
-                            new mini.CheckboxView({ id: guid, name: 'convertTime', model: baton.model }).render().$el
-                        )
-                    )
-                )
-            );
-        }
-    });
-
     function open(opt) {
-        var model = new TimezoneModel({
-            startTimezone: opt.model.get('timezone'),
-            endTimezone: opt.model.get('endTimezone') || opt.model.get('timezone')
-        });
-
-        function getUtc(attribute, timezone) {
-            var formatStr = 'l LT',
-                timestamp = parseInt(opt.model[opt.model.getDate ? 'getDate' : 'get'](attribute), 10),
-                oldTime = moment.tz(timestamp, opt.model.get('timezone')),
-                newTime = moment.tz(oldTime.format(formatStr), formatStr, timezone);
-
-            return newTime.valueOf();
-        }
-
-        model.on('change:startTimezone', function (model, value) {
-            if (model.previous('startTimezone') === model.get('endTimezone')) {
-                model.set('endTimezone', value);
-            } else {
-                model.off('change:startTimezone');
-            }
+        var model = new Backbone.Model({
+            startTimezone: opt.model.getMoment('startDate').tz(),
+            endTimezone: opt.model.getMoment('endDate').tz()
         });
 
         new dialogs.ModalDialog()
@@ -140,22 +76,12 @@ define('io.ox/calendar/edit/timezone-dialog', [
                 ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.getContentNode(), { model: model });
             })
             .on('change', function () {
-                if (model.get('convertTime')) {
-                    var utcStart = getUtc('start_date', model.get('startTimezone')),
-                        utcEnd = getUtc('end_date', model.get('endTimezone'));
-
-                    opt.model.set({
-                        'timezone': model.get('startTimezone'),
-                        'endTimezone': model.get('endTimezone'),
-                        'start_date': utcStart,
-                        'end_date': utcEnd
-                    });
-                } else {
-                    opt.model.set({
-                        'timezone': model.get('startTimezone'),
-                        'endTimezone': model.get('endTimezone')
-                    });
-                }
+                var startDate = opt.model.getMoment('startDate').tz(model.get('startTimezone')),
+                    endDate = opt.model.getMoment('endDate').tz(model.get('endTimezone'));
+                opt.model.set({
+                    startDate: { value: startDate.clone().utc().format(util.ZULU_FORMAT), tzid: startDate.tz() },
+                    endDate: { value: endDate.clone().utc().format(util.ZULU_FORMAT), tzid: endDate.tz() }
+                });
             })
             .show();
     }

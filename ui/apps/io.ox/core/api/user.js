@@ -147,6 +147,12 @@ define('io.ox/core/api/user', [
                         api.trigger('update:' + _.ecid(data), data);
                         api.trigger('update', data);
                         api.trigger('refresh.list');
+                        // reset image?
+                        if (o.data.image1 === '') {
+                            // to clear picture halo's cache
+                            contactsApi.trigger('update:image', data);
+                            api.trigger('reset:image reset:image:' + o.id, { id: o.id });
+                        }
                         // get new contact and trigger contact events
                         // skip this if GAB is missing
                         if (data.folder_id === 6 && capabilities.has('!gab')) return;
@@ -176,10 +182,12 @@ define('io.ox/core/api/user', [
                 api.caches.get.clear(),
                 api.caches.all.clear(),
                 api.caches.list.clear()
-            ).pipe(function () {
+            )
+            .then(function () {
                 api.trigger('refresh.list');
-                api.trigger('update', {
-                    id: o.id
+                require(['io.ox/contacts/api']).then(function (contactsApi) {
+                    contactsApi.trigger('update:image', { id: o.id });
+                    api.trigger('update update:image update:image:' + o.id, { id: o.id });
                 });
             });
 
@@ -197,7 +205,7 @@ define('io.ox/core/api/user', [
                 data: form,
                 fixPost: true
             })
-            .pipe(filter);
+            .then(filter);
         }
         return http.FORM({
             module: 'user',
@@ -206,7 +214,7 @@ define('io.ox/core/api/user', [
             data: changes,
             params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
         })
-        .pipe(filter);
+        .then(filter);
     };
 
     /**
@@ -215,8 +223,8 @@ define('io.ox/core/api/user', [
      * @return { deferred} returns name string
      */
     api.getName = function (id) {
-        return api.get({ id: id }).pipe(function (data) {
-            return _.noI18n(data.display_name || data.email1 || '');
+        return api.get({ id: id }).then(function (data) {
+            return data.display_name || data.email1 || '';
         });
     };
 
@@ -226,8 +234,8 @@ define('io.ox/core/api/user', [
      * @return { deferred} returns greeting string
      */
     api.getGreeting = function (id) {
-        return api.get({ id: id }).pipe(function (data) {
-            return _.noI18n(data.first_name || data.display_name || data.email1 || '');
+        return api.get({ id: id }).then(function (data) {
+            return data.first_name || data.display_name || data.email1 || '';
         });
     };
 
@@ -236,11 +244,16 @@ define('io.ox/core/api/user', [
      * @param {string} id of a user
      * @return { object} text node
      */
-    api.getTextNode = function (id) {
-        var node = document.createTextNode('');
+    api.getTextNode = function (id, options) {
+        var opt = _.extend({ type: 'name' }, options),
+            node = document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = data.display_name || data.email1;
+                var name = '';
+                if (opt.type === 'name') name = data.display_name || data.email1;
+                else if (opt.type === 'email') name = data.email1 || data.display_name;
+                else if (opt.type === 'initials') name = util.getInitials(data);
+                node.nodeValue = name;
             })
             .always(function () {
                 // use defer! otherwise we return null on cache hit
@@ -249,7 +262,6 @@ define('io.ox/core/api/user', [
                     node = null;
                 });
             });
-        window.node = node;
         return node;
     };
 
@@ -260,7 +272,7 @@ define('io.ox/core/api/user', [
      * @return { jquery} textlink node
      */
     api.getLink = function (id, text) {
-        text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
+        text = text ? $.txt(text) : api.getTextNode(id);
         return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 
@@ -272,6 +284,13 @@ define('io.ox/core/api/user', [
         return require(['io.ox/core/settings/user']).then(function (api) {
             return api.getCurrentUser();
         });
+    };
+
+    // auto-inject user_id to guarantee client-side caching
+    var getUser = api.get;
+    api.get = function () {
+        if (!arguments.length) return getUser({ id: ox.user_id });
+        return getUser.apply(this, arguments);
     };
 
     // reload account API if current user gets changed

@@ -16,7 +16,6 @@ define('io.ox/core/folder/selection', [], function () {
     'use strict';
 
     function Selection(view) {
-
         this.view = view;
 
         this.view.$el
@@ -24,6 +23,8 @@ define('io.ox/core/folder/selection', [], function () {
             .on('keydown', '.selectable', $.proxy(this.onKeydown, this))
             // bug 54193: do not set focus
             .on('mousedown contextmenu', '.selectable', function (e) { e.preventDefault(); });
+
+        if (view.options.dblclick) this.view.$el.on('dblclick', $.proxy(this.onDblClick, this));
 
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')
@@ -38,19 +39,48 @@ define('io.ox/core/folder/selection', [], function () {
 
     _.extend(Selection.prototype, {
 
-        byId: function (id, items) {
+        /**
+         * Returns the node from the tree view
+         * @param {String} id
+         *  id to select
+         * @param [{jQuery}] items
+         *  nodes to check
+         * @param {Boolean} favorite
+         *  select favorites first
+         */
+        byId: function (id, items, favorite) {
             items = items || this.getItems();
             // use first, we might have duplicates
-            return items.filter('[data-id="' + $.escape(id) + '"]').first();
+            var elements = items.filter('[data-id="' + $.escape(id) + '"]');
+            var returnElement = elements.first();
+
+            if (elements.length !== 1) {
+                elements.each(function () {
+                    if (favorite && $(this).parentsUntil('.tree-container', '.folder.favorites').length) {
+                        returnElement = $(this);
+                    } else if (!favorite && !$(this).parentsUntil('.tree-container', '.folder.favorites').length) {
+                        returnElement = $(this);
+                    }
+                });
+            }
+
+            return returnElement;
         },
 
         get: function (attribute) {
             return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
         },
 
-        set: function (id) {
+        /**
+         * Select the folder in the tree view
+         * @param {String} id
+         *  node to select
+         * @param {Boolean} favorite
+         *  select favorites first
+         */
+        set: function (id, favorite) {
             var items = this.getItems(),
-                node = this.byId(id),
+                node = this.byId(id, items, favorite),
                 index = items.index(node);
             // not found?
             if (index === -1) return;
@@ -113,6 +143,17 @@ define('io.ox/core/folder/selection', [], function () {
             this.pick(index, items);
         },
 
+        onDblClick: function (e) {
+            // ignore native checkbox
+            if ($(e.target).is(':checkbox')) return;
+            if ($(e.target).closest('.contextmenu-control').length > 0) return;
+
+            var target = $(e.target),
+                node = target.closest('.folder'),
+                folder = node.attr('data-id');
+            this.triggerEvent('dblclick', e, folder);
+        },
+
         onKeydown: function (e) {
             if (!/38|40/.test(e.which)) return;
 
@@ -170,12 +211,7 @@ define('io.ox/core/folder/selection', [], function () {
             var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
             this.view.$container.attr('aria-activedescendant', node.attr('id'));
-            this.triggerChange(items);
-        },
-
-        resetSelected: function (items) {
-            if (ox.debug) console.warn('resetSelected() is deprecated and will be removed with 7.10. Please use uncheck()');
-            return this.uncheck(items);
+            this.triggerEvent('change', items);
         },
 
         resetTabIndex: function (items, skip) {
@@ -197,14 +233,14 @@ define('io.ox/core/folder/selection', [], function () {
             if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
-                .attr({ 'aria-selected': true, tabindex: 0 })
-                .find('.folder-label:first').each(function () {
-                    // special handling for settings for now
-                    if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
-                    var left = $(this).position().left, maxWidth = width - left - 76;
-                    $(this).css('max-width', Math.max(maxWidth, 80));
-                })
-                .end();
+            .attr({ 'aria-selected': true, tabindex: 0 })
+            .find('.folder-label:first').each(function () {
+                // special handling for settings for now
+                if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
+                var left = $(this).position().left, maxWidth = width - left - 76;
+                $(this).css('max-width', Math.max(maxWidth, 80));
+            })
+            .end();
         },
 
         uncheck: function (items) {
@@ -224,13 +260,32 @@ define('io.ox/core/folder/selection', [], function () {
             this.selectableVirtualFolders[id] = true;
         },
 
-        triggerChange: _.debounce(function (items) {
-            var item = (items || this.getItems()).filter('.selected').first(),
+        triggerEvent: _.debounce(function (event) {
+            if (event === 'change') this.triggerChange.apply(this, _(arguments).toArray().splice(1));
+            else this.view.trigger.apply(this.view, arguments);
+        }, 300),
+
+        triggerChange: function (items) {
+            var self = this,
+                item = (items || this.getItems()).filter('.selected').first(),
                 id = item.attr('data-id'),
+
+                // Only true for files in Drive
+                showInDrive = item.attr('data-show-in-drive'),
                 isVirtual = /^virtual/.test(id);
-            // trigger change event on view
-            this.view.trigger(isVirtual && !this.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
-        }, 300)
+            if (showInDrive) {
+                require(['io.ox/core/extensions', 'io.ox/files/api', 'io.ox/core/extPatterns/actions']).then(function (ext, api, actions) {
+                    var models = api.pool.get('detail').get(id);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({
+                        models: [models],
+                        app: self.view.app,
+                        alwaysChange: true
+                    }));
+                });
+            } else if (self.view) {
+                self.view.trigger(isVirtual && !self.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
+            }
+        }
     });
 
     return Selection;

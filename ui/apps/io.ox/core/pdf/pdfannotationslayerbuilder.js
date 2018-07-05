@@ -17,12 +17,13 @@
 define('io.ox/core/pdf/pdfannotationslayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfsimplelinkservice',
-    'pdfjs-dist/build/pdf.combined'
-], function (Polyfill, SimpleLinkService, PDFJSCombined) {
+    'pdfjs-dist/build/pdf',
+    'pdfjs-dist/build/pdf.worker'
+], function (Polyfill, SimpleLinkService, PDFJSLib) {
 
     'use strict';
 
-    var PDFJS = PDFJSCombined.PDFJS;
+    var PDFJS = PDFJSLib.PDFJS;
 
     var mozL10n = document.mozL10n || document.webL10n;
 

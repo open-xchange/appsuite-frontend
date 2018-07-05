@@ -37,7 +37,7 @@ define('io.ox/onboarding/clients/extensions', [
         addIcon: function (obj) {
             var target = $(obj.target || obj);
             util.removeIcons(obj);
-            target.after($('<i class="fa fa-check button-clicked"></i>'));
+            target.after($('<i class="fa fa-check button-clicked" aria-hidden="true">'));
         },
         disable: function (obj) {
             $(obj.target || obj).addClass('disabled');
@@ -230,7 +230,7 @@ define('io.ox/onboarding/clients/extensions', [
                     model: this.model,
                     list: this.config.getCodes()
                 }),
-                standard = this['default'];
+                standard = this.default;
             // adjust node
             select.render().$el
                 .removeClass('form-control')
@@ -265,7 +265,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     //$('<label class="control-label">').text(gt('Phone Number')),
                                     this._select().$el,
                                     this._input(),
-                                    $('<button class="btn btn-primary action-call">').text(gt('Send'))
+                                    $('<button type="button" class="btn btn-primary action-call">').text(gt('Send'))
                                 )
                             )
                         )
@@ -370,7 +370,7 @@ define('io.ox/onboarding/clients/extensions', [
                                 $('<div class="row">').append(
                                     this._input(),
                                     // action
-                                    $('<button class="btn btn-primary action-call">').text(gt('Send'))
+                                    $('<button type="button" class="btn btn-primary action-call">').text(gt('Send'))
                                 )
                             )
                         )
@@ -438,7 +438,7 @@ define('io.ox/onboarding/clients/extensions', [
                             .attr('id', ref)
                             .text(this.description),
                         // action
-                        $('<button class="btn btn-primary action-call">')
+                        $('<button type="button" class="btn btn-primary action-call">')
                             .attr('aria-describedby', ref)
                             .text(gt('Configure now'))
                     )
@@ -485,7 +485,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         getButton: function () {
-            if (!this.store.image) return $('<button class="btn btn-primary action-call">').text(gt('Download'));
+            if (!this.store.image) return $('<button type="button" class="btn btn-primary action-call">').text(gt('Download'));
             // appstore button
             return $('<a href="#" class="store">').append(
                 $('<img class="store-icon action-call" role="button">').attr({

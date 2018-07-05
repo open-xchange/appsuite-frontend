@@ -12,35 +12,23 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-@import '../../../bower_components/bootstrap/less/mixins.less';
-@import '../../../bower_components/bootstrap/less/normalize.less';
-@import '../../../bower_components/bootstrap/less/scaffolding.less';
-@import '../../../bower_components/bootstrap/less/type.less';
-@import '../../../bower_components/bootstrap/less/grid.less';
-@import '../../../bower_components/bootstrap/less/forms.less';
-@import '../../../bower_components/bootstrap/less/buttons.less';
-@import '../../../bower_components/bootstrap/less/dropdowns.less';
-@import '../../../bower_components/bootstrap/less/utilities.less';
-@import '../../../bower_components/font-awesome/less/variables.less';
+@import 'bootstrap/less/mixins.less';
+@import 'bootstrap/less/normalize.less';
+@import 'bootstrap/less/scaffolding.less';
+@import 'bootstrap/less/type.less';
+@import 'bootstrap/less/grid.less';
+@import 'bootstrap/less/forms.less';
+@import 'bootstrap/less/buttons.less';
+@import 'bootstrap/less/dropdowns.less';
+@import 'bootstrap/less/utilities.less';
+@import 'font-awesome/less/variables.less';
 
-// link color on login screen must match background
-@link-color: #79bcfc;
+@import "../components/checkboxes.less";
 
 @wallpaper-start-color: #294F83;
 @wallpaper-end-color: #162C4A;
 
 @fa-font-path: '../../../3rd.party/font-awesome/fonts';
-
-@font-face {
-    font-family: 'OpenSans';
-    src: local('Open Sans Light'),
-         local('OpenSans-Light'),
-         url('../../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.woff') format('woff'),
-         url('../../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.ttf') format('truetype'),
-         url('../../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.svg#OpenSansLight') format('svg');
-    font-weight: 300;
-    font-style: normal;
-}
 
 @font-face {
     font-family: 'FontAwesome';
@@ -230,7 +218,7 @@ html.baseline {
     .alert {
 
         padding: 15px; // 16 minus 1
-        .border-radius(4px);
+        border-radius: 4px;
 
         body.down & {
             position: relative;
@@ -261,10 +249,12 @@ html.baseline {
     color: #6cbafc;
 }
 
-#io-ox-login-store, #io-ox-forgot-password {
-    margin-top: 8px;
-    margin-bottom: 20px;
+#io-ox-login-store {
+    .checkbox.custom { margin-top: 0; }
+    margin-bottom: 16px;
 }
+.row.options { padding-top: 8px; }
+#io-ox-forgot-password { margin-top: 2px; }
 
 #io-ox-login-feedback {
     margin-bottom: 8px;
@@ -438,3 +428,5 @@ html.baseline {
 .form-control::-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: #666666;
 }
+
+

@@ -12,51 +12,53 @@
  */
 
 define('io.ox/tasks/settings/pane', [
+    'io.ox/backbone/views/extensible',
     'settings!io.ox/tasks',
     'io.ox/core/extensions',
     'io.ox/core/settings/util',
     'gettext!io.ox/tasks'
-], function (settings, ext, util, gt) {
+], function (ExtensibleView, settings, ext, util, gt) {
 
     'use strict';
-
-    var POINT = 'io.ox/tasks/settings/detail';
 
     settings.on('change', function () {
         settings.saveAndYell();
     });
 
-    ext.point(POINT).extend({
+    ext.point('io.ox/tasks/settings/detail').extend({
         index: 100,
-        id: 'taskssettings',
-        draw: function () {
-            var holder = $('<div class="io-ox-tasks-settings">');
-            this.append(holder);
-            ext.point(POINT + '/pane').invoke('draw', holder);
-        }
-
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 100,
-        id: 'header',
-        draw: function () {
-            this.append(util.header(gt.pgettext('app', 'Tasks')));
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 200,
-        id: 'notifications',
+        id: 'view',
         draw: function () {
             this.append(
-                util.fieldset(gt('Email notifications'),
-                    util.checkbox('notifyNewModifiedDeleted', gt('Receive notifications when a task in which you participate is created, modified or deleted'), settings),
-                    util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notifications when a participant accepted or declined a task created by you'), settings),
-                    util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notifications when a participant accepted or declined a task in which you participate'), settings)
-                )
+                new ExtensibleView({ point: 'io.ox/tasks/settings/detail/view', model: settings })
+                .render().$el
             );
         }
     });
 
+    ext.point('io.ox/tasks/settings/detail/view').extend(
+        {
+            id: 'header',
+            index: 100,
+            render: function () {
+                this.$el.addClass('io-ox-tasks-settings').append(
+                    util.header(gt.pgettext('app', 'Tasks'))
+                );
+            }
+        },
+        {
+            id: 'notifications',
+            index: 200,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('Email notifications'),
+                        util.checkbox('notifyNewModifiedDeleted', gt('Receive notifications when a task in which you participate is created, modified or deleted'), settings),
+                        util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notifications when a participant accepted or declined a task created by you'), settings),
+                        util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notifications when a participant accepted or declined a task in which you participate'), settings)
+                    )
+                );
+            }
+        }
+    );
 });

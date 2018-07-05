@@ -11,11 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
- /**
+/**
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 
-define('io.ox/oauth/keychain', [
+define.async('io.ox/oauth/keychain', [
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/core/event',
@@ -57,7 +57,7 @@ define('io.ox/oauth/keychain', [
                 })[0];
             }
         }),
-        services = new ServiceCollection();
+        services;
 
     var generateId = function () {
         generateId.id = generateId.id + 1;
@@ -68,6 +68,30 @@ define('io.ox/oauth/keychain', [
 
     function simplifyId(id) {
         return id.substring(id.lastIndexOf('.') + 1);
+    }
+
+    function chooseDisplayName(service) {
+        // check if model or simple json
+        if (service.toJSON) service = service.toJSON();
+
+        var names = {}, name, counter = 0;
+        _(accounts.forService(service.id)).each(function (account) {
+            names[account.get('displayName')] = 1;
+        });
+
+        //#. %1$s is the display name of the account
+        //#. e.g. My Xing account
+        name = gt('My %1$s account', service.displayName);
+
+        while (names[name]) {
+            counter++;
+            //#. %1$s is the display name of the account
+            //#. %2$d number, if more than one account of the same service
+            //#. e.g. My Xing account
+            name = gt('My %1$s account (%2$d)', service.displayName, counter);
+        }
+
+        return name;
     }
 
     // Extension
@@ -85,26 +109,6 @@ define('io.ox/oauth/keychain', [
             }
             account.accountType = self.id;
             return account;
-        }
-
-        function chooseDisplayName() {
-            var names = {}, name, counter = 0;
-            _(accounts.forService(service.id)).each(function (account) {
-                names[account.displayName] = 1;
-            });
-
-            //#. %1$s is the display name of the account
-            //#. e.g. My Xing account
-            name = gt('My %1$s account', service.displayName);
-
-            while (names[name]) {
-                counter++;
-                //#. %1$s is the display name of the account
-                //#. %2$d number, if more than one account of the same service
-                //#. e.g. My Xing account
-                name = gt('My %1$s account (%2$d)', service.displayName, counter);
-            }
-            return name;
         }
 
         this.getAll = function () {
@@ -137,7 +141,7 @@ define('io.ox/oauth/keychain', [
             if (!popupWindow) return def.reject();
 
             var newAccount = new OAuth.Account.Model({
-                displayName: chooseDisplayName(),
+                displayName: chooseDisplayName(service),
                 serviceId: service.id,
                 popup: popupWindow
             });
@@ -145,14 +149,14 @@ define('io.ox/oauth/keychain', [
             newAccount.enableScopes(scopes);
 
             return newAccount.save().then(function (account) {
-                accounts.add(newAccount);
                 // needed for some portal plugins (xing, twitter, for example)
                 self.trigger('create', account);
                 ox.trigger('refresh-portal');
                 notifications.yell('success', gt('Account added successfully'));
                 return account;
-            }, function () {
+            }, function (error) {
                 notifications.yell('error', gt('Account could not be added'));
+                throw error;
             });
         };
 
@@ -206,6 +210,7 @@ define('io.ox/oauth/keychain', [
                 return account.toJSON();
             }, function (e) {
                 notifications.yell('error', e.error);
+                throw e;
             });
         };
         if (_.contains(['xing', 'twitter', 'linkedin', 'boxcom', 'dropbox', 'google', 'msliveconnect', 'yahoo'], this.id)) {
@@ -219,18 +224,59 @@ define('io.ox/oauth/keychain', [
         }
     }
 
-    // services & accounts are part of the rampup data
-    services.add(ox.rampup.oauth.services);
-    accounts.add(ox.rampup.oauth.accounts);
-
-    accounts.listenTo(accounts, 'add remove', function (model) {
-        var service = services.forAccount(model);
-        service.keychainAPI.trigger('refresh.all refresh.list', model.toJSON());
-        // Some standard event handlers
-        require(['plugins/halo/api'], function (haloAPI) {
-            haloAPI.halo.refreshServices();
+    function getAllServices() {
+        return http.GET({
+            module: 'oauth/services',
+            params: { action: 'all' }
         });
-    });
+    }
+
+    function getAllAcccounts() {
+        return http.GET({
+            module: 'oauth/accounts',
+            params: { action: 'all' }
+        });
+    }
+
+    function setupAccountBindings() {
+        accounts.listenTo(accounts, 'add remove', function (model) {
+            var service = services.forAccount(model);
+            service.keychainAPI.trigger('refresh.all refresh.list', model.toJSON());
+            // Some standard event handlers
+            require(['plugins/halo/api'], function (haloAPI) {
+                haloAPI.halo.refreshServices();
+            });
+        });
+    }
+
+    var def = $.Deferred(),
+        api = {
+            accounts: accounts,
+            chooseDisplayName: chooseDisplayName
+        };
+
+    // services & accounts maybe part of the rampup data
+    if (ox.rampup && ox.rampup.oauth && ox.rampup.oauth.services) {
+        services = api.services = new ServiceCollection();
+        services.add(ox.rampup.oauth.services);
+        accounts.add(ox.rampup.oauth.accounts);
+        setupAccountBindings();
+        api.serviceIDs = services.map(function (service) { return simplifyId(service.id); });
+        def.resolve(api);
+    } else {
+        // if there is no rampup fetch accounts and services manually first
+        http.pause();
+        getAllServices();
+        getAllAcccounts();
+        http.resume().then(function (data) {
+            services = api.services = new ServiceCollection();
+            if (data[0]) services.add(data[0].data);
+            if (data[1]) accounts.add(data[1].data);
+            setupAccountBindings();
+            api.serviceIDs = services.map(function (service) { return simplifyId(service.id); });
+            def.resolve(api);
+        });
+    }
 
     filestorageApi.rampup().then(function () {
         // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
@@ -238,34 +284,5 @@ define('io.ox/oauth/keychain', [
         _.delay(filestorageApi.consistencyCheck, 5000);
     });
 
-    ox.on('http:error:OAUTH-0040', function (err) {
-        //do not yell
-        err.handled = true;
-        if ($('.modal.oauth-reauthorize').length > 0) return;
-
-        require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
-            new ModalDialog({ title: gt('Error') })
-            .build(function () {
-                this.$el.addClass('oauth-reauthorize');
-                this.$body.append(err.error);
-            })
-            .addCancelButton()
-            .addButton({
-                action: 'reauthorize',
-                label: gt('Reauthorize')
-            })
-            .on('reauthorize', function () {
-                var account = accounts.get(err.error_params[1]);
-
-                account.reauthorize();
-            })
-            .open();
-        });
-    });
-
-    return {
-        services: services,
-        accounts: accounts,
-        serviceIDs: services.map(function (service) { return simplifyId(service.id); })
-    };
+    return def;
 });

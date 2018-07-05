@@ -44,10 +44,38 @@ define('io.ox/tasks/detail/main', [
 
                     app.getWindowNode().addClass('detail-view-app').append(
                         $('<div class="f6-target detail-view-container" tabindex="-1" role="complementary">')
-                            .attr('aria-label', gt('Task Details')
-                        ).append(detailView.draw(baton)));
+                            .attr('aria-label', gt('Task Details'))
+                            .append(detailView.draw(baton)));
                 }).fail(yell);
             };
+        },
+
+        'metrics': function (app) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                var body = app.getWindow().nodes.body;
+                // toolbar actions
+                body.on('mousedown', '.io-ox-action-link:not(.dropdown, [data-toggle="dropdown"])', function (e) {
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropdown
+                body.on('mousedown', '.io-ox-inline-links .dropdown a:not([data-toggle])', function (e) {
+                    var action = $(e.target).closest('.dropdown').find('> a');
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: action.attr('data-action'),
+                        detail: $(e.target).val()
+                    });
+                });
+
+            });
         }
     });
 
@@ -58,7 +86,8 @@ define('io.ox/tasks/detail/main', [
         var app = ox.ui.createApp({
             closable: true,
             name: NAME,
-            title: ''
+            title: '',
+            floating: !_.device('smartphone')
         });
 
         // launcher
@@ -66,7 +95,9 @@ define('io.ox/tasks/detail/main', [
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
-                toolbar: false
+                toolbar: false,
+                closable: true,
+                floating: !_.device('smartphone')
             });
 
             app.setWindow(win);

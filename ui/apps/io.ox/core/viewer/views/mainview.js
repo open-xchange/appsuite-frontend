@@ -42,6 +42,9 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         initialize: function (options) {
+
+            Util.logPerformanceTimer('MainView:initialize');
+
             _.extend(this, options);
             // apps with 'simple window' class (Portal) scrolls behind the viewer.
             // Hide it for the moment as a workaround.
@@ -55,7 +58,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true, openedBy: this.openedBy };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true, openedBy: this.openedBy, isSharing: this.isSharing };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
@@ -68,8 +71,12 @@ define('io.ox/core/viewer/views/mainview', [
             if (!this.standalone) {
                 this.listenTo(ox, 'app:start app:resume', this.closeViewer);
             }
+            // register app resume event for stand alone mode
+            if (this.app) {
+                this.app.on('resume', this.onAppResume);
+            }
             // handle DOM events
-            $(window).on('resize.viewer', this.refreshViewSizes.bind(this));
+            $(window).on('resize', this.refreshViewSizes.bind(this));
             // clean stuff on dispose event from core/commons.js
             this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
@@ -89,7 +96,9 @@ define('io.ox/core/viewer/views/mainview', [
          * @returns {MainView}
          */
         render: function (model) {
-            var state = Settings.getSidebarOpenState();
+            // #58229 - sidebar closed by default for shared files
+            var state = (this.isSharing) ? false : Settings.getSidebarOpenState();
+
             if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
                 return;
@@ -172,14 +181,16 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    if ($(event.target).hasClass('swiper-slide-active')) {
-                        handleChangeSlide('left');
-                    }
+                    // bug #55252
+                    // if ($(event.target).hasClass('swiper-slide-active')) {
+                    handleChangeSlide('left');
+                    // }
                     break;
                 case 39: // right arrow
-                    if ($(event.target).hasClass('swiper-slide-active')) {
-                        handleChangeSlide('right');
-                    }
+                    // bug #55252
+                    // if ($(event.target).hasClass('swiper-slide-active')) {
+                    handleChangeSlide('right');
+                    // }
                     break;
                 case 33: // page up
                     event.preventDefault();
@@ -212,23 +223,31 @@ define('io.ox/core/viewer/views/mainview', [
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
             // filter random resize events that are coming from other parts of appsuite while switching apps.
-            if (!this.$el.is(':visible')) {
+            if (this.disposed || !this.$el.is(':visible')) {
                 return;
             }
-            var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0,
-                displayerEl = this.displayerView.$el,
-                activeSlide = this.displayerView.getActiveSlideNode(),
-                activeSlideIndex = activeSlide.index(),
-                swiper = this.displayerView.swiper;
+
+            var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0;
+            var displayerEl = this.displayerView.$el;
+            var activeSlide = this.displayerView.getActiveSlideNode();
+            var activeSlideIndex = activeSlide.index();
+            var swiper = this.displayerView.swiper;
+
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
+
             if (swiper) {
                 swiper.onResize();
                 this.viewerEvents.trigger('viewer:resize');
                 // workaround for a possible bug from swiper plugin that happens sporadically:
                 // After an on resize call, the plugin 'resets' the active slide to the beginning.
-                this.displayerView.swiper.slideTo(activeSlideIndex);
+                swiper.slideTo(activeSlideIndex);
             }
+        },
+
+        // handle app resume
+        onAppResume: function () {
+            $(window).trigger('resize');
         },
 
         /**
@@ -247,10 +266,17 @@ define('io.ox/core/viewer/views/mainview', [
          * - save sidebar state into the Settings.
          * - Hides viewer DOM first and then do cleanup.
          */
-        closeViewer: function () {
+        closeViewer: function (app) {
+            // check if the Viewer initiated an application start which triggered the app:start event
+            if (app && app.options && app.options.mode === 'viewer-mode') {
+                return;
+            }
+
             this.viewerEvents.trigger('viewer:beforeclose');
-            // save sidebar state
-            Settings.setSidebarOpenState(this.sidebarView.open);
+            // save sidebar state, but only if files are not shared #58229
+            if (!this.isSharing) {
+                Settings.setSidebarOpenState(this.sidebarView.open);
+            }
             this.$el.hide();
             if (!this.standalone) {
                 this.$el.parent().find('.simple-window').show();
@@ -268,7 +294,13 @@ define('io.ox/core/viewer/views/mainview', [
             this.toolbarView = null;
             this.displayerView = null;
             this.sidebarView = null;
-            $(window).off('resize.viewer');
+
+            $(window).off('resize', this.refreshViewSizes.bind(this));
+
+            if (this.app) {
+                this.app.off('resume', this.onAppResume);
+            }
+
             if (!this.standalone && this.app) {
                 this.app.quit();
                 this.app = null;

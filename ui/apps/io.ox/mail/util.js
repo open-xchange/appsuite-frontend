@@ -77,7 +77,7 @@ define('io.ox/mail/util', [
         // regex: remove delimiters/spaces
         rRecipientCleanup = /^[,;\s]+/,
         // regex: process single recipient
-        rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^\>]+\>)$/,
+        rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^>]+>)$/,
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
         // regex: remove special characters from telephone number
@@ -249,7 +249,7 @@ define('io.ox/mail/util', [
 
                 if (i < $i - 1) {
                     tmp.append(
-                        $('<span class="delimiter">').text(',\u00A0\u00A0\u00A0 ')
+                        $('<span class="delimiter">').text(',\u00A0\u00A0 ')
                     );
                 }
             }
@@ -268,11 +268,11 @@ define('io.ox/mail/util', [
                     delivery: 'download'
                 });
                 tmp = tmp.add(
-                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(_.noI18n(filename))
+                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(filename)
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 ')))
+                        $('<span class="delimiter">').append($.txt('\u00A0\u2022 '))
                     );
                 }
             }
@@ -280,7 +280,7 @@ define('io.ox/mail/util', [
         },
 
         getFontFormats: function () {
-            return settings.get('tinyMCE/font_formats', 'Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats');
+            return settings.get('tinyMCE/font_formats', 'System=-apple-system, BlinkMacSystemFont,helvetica,sans-serif,Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats');
         },
 
         getDefaultStyle: function () {
@@ -293,7 +293,7 @@ define('io.ox/mail/util', [
             // styles as string
             obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
             // node
-            obj.node = $('<p>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
+            obj.node = $('<div>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
             return obj;
         },
 
@@ -321,7 +321,7 @@ define('io.ox/mail/util', [
             if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
-                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,.\(\)]+)$/, '$2 $1');
+                display_name = display_name.replace(/^([^,.()]+),\s([^,.()]+)$/, '$2 $1');
             }
 
             if (options.showMailAddress && display_name && email) {
@@ -329,6 +329,16 @@ define('io.ox/mail/util', [
             }
 
             return display_name || email;
+        },
+
+        getSender: function (item, enabled) {
+            var address = item[1];
+            // disabled
+            if (!enabled) return [null, address];
+            // default or custom
+            var custom = settings.get(['customDisplayNames', address], {}),
+                name = (custom.overwrite ? custom.name : custom.defaultName) || '';
+            return [name, address];
         },
 
         // takes care of special edge-case: no from address
@@ -399,9 +409,8 @@ define('io.ox/mail/util', [
         },
 
         // remove typical "Re: Re: Fwd: Re sequences".
-        // keepFirstPrefix <bool> allows to keep the most recent one.
-        // that mode is useful in list view to indicate that it's not the original email.
-        getSubject: function (data, keepFirstPrefix) {
+        // keepPrefix <bool> allows to keep them
+        getSubject: function (data, keepPrefix) {
 
             var subject = $.trim(_.isString(data) ? data : data.subject);
 
@@ -409,19 +418,17 @@ define('io.ox/mail/util', [
 
             // remove mailing list stuff (optional)
             if (settings.get('features/cleanSubjects', false)) {
-                subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+                subject = subject.replace(/\[[^[]*\]\s*/g, '');
             }
 
-            return keepFirstPrefix ?
-                subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
-                subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+            return keepPrefix ? subject : subject.replace(/^((re|ref|aw|fwd|wg|rv|tr):\s?)+/i, '');
         },
 
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
-            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation" aria-hidden="true"></i></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
+            return $('<span class="low"><i class="fa fa-minus" aria-hidden="true"></i></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
         },
 
         getAccountName: function (data) {
@@ -537,13 +544,82 @@ define('io.ox/mail/util', [
             return data.folder_id === undefined && data.filename !== undefined;
         },
 
+        authenticity: (function () {
+
+            function getAuthenticityLevel() {
+                if (!settings.get('features/authenticity', false)) return 'none';
+                return settings.get('authenticity/level', 'none');
+            }
+
+            function getAuthenticityStatus(data) {
+                if (!_.isObject(data)) return;
+                return _.isObject(data.authenticity) ? data.authenticity.status : data.status;
+            }
+
+            function matches(regex, status, level) {
+                // status must match the regex AND the status must be a subset of the level
+                return regex.test(status) && level.indexOf(status) > -1;
+            }
+
+            function isRelevant(aspect, level, status) {
+                switch (aspect) {
+                    // contact image
+                    case 'image':
+                        return matches(/(fail|neutral)/, status, level);
+                    // append icon with info hover next to the from field
+                    // prepend in sender block (detail), 'via' hint for different mail server
+                    case 'icon':
+                        // always show if status matches level
+                        return level === 'all' || matches(/(fail|neutral|pass|trusted)/, status, level);
+                    case 'via':
+                        // always display "Via <real-domain>" if there is an authenticated domain
+                        // that differs from the "From" header domain
+                        return true;
+                    // info box within mail detail
+                    case 'box':
+                        return matches(/(fail|trusted)/, status, level);
+                    // disable links, replace external images
+                    case 'block':
+                        return matches(/(fail)/, status, level);
+                    default:
+                        return false;
+                }
+            }
+
+            return function (aspect, data) {
+
+                // support incomplete data (only 'status'), provided by all request
+                if (data.authenticity_preview) data = _.extend({}, { authenticity: data.authenticity_preview }, data);
+
+                var status = getAuthenticityStatus(data),
+                    level = getAuthenticityLevel();
+
+                // always show trusted
+                if (level === 'none' && status !== 'trusted') return;
+                if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
+
+                return isRelevant(aspect, level, status) ? status : undefined;
+            };
+        })(),
+
+        getAuthenticityMessage: function (status, email) {
+            switch (status) {
+                case 'fail': return gt('This is a suspicious email because we could not verify that it is really from %1$s.', email);
+                case 'neutral': return gt('We could not verify that this email is from %1$s.', email);
+                case 'pass':
+                case 'trusted': return gt('We could verify that this email is from %1$s.', email);
+                default: return '';
+            }
+        },
+
         isMalicious: (function () {
             if (!settings.get('maliciousCheck')) return _.constant(false);
             var blacklist = settings.get('maliciousFolders');
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
-                return accountAPI.isMalicious(data.folder_id, blacklist);
+                // nested mails don't have their own folder id. So use the parent mails folder id
+                return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };
         })(),
 

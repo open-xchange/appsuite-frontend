@@ -16,6 +16,7 @@
 define('io.ox/files/api', [
     'io.ox/core/http',
     'io.ox/core/folder/api',
+    'io.ox/core/api/user',
     'io.ox/core/api/backbone',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
@@ -27,7 +28,7 @@ define('io.ox/files/api', [
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -66,9 +67,9 @@ define('io.ox/files/api', [
                 // pim attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
-                    file_size: attributes.file_size,
-                    file_mimetype: attributes.file_mimetype,
-                    id: attributes.id,
+                    file_size: attributes.file_size || attributes.size,
+                    file_mimetype: attributes.file_mimetype || attributes.fmtType,
+                    id: attributes.id || attributes.managedId,
                     folder_id: attributes.folder,
                     module: attributes.module,
                     origData: attributes,
@@ -90,14 +91,14 @@ define('io.ox/files/api', [
             // call parent constructor
             backbone.Model.call(this, normalizedAttrs, options);
 
-            this.listenTo(this, 'change:filename', function (m, newName) {
+            this.listenTo(this, 'change:com.openexchange.file.sanitizedFilename', function (m, newName) {
                 //maybe update versions if filename is changed
                 var versions = this.get('versions');
                 if (!versions) return;
 
                 for (var i = 0; i < versions.length; i++) {
                     if (versions[i].version === m.get('version')) {
-                        versions[i].filename = newName;
+                        versions[i]['com.openexchange.file.sanitizedFilename'] = newName;
                         break;
                     }
                 }
@@ -111,7 +112,10 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
+            return !this.isFolder() && this.isDriveItem();
+        },
+        isDriveItem: function () {
+            return (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
         isSVG: function (type) {
@@ -161,7 +165,7 @@ define('io.ox/files/api', [
         },
 
         isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
-            return (/^application\/pgp(?:\-encrypted)*$/).test(type) || this.isGuard();
+            return (/^application\/pgp(?:-encrypted)*$/).test(type) || this.isGuard();
         },
         isGuard: function () {
             return (/^guard/).test(this.get('source'));
@@ -246,13 +250,16 @@ define('io.ox/files/api', [
         },
 
         getFileType: function () {
-            if (this.isFolder()) {
+            if (this.isFolder && this.isFolder()) {
                 return 'folder';
             }
-            var extension = this.getExtension();
-            for (var type in this.types) {
-                if (this.types[type].test(extension)) return type;
+            if (this.getExtension) {
+                var extension = this.getExtension();
+                for (var type in this.types) {
+                    if (this.types[type].test(extension)) return type;
+                }
             }
+            return false;
         },
 
         getGuardType: function () {
@@ -293,20 +300,25 @@ define('io.ox/files/api', [
         },
 
         hasWritePermissions: function () {
-            var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
+            var def = $.Deferred(),
+                array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
                 myself = _(array).findWhere({ entity: ox.user_id, group: false });
 
             // check if there is a permission for a group, the user is a member of
             // use max permissions available
-            if ((!myself || (myself && myself.bits < 2))) {
-                return array.filter(function (perm) {
-                    // use rampup data so this is not deferred
-                    return perm.group === true && _.contains(ox.rampup.user.groups, perm.entity);
-                }).reduce(function (acc, perm) {
-                    return acc || perm.bits >= 2;
-                }, false);
+            if (!myself || (myself && myself.bits < 2)) {
+                userAPI.get().done(function (userData) {
+                    def.resolve(array.filter(function (perm) {
+                        return perm.group === true && _.contains(userData.groups, perm.entity);
+                    }).reduce(function (acc, perm) {
+                        return acc || perm.bits >= 2;
+                    }, false));
+                }).fail(function () { def.resolve(false); });
+            } else {
+                def.resolve(!!(myself && (myself.bits >= 2)));
             }
-            return !!(myself && (myself.bits >= 2));
+
+            return def;
         }
     });
 
@@ -386,6 +398,64 @@ define('io.ox/files/api', [
         'pps':  'application/vnd.ms-powerpoint'
     };
 
+    //
+    // Helper functions based on file extension.
+    //
+
+    // Returns the file extension, removes pgp from .xyz.pgp if present
+    api.getExtension = function (file) {
+        var filename = file && (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title);
+        var parts = String(filename || '').split('.');
+        var extension;
+
+        // if extension is .xyz.pgp, remove the pgp and return extension
+        if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+            extension = parts[parts.length - 1].toLowerCase();
+        } else if (parts.length > 1) {
+            extension = parts.pop().toLowerCase();
+        } else {
+            extension = '';
+        }
+
+        return extension;
+    };
+
+    api.isText = function (file) {
+        return api.Model.prototype.types.txt.test(api.getExtension(file));
+    };
+
+    api.isPDF = function (file) {
+        return api.Model.prototype.types.pdf.test(api.getExtension(file));
+    };
+
+    api.isWordprocessing = function (file) {
+        return api.Model.prototype.types.doc.test(api.getExtension(file));
+    };
+
+    api.isPresentation = function (file) {
+        return api.Model.prototype.types.ppt.test(api.getExtension(file));
+    };
+
+    api.isSpreadsheet = function (file) {
+        return api.Model.prototype.types.xls.test(api.getExtension(file));
+    };
+
+    api.isOffice = function (file) {
+        return (api.isWordprocessing(file) || api.isPresentation(file) || api.isSpreadsheet(file));
+    };
+
+    api.isImage = function (file) {
+        return api.Model.prototype.types.image.test(api.getExtension(file));
+    };
+
+    api.isAudio = function (file) {
+        return api.Model.prototype.types.audio.test(api.getExtension(file));
+    };
+
+    api.isVideo = function (file) {
+        return api.Model.prototype.types.video.test(api.getExtension(file));
+    };
+
     // get URL to open, download, or preview a file
     // options:
     // - scaleType: contain or cover or auto
@@ -433,7 +503,7 @@ define('io.ox/files/api', [
                 }
                 return util.getShardingRoot((file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg');
             case 'cover':
-                url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                url = '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
                 break;
             case 'play':
                 url = url + query + '&delivery=view';
@@ -531,7 +601,7 @@ define('io.ox/files/api', [
         fetch: function (params) {
 
             var module = this.module,
-                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
+                key = module + '/' + _.cacheKey(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
                 noSelect = this.noSelect(params),
                 virtual = this.virtual(params),
@@ -832,12 +902,12 @@ define('io.ox/files/api', [
             if (model && !model.get('expired') && model.has('description')) return $.when(model.toJSON());
         }
 
-        var params = {
+        var params = _.extend({
             action: 'get',
             id: file.id,
             folder: file.folder_id || file.folder,
             timezone: 'UTC'
-        };
+        }, options.params);
 
         if (options.columns) params.columns = options.columns;
 
@@ -854,7 +924,7 @@ define('io.ox/files/api', [
             return mergeDetailInPool(data);
         }, function (error) {
             api.trigger('error error:' + error.code, error);
-            return error;
+            throw error;
         });
     };
 
@@ -867,19 +937,19 @@ define('io.ox/files/api', [
 
         return http.GET({
             module: 'files',
-            params: {
+            params: _.extend({
                 action: 'all',
                 columns: options.columns,
                 folder: folder,
                 timezone: 'UTC'
-            }
+            }, options.params)
         })
         .then(function (data) {
             pool.add('detail', data);
             return data;
         }, function (error) {
             api.trigger('error error:' + error.code, error);
-            return error;
+            throw error;
         });
     };
 
@@ -896,6 +966,19 @@ define('io.ox/files/api', [
             return this.get(_.cid(item)).toJSON();
         }
 
+        /**
+         * Retrieve a list of models or a list of FileDescriptors. Merge all files into pool.
+         *
+         * @param {FileDescriptor[]} ids
+         *  Items to retrieve
+         *
+         * Additional Parameters
+         * @param {Object} options Parameter Object
+         *  @param {Boolean} options.fullModels
+         *   Return FileDescriptor or Model List
+         *  @param {Boolean} options.cache
+         *   Use cache or nocache
+         */
         return function (ids, options) {
 
             var uncached = ids, collection = pool.get('detail');
@@ -908,6 +991,7 @@ define('io.ox/files/api', [
             if (options.cache) uncached = _(ids).reject(has, collection);
 
             // all cached?
+            if (options.fullModels && uncached.length === 0) return $.when(_(ids).map(has, collection));
             if (uncached.length === 0) return $.when(_(ids).map(getter, collection));
 
             return http.fixList(uncached, http.PUT({
@@ -917,8 +1001,11 @@ define('io.ox/files/api', [
             }))
             .then(function (array) {
                 // add new items to the pool
-                _(array).each(mergeDetailInPool);
+                _(array.filter(Boolean)).each(mergeDetailInPool);
                 // reconstruct results
+                if (options.fullModels) {
+                    return _(ids).map(has, collection);
+                }
                 return _(ids).map(getter, collection);
             });
         };
@@ -1015,6 +1102,58 @@ define('io.ox/files/api', [
         });
     };
 
+    /**
+     * Restore a bunch of fileModels to their originally source.
+     *
+     * @param {api.Model[]} list
+     *  Array of fileModels
+     */
+    api.restore = function (list) {
+        // ensure array
+        if (!_.isArray(list)) list = [list];
+
+        // local copy for model data
+        var data = [];
+
+        _(list).each(function (model) {
+            data.push({ id: model.get('id'), folder: model.get('folder_id') });
+
+            // remove model from collections
+            _(api.pool.collections).invoke('remove', model);
+            model.set('unread', 0);
+        });
+
+        // restore on server
+        return http.PUT({
+            module: 'infostore',
+            params: {
+                action: 'restore',
+                folder: data[0].id === '1' || /^default\d+/.test(data[0].id) ? 0 : 1
+            },
+            data: data,
+            appendColumns: false
+        })
+        .done(function (responseArray) {
+            var folderId,
+                affectedFolders = [];
+
+            _.each(responseArray, function (response) {
+                folderId = response.path[0].id;
+
+                if (!_.contains(affectedFolders, folderId)) {
+                    affectedFolders.push(folderId);
+                }
+
+                api.trigger('refresh:listviews');
+            });
+        })
+        .fail(function () {
+            _(list).each(function (model) {
+                api.propagate('restore:fail', model.toJSON());
+            });
+        });
+    };
+
     //
     // Respond to folder API
     //
@@ -1045,6 +1184,9 @@ define('io.ox/files/api', [
         'before:remove before:move': function (data) {
             var collection = pool.get('detail'), cid = _.cid(data);
             collection.remove(collection.get(cid));
+        },
+        'restore': function () {
+            api.trigger('refresh:listviews');
         }
     });
 
@@ -1144,6 +1286,13 @@ define('io.ox/files/api', [
         var fn = type === 'move' ? move : copy,
             def = $.Deferred(),
             callback = function (response) {
+
+                // this needs refactoring: when moving a folder successful with larger files (long running job)
+                // the finished jobs have no 'multiple' response, therefore the input 'result' here is a String
+                // (see http.js/processResponse why). When a String is returned in this function, later functions
+                // detects that as an error, which is wrong. Therefore prevent that as an intermediate workaround.
+                response = _.isString(response) ? [] : response;
+
                 var errorText, i = 0, $i = response ? response.length : 0;
                 // look if anything went wrong
                 for (; i < $i; i++) {
@@ -1159,7 +1308,7 @@ define('io.ox/files/api', [
                 def.resolve(errorText || response);
             },
             failCallback = function (error) {
-                // if a job fails, check if this is conflict thing, if it is use the successcallback
+                // if a job fails, check if this is a conflict thing, if it is use the successcallback
                 if (_.isArray(error)) {
                     for (var i = 0; i < error.length; i++) {
                         if (error[i].error.categories === 'CONFLICT') {
@@ -1176,18 +1325,25 @@ define('io.ox/files/api', [
             };
 
         http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (result) {
-            if (type === 'move' && result && result[0] && result[0].data && result[0].data.job) {
-                // long running job. Add to jobs list and return here
-                //#. %1$s: Folder name
-                jobsAPI.addJob({
-                    module: 'folders',
-                    action: 'update',
-                    done: false,
-                    showIn: 'infostore',
-                    id: result[0].data.job,
-                    successCallback: callback,
-                    failCallback: failCallback });
-                return;
+            if (type === 'move' && result && result.length) {
+                result = _(result).map(function (res) {
+                    if (res.data && res.data.job) {
+                        // long running job. Add to jobs list
+                        jobsAPI.addJob({
+                            module: 'folders',
+                            action: 'update',
+                            done: false,
+                            showIn: 'infostore',
+                            id: res.data.job,
+                            successCallback: callback,
+                            failCallback: failCallback });
+                        return;
+                    }
+                    return res;
+                });
+                result = _(result).compact();
+                // if all responses in the multiple where long running jobs, we return here. Otherwise we continue with what already finished
+                if (result.length === 0) return;
             }
             callback(result);
         }, function (error) {
@@ -1592,6 +1748,10 @@ define('io.ox/files/api', [
                     folderAPI.reload(list);
                     break;
 
+                case 'restore:fail':
+                    api.trigger('restore:fail', file);
+                    break;
+
                 case 'add:version':
                     // reload versions list
                     return reloadVersions(file).done(function () {
@@ -1607,6 +1767,14 @@ define('io.ox/files/api', [
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
                     if ('object_permissions' in changes) api.propagate('permissions', file);
                     if ('description' in changes) api.propagate('description', file);  //Bug 51571
+                    break;
+
+                case 'favorite:add':
+                    api.trigger('favorite:add', file);
+                    break;
+
+                case 'favorite:remove':
+                    api.trigger('favorite:remove', file);
                     break;
 
                 case 'change:version':

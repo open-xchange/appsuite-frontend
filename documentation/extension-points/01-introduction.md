@@ -4,9 +4,9 @@ description: Extension points are an architecture for letting plugins contribute
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extending_the_UI_(Hands-on_introduction)
 ---
 
-Abstractly speaking extension points are an architecture for letting plugins contribute functionality to other parts of the program. 
-They form the core of the OX App Suite plugin architecture. 
-This is a hands-on introduction based on simple code examples. 
+Abstractly speaking extension points are an architecture for letting plugins contribute functionality to other parts of the program.
+They form the core of the OX App Suite plugin architecture.
+This is a hands-on introduction based on simple code examples.
 For more details take a look at Extending the UI.
 
 # Extending the UI
@@ -26,7 +26,7 @@ Let's start with some example code.
  // The extension point system lives in the
  // 'io.ox/core/extensions' module
  require(["io.ox/core/extensions"], function (ext) {
-  
+
      // An extension point represents the system that can be extended
      // It has an id (in this case 'io.ox/mail/detail')
      var point = ext.point("io.ox/mail/detail");
@@ -47,7 +47,7 @@ Let's start with some example code.
  });
 ```
 
-Please have a look at the detail view of a mail now. 
+Please have a look at the detail view of a mail now.
 Perhaps you have to select another mail to see the difference.
 
 _step 1: default mail detail_
@@ -64,7 +64,7 @@ _step 3: extended mail detail_
 
 ## A qualified mail footer
 
-Let's try and add a section to the mails detail view and use some data of the currently viewed mail. 
+Let's try and add a section to the mails detail view and use some data of the currently viewed mail.
 For information about the baton object please take a look at the more detailed article how to extend the UI.
 
 ```javascript
@@ -95,7 +95,7 @@ _step 1: default mail detail_
 _step 2: execute code in chrome dev tools console_
 
 ![](01-introduction-05.png)
- 
+
 _step 3: mail detail with disabled inline links_
 
 ![](01-introduction-06.png)
@@ -108,8 +108,8 @@ Reload the page (to clear out the registered extensions) and try switching the i
 
 # Customizing the UI
 
-Since extensions are a property of the runtime system, you can also modify them. 
-The extension system offers a couple of things you can do with existing extensions like **changing their order, disabling them or replacing them**. 
+Since extensions are a property of the runtime system, you can also modify them.
+The extension system offers a couple of things you can do with existing extensions like **changing their order, disabling them or replacing them**.
 Let's look at how to accomplish all of these, again by modifying the mail detail view.
 
 ## switch off inline links
@@ -137,38 +137,6 @@ _step 2: execute code in chrome dev tools console_
 _step 3: mail detail with disabled inline links_
 
 ![](01-introduction-09.png)
-
-## replace the way time is rendered
-
-```javascript
-require(["io.ox/core/extensions", "io.ox/mail/util", "io.ox/core/date"], function (ext, util, date) {
-    ext.point("io.ox/mail/detail/header").replace({
-        //current extension will extended not fully replaced
-        // so we do not have to specify the index to keep time on it's place 
-        id: 'receiveddate', // The extension we want to replace has this id as well
-        draw: function (baton) {
-            var data = baton.data;
-            //show unix timestamp (plus trailing '000' for milliseconds )
-            var timeToRender = (data.received_date || data.sent_date || 0);
-            this.append(
-                $('<div>').addClass('date list').text(timeToRender)
-            );
-        }
-    });
-});
-```
-
-_step 1: default mail detail_
-
-![](01-introduction-10.png)
-
-_step 2: execute code in chrome dev tools console_
-
-![](01-introduction-11.png)
-
-_step 3: extended mail detail with unix timestamp_
-
-![](01-introduction-12.png)
 
 ## change order
 
@@ -199,7 +167,7 @@ _step 3: pushed subject to header bottom_
 
 # Trouble finding the right extension point?
 
-You don't know where to append your plugin's content / which extension point you should use? 
-A good way to find the suitable extension point, is to search in the OX Source Code for an HTML-element displayed in the user interface. 
-For example an easy to identify text. 
+You don't know where to append your plugin's content / which extension point you should use?
+A good way to find the suitable extension point, is to search in the OX Source Code for an HTML-element displayed in the user interface.
+For example an easy to identify text.
 Once found the HTML-element in the source, you can see which extension point was used appending this element to the UI and append your content there aswell.

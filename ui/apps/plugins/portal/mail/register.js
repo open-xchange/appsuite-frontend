@@ -22,8 +22,11 @@ define('plugins/portal/mail/register', [
     'gettext!plugins/portal',
     'io.ox/backbone/disposable',
     'io.ox/core/api/collection-loader',
-    'io.ox/core/emoji/util'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, emoji) {
+    'io.ox/core/capabilities',
+    'io.ox/core/http',
+    'settings!io.ox/mail',
+    'less!plugins/portal/mail/style'
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, capabilities, http, mailSettings) {
 
     'use strict';
 
@@ -58,28 +61,28 @@ define('plugins/portal/mail/register', [
         },
 
         render: function (baton) {
+
             var self = this,
-                subjectNode,
-                subject = this.model.get('subject') ? _.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 })) : gt('No subject'),
+                subject = this.model.get('subject') ? _.ellipsis(this.model.get('subject'), { max: 50 }) : gt('No subject'),
                 received = moment(this.model.get('received_date')).format('l');
 
             this.$el.empty()
                 .data('item', this.model.attributes)
                 .append(
-                    (function () {
-                        if ((self.model.get('flags') & 32) === 0) {
-                            return $('<i class="fa fa-circle new-item accent">');
-                        }
-                    })(),
-                    $('<span class="bold">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
-                    subjectNode = $('<span class="normal">').text(subject), $.txt(' '),
-                    $('<span class="accent">').text(_.noI18n(received))
+                    $('<div class="row1">').append(
+                        (function () {
+                            if ((self.model.get('flags') & 32) === 0) {
+                                return $('<i class="fa fa-circle new-item accent">');
+                            }
+                        })(),
+                        $('<div class="date accent">').text(_.noI18n(received)),
+                        $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                    ),
+                    $('<div class="row2">').append(
+                        $('<div class="subject ellipsis">').text(subject),
+                        $.txt(' ')
+                    )
                 );
-
-            //process emoji
-            emoji.processEmoji(subjectNode.html(), function (text) {
-                subjectNode.html(text);
-            });
 
             // Give plugins a chance to customize mail display
             ext.point('io.ox/mail/portal/list/item').invoke('customize', this.$el, this.model.toJSON(), baton, this.$el);
@@ -91,7 +94,7 @@ define('plugins/portal/mail/register', [
 
         tagName: 'ul',
 
-        className: 'content list-unstyled',
+        className: 'mailwidget content list-unstyled',
 
         initialize: function () {
             // reset is only triggered by garbage collection and causes wrong "empty inbox" messages under certain conditions
@@ -150,10 +153,11 @@ define('plugins/portal/mail/register', [
                     return {
                         action: 'all',
                         folder: params.folder,
-                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                        columns: http.defaultColumns.mail.all,
                         sort: params.sort || '610',
                         order: params.order || 'desc',
-                        timezone: 'utc'
+                        timezone: 'utc',
+                        deleted: !mailSettings.get('features/ignoreDeleted', false)
                     };
                 }
             });
@@ -229,7 +233,7 @@ define('plugins/portal/mail/register', [
                     //#. %1$d is the number of mails
                     //#, c-format
                     gt.ngettext('You have %1$d unread message', 'You have %1$d unread messages', unread),
-                    gt.noI18n(unread)
+                    unread
                 ));
             }
         },
@@ -260,10 +264,10 @@ define('plugins/portal/mail/register', [
             dialog.header($('<h4>').text(gt('Inbox')))
                 .build(function () {
                     this.getContentNode().append(
-                        options.length > 1 ?
+                        capabilities.has('multiple_mail_accounts') ?
                             $('<div class="form-group">').append(
                                 $('<label>').attr('for', accId).text(gt('Account')),
-                                accSelect = $('<select class="form-control">').attr('id', accId).append(options)
+                                accSelect = $('<select class="form-control">').attr('id', accId).prop('disabled', options.length <= 1).append(options)
                             ) : $(),
                         $('<div class="form-group">').append(
                             $('<label>').attr('for', nameId).text(gt('Description')),
@@ -312,7 +316,7 @@ define('plugins/portal/mail/register', [
         type: 'mail',
         editable: true,
         edit: edit,
-        unique: false
+        unique: !capabilities.has('multiple_mail_accounts')
     });
 
     ext.point('io.ox/portal/widget/stickymail').extend({
@@ -336,7 +340,7 @@ define('plugins/portal/mail/register', [
                     api.on('deleted-mails', remove);
                 },
                 function fail(e) {
-                    return e.code === 'MSG-0032' ? 'remove' : e;
+                    throw e.code === 'MSG-0032' ? 'remove' : e;
                 }
             );
         },
@@ -344,14 +348,10 @@ define('plugins/portal/mail/register', [
         preview: function (baton) {
             var data = baton.data,
                 received = moment(data.received_date).format('l'),
-                content = '',
-                source = _(data.attachments).reduce(function (memo, a) {
+                content = _(data.attachments).reduce(function (memo, a) {
                     return memo + (a.content_type === 'text/plain' ? a.content : '');
                 }, '');
-            // escape html
-            $('<div>').html(source).contents().each(function () {
-                content += $(this).text() + ' ';
-            });
+
             this.append(
                 $('<div class="content">').append(
                     $('<div class="item">')

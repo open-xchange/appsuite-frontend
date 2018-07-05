@@ -15,7 +15,6 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
-    'io.ox/core/emoji/util',
     'io.ox/mail/util',
     'io.ox/mail/api',
     'io.ox/core/api/account',
@@ -24,6 +23,7 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/api/user',
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
@@ -31,13 +31,39 @@ define('io.ox/mail/common-extensions', [
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, links, actions, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
     // little helper
     function isSearchResult(baton) {
         return !!baton.app && !!baton.app.props.get('find-result');
+    }
+
+    function pictureHalo(node, data, baton) {
+
+        // authenticity
+        var status = util.authenticity('image', baton && baton.model.toJSON());
+        if (status) return node.text(status === 'neutral' ? '?' : '!');
+
+        // add initials
+        var initials = getInitials(baton.data.from);
+        node.text(initials);
+
+        var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
+
+        return contactsAPI.pictureHalo(
+            node,
+            { email: address },
+            { width: 40, height: 40, effect: 'fadeIn', fallback: false }
+        );
+    }
+
+    //
+    function getInitials(from) {
+        if (!_.isArray(from) || !from.length) return '';
+        var name = util.getDisplayName(from[0]);
+        return contactsUtil.getInitials({ display_name: name });
     }
 
     var extensions = {
@@ -72,67 +98,53 @@ define('io.ox/mail/common-extensions', [
             });
         },
 
+        authenticity: function (baton) {
+            var status = util.authenticity('box', baton && baton.model.toJSON());
+            if (!status) return;
+
+            var section = $('<section class="authenticity">'),
+                data = baton.data,
+                from = data.from || [], email;
+
+            _(from).each(function (item) {
+                email = String(item[1] || '').toLowerCase();
+                section.append(
+                    $('<div>')
+                        .addClass(status.toLowerCase())
+                        .append(
+                            $('<b>').text(status === 'fail' ? gt('Warning:') + ' ' : gt('Note:') + ' '),
+                            $.txt(util.getAuthenticityMessage(status, email))
+                        )
+                );
+            });
+
+            this.append(section);
+        },
+
         picture: function (baton) {
             // show picture of sender or first recipient
             // special cases:
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
-                self = this,
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
-                // search result: use image based on 'addresses'
-                picture = isSearchResult ? undefined : data.picture;
+                node = $('<div class="contact-picture" aria-hidden="true">');
 
-            if (picture) {
-                this.append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">'),
-                        { email: picture },
-                        { width: 40, height: 40, effect: 'fadeIn' }
-                    )
-                );
-                return;
-            }
-
-            // user should be in cache from rampup data
-            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
-            userAPI.get({ id: ox.user_id }).then(function (user) {
-                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1],
-                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-
-                self.append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">'),
-                        (useUserApi ? { id: ox.user_id } : { email: address }),
-                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                    )
-                );
-            });
+            this.append(
+                isSearchResult(baton) && data.picture ? pictureHalo(node, data.picture) : pictureHalo(node, addresses, baton)
+            );
         },
 
         senderPicture: function (baton) {
             // shows picture of sender see Bug 41023
             var addresses = baton.data.from,
-                self = this;
+                node = $('<div class="contact-picture" aria-hidden="true">');
 
-            // user should be in cache from rampup data
-            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
-            userAPI.get({ id: ox.user_id }).then(function (user) {
-                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1],
-                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-
-                self.append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">'),
-                        (useUserApi ? { id: ox.user_id } : { email: address }),
-                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                    )
-                );
-            });
+            this.append(
+                pictureHalo(node, addresses, baton)
+            );
         },
 
         date: function (baton, options) {
@@ -143,9 +155,9 @@ define('io.ox/mail/common-extensions', [
             }, options);
             if (!_.isNumber(t)) return;
             this.append(
-                $('<time class="date">')
+                $('<time class="date gray">')
                 .attr('datetime', moment(t).toISOString())
-                .text(_.noI18n(util.getDateTime(t, options)))
+                .text(util.getDateTime(t, options))
             );
         },
 
@@ -174,7 +186,8 @@ define('io.ox/mail/common-extensions', [
             var $el = $('<div class="from">'),
                 data = baton.data,
                 from = data.from || [],
-                length = from.length;
+                length = from.length,
+                status = util.authenticity('icon', data);
 
             // from is special as we need to consider the "sender" header
             // plus making the mail address visible (see bug 56407)
@@ -189,11 +202,36 @@ define('io.ox/mail/common-extensions', [
                     $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
                         .data({ email: email, email1: email })
                         .text(name)
+                        .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
+
                 );
 
                 if (name !== email) {
-                    $el.append($('<span class="address">').text('<' + email + '>'));
+                    $el.append(
+                        $('<span class="address">')
+                            .text('<' + email + '>')
+                            .addClass(status ? 'authenticity-sender ' + status : '')
+                    );
                 }
+
+                if (status) {
+                    $el.append(
+                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
+                            placement: _.device('smartphone') ? 'auto' : 'right',
+                            trigger: 'focus hover',
+                            content: util.getAuthenticityMessage(status, email)
+                        })
+                        .append(
+                            $('<i class="fa" aria-hidden="true">').addClass(function () {
+                                if (status === 'neutral') return 'fa-question'; //fa-question
+                                if (status === 'fail') return 'fa-exclamation';
+                                return 'fa-check';
+                            })
+                            .addClass(status ? 'authenticity-icon-' + status : '')
+                        )
+                    );
+                }
+
 
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
@@ -254,11 +292,22 @@ define('io.ox/mail/common-extensions', [
 
         colorflag: function (baton) {
             if (!settings.get('features/flag/color')) return;
-            var color = baton.data.color_label;
+            var color = baton.data.color_label,
+                icon = 'fa-bookmark';
             // 0 and a buggy -1
             if (color <= 0) return;
+            // show bookmark with outline only, if thread color does not coincide with most recent mail
+            var isThreaded = baton.app && baton.app.isThreaded();
+            if ((isThreaded || baton.options.threaded) &&
+                baton.data.thread &&
+                color !== baton.data.thread[0].color_label) {
+                icon = 'fa-bookmark-o';
+                color = 0;
+            }
             this.append(
-                $('<i class="color-flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
+                $('<i class="color-flag fa" aria-hidden="true">')
+                    .addClass(icon)
+                    .addClass(color > 0 ? 'flag_' + color : 'multiple-colors')
             );
         },
 
@@ -298,7 +347,6 @@ define('io.ox/mail/common-extensions', [
 
             return function (baton) {
                 if (!settings.get('features/flag/star') || util.isEmbedded(baton.data)) return;
-                if (util.isEmbedded(baton.data)) return;
                 var self = this;
                 folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the flag status - always allows for unified folder
@@ -324,7 +372,7 @@ define('io.ox/mail/common-extensions', [
 
             this.append(
                 $('<div class="thread-size" aria-hidden="true">').append(
-                    $('<span class="number drag-count">').text(_.noI18n(size))
+                    $('<span class="number drag-count">').text(size)
                 )
             );
         },
@@ -378,7 +426,7 @@ define('io.ox/mail/common-extensions', [
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) extensions.envelope.call(this).attr('title', 'Unread');
+            if (isUnseen) extensions.envelope.call(this).attr('title', gt('Unread'));
         },
 
         answered: function (baton) {
@@ -400,20 +448,15 @@ define('io.ox/mail/common-extensions', [
         subject: function (baton) {
 
             var data = baton.data,
-                keepFirstPrefix = baton.data.threadSize === 1,
-                subject = util.getSubject(data, keepFirstPrefix),
-                node;
+                keepPrefix = baton.data.threadSize === 1,
+                subject = util.getSubject(data, keepPrefix);
 
             this.append(
-                $('<div class="subject">').append(
-                    $('<span class="flags">'),
-                    node = $('<span class="drag-title">').text(subject)
+                $('<div class="subject" role="presentation">').append(
+                    $('<span class="flags" role="presentation">'),
+                    $('<span class="drag-title" role="presentation">').text(subject).attr('title', subject)
                 )
             );
-
-            emoji.processEmoji(_.escape(subject), function (html) {
-                node.html(html);
-            });
         },
 
         // a11y: set title attribute on outer list item
@@ -435,32 +478,11 @@ define('io.ox/mail/common-extensions', [
 
         // add orignal folder as label to search result items
         folder: function (baton) {
-            // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !isSearchResult(baton)) return;
-            // add container
-            var node = $('<span class="original-folder">').appendTo(this);
-            // add breadcrumb
-            require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
-                var view = new BreadcrumbView({
-                        folder: baton.data.original_folder_id,
-                        app: baton.app,
-                        exclude: ['default0']
-                    }), renderPathOrig;
-                // not need for this here
-                view.computeWidth = $.noop;
-                // show only folder paths tail
-                renderPathOrig = view.renderPath;
-                view.renderPath = function (path) {
-                    return renderPathOrig.call(this, [].concat(_.last(path)));
-                };
-                // append to dom
-                node.append(view.render().$el);
-            });
-        },
-
-        folderName: function (baton) {
-            if (!baton.app || !baton.app.folder || baton.app.folder.get() !== 'virtual/all-unseen') return;
-
+            // missing data
+            if (!baton.data.original_folder_id) return;
+            var isUnseenFolder = baton.app && baton.app.folder && baton.app.folder.get() === 'virtual/all-unseen';
+            // apply only for search results and for unseen folder
+            if (!isSearchResult(baton) && !isUnseenFolder) return;
             this.append($('<span class="original-folder">').append(folderAPI.getTextNode(baton.data.original_folder_id)));
         },
 
@@ -494,7 +516,7 @@ define('io.ox/mail/common-extensions', [
 
                 if (!show) {
                     // fix broken layout when mail has only 'to' and 'attachments'
-                    this.append(container.append($.txt(_.noI18n('\u00A0'))));
+                    this.append(container.append($.txt('\u00A0')));
                     return;
                 }
 
@@ -503,10 +525,10 @@ define('io.ox/mail/common-extensions', [
                         // TO
                         $('<span class="io-ox-label">').append(
                             $.txt(gt('To')),
-                            $.txt(_.noI18n('\u00A0\u00A0'))
+                            $.txt('\u00A0\u00A0')
                         ),
                         util.serializeList(data, 'to'),
-                        $.txt(_.noI18n(' \u00A0 '))
+                        $.txt(' \u00A0 ')
                     );
                 }
                 if (showCC) {
@@ -514,10 +536,10 @@ define('io.ox/mail/common-extensions', [
                         // CC
                         $('<span class="io-ox-label">').append(
                             $.txt(gt.pgettext('CC', 'Copy')),
-                            _.noI18n('\u00A0\u00A0')
+                            '\u00A0\u00A0'
                         ),
                         util.serializeList(data, 'cc'),
-                        $.txt(_.noI18n(' \u00A0 '))
+                        $.txt(' \u00A0 ')
                     );
                 }
                 if (showBCC) {
@@ -525,10 +547,10 @@ define('io.ox/mail/common-extensions', [
                         // BCC
                         $('<span class="io-ox-label">').append(
                             $.txt(gt('Blind copy')),
-                            _.noI18n('\u00A0\u00A0')
+                            '\u00A0\u00A0'
                         ),
                         util.serializeList(data, 'bcc'),
-                        $.txt(_.noI18n(' \u00A0 '))
+                        $.txt(' \u00A0 ')
                     );
                 }
 
@@ -621,6 +643,7 @@ define('io.ox/mail/common-extensions', [
                 };
 
                 view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
+                view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
                 view.$el.on('click', 'li.item', function (e) {
@@ -688,6 +711,48 @@ define('io.ox/mail/common-extensions', [
             };
         }()),
 
+        disabledLinks: (function () {
+
+            function disableExt(view, point, ext) {
+                view.options.disable = view.options.disable || {};
+                var value = view.options.disable[point];
+                if (_.isString(value)) view.options.disable[point] = [].concat(value);
+                view.options.disable[point] = (view.options.disable[point] || []).concat(ext);
+            }
+
+            function loadLinks(e) {
+                e.preventDefault();
+                var view = e.data.view;
+                view.trigger('load');
+                view.$el.find('.disabled-links').remove();
+                disableExt(view, 'io.ox/mail/detail/source', 'disable-links');
+                disableExt(view, 'io.ox/mail/detail/content-general', 'disable-links');
+                disableExt(view, 'io.ox/mail/detail/notifications', 'disabled-links');
+                view.redraw();
+            }
+
+            function draw() {
+                // hint: initally hidden unless article has content-links class
+                this.append(
+                    $('<div class="notification-item disabled-links">').append(
+                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Enable Links')),
+                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
+                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
+                    )
+                );
+            }
+
+            return function (baton) {
+                // malicious mails are filtered by middlewarea already
+                if (!util.authenticity('block', baton.data) || util.isMalicious(baton.data)) return;
+                draw.call(this, baton.model);
+                this.on('click', '.disabled-links > .btn-default', { view: baton.view }, loadLinks);
+                this.on('click', '.disabled-links > .close', function (e) {
+                    $(e.target).closest('.disabled-links').remove();
+                });
+            };
+        }()),
+
         externalImages: (function () {
 
             function loadImages(e) {
@@ -706,27 +771,27 @@ define('io.ox/mail/common-extensions', [
             function draw(model) {
 
                 // nothing to do if message is unchanged
-                // or if message is embedded (since we cannot reload it)
-                if (model.get('modified') !== 1 || util.isEmbedded(model.toJSON())) {
-                    this.find('.external-images').remove();
-                    return;
-                }
+                if (model.get('modified') !== 1) return this.find('.external-images').remove();
 
                 this.append(
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
-                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
+                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }
 
             return function (baton) {
                 draw.call(this, baton.model);
-                this.on('click', '.external-images', { view: baton.view }, function (e) {
-                    ext.point('io.ox/mail/externalImages').cascade(baton)
+                this.on('click', '.external-images > .btn-default', { view: baton.view }, function (e) {
+                    ext.point('io.ox/mail/externalImages').cascade(this, baton)
                     .then(function () {
                         loadImages(e);
                     });
+                });
+                this.on('click', '.external-images > .close', function (e) {
+                    $(e.target).closest('.external-images').remove();
                 });
                 baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
@@ -820,15 +885,11 @@ define('io.ox/mail/common-extensions', [
                 if (account.is('drafts', model.get('folder_id'))) return;
 
                 this.append(
-                    $('<div class="alert alert-info disposition-notification">').append(
-                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
-                        $('<button type="button" class="btn btn-primary btn-sm">').text(
-                            //#. Respond to a read receipt request; German "Lesebestätigung senden"
-                            gt('Send a read receipt')
-                        ),
-                        $('<div class="comment">').text(
-                            gt('The sender wants to get notified when you have read this email')
-                        )
+                    $('<div class="alert alert-info disposition-notification notification-item">').append(
+                        //#. Respond to a read receipt request; German "Lesebestätigung senden"
+                        $('<button type="button" class="btn btn-primary btn-sm">').text(gt('Send a read receipt')),
+                        $('<div class="comment">').text(gt('The sender wants to get notified when you have read this email')),
+                        $('<button type="button" class="close" data-dismiss="alert">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
             }

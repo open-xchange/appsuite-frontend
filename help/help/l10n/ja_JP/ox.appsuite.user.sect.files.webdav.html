@@ -1,13 +1,13 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.7. WebDAV によるファイルへのアクセス</title>
+<title>9.8. WebDAV によるファイルアクセス</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="第9章 ドライブ">
-<link rel="prev" href="ox.appsuite.user.sect.files.search.html" title="9.6. ファイルの検索">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.7.1. Linux 環境での WebDAV のセットアップ">
+<link rel="prev" href="ox.appsuite.user.sect.files.search.html" title="9.7. ファイルの検索">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.8.1. Linux 環境での WebDAV のセットアップ">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,14 +31,14 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">ドライブ</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.files.webdav">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.7. WebDAV によるファイルへのアクセス</h2></div></div></div>
-<a class="indexterm" name="id-1.10.13.2"></a><a class="indexterm" name="id-1.10.13.3"></a><a class="indexterm" name="id-1.10.13.4"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.8. WebDAV によるファイルアクセス</h2></div></div></div>
+<a class="indexterm" name="id-1.10.14.2"></a><a class="indexterm" name="id-1.10.14.3"></a><a class="indexterm" name="id-1.10.14.4"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.webdav"></a><p id="ox.appsuite.user.concept.files.webdav">WebDAV を使用すると、ローカルディスクにあるファイルと同じように<span class="phrase"><span class="guilabel"><strong>ドライブ</strong></span></span>アプリケーションのファイルにアクセスできます。グループウェアのGUIからのアクセスと比較した場合、WebDAVには次のような利点と欠点があります。</p>
 <ul class="itemizedlist compact" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">WebDAV では、Windows エクスプローラなどのファイルブラウザを使用してファイルに素早く、かつ直接アクセスできる利点があります。また、グループウェアの GUI にログインする必要もありません。</p></li>
 <li class="listitem"><p role="presentation">欠点としては、ドキュメントの最新バージョンを閲覧できない点があります。また、バージョン履歴や、コメントなどの追加情報も表示されません。</p></li>
 </ul>
-<p><span class="phrase"><strong>警告:</strong></span>WebDAV でファイルを削除すると、最新のファイルだけでなく、すべてのバージョンのファイルが削除されます。<span class="phrase"><strong>注:</strong></span>WebDAV でパブリックフォルダや共有フォルダにオブジェクトを作成するには、対象フォルダに少なくとも次の権限が必要です。オブジェクトを作成、自分のオブジェクトのみを編集自分のオブジェクトも表示するには、次の権限も必要です。自分のオブジェクトのみを表示権限に関する詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.permissions.html">11.2: 権限</a>を参照してください。</p>
+<p><span class="phrase"><strong>警告:</strong></span>WebDAV でファイルを削除すると、最新のファイルだけでなく、すべてのバージョンのファイルが削除されます。<span class="phrase"><strong>注:</strong></span>WebDAV でパブリックフォルダや共有フォルダにオブジェクトを作成するには、対象フォルダに少なくとも次の権限が必要です。オブジェクトを作成、自分のオブジェクトのみを編集自分のオブジェクトも表示するには、次の権限も必要です。自分のオブジェクトのみを表示権限に関する詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">10.2.8: 利用できる権限について</a>を参照してください。</p>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.files.webdav.setup"></a><p id="ox.appsuite.user.concept.files.webdav.setup">Windows エクスプローラなどのファイルブラウザで<span class="phrase"><span class="guilabel"><strong>ドライブ</strong></span></span>アプリケーションのファイルにアクセスする前に、WebDAV アクセスをセットアップする必要があります。手順は、次のようにオペレーティングシステムによって異なります。</p>

@@ -102,7 +102,7 @@ define('io.ox/find/date/patterns', [
     });
 
     var getFormat = (function () {
-        var regexEndian = /(\d{1,4})([\/\.\-])(\d{1,2})[\/\.\-](\d{1,4})/,
+        var regexEndian = /(\d{1,4})([/.-])(\d{1,2})[/.-](\d{1,4})/,
             replaceEndian = function (matchedPart, first, separator, second, third) {
                 var hasYearSuffix = first.length < third.length, leadingMonth,
                     parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];

@@ -54,6 +54,16 @@
 
         &.empty {
             display: none;
+            &.show-anyway {
+                display: block;
+                .folder-arrow {
+                    .fa {
+                        &:before {
+                            display: none;
+                        }
+                    }
+                }
+            }
         }
 
         &.disabled > .folder-node > .folder-label,
@@ -118,6 +128,7 @@
         a.account-link {
             padding: 0 8px;
             color: @foldertree-account-link-color;
+            vertical-align: top;
         }
 
         .folder-arrow {
@@ -127,7 +138,7 @@
             width: @indentation;
         }
 
-        .folder-label, .folder-counter, .folder-options, .folder-buttons {
+        .folder-label, .folder-counter, .folder-options, .folder-buttons, .account-link {
             font-weight: @normal;
             display: inline-block;
             -webkit-font-smoothing: antialiased;
@@ -180,8 +191,10 @@
             }
 
             i {
-                text-align: left;
-                &:before { content: '\f114'; } // fa-folder-o
+                &:not(.file-type-icon) {
+                    text-align: left;
+                    &:before { content: '\f114'; } // fa-folder-o
+                }
             }
 
             &.inbox { i:before { content: '\f01c'; }} // fa-inbox
@@ -191,11 +204,12 @@
             &.trash { i:before { content: '\f1f8'; }} // fa-trash
             &.spam { i:before { content: '\f05e'; }} // fa-ban
             &.archive { i:before { content: '\f187'; }} // fa-archive
-            &.default { i { color: #aaa; }}
+            &.default { i { color: #aaa; }}
 
             &.myshares { i:before{ content: '\f0c2'; }} // fa-cloud
             &.attachments { i:before{ content: '\f0c6'; }} // fa-paperclip
             &.myfiles { i:before{ content: '\f007'; }} // fa-user
+            &.myfavorites { i:before{ content: '\f005'; }} // fa-star
         }
 
         .folder-checkbox {
@@ -231,9 +245,9 @@
         display: block;
     }
 
-    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders, .remote-folders {
+    .favorites, .unified-folders, .standard-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders, .remote-folders {
         margin-bottom: @default-padding;
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
             margin-bottom: 0;
         }
     }
@@ -279,7 +293,8 @@
     // links
     .links {
 
-        margin: 0;
+        list-style-type: none;
+        margin: 16px 0 0 0;
         padding: 0 @default-padding @default-padding @indentation;
         font-size: @fontSize;
         line-height: 24px;
@@ -306,61 +321,6 @@
                 color: @link-color;
                 text-decoration: underline;
             }
-        }
-    }
-
-    @media(max-width: 480px), (max-device-width: 480px) {
-
-        padding-left: 20px;
-
-        // custom mobile values
-        @mobile-height: 48px;
-        @mobile-line-height: @mobile-height;
-        @mobile-arrow-size: 20px;
-        @mobile-label-size: 15px;
-
-        .folder {
-            line-height: @mobile-line-height;
-        }
-        .folder-icon {
-            float: left;
-        }
-        .folder-node {
-            height: @mobile-height;
-
-            .folder-arrow {
-                font-size: @mobile-arrow-size;
-                position: absolute;
-                right: 0;
-                text-align: center;
-                padding-left: 0;
-                // .fa-caret-right:before {
-                //     content: "\f0d8";
-                // }
-                .fa-caret-down:before {
-                    content: "\f0d7";
-                }
-            }
-            .folder-label {
-                float: left;
-            }
-            .folder-label, .folder-counter, .folder-options {
-                font-size: @mobile-label-size;
-            }
-            .folder-label > div {
-                max-width: 160px;
-                .ellipsis();
-            }
-        }
-        li[data-id="virtual/settings"] {
-            .folder-node {
-                .folder-label > div {
-                    max-width: 280px;
-                }
-            }
-        }
-        .links {
-            font-size: @font-size-touch;
         }
     }
 }
@@ -408,7 +368,7 @@
                 }
             }
             .folder-label {
-                float: left;
+                //float: left;
             }
             .folder-label, .folder-counter, .folder-options {
                 font-size: @mobile-label-size;
@@ -432,6 +392,10 @@
 
         .links {
             font-size: @font-size-touch;
+            padding-left: 0;
+            a {
+                margin-bottom: 8px;
+            }
         }
         .flat-tree {
             // set min-width on flat folder to get consistent layout

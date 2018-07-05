@@ -209,8 +209,8 @@ define('io.ox/core/boot/form', [
         language.render();
 
         // update header
-        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').attr('aria-hidden', false);
-        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0').attr('aria-hidden', false);
+        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').removeAttr('aria-hidden');
+        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0').removeAttr('aria-hidden');
 
         // update footer
         var footer = sc.copyright ? sc.copyright + ' ' : '';
@@ -236,8 +236,7 @@ define('io.ox/core/boot/form', [
             });
         }
 
-        // set username input type to text in IE
-        if (_.device('IE > 9')) {
+        if (_.device('IE')) {
             // cannot change type with jQuery's attr()
             ($('#io-ox-login-username')[0] || {}).type = 'text';
         }

@@ -59,7 +59,7 @@ _THEME_ID_ is a unique identifier for your theme, which is not visible to users.
 
 ## definitions.less
 
-This file can be used to override variables described in the "Variables" section of this article.
+This file can be used to override variables described in `ui/apps/themes/definitions.less`. The content of that file is also provided [here](theming/variables.html).
 
 ## style.less
 
@@ -71,163 +71,49 @@ Since 7.2.1, all URLs are relative to the source .less file in which they are co
 
 Old themes must be updated if they change an image from the default theme: All styles from the default theme which refer to a changed image must be overwritten in the custom theme. This way the URLs resolve to the new image.
 
-# Variables
+## Replacing the logo
 
-Naming of the variables should be straight forward. Variables containing the word Background will always refer to the background color. Variables containing Color will refer to the foreground color of an element, like color of a font. Hover in most cases means "hovered" elements. Selected relates to the currently selected item. Elements that are supposed to catch the users eye can use the _Highlight_ class and the variable contains this word.
+One of the most common theme changes which requires editing `style.css` is changing the logo in the top right corner. The logo is displayed as the background image for an element with the ID _io-ox-top-logo-small_. A theme can therefore change the size and URL of the image:
 
-Variables are defined in variables.less from twitter-bootstrap and our default definitions.less. Variables that are defined in definitions.less always override variables from bootstrap's variables.less
+```
+#io-ox-top-logo-small {
+    width: 60px;
+    height: 22px;
+    margin: 8px 13px 0 13px;
+    background-image: url(path/to/mylogo.png);
+}
+```
 
-## Most relevant variables
+The file `mylogo.png` is expected to be in the same directory as style.css. Reference the entire path to the file, relative to the folder containing your ui, but without the leading slash. For example, the Core reference would be `apps/themes/default/logo-small.png`. If you want to place the image somewhere else, then use a relative path in url().
 
-| Variable                           | Default                   |
-| ---------------------------------- | ------------------------- |
-| @topbar-background                 | #3774A8 (blue)            |
-| @topbar-launcher-color             | rgba(255, 255, 255, 0.70) |
-| @topbar-launcher-color-hover       | #fff                      |
-| @topbar-launcher-color-active      | #fff                      |
-| @topbar-launcher-background-hover  | rgba(0, 0, 0, 0.30)       |
-| @topbar-launcher-background-active | rgba(0, 0, 0, 0.20);      |
-| @topbar-icon-color                 | #fff                      |
-| @selected-background               | #428BCA (blue)            |
-| @contact-picture-radius            | 50%                       |
+### Mobile and retina screens
 
-The most significant visual change is achieved by changing the following variables:
+Almost any mobile device and some newer desktop devices use retina screens. These screens do have a very high pixel density which offer very sharp text rendering. To offer sharp and correctly sized images on retina screens there is and additional CSS directive encapsulated in a media query which must be set in your custom theme.
 
-- **@topbar-background** (top navigation bar)
-- **@selected-background** (selection background color in list views and folder tree)
-- **@link-color** (almost all hyperlinks)
+```
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+     only screen and (-moz-min-device-pixel-ratio: 1.5),
+     only screen and (min-device-pixel-ratio: 1.5),
+     only screen and (min-resolution: 240dppx) {
+     #io-ox-top-logo-small {
+         background-size: 60px 22px;
+         background-image: url('apps/themes/default/logo-large.png');
+    }
+}
+```
 
-## Font
+**It is important that you provide your brand logo in two sizes**, the standard size of 60x22px and a large version with doubled pixel sizes of 120x44px. All retina devices will use the large logo and scale it down the CSS pixel size of 60x22px. This will result in a sharp image as the retina screen can make use of the additional available pixels in the source image.
 
-| Variable                | Default                                           |
-| ----------------------- | ------------------------------------------------- |
-| @font-family-sans-serif | "Helvetica Neue", Helvetica, Arial, sans-serif    |
-| @font-family-serif      | Georgia, "Times New Roman", Times, serif          |
-| @font-family-monospace  | Monaco, Menlo, Consolas, "Courier New", monospace |
-| @font-size-base         | 14px                                              |
-| @line-height-base       | 1.428571429; // 20/14                             |
-| @font-size-touch        | 15px                                              |
-| @headings-font-family   | inherit                                           |
-| @headings-font-weight   | 500                                               |
-| @font-size-large        | ceil((@font-size-base \* 1.25)); // ~18px         |
-| @font-size-small        | ceil((@font-size-base \* 0.85)); // ~12px         |
-| @vgrid-font-size        | 13px                                              |
+**Important note:** Your logo must not be wider than 70px (including margins) for mobile devices. Otherwise the toolbar will be broken on mobile devices as the large logo will cause a line wrap in the toolbar. If you need a larger logo use a custom, smaller one for mobiles.
 
-## Colors
+Always test your theme on mobiles, too. You can emulate popular screen sizes with the Google Chrome Dev-Tools.
 
-| Variable           | Default                  |
-| ------------------ | ------------------------ |
-| @background        | #fff                     |
-| @text-color        | @gray-dark               |
-| @link-color        | @brand-primary           |
-| @link-hover-color  | darken(@link-color, 15%) |
-| @link-accent-color | #ffad00                  |
-| @badge-color       | @white                   |
-| @badge-bg          | #aaa                     |
-| @headings-color    | inherit                  |
-| @black             | #000                     |
-| @gray-darker       | #222                     |
-| @gray-dark         | #333                     |
-| @gray              | #555                     |
-| @gray-light        | #999                     |
-| @gray-lighter      | #eee                     |
-| @white             | #fff                     |
-| @blue              | darken(#049cdb, 5%)      |
-| @blue-dark         | #0064cd                  |
-| @blue-light        | lighten(#049cdb, 25%)    |
-| @green             | #1A8D1A                  |
-| @green-light       | #92D050                  |
-| @red               | #cc0000                  |
-| @yellow            | #F8E400                  |
-| @orange            | #f89406                  |
-| @pink              | #E01CD9                  |
-| @purple            | #7E16CF                  |
+Remember that images in OX App Suite are served by the web server and not by the application server. This means that images need to be packaged separately (for dedicated web servers) and installed in `/var/www/appsuite/` (or similar, depending on the target platform) instead of `/opt/open-xchange/appsuite/`.
 
-# Space
+### Replacing Favicons and mobile homescreen icons
 
-| Variable             | Default |
-| -------------------- | ------- |
-| @border-radius-base  | 4px     |
-| @border-radius-large | 6px     |
-| @border-radius-small | 3px     |
+Note: This chapter is not about changing AppSuite icons which are used in the application like the brand on the upper right.
 
-# Pagination
+AppSuite ships with a standard set of icons containing a favicon and a set of touch icons which are mainly used by iOS and Android devices. These icons are used as default for all devices and browsers as long as you don't deliver your own icons with your theme. To provide your own icons, put them into your theme's directory, e.g. `apps/themes/icons/theme-name`.
 
-| Variable              | Default        |
-| --------------------- | -------------- |
-| @pagination-bg        | #fff           |
-| @pagination-border    | #ddd           |
-| @pagination-active-bg | @brand-primary |
-
-# Buttons
-
-| Variable        | Default               |
-| --------------- | --------------------- |
-| @btn-primary-bg | @link-color           |
-| @btn-info-bg    | #5bc0de               |
-| @btn-success-bg | #62c462               |
-| @btn-warning-bg | lighten(@orange, 15%) |
-| @btn-danger-bg  | #ee5f5b               |
-| @btn-inverse-bg | #444                  |
-
-# Dropdowns
-
-| Variable                    | Default                 |
-| --------------------------- | ----------------------- |
-| @dropdown-bg                | #fff                    |
-| @dropdown-border            | rgba(0,0,0,.15)         |
-| @dropdown-divider-bg        | #e5e5e5                 |
-| @dropdown-divider-bg        | #e5e5e5                 |
-| @dropdown-link-color        | @gray-dark              |
-| @dropdown-link-hover-color  | darken(@gray-dark, 5%)  |
-| @dropdown-link-active-color | @component-active-color |
-| @dropdown-link-active-bg    | @component-active-bg    |
-| @dropdown-link-hover-bg     | #f5f5f5                 |
-
-# Foldertree
-
-| Variable                        | Default             | Description                                                   |
-| ------------------------------- | ------------------- | ------------------------------------------------------------- |
-| @foldertree-sidepane-background | #f5f5f5             |                                                               |
-| @foldertee-section-title-color  | #888                | Color for sectiontitles in foldertree (like "Public" folders) |
-| @foldertree-active-label-color  | #333                | Active means, user can perform an action on this item         |
-| @foldertree-passive-label-color | @hc-gray            | Passive means, user can not perform any action with this item |
-| @foldertree-hover-background    | rgba(0, 0, 0, 0.05) |                                                               |
-| @foldertree-selected-background | rgba(0, 0, 0, 0.10) |                                                               |
-| @foldertree-badge-background    | @bagde-bg           | see #Colors for definition of @badge-bg                       |
-| @foldertree-badge-color         | @badge-color        | see #Colors for definition of @badge-color                    |
-
-# Calendar
-
-| Variable                       | Default                | Description                                                     |
-| ------------------------------ | ---------------------- | --------------------------------------------------------------- |
-| @appointment-reserved          | #08c `/*blue*/`        | Appointment status color                                        |
-| @appointment-temporary         | #ffbb00 `/* yellow */` | Appointment status color                                        |
-| @appointment-absent            | #913f3f `/* red */`    | Appointment status color                                        |
-| @appointment-free              | #8eb360 `/* green */`  | Appointment status color                                        |
-| @appointment-private           | #555 `/* gray */`      | Appointment status color                                        |
-| @appointment-declined-font     | #888 `/* dark gray */` | Font color for declined Appointments                            |
-| @appointment-unconfirmed-alpha | 0.4                    | Transparency value for unconfirmed Appointments                 |
-| @appointment-declined-alpha    | 0.3                    | Transparency value for declined Appointments                    |
-| @appointment-hover-pct         | 15%                    | Percentage increase of the dark pigment content on hover effect |
-
-## Week view
-
-| Variable                       | Default                | Description                                                     |
-| ------------------------------ | ---------------------- | --------------------------------------------------------------- |
-| @appointment-reserved          | #08c `/* blue */`      | Appointment status color                                        |
-| @appointment-temporary         | #ffbb00 `/* yellow */` | Appointment status color                                        |
-| @appointment-absent            | #913f3f `/* red */`    | Appointment status color                                        |
-| @appointment-free              | #8eb360 `/* green */`  | Appointment status color                                        |
-| @appointment-private           | #555 `/* gray */`      | Appointment status color                                        |
-| @appointment-declined-font     | #888 `/* dark gray */` | Font color for declined Appointments                            |
-| @appointment-unconfirmed-alpha | 0.4                    | Transparency value for unconfirmed Appointments                 |
-| @appointment-declined-alpha    | 0.3                    | Transparency value for declined Appointments                    |
-| @appointment-hover-pct         | 15%                    | Percentage increase of the dark pigment content on hover effect |
-
-## Month view
-
-| Variable                   | Default                    | Description                                   |
-| -------------------------- | -------------------------- | --------------------------------------------- |
-| @monthview-appointment-out | #aaa `/* light gray */`    | Color of appointments, which are not in focus |
-| @monthview-today           | #daefff `/* light blue */` | Background color of the current day           |
+**Attention**: Safari and Internet Explorer do not support dynamic changes to the favicon for a webpage. This means, the default icon will be shown even if a custom favicon is provided within a custom theme. To enable the right favicon for a theme on Safari and IE, the overall standard favicon.ico located under `apps/themes/icons/default` on the web server must be replaced with a custom version.

@@ -25,9 +25,10 @@ define('io.ox/core/folder/api', [
     'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'settings!io.ox/calendar',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, calSettings, filestorageApi, gt) {
 
     'use strict';
 
@@ -56,9 +57,9 @@ define('io.ox/core/folder/api', [
 
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
+                if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
-                if (item.id === String(settings.get('folder/calendar'))) return true;
+                if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
                 // any shared folder
                 return util.is('shared', item);
             }),
@@ -75,7 +76,7 @@ define('io.ox/core/folder/api', [
             var hash = _.object(ids, list);
 
             _(renameItems).each(function (item) {
-                if (item.id === String(settings.get('folder/calendar')) || item.title === gt('Calendar')) {
+                if (item.id === String(calSettings.get('chronos/defaultFolderId')) || item.title === gt('Calendar')) {
                     item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
                 } else {
                     //#. %1$s is the folder owner
@@ -98,17 +99,18 @@ define('io.ox/core/folder/api', [
     }
 
     function isVirtual(id) {
+        if (id === 'cal://0/allPublic') return true;
         return /^virtual/.test(id);
     }
 
     function isExternalFileStorage(data) {
         //
-        var type = data.get ? data.get('type') : data.type;
+        var type = data instanceof Backbone.Model ? data.get('type') : data.type;
         return type === 14;
     }
 
     function isFlat(id) {
-        return /^(contacts|calendar|tasks)$/.test(id);
+        return /^(contacts|calendar|tasks|event)$/.test(id);
     }
 
     function isNested(id) {
@@ -201,6 +203,7 @@ define('io.ox/core/folder/api', [
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
             if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
+            if (this.is('calendar') && this.is('private') && !this.supportsShares()) return false;
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
             return capabilities.has('read_create_shared_folders');
@@ -250,7 +253,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
 
             // sort shared and hidden folders by title
-            if (/^flat\/(contacts|calendar|tasks)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks)\/hidden$/.test(this.id)) {
+            if (/^flat\/(contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
                 this.comparator = function (model) {
                     return (model.get('display_title') || model.get('title')).toLowerCase();
                 };
@@ -278,6 +281,10 @@ define('io.ox/core/folder/api', [
     _.extend(Pool.prototype, {
 
         addModel: function (data) {
+
+            if (data.attributes) {
+                return data;
+            }
 
             var id = data.id, model = this.models[id];
 
@@ -337,8 +344,10 @@ define('io.ox/core/folder/api', [
                         // add virtual parent references
                         if (isVirtual(id)) {
                             var newParents = models[i].get('virtual_parents');
-                            newParents.push(id);
-                            models[i].set('virtual_parents', _.uniq(newParents));
+                            if (newParents) {
+                                newParents.push(id);
+                                models[i].set('virtual_parents', _.uniq(newParents));
+                            }
                         }
                     }
                 }
@@ -442,19 +451,6 @@ define('io.ox/core/folder/api', [
     // Define virtual folders
     //
 
-    pool.addModel({
-        folder_id: '1',
-        id: 'virtual/all-my-appointments',
-        module: 'calendar',
-        own_rights: 403710016, // all rights but admin
-        permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
-        standard_folder: true,
-        supported_capabilities: [],
-        title: gt('All my appointments'),
-        total: -1,
-        type: 1
-    });
-
     if (capabilities.has('webmail')) {
         // only define if the user actually has mail
         // otherwise the folder refresh tries to fetch 'default0'
@@ -465,6 +461,22 @@ define('io.ox/core/folder/api', [
             title: gt('Unread messages')
         });
     }
+
+    if (capabilities.has('edit_public_folders')) {
+        pool.addModel({
+            folder_id: '1',
+            id: 'cal://0/allPublic',
+            module: 'calendar',
+            permissions: [{ bits: 0, entity: ox.user_id, group: false }],
+            standard_folder: true,
+            supported_capabilities: [],
+            title: gt('All my public appointments'),
+            total: -1,
+            type: 1,
+            subscribed: true
+        });
+    }
+
 
     //
     // Propagate
@@ -493,16 +505,6 @@ define('io.ox/core/folder/api', [
 
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
 
-            if (mailSettings.get('dsc/enabled')) {
-
-                // need to refresh subfolders of default0
-                return list('default0', { cache: false }).done(function () {
-                    refresh();
-                    api.trigger('refresh');
-                });
-
-            }
-
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
                 virtual.refresh();
@@ -523,8 +525,9 @@ define('io.ox/core/folder/api', [
     }
 
     VirtualFolder.prototype.concat = function () {
-        return $.when.apply($, arguments).then(function () {
-            return _(arguments).chain().flatten().compact().value();
+        return _.whenSome.apply(undefined, arguments).then(function (data) {
+            if (data.rejected.length) _.each(data.rejected, function (data) { console.error(data); });
+            return _(data.resolved).chain().flatten().compact().value();
         });
     };
 
@@ -618,7 +621,7 @@ define('io.ox/core/folder/api', [
                 tree: tree(id)
             }
         })
-        .then(
+        .pipe(
             function (data) {
                 return renameDefaultCalendarFolders(data);
             },
@@ -627,9 +630,13 @@ define('io.ox/core/folder/api', [
                 return error;
             }
         )
-        .then(function (data) {
+        .pipe(function (data) {
             // update/add model
             var model = pool.addModel(data);
+            if (_(model.changed).size()) {
+                // use module here, so apis only listen to their own folders
+                api.trigger('changesAfterReloading:' + model.get('module'), model);
+            }
             // propagate changes via api events
             propagate(model);
             // to make sure we always get the same result (just data; not timestamp)
@@ -642,12 +649,15 @@ define('io.ox/core/folder/api', [
     //
 
     function multiple(ids, options) {
+
+        if (!ids || !ids.length) return $.when([]);
         options = _.extend({ cache: true, errors: false }, options);
+
         try {
             http.pause();
             return $.when.apply($,
                 _(ids).map(function (id) {
-                    return get(id, { cache: options.cache }).then(
+                    return get(id, { cache: options.cache }).pipe(
                         null,
                         function fail(error) {
                             error.id = id;
@@ -656,11 +666,22 @@ define('io.ox/core/folder/api', [
                     );
                 })
             )
-            .then(function () {
+            .pipe(function () {
                 return _(arguments).toArray();
+            })
+            .pipe(function (responses) {
+                // fail completely if no connection available, i.e. all requests fail with NOSERVER or OFFLINE (see bug 57323)
+                if (!responses.length) return [];
+                if (_(responses).all({ code: 'OFFLINE' })) return reject('offline');
+                if (_(responses).all({ code: 'NOSERVER' })) return reject('noserver');
+                return responses;
             });
         } finally {
             http.resume();
+        }
+
+        function reject(code) {
+            return $.Deferred().reject({ error: http.messages[code], code: code.toUpperCase() });
         }
     }
 
@@ -715,7 +736,7 @@ define('io.ox/core/folder/api', [
         })
         .then(renameDefaultCalendarFolders, function (error) {
             api.trigger('error error:' + error.code, error, id);
-            return error;
+            throw error;
         })
         .then(function (array) {
             array = processListResponse(id, array);
@@ -818,10 +839,6 @@ define('io.ox/core/folder/api', [
         return pool.getCollection(getFlatCollectionId(module, section));
     }
 
-    function injectVirtualCalendarFolder(array) {
-        array.unshift(pool.getModel('virtual/all-my-appointments').toJSON());
-    }
-
     function getFlatViews() {
         return _(pool.collections).chain()
             .keys()
@@ -835,9 +852,14 @@ define('io.ox/core/folder/api', [
             .value();
     }
 
+    function injectVirtualCalendarFolder(array) {
+        array.unshift(pool.getModel('cal://0/allPublic').toJSON());
+    }
+
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
+        if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
         if (ox.debug && !options.module) {
@@ -851,7 +873,7 @@ define('io.ox/core/folder/api', [
             cached = {};
 
         if (collection.fetched && options.cache === true) {
-            cached['private'] = collection.toJSON();
+            cached.private = collection.toJSON();
             ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
                 var collection = getFlatCollection(module, section);
                 if (collection.fetched) cached[section] = collection.toJSON();
@@ -867,7 +889,8 @@ define('io.ox/core/folder/api', [
                 altNames: true,
                 content_type: module,
                 timezone: 'UTC',
-                tree: 1
+                tree: 1,
+                all: !!options.all
             }
         })
         .then(function (data) {
@@ -903,6 +926,9 @@ define('io.ox/core/folder/api', [
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
 
+            // inject public section if not presend
+            if (module === 'event' && !data.public) data.public = [];
+
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
                 var array = _(section).filter(function (folder) {
@@ -913,8 +939,8 @@ define('io.ox/core/folder/api', [
                     // otherwise
                     return true;
                 });
-                // inject 'All my appointments' for calender/private
-                if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
+                // inject 'All my public appointments' for calender/public
+                if (module === 'event' && id === 'public') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -946,6 +972,8 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
         if (isVirtual(id)) return $.when();
+
+        if (!options.silent) api.trigger('before:update before:update:' + id, id, model);
 
         // build data object
         var data = { folder: changes },
@@ -979,7 +1007,7 @@ define('io.ox/core/folder/api', [
                 if (!options.silent) {
                     api.trigger('update:fail', error, id);
                 }
-                return error;
+                throw error;
             };
 
         if (options.notification && !_.isEmpty(options.notification)) {
@@ -1078,9 +1106,9 @@ define('io.ox/core/folder/api', [
             function fail(error) {
                 // re-add folder
                 pool.getModel(folderId).set('subscr_subflds', true);
-                virtual.refresh();
                 pool.getCollection(folderId).add(model);
-                return error;
+                virtual.refresh();
+                throw error;
             }
         );
     }
@@ -1101,22 +1129,23 @@ define('io.ox/core/folder/api', [
                 subscribed: 1,
                 title: gt('New Folder')
             }, options);
-            // don't inherit permissions for private flat folders
-            if (isFlat(options.module) && !(parent.id === '2' || util.is('public', parent))) {
+            // inherit permissions for private flat non-calendar folders
+            if (isFlat(options.module) && options.module !== 'calendar' && options.module !== 'event' && !(parent.id === '2' || util.is('public', parent))) {
                 // empty array doesn't work; we heve to copy the admins
                 options.permissions = _(parent.permissions).filter(function (item) {
                     return !!(item.bits & 268435456);
                 });
             }
+            var params = {
+                action: 'new',
+                autorename: true,
+                folder_id: id
+            };
+            if (options.module !== 'event') params.tree = tree(id);
             // go!
             return http.PUT({
                 module: 'folders',
-                params: {
-                    action: 'new',
-                    autorename: true,
-                    folder_id: id,
-                    tree: tree(id)
-                },
+                params: params,
                 data: options,
                 appendColumns: false
             })
@@ -1161,7 +1190,7 @@ define('io.ox/core/folder/api', [
         return _(currentlyDeleted).contains(id);
     }
 
-    function remove(ids, options) {
+    function remove(ids) {
 
         // ensure array
         if (!_.isArray(ids)) ids = [ids];
@@ -1179,6 +1208,7 @@ define('io.ox/core/folder/api', [
             model.set('unread', 0);
             // update collection (now)
             removeFromAllCollections(model);
+            delete pool.models[id];
             model.trigger('destroy');
         });
 
@@ -1188,8 +1218,6 @@ define('io.ox/core/folder/api', [
             tree: tree(ids[0]),
             extendedResponse: true
         };
-
-        if (options && options.isDSC) params.hardDelete = true;
 
         // delete on server
         return http.PUT({
@@ -1217,7 +1245,7 @@ define('io.ox/core/folder/api', [
                         var pathOrId = (response[index] ? response[index].new_path : id);
                         api.get(pathOrId, { cache: false }).fail(function (error) {
                             // folder does not exist
-                            if (error.code === 'FLD-0008') {
+                            if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
                                 api.pool.removeCollection(id, { removeModels: true });
                             }
                         }).always(function () {
@@ -1239,6 +1267,60 @@ define('io.ox/core/folder/api', [
         });
     }
 
+    /**
+     * Restore a bunch of folderModels to their originally source.
+     *
+     * @param {api.Model[]} list
+     *  Array of folderModels
+     */
+    function restore(list) {
+        // ensure array
+        if (!_.isArray(list)) list = [list];
+
+        var ids = [];
+
+        _(list).each(function (model) {
+            var id = model.get('id');
+
+            ids.push(id);
+
+            // remove model from collections
+            _(api.pool.collections).invoke('remove', model);
+            model.set('unread', 0);
+        });
+
+        // restore on server
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'restore',
+                tree: tree(ids[0])
+            },
+            data: ids,
+            appendColumns: false
+        })
+        .done(function () {
+            _(list).each(function (model) {
+                var id = model.get('id');
+                api.get(id, { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('restore', model.toJSON());
+                })
+                .fail(function (error) {
+                    // folder does not exist
+                    if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
+                        removeFromAllCollections(model);
+                    }
+                });
+            });
+        })
+        .fail(function () {
+            _(list).each(function (model) {
+                api.propagate('restore:fail', model.toJSON());
+            });
+        });
+    }
+
     //
     // Clear/empty folder
     //
@@ -1257,7 +1339,13 @@ define('io.ox/core/folder/api', [
             data: [id]
         })
         .done(function () {
-            if (account.is('trash', id)) {
+            if ((api.pool.models[id] && api.pool.models[id].is('trash')) || account.is('trash', id)) {
+                // clear collections
+                if (api.pool.collections[id]) {
+                    api.pool.collections[id].each(function (model) {
+                        api.pool.removeCollection(model.id, { removeModels: true });
+                    });
+                }
                 // if this is a trash folder trigger special event (quota updates)
                 api.trigger('cleared-trash');
             }
@@ -1271,7 +1359,7 @@ define('io.ox/core/folder/api', [
     //
 
     function updateTextNode(data) {
-        this.nodeValue = _.noI18n(data.title || data.id);
+        this.nodeValue = data.display_title || data.title || data.id;
     }
 
     function getTextNode(id) {
@@ -1345,7 +1433,7 @@ define('io.ox/core/folder/api', [
         settings.set(['folder/hidden', id], true).save();
         // reload sections; we could handle this locally
         // but this is a dead-end when it comes to sorting
-
+        api.trigger('hide', id);
         flat({ module: module, cache: false });
     }
 
@@ -1356,6 +1444,7 @@ define('io.ox/core/folder/api', [
         settings.remove(['folder/hidden', id]).save();
         // reload sections; we could handle this locally
         // but this is a dead-end when it comes to sorting
+        api.trigger('show', id);
         flat({ module: module, cache: false });
     }
 
@@ -1418,7 +1507,7 @@ define('io.ox/core/folder/api', [
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            defs.push(flat({ module: module, cache: false }));
+            defs.push(flat({ module: module, all: module === 'event', cache: false }));
         });
 
         // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool
@@ -1498,6 +1587,9 @@ define('io.ox/core/folder/api', [
         return getDefaultSeparator();
     }
 
+    // register pool in util function. Needed for some checks. Cannot be done with require folderAPI or we would either be asynchronous or have circular dependencies
+    util.registerPool(pool);
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
@@ -1514,6 +1606,7 @@ define('io.ox/core/folder/api', [
         move: move,
         create: create,
         remove: remove,
+        restore: restore,
         isBeingDeleted: isBeingDeleted,
         clear: clear,
         reload: reload,

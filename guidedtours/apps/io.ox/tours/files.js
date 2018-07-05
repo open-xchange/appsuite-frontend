@@ -24,8 +24,6 @@ define('io.ox/tours/files', [
 
     'use strict';
 
-    var createApp;
-
     /* Tour: files / ... */
     Tour.registry.add({
         id: 'default/io.ox/files',
@@ -59,6 +57,15 @@ define('io.ox/tours/files', [
         tour.step()
                 .title(gt('The Drive app'))
                 .content(gt('Welcome to your cloud storage app. This Guided Tour will introduce you to your new online storage solution - your one point to access online stored files from all your accounts. This is where you can upload and save your files, share them and synchronize them with different devices.  '))
+                .on('wait', function () {
+                    if ($('.launcher-dropdown:visible').length === 0) $('.launcher-btn').click();
+                    $('#io-ox-launcher').attr('forceOpen', true);
+                })
+                .on('hide', function () {
+                    $('#io-ox-launcher').attr('forceOpen', false);
+                    if ($('.launcher-dropdown:visible').length) $('.launcher-btn').click();
+                })
+                .waitFor('.launcher-dropdown:visible')
                 .hotspot('[data-app-name="io.ox/files"]')
                 .spotlight('[data-app-name="io.ox/files"]')
                 .on('close', cleanup)
@@ -74,8 +81,6 @@ define('io.ox/tours/files', [
                 .waitFor('.folder-tree:visible')
                 .hotspot('.folder-icon.visible.myfiles')
                 .spotlight('.folder-icon.visible.myfiles')
-
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Folder content'))
@@ -83,7 +88,6 @@ define('io.ox/tours/files', [
                 .waitFor(getSelector)
                 .spotlight(getSelector, { position: 'left' })
                 .hotspot(getSelector)
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Select a view'))
@@ -98,7 +102,6 @@ define('io.ox/tours/files', [
                 .on('next', function () {
                     $('.classic-toolbar-container .pull-right').removeClass('open');
                 })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Toolbar'))
@@ -111,7 +114,6 @@ define('io.ox/tours/files', [
                         $('.classic-toolbar-container [data-action="create"]').closest('.dropdown').addClass('open');
                     }
                 })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Upload a new file'))
@@ -126,18 +128,17 @@ define('io.ox/tours/files', [
                 .on('next', function () {
                     $('.classic-toolbar-container [data-action="create"]').closest('.dropdown').removeClass('open');
                 })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Preview files'))
                 .content(gt('Clicking on the view icon leads you to a preview of the selected file.'))
                 .on('before:show', function () {
+                    if (_.device('touch')) return $('.list-view li[data-cid="' + key + '"]').tap();
                     $('.list-view li[data-cid="' + key + '"]').click();
                 })
                 .waitFor('.classic-toolbar-container [data-action="viewer"]')
                 .spotlight('.classic-toolbar-container [data-action="viewer"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="viewer"] i', { position: 'right' })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Preview mode'))
@@ -151,7 +152,6 @@ define('io.ox/tours/files', [
                 .waitFor('.io-ox-viewer .viewer-toolbar')
                 .spotlight('.viewer-toolbar [data-action="editor"]', { position: 'left' })
                 .hotspot('.viewer-toolbar [data-action="editor"]', { position: 'bottom' })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Share files'))
@@ -176,7 +176,6 @@ define('io.ox/tours/files', [
                         $('.classic-toolbar-container [data-action="share"]').closest('.dropdown').addClass('open');
                     }
                 })
-                .on('close', cleanup)
                 .end()
 
             .step()
@@ -192,7 +191,6 @@ define('io.ox/tours/files', [
                 .on('next', function () {
                     $('.classic-toolbar-container [data-action="share"]').closest('.dropdown').removeClass('open');
                 })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Edit documents'))
@@ -200,7 +198,6 @@ define('io.ox/tours/files', [
 
                 .spotlight('.classic-toolbar-container [data-action="edit"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="edit"]', { position: 'right' })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('File details'))
@@ -216,7 +213,6 @@ define('io.ox/tours/files', [
                 })
                 .spotlight('.viewer-sidebar', { position: 'left' })
                 .hotspot('.viewer-sidebar', { position: 'left' })
-                .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Add another account'))
@@ -226,30 +222,8 @@ define('io.ox/tours/files', [
                 })
                 .spotlight('a[data-action="add-storage-account"]', { position: 'right' })
                 .hotspot('a[data-action="add-storage-account"]', { position: 'right' })
-                .on('close', cleanup)
                 .end()
-            .step()
-                .title(gt('Restart Guided Tour'))
-                .content(gt('Hint: you can always restart guided tours, any time you need them, from the system menu.'))
-                .on('before:show', function () {
-                    if ($('.topbar-settings-dropdown:visible').length === 0) {
-                        $('#io-ox-topbar-dropdown-icon').addClass('open');
-                    }
-                })
-                .on('done close', function () {
-                    $('#io-ox-topbar-dropdown-icon').removeClass('open');
-                    cleanup();
-                })
-                .spotlight('#io-ox-topbar-dropdown-icon [data-action="guided-tour"]', { position: 'left' })
-                .hotspot('#io-ox-topbar-dropdown-icon [data-action="guided-tour"]', { position: 'left' })
-
-                .end()
-            .on('stop', function () {
-                if (createApp) {
-                    //prevent app from asking about changed content
-                    createApp.quit();
-                }
-            });
+            .on('stop', cleanup);
         if (!capabilities.has('text') || !capabilities.has('spreadsheet')) {
             tour.steps.splice(10, 2);
         }
@@ -268,10 +242,13 @@ define('io.ox/tours/files', [
             current.view = app.props.get('layout');
 
             // set folder and layout: ensure we find the uploaded 'drive app tour.txt'
-            if (current.folder !== standardFolder) app.folder.set(standardFolder);
-            if (current.view === 'tile') app.props.set('layout', 'list');
-            // ensure
-            tour.start();
+            if (current.folder === standardFolder) return cont();
+            return app.folder.set(standardFolder).then(cont);
+
+            function cont() {
+                if (current.view === 'tile') app.props.set('layout', 'list');
+                tour.start();
+            }
         });
     });
 });

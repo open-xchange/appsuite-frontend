@@ -21,7 +21,8 @@ define('io.ox/core/viewer/views/types/videoview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *
@@ -81,7 +82,7 @@ define('io.ox/core/viewer/views/types/videoview', [
             this.$el.find('div.viewer-displayer-notification').remove();
             this.$el.find('.viewer-displayer-audio-video-placeholder').remove();
             this.$el.append(
-                this.createNotificationNode(
+                this.displayDownloadNotification(
                     gt('Error while playing the video. Either your browser does not support the format or you have connection problems.')
                 )
             );

@@ -179,7 +179,6 @@ define('io.ox/contacts/main', [
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
                     'tabindex': -1,
-                    'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();
         },
@@ -214,7 +213,7 @@ define('io.ox/contacts/main', [
                     var fullname, name, description;
                     if (data.mark_as_distributionlist === true) {
                         name = data.display_name || '';
-                        fields.name.text(_.noI18n(name));
+                        fields.name.text(name);
                         fields.private_flag.get(0).style.display =
                             data.private_flag ? '' : 'none';
                         fields.description.text(gt('Distribution list'));
@@ -235,7 +234,7 @@ define('io.ox/contacts/main', [
                         description = $.trim(util.getJob(data));
                         fields.private_flag.get(0).style.display =
                             data.private_flag ? '' : 'none';
-                        fields.description.text(_.noI18n(description));
+                        fields.description.text(description);
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
                             fields.name.addClass('bright-text').text(gt('Empty name and description found.'));
@@ -244,7 +243,7 @@ define('io.ox/contacts/main', [
                             fields.name.removeClass('bright-text');
                         }
                     }
-                    this.attr({ 'aria-label': _.noI18n(name) });
+                    this.attr('aria-label', name);
                 }
             });
 
@@ -277,7 +276,7 @@ define('io.ox/contacts/main', [
                     this.addClass('vgrid-label');
                 },
                 set: function (data) {
-                    this.text(_.noI18n(getLabel(data)));
+                    this.text(getLabel(data));
                 }
             });
 
@@ -315,7 +314,7 @@ define('io.ox/contacts/main', [
             Thumb.prototype.draw = function (baton) {
                 var node = $('<li class="thumb-index" role="option">')
                     .attr('id', _.uniqueId('ti_'))
-                    .text(this.label || _.noI18n(this.text));
+                    .text(this.label || this.text);
                 if (this.enabled(baton)) {
                     node.data('text', this.text);
                 } else {
@@ -381,7 +380,7 @@ define('io.ox/contacts/main', [
                     // add omaga thumb for any other leading chars
                     if (!_(keys).any(function (char) { return char === 'Ω'; })) return;
                     baton.data.push(new baton.Thumb({
-                        label: _.noI18n('Ω'),
+                        label: 'Ω',
                         text: 'Ω',
                         enabled: _.constant(true)
                     }));
@@ -415,10 +414,7 @@ define('io.ox/contacts/main', [
                     gt('Back')
                 );
 
-            // TODO restore last folder as starting point
-            app.pages.showPage('listView');
         },
-
         'toolbars-mobile': function () {
 
             if (!_.device('smartphone')) return;
@@ -854,17 +850,27 @@ define('io.ox/contacts/main', [
         },
 
         'inplace-find': function (app) {
-
             if (_.device('smartphone') || !capabilities.has('search')) return;
-
-            app.searchable();
+            if (!app.isFindSupported()) return;
+            app.initFind();
         },
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
+                return 'ox.appsuite.user.sect.contacts.gui.html';
             };
         },
+
+        // reverted for 7.10
+        // 'primary-action': function (app) {
+
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/contacts/sidepanel',
+        //         label: gt('New contact'),
+        //         action: 'io.ox/contacts/actions/create',
+        //         toolbar: 'create'
+        //     });
+        // },
 
         'sidepanel': function (app) {
 

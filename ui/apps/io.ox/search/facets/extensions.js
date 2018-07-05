@@ -27,17 +27,19 @@ define('io.ox/search/facets/extensions', [
                 module = type === 'files' ? 'infostore' : type;
 
             picker({
+                async: true,
                 folder: id || api.getDefaultFolder(module),
                 module: module,
                 flat: api.isFlat(module),
                 root: type === 'files' ? '9' : '1',
-                done: function (target) {
+                done: function (target, dialog) {
                     //get folder data
                     api.get(target)
                         .always(function (data) {
                             //use id as fallback label
                             var label = (data || {}).title || target;
                             baton.model.update(facet.id, id, { custom: target, name: label });
+                            dialog.close();
                         });
                 },
                 disable: function (data) {
@@ -84,7 +86,7 @@ define('io.ox/search/facets/extensions', [
             },
 
             optionsHandler: function (baton) {
-                $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
+                $('body').on('click tap', '.facet-dropdown .option', function (e) {
                     // TODO: remove hack
                     e.stopImmediatePropagation();
                     e.stopPropagation();
@@ -219,13 +221,14 @@ define('io.ox/search/facets/extensions', [
                         // add option to open dialog
                         menu.append(
                             $('<li role="presentation">').append(
-                                 $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1" data-action="dialog">').append(
+                                $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1" data-action="dialog">').append(
                                     $('<i class="fa fa-fw fa-none" aria-hidden="true">'),
                                     $('<span>').text(gt('More') + ' ...')
                                 )
                             )
                         );
-                    }).then(function () {
+                    })
+                    .then(function () {
                         // add to dom
                         button.append(menu);
 

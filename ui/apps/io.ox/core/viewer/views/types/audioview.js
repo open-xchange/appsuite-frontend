@@ -22,7 +22,8 @@ define('io.ox/core/viewer/views/types/audioview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *
@@ -53,14 +54,22 @@ define('io.ox/core/viewer/views/types/audioview', [
             this.$el.find('audio').off();
             this.$el.empty().append(
                 $('<div class="viewer-displayer-item viewer-displayer-audio player-hidden">').append(
+                    // play button
+                    $('<i class="play-button fa fa-play-circle-o">'),
+                    $('<div class="player-text">').text(gt('Click to play audio file')),
                     // cover
                     $('<img class="cover">')
-                        .one('error', function () {
-                            // we don't know if the cover url is valid or not until we load it from the server
-                            $(this).remove();
-                            self.$el.find('.play-button').css({ height: 'auto', position: 'relative' }).after($('<div class="player-text">').text(gt('Click to play audio file')));
+                        // we don't know if the cover url is valid or not until we load it from the server
+                        .one({
+                            load: function () {
+                                self.$el.find('.play-button').addClass('cover');
+                                self.$el.find('.player-text').remove();
+                            },
+                            error: function () {
+                                $(this).remove();
+                            }
                         })
-                        .attr('data-src', _.unescapeHTML('aesrgerfcwertvc0' + coverUrl)),
+                        .attr('data-src', _.unescapeHTML(coverUrl)),
                     // audio element
                     $('<audio controls="true">')
                         // set preload (and do a dance); see https://code.google.com/p/chromium/issues/detail?id=234779
@@ -74,6 +83,7 @@ define('io.ox/core/viewer/views/types/audioview', [
                             'error': this.onError.bind(this)
                         })
                         .attr({ 'data-src': _.unescapeHTML(audioUrl), 'type': mimeType })
+                        .hide()
                 )
             );
 
@@ -95,8 +105,19 @@ define('io.ox/core/viewer/views/types/audioview', [
             this.$el.idle().find('.viewer-displayer-audio').addClass('player-hidden');
             this.$el.find('div.viewer-displayer-notification,play-button,.player-text').remove();
             this.$el.append(
-                this.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
+                this.displayDownloadNotification(gt('Your browser does not support the audio format of this file.'))
             );
+        },
+
+        /**
+         * Play button click handler
+         */
+        onPlay: function () {
+            var audio = this.$el.find('audio');
+
+            this.$el.find('.play-button').empty().busy();
+            audio.attr('src', audio.attr('data-src'));
+            audio[0].load();
         },
 
         /**
@@ -119,20 +140,15 @@ define('io.ox/core/viewer/views/types/audioview', [
          *  the AudioView instance.
          */
         show: function () {
-            var audio = this.$el.find('audio'),
-                wrapper = this.$el.find('.viewer-displayer-item'),
-                cover = this.$el.find('img.cover');
+            var audio = this.$el.find('audio');
+            var cover = this.$el.find('img.cover');
 
             if ((audio.length > 0)) {
-                this.$el.find('div.viewer-displayer-notification,.play-button').remove();
+                this.$el.find('div.viewer-displayer-notification').remove();
                 this.$el.idle().find('.viewer-displayer-audio').removeClass('player-hidden');
-                wrapper.prepend($('<i class="play-button fa fa-play-circle-o">')).one('click', function () {
-                    $(this).find('.play-button').empty().busy();
-                    audio.attr('src', audio.attr('data-src'));
-                    audio[0].load();
-                });
+
+                this.$el.find('.play-button').one('click', this.onPlay.bind(this));
                 cover.attr('src', cover.attr('data-src'));
-                audio.hide();
             }
 
             return this;
@@ -169,7 +185,7 @@ define('io.ox/core/viewer/views/types/audioview', [
          */
         disposeView: function () {
             // remove event listeners from audio element and cover image
-            this.$el.find('audio, img.cover').off();
+            this.$el.find('audio, img.cover, .play-button').off();
             this.disposeElement();
         }
 

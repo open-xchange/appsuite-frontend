@@ -88,7 +88,7 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
                 var goToDestination = function (destRef) {
                     // dest array looks like that: <page-ref> </XYZ|FitXXX> <args..>
                     var pageNumber = destRef instanceof Object ?
-                            self._pagesRefCache[destRef.num + ' ' + destRef.gen + ' R'] : (destRef + 1);
+                        self._pagesRefCache[destRef.num + ' ' + destRef.gen + ' R'] : (destRef + 1);
 
                     if (pageNumber) {
                         if (pageNumber > self.pagesCount) {
@@ -142,7 +142,7 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
                 if (dest instanceof Array) {
                     var destRef = dest[0]; // see navigateTo method for dest format
                     var pageNumber = destRef instanceof Object ?
-                            this._pagesRefCache[destRef.num + ' ' + destRef.gen + ' R'] : (destRef + 1);
+                        this._pagesRefCache[destRef.num + ' ' + destRef.gen + ' R'] : (destRef + 1);
 
                     if (pageNumber) {
                         var pdfOpenParams = this.getAnchorUrl('#page=' + pageNumber);

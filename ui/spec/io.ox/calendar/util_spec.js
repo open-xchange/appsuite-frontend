@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
-define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
+define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], function (util, moment, models) {
 
     'use strict';
 
@@ -19,29 +19,46 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
         describe('can convert timestamp to even smarter dates', function () {
 
-            var testDate = moment(),
-                data = {
-                    full_time: false
-                };
+            var model;
+
+            beforeEach(function () {
+                model = new models.Model({ id: '1234567' });
+            });
 
             it('yesterday', function () {
-                data.start_date = testDate.subtract(1, 'day').valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format('l'));
+                var date = moment().subtract(1, 'day');
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: 'Europe/Berlin'
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('Gestern, ' + date.format('l'));
             });
 
             it('same day', function () {
-                data.start_date = testDate.add(1, 'day').valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format('l'));
+                var date = moment();
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: 'Europe/Berlin'
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('Heute, ' + date.format('l'));
             });
 
             it('tomorrow', function () {
-                data.start_date = testDate.add(1, 'day').valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format('l'));
+                var date = moment().add(1, 'day');
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: 'Europe/Berlin'
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('Morgen, ' + date.format('l'));
             });
 
             it('date in the past', function () {
-                data.start_date = testDate.set({ 'year': 2012, 'month': 10, 'date': 11 }).valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('So., 11.11.2012');
+                var date = moment().set({ 'year': 2012, 'month': 10, 'date': 11 });
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: 'Europe/Berlin'
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('So., 11.11.2012');
             });
 
         });
@@ -53,13 +70,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
 
             it('same day', function () {
-                var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('So., 11.11.2012');
+                expect(util.getDateInterval({ startDate: { value: '20121111' }, endDate: { value: '20121112' } })).to.equal('So., 11.11.2012');
             });
 
             it('one week difference', function () {
-                var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
+                expect(util.getDateInterval({ startDate: { value: '20121111' }, endDate: { value: '20121119' } })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -71,13 +86,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
 
             it('same time', function () {
-                var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('11:11');
+                expect(util.getTimeInterval({ startDate: { value: '20121111T111100' }, endDate: { value: '20121111T111100' } })).to.equal('11:11');
             });
 
             it('same day', function () {
-                var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11 Uhr');
+                expect(util.getTimeInterval({ startDate: { value: '20121111T111100' }, endDate: { value: '20121111T121100' } })).to.equal('11:11\u201312:11 Uhr');
             });
 
         });
@@ -86,29 +99,28 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('object', function () {
                 var result = {
-                    '-1': 'Keine Erinnerung',
-                    0: '0 Minuten',
-                    5: '5 Minuten',
-                    10: '10 Minuten',
-                    15: '15 Minuten',
-                    30: '30 Minuten',
-                    45: '45 Minuten',
-                    60: '1 Stunde',
-                    120: '2 Stunden',
-                    240: '4 Stunden',
-                    360: '6 Stunden',
-                    480: '8 Stunden',
-                    720: '12 Stunden',
-                    1440: '1 Tag',
-                    2880: '2 Tage',
-                    4320: '3 Tage',
-                    5760: '4 Tage',
-                    7200: '5 Tage',
-                    8640: '6 Tage',
-                    10080: '1 Woche',
-                    20160: '2 Wochen',
-                    30240: '3 Wochen',
-                    40320: '4 Wochen'
+                    'PT0M': '0 Minuten',
+                    'PT5M': '5 Minuten',
+                    'PT10M': '10 Minuten',
+                    'PT15M': '15 Minuten',
+                    'PT30M': '30 Minuten',
+                    'PT45M': '45 Minuten',
+                    'PT1H': '1 Stunde',
+                    'PT2H': '2 Stunden',
+                    'PT4H': '4 Stunden',
+                    'PT6H': '6 Stunden',
+                    'PT8H': '8 Stunden',
+                    'PT12H': '12 Stunden',
+                    'P1D': '1 Tag',
+                    'P2D': '2 Tage',
+                    'P3D': '3 Tage',
+                    'P4D': '4 Tage',
+                    'P5D': '5 Tage',
+                    'P6D': '6 Tage',
+                    'P1W': '1 Woche',
+                    'P2W': '2 Wochen',
+                    'P3W': '3 Wochen',
+                    'P4W': '4 Wochen'
                 };
                 expect(util.getReminderOptions()).to.deep.equal(result);
             });
@@ -388,89 +400,319 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
         });
 
+        describe('updates recurrence patterns on date change', function () {
+
+            it('shifts single day', function () {
+                // originally on 12/04/2017 and repeated monday, wednesday and friday
+                var event = new models.Model({
+                    startDate: {
+                        value: '20171204T130000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    rrule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR'
+                });
+
+                // change to 12/08/2017
+                event.set('startDate', {
+                    value: '20171208T130000',
+                    tzid: 'Europe/Berlin'
+                });
+
+                util.updateRecurrenceDate(event, moment('20171204T130000'));
+
+                // repeated days should have changed to friday, sunday and tuesday
+                expect(event.get('rrule')).to.equal('FREQ=WEEKLY;BYDAY=SU,TU,FR');
+            });
+
+            it('shifts multiple weeks', function () {
+                // originally on 12/04/2017 and repeated monday, wednesday and friday
+                var event = new models.Model({
+                    startDate: {
+                        value: '20171204T130000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    rrule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR'
+                });
+
+                // change to 11/16/2017
+                event.set('startDate', {
+                    value: '20171116T130000',
+                    tzid: 'Europe/Berlin'
+                });
+
+                util.updateRecurrenceDate(event, moment('20171204T130000'));
+
+                // repeated days should have changed to monday, thursday and saturday
+                expect(event.get('rrule')).to.equal('FREQ=WEEKLY;BYDAY=MO,TH,SA');
+            });
+        });
+
         describe('can compute folder color', function () {
             describe('resolves folder color', function () {
-                it('without meta', function () {
-                    expect(util.getFolderColor({})).to.equal(1);
+                it('without color label', function () {
+                    var defaultColor = util.colors[6].value;
+                    expect(util.getFolderColor({})).to.equal(defaultColor);
                 });
-                it('with meta but without color label', function () {
-                    expect(util.getFolderColor({ meta: {} })).to.equal(1);
-                });
-                it('with meta and color label', function () {
-                    expect(util.getFolderColor({ meta: { color_label: 4 } })).to.equal(4);
+                it('with color label', function () {
+                    expect(util.getFolderColor({ 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } })).to.equal('lightblue');
                 });
             });
-            describe('resolve appointment color class', function () {
+            describe('resolve appointment color', function () {
                 it('with appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ flags: ['accepted'] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('lightblue');
                 });
                 it('with appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
                 it('with private appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ flags: ['confidential', 'accepted'] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#616161');
                 });
 
                 it('with private appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['confidential', 'accepted'] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
                 it('with shared unconfirmed appointment', function () {
-                    var folder = { meta: { color_label: 2 }, type: 3 },
-                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } }, type: 3 },
+                        appointment = new models.Model({ createdBy: 377, flags: ['needs-action'] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('');
                 });
                 it('with public folder', function () {
-                    var folder = { meta: { color_label: 2 }, type: 2 },
-                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } }, type: 2 },
+                        appointment = new models.Model({ createdBy: 377, flags: ['accepted'] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('lightblue');
                 });
             });
             describe('detects, if appointment is editable', function () {
                 it('with appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ flags: ['accepted'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
                 });
                 it('with appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ flags: ['accepted', 'confidential'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'confidential'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with shared unconfirmed appointment', function () {
-                    var folder = { meta: { color_label: 2 }, type: 3 },
-                        appointment = { color_label: 2, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+                    var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } }, type: 3 },
+                        appointment = new models.Model({ color: '#aabbcc', createdBy: 377, flags: ['needs-action'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
+            });
+        });
+
+        describe('can compute color to hex', function () {
+            it('converts rgb colors', function () {
+                expect(util.colorToHex('rgb(23, 167, 237)')).to.equal(1550317);
+            });
+            it('converts rgba colors', function () {
+                expect(util.colorToHex('rgba(23, 167, 237, 80)')).to.equal(1550317);
+            });
+            it('converts hsl colors', function () {
+                expect(util.colorToHex('hsl(195, 53%, 79%)')).to.equal(11393254);
+            });
+            it('converts colors by name', function () {
+                expect(util.colorToHex('lightblue')).to.equal(11393254);
+            });
+        });
+
+        it('converts hex (as number) to hsl', function () {
+            expect(util.hexToHSL(0xadd8e6)).to.deep.equal([194, 53, 79]);
+        });
+
+        it('computes relative luminance', function () {
+            expect(util.getRelativeLuminance(util.colorToRGB('white'))).to.equal(1);
+            expect(util.getRelativeLuminance(util.colorToRGB('black'))).to.equal(0);
+            expect(util.getRelativeLuminance(util.colorToRGB('#aaaaaa'))).to.equal(0.4019777798321958);
+            expect(util.getRelativeLuminance(util.colorToRGB('#3c61aa'))).to.equal(0.12412326645354393);
+        });
+
+        it('computes foreground color for background-color with an appropriate contrast ratio', function () {
+
+            function contrast(bg, fg) {
+                var bgLuminance = util.getRelativeLuminance(bg),
+                    fgLuminance = util.getRelativeLuminance(util.colorToRGB(fg));
+                return (Math.max(fgLuminance, bgLuminance) + 0.05) / (Math.min(fgLuminance, bgLuminance) + 0.05);
+            }
+
+            // yellow
+            expect(contrast([255, 255, 0], util.getForegroundColor('rgb(255, 255, 0)')), 'yellow').to.be.above(4.5);
+            // red
+            expect(contrast([255, 0, 0], util.getForegroundColor('rgb(255, 0, 0)')), 'red').to.be.above(4.5);
+            // blue
+            expect(contrast([0, 0, 255], util.getForegroundColor('rgb(0, 0, 255)')), 'blue').to.be.above(4.5);
+            // black
+            expect(contrast([0, 0, 0], util.getForegroundColor('rgb(0, 0, 0)')), 'black').to.be.above(4.5);
+            // white
+            expect(contrast([255, 255, 255], util.getForegroundColor('rgb(255, 255, 255)')), 'white').to.be.above(4.5);
+            // transparent (expect white background)
+            expect(contrast([255, 255, 255], util.getForegroundColor('transparent')), 'transparent').to.be.above(4.5);
+        });
+
+    });
+
+    describe('createAttendee', function () {
+
+        // partial user object
+        var testUser = {
+                contact_id: 123456,
+                display_name: 'Test, Miss',
+                email1: 'miss.test@test.com',
+                first_name: 'Miss',
+                folder_id: 123,
+                id: 1337,
+                last_name: 'Test',
+                user_id: 1337
+            },
+            testUserResult = {
+                cuType: 'INDIVIDUAL',
+                cn: 'Test, Miss',
+                partStat: 'NEEDS-ACTION',
+                entity: 1337,
+                email: 'miss.test@test.com',
+                uri: 'mailto:miss.test@test.com',
+                contactInformation: {
+                    folder: 123,
+                    contact_id: 123456
+                },
+                contact: {
+                    display_name: 'Test, Miss',
+                    first_name: 'Miss',
+                    last_name: 'Test'
+                }
+            },
+            // test resource object
+            testResource = {
+                description: 'Now with 20% more PEW PEW',
+                display_name: 'Deathstar',
+                email1: '',
+                id: 319,
+                type: 3
+            },
+            testResourceResult = {
+                cn: 'Deathstar',
+                comment: 'Now with 20% more PEW PEW',
+                cuType: 'RESOURCE',
+                entity: 319,
+                partStat: 'ACCEPTED',
+                resource: _.clone(testResource)
+            },
+            // test contact object
+            testContact = {
+                display_name: 'Smith, Hannibal',
+                email1: 'hannibal@a.team',
+                first_name: 'Hannibal',
+                folder_id: 123,
+                id: 1337,
+                internal_userid: 0,
+                last_name: 'Smith',
+                type: 5
+            },
+            testContactResult = {
+                cn: 'Smith, Hannibal',
+                cuType: 'INDIVIDUAL',
+                email: 'hannibal@a.team',
+                partStat: 'NEEDS-ACTION',
+                uri: 'mailto:hannibal@a.team',
+                contactInformation: {
+                    folder: 123,
+                    contact_id: 1337
+                },
+                contact: {
+                    display_name: 'Smith, Hannibal',
+                    first_name: 'Hannibal',
+                    last_name: 'Smith'
+                }
+            },
+            // input from addParticipants for external contacts not in your gab
+            inputFragment = {
+                display_name: 'vader',
+                email1: 'vader@dark.side',
+                field: 'email1',
+                type: 5
+            };
+
+        it('should return undefined if no argument is given', function () {
+            expect(util.createAttendee()).to.equal(undefined);
+        });
+
+        it('should work with user object', function () {
+            util.createAttendee(testUser).should.deep.equal(testUserResult);
+        });
+
+        it('should work with user model', function () {
+            util.createAttendee(new Backbone.Model(testUser)).should.deep.equal(testUserResult);
+        });
+
+        it('should work with contact object', function () {
+            util.createAttendee(testContact).should.deep.equal(testContactResult);
+        });
+
+        it('should work with contact model', function () {
+            util.createAttendee(new Backbone.Model(testContact)).should.deep.equal(testContactResult);
+        });
+
+        it('should handle resources correctly', function () {
+            util.createAttendee(testResource).should.deep.equal(testResourceResult);
+            util.createAttendee(new Backbone.Model(testResource)).should.deep.equal(testResourceResult);
+        });
+
+        it('should add predefined values', function () {
+            var result = _.copy(testUserResult);
+            result.partStat = 'ACCEPTED';
+            util.createAttendee(testUser, { partStat: 'ACCEPTED' }).should.deep.equal(result);
+        });
+
+        it('should resolve distribution lists', function () {
+            util.createAttendee({ mark_as_distributionlist: true, distribution_list: [testUser, testContact] }, { partStat: 'ACCEPTED' }).should.deep.equal([testUserResult, testContactResult]);
+        });
+
+        it('should work with input fragments created by addParticipants autocomplete', function () {
+            util.createAttendee(inputFragment).should.deep.equal({
+                cn: 'vader',
+                cuType: 'INDIVIDUAL',
+                email: 'vader@dark.side',
+                partStat: 'NEEDS-ACTION',
+                uri: 'mailto:vader@dark.side',
+                contactInformation: {
+                    folder: undefined,
+                    contact_id: undefined
+                },
+                contact: {
+                    display_name: 'vader',
+                    first_name: undefined,
+                    last_name: undefined
+                }
             });
         });
     });

@@ -138,7 +138,7 @@ define('io.ox/search/api', [
             // }
             // call server
             return http[opt.method](opt)
-                    .then(simpleCache.add.bind(this, key));
+                .then(simpleCache.add.bind(this, key));
         });
     };
 

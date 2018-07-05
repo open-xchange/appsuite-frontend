@@ -73,7 +73,14 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             });
 
             // track completeness
-            var complete = (type === 'load' && data.length < PAGE_SIZE) || (type === 'paginate' && data.length <= 1);
+            var complete = collection.complete;
+            if (type === 'load') {
+                complete = data.length < PAGE_SIZE;
+            } else if (type === 'paginate') {
+                // the first data element is the last currently visible element
+                // in the list, therefore <=1 is already complete
+                complete = data.length <= 1;
+            }
             if (complete !== collection.complete) {
                 collection.complete = complete;
                 collection.trigger('complete', complete);
@@ -173,7 +180,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
     }
 
     function map(key) {
-        return key + '=' + this[key];
+        var value = this[key];
+        return key + '=' + (_.isString(value) ? value : JSON.stringify(value));
     }
 
     _.extend(CollectionLoader.prototype, {
@@ -232,7 +240,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         fetch: function (params) {
 
             var module = this.module,
-                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
+                key = module + '/' + _.cacheKey(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
                 noSelect = this.noSelect(params),
                 virtual = this.virtual(params),

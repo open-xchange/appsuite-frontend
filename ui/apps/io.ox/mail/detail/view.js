@@ -20,14 +20,13 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/api/collection-pool',
     'io.ox/mail/detail/content',
     'io.ox/core/extPatterns/links',
-    'io.ox/core/emoji/util',
     'io.ox/core/a11y',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, shadowStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, a11y, gt, contentStyle) {
 
     'use strict';
 
@@ -50,14 +49,11 @@ define('io.ox/mail/detail/view', [
         index: INDEX += 100,
         draw: function (baton) {
 
-            var subject = util.getSubject(baton.data),
-                node = $('<h1 class="subject">').text(subject);
+            var subject = util.getSubject(baton.data);
 
-            emoji.processEmoji(_.escape(subject), function (html) {
-                node.html(html);
-            });
-
-            this.append(node);
+            this.append(
+                $('<h1 class="subject">').text(subject)
+            );
         }
     });
 
@@ -72,6 +68,29 @@ define('io.ox/mail/detail/view', [
     });
 
     var INDEX_header = 0;
+
+    ext.point('io.ox/mail/detail/header').extend({
+        id: 'threadcontrol',
+        index: INDEX_header += 100,
+        draw: function (baton) {
+            var data = baton.data,
+                subject = util.getSubject(data),
+                title = util.hasFrom(data) ?
+                    //#. %1$s: Mail sender
+                    //#. %2$s: Mail subject
+                    gt('Email from %1$s: %2$s', util.getDisplayName(data.from[0]), subject) : subject;
+            this.append(
+                $('<h2 class="toggle-mail-body">').append(
+                    $('<button type="button" class="toggle-mail-body-btn">')
+                        .attr('aria-expanded', baton.view.$el.hasClass('expanded'))
+                        .append(
+                            $('<span class="sr-only">').text(title)
+                        )
+                )
+            );
+        }
+    });
+
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'picture',
@@ -96,7 +115,7 @@ define('io.ox/mail/detail/view', [
     ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
         index: _.device('smartphone') ? 50 : INDEX_header += 100,
-        classes: _.device('smartphone') ? '' : 'actions pull-right',
+        classes: _.device('smartphone') ? '' : 'actions',
         label: gt('Actions'),
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
@@ -188,8 +207,21 @@ define('io.ox/mail/detail/view', [
         id: 'default',
         index: 100,
         draw: function (baton) {
+            var data = baton.data, from = data.from || [],
+                status = util.authenticity('via', data);
 
-            var data = baton.data, from = data.from || [];
+            if (status && baton.data.authenticity && baton.data.authenticity.domain_mismatch && baton.data.authenticity.from_domain) {
+                this.append(
+                    $('<div class="sender">').append(
+                        $('<span class="io-ox-label">').append(
+                            //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+                            $.txt(gt('Via')),
+                            $.txt('\u00A0\u00A0')
+                        ),
+                        $('<span class="address">').text(baton.data.authenticity.from_domain)
+                    )
+                );
+            }
 
             // add 'on behalf of'?
             if (!('headers' in data)) return;
@@ -257,26 +289,6 @@ define('io.ox/mail/detail/view', [
         }
     );
 
-    // Inplace/quick reply
-
-    ext.point('io.ox/mail/detail').extend({
-        id: 'inplace-reply',
-        index: INDEX += 100,
-        draw: function (baton) {
-
-            var model = baton.model;
-
-            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
-                if (!InplaceReplyView.hasDraft(model.cid)) return;
-                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
-                // trigger click to open
-                baton.view.$('.detail-view-header').click();
-                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
-                model = null;
-            });
-        }
-    });
-
     ext.point('io.ox/mail/detail').extend({
         id: 'notifications',
         index: INDEX += 100,
@@ -305,10 +317,17 @@ define('io.ox/mail/detail/view', [
 
     var INDEX_notifications = 0;
 
+
     ext.point('io.ox/mail/detail/notifications').extend({
         id: 'phishing',
         index: INDEX_notifications += 100,
         draw: extensions.phishing
+    });
+
+    ext.point('io.ox/mail/detail/notifications').extend({
+        id: 'authenticity',
+        index: INDEX_notifications += 100,
+        draw: extensions.authenticity
     });
 
     ext.point('io.ox/mail/detail/notifications').extend({
@@ -323,6 +342,12 @@ define('io.ox/mail/detail/view', [
         draw: extensions.externalImages
     });
 
+    ext.point('io.ox/mail/detail/notifications').extend({
+        id: 'disabled-links',
+        index: INDEX_notifications += 100,
+        draw: extensions.disabledLinks
+    });
+
     ext.point('io.ox/mail/detail').extend({
         id: 'error',
         index: INDEX += 100,
@@ -331,36 +356,165 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+
     ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
         draw: function () {
-            var $body;
             this.append(
                 $('<section class="attachments">'),
                 // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text focusable" tabindex="-1">')
+                $('<section class="body user-select-text focusable" tabindex="-1">')
             );
-            // rendering mails in chrome is slow if we do not use a shadow dom
-            if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
-                $body[0].createShadowRoot();
-                $body.addClass('shadow-root-container');
+        }
+    });
+
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'iframe',
+        index: 100,
+        draw: function (baton) {
+            // "//:0" does not work for src as IE 11 goes crazy when loading the frame
+            var iframe = $('<iframe src="" class="mail-detail-frame">').attr('title', gt('Email content'));
+            ext.point('io.ox/mail/detail/body/iframe').invoke('draw', iframe, baton);
+            this.idle().append(iframe);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'content-flags',
+        index: 200,
+        draw: function (baton) {
+            if (!baton.content) return;
+            var $content = $(baton.content);
+            this.closest('article')
+                .toggleClass('content-links', !!$content.find('a').length);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/body/iframe').extend({
+        id: 'content',
+        index: 100,
+        draw: function (baton) {
+
+            baton.content = content.get(baton.data, {}, baton.flow).content;
+            var $content = $(baton.content), resizing = 0;
+
+            // inject content and listen to resize event
+            this.on('load', function () {
+                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
+                _.defer(function () {
+
+                    // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
+                    var html = $(this.contentDocument).find('html');
+                    if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
+                    // trigger click on body when theres a click in the iframe -> to close dropdownscorrectly etc
+                    html.on('click', function () {
+                        $('body').trigger('click');
+                    });
+
+                    $(this.contentDocument)
+                        .find('head').append('<style>' + contentStyle + '</style>').end()
+                        .find('body').append($content);
+                    $(this.contentWindow)
+                        .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
+                        .on('resize', { iframe: $(this) }, onWindowResize)
+                        .trigger('resize');
+                }.bind(this));
+            });
+
+            function onImmediateResize(e) {
+                // scrollHeight consdiers paddings, border, and margins
+                // set height for iframe and its parent
+                e.data.iframe.parent().addBack().height(this.document.body.scrollHeight);
             }
-            $body.on('dispose', function () {
-                var $content = $(this.shadowRoot || this);
-                if ($content[0] && $content[0].children.length > 0) {
-                    //cleanup content manually, since this subtree might get very large
-                    //content only contains the mail and should not have any handlers assigned
-                    //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
-                    $content[0].innerHTML = '';
-                }
+
+            function onWindowResize(e) {
+                // avoid event-based recursion
+                if (resizing <= 0) resizing = 2; else return;
+                // revert outer size to support shrinking
+                e.data.iframe.height('');
+                onImmediateResize.call(this, e);
+                // we need to wait until allowing further resize events
+                // setTimeout is bad because we don't know how long to wait exactly
+                // requestAnimationFrame seems to be the proper tool
+                // we will have two events so we use a countdown to track this
+                this.requestAnimationFrame(function () { resizing--; });
+            }
+
+            // track images since they can change dimensions
+            $content.find('img').on('load error', function () {
+                $(this).off().trigger('complete');
+            });
+
+            // remove event handlers on dispose
+            this.on('dispose', function () {
+                $(this.contentWindow).off();
             });
         }
     });
 
+    ext.point('io.ox/mail/detail/body/iframe').extend({
+        id: 'events',
+        index: 200,
+        draw: function () {
+            this.on('load', function () {
+                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
+                _.defer(function () {
+                    var html = $(this.contentDocument).find('html'),
+                        targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
+                    // forward deep link clicks from iframe scope to document-wide handlers
+                    html.on('click', targets, function (e) {
+                        ox.trigger('click:deep-link-mail', e, this);
+                    });
+                }.bind(this));
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/detail/body/iframe').extend({
+        id: 'max-size',
+        index: 1200,
+        after: 'content',
+        draw: function (baton) {
+
+            this.on('load', function () {
+                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
+                _.defer(function () {
+
+                    var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
+                    if (!isTruncated) return;
+
+                    var url = 'api/mail?' + $.param({
+                        action: 'get',
+                        view: 'document',
+                        forceImages: true,
+                        folder: baton.data.folder_id,
+                        id: baton.data.id,
+                        session: ox.session
+                    });
+
+                    $(this.contentDocument)
+                        .find('body .mail-detail-content')
+                        .append(
+                            $('<div class="max-size-warning">').append(
+                                $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
+                                $('<a role="button" target="_blank">').attr('href', url).text(
+                                    // external images shown?
+                                    baton.model.get('modified') !== 1 ?
+                                        gt('Show entire message') :
+                                        gt('Show entire message including all external images')
+                                )
+                            )
+                        );
+                }.bind(this));
+            });
+        }
+    });
+
+
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
-        index: 100,
+        index: 200,
         draw: function (baton) {
             if (baton.attachments.length === 0) return;
             // reuse existing view, to not duplicate event listeners
@@ -370,82 +524,13 @@ define('io.ox/mail/detail/view', [
                 baton.view.attachmentView.renderInlineLinks();
             } else {
                 baton.view.attachmentView = extensions.attachmentList.call(this, baton);
-            }
-        }
-    });
-
-    ext.point('io.ox/mail/detail/body').extend({
-        id: 'content',
-        index: 1000,
-        draw: function (baton) {
-
-            var data = content.get(baton.data),
-                node = data.content;
-
-            if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.innerHTML, function (html, lib) {
-                    baton.processedEmoji = !lib.loaded;
-                    if (baton.processedEmoji) return;
-                    node.innerHTML = html;
+                baton.view.listenTo(baton.view.attachmentView, 'dispose', function () {
+                    delete baton.view.attachmentView;
                 });
             }
-
-            if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
-                var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
-                    return require('css!' + point.css).clone();
-                }).value();
-                this.prepend(emojiStyles);
-            }
-            // restore height or set minimum height of 100px
-            $(node).css('min-height', baton.model.get('visualHeight') || 100);
-            // add to DOM
-            this.idle().append(node);
-            // ensure, that the scrollable is a lazyload scrollpane
-            if (this[0] && this[0].host) {
-                // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
-                $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
-                // copy events
-                _($._data(document).events.click).each(function (e) {
-                    if (!e.namespace && e.selector) $(node).on('click', e.selector, e.handler);
-                });
-            } else {
-                this.closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
-            }
-            // now remember height
-            baton.model.set('visualHeight', $(node).height(), { silent: true });
         }
     });
 
-    ext.point('io.ox/mail/detail/body').extend({
-        id: 'max-size',
-        after: 'content',
-        draw: function (baton) {
-
-            var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
-            if (!isTruncated) return;
-
-            var url = 'api/mail?' + $.param({
-                action: 'get',
-                view: 'document',
-                forceImages: true,
-                folder: baton.data.folder_id,
-                id: baton.data.id,
-                session: ox.session
-            });
-
-            this.append(
-                $('<div class="max-size-warning">').append(
-                    $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
-                    $('<a role="button" target="_blank">').attr('href', url).text(
-                        // external images shown?
-                        baton.model.get('modified') !== 1 ?
-                            gt('Show entire message') :
-                            gt('Show entire message including all external images')
-                    )
-                )
-            );
-        }
-    });
 
     var pool = Pool.create('mail');
 
@@ -456,6 +541,7 @@ define('io.ox/mail/detail/view', [
         events: {
             'keydown': 'onToggle',
             'click .detail-view-header': 'onToggle',
+            'click .toggle-mail-body-btn': 'onToggle',
             'click a[data-action="retry"]': 'onRetry'
         },
 
@@ -486,6 +572,7 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeSecurity: function () {
+            if (_.device('small')) return;  // Need to redraw action links on desktop only
             var data = this.model.toJSON(),
                 baton = ext.Baton({
                     view: this,
@@ -498,11 +585,7 @@ define('io.ox/mail/detail/view', [
         },
 
         getEmptyBodyNode: function () {
-            // get shadow DOM or body node
-            var body = this.$el.find('section.body'),
-                shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + shadowStyle + '</style>'; else body.empty();
-            return $(shadowRoot || body);
+            return this.$el.find('section.body').empty();
         },
 
         onChangeSubject: function () {
@@ -522,6 +605,7 @@ define('io.ox/mail/detail/view', [
                 body = this.$el.find('section.body'),
                 node = this.getEmptyBodyNode(),
                 view = this;
+            baton.disable(this.options.disable);
             // set outer height & clear content
             body.css('min-height', this.model.get('visualHeight') || null);
             // draw
@@ -549,10 +633,12 @@ define('io.ox/mail/detail/view', [
             // this is required even if a-tags are tabbable elements since some links are removed from dom on click
             if ($(e.target).closest('a').length) return;
 
-            // ignore clicks on tabbable elements
-            var tabbable = a11y.getTabbable(this.$el);
-            if (tabbable.index(e.target) >= 0) return;
-            if (tabbable.find($(e.target)).length) return;
+            if (!$(e.currentTarget).hasClass('toggle-mail-body-btn')) {
+                // ignore clicks on tabbable elements
+                var tabbable = a11y.getTabbable(this.$el);
+                if (tabbable.index(e.target) >= 0) return;
+                if (tabbable.find($(e.target)).length) return;
+            }
 
             // ignore click on dropdowns
             if ($(e.target).hasClass('dropdown-menu')) return;
@@ -567,8 +653,7 @@ define('io.ox/mail/detail/view', [
             this.$el.find('.collapsed-blockquote').hide();
             this.$el.find('.blockquote-toggle').show();
 
-            var cid = $(e.currentTarget).closest('li').data('cid');
-            this.toggle(cid);
+            this.toggle();
         },
 
         onRetry: function (e) {
@@ -580,9 +665,7 @@ define('io.ox/mail/detail/view', [
 
         onUnseen: function () {
             var data = this.model.toJSON();
-            if (!util.isToplevel(data)) return;
-            if (this.options.app && this.options.app.props.get('sort') === 651) return;
-            api.markRead(data);
+            if (util.isToplevel(data)) api.markRead(data);
         },
 
         onLoad: function (data) {
@@ -604,6 +687,7 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
+            if (data && (data.security || data.security_info)) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {
@@ -628,15 +712,12 @@ define('io.ox/mail/detail/view', [
         },
 
         toggle: function (state) {
-            var $li = this.$el;
+            var $li = this.$el,
+                $button = $li.find('.toggle-mail-body-btn');
 
-            if (state === undefined) {
-                $li.toggleClass('expanded');
-                $li.attr('aria-expanded', !$li.attr('aria-expanded'));
-            } else {
-                $li.toggleClass('expanded', state);
-                $li.attr('aria-expanded', state);
-            }
+            $li.toggleClass('expanded', state);
+
+            $button.attr('aria-expanded', $li.hasClass('expanded'));
 
             // trigger DOM event that bubbles
             this.$el.trigger('toggle');
@@ -652,19 +733,20 @@ define('io.ox/mail/detail/view', [
                     var cid = _.cid(this.model.cid);
                     // check if we have a nested email here, those are requested differently
                     if (_(cid).size() === 1 && cid.id !== undefined && this.model.has('parent')) {
-                        api.getNestedMail(this.model.attributes).then(
+                        api.getNestedMail(this.model.attributes).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        var data = { id: this.model.get('id'), folder_id: this.model.get('folder_id') };
-                        if (this.options.app && this.options.app.props.get('sort') === 651) data.unseen = true;
-                        api.get(data).then(
+                        api.get(cid).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
                     }
                 }
+            } else if ($li.hasClass('expanded')) {
+                // trigger resize to restart resizeloop
+                this.$el.find('.mail-detail-frame').contents().find('.mail-detail-content').trigger('resize');
             }
 
             return this;
@@ -706,31 +788,15 @@ define('io.ox/mail/detail/view', [
         },
 
         render: function () {
-
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, model: this.model, view: this }),
-                subject = util.getSubject(data),
-                title = util.hasFrom(data) ?
-                    //#. %1$s: Mail sender
-                    //#. %2$s: Mail subject
-                    gt('Email from %1$s: %2$s', util.getDisplayName(data.from[0]), subject) : subject;
+                baton = ext.Baton({ data: data, model: this.model, view: this });
 
             // disable extensions?
-            _(this.options.disable).each(function (extension, point) {
-                if (_.isArray(extension)) {
-                    _(extension).each(function (ext) {
-                        baton.disable(point, ext);
-                    });
-                } else {
-                    baton.disable(point, extension);
-                }
-            });
+            baton.disable(this.options.disable);
 
             this.$el.attr({
                 'data-cid': this.model.cid,
-                'aria-expanded': 'false',
-                'data-loaded': 'false',
-                'aria-label': title
+                'data-loaded': 'false'
             });
 
             this.$el.data({ view: this, model: this.model });

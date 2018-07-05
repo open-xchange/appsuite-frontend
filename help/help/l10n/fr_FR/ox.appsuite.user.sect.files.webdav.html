@@ -1,13 +1,13 @@
 <html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.7. Accéder aux fichiers avec WebDAV</title>
+<title>9.8. Accéder aux fichiers avec WebDAV</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Manuel de l'utilisateur">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapitre 9. Fichiers">
-<link rel="prev" href="ox.appsuite.user.sect.files.search.html" title="9.6. Rechercher des fichiers">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.7.1. Configurer WebDAV sous Linux">
+<link rel="prev" href="ox.appsuite.user.sect.files.search.html" title="9.7. Rechercher des fichiers">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.8.1. Configurer WebDAV sous Linux">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,14 +31,14 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Fichiers</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.files.webdav">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.7. Accéder aux fichiers avec WebDAV</h2></div></div></div>
-<a class="indexterm" name="id-1.10.13.2"></a><a class="indexterm" name="id-1.10.13.3"></a><a class="indexterm" name="id-1.10.13.4"></a><div class="concept">
-<a name="ox.appsuite.user.concept.files.webdav"></a><p id="ox.appsuite.user.concept.files.webdav">WebDAV vous permet d'accéder aux fichiers de l'app <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span> comme si vous accédiez à des fichiers locaux sur votre disque dur. Comparé à l'accès au travers de l'interface graphique du logiciel de travail collaboratif, WebDAV présente à la fois des avantages et des inconvénients :</p>
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.8. Accéder aux fichiers avec WebDAV</h2></div></div></div>
+<a class="indexterm" name="id-1.10.14.2"></a><a class="indexterm" name="id-1.10.14.3"></a><a class="indexterm" name="id-1.10.14.4"></a><div class="concept">
+<a name="ox.appsuite.user.concept.files.webdav"></a><p id="ox.appsuite.user.concept.files.webdav">WebDAV vous permet d'accéder aux fichiers de l'app <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span> comme si vous accédiez à des fichiers locaux sur votre disque dur. Comparé à l'accès parl'interface graphique du collecticiel, WebDAV présente à la fois des avantages et des inconvénients :</p>
 <ul class="itemizedlist compact" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">L'avantage de WebDAV est qu'il donne un accès direct et rapide à travers un navigateur de fichiers, par exemple l'explorateur Windows. Il n'y a pas besoin de se connecter à l'interface graphique du collecticiel.</p></li>
-<li class="listitem"><p role="presentation">L'inconvénient est que l'on ne voit que la version actuelle du document. On ne voit ni l'historique des versions, ni les informations supplémentaires, comme les commentaires.</p></li>
+<li class="listitem"><p role="presentation">L'inconvénient est que l'on ne voit que la version actuelle du document. Ni l'historique des versions, ni les informations supplémentaires du type commentaires ne sont visibles.</p></li>
 </ul>
-<p> <span class="phrase"><strong>Attention :</strong></span> si vous supprimez un fichier avec WebDAV, toutes ses versions seront perdues, pas seulement sa version actuelle. <span class="phrase"><strong>Remarque :</strong></span> pour créer des objets à travers WebDAV dans un dossier public ou partagé, vous devez avoir sur ce dossier au moins les droits d'accès suivants : créer des objets, modifier ses propres objets. Pour pouvoir aussi lire vos propres objets, vous devez également avoir le droit correspondant. Vous trouverez plus d'informations sur les droits d'accès dans <a class="xref" href="ox.appsuite.user.sect.dataorganisation.permissions.html">11.2: Droits</a>.</p>
+<p> <span class="phrase"><strong>Attention :</strong></span> si vous supprimez un fichier avec WebDAV, toutes ses versions seront perdues, pas seulement sa version actuelle. <span class="phrase"><strong>Remarque :</strong></span> pour créer des objets à travers WebDAV dans un dossier public ou partagé, vous devez avoir sur ce dossier au moins les droits d'accès suivants : créer des objets, modifier ses propres objets. Pour pouvoir aussi lire vos propres objets, vous devez également avoir le droit correspondant. Vous trouverez plus d'informations sur les droits d'accès dans <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">10.2.8: Quels droits peuvent être accordés ?</a>.</p>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.files.webdav.setup"></a><p id="ox.appsuite.user.concept.files.webdav.setup">Avant de pouvoir accéder aux fichiers des apps <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span> depuis un navigateur de fichiers, par exemple depuis l'explorateur de Windows, vous devez configurer l'accès WebDAV. Suivant votre système, la marche à suivre est différente :</p>

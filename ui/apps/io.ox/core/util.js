@@ -35,13 +35,13 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
     //     index: 200,
     //     draw: function () {
     //         this.prepend(
-    //             $('<span class="fa fa-circle" style="display: inline-block; font-size: 90%; float: none; margin-right: 0.5em;">')
+    //             $('<span class="fa fa-circle" style="display: inline-block; font-size: 90%; float: none; margin-right: 0.5em;" aria-hidden="true">')
     //             .css('color', '#c00 #77AC40 #F89406 #ccc'.split(' ')[Math.random() * 4 >> 0])
     //         );
     //     }
     // });
 
-    var regUrl = /((https?|ftps?)\:\/\/[^\s"]+)/gim;
+    var regUrl = /((https?|ftps?):\/\/[^\s"]+)/gim;
 
     var that = {
 
@@ -65,7 +65,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
 
             var halo = {
                 // alternative fields to get the name
-                name: options.full_name || options.display_name || options.name,
+                name: options.full_name || options.display_name || options.name || options.cn || options.email,
                 // halo view looks for email1
                 email: options.email,
                 email1: options.email,
@@ -80,8 +80,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
             // get node
             var node = options.$el || (
                 halo.email || halo.user_id ?
-                $('<a href="#" role="button" class="halo-link">').attr('title', halo.email).data(halo) :
-                $('<' + options.tagName + '>')
+                    $('<a href="#" role="button" class="halo-link">').attr('title', halo.email).data(halo) :
+                    $('<' + options.tagName + '>')
             );
 
             ext.point('io.ox/core/person').invoke('draw', node.empty(), baton);
@@ -114,7 +114,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         // central helper to solve this only once
         fixUrlSuffix: function (url, suffix) {
             suffix = suffix || '';
-            url = url.replace(/([.,;!?<>\(\)\{\}\[\]\|]+)$/, function (all, marks) {
+            url = url.replace(/([.,;!?<>(){}[\]|]+)$/, function (all, marks) {
                 suffix = marks + suffix;
                 return '';
             });
@@ -124,7 +124,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         // remove (almost) all quotes from a string
         removeQuotes: function (str) {
             // remove all outer single and double quotes; also remove all inner quotes
-            return $.trim(str).replace(/^["'\\]+|["'\\]+$/g, '').replace(/\\?\"/g, '');
+            return $.trim(str).replace(/^["'\\]+|["'\\]+$/g, '').replace(/\\?"/g, '');
         },
 
         // detect URLs in plain text
@@ -207,7 +207,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
 
         isValidPhoneNumber: (function () {
 
-            var regex = /^\+?[0-9 .,;\-\/\(\)\*\#]+$/,
+            var regex = /^\+?[0-9 .,;\-/()*#]+$/,
                 tooShort = /^\+\d{0,2}$/;
 
             function validate(val) {
@@ -229,18 +229,20 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 folder = '&folder=' + encodeURIComponent(data.id);
             } else {
                 folder = '&folder=' + encodeURIComponent(data.folder_id);
-                id = '&id=' + (/^[\d\/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
+                id = '&id=' + (/^[\d/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
             }
             return ox.abs + ox.root + '/#!&app=' + app + folder + id;
         },
 
-        // recognize addresses in a string
+        // recognize addresses in a string (see bug 49937)
         // delimiters: comma, semi-colon, tab, newline, space; ignores delimiters in quotes
-        // display name can contain a-z plus \u00C0-\u024F, i.e. Latin supplement, Latin Extended-A, and Latin Extended-B
+        // display name can contain a-z plus \u00C0-\u024F, i.e. Latin supplement, Latin Extended-A, and Latin Extended-B (see OXUI-297)
         // the local part is either a quoted string or latin (see above) plus . ! # $ % & ' * + - / = ? ^ _ ` { | } ~
         // returns array of addresses
         getAddresses: function (str) {
-            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-\/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
+            // cover simple case separately; simple string without comma, semi-colon or white-space (see bug 57870)
+            if (/^[^,;\s]+$/.test(str)) return [str];
+            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });
@@ -264,7 +266,15 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 if (ox.debug) return '//' + defaultUrl + url;
                 return '//' + hosts[index] + url;
             };
-        }())
+        }()),
+
+        getScrollBarWidth: _.memoize(function () {
+            var $outer = $('<div>').css({ visibility: 'hidden', width: 100, overflow: 'scroll' }).appendTo('body'),
+                widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
+            $outer.remove();
+            return 100 - widthWithScroll;
+        })
+
     };
 
     return that;

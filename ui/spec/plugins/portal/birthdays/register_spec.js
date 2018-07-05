@@ -23,9 +23,9 @@ define([
 
         function invokeDraw() {
             //FIXME: uuuuugly API
-            var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
-            return def._wrapped[0].then(function () {
-                return ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton);
+            var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton)._wrapped[0];
+            return def.then(function () {
+                return ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton).value();
             }.bind(this));
         }
 

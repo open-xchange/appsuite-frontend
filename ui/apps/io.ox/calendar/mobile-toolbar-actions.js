@@ -15,8 +15,9 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/calendar/api',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar'
-], function (ext, links, api, gt) {
+], function (ext, links, api, util, gt) {
 
     'use strict';
 
@@ -55,6 +56,25 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 icon: 'fa fa-table',
                 drawDisabled: true,
                 ref: 'io.ox/calendar/actions/switch-to-month-view',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'nextMonth': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show next month'),
+                icon: 'fa fa-chevron-right',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/monthview/showNext',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+
+            },
+            'prevMonth': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show previous month'),
+                icon: 'fa fa-chevron-left',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/monthview/showPrevious',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
             'nextDay': {
@@ -109,6 +129,15 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 drawDisabled: true,
                 ref: 'io.ox/calendar/detail/actions/delete',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'export': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Export'),
+                //icon: 'fa fa-trash-o',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/detail/actions/export',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             }
         };
 
@@ -137,7 +166,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }));
 
     // add other actions
-    addAction(pMonth, ['create', 'listView', 'today-month']);
+    addAction(pMonth, ['create', 'listView', 'prevMonth', 'today-month', 'nextMonth']);
     addAction(pWeek, ['create', 'listView', 'prevDay', 'today', 'nextDay']);
     addAction(pList, ['calendarView']);
     addAction(multiInlineActions, ['move', 'delete']);
@@ -165,7 +194,11 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }, 10);
 
     function prepareUpdateToolbar(app) {
-        var list = app.pages.getCurrentPage().name === 'list' ? app.getGrid().selection.get() : {};
+        var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : {};
+        list = _(list).map(function (item) {
+            if (_.isString(item)) item = _.extend(util.cid(item), { flags: app.listView.selection.getNode(item).attr('data-flags') || '' });
+            return item;
+        });
         app.updateToolbar(list);
     }
 
@@ -187,7 +220,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             if (_.device('!smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change
-            app.getGrid().selection.on('change', function () {
+            app.listView.on('selection:change', function () {
                 prepareUpdateToolbar(app);
             });
             // folder change

@@ -12,15 +12,25 @@
  */
 
 define('io.ox/core/relogin', [
+    'io.ox/core/extensions',
     'io.ox/core/session',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
     'settings!io.ox/core'
-], function (session, notifications, capabilities, dialogs, gt, settings) {
+], function (ext, session, notifications, capabilities, ModalDialog, gt, settings) {
 
     'use strict';
+
+    ext.point('io.ox/core/relogin').extend({
+        draw: function () {
+            this.append(
+                gt('Your session is expired'), $.txt('.'), $('<br>'),
+                $('<small>').text(gt('Please sign in again to continue'))
+            );
+        }
+    });
 
     var queue = [], pending = false;
 
@@ -53,20 +63,23 @@ define('io.ox/core/relogin', [
     }
 
     function showSessionLostDialog(error) {
-        new dialogs.ModalDialog({ easyOut: false, width: 400 })
+        new ModalDialog({ width: 400, async: true, title: getReason(error) })
             .build(function () {
-                this.getPopup().addClass('relogin');
-                this.getContentNode().append(
-                    $('<h4>').text(getReason(error)),
+                this.$el.addClass('relogin');
+                this.$body.append(
                     $('<div>').text(gt('You have to sign in again'))
                 );
             })
-            .addPrimaryButton('ok', gt('Ok'))
+            .addButton({ action: 'ok', label: gt('Ok') })
             .on('ok', function () {
                 ox.trigger('relogin:cancel');
                 gotoLoginLocation();
             })
-            .show();
+            .on('open', function () {
+                $('html').addClass('relogin-required');
+                $('#io-ox-core').addClass('blur');
+            })
+            .open();
     }
 
     function relogin(request, deferred, error) {
@@ -90,21 +103,21 @@ define('io.ox/core/relogin', [
             // set flag
             pending = true;
 
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
+            new ModalDialog({ async: true, width: '400px', enter: 'relogin', backdrop: true, focus: 'input', title: getReason(error) })
                 .build(function () {
-                    this.getPopup().addClass('relogin');
-                    this.getHeader().append(
-                        $('<h4>').text(getReason(error)),
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.addClass('relogin');
+                    this.$header.append(
                         $('<div>').text(gt('Please sign in again to continue'))
                     );
-                    this.getContentNode().append(
-                        $('<label>').text(gt('Password')),
-                        $('<input type="password" name="relogin-password" class="form-control">')
+                    this.$body.append(
+                        $('<label>').attr('for', guid).text(gt('Password')),
+                        $('<input type="password" name="relogin-password" class="form-control">').attr('id', guid)
                     );
                 })
-                .addPrimaryButton('relogin', gt('Sign in'))
-                .addAlternativeButton('cancel', gt('Cancel'))
-                .on('cancel', function () {
+                .addButton({ className: 'btn-default', label: gt('Cancel'), placement: 'left' })
+                .addButton({ action: 'relogin', label: gt('Sign in') })
+                .on('cancel close', function () {
                     ox.trigger('relogin:cancel');
                     gotoLogoutLocation();
                     $blocker.css('z-index', '');
@@ -114,13 +127,13 @@ define('io.ox/core/relogin', [
                     // relogin
                     session.login({
                         name: ox.user,
-                        password: this.getContentNode().find('input').val(),
+                        password: this.$body.find('input').val(),
                         rampup: false,
                         store: ox.secretCookie
                     }).then(
                         function success() {
                             notifications.yell('close');
-                            self.getContentNode().find('input').val('');
+                            self.$body.find('input').val('');
                             self.close();
                             // process queue
                             var i = 0, item, http = require('io.ox/core/http');
@@ -135,6 +148,8 @@ define('io.ox/core/relogin', [
                             pending = false;
                             ox.trigger('relogin:success');
                             $blocker.css('z-index', '');
+                            $('html').removeClass('relogin-required');
+                            $('#io-ox-core').removeClass('blur');
                         },
                         function fail(e) {
                             // eloquentify standard error message ;-)
@@ -147,14 +162,16 @@ define('io.ox/core/relogin', [
                                 message: e.error
                             });
                             self.idle();
-                            self.getContentNode().find('input').focus().select();
+                            self.$body.find('input').focus().select();
                             ox.trigger('relogin:fail', e);
                         }
                     );
                 })
-                .show(function () {
-                    this.find('input').focus();
-                });
+                .on('open', function () {
+                    $('html').addClass('relogin-required');
+                    $('#io-ox-core').addClass('blur');
+                })
+                .open();
 
         } else if (request && deferred) {
             // enqueue last request

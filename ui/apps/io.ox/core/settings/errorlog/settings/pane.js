@@ -13,12 +13,14 @@
 
 define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/extensions',
+    'io.ox/backbone/views/extensible',
+    'io.ox/core/settings/util',
     'io.ox/core/http',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
-    'static/3rd.party/Chart.js/Chart.js'
-], function (ext, http, capabilities, settings, gt) {
+    'static/3rd.party/Chart.min.js'
+], function (ext, ExtensibleView, util, http, capabilities, settings, gt, Chart) {
 
     'use strict';
 
@@ -29,9 +31,40 @@ define('io.ox/core/settings/errorlog/settings/pane', [
         id: 'errorlog',
         title: gt('Error log'),
         ref: 'io.ox/core/settings/errorlog',
-        index: 200,
-        advancedMode: true
+        index: 200
     });
+
+    ext.point('io.ox/core/settings/errorlog/settings/detail').extend({
+        index: 100,
+        id: 'view',
+        draw: function () {
+            this.append(
+                new ExtensibleView({ point: 'io.ox/core/settings/errorlog/settings/detail/view', model: settings })
+                .render().$el
+            );
+        }
+    });
+
+    ext.point('io.ox/core/settings/errorlog/settings/detail/view').extend(
+        {
+            id: 'header',
+            index: 100,
+            render: function () {
+                this.$el.append(util.header(gt('Error log')));
+            }
+        },
+        {
+            id: 'error-view',
+            index: 200,
+            render: function () {
+                this.$el.append(new ErrorLogView().render().$el);
+            }
+        }
+    );
+
+    //
+    // Error Log View
+    //
 
     var ErrorLogView = Backbone.View.extend({
 
@@ -197,16 +230,8 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             chart = {
                 labels: [0, '', 100, '', 200, '', 300, '', 400, '', '> 0.5s', '> 1s'],
                 datasets: [{
-                    fillColor: 'rgba(220, 220, 220, 0.5)',
-                    strokeColor: 'rgba(220, 220, 220, 1)',
-                    pointColor: 'rgba(220, 220, 220, 1)',
-                    pointStrokeColor: '#fff',
                     data: ping
                 }, {
-                    fillColor: 'rgba(0, 136, 204, 0.15)',
-                    strokeColor: 'rgba(0, 136, 204, 0.80)',
-                    pointColor: 'rgba(0, 136, 204, 1)',
-                    pointStrokeColor: '#fff',
                     data: data
                 }]
             };
@@ -216,7 +241,26 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             );
 
             ctx = canvas.get(0).getContext('2d');
-            new window.Chart(ctx).Line(chart, {});
+            new Chart(ctx, {
+                type: 'line',
+                data: chart,
+                options: {
+                    legend: { display: false },
+                    tooltips: { enabled: false },
+                    elements: {
+                        line: {
+                            backgroundColor: 'rgba(0, 136, 204, 0.15)',
+                            borderColor: 'rgba(0, 136, 204, 0.80)',
+                            borderWidth: 2
+                        },
+                        point: {
+                            backgroundColor: 'rgba(0, 136, 204, 1)',
+                            borderColor: '#fff',
+                            radius: 4
+                        }
+                    }
+                }
+            });
         },
 
         renderTabs: function () {
@@ -341,15 +385,6 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             );
 
             this.updateTab(id);
-        }
-    });
-
-    ext.point('io.ox/core/settings/errorlog/settings/detail').extend({
-        draw: function () {
-            this.append(
-                $('<h1>').text(gt('Error log')),
-                (new ErrorLogView()).render().$el
-            );
         }
     });
 });

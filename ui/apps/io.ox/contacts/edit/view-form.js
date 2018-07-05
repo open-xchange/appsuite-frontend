@@ -226,6 +226,15 @@ define('io.ox/contacts/edit/view-form', [
                 if (baton.app) {
                     var row = $('<div class="header">');
                     ext.point(ref + '/edit/buttons').invoke('draw', row, baton);
+
+                    var pos = _.device('!desktop') ? 'top' : settings.get('features/windowHeaderPosition', 'bottom');
+                    // set header apparently means "append to" header. So let's empty it, to avoid redraw issues
+                    if (pos === 'top') {
+                        baton.app.getWindow().nodes.header.empty();
+                    } else {
+                        baton.app.getWindow().nodes.footer.empty();
+                    }
+                    baton.app.getWindow().nodes.header.empty();
                     baton.app.getWindow().setHeader(row);
                 }
             }
@@ -263,7 +272,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 300,
             id: 'showall',
             draw: function (baton) {
-                var guid = _.uniqueId('form-control-label-');
+                var guid = _.uniqueId('contacts-');
                 this.append(
                     $('<label class="checkbox-inline">').attr('for', guid).append(
                         $('<input type="checkbox" class="toggle-check">').attr('id', guid)
@@ -479,12 +488,7 @@ define('io.ox/contacts/edit/view-form', [
 
         new actions.Action(ref + '/actions/edit/discard', {
             action: function () {
-                if (ref === 'io.ox/core/user') {
-                    //invoked by sidepopup (portal); uses event of hidden sidebar-close button
-                    $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
-                } else {
-                    $(this).trigger('controller:quit');
-                }
+                $(this).trigger('controller:quit');
             }
         });
 
@@ -498,10 +502,11 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawDefault(options, model) {
             var input;
+            var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
-                $('<label class="control-label col-xs-12">').append(
+                $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(options.label),
-                    input = new mini.InputView({ name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el,
+                    input = new mini.InputView({ id: guid, name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el,
                     new mini.ErrorView({ selector: '.row' }).render().$el
                 )
             );
@@ -510,7 +515,7 @@ define('io.ox/contacts/edit/view-form', [
             if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {
                 input.on('keyup', function () {
                     // update model value silinet
-                    model.set(options.field, _.noI18n($(this).val()), { silent: true });
+                    model.set(options.field, $(this).val(), { silent: true });
                     if (model.changed.display_name) return;
                     var mod = model.toJSON();
                     delete mod.display_name;
@@ -520,10 +525,11 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function drawTextarea(options, model) {
+            var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
-                $('<label>').addClass('control-label col-xs-12').append(
+                $('<label>').attr('for', guid).addClass('control-label col-xs-12').append(
                     $.txt('\u00A0'), $('<br>'),
-                    new mini.TextView({ name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
+                    new mini.TextView({ id: guid, name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
                 )
             );
         }
@@ -533,13 +539,13 @@ define('io.ox/contacts/edit/view-form', [
                 $('<fieldset class="col-lg-12 form-group birthdate">').append(
                     $('<legend class="simple">').text(options.label),
                     // don't wrap the date control with a label (see bug #27559)
-                    new mini.DateView({ name: options.field, model: model }).render().$el
+                    new mini.DateSelectView({ name: options.field, model: model }).render().$el
                 )
             );
         }
 
         function drawCheckbox(options, model) {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
                 $('<div class="col-lg-12 checkbox">').append(
                     $('<label>').attr('for', guid).append(

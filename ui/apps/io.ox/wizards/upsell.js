@@ -108,11 +108,12 @@ define('io.ox/wizards/upsell', [
 
             /* draw product selection pane */
             _(products).each(function (p) {
+                var guid = _.uniqueId('form-control-label-');
                 $products.append(
                     $('<div class="upsell-product upsell-product-' + p.id + '">').append(
                         $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
-                        $('<label class="upsell-product-name">').append(
-                            new miniViews.CheckboxView({ name: 'inCart', model: p }).render().$el,
+                        $('<label class="upsell-product-name">').attr('for', guid).append(
+                            new miniViews.CheckboxView({ name: 'inCart', model: p, id: guid }).render().$el,
                             $.txt(' '),
                             $.txt(p.get('title'))
                         ),
@@ -123,7 +124,7 @@ define('io.ox/wizards/upsell', [
 
             /* draw cart */
             $cart.append(
-                $('<i class="fa fa-shopping-cart fa-2x">'),
+                $('<i class="fa fa-shopping-cart fa-2x" aria-hidden="true">'),
                 $('<span class="title">').text(gt('Shopping cart')),
                 $('<br/>'),
                 $('<span class="upsell-shopping-cart-status">').text(gt('Cart is empty.'))
@@ -136,7 +137,7 @@ define('io.ox/wizards/upsell', [
                         $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<div class="upsell-product-name">').text(p.get('title')),
                         $('<span class="upsell-product-price">').text(printPrice(p)),
-                    $('<div class="upsell-product-description">').html(p.get('description'))
+                        $('<div class="upsell-product-description">').html(p.get('description'))
                     )
                 );
             });

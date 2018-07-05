@@ -17,7 +17,7 @@ html {
 
 body {
     padding: 1.5cm;
-    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 13px;
     line-height: 18px;
     max-width: 21cm;
@@ -261,4 +261,139 @@ body.scaled-preview {
     transform-origin: 0 0;
     width: 21cm;
     overflow: hidden;
+}
+
+/* Month view */
+
+.month-view {
+    border-top: 1px solid #C0C0C0;
+    border-left: 1px solid #C0C0C0;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 12px;
+}
+
+h1.calendar-title {
+    text-align: center;
+}
+
+.month-view tr {
+    min-height: 16%;
+}
+
+.month-view td {
+    vertical-align: top;
+    position: relative;
+}
+
+.month-view td.out {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.month-view .date {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0 3px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.month-view td, .month-view th{
+    border-right: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
+    overflow: hidden;
+}
+
+.month-view ul {
+    padding: 2px;
+    margin: 0;
+    list-style-type: none;
+    min-height: 40px;
+}
+
+.month-view .time{
+    font-weight: bold;
+}
+
+/* Week view */
+
+.week-view {
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.week-view th {
+    border-right: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
+    z-index: 2;
+}
+
+.week-view .label {
+    white-space: nowrap;
+    width: 80px;
+    text-align: right;
+    vertical-align: top;
+    padding: 4px 8px;
+    position: relative;
+
+    border-bottom: 1px solid #C0C0C0;
+    border-right: 1px solid #C0C0C0;
+}
+
+.week-view tr:last-child .label {
+    border-bottom: none;
+}
+
+.week-view .label > span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 2px 4px;
+}
+
+.week-view td {
+    padding: 0;
+}
+
+.week-view .slot {
+    position: relative;
+    height: 60px;
+    overflow: hidden;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.week-view .allday-slot {
+    border-bottom: 1px solid #C0C0C0;
+    border-right: 1px solid #C0C0C0;
+}
+
+.week-view .slot-border {
+    position:  absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px solid #C0C0C0;
+    border-right: 1px solid #C0C0C0;
+}
+
+.week-view .event {
+    overflow: hidden;
+    border: 1px solid gray;
+    z-index: 1;
+    background-color: white;
+    padding: 1px;
+    font-size: 12px;
+    line-height: 14px;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.week-view .event.absolute {
+    position: absolute;
 }

@@ -121,117 +121,6 @@ define('io.ox/preview/main', [
         }
     }));
 
-    // register audio typed renderer
-    if (mediasupport.hasSupport('audio')) {
-        Renderer.point.extend(new Engine({
-            id: 'audio',
-            index: 10,
-            supports: (function () {
-                return mediasupport.supportedExtensionsArray('audio');
-            }()),
-            verify: function (file) {
-                // chrome cannot play audio files attachments (content-length issue; see bug 29491)
-                return !file || !file.attachment || !_.device('chrome');
-            },
-            draw: function (file) {
-                $('<audio>').attr({
-                    src: file.dataURL + '&delivery=view&content_type=' + String(file.mimetype || '').split(';')[0],
-                    type: file.mimetype,
-                    preload: 'metadata',
-                    controls: 'control',
-                    autoplay: false
-                }).hide().appendTo(this.on('click', function () { return false; }));
-                var self = this;
-                require([
-                    'static/3rd.party/mediaelement/mediaelement-and-player.js',
-                    'css!3rd.party/mediaelement/mediaelementplayer.css'
-                ], function () {
-
-                    var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
-
-                    self.find('audio').mediaelementplayer({
-                        audioWidth: pw,
-                        videoWidth: pw,
-                        plugins: ['flash', 'silverlight'],
-                        pluginPath: 'apps/3rd.party/mediaelement/',
-                        enableAutosize: false,
-                        timerRate: 250,
-                        features: ['playpause', 'progress', 'current', 'volume'],
-                        enablePluginDebug: true,
-                        pauseOtherPlayers: true,
-                        keyActions: [{
-                            // SPACE
-                            keys: [32, 179],
-                            action: function (player, media) {
-                                if (media.paused || media.ended) {
-                                    media.play();
-                                } else {
-                                    media.pause();
-                                }
-                            }
-                        },
-                        {
-                            // RIGHT
-                            keys: [39, 228],
-                            action: function (player, media) {
-                                var newVolume = Math.min(media.volume + 0.1, 1);
-                                media.setVolume(newVolume);
-                            }
-                        },
-                        {
-                            // LEFT
-                            keys: [37, 227],
-                            action: function (player, media) {
-                                var newVolume = Math.max(media.volume - 0.1, 0);
-                                media.setVolume(newVolume);
-                            }
-                        }]
-                    });
-                });
-            }
-        }));
-    }
-    if (mediasupport.hasSupport('video')) {
-        Renderer.point.extend(new Engine({
-            id: 'video',
-            index: 10,
-            supports: (function () {
-                return mediasupport.supportedExtensionsArray('video');
-            }()),
-            verify: function (file) {
-                return !file || !file.attachment || !_.device('chrome');
-            },
-            draw: function (file) {
-                $('<video>').attr({
-                    src: file.dataURL + '&delivery=view&content_type=' + String(file.mimetype || '').split(';')[0],
-                    type: file.mimetype,
-                    preload: 'none',
-                    controls: 'control',
-                    autoplay: 'autoplay'
-                }).appendTo(this.on('click', function () { return false; }));
-                var self = this;
-                require([
-                    'static/3rd.party/mediaelement/mediaelement-and-player.js',
-                    'css!3rd.party/mediaelement/mediaelementplayer.css'
-                ], function () {
-                    // TODO: sizing mediaplayer on changing viewport dimensions
-                    var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
-                    self.find('video').mediaelementplayer({
-                        audioWidth: pw,
-                        videoWidth: pw,
-                        plugins: ['flash', 'silverlight'],
-                        pluginPath: 'apps/3rd.party/mediaelement/',
-                        enableAutosize: true,
-                        timerRate: 250,
-                        features: ['playpause', 'progress', 'current', 'volume'],
-                        enablePluginDebug: true,
-                        pauseOtherPlayers: true
-                    });
-                });
-            }
-        }));
-    }
-
     Renderer.point.extend(new Engine({
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
@@ -270,12 +159,10 @@ define('io.ox/preview/main', [
         supports: ['txt', 'plain/text', 'asc', 'js', 'md', 'json', 'csv'],
         draw: function (file) {
             var node = this;
-            require(['io.ox/core/emoji/util', 'less!io.ox/preview/style'], function (emoji) {
+            require(['less!io.ox/preview/style'], function () {
                 $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
-                    // plain text preview with emoji support
-                    // need to escape here; plain text might surprise with bad HTML
-                    var html = emoji.processEmoji(_.escape(text));
-                    node.addClass('preview-plaintext').html(html);
+                    // plain text preview
+                    node.text(text);
                 });
             });
         },

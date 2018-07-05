@@ -71,6 +71,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             });
         },
 
+        resolve: function () {
+            var view = this.view;
+            return this.get().map(function (cid) {
+                return view.collection.get(cid);
+            });
+        },
+
         getItems: function (filter) {
             var items = this.view.$el.find(SELECTABLE);
             return filter ? items.filter(filter) : items;
@@ -150,7 +157,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.trigger('selection:doubleclick', [cid]);
         },
 
-        triggerChange: function (items) {
+        triggerChange: function (items, currentTargetCID) {
             items = items || this.getItems();
             // default event
             var list = this.get(), events = 'selection:change';
@@ -169,7 +176,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else {
                 events += ' selection:subset';
             }
-            this.view.trigger(events, list);
+            this.view.trigger(events, list, currentTargetCID);
         },
 
         clear: function (items) {
@@ -257,7 +264,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         pickRange: function (index, items) {
-            var cursor = this.getPosition(items),
+            var cursor = this.getPosition(items, index),
                 start = Math.min(index, cursor),
                 end = Math.max(index, cursor);
 
@@ -400,14 +407,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 index = (/38|36/.test(e.which) ? 0 : -1);
             }
 
-            this.resetTabIndex(items, items.eq(index));
+            var currentTarget = items.eq(index);
+            this.resetTabIndex(items, currentTarget);
             this.resetCheckmark(items);
             this.pick(index, items, e);
             // just call get position to update "direction"
             this.getPosition();
             // alternative selection mode needs this, has no effect in default mode
             if (this.isMultiple(e) || this.isRange(e)) {
-                this.triggerChange(items);
+                this.triggerChange(items, currentTarget.attr('data-cid'));
             } else {
                 this.selectEvents(items);
             }
@@ -464,8 +472,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
                 case 8:
                 case 46:
+                    // ignore combinations like ctrl+shift+del (see bug 55469)
+                    if (e.ctrlKey || e.metaKey || e.altKey) return;
                     e.preventDefault();
-                    this.view.trigger('selection:delete', this.get());
+                    this.view.trigger('selection:delete', this.get(), e.shiftKey);
                     break;
 
                 // home/end cursor left/right up/down
@@ -523,7 +533,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // support custom events
             if (options.customEvents) return;
             // always trigger in multiple mode (sometimes only checkbox is changed)
-            if (!_.isEqual(previous, this.get())) this.triggerChange(items);
+            if (!_.isEqual(previous, this.get())) this.triggerChange(items, $(e.currentTarget).attr('data-cid'));
         },
 
         onSwipeDelete: function (e) {
@@ -833,7 +843,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetSwipe($(e.currentTarget));
         },
 
-        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o" aria-hidden="true"/></div>'),
+        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o" aria-hidden="true"></i></div>'),
 
         renderInplaceRemove: function (node) {
             node.append(this.inplaceRemoveScaffold.clone());
@@ -948,14 +958,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         onClick: function (e) {
             var previous = this.get(),
-                mousedownSelect = (e.type === 'mousedown' && !this.isMultiple(e) && !$(e.currentTarget).is('.selected'));
+                currentTarget = $(e.currentTarget),
+                mousedownSelect = (e.type === 'mousedown' && !this.isMultiple(e) && !currentTarget.is('.selected'));
 
             prototype.onClick.call(this, e, { customEvents: mousedownSelect });
             if (mousedownSelect) {
                 this.selectEvents();
             }
             //trigger events (if only checkbox is changed the events are not triggered by normal function)
-            if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems());
+            if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems(), currentTarget.attr('data-cid'));
         },
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
@@ -995,18 +1006,26 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.$el
                 .on('click', SELECTABLE, $.proxy(this.onClick, this))
                 .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-                .on('focus', $.proxy(this.onFocus, this));
+                .on('focus', $.proxy(this.onFocus, this))
+                .on('mousedown', $.proxy(this.onMousedown, this))
+                .on('mouseup', $.proxy(this.onMouseup, this));
+
+            this.view.on('selection:empty', $.proxy(this.onSelectionEmpty, this));
         },
 
         isMultiple: function () {
+            // allow select/deselect via space
             return true;
         },
 
-        isRange: function () {
-            return false;
+        onSelectionEmpty: function () {
+            if (this.getItems().parent().find('li:focus').length > 0) return;
+            this._lastposition = -1;
         },
 
         onFocus: function () {
+            // prevent focus on scrollbar mouse clicks: see bug 57293
+            if (this.view.mousedown) return;
 
             var items = this.getItems(),
                 first = items.filter('[tabindex="0"]:first'),
@@ -1016,17 +1035,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onClick: function (e) {
-
             var items = this.getItems(),
-                index = items.index($(e.currentTarget));
+                currentTarget = $(e.currentTarget),
+                index = items.index(currentTarget);
 
             this.resetTabIndex(items, items.eq(index));
-            this.pick(index, items);
-            this.triggerChange(items);
+            this.pick(index, items, e);
+            this.triggerChange(items, currentTarget.attr('data-cid'));
+            this.setPosition(e);
         },
 
         onKeydown: function (e) {
-
             switch (e.which) {
 
                 // space
@@ -1069,18 +1088,37 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             e.preventDefault();
         },
 
-        onCursor: function (e) {
+        setPosition: function (e, index) {
+            this._lastposition = _.isUndefined(index) ? this.getItems().index($(e.target).closest('li')) || 0 : index;
+        },
 
+        getPosition: function (items, index) {
+            return this._lastposition > -1 ? this._lastposition : index;
+        },
+
+        onCursor: function (e) {
             // get current index
             var items = this.getItems(),
                 current = $(document.activeElement),
                 index = (items.index(current) || 0),
                 cursorDown = e.which === 40;
 
+            // prevent default to avoid unwanted scrolling
+            e.preventDefault();
+            if (!/^(40|38)$/.test(e.which)) return;
+
             index += cursorDown ? +1 : -1;
             index = this.outOfBounds(index, items);
 
-            this.resetTabIndex(items, items.eq(index));
+            if (this.isRange(e)) {
+                // range select includes previous node
+                this.setPosition(e);
+                return this.pickRange(index, items);
+            }
+
+            // simple select includes only current node
+            this.triggerChange(items, current.attr('data-cid'));
+            this.setPosition(e, index);
             this.focus(index, items);
         }
     };

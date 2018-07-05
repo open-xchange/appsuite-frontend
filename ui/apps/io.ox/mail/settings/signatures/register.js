@@ -13,16 +13,19 @@
 
 define('io.ox/mail/settings/signatures/register', [
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'gettext!io.ox/mail'
-], function (ext, gt) {
+], function (ext, capabilities, gt) {
 
     'use strict';
 
-    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
-        id: 'io.ox/mail/settings/signatures',
-        title: gt('Signatures'),
-        ref: 'io.ox/mail/settings/signatures',
-        index: 400
-    });
+    if (!capabilities.has('guest')) {
+        ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
+            id: 'io.ox/mail/settings/signatures',
+            title: gt('Signatures'),
+            ref: 'io.ox/mail/settings/signatures',
+            index: 200
+        });
+    }
 
 });

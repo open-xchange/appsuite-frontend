@@ -47,7 +47,10 @@ In order to configure this server-side, just append to existing `appsuite.proper
 | overrideUserCollection | Set this setting to true and the current user collection will not be prefered when replacing unicode characters with an image. (See comment for availableCollections describing the fallback mechanism.) Since Mail compose works with a current collection object, this setting has no effect when inserting icons from the editor plugin into the text. But when rendering any text with unicode characters, this setting will have an effect on the icon that is shown. |
 | sendEncoding           | Override the default send encoding to use something else than unified (unicode6)                                                                                                                                                                                                                                                                                                                                                                                           |
 
-# How to add a new icon set
+# How to add a new icon set (Pre 7.10.0)
+
+## With 7.10.0 native emojis are used instead of icon based emojis!
+
 
 It is possible to add new icon sets by [writing a core plugin]({{ site.baseurl }}/ui/customize/app/simple-application.html). It is recommended, to install the files to
 

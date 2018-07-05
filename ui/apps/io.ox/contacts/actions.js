@@ -155,6 +155,15 @@ define('io.ox/contacts/actions', [
         }
     });
 
+    new Action('io.ox/contacts/actions/export', {
+        requires: 'some read',
+        multiple: function (list) {
+            require(['io.ox/core/export'], function (exportDialog) {
+                exportDialog.open('contacts', { list: list });
+            });
+        }
+    });
+
     new Action('io.ox/contacts/actions/vcard', {
         capabilities: 'webmail',
         requires: 'some read',
@@ -404,6 +413,15 @@ define('io.ox/contacts/actions', [
         mobile: 'hi',
         label: gt('Send mail'),
         ref: 'io.ox/contacts/actions/send'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'export',
+        index: INDEX += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Export'),
+        ref: 'io.ox/contacts/actions/export'
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({

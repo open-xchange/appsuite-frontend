@@ -22,7 +22,7 @@ define('io.ox/tasks/toolbar', [
     'io.ox/core/notifications',
     'io.ox/tasks/common-extensions',
     'io.ox/tasks/api',
-    'gettext!io.ox/mail',
+    'gettext!io.ox/tasks',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style'
 ], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, extensions, api, gt) {
@@ -89,6 +89,13 @@ define('io.ox/tasks/toolbar', [
         //
         // --- LO ----
         //
+        'export': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Export'),
+            drawDisabled: true,
+            ref: 'io.ox/tasks/actions/export'
+        },
         'confirm': {
             prio: 'lo',
             mobile: 'lo',
@@ -140,9 +147,9 @@ define('io.ox/tasks/toolbar', [
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'))
-            .option('checkboxes', true, gt('Checkboxes'));
+                .header(gt('Options'))
+                .option('folderview', true, gt('Folder view'))
+                .option('checkboxes', true, gt('Checkboxes'));
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')

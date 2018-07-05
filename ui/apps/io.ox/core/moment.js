@@ -16,6 +16,10 @@ define('moment', ['static/3rd.party/moment/moment.js'], function (m) {
     return (window.moment = m);
 });
 
+define('../moment', ['static/3rd.party/moment/moment.js'], function (m) {
+    return (window.moment = m);
+});
+
 // this is defined globaly in boot.js
 define('static/3rd.party/moment/moment.js', function () {
     return window.moment;
@@ -54,25 +58,7 @@ define('io.ox/core/moment', [
         // load the file that contains the define, then load the define itself
         // we need do it this way to avoid the use of anonymous defines
         require(['static/3rd.party/moment/locale/' + langISO + '.js'], function () {
-            require(['moment/locale/' + langISO]).done(function () {
-                // use custom locales for japanese
-                if (moment.locales().indexOf('ja') !== -1) {
-                    moment.updateLocale('ja', {
-                        longDateFormat: {
-                            LT: 'HH:mm',
-                            LTS: 'HH:mm:ss',
-                            L: 'YYYY/MM/DD',
-                            LL: 'YYYY年M月D日',
-                            LLL: 'YYYY年M月D日 HH:mm',
-                            LLLL: 'YYYY年M月D日 HH:mm dddd',
-                            l: 'YYYY/MM/DD',
-                            ll: 'YYYY年M月D日',
-                            lll: 'YYYY年M月D日 HH:mm',
-                            llll: 'YYYY年M月D日 HH:mm dddd'
-                        }
-                    });
-                }
-            });
+            require(['moment/locale/' + langISO]);
         });
     }
 

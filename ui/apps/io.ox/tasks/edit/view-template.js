@@ -70,7 +70,6 @@ define('io.ox/tasks/edit/view-template', [
                                 yell(response);
                             }, 300);
                         });
-
                     }),
                 //cancel button
                 $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
@@ -79,7 +78,7 @@ define('io.ox/tasks/edit/view-template', [
                         e.stopPropagation();
                         app.quit();
                     })
-                );
+            );
 
             app.getWindow().setHeader(row);
 
@@ -104,7 +103,7 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Subject')).attr({ for: guid }),
-                new mini.InputView({ name: 'title', model: this.model }).render().$el.attr({ id: guid }).addClass('title-field')
+                new mini.InputView({ name: 'title', model: this.model, mandatory: true }).render().$el.attr({ id: guid }).addClass('title-field')
             );
         }
     }, { row: '1' });
@@ -137,20 +136,8 @@ define('io.ox/tasks/edit/view-template', [
                 $('<div class="col-lg-12">').append(
                     $('<button type="button" class="btn btn-link expand-link">').attr('aria-expanded', !baton.parentView.collapsed).text(text)
                     .on('click', function () {
-                        if (baton.parentView.collapsed) {
-                            baton.parentView.$el.find('.collapsed').show();
-                            //if details were open, show them too
-                            if (!baton.parentView.detailsCollapsed) {
-                                baton.parentView.$el.find('.task-edit-details').show();
-                            }
-                        } else {
-                            baton.parentView.$el.find('.collapsed').hide();
-                            //if details were open, hide them too
-                            if (!baton.parentView.detailsCollapsed) {
-                                baton.parentView.$el.find('.task-edit-details').hide();
-                            }
-                        }
                         baton.parentView.collapsed = !baton.parentView.collapsed;
+                        baton.parentView.$el.toggleClass('expanded', !baton.parentView.collapsed);
                         $(this).attr('aria-expanded', !baton.parentView.collapsed).text((baton.parentView.collapsed ? gt('Expand form') : gt('Collapse form')));
                     })
                 )
@@ -166,7 +153,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'col-xs-6 collapsed',
+                    className: 'col-xs-6 collapsible',
                     attribute: 'start_time',
                     label: gt('Start date'),
                     clearButton: true,
@@ -200,7 +187,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'col-xs-6 collapsed',
+                    className: 'col-xs-6 collapsible',
                     attribute: 'end_time',
                     label: gt('Due date'),
                     clearButton: true,
@@ -230,23 +217,18 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'full_time',
         index: 700,
-        className: 'col-md-6 collapsed',
+        className: 'col-md-6 collapsible',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div class="checkbox">').append(
-                    $('<label class="control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'full_time', model: this.model }).render().$el,
-                        $.txt(gt('All day'))
-                    )
-                )
+                new mini.CustomCheckboxView({ id: guid, name: 'full_time', label: gt('All day'), model: this.model }).render().$el
             );
         }
     }, { row: '5' });
 
     point.extend({
         id: 'recurrence',
-        className: 'col-xs-12 collapsed',
+        className: 'col-xs-12 collapsible',
         tabindex: 0,
         index: 800,
         render: function () {
@@ -264,7 +246,8 @@ define('io.ox/tasks/edit/view-template', [
         row: '7',
         draw: function (baton) {
             var selector;
-            this.append($('<div class="col-sm-6 collapsed">').append(
+            this.append(
+                $('<div class="col-sm-6 collapsible">').append(
                     $('<label for="task-edit-reminder-select">').text(gt('Reminder')),
                     selector = $('<select id="task-edit-reminder-select" class="form-control">')
                     .append($('<option>')
@@ -315,7 +298,7 @@ define('io.ox/tasks/edit/view-template', [
                     model: baton.model,
                     display: 'DATETIME',
                     ignoreToggle: true,
-                    className: 'col-xs-6 collapsed',
+                    className: 'col-xs-6 collapsible',
                     attribute: 'alarm',
                     label: gt('Reminder date'),
                     clearButton: true
@@ -338,7 +321,7 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'status',
         index: 1100,
-        className: 'col-sm-3 collapsed',
+        className: 'col-sm-3 collapsible',
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 self = this,
@@ -350,10 +333,7 @@ define('io.ox/tasks/edit/view-template', [
                     { label: gt('Deferred'), value: 5 }
                 ], selectInput;
             this.$el.append(
-                $('<label>').attr({
-                    class: 'control-label',
-                    for: guid
-                }).text(gt('Status')),
+                $('<label class="control-label">').attr('for', guid).text(gt('Status')),
                 $('<div>').append(
                     selectInput = new mini.SelectView({
                         list: options,
@@ -382,9 +362,9 @@ define('io.ox/tasks/edit/view-template', [
         row: '8',
         draw: function (baton) {
             var progressField = util.buildProgress(baton.model.get('percent_completed'));
-            this.append($('<div class="col-sm-3 collapsed">')
-                .append(
-                     $('<label>').text(gt('Progress in %')).attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
+            this.append(
+                $('<div class="col-sm-3 collapsible">').append(
+                    $('<label for="task-edit-progress-field">').text(gt('Progress in %')), $(progressField.wrapper)
                     .val(baton.model.get('percent_completed'))
                     .on('change', function () {
                         var value = $.trim(progressField.progress.val()).replace(/\s*%$/, ''),
@@ -418,7 +398,7 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'priority',
         index: 1300,
-        className: 'col-sm-3 collapsed',
+        className: 'col-sm-3 collapsible',
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 options = [
@@ -426,14 +406,14 @@ define('io.ox/tasks/edit/view-template', [
                     { label: gt.pgettext('Tasks priority', 'Low'), value: 1 },
                     { label: gt.pgettext('Tasks priority', 'Medium'), value: 2 },
                     { label: gt.pgettext('Tasks priority', 'High'), value: 3 }
-                ];
+                ], selectbox;
             this.$el.append(
                 $('<label>').attr({
                     class: 'control-label',
                     for: guid
                 }).text(gt.pgettext('Tasks', 'Priority')),
                 $('<div>').append(
-                    new mini.SelectView({
+                    selectbox = new mini.SelectView({
                         list: options,
                         name: 'priority',
                         model: this.baton.model,
@@ -442,6 +422,9 @@ define('io.ox/tasks/edit/view-template', [
                     }).render().$el
                 )
             );
+            if (!this.baton.model.get('priority')) {
+                selectbox.find('option').first().attr('selected', 'selected');
+            }
         }
     }, { row: '8' });
 
@@ -449,7 +432,7 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'private_flag',
         index: 1400,
-        className: 'checkbox col-sm-3 collapsed',
+        className: 'col-sm-3 collapsible',
         render: function () {
 
             // private flag only works in private folders
@@ -459,10 +442,7 @@ define('io.ox/tasks/edit/view-template', [
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
-                        $.txt(gt('Private'))
-                    )
+                    new mini.CustomCheckboxView({ id: guid, name: 'private_flag', label: gt('Private'), model: this.model }).render().$el
                 )
             );
         }
@@ -478,7 +458,7 @@ define('io.ox/tasks/edit/view-template', [
                     collection: baton.model.getParticipants(),
                     baton: baton,
                     empty: gt('This task has no participants yet')
-                }).render().$el.addClass('collapsed')
+                }).render().$el.addClass('collapsible')
             );
         }
     });
@@ -504,7 +484,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 view.$el
             );
-            view.render().$el.addClass('col-md-6 collapsed');
+            view.render().$el.addClass('col-md-6 collapsible');
             view.$el.find('input.add-participant').addClass('task-participant-input-field');
 
             view.typeahead.on('typeahead-custom:dropdown-rendered', function () {
@@ -531,7 +511,7 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'attachments_legend',
         index: 1800,
-        className: 'col-md-12 collapsed',
+        className: 'col-md-12 collapsible',
         render: function () {
             this.$el.append(
                 $('<fieldset>').append(
@@ -546,7 +526,7 @@ define('io.ox/tasks/edit/view-template', [
         registerAs: 'attachmentList',
         index: 1900,
         module: 4,
-        className: 'collapsed',
+        className: 'collapsible',
         finishedCallback: function (model, id, errors) {
             var obj = {};
             obj.id = model.attributes.id || id;
@@ -583,7 +563,7 @@ define('io.ox/tasks/edit/view-template', [
         row: '14',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),
-                $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid).addClass('col-sm-12 collapsed'),
+                $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid).addClass('col-sm-12 collapsible'),
                 $inputWrap = attachments.fileUploadWidget(),
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
@@ -599,7 +579,7 @@ define('io.ox/tasks/edit/view-template', [
                     } else if ($input.val()) {
                         //IE
                         var fileData = {
-                            name: $input.val().match(/[^\/\\]+$/),
+                            name: $input.val().match(/[^/\\]+$/),
                             size: 0,
                             hiddenField: $input
                         };
@@ -633,11 +613,11 @@ define('io.ox/tasks/edit/view-template', [
                 text = gt('Show details');
             }
             this.append(
-                $('<div class="col-lg-12 collapsed">').append(
-                    $('<button class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
+                $('<div class="col-lg-12 collapsible">').append(
+                    $('<button type="button" class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
                     .on('click', function () {
-                        baton.parentView.$el.find('.task-edit-details').toggle();
                         baton.parentView.detailsCollapsed = !baton.parentView.detailsCollapsed;
+                        baton.parentView.$el.toggleClass('details-expanded', !baton.parentView.detailsCollapsed);
                         $(this).attr('aria-expanded', !baton.parentView.detailsCollapsed).text((baton.parentView.detailsCollapsed ? gt('Show details') : gt('Hide details')));
                     })
                 )
@@ -785,7 +765,7 @@ define('io.ox/tasks/edit/view-template', [
                 self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
-                        app: 'task',
+                        app: 'tasks',
                         target: 'edit/toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),
@@ -797,7 +777,7 @@ define('io.ox/tasks/edit/view-template', [
                         // metrics
                         require(['io.ox/metrics/main'], function (metrics) {
                             metrics.trackEvent({
-                                app: 'task',
+                                app: 'tasks',
                                 target: 'edit',
                                 type: 'click',
                                 action: 'add-attachment'

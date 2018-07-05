@@ -16,8 +16,11 @@ define('io.ox/tours/main', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'io.ox/core/extPatterns/stage',
+    'settings!io.ox/tours',
+    'io.ox/core/capabilities',
+    'io.ox/tours/whats-new',
     'gettext!io.ox/tours'
-], function (ext, notifications, Stage, gt) {
+], function (ext, notifications, Stage, tourSettings, capabilities, whatsNewTour, gt) {
 
     'use strict';
 
@@ -31,59 +34,55 @@ define('io.ox/tours/main', [
                 return $.when();
             }
 
-            ox.load(['settings!io.ox/tours']).done(function (tourSettings) {
-                var disableTour = tourSettings.get('server/disableTours'),
-                    startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
-                    tourVersion = tourSettings.get('server/version', 0),
-                    tourVersionSeen = tourSettings.get('user/alreadySeenVersion', -1);
+            var disableTour = tourSettings.get('server/disableTours'),
+                startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
+                tourVersionSeen = tourSettings.get('user/alreadySeenVersion', -1);
 
-                if (!disableTour && startOnFirstLogin && tourVersion > tourVersionSeen) {
-                    tourSettings.set('user/alreadySeenVersion', tourVersion).save();
-                    require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
-                        Tour.registry.run('default/io.ox/intro');
-                    });
-                }
-            });
+            if (!disableTour && startOnFirstLogin && tourVersionSeen === -1) {
+                tourSettings.set('user/alreadySeenVersion', 1).save();
+                // don't show first start wizard and what's new tour at the same time
+                tourSettings.set('whatsNew/autoShow', 0).save();
+
+                require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
+                    Tour.registry.run('default/io.ox/intro');
+                });
+            } else if (!tourSettings.get('whatsNew/neverShowAgain', false) && tourSettings.get('whatsNew/autoShow', 1) > 0) {
+                whatsNewTour.run();
+            }
+
             return $.when();
         }
     });
 
     /* Link: Intro tour in settings toolbar */
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
         id: 'intro-tour',
         index: 210, /* close to the help link */
-        draw: function () {
-            var node = this,
-                link = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
+        extend: function () {
 
-            if (_.device('smartphone')) {
+            if (_.device('smartphone') || tourSettings.get('disableTours', false) || capabilities.has('!webmail || guest')) {
                 //tablets are fine just disable phones
                 return;
             }
 
-            require(['settings!io.ox/tours', 'io.ox/core/capabilities'], function (tourSettings, capabilities) {
-                if (tourSettings.get('disableTours', false) || capabilities.has('!webmail || guest')) {
-                    link.remove();
-                    return;
-                }
+            this.append(
+                $('<a target="_blank" href="" role="menuitem">').text(
+                    //#. Tour name; general introduction
+                    gt('Getting started')
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
+                    require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
+                        Tour.registry.run('default/io.ox/intro');
+                    });
+                })
+            );
 
-                link.append(
-                    $('<a target="_blank" href="" role="menuitem">').text(
-                        //#. Tour name; general introduction
-                        gt('Getting started')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
-                            Tour.registry.run('default/io.ox/intro');
-                        });
-                    })
-                );
-            });
+            this.$ul.find('li').last().addClass('io-ox-specificHelp');
         }
     });
 
-    ext.point('io.ox/core/topbar/right/dropdown').sort();
+    ext.point('io.ox/core/appcontrol/right/dropdown').sort();
 
     return {
         //DEPRECATED: legacy method. Don't use it in new code. Use the WTF instead.

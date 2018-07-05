@@ -12,109 +12,29 @@
  */
 
 define('io.ox/core/settings/user', [
-    'io.ox/core/extensions',
     'io.ox/core/api/user',
-    'io.ox/contacts/model',
-    'io.ox/contacts/edit/view-form',
-    'io.ox/core/tk/dialogs',
-    'io.ox/contacts/util',
-    'io.ox/core/yell',
-    'io.ox/core/a11y',
-    'gettext!io.ox/contacts'
-], function (ext, api, contactModel, ViewForm, dialogs, util, yell, a11y, gt) {
+    'io.ox/contacts/model'
+], function (api, contactModel) {
 
     'use strict';
 
     // Model Factory for use with the edit dialog
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
+    function getCurrentUser() {
+        return factory.realm('default').get({});
+    }
+
     return {
 
-        getCurrentUser: function () {
-            return factory.realm('default').get({});
-        },
+        getCurrentUser: getCurrentUser,
 
         openModalDialog: function () {
-
-            var dialog = new dialogs.ModalDialog({
-                top: 20,
-                width: 910,
-                center: false,
-                maximize: true,
-                async: true
-            })
-            .addPrimaryButton('save', gt('Save'), 'save')
-            .addButton('discard', gt('Discard'), 'discard');
-
-            var guid = _.uniqueId('form-control-label-');
-            dialog.getContentControls()
-                .prepend(
-                    $('<label class="checkbox-inline pull-left">').attr('for', guid).append(
-                        $('<input type="checkbox" class="toggle-check">').attr('id', guid)
-                            .on('change', function (e) {
-                                e.preventDefault();
-                                view.toggle.call(view.$el);
-                            }),
-                        $.txt(gt('Show all fields'))
-                    )
-                );
-
-            var self = this,
-                $node = dialog.getContentNode(),
-                usermodel,
-                view;
-
-            factory.realm('edit').get({})
-                .then(
-                    function success(user) {
-                        usermodel = user;
-                        // The edit dialog
-                        var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
-                        view = new UserEdit({ model: user });
-                        $node.append(view.render().$el);
-                        a11y.getTabbable($node).first().focus();
-
-                        user.on('change:first_name change:last_name', function () {
-                            user.set('display_name', util.getFullName(user.toJSON(), { validate: true }));
-                        });
-                        user.on('sync:start', function () {
-                            //if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
-                            if (user.get('birthday') === null) {
-                                $node.find('[data-field="birthday"]').find('.year,.month,.date').val('');
-                            }
-                            // dont't hide on IE to fix form submit.
-                            if (!_.browser.IE || _.browser.IE > 9) {
-                                dialogs.busy($node);
-                            }
-                        });
-                        user.on('sync:always', function () {
-                            if (!_.browser.IE || _.browser.IE > 9) {
-                                dialogs.idle($node);
-                            }
-                        });
-                    },
-                    function fail() {
-                        $node.append(
-                            $.fail(gt('Couldn\'t load your contact data.'), function () {
-                                self.editCurrentUser($node).done(function () {
-                                    $node.find('[data-action="discard"]').hide();
-                                });
-                            })
-                        );
-                    }
-                );
-
-            dialog.show();
-
-            dialog.on('save', function () {
-                if (usermodel._valid) {
-                    usermodel.save().fail(yell);
-                    dialog.close();
-                } else {
-                    dialog.idle();
-                }
-            }).on('discard', function () {
-                dialog.close();
+            getCurrentUser().done(function (model) {
+                ox.load(['io.ox/contacts/edit/main']).done(function (m) {
+                    if (m.reuse('edit', model.attributes)) return;
+                    m.getApp(model.attributes).launch();
+                });
             });
         }
     };

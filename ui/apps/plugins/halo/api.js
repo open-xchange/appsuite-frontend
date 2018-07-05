@@ -94,7 +94,7 @@ define.async('plugins/halo/api', [
                     action: 'services'
                 }
             })
-            .pipe(function (list) {
+            .then(function (list) {
                 // TODO: remove; temp.fix for sequence
                 list = _(list).without('com.openexchange.halo.contacts');
                 list.unshift('com.openexchange.halo.contacts');
@@ -149,7 +149,7 @@ define.async('plugins/halo/api', [
             action: 'services'
         }
     })
-    .pipe(function (list) {
+    .then(function (list) {
         // TODO: remove; temp.fix for sequence
         list = _(list).without('com.openexchange.halo.contacts');
         list.unshift('com.openexchange.halo.contacts');

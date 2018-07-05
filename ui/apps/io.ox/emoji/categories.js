@@ -12,7 +12,7 @@
  */
 
 define('io.ox/emoji/categories', [
-    'gettext!io.ox/mail/emoji',
+    'gettext!io.ox/mail',
     'raw!io.ox/emoji/unified.json',
     'raw!io.ox/emoji/softbank.json',
     'raw!io.ox/emoji/japan_carrier.json'

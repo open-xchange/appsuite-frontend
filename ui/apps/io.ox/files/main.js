@@ -33,6 +33,7 @@ define('io.ox/files/main', [
     'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/backbone/mini-views/quota',
+    'io.ox/core/notifications',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -44,7 +45,7 @@ define('io.ox/files/main', [
     'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications) {
 
     'use strict';
 
@@ -52,7 +53,8 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true, app: app });
+        sidebarView = new Sidebarview({ closable: true, app: app }),
+        contextmenu;
 
     app.mediator({
 
@@ -227,7 +229,11 @@ define('io.ox/files/main', [
                 quota.getQuota(true);
             });
 
-            api.on('add:file remove:file', function () {
+            api.on('add:file remove:file add:version remove:version', function () {
+                quota.getQuota(true);
+            });
+
+            api.on('copy', function () {
                 quota.getQuota(true);
             });
 
@@ -334,7 +340,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, scrollto: false }); // #bug 53151: scrollto = false to prevent a jumping selection when using shift+arrow to select multiple files
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, contextMenu: contextmenu });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -350,7 +356,6 @@ define('io.ox/files/main', [
                 app.listControl.render().$el
                 //#. items list (e.g. mails)
                 .attr({
-                    role: 'main',
                     'aria-label': gt('Files')
                 })
                 .find('.toolbar')
@@ -434,7 +439,8 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true
+                            noPullToRefresh: true,
+                            contextMenu: contextmenu
                         });
 
                         app.mysharesListViewControl = new ListViewControl({
@@ -463,10 +469,22 @@ define('io.ox/files/main', [
                                 .append(toolbar.render().$el)
                         );
 
-                        app.updateMyshareToolbar = _.debounce(function (list) {
-                            var baton = ext.Baton({
+                        app.updateMyshareToolbar = _.debounce(function (cidList) {
+                            var // turn cids into proper objects
+                                cids = _.uniq(cidList),
+                                modelList = [];
+                            _.each(cids, function (cid) {
+                                modelList.push(app.mysharesListView.collection.get(cid));
+                            });
+                            var models = modelList,
+                                list = models, //_(models).invoke('toJSON'),
+                                // extract single object if length === 1
+                                data = list.length === 1 ? list[0] : list,
+                                baton = ext.Baton({
                                     $el: toolbar.$list,
-                                    data: app.mysharesListView.collection.get(list),
+                                    app: app,
+                                    data: data,
+                                    models: models,
                                     collection: app.mysharesListView.collection,
                                     model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                                 }),
@@ -495,6 +513,10 @@ define('io.ox/files/main', [
                 'change': function () {
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.hide().siblings().show();
+                        if (app.mysharesListView) {
+                            // to get a notification when listView is rendered complete
+                            app.mysharesListView.trigger('listview:shown');
+                        }
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -523,6 +545,7 @@ define('io.ox/files/main', [
                     app.folder.unset();
                     app.getWindow().setTitle(gt('Favorites'));
                     if (app.myFavoritesListViewControl) {
+                        app.myFavoriteListView.trigger('selection:change');
                         app.myFavoritesListViewControl.$el.show().siblings().hide();
                         return;
                     }
@@ -539,7 +562,8 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true
+                            noPullToRefresh: true,
+                            contextMenu: contextmenu
                         });
 
                         app.myFavoritesListViewControl = new ListViewControl({
@@ -557,24 +581,38 @@ define('io.ox/files/main', [
                                 .append(toolbar.render().$el)
                         );
 
-                        app.updateMyFavoritesToolbar = _.debounce(function (list) {
-                            var baton = ext.Baton({
-                                    $el: toolbar.$list,
-                                    data: app.myFavoriteListView.collection.get(list),
-                                    collection: app.myFavoriteListView.collection,
-                                    model: app.myFavoriteListView.collection.get(app.myFavoriteListView.collection.get(list))
-                                }),
-                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
-                                .invoke('draw', toolbar.$list.empty(), baton);
+                        function updateCallback($toolbar) {
+                            toolbar.replaceToolbar($toolbar).initButtons();
+                        }
 
-                            $.when.apply($, ret.value()).then(function () {
-                                toolbar.initButtons();
-                            });
+                        app.updateMyFavoritesToolbar = _.debounce(function (cidList) {
+                            // var folder = api.pool.getModel(_.cid(folder));
+                            toolbar.disableButtons();
+                            var // turn cids into proper objects
+                                cids = cidList,
+                                models = api.resolve(cids, false),
+                                list = _(models).invoke('toJSON'),
+                                // extract single object if length === 1
+                                data = list.length === 1 ? list[0] : list,
+                                $toolbar = toolbar.createToolbar(),
+                                baton = ext.Baton({
+                                    $el: $toolbar,
+                                    data: data,
+                                    models: models,
+                                    app: this,
+                                    allIds: [],
+                                    favorite: true,
+                                    collection: app.myFavoriteListView.collection
+                                }),
+                                // draw toolbar
+                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
+                                .invoke('draw', $toolbar, baton);
+                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
                         }, 10);
 
-                        app.updateMyFavoritesToolbar([]);
+                        app.updateMyFavoritesToolbar();
                         // update toolbar on selection change as well as any model change
-                        app.myFavoriteListView.on('selection:change change', function () {
+                        app.myFavoriteListView.on('selection:change change favorite:add favorite:remove', function () {
                             app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
                         });
 
@@ -590,6 +628,10 @@ define('io.ox/files/main', [
                     if (app.myFavoritesListViewControl) {
                         app.myFavoritesListViewControl.$el.hide().siblings().show();
                         app.myFavoriteListView.selection.clear();
+                        if (app.mysharesListView) {
+                            // to get a notification when listView is rendered complete
+                            app.mysharesListView.trigger('listview:shown');
+                        }
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -683,7 +725,7 @@ define('io.ox/files/main', [
 
             if (_.device('touch')) return;
 
-            function updateSidebar() {
+            function updateSidebar(list, currentTargetCID) {
 
                 // do nothing if closed
                 if (!sidebarView.open) return;
@@ -696,7 +738,7 @@ define('io.ox/files/main', [
                     );
                 } else {
 
-                    var item = app.listView.selection.get()[0];
+                    var item = currentTargetCID || app.listView.selection.get()[0];
                     var model;
 
                     if (/^folder\./.test(item)) {
@@ -775,7 +817,7 @@ define('io.ox/files/main', [
                 column = Math.max(1, Math.min(12, width / gridWidth >> 0));
 
                 // update class name
-                list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
+                list.el.className = list.el.className.replace(/\s?grid-\d+/g, '');
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
 
                 resizePending = false;
@@ -843,6 +885,7 @@ define('io.ox/files/main', [
                     app.applyLayout();
                     app.listView.redraw();
                     $(document).trigger('resize');
+                    ox.ui.apps.trigger('layout', app);
                 });
             });
 
@@ -918,6 +961,9 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
+            api.on('refresh:listviews change:file', _.debounce(function () {
+                ox.trigger('refresh^');
+            }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
@@ -951,19 +997,49 @@ define('io.ox/files/main', [
          * Add listener to files upload to select newly uploaded files after listview reload
          */
         'select-uploaded-files': function (app) {
+            // listen
             api.on('stop:upload', function (requests) {
                 api.collectionLoader.collection.once('reload', function () {
                     $.when.apply(this, requests).done(function () {
                         var files,
-                            selection = app.listView.selection,
+                            listView = app.listView,
+                            selection = listView.selection,
+                            // selection array to select after upload
                             items;
 
                         files = _(arguments).map(_.cid);
 
                         items = selection.getItems(function () {
-                            return files.indexOf($(this).attr('data-cid')) >= 0;
+                            // add already rendered items to selection array
+                            var position = files.indexOf($(this).attr('data-cid'));
+                            if (position >= 0) {
+                                delete files[position];
+                            }
+                            return position >= 0;
                         });
 
+                        // limit selectable items to PRIMARY_PAGE_SIZE
+                        var lastPosition = api.collectionLoader.PRIMARY_PAGE_SIZE - selection.getItems().length;
+                        _.each(_.without(files, undefined).slice(0, lastPosition > 0 ? lastPosition : 0), function (cid) {
+                            var file = api.pool.get('detail').get(cid);
+                            // select only if the current folder is the upload folder
+                            if (file && app.folder.get() === file.get('folder_id')) {
+                                if (cid) {
+                                    app.listView.on('add:' + cid, function (model) {
+                                        _.each(selection.getItems(), function (item) {
+                                            if ($(item).attr('data-cid') === model.cid) {
+                                                // add items to selection array after rendering
+                                                items.push(item);
+                                            }
+                                        });
+                                        // select all items from selectiona array after rendering
+                                        selection.selectAll(items);
+                                    });
+                                }
+                            }
+                        });
+
+                        // deselect all items
                         selection.selectNone();
                         selection.selectAll(items);
                     });
@@ -1197,10 +1273,24 @@ define('io.ox/files/main', [
         },
 
         'inplace-find': function (app) {
-
             if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
 
-            app.searchable();
+            function registerHandler(model, find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.listControl.$el.find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.listControl.$el.find('.grid-options:first').show();
+                    }
+                });
+            }
+
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
         },
 
         // respond to search results
@@ -1216,7 +1306,7 @@ define('io.ox/files/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.sect.files.gui';
+                return 'ox.appsuite.user.sect.files.gui.html';
             };
         },
 
@@ -1406,28 +1496,12 @@ define('io.ox/files/main', [
         'select-file': function (app) {
 
             app.selectFile = function (obj) {
-
-                function isCurrentFolder() {
-                    return app.listView.collection.cid && app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
-                }
-
-                function select() {
-                    if (!isCurrentFolder()) return;
-                    app.listView.off('collection:load', select);
-                    app.listView.selection.set([obj], true);
-
-                    // must trigger for a updated toolbar
-                    app.listView.trigger('selection:change');
-                }
-
                 obj = _.isString(obj) ? _.cid(obj) : obj;
 
-                if (isCurrentFolder()) {
-                    select();
-                } else {
-                    app.listView.on('collection:load', select);
-                    app.folder.set(obj.folder_id);
-                }
+                api.get(obj).done(function (model) {
+                    var models = api.resolve(model, false);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({ models: models, app: app, favorites: false, portal: true }));
+                });
             };
         },
 
@@ -1447,7 +1521,28 @@ define('io.ox/files/main', [
                 // check if it's really the folder - not the contextmenu toggle
                 if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
-                if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+                // if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+            });
+        },
+
+        // FLD-0008 -> not found
+        //  => Bug 56943: error handling on external folder delete
+        // FLD-0003 -> permission denied
+        //  => Bug 57149: error handling on permission denied
+        // FILE_STORAGE-0055
+        //  => Bug 54793 : error handling when folder does not exists anymore
+        'special-error-handling': function (app) {
+            var process = _.debounce(function (error) {
+                var model = folderAPI.pool.getModel(app.folder.get());
+                if (model) folderAPI.list(model.get('folder_id'), { cache: false });
+                app.folder.setDefault();
+                notifications.yell(error);
+            }, 1000, true);
+            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003 http:error:FILE_STORAGE-0055', function (error, request) {
+                var folder = request.params.parent || request.data.parent;
+                if (!folder || folder !== this.folder.get()) return;
+                if (folderAPI.isBeingDeleted(folder)) return;
+                process(error);
             });
         }
     });
@@ -1496,8 +1591,7 @@ define('io.ox/files/main', [
             // ensure proper type
             baton.dropType = 'infostore';
             baton.target = baton.target.replace(/^folder\./, '');
-            // avoid self-reference
-            if (baton.data[0].id === baton.target) return;
+
             // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });
@@ -1507,7 +1601,14 @@ define('io.ox/files/main', [
 
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
-            .always(function () {
+            .then(function () {
+                return require(['io.ox/files/contextmenu']);
+            })
+            .then(function (Contextmenu) {
+                // contextmenu for all listviews
+                if (!(_.device('smartphone') && _.device('tablet'))) {
+                    contextmenu = new Contextmenu({ el: win.nodes.outer });
+                }
                 app.mediate();
                 win.show(function () {
                     // trigger grid resize

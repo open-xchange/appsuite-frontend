@@ -15,8 +15,6 @@
 
 .myfavorites-list-control .secondary-toolbar { top: 40px; }
 
-.myfavorites-list-control [data-ref="io.ox/files/favorite/back"] { display:none; }
-
 .smartphone .myfavorites-list-control [data-ref="io.ox/files/favorite/back"] {
     display:block;
     position: absolute;
@@ -43,7 +41,7 @@
 
         .breadcrumb-view {
             overflow: hidden;
-            a { color: #333; }
+            a { color: #767676; }
         }
 
         .list-item-column.column-2,
@@ -61,3 +59,10 @@
     }
 }
 
+.myfavorites-list-control {
+    .classic-toolbar-container {
+        .classic-toolbar {
+            overflow: hidden;
+        }
+    }
+}

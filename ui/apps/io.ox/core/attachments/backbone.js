@@ -42,7 +42,7 @@ define('io.ox/core/attachments/backbone', [
         };
     };
 
-    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?|txt)$/i,
+    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?|ppsx?|txt)$/i,
         regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f)$/i;
 
     var previewFetcher = {
@@ -260,6 +260,15 @@ define('io.ox/core/attachments/backbone', [
             return _(this.filter(function (model) {
                 return model.isLocalFile();
             })).pluck('fileObj');
+        },
+        getSize: function () {
+            return this.reduce(function (memo, model) { return memo + model.getSize(); }, 0);
+        },
+        isValidModel: function (model) {
+            return model.isFileAttachment();
+        },
+        getValidModels: function () {
+            return this.filter(this.isValidModel, this);
         }
     });
 

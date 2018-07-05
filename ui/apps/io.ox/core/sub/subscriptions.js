@@ -48,9 +48,9 @@ define('io.ox/core/sub/subscriptions', [
 
         availableServices = (function () {
             var s = { calendar: false, contacts: false };
-            _(ox.rampup.oauth.services).each(function (service) {
-                if (service.availableScopes.indexOf('contacts') !== -1 || service.availableScopes.indexOf('contacts_ro') !== -1) s.contacts = true;
-                if (service.availableScopes.indexOf('calendar') !== -1 || service.availableScopes.indexOf('calendar_ro') !== -1) s.calendar = true;
+            _(oauthAPI.services.models).each(function (service) {
+                if (service.get('availableScopes').indexOf('contacts') !== -1 || service.get('availableScopes').indexOf('contacts_ro') !== -1) s.contacts = true;
+                if (service.get('availableScopes').indexOf('calendar') !== -1 || service.get('availableScopes').indexOf('calendar_ro') !== -1) s.calendar = true;
             });
             return s;
         }()),
@@ -87,7 +87,14 @@ define('io.ox/core/sub/subscriptions', [
                             if (fd.widget !== 'oauthAccount') return true;
 
                             var accountType = getAccountType(fd.options.type),
-                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type }).filter(function (account) {
+                                    if (!self.app.subscription || !_.isArray(self.app.subscription.wantedOAuthScopes)) {
+                                        return true;
+                                    }
+                                    return self.app.subscription.wantedOAuthScopes.reduce(function (acc, scope) {
+                                        return acc && account.availableScopes.indexOf(scope) >= 0;
+                                    }, true);
+                                });
 
                             // process when at least one account exists
                             if (accounts.length) return true;
@@ -114,13 +121,14 @@ define('io.ox/core/sub/subscriptions', [
                 var self = this,
                     popup = new dialogs.ModalDialog({
                         async: true,
-                        help: 'ox.appsuite.user.sect.dataorganisation.subscribe.data.html',
-                        width: 570
+                        help: 'ox.appsuite.user.sect.contacts.folder.subscribe.html',
+                        // 130 * 4 + 8 * 3 + 30, Button.width * ButtonsPerRow + Button.rightMargin * (ButtonsPerRow - 1) + leftAndRightPaddingOfDialog
+                        width: 574
                     }),
                     title = gt('Subscribe');
 
-                if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe address book');
-                else if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe calendar');
+                if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe to address book');
+                if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
 
                 popup.getHeader().append($('<h4>').text(title));
 
@@ -148,6 +156,7 @@ define('io.ox/core/sub/subscriptions', [
                                 this.find('[data-action="add"]').hide();
                                 a11y.getTabbable(popup.getContentNode()).first().focus();
                             });
+                        popup.getBody().css('padding', '15px 11px');
                     } else {
                         popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
                         popup.addPrimaryButton('cancel', gt('Cancel')).show();
@@ -168,22 +177,24 @@ define('io.ox/core/sub/subscriptions', [
 
             subscribe: function () {
                 var self = this,
-                    popup = this.popup;
+                    popup = this.popup,
+                    service = _(this.services).findWhere({ id: this.model.get('source') });
 
                 popup.busy();
+                // workaround: service is needed for proper validation
+                this.model.set('service', service);
 
                 // validate model and check for errors
                 this.model.validate();
                 if (this.model.errors && this.model.errors.hasErrors()) {
                     this.model.errors.each(function (errors) {
-                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(errors[0]));
+                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors);
                     });
                     popup.idle();
                     popup.getContentNode().find('input').first().focus();
                     return;
                 }
 
-                var service = _(this.services).findWhere({ id: this.model.get('source') });
                 subscribe(this.model, service).then(
                     function saveSuccess(id) {
                         //set id, if none is present (new model)
@@ -196,10 +207,11 @@ define('io.ox/core/sub/subscriptions', [
                             },
                             function refreshFail(error) {
                                 popup.idle();
-                                showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error_html || error.error));
+                                showErrorInline(popup.getBody(), gt('Error:'), error.error_html || error.error);
                                 api.subscriptions.destroy(id);
                                 self.model = self.model.clone();
                                 folderAPI.remove(self.model.get('folder'));
+                                throw error;
                             }
                         )
                         .then(function (model) {
@@ -217,7 +229,7 @@ define('io.ox/core/sub/subscriptions', [
                     function saveFail(error) {
                         popup.idle();
                         if (error.error) {
-                            showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                            showErrorInline(popup.getBody(), gt('Error:'), error.error);
                         } else {
                             notifications.yell({
                                 type: 'error',
@@ -226,6 +238,7 @@ define('io.ox/core/sub/subscriptions', [
                             });
                         }
                         folderAPI.remove(self.model.get('folder'));
+                        throw error;
                     }
                 );
             }
@@ -238,7 +251,7 @@ define('io.ox/core/sub/subscriptions', [
             title = gt('New Folder');
 
         if (service.displayName && module === 'calendar') title = gt('My %1$s calendar', service.displayName);
-        else if (service.displayName && module === 'contacts') title = gt('My %1$s contacts', service.displayName);
+        if (service.displayName && module === 'contacts') title = gt('My %1$s contacts', service.displayName);
 
         return folderAPI.create(folder, {
             title: title
@@ -251,14 +264,16 @@ define('io.ox/core/sub/subscriptions', [
     }
 
     function showErrorInline(node, label, msg) {
+        var list = [].concat(msg);
         node.find('div.alert').remove();
-        node.prepend($('<div class="alert alert-danger alert-dismissible" role="alert">').append(
-            $('<strong>').text(label),
-            $.txt(' '),
-            $('<span>').html(msg),
-            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
-        );
-
+        _(list).each(function (msg) {
+            this.prepend($('<div class="alert alert-danger alert-dismissible" role="alert">').append(
+                $('<strong>').text(label),
+                $.txt(' '),
+                $('<span>').html(msg),
+                $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
+            );
+        }, node);
     }
 
     ext.point(POINT + '/dialog').extend({
@@ -282,7 +297,8 @@ define('io.ox/core/sub/subscriptions', [
             });
             this.append(new OAuth.Views.ServicesListView({
                 collection: new Backbone.Collection(baton.services)
-            }).on('select', function (model) {
+            })
+            .on('select', function (model) {
                 var fd = model.get('formDescription'),
                     bat = ext.Baton({ view: baton.view, subModel: baton.model, model: model, services: baton.services, popup: baton.popup, app: baton.app });
                 baton.model.setSource(model.toJSON());
@@ -298,21 +314,13 @@ define('io.ox/core/sub/subscriptions', [
 
     function createAccount(service, scope) {
         var serviceId = service.formDescription[0].options.type,
-            account = oauthAPI.accounts.forService(serviceId).filter(function (account) {
-                return !account.hasScopes(scope);
-            })[0] || new OAuth.Account.Model({
+            account = new OAuth.Account.Model({
                 serviceId: serviceId,
-                //#. %1$s is the display name of the account
-                //#. e.g. My Xing account
-                displayName: gt('My %1$s account', service.displayName)
+                displayName: oauthAPI.chooseDisplayName(service)
             });
 
-        return account.enableScopes(scope).save().then(function (account) {
-            oauthAPI.accounts.add(account, { merge: true });
-            return account;
-        });
+        return account.enableScopes(scope).save();
     }
-
     ext.point(POINT + '/oauth').extend({
         id: 'oauth',
         index: 100,

@@ -1,9 +1,0 @@
-{
-    "title": "Edit task",
-    "company": "Open-Xchange",
-    "icon": "default.png",
-    "category": "Productivity",
-    "settings": false,
-    "visible": false,
-    "requires": "tasks"
-}

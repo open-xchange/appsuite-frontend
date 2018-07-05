@@ -80,12 +80,12 @@ define('io.ox/core/cache', [
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
                 persist = (persistent === true && ox.cache.usePersistence() && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' ?
-                        function () {
-                            return ox.user !== '';
-                        } :
-                        function () {
-                            return false;
-                        }),
+                    function () {
+                        return ox.user !== '';
+                    } :
+                    function () {
+                        return false;
+                    }),
 
                 // define id now; user & language should never change on-the-fly
                 id = _(['appsuite.cache', ox.user, ox.language, name || '']).compact().join('.'),

@@ -24,6 +24,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/contacts/api',
     'io.ox/backbone/views/modal',
     'io.ox/contacts/util',
+    'io.ox/core/settings/util',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
     'io.ox/participants/views',
@@ -32,9 +33,10 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
-    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
+    'io.ox/core/util',
+    'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil) {
 
     'use strict';
 
@@ -108,6 +110,11 @@ define('io.ox/files/share/permissions', [
 
             isAnonymous: function () {
                 return this.get('type') === 'anonymous';
+            },
+
+            isOwner: function (parentModel) {
+                if (!this.get('entity') || !parentModel || !_.isFunction(parentModel.getOwner)) return;
+                return this.get('entity') === parentModel.getOwner();
             },
 
             getDisplayName: function (htmlOutput) {
@@ -308,6 +315,7 @@ define('io.ox/files/share/permissions', [
 
             render: function () {
                 this.getEntityDetails();
+                if (this.model.get('type') === 'anonymous') return false;
                 this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
@@ -401,7 +409,7 @@ define('io.ox/files/share/permissions', [
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
                     if (bits === 2 || bits === 4) return 'reviewer';
-                } else if (this.model.get('entity') === this.parentModel.get('created_by')) {
+                } else if (this.model.isOwner(this.parentModel)) {
                     return 'owner';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
@@ -511,7 +519,7 @@ define('io.ox/files/share/permissions', [
                     // groups and links
                     column.append(
                         node.addClass('group').append(
-                            $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'link') + '">')
+                            $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'link') + '" aria-hidden="true">')
                         )
                     );
                 }
@@ -571,7 +579,7 @@ define('io.ox/files/share/permissions', [
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
-                    isOwner = baton.model.get('entity') === baton.parentModel.get('created_by'),
+                    isOwner = baton.model.isOwner(baton.parentModel),
                     module = baton.parentModel.get('module'),
                     supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
 
@@ -733,7 +741,7 @@ define('io.ox/files/share/permissions', [
 
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
-                if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
+                if (isFolderAdmin && baton.model.isOwner(baton.parentModel)) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
@@ -794,8 +802,15 @@ define('io.ox/files/share/permissions', [
         showByModel: function (model, options) {
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
-            model.loadExtendedPermissions().done(function () {
+            model.loadExtendedPermissions({ cache: false })
+            .done(function () {
                 that.show(model, options);
+            })
+            // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
+            // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
+            // -> check if this handling should be changed later so that the FLD-0003' is handled globally
+            .fail(function (error) {
+                yell(error);
             });
         },
 
@@ -804,11 +819,29 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
+        // traverse folders upwards and check if root folder is Public Files
+        isOrIsUnderPublicFolder: function (model) {
+
+            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
+
+            function checkFolder(id) {
+                if (id === '15') { return true; }
+                if (id === '9' || id === '1' || id === '0' || id === undefined) { return false; }
+
+                var model = folderAPI.pool.getModel(id);
+                var parentId = model && model.get('folder_id');
+
+                return checkFolder(parentId);
+            }
+
+            return checkFolder(id);
+        },
+
         show: function (objModel, options) {
 
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
-                notificationDefault = !folderUtil.is('public', objModel.attributes),
+                notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
                 title,
                 guid;
 
@@ -824,10 +857,10 @@ define('io.ox/files/share/permissions', [
                 share: false }, options);
 
             options.title = options.title || (options.share ?
-                        //#. %1$s determines whether setting permissions for a file or folder
-                        //#. %2$s is the file or folder name
-                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
+                //#. %1$s determines whether setting permissions for a file or folder
+                //#. %2$s is the file or folder name
+                gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
+                gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
 
             options.point = 'io.ox/files/share/permissions/dialog';
 
@@ -873,11 +906,11 @@ define('io.ox/files/share/permissions', [
                 return permissionsView.collection.where({ type: 'guest' }).length > knownGuests.length;
             }
 
-            permissionsView.collection.on('reset', function () {
+            permissionsView.listenTo(permissionsView.collection, 'reset', function () {
                 dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
             });
 
-            permissionsView.collection.on('add remove', function () {
+            permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
                 if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
@@ -897,24 +930,23 @@ define('io.ox/files/share/permissions', [
 
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Send notification by email')).prepend(
-                            new miniViews.CheckboxView({ id: guid, name: 'sendNotifications', model: dialogConfig }).render().$el
-                            .on('click', function (e) {
-                                dialogConfig.set('byHand', e.currentTarget.checked);
-                            })
-                        )
+                        settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
+                            var input = e.originalEvent.srcElement;
+                            dialogConfig.set('byHand', input.checked);
+                        })
                     )
                 );
             }
 
             dialogConfig.on('change:disabled', function () {
-                dialog.$footer.find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
+                dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
             });
 
             dialog.$el.addClass('share-permissions-dialog');
 
             // add permissions view
-            dialog.$body.addClass(_.browser.IE < 12 ? 'IE11' : '').append(
+            // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
+            dialog.$body.addClass(_.browser.IE ? 'IE11' : '').append(
                 permissionsView.render().$el
             );
 
@@ -952,8 +984,8 @@ define('io.ox/files/share/permissions', [
                     usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true),
                     click = function (e, member) {
                         // build extended permission object
-                        var isInternal = member.get('type') === 2 || member.get('type') === 1,
-                            isGuest = member.get('type') === 5,
+                        var isInternal = /^(1|2)$/.test(member.get('type')) || member.has('user_id'),
+                            isGuest = !isInternal && member.get('type') === 5,
                             obj = {
                                 bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
                                 group: member.get('type') === 2,
@@ -961,7 +993,7 @@ define('io.ox/files/share/permissions', [
                                 new: true
                             };
                         if (isInternal) {
-                            obj.entity = member.get('id');
+                            obj.entity = member.has('user_id') ? member.get('user_id') : member.get('id');
                         }
                         obj.contact = member.toJSON();
                         obj.display_name = member.getDisplayName();
@@ -1004,9 +1036,10 @@ define('io.ox/files/share/permissions', [
                 if (objModel.isFolder() && options.nested) {
                     dialog.$footer.append(
                         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ id: guid, name: 'cascadePermissions', model: dialogConfig }).render().$el
-                            )
+                            settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), dialogConfig).on('change', function (e) {
+                                var input = e.originalEvent.srcElement;
+                                dialogConfig.set('cascadePermissions', input.checked);
+                            })
                         )
                     );
                 }
@@ -1019,7 +1052,8 @@ define('io.ox/files/share/permissions', [
                                 typeaheadView.$el.attr({ id: guid }),
                                 usePicker ? new AddressPickerView({
                                     isPermission: true,
-                                    process: click
+                                    process: click,
+                                    useGABOnly: !supportsGuests
                                 }).render().$el : []
                             )
                         )
@@ -1037,16 +1071,19 @@ define('io.ox/files/share/permissions', [
                             if (e.type === 'keydown' && e.which !== 13) return;
 
                             // use shown input
-                            var value = $.trim($(this).typeahead('val'));
-                            if (_.isEmpty(value)) return;
+                            var value = $.trim($(this).typeahead('val')),
+                                list = coreUtil.getAddresses(value);
 
-                            // add to collection
-                            permissionsView.collection.add(new Permission({
-                                bits: getBitsExternal(objModel),
-                                contact: { email1: value },
-                                type: 'guest',
-                                new: true
-                            }));
+                            _.each(list, function (value) {
+                                if (_.isEmpty(value)) return;
+                                // add to collection
+                                permissionsView.collection.add(new Permission({
+                                    bits: getBitsExternal(objModel),
+                                    contact: { email1: value },
+                                    type: 'guest',
+                                    new: true
+                                }));
+                            });
 
                             // clear input field
                             $(this).typeahead('val', '');
@@ -1054,7 +1091,7 @@ define('io.ox/files/share/permissions', [
                     )
                 );
 
-                dialog.$footer.prepend(
+                dialog.$body.append(
                     // add message - not available for mail
                     $('<div class="share-options form-group">')
                     .toggle(notificationDefault)
@@ -1080,7 +1117,7 @@ define('io.ox/files/share/permissions', [
 
                 // apply polyfill for CSS resize which IE doesn't support natively
                 if (_.browser.IE) {
-                    window.resizeHandlerPolyfill(dialog.$footer.find('.message-text')[0]);
+                    window.resizeHandlerPolyfill(dialog.$body.find('.message-text')[0]);
                 }
 
                 dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {

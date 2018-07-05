@@ -12,10 +12,11 @@
  */
 
 define('io.ox/core/pdf/pdfview', [
+    'io.ox/core/viewer/util',
     'io.ox/core/pdf/pdftextlayerbuilder',
     'io.ox/core/pdf/pdfannotationslayerbuilder',
     'less!io.ox/core/pdf/pdfstyle'
-], function (PDFTextLayerBuilder, PDFAnnotationsLayerBuilder) {
+], function (Util, PDFTextLayerBuilder, PDFAnnotationsLayerBuilder) {
 
     'use strict';
 
@@ -554,8 +555,8 @@ define('io.ox/core/pdf/pdfview', [
                 curPageZoom = _.isNumber(pageZoom) ? pageZoom : this.getPageZoom(pageNumber);
             if (_.isObject(pdfDocument)) {
                 pageSize = _.isNumber(pageNumber) ?
-                            pdfDocument.getOriginalPageSize(pageNumber) :
-                            pdfDocument.getDefaultPageSize();
+                    pdfDocument.getOriginalPageSize(pageNumber) :
+                    pdfDocument.getDefaultPageSize();
             }
             return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };
@@ -602,7 +603,9 @@ define('io.ox/core/pdf/pdfview', [
 
                 var renderDef = $.Deferred();
                 renderDef.done(function () {
+                    Util.logPerformanceTimer('pdfView:renderPDFPage_before_getPDFJSPage_' + pageNumber); // 250 ms time shift between two pages (see handleRenderQueue)
                     pdfDocument.getPDFJSPage(pageNumber).then(function (pdfjsPage) {
+                        Util.logPerformanceTimer('pdfView:renderPDFPage_getPDFJSPage_then_handler_' + pageNumber); // typically this then-handler starts immediately
                         if (pageNode.children().length) {
                             var viewport = getPageViewport(pdfjsPage, pageZoom),
                                 pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
@@ -656,10 +659,13 @@ define('io.ox/core/pdf/pdfview', [
                             canvasCtx._transformMatrix = [xScale, 0, 0, yScale, 0, 0];
                             canvasCtx.scale(xScale, yScale);
 
+                            Util.logPerformanceTimer('pdfView:renderPDFPage_before_pdfjsPage_render_' + pageNumber);
+
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,
                                 viewport: viewport
                             }).then(function () {
+                                Util.logPerformanceTimer('pdfView:renderPDFPage_pdfjsPage_render_then_handler_' + pageNumber); // after second long running process (pdfjsPage.render)
                                 if (pdfTextBuilder) {
                                     return pdfjsPage.getTextContent().then(function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);

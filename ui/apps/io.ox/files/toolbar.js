@@ -20,9 +20,10 @@ define('io.ox/files/toolbar', [
     'io.ox/core/notifications',
     'gettext!io.ox/files',
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {
+], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api, folderApi) {
 
     'use strict';
 
@@ -52,7 +53,7 @@ define('io.ox/files/toolbar', [
                             }
                         }, baton);
 
-                    this.append('<i class="fa fa-caret-down">');
+                    this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                     this.addClass('dropdown-toggle').attr({
                         'aria-haspopup': 'true',
@@ -92,7 +93,7 @@ define('io.ox/files/toolbar', [
                             }
                         }, baton);
 
-                    this.append('<i class="fa fa-caret-down">');
+                    this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                     this.addClass('dropdown-toggle').attr({
                         'aria-haspopup': 'true',
@@ -137,20 +138,6 @@ define('io.ox/files/toolbar', [
                     this.attr({ 'aria-label': title, 'data-original-title': title });
                 }
             },
-            'mediaplayer-audio': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-music',
-                label: gt('Play audio files'),
-                ref: 'io.ox/files/icons/audioplayer'
-            },
-            'mediaplayer-video': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-film',
-                label: gt('Play video files'),
-                ref: 'io.ox/files/icons/videoplayer'
-            },
             'viewer': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -177,11 +164,36 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-trash-o',
                 label: gt('Delete'),
-                ref: 'io.ox/files/actions/delete'
+                ref: 'io.ox/files/actions/delete',
+                customize: function (baton) {
+                    var folderId = baton.app.folder.get(),
+                        model = folderApi.pool.getModel(folderId);
+
+                    if (folderApi.is('trash', model.toJSON())) {
+                        this.attr({
+                            'aria-label': gt('Delete forever'),
+                            'data-original-title': gt('Delete forever')
+                        });
+                    }
+                }
             },
             //
             // --- LO ----
             //
+            'addToFavorites': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Add to Favorites'),
+                ref: 'io.ox/files/favorites/add',
+                section: 'favorites'
+            },
+            'removeFromFavorites': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Remove from favorites'),
+                ref: 'io.ox/files/favorites/remove',
+                section: 'favorites'
+            },
             'rename': {
                 prio: 'lo',
                 mobile: 'lo',
@@ -244,18 +256,47 @@ define('io.ox/files/toolbar', [
                 label: gt('Unlock'),
                 ref: 'io.ox/files/actions/unlock',
                 section: 'file-op'
+            },
+            'restore': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Restore'),
+                ref: 'io.ox/files/actions/restore',
+                section: 'file-op'
             }
         };
 
     // local dummy action
 
     new actions.Action('io.ox/files/dropdown/new', {
-        requires: function () { return true; },
+        requires: function (e) {
+            var folderId = e.baton.app.folder.get(),
+                model = folderApi.pool.getModel(folderId);
+
+            return !folderApi.is('trash', model.toJSON());
+        },
         action: $.noop
     });
 
-    new actions.Action('io.ox/files/dropdown/share', {
-        requires: function () { return true; },
+    // new actions.Action('io.ox/files/dropdown/share', {
+    //     requires: function () {
+    //         return true;
+    //     },
+    //     action: $.noop
+    // });
+
+    new actions.Action('io.ox/files/dropdown/shareFavorites', {
+        requires: function (e) {
+            var elemId;
+            if (e.baton.data) {
+                if (!_.isArray(e.baton.data)) {
+                    elemId = e.baton.data.id;
+                } else if (e.baton.data.length) {
+                    elemId = _.first(e.baton.data).id;
+                }
+            }
+            return !!elemId;
+        },
         action: $.noop
     });
 
@@ -346,6 +387,12 @@ define('io.ox/files/toolbar', [
             app.updateToolbar([]);
             // update toolbar on selection change as well as any model change
             app.listView.on('selection:change change', function () {
+                app.updateToolbar(app.listView.selection.get());
+            });
+            api.on('favorite:add favorite:remove', function () {
+                app.updateToolbar(app.listView.selection.get());
+            });
+            folderApi.on('favorite:add favorite:remove', function () {
                 app.updateToolbar(app.listView.selection.get());
             });
         }

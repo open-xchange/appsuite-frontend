@@ -24,7 +24,8 @@ define('io.ox/core/viewer/views/types/imageview', [
      *
      * interface ViewerType {
      *    function render();
-     *    function load();
+     *    function prefetch();
+     *    function show();
      *    function unload();
      * }
      *
@@ -42,7 +43,7 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         render: function () {
-            var image      = $('<img class="viewer-displayer-item viewer-displayer-image">');
+            var image      = $('<img class="viewer-displayer-item viewer-displayer-image hidden">');
             var imageSize  = this.getImageSize();
             var options    = _.extend({ scaleType: 'contain' }, imageSize);
             var previewUrl = this.getPreviewUrl(options);
@@ -57,10 +58,10 @@ define('io.ox/core/viewer/views/types/imageview', [
                 this.$el.busy();
                 image.one('load', function () {
                     self.$el.idle();
-                    image.show();
+                    image.removeClass('hidden');
                 });
                 image.one('error', function () {
-                    var notification = self.createNotificationNode(gt('Sorry, there is no preview available for this image.'));
+                    var notification = self.displayDownloadNotification(gt('Sorry, there is no preview available for this image.'));
                     self.$el.idle().append(notification);
                 });
                 this.$el.append($('<div class="viewer-displayer-item-container">').append(image));

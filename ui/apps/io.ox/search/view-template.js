@@ -14,11 +14,10 @@
 define('io.ox/search/view-template', [
     'gettext!io.ox/core',
     'io.ox/core/extensions',
-    'io.ox/core/api/apps',
     'settings!io.ox/core',
     'io.ox/search/autocomplete/view',
     'io.ox/search/facets/view'
-], function (gt, ext, appAPI, settings) {
+], function (gt, ext, settings) {
 
     'use strict';
 
@@ -28,18 +27,6 @@ define('io.ox/search/view-template', [
      */
 
     var point = ext.point('io.ox/search/view');
-
-    // same stupid solution like in core/main until we get translated apps from backend
-    gt.pgettext('app', 'Portal');
-    gt.pgettext('app', 'Mail');
-    gt.pgettext('app', 'Address Book');
-    gt.pgettext('app', 'Calendar');
-    gt.pgettext('app', 'Scheduling');
-    gt.pgettext('app', 'Tasks');
-    gt.pgettext('app', 'Drive');
-    gt.pgettext('app', 'Conversations');
-    gt.pgettext('app', 'Settings');
-    gt.pgettext('app', 'Documents');
 
     // input field
     point.extend({
@@ -62,8 +49,8 @@ define('io.ox/search/view-template', [
                         $('<i class="fa fa-search" aria-hidden="true">')
                     ),
                     // clear icon/button
-                    $('<a href="#" class="btn-clear" role="button">').attr('aria-label', gt('Clear field')).append(
-                        $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Clear field'))
+                    $('<a href="#" class="btn-clear" role="button">').attr('title', gt('Clear field')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
                     )
                 ),
                 cell = $('<div class="col-xs-11">')
@@ -97,22 +84,23 @@ define('io.ox/search/view-template', [
 
             // create dropdown menu entries
             _(apps).each(function (id) {
-                var title = (ox.manifests.apps[id + '/main'] || {}).title;
-                title = titles[id] = /*#, dynamic*/gt.pgettext('app', title);
+                var app = ox.ui.apps.get(id),
+                    title = app ? app.get('title') : '';
+
+                if (app) titles[app.id] = title;
+
                 items.push(
                     $('<li>').append(
-                        $('<a href="#">')
+                        $('<a href="#" role="button" tabindex="-1">')
                             .attr({
                                 'title': title,
-                                'data-app': id,
-                                'tabindex': '-1',
-                                'role': 'button'
+                                'data-app': id
                             })
                             .append(
-                                $('<i class="fa fa-fw icon"></i>'),
+                                $('<i class="fa fa-fw icon" aria-hidden="true"></i>'),
                                 $('<span>').text(title),
                                 // countpart to keep title centered
-                                $('<i class="fa fa-fw"></i>')
+                                $('<i class="fa fa-fw" aria-hidden="true"></i>')
                             )
                     )
                 );
@@ -120,11 +108,7 @@ define('io.ox/search/view-template', [
 
             // create button and append dropdown menue
             cell.append(
-                $('<a href="#" type="button" class="dropdown-toggle pull-left">')
-                    .attr({
-                        'data-toggle': 'dropdown',
-                        'role': 'menuitemcheckbox'
-                    })
+                $('<a href="#" type="button" class="dropdown-toggle pull-left" data-toggle="dropdown" role="menuitemcheckbox">')
                     .append(
                         $('<span class="name">'),
                         $('<span class="caret">')
@@ -148,7 +132,7 @@ define('io.ox/search/view-template', [
             }
 
             // delegate handler
-            $('body').delegate('.app-dropdown a', 'click', function (e) {
+            $('body').on('click', '.app-dropdown a', function (e) {
                 var cell = $(e.target),
                     next = cell.closest('a').attr('data-app');
 
@@ -206,9 +190,8 @@ define('io.ox/search/view-template', [
         draw: function () {
             this.append(
                 $('<div class="row busy">').append(
-                    $('<div class="col-xs-12 io-ox-busy">')
-                        .css('min-height', '50px')
-                    )
+                    $('<div class="col-xs-12 io-ox-busy">').css('min-height', '50px')
+                )
             );
         }
     });

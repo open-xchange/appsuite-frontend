@@ -17,7 +17,7 @@ First, you need to install some tools which are necessary for UI development.
 TL;DR version:
 
 ```bash
-npm install -g grunt-cli bower yo generator-ox-ui-module
+npm install -g grunt-cli yo generator-ox-ui-module
 ```
 
 Or if needed, there is a complete article about setting up an environment for [grunt]({{ site.baseurl }}/ui/00-getting-started/04-build-process.html).
@@ -132,7 +132,7 @@ You will need those to run the grunt tasks described below.
 
 There is a grunt tasks to create source packages.
 You can use it to create a tar.gz file containing all sources needed to build the project.
-This source package should contain all dependencies that are installed during bower install and npm install (basically containing your bower_components and node_modules directories).
+This source package should contain all dependencies that are installed during npm install (basically containing your node_modules directories).
 To generate this file, run:
 
 ```bash

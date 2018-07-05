@@ -16,9 +16,16 @@
     height: 100%;
     width: 100%;
 
+    .modal-title {
+        font-size: 18px;
+        line-height: 24px;
+        margin: -3px 0 2px 0;
+    }
+
     .modal-body {
         overflow-y: auto;
         max-height: 400px;
+        padding: 15px;
     }
 
     .modal-footer .checkbox {
@@ -56,8 +63,8 @@
     background-color: white;
     z-index: 65001;
     border: 0 none;
-    .box-shadow(0 5px 25px -5px #000);
-    .border-radius(@border-radius-base);
+    box-shadow: 0 5px 25px -5px #000;
+    border-radius: @border-radius-base;
 
     .modal-header {
         position: relative;
@@ -99,7 +106,7 @@
 
             iframe {
                 display: block;
-                .border-radius(5px 5px 0 0);
+                border-radius: 5px 5px 0 0;
             }
         }
 
@@ -128,13 +135,13 @@
     }
 
     .io-ox-sidepopup {
-        &.right { .border-radius(0 5px 5px 0); }
-        &.left  { .border-radius(5px 0 0 5px); }
+        &.right { border-radius: 0 5px 5px 0; }
+        &.left  { border-radius: 5px 0 0 5px; }
     }
 
     &:focus {
-        outline: none;
-        .box-shadow(0 5px 25px -5px darken(@link-color, 20%));
+        outline: 0;
+        box-shadow: 0 5px 25px -5px darken(@link-color, 20%);
     }
 
     &.topmost { z-index: 65003; }
@@ -158,14 +165,11 @@
     .picker-pc-container {
         position: relative;
         height: 350px;
-        @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            .folder-tree .folder-node .folder-arrow { position: static; }
-        }
 
         .io-ox-fileselection {
              li.file {
                 font-size: @font-size-touch;
-                outline: none;
+                outline: 0;
                 line-height: 40px;
                 padding: 2px 7px;
                 .user-select(none);
@@ -206,7 +210,7 @@
         > ul {
             display: inline-block;
             overflow: auto;
-            width: 50%;
+            width: 33%;
             height: 100%;
             margin: 0;
             vertical-align: top;
@@ -246,9 +250,8 @@
                 background-attachment: scroll;
 
                 .file-type-icon {
-                    position: absolute;
-                    bottom: 25px;
-                    margin-left: -50px;
+                    position: relative;
+                    top: 45px;
                     width: 100px;
                     font-size: 70px;
                     font-weight: 100;
@@ -280,16 +283,36 @@
             }
         }
 
-        @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            > div,
-            > ul { width: 100%; }
-        }
-
         .folder-tree { border-right: 1px solid #ddd; }
 
         .io-ox-fileselection {
+
+            &.has-focus > li.file {
+                &.selected {
+                    background-color: @foldertree-selected-focus-background;
+                    * { color: @foldertree-focused-label-color; }
+                }
+
+                &.marked:not(.selected) {
+                    box-shadow: inset 0px 0px 0px 2px #86acd2;
+                }
+
+                &.selected:not(.marked):focus {
+                    background-color: darken(@foldertree-selected-focus-background, 5%);
+
+                    * { color: @foldertree-focused-label-color; }
+                }
+
+                &.selected.marked:focus {
+                    background-color: darken(@foldertree-selected-focus-background, 5%);
+
+                    * { color: @foldertree-focused-label-color; }
+                    box-shadow: inset 0px 0px 0px 2px #86acd2;
+                }
+            }
+
             li.file {
-                outline: none;
+                outline: 0;
                 line-height: 30px;
                 padding: 2px 7px;
                 cursor: pointer;
@@ -307,15 +330,8 @@
                 }
 
                 &.selected {
-                    background-color: @foldertree-selected-focus-background;
-
-                    * { color: @foldertree-focused-label-color; }
-                }
-
-                &:focus {
-                    background-color: darken(@foldertree-selected-focus-background, 5%);
-
-                    * { color: @foldertree-focused-label-color; }
+                    background-color: @foldertree-selected-background;
+                    * { color: @foldertree-selected-label-color; }
                 }
 
                 .checkbox-inline { display: none; }
@@ -341,6 +357,17 @@
     .modal-footer { margin-top: 0; }
 }
 
+.smartphone .add-infostore-file {
+    .picker-pc-container {
+        .folder-tree .folder-node .folder-arrow { position: static; }
+    }
+
+    .modal-body {
+        > div,
+        > ul { width: 100%; }
+    }
+}
+
 /* ios momentum scrolling, breakes mobile chrome if applied to all devices */
 .ios .io-ox-dialog-popup { -webkit-overflow-scrolling: touch; }
 
@@ -351,7 +378,7 @@
     width: 95%;
     margin-top: 0;
     top: 10px;
-    .border-radius(0);
+    border-radius: 0;
 
     .modal-footer {
         margin-top: 0;
@@ -378,6 +405,7 @@
 
 
 .export-dialog .modal-body label.checkbox { padding-left: 20px; }
+.export-dialog select { width: 100%; }
 
 //
 // Backbone-based Modal Dialog
@@ -401,6 +429,7 @@
         flex-direction: column;
         width: 100%;
         max-height: ~"calc(100vh - 48px)";
+        overflow: auto;
     }
 
     .modal-title {
@@ -429,6 +458,23 @@
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
+        .checkbox.custom { margin-bottom: 0; margin-top: 3px; }
+    }
+
+    &.mobile-dialog {
+        .modal-dialog {
+            width: 96%;
+        }
+        .modal-footer {
+            .row {
+                [class*="col-"] { margin-left: 0; }
+
+                .btn {
+                    width: 100%;
+                    margin: 2px 0;
+                }
+            }
+        }
     }
 
     &.maximize {

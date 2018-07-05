@@ -41,7 +41,7 @@ define('io.ox/mail/accounts/model', [
                     required: true,
                     msg: gt('This field is mandatory')
                 }, {
-                    fn: _.noI18n('isMailAddress')
+                    fn: 'isMailAddress'
                 }
             ],
             login: function (value) {
@@ -122,7 +122,7 @@ define('io.ox/mail/accounts/model', [
 
             // See also io.ox/backbone/validation.js
 
-            var regEmail = /\@/.test(newMailaddress);
+            var regEmail = /@/.test(newMailaddress);
 
             if (!regEmail) return gt('This is not a valid email address');
         },
@@ -171,8 +171,19 @@ define('io.ox/mail/accounts/model', [
                     }
 
                     return AccountAPI.update(changes).done(function () {
+                        var def = $.when();
                         folderAPI.pool.unfetch('default' + id);
-                        folderAPI.refresh();
+                        if (typeof changes.unified_inbox_enabled !== 'undefined') {
+                            def = require(['settings!io.ox/mail']).then(function (settings) {
+                                // reload settings to fetch unifiedInboxIdentifier
+                                return settings.reload();
+                            }).then(function () {
+                                folderAPI.pool.unfetch('1');
+                            });
+                        }
+                        def.then(function () {
+                            folderAPI.refresh();
+                        });
                     });
 
                 }).then(function () {

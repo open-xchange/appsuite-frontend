@@ -8,7 +8,7 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: [
-                        'bower_components/bootstrap/less/bootstrap.less'
+                        'node_modules/bootstrap/less/bootstrap.less'
                     ],
                     expand: true,
                     rename: function (dest) { return dest; },

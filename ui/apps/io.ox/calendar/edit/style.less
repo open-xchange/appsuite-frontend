@@ -14,6 +14,7 @@
 .io-ox-calendar-edit {
     // baseline adjustment
     padding-top: @default-padding;
+    padding-bottom: @default-padding;
 
     .btn.btn-link { padding-left: 0; }
 
@@ -35,70 +36,45 @@
 
     .find-free-time { margin-top: 12px; }
 
-    .custom-color {
+    .hard-conflict { margin: 1em 0 0 0; }
 
-        padding-top: 8px;
+    .io-ox-calendar-color-picker {
+        width: 352px;
+    }
 
-        input[type="radio"] {
-            // display: none does NOT work; cannot receive focus
-            position: absolute;
-            clip: rect(0, 0, 0, 0);
+    .color-picker-dropdown {
+        display: inline-block;
+    }
+
+    .color-container {
+        display: flex;
+        margin-top: 7px;
+        align-items: center;
+    }
+
+    .picked-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        margin-right: 16px;
+        background-color: rgb(255, 255, 255);
+        display: inline-block;
+
+        &.no-color:before {
+            border: 1px solid #888;
         }
-
-        label {
-            padding: 0;
-            margin: 0;
-        }
-
-        .box:before {
+        &:before {
             font-family: 'FontAwesome';
             content: '\00a0';
             width: 20px;
             height: 20px;
             display: inline-block;
-            margin-right: 4px;
-            border-radius: @border-radius-small;
-            text-align: center;
-            font-size: 14px;
-            line-height: 20px;
-        }
-
-        input[type="radio"]:focus + .box:before {
-            box-shadow: 0 0 3px @link-color;
-        }
-
-        input[type="radio"]:checked + .box:before {
-            content: '\f00c';
-        }
-
-        .generate-color-label(@counter) when (@counter > 0) {
-            .generate-color-label((@counter - 1));
-
-            @color-label-bg-mod: ~"color-label-bg-@{counter}";
-            @color-label-contrast: contrast(@@color-label-bg-mod);
-
-            .color-label-@{counter} {
-                &:before {
-                    @color-label-counter: ~"color-label-bg-@{counter}";
-                    background-color: darken(@@color-label-counter, 10%);
-                    color: @color-label-contrast;
-                }
-            }
-        }
-
-        .generate-color-label(10);
-
-        .box.no-color:before {
-            border: 1px solid #888;
-            margin-right: 24px;
-            color: @black;
+            border-radius: 3px;
         }
     }
 
-    .hard-conflict { margin: 1em 0 0 0; }
-
     /* Mobile */
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+    @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
         .actionToggle { display: block; }
 
         .collapsed { display: none; }
@@ -115,6 +91,27 @@
 
             &.active .fa { line-height: 40px; }
         }
+    }
+
+    .visibility-select {
+        margin-top: 8px;
+    }
+
+    .btn.btn-link.visibility-helper-button {
+        font-size: 16px;
+        padding: 0 8px;
+        position: absolute;
+        top: 6px;
+    }
+
+}
+
+.calendar-popover {
+    padding: 0 8px 8px 8px;
+
+    .ox-popover-title {
+        font-weight: bold;
+        margin: 8px 0;
     }
 }
 

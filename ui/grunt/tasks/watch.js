@@ -16,4 +16,14 @@ module.exports = function (grunt) {
 
     // do not start any heavy operation when configs change. Developer is responsible, instead
     grunt.config.set('watch.configs.files', []);
+    var prefixes = grunt.config('local.appserver.prefixes').slice(1);
+    grunt.config.extend('watch', {
+        prefixes: {
+            options: {},
+            files: prefixes.map(function (p) {
+                return require('path').join(p, '**/*');
+            }),
+            tasks: ['force_update']
+        }
+    });
 };

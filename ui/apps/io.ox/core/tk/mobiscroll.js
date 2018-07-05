@@ -13,8 +13,8 @@
 
 define('io.ox/core/tk/mobiscroll', [
     'gettext!io.ox/core',
-    'static/3rd.party/mobiscroll/mobiscroll.js',
-    'css!3rd.party/mobiscroll/mobiscroll.css'
+    'static/3rd.party/mobiscroll.js',
+    'css!3rd.party/mobiscroll.css'
 ], function (gt) {
 
     'use strict';

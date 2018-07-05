@@ -13,9 +13,8 @@
 define('io.ox/core/api/reminder', [
     'io.ox/core/http',
     'io.ox/tasks/api',
-    'io.ox/calendar/api',
     'io.ox/core/event'
-], function (http, taskAPI, calendarAPI, Events) {
+], function (http, taskAPI, Events) {
 
     'use strict';
 
@@ -27,7 +26,6 @@ define('io.ox/core/api/reminder', [
         reminderStorage = {},
         // arrays to store the reminders that should be displayed currently
         tasksToDisplay = [],
-        appointmentsToDisplay = [],
         // next reminder to be triggered
         nextReminder,
         // timer that triggers the next reminder
@@ -44,7 +42,6 @@ define('io.ox/core/api/reminder', [
         checkReminders = function () {
             //reset variables
             tasksToDisplay = [];
-            appointmentsToDisplay = [];
             clearTimeout(reminderTimer);
 
             //check if nextReminder was removed meanwhile
@@ -54,13 +51,7 @@ define('io.ox/core/api/reminder', [
             //find the next due reminder
             _(reminderStorage).each(function (reminder) {
                 if (reminder.alarm <= _.now()) {
-                    //tasks
-                    if (reminder.module === 4) {
-                        tasksToDisplay.push(reminder);
-                    // appointments
-                    } else {
-                        appointmentsToDisplay.push(reminder);
-                    }
+                    tasksToDisplay.push(reminder);
                 } else if (!nextReminder || reminder.alarm < nextReminder.alarm) {
                     nextReminder = reminder;
                 }
@@ -68,7 +59,6 @@ define('io.ox/core/api/reminder', [
 
             //trigger events so notification area is up to date
             api.trigger('set:tasks:reminder', tasksToDisplay);
-            api.trigger('set:calendar:reminder', appointmentsToDisplay);
 
             if (nextReminder) {
                 var timeout = nextReminder.alarm - _.now();
@@ -140,7 +130,11 @@ define('io.ox/core/api/reminder', [
                     // if no range given, get the reminders an our ahead(to be independent of global refresh)
                     end: range || moment().add(1, 'hour').valueOf()
                 }
-            }).pipe(function (list) {
+            }).then(function (list) {
+                // remove appointment reminders, those are requested via chronos api
+                list = _(list).filter(function (reminder) {
+                    return reminder.module === 4;
+                });
                 updateReminders(list);
                 checkReminders();
                 return list;
@@ -148,7 +142,7 @@ define('io.ox/core/api/reminder', [
         },
 
         /**
-         * get's a task or appointment for a given reminder
+         * get's a task for a given reminder
          * @param  {reminder} reminder
          * @return {deferred}
          */
@@ -166,14 +160,7 @@ define('io.ox/core/api/reminder', [
                 id: reminder.target_id,
                 folder_id: reminder.folder
             };
-            if (reminder.module === 4) {
-                //task
-                return taskAPI.get(obj);
-            }
-
-            //appointment
-            obj.recurrence_position = reminder.recurrence_position;
-            return calendarAPI.get(obj);
+            return taskAPI.get(obj);
         }
     };
 
@@ -195,7 +182,7 @@ define('io.ox/core/api/reminder', [
         api.refresh();
     });
 
-    function handleDelete(item, type) {
+    function handleDelete(item) {
         if (!(item || item.length)) {
             return;
         }
@@ -210,16 +197,16 @@ define('io.ox/core/api/reminder', [
             }
         }
 
-        if (find(item, type, true)) {
+        if (find(item, true)) {
             checkReminders();
         }
     }
     //function returns true if there is a reminder for the task or appointment
     //setting remove to true also removes it
-    function find(item, type, remove) {
+    function find(item, remove) {
         var found = false;
         _(reminderStorage).each(function (reminder, key) {
-            if (reminder.module === type && reminder.target_id === item.id) {
+            if (reminder.target_id === item.id) {
                 if (remove) {
                     delete reminderStorage[key];
                 }
@@ -239,28 +226,17 @@ define('io.ox/core/api/reminder', [
                     tasks.push(obj);
                 }
             });
-            handleDelete(tasks, 4);
+            handleDelete(tasks);
         } else {
-            handleDelete(item, 4);
+            handleDelete(item);
         }
     });
 
     taskAPI.on('update', function (e, item) {
-        if (find(item, 4)) {
+        if (find(item)) {
             //get fresh data to be consistent(name, due date change etc)
             api.getReminders();
         }
-    });
-
-    calendarAPI.on('update', function (e, item) {
-        if (find(item, 1)) {
-            //get fresh data to be consistent(name, due date change etc)
-            api.getReminders();
-        }
-    });
-
-    calendarAPI.on('delete', function (e, item) {
-        handleDelete(item, 1);
     });
 
     return api;

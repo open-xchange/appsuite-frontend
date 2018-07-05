@@ -50,8 +50,10 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
          * early and spawn a onLeft or onRight action
          */
         events: {
-            'tap .navbar-action.right:not(.custom)': 'onRightAction',
-            'tap .navbar-action.left:not(.custom)': 'onLeftAction'
+            'touchstart .navbar-action': 'cantTouchThis',
+            'touchend .navbar-action': 'cantTouchThis',
+            'click .navbar-action.right:not(.custom)': 'onRightAction',
+            'click .navbar-action.left:not(.custom)': 'onLeftAction'
         },
 
         initialize: function (opt) {
@@ -81,7 +83,12 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
 
             return this;
         },
+        // simple fix to prevent sticky hover effects on touch devices
+        cantTouchThis: function (e) {
+            if (e.type === 'touchstart') $(e.currentTarget).addClass('tapped');
+            if (e.type === 'touchend') $(e.currentTarget).removeClass('tapped');
 
+        },
         setLeft: function ($node) {
             this.left = $node;
             this.render();

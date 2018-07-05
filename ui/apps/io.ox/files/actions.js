@@ -14,14 +14,19 @@
 define('io.ox/files/actions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
+    'io.ox/core/api/user',
+    'io.ox/files/share/api',
     'io.ox/files/util',
     'io.ox/core/api/filestorage',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
+    'io.ox/files/actions/download',
     'settings!io.ox/files',
-    'gettext!io.ox/files'
-], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
+    'settings!io.ox/core',
+    'gettext!io.ox/files',
+    'io.ox/core/yell'
+], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, links, capabilities, download, settings, coreSettings, gt, yell) {
 
     'use strict';
 
@@ -30,8 +35,20 @@ define('io.ox/files/actions', [
         // used by text editor
         allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
 
-    if (capabilities.has('guard-drive')) {
+    if (capabilities.has('guard')) {
         allowedFileExtensions.push('pgp');
+    }
+
+    function isTrash(baton) {
+        var model,
+            folderId;
+        if (baton.app) {
+            folderId = baton.app.folder.get();
+        } else if (baton.data) {
+            folderId = baton.data.folder_id;
+        }
+        model = folderAPI.pool.getModel(folderId);
+        return model ? folderAPI.is('trash', model.toJSON()) : false;
     }
 
     // actions
@@ -80,6 +97,7 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
+                if (isTrash(e.baton)) return false;
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
                     var model = _.first(e.baton.models);
                     var isEncrypted = model && model.isEncrypted();
@@ -118,12 +136,13 @@ define('io.ox/files/actions', [
 
                 // Check if Guard file.  If so, do auth then call with parameters
                 // do not use endsWith because of IE11
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.toLowerCase().lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard-drive')) {
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.toLowerCase().lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
                                 cryptoAction: 'Decrypt',
-                                cryptoAuth: auth
+                                cryptoAuth: auth,
+                                session: ox.session
                             };
                             launch(params);
                         });
@@ -161,8 +180,8 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
-            // no file-system, no download
-            if (_.device('ios')) return false;
+            // no download for oldeer ios devices
+            if (_.device('ios') && _.device('ios < 11')) return false;
 
             function isValid(file) {
                 // locally added but not yet uploaded,   'description only' items
@@ -185,16 +204,13 @@ define('io.ox/files/actions', [
             return isValid(e.baton.data);
         },
         multiple: function (list) {
-            ox.load(['io.ox/files/actions/download']).done(function (action) {
-                action(list);
-            });
+            download(list);
         }
     });
 
     new Action('io.ox/files/actions/download-folder', {
         requires: function (e) {
-            // no file-system, no download
-            if (_.device('ios')) return false;
+            if (_.device('ios') && _.device('ios < 11')) return false;
             // single folders only
             if (!e.collection.has('one', 'folders')) return false;
             //disable for external storages
@@ -210,7 +226,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/downloadversion', {
         requires: function (e) {
             // no file-system, no download
-            if (_.device('ios')) return false;
+            if (_.device('ios') && _.device('ios < 11')) return false;
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
@@ -253,12 +269,10 @@ define('io.ox/files/actions', [
             if (_(e.baton.data).has('internal_userid')) return false;
             // locally added but not yet uploaded
             if (e.baton.data.group === 'localFile') { return false; }
-            if (e.baton.data.file_mimetype) {
-                // no 'open' menu entry for office documents, PDF and plain text
-                if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
-                if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
-            }
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.isOffice(e.baton.data)) return false;
+            if (api.isPDF(e.baton.data)) return false;
+            if (api.isText(e.baton.data)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -316,7 +330,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/viewer', {
         requires: function (e) {
-            if (e.collection.has('guard') && !capabilities.has('guard-drive')) return false;
+            if (e.collection.has('guard') && !capabilities.has('guard')) return false;
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
@@ -346,7 +360,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -367,7 +381,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-
+            if (isTrash(e.baton)) return false;
             var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
@@ -414,8 +428,15 @@ define('io.ox/files/actions', [
         // check if there is a permission for a group, the user is a member of
         // use max permissions available
         if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
-            // use rampup data so this is not deferred
-            myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+            var def = $.Deferred();
+
+            userAPI.get().done(function (userData) {
+                myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(userData.groups)[0] });
+                def.resolve(!!(myself && (myself.bits >= 2)));
+            }).fail(function () { def.reject(); });
+
+            return def;
+
         }
 
         return !!(myself && (myself.bits >= 2));
@@ -423,6 +444,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             // one?
             if (!e.collection.has('one')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
@@ -456,7 +478,9 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/save-as-pdf', {
         capabilities: 'document_preview', // document converter.
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             // one?
+            if (e.baton.favorite) return false;
             if (!e.collection.has('one')) return false;
 
             // hide in mail compose preview
@@ -465,11 +489,13 @@ define('io.ox/files/actions', [
             // is folder?
             if (e.collection.has('folders')) return false;
 
-            var
-                model         = e.baton.models[0];
-          //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
-          //
-          //if (!isAccessWrite(e)) return false;
+            // bug 54493: no "Save as PDF" for anonymous guests (same solution as in bug 42621)
+            if (capabilities.has('guest && anonymous')) return false;
+
+            var model = e.baton.models[0];
+            //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
+            //
+            //if (!isAccessWrite(e)) return false;
 
             // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
             return (model.isFile() && (model.isOffice() || model.isText()));
@@ -484,6 +510,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
+            if (isTrash(e.baton)) return false;
             if (!e.collection.has('one', 'items')) return false;
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
@@ -496,7 +523,10 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
-                action(baton.data);
+                // initially the description in not in the reduced data in the pool that is used here, get the fileModel
+                api.get(baton.data).done(function (fileModel) {
+                    action(fileModel);
+                });
             });
         }
     });
@@ -514,11 +544,57 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to restore a list of files and folders
+    new Action('io.ox/files/actions/restore', {
+        requires: function (e) {
+            if (!e.context) return false;
+
+            if (!_.isArray(e.context)) e.context = [e.context];
+
+            if (!e.context.length) return false;
+
+            var result = true;
+            _.each(e.context, function (element) {
+                // folderId where the item is located
+                var folderId = element.folder_id;
+                if ((/^folder\./).test(e.context[0].cid)) {
+                    // the folderId is the id of the parent folder if the item is a folder
+                    var folderModel = folderAPI.pool.getModel(e.context[0].id);
+                    folderId = folderModel.get('folder_id');
+                }
+
+                // is an item is not located in the trash, disable the action
+                if (String(settings.get('folder/trash')) !== folderId) {
+                    result = false;
+                }
+            });
+
+            return result;
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/restore']).done(function (action) {
+                if (!_.isArray(baton.data)) baton.data = [baton.data];
+                var models = [];
+                _.each(baton.data, function (element) {
+                    var model = new api.Model(element);
+                    var key = baton.app.listView.getCompositeKey(model);
+
+                    // the file model of files and folders
+                    var convertedModel = api.resolve([key], false);
+                    if (convertedModel.length) models.push(convertedModel[0]);
+                });
+
+                action(models);
+            });
+        }
+    });
+
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             requires:  function (e) {
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+                if (type === 'move' && e.baton.favorite) return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
                 // anonymous guests just have one folder so no valid target folder (see bug 42621)
                 if (capabilities.has('guest && anonymous')) return false;
@@ -535,6 +611,7 @@ define('io.ox/files/actions', [
                         label: label,
                         success: success,
                         successCallback: function (response, apiInput) {
+                            // see file/api.js transfer(): in case of an error the callback returns a string
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
                                     itemsLeft = [];
@@ -595,8 +672,28 @@ define('io.ox/files/actions', [
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
-                                                api[type](itemsLeft, baton.target || apiInput.target, true);
+                                                api[type](itemsLeft, baton.target || apiInput.target, true)
+                                                .always(function (response) {
 
+                                                    // see file/api.js transfer(): in case of an error the callback returns a string
+                                                    // important: only errors must be checked, conflicts can't happen here, since the
+                                                    // ignoreConflicts flag is 'true' at api.move
+                                                    var error = _.isString(response);
+
+                                                    if (error) {
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('error', response);
+                                                            api.trigger('reload:listview');
+                                                        });
+
+                                                    } else {
+                                                        //no error, must be success
+                                                        require(['io.ox/core/yell'], function (yell) {
+                                                            yell('success', itemsLeft.length > 1 ? success.multiple : success.single);
+                                                        });
+                                                    }
+
+                                                });
                                             },
                                             callbackCancel: function () {
                                                 // note: drag&drop and actions via menu use a different baton, see b53498
@@ -635,33 +732,86 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
+    /**
+     * Checks if the collection inside an event is shareable
+     * @param {Event} e
+     *  Event to check the collection
+     * @param {String} type
+     *  Type of the sharing to check ("invite" or "link")
+     * @returns {boolean}
+     *  Whether the elements inside the collection are shareable
+     */
     function isShareable(e, type) {
-        var id, model;
+        var id, folderModel;
+
         // not possible for multi-selection
         if (e.collection.has('multiple')) return false;
         // check if this is a contact not a file, happens when contact is send as vcard
         if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
         // get folder id
         if (e.collection.has('one')) {
-            // use selected file or folders
-            id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+
+            // -> from the folder tree we get an array, in the list an obj so normalize
+            var dataObj = _.isArray(e.baton.data) ? e.baton.data[0] : e.baton.data;
+            id = e.collection.has('folders') ? dataObj.id : dataObj.folder_id;
+
         } else if (e.baton.app) {
             // use current folder
             id = e.baton.app.folder.get();
         }
-        if (e.collection.has('guard')) return false;  // Guard sharing not supported currently
+
         if (!id) return false;
         // general capability and folder check
-        model = folderAPI.pool.getModel(id);
-        if (!model.isShareable()) return false;
-        if (model.is('trash')) return false;
-        return type === 'invite' ? model.supportsInviteGuests() : true;
+        folderModel = folderAPI.pool.getModel(id);
+        if (!folderModel.isShareable()) return false;
+        if (folderModel.is('trash')) return false;
+        return type === 'invite' ? folderModel.supportsInviteGuests() : true;
     }
+
+    new Action('io.ox/files/dropdown/share', {
+        requires: function (e) {
+            // usually this dropdown was always true and only removed in case the child actions are disabled.
+            // but this introduced jumping icons in the toolbar, therefore we check the dropdown/share too now to prevent this.
+            // note for the next one who is working in this area: a more elegant solution would be to wait until
+            // the child action from this dropdown are checked or something similar, so that we don't need
+            // to check it twice like now.
+            return isShareable(e, 'link') || isShareable(e, 'invite');
+        },
+        action: $.noop
+    });
+
+    // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
+    new Action('io.ox/files/actions/editShare', {
+        requires: function (e) {
+            if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            // we must check the real selection because in myShares we could have two items for one model
+            if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
+            return true;
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                var models = _.isArray(baton.models) ? baton.models : [baton.models],
+                    shareType, elem;
+                if (models && models.length) {
+                    elem = baton.app.mysharesListView.$el.find('.list-item.selected');
+                    if (elem.length) {
+                        shareType = elem.attr('data-share-type');
+                        if (shareType === 'invited-people') {
+                            action.invite(models);
+                        } else if (shareType === 'public-link') {
+                            action.link(models);
+                        }
+                    }
+                }
+            });
+        }
+    });
 
     // folder based actions
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
+            if (e.baton.models.length > 1) return false;
             return isShareable(e, 'invite');
         },
         action: function (baton) {
@@ -683,6 +833,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/getalink', {
         capabilities: 'share_links',
         requires: function (e) {
+            if (e.baton.models.length > 1) return false;
             return isShareable(e, 'link');
         },
         action: function (baton) {
@@ -700,34 +851,128 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/icons/audioplayer', {
+    // Action to revoke the sharing of the files.
+    new Action('io.ox/files/share/revoke', {
         requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('audio', e);
+            if (!e.baton.app || !e.baton.app.mysharesListView || !e.baton.app.mysharesListView.$el) return false;
+            // we must check the real selection because in myShares we could have two items for one model
+            if (e.baton.app.mysharesListView.selection.get().length !== 1) return false;
+            return true;
         },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
+        action: _.throttle(function (baton) {
+            require(['io.ox/files/share/permissions', 'io.ox/files/share/api'], function (permissions, shareApi) {
 
-    new Action('io.ox/files/icons/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('video', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
+                var models = _.isArray(baton.models) ? baton.models : [baton.models];
+                if (models && models.length) {
+                    var model = _.first(models),
+                        elem = baton.app.mysharesListView.$el.find('.list-item.selected'),
+                        shareType = elem.attr('data-share-type'),
+                        shareModel = new shareApi.Model(model.isFile() ? model.pick('id', 'folder_id') : model.pick('id')),
+                        folderId = model.get('folder_id') || model.get('id'),
+                        options = { module: 'infostore', folder: folderId },
+                        permissionsToKeep,
+                        fileModel, folderModel,
+                        newPermissionList, newExtendedPermissionList;
+
+                    // do nothing when the item is removed from DOM, because the type is (unfortunately) determined by DOM attributes
+                    // revoking an sharing link while the DOM does not exist would remove permissions for example as shareType is undefined
+                    if (shareType === undefined) { return; }
+
+                    shareModel.loadExtendedPermissions().done(function () {
+
+                        if (shareType === 'public-link') {
+                            var def;
+
+                            if (model.isFile()) {
+                                options.item = model.get('id');
+                                // workaround: do not cache, we need the most recent data from the server to prevent old timestamps
+                                def = api.get(_.pick(model.toJSON(), 'id', 'folder_id'), { cache: false }).then(function (fileModel) {
+                                    // use this as a timestamp for files for deleteLink, never use system time!
+                                    return fileModel.sequence_number;
+                                });
+                            } else {
+                                // workaround: do not cache, we need the most recent data from the server to prevent old timestamps
+                                def = folderAPI.get(model.get('id'), { cache: false }).then(function (folderDesc) {
+                                    // use this as a timestamp for deleteLink, never use system time!
+                                    return folderDesc.last_modified_utc;
+                                });
+                            }
+
+                            def.done(function (changeTimestamp) {
+                                shareAPI.deleteLink(options, changeTimestamp)
+                                .done(function () {
+                                    yell('success', gt('Revoked access.'));
+                                    shareModel.destroy.bind(shareModel);
+                                })
+                                .fail(function (error) {
+                                    // current 'dirty' workaround: the error below appears when the link does not exist anymore on the server and when the user revoke it,
+                                    // the user should not see this error, so we can just refresh the view and refresh all data to be sync again
+                                    if (error.categories === 'ERROR' && error.code === 'SHR-0023') {
+                                        ox.trigger('refresh^');
+                                    } else {
+                                        yell(error);
+                                    }
+                                });
+                            });
+
+                        } else {
+                            shareModel.reload().done(function () {
+                                permissionsToKeep = shareModel.getPermissions().filter(function (item) {
+                                    if (item.type === 'anonymous' || ox.user_id === item.entity) {
+                                        return true;
+                                    }
+                                    return false;
+                                });
+
+                                shareModel.setPermissions(permissionsToKeep);
+
+                                if (model.isFolder()) {
+                                    folderAPI.get(model.get('id')).done(function (folderDesc) {
+                                        folderModel = new folderAPI.FolderModel(folderDesc);
+                                        newPermissionList = folderModel.get('permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        folderAPI
+                                            .update(folderModel.get('id'), { permissions: newPermissionList })
+                                            .done(function () {
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
+                                } else {
+                                    api.get(_.pick(model.toJSON(), 'id', 'folder_id')).done(function (fileDesc) {
+                                        fileModel = new api.Model(fileDesc);
+                                        newPermissionList = fileModel.get('object_permissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        newExtendedPermissionList = fileModel.get('com.openexchange.share.extendedObjectPermissions').filter(function (item) {
+                                            return !!_.where(permissionsToKeep, { entity: item.entity }).length;
+                                        });
+                                        api
+                                            .update(fileDesc, {
+                                                object_permissions: newPermissionList,
+                                                'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
+                                            })
+                                            .done(function () {
+                                                fileModel.destroy.bind(fileModel);
+                                                yell('success', gt('Revoked access.'));
+                                            })
+                                            .fail(function (error) {
+                                                yell(error);
+                                            });
+                                    });
+                                }
+                            });
+                        }
+                    })
+                    .fail(function (error) {
+                        yell(error);
+                    });
+                }
             });
-        }
+        }, 600)
     });
 
     // version specific actions
@@ -801,6 +1046,166 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to switch to the folder of a file
+    new Action('io.ox/files/actions/show-in-folder', {
+        requires: function (e) {
+            if (_.device('smartphone')) return false;
+            if (!e.collection.has('one')) return false;
+            if (!e.baton.favorite && !e.baton.share && !e.baton.portal) return false;
+
+            // get proper id
+            var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+            var model = folderAPI.pool.getModel(id);
+            return !!model;
+        },
+        action: function (baton) {
+            var app = baton.app,
+                model = baton.models[0],
+                attr = model.attributes,
+                folder_id = model.isFile() ? attr.folder_id : attr.id,
+                listView = app.listView,
+                mysharesListView = app.mysharesListView,
+                myfavoritesListView = app.myfavoritesListView,
+                cid = app.listView.getCompositeKey(model),
+
+                // refresh the view and select file even if the folder is already selected
+                alwaysChange = baton.alwaysChange;
+
+            function select() {
+                if (mysharesListView) {
+                    mysharesListView.off('listview:shown', select);
+                } else if (myfavoritesListView) {
+                    myfavoritesListView.off('listview:shown', select);
+                } else {
+                    listView.off('listview:shown', select);
+                }
+
+                listView.off('collection:rendered', select);
+                listView.selection.set([cid], true);
+
+                var element = app.listView.selection.getNode(cid);
+                listView.selection.selectAll(element);
+            }
+
+            if (mysharesListView && mysharesListView.$el.is(':visible')) {
+                mysharesListView.on('listview:shown', select);
+            } else if (myfavoritesListView && myfavoritesListView.$el.is(':visible')) {
+                myfavoritesListView.on('listview:shown', select);
+            } else {
+                listView.on('listview:shown', select);
+                listView.on('listview:reset', select);
+            }
+
+            if (alwaysChange && app.folder.get() === folder_id) {
+                select();
+            } else {
+                app.folder.set(folder_id);
+            }
+        }
+    });
+
+    // Action to add files/folders to favorites
+    new Action('io.ox/files/favorites/add', {
+        requires: function (e) {
+            if (isTrash(e.baton)) return false;
+            if (capabilities.has('guest && anonymous')) return false;
+
+            var favorites = coreSettings.get('favorites/infostore', []);
+            var favoriteFiles = coreSettings.get('favoriteFiles/infostore', []);
+
+            var allFavorites = favorites;
+            _.each(favoriteFiles, function (file) {
+                allFavorites.push(file.id);
+            });
+
+            if (Array.isArray(allFavorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
+                }
+
+                if (!e.context.length) {
+                    e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
+                }
+
+                // returns false if one file/folder of the selection is in favorites or a 'local file' (see below)
+                var result =  _.some(e.context, function (element) {
+                    // check that we don't have a local file (upload file in mailcompose, view the file -> we have a local file)
+                    if (element.group === 'localFile') {
+                        return true;
+                    }
+
+                    var isFavorite = _.find(favorites, function (elemId) {
+                        if (elemId === element.id) {
+                            return true;
+                        }
+                    });
+                    return folderAPI.is('trash', element) || isFavorite;
+                });
+
+                return !result;
+            }
+            return true;
+        },
+        multiple: function (list, baton) {
+            if (!Array.isArray(list) || !list.length) {
+                if (baton.app) {
+                    var model = folderAPI.pool.getModel(baton.app.folder.get());
+                    list = [model.toJSON()];
+                }
+            }
+            ox.load(['io.ox/files/actions/favorites']).done(function (action) {
+                action.add(list);
+            });
+        }
+    });
+
+    // Action to remove files/folders to favorites
+    new Action('io.ox/files/favorites/remove', {
+        requires: function (e) {
+            if (capabilities.has('guest && anonymous')) return false;
+            var favorites = coreSettings.get('favorites/infostore', []);
+            var favoriteFiles = coreSettings.get('favoriteFiles/infostore', []);
+
+            var allFavorites = favorites;
+            _.each(favoriteFiles, function (file) {
+                allFavorites.push(file.id);
+            });
+
+            if (Array.isArray(allFavorites)) {
+                if (!Array.isArray(e.context)) {
+                    e.context = [e.context];
+                }
+
+                if (!e.context.length) {
+                    e.context.push({ id: e.baton.app.folder.get(), folder_id: 'folder' });
+                }
+
+                // returns true if one file/folder of the selection is in favorites
+                var result =  _.some(e.context, function (element) {
+                    var isFavorite = _.find(favorites, function (elemId) {
+                        if (elemId === element.id) {
+                            return true;
+                        }
+                    });
+                    return isFavorite;
+                });
+                return result;
+            }
+            return false;
+        },
+        multiple: function (list, baton) {
+            if (!Array.isArray(list) || !list.length) {
+                if (baton.app) {
+                    var model = folderAPI.pool.getModel(baton.app.folder.get());
+                    list = [model.toJSON()];
+                }
+            }
+            ox.load(['io.ox/files/actions/favorites']).done(function (action) {
+                action.remove(list);
+            });
+        }
+    });
+
     // 'new' dropdown
     new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,
@@ -847,16 +1252,6 @@ define('io.ox/files/actions', [
 
     // INLINE (only used by mobile toolbar atm)
     var index = 100;
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'open',
-        enabled: _.device('!IE'),
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'hi',
-        label: gt('Open in browser'),
-        ref: 'io.ox/files/actions/open'
-    }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'openviewer',
@@ -913,6 +1308,24 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'favorite-add',
+        index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Add to favorites'),
+        ref: 'io.ox/files/favorites/add'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'favorite-remove',
+        index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Remove from favorites'),
+        ref: 'io.ox/files/favorites/remove'
     }));
 
     // low

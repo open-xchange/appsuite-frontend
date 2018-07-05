@@ -19,6 +19,28 @@ define('io.ox/backbone/mini-views/common', [
 
     'use strict';
 
+    // used by firefox only, because it doesn't trigger a change event automatically
+    var firefoxDropHelper =  function (e) {
+        if (e.originalEvent.dataTransfer.getData('text')) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
+    // used by passwordfield, because it doesn't trigger a change event automatically
+    var pasteHelper =  function (e) {
+        if (!e || e.type !== 'paste') return;
+        if (e.originalEvent.clipboardData.types.indexOf('text/plain') !== -1) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
+
     //
     // <input type="text">
     //
@@ -26,20 +48,12 @@ define('io.ox/backbone/mini-views/common', [
     var InputView = AbstractView.extend({
         el: '<input type="text" class="form-control">',
         // firefox does not trigger a change event if you drop text.
-        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
+        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop', 'paste': 'onPaste' } : { 'blur': 'onChange', 'change': 'onChange', 'paste': 'onPaste' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
-        // used by firefox only, because it doesn't trigger a change event automatically
-        onDrop: function (e) {
-            if (e.originalEvent.dataTransfer.getData('text')) {
-                var self = this;
-                // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
-                this.$el.one('input', function () {
-                    self.$el.trigger('change');
-                });
-            }
-        },
+        onDrop: firefoxDropHelper,
+        onPaste: pasteHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
@@ -70,12 +84,17 @@ define('io.ox/backbone/mini-views/common', [
 
     var PasswordView = AbstractView.extend({
         el: '<input type="password" class="form-control">',
-        events: { 'change': 'onChange' },
+        events: {
+            'change': 'onChange',
+            'paste': 'onPaste'
+        },
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
-            this.model.set(this.name, value, { validate: true });
+            this.model.set(this.name, value, { validate: true, _event: 'change' });
         },
+        // paste doesn't trigger a change event
+        onPaste: pasteHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
@@ -126,7 +145,8 @@ define('io.ox/backbone/mini-views/common', [
         },
         onFocusChange: _.debounce(function () {
             this.$el.toggleClass('has-focus', $(document.activeElement).closest('.password-container').length > 0);
-        }, 20),
+            // use long delay here as safari messes up the focus order
+        }, 200),
         onKeyPress: function (e) {
             // Windows Key / Left ⌘ / Chromebook Search key
             if (e.which !== 91) return;
@@ -136,11 +156,15 @@ define('io.ox/backbone/mini-views/common', [
             state = _.isBoolean(state) ? state : undefined;
             this.passwordView.toggle(state);
             this.$el.find('i.fa').removeClass('fa-eye fa-eye-slash').addClass(this.icons[this.passwordView.$el.attr('type')]);
+            // safari needs manual focus
+            if (_.device('safari')) {
+                this.$el.find('.toggle-asterisks').focus();
+            }
         },
         render: function () {
             this.$el.empty().append(
                 this.passwordView.render().$el,
-                $('<button href="#" class="btn form-control-feedback toggle-asterisks center-childs">')
+                $('<button type="button" class="btn form-control-feedback toggle-asterisks center-childs">')
                     //#. title of toggle button within password field
                     .attr({ title: gt('toggle password visibility') })
                     .append(
@@ -162,16 +186,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
-        // used by firefox only, because it doesn't trigger a change event automatically
-        onDrop: function (e) {
-            if (e.originalEvent.dataTransfer.getData('text')) {
-                var self = this;
-                // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
-                this.$el.one('input', function () {
-                    self.$el.trigger('change');
-                });
-            }
-        },
+        onDrop: firefoxDropHelper,
         setup: function (options) {
             this.rows = options.rows;
             this.listenTo(this.model, 'change:' + this.name, this.update);
@@ -181,6 +196,7 @@ define('io.ox/backbone/mini-views/common', [
         },
         render: function () {
             this.$el.attr({ name: this.name });
+            if (this.options.id) this.$el.attr('id', this.options.id);
             if (this.rows) this.$el.attr('rows', this.rows);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
@@ -190,25 +206,84 @@ define('io.ox/backbone/mini-views/common', [
 
     //
     // <input type="checkbox">
+    // if you require custom values instead of true and false you may pass the option customValues. This must be an object containing the values to be used with 'true' and 'false' as keys.
+    // used for transparency in calendar edit for example
     //
 
     var CheckboxView = AbstractView.extend({
         el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
+        getValue: function () {
+            return (this.options.customValues && this.options.customValues.true && this.options.customValues.false) ? this.options.customValues[this.isChecked()] : this.isChecked();
+        },
+        setValue: function () {
+            var val = this.model.get(this.name) || this.options.defaultVal;
+            if (this.options.customValues && this.options.customValues.true && this.options.customValues.false) {
+                // val = this.options.customValues['true'] === val;
+                val = _.isEqual(this.options.customValues.true, val);
+            } else {
+                // make true boolean
+                val = !!val;
+            }
+            return val;
+        },
         onChange: function () {
-            this.model.set(this.name, this.$el.prop('checked'));
+            this.model.set(this.name, this.getValue());
+        },
+        isChecked: function () {
+            return !!this.$input.prop('checked');
         },
         setup: function () {
+            this.$input = this.$el;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$el.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
+            this.$input.prop('checked', this.setValue());
         },
         render: function () {
-            this.$el.attr({ name: this.name });
-            if (this.options.id) this.$el.attr('id', this.options.id);
+            this.$input.attr({ name: this.name });
+            if (this.options.id) this.$input.attr('id', this.options.id);
             this.update();
             return this;
+        }
+    });
+
+    //
+    // custom checkbox
+    // options: id, name, size (small | large), label
+    //
+    var CustomCheckboxView = CheckboxView.extend({
+        el: '<div class="checkbox custom">',
+        render: function () {
+            var id = this.options.id || _.uniqueId('custom-');
+            this.$el.addClass(this.options.size || 'small').append(
+                $('<label>').attr('for', id).append(
+                    this.$input = $('<input type="checkbox" class="sr-only">').attr({ id: id, name: this.name }),
+                    $('<i class="toggle" aria-hidden="true">'),
+                    $.txt(this.options.label || '\u00a0')
+                )
+            );
+            this.update();
+            return this;
+        }
+    });
+
+    //
+    // switch control
+    // options: id, name, size (small | large), label
+    //
+    var SwitchView = CustomCheckboxView.extend({
+        el: '<div class="checkbox switch">',
+        events: {
+            'change': 'onChange',
+            'swipeleft .toggle': 'onSwipeLeft',
+            'swiperight .toggle': 'onSwipeRight'
+        },
+        onSwipeLeft: function () {
+            if (this.isChecked()) this.$input.prop('checked', false);
+        },
+        onSwipeRight: function () {
+            if (!this.isChecked()) this.$input.prop('checked', true);
         }
     });
 
@@ -221,28 +296,49 @@ define('io.ox/backbone/mini-views/common', [
         className: 'controls',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.find('[name="' + this.name + '"]:checked').val());
+            this.model.set(this.name, this.$('[name="' + this.name + '"]:checked').val());
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            var self = this;
-            _.each(self.$el.find('[name="' + self.name + '"]'), function (option) {
-                if (self.model.get(self.name) === option.value) $(option).prop('checked', true);
+            var name = this.model.get(this.name);
+            this.$('[name="' + this.name + '"]').each(function () {
+                if (this.value === name) $(this).prop('checked', true);
             });
         },
         render: function () {
-            var self = this;
-            this.$el.append(_.map(this.options.list, function (option) {
-                return $('<div class="radio">').append(
-                    $('<label>').text(option.label).prepend(
-                        $('<input type="radio">').attr('name', self.name).val(option.value)
-                    )
-                );
-            }));
+            this.$el.append(_(this.options.list).map(this.renderOption, this));
             this.update();
             return this;
+        },
+        renderOption: function (data) {
+            return $('<div class="radio custom">')
+                .addClass(this.options.size || 'small')
+                .append(this.renderLabel(data));
+        },
+        renderLabel: function (data) {
+            return $('<label>').append(this.renderInput(data), $.txt(data.label));
+        },
+        renderInput: function (data) {
+            return $('<input type="radio">').attr('name', this.name).val(data.value);
+        }
+    });
+
+    var CustomRadioView = RadioView.extend({
+        renderLabel: function (data) {
+            var id = _.uniqueId('custom-');
+            return $('<label>').attr('for', id).append(
+                this.renderInput(data).attr('id', id),
+                this.renderToggle(data),
+                $.txt(data.label)
+            );
+        },
+        renderToggle: function () {
+            return $('<i class="toggle" aria-hidden="true">');
+        },
+        renderInput: function () {
+            return RadioView.prototype.renderInput.apply(this, arguments).addClass('sr-only');
         }
     });
 
@@ -255,7 +351,8 @@ define('io.ox/backbone/mini-views/common', [
         className: 'input-xlarge form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val());
+            var val = this.$el.val();
+            this.model.set(this.name, this.options.integer ? parseInt(val, 10) : val);
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
@@ -264,16 +361,70 @@ define('io.ox/backbone/mini-views/common', [
             this.$el.val(this.model.get(this.name));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: 0 });
+            this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
-            this.$el.append(_.map(this.options.list, function (option) {
-                return $('<option>').attr({ value: option.value }).text(option.label);
-            }));
+            this.$el.append(
+                this.options.groups ?
+                    this.renderOptionGroups(this.options.list) :
+                    this.renderOptions(this.options.list)
+            );
             this.update();
             return this;
+        },
+        renderOptionGroups: function (items) {
+            return _(items).map(function (item) {
+                return $('<optgroup>').attr('label', item.label).append(
+                    this.renderOptions(item.options)
+                );
+            }, this);
+        },
+        renderOptions: function (items) {
+            return _(items).map(function (item) {
+                return $('<option>').attr({ value: item.value }).text(item.label);
+            });
         }
     });
 
+    //
+    // Date view: <input type="date"> or <input type="text"> plus Date Picker
+    //
+    var DateView = _.device('smartphone') ?
+        InputView.extend({
+            el: '<input type="date" class="form-control">'
+        }) :
+        InputView.extend({
+            format: 'l',
+            onChange: function () {
+                var t = +moment(this.$el.val(), this.format).utc(true);
+                this.model.set(this.name, t);
+            },
+            update: function () {
+                var date = this.model.get(this.name);
+                this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
+            },
+            getFormattedDate: function (date) {
+                return moment(date).utc(true).format(this.format);
+            },
+            render: function () {
+                InputView.prototype.render.call(this);
+                var view = this;
+                require(['io.ox/backbone/views/datepicker'], function (DatePicker) {
+                    // need to be async here otherwise parent is undefined
+                    setTimeout(function () {
+                        new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
+                            .attachTo(view.$el)
+                            .on('select', function (date) {
+                                view.model.set(view.name, date.utc(true).valueOf());
+                            });
+                    });
+                });
+                return this;
+            }
+        });
+
+    //
+    // Error view
+    //
     var ErrorView =  AbstractView.extend({
         tagName: 'span',
         className: 'help-block',
@@ -323,6 +474,9 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    //
+    // Form view
+    //
     var FormView = AbstractView.extend({
         tagName: 'form',
         setup: function () {
@@ -334,6 +488,9 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    //
+    // Dropdown Link view
+    //
     var DropdownLinkView = Dropdown.extend({
         tagName: 'div',
         className: 'dropdownlink',
@@ -356,6 +513,15 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    // most needed pattern
+    function getInputWithLabel(id, label, model) {
+        var guid = _.uniqueId('form-control-label-');
+        return [
+            $('<label>').attr('for', guid).text(label),
+            new InputView({ name: id, model: model, id: guid }).render().$el
+        ];
+    }
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -363,10 +529,15 @@ define('io.ox/backbone/mini-views/common', [
         PasswordViewToggle: PasswordViewToggle,
         TextView: TextView,
         CheckboxView: CheckboxView,
+        CustomCheckboxView: CustomCheckboxView,
+        SwitchView: SwitchView,
         RadioView: RadioView,
+        CustomRadioView: CustomRadioView,
         SelectView: SelectView,
+        DateView: DateView,
         ErrorView: ErrorView,
         FormView: FormView,
-        DropdownLinkView: DropdownLinkView
+        DropdownLinkView: DropdownLinkView,
+        getInputWithLabel: getInputWithLabel
     };
 });

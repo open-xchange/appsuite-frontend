@@ -47,8 +47,19 @@ less.tree.mixin.Call.prototype.getChildren = function() {
     return [].concat(this.selector, _.pluck(this.arguments, "value"));
 };
 less.tree.mixin.Definition.prototype.getChildren = function() {
-    return this.selectors.concat(_.compact(_.pluck(this.params, "value")),
-                                 this.rules, this.condition);
+    var self = this;
+    return _.map({
+        'MixinDefinition.selectors': this.selectors,
+        'MixinDefinition.params': _.compact(_.pluck(this.params, "value")),
+        'MixinDefinition.rules': this.rules,
+        'MixinDefinition.condition': [this.condition]
+    }, function (array, type) {
+        return {
+            getChildren: function () { return array; },
+            type: type,
+            parent: self
+        };
+    });
 };
 less.tree.Operation.prototype.getChildren =
     function() { return this.operands; };
@@ -173,7 +184,6 @@ less.tree.Alpha.prototype.print = function() {
 };
 less.tree.Anonymous.prototype.print =
     less.tree.Combinator.prototype.print =
-    less.tree.Comment.prototype.print =
     less.tree.UnicodeDescriptor.prototype.print =
     less.tree.Keyword.prototype.print = function() { return this.value; };
 less.tree.Assignment.prototype.print =
@@ -190,6 +200,7 @@ less.tree.Color.prototype.print = function() {
          : this.alpha < 1 ? ["rgba(", this.rgb.concat(this.alpha).join(), ")"]
          : this.toRGB();
 };
+less.tree.Comment.prototype.print = function () { return ""; };
 less.tree.Condition.prototype.print = function() {
     return [this.negate ? "not (" : "(", this.lvalue.print(), this.op,
             this.rvalue.print(), ")"];
@@ -257,7 +268,7 @@ less.tree.Negative.prototype.print =
 less.tree.Operation.prototype.print = function(opt) {
     var op = this.isSpaced ? " " + this.op + " " : this.op;
     return this.op === "*" || this.op === "/" ?
-        printList(this.operands, op, 1) :
+        printList(this.operands, op, { prec: 1 }) :
         opt && opt.prec ? ["(", printList(this.operands, op), ")"] :
                                 printList(this.operands, op);
 };

@@ -4,8 +4,9 @@ stages:
   - prepare
   - build
   - test
-  - docker
   - deploy
+  - e2e
+  - cleanup
 
 variables:
   PROXY_HOST: npm.open-xchange.com
@@ -19,25 +20,22 @@ variables:
 
 .install_deps_template: &install_deps
   <<: *use_npm_proxy
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.3
   stage: prepare
   script:
     - cd ${PROJECT_PATH}
     - yarn
-    - bower i --silent
   cache:
     # use one cache per project and branch
     # ex.: ui_feature/gitlab_ci
-    key: ${PROJECT_PATH}_${CI_BUILD_REF_NAME}
+    key: ${PROJECT_PATH}_${CI_COMMIT_REF_NAME}
     paths:
       - "${PROJECT_PATH}/node_modules"
-      - "${PROJECT_PATH}/bower_components"
   artifacts:
     name: ${PROJECT_PATH}_dependencies
     expire_in: 2 hours
     paths:
       - ${PROJECT_PATH}/node_modules
-      - ${PROJECT_PATH}/bower_components
 
 install_deps_ui:
   variables:
@@ -76,7 +74,7 @@ install_deps_guidedtours:
     - install_deps_ui
   script:
     - cd ui
-    - grunt ${CI_BUILD_NAME}
+    - grunt ${CI_JOB_NAME}
   stage: build
   artifacts:
     expire_in: 2hours
@@ -88,9 +86,13 @@ install_deps_guidedtours:
 # this distributes workload onto 2 runners instead of one and basically halves build time
 lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist:
   <<: *build_ui
+  tags:
+    - openstack
 
 copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist:
   <<: *build_ui
+  tags:
+    - openstack
 
 build documentation:
   image: gitlab.open-xchange.com:4567/engineering/documentation:latest
@@ -111,22 +113,24 @@ build documentation:
       - doku/
     expire_in: 2 hours
 
-docker_image_ui:
+build ui docker image:
   script:
-    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ui/
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_BUILD_REF_SLUG}
-  stage: docker
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
+    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_COMMIT_REF_SLUG}
+  stage: test
   dependencies:
     - install_deps_ui
     - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
     - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
 
 test_ui:
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
+  variables:
+    BROWSERS: DockerHeadless
   script:
     - cd ui
-    - /app/run.sh test
+    - yarn test
   stage: test
   dependencies:
     - install_deps_ui
@@ -138,10 +142,10 @@ test_ui:
   dependencies: [] # none
   script:
     - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG}
-    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
+    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG}
+    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
     - docker push ${CI_REGISTRY_IMAGE}:${TAG_NAME}
 
 tag latest:
@@ -162,6 +166,44 @@ tag tags:
   only:
     - tags
 
+deploy preview app:
+  stage: deploy
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    SERVER: http://10.20.28.164/appsuite/
+  script:
+    - docker pull $DOCKER_IMAGE
+    - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
+    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=$SERVER $DOCKER_IMAGE && break || counter=$((counter+1)); done
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
+    on_stop: stop_review
+  only:
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
+
+stop_review:
+  stage: cleanup
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+  script:
+    - docker stop $CI_COMMIT_REF_SLUG
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  only:
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
+
 deploy documentation:
   stage: deploy
   variables:
@@ -176,10 +218,81 @@ deploy documentation:
   tags:
     - shell
     - documentation
+  allow_failure: true
   only:
     - develop
     - master
     - /^master-.*$/
+    - /^release-.*$/
+
+# deploy e2e environment to well-known location - can be used to develop e2e tests against
+deploy e2e dev server:
+  stage: deploy
+  dependencies: []
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e-develop
+    SERVER: http://10.20.28.164/appsuite/
+  script:
+    - docker stop $CONTAINER_NAME || true
+    - docker wait $CONTAINER_NAME || true
+    - docker rm $CONTAINER_NAME || true
+    - docker pull $DOCKER_IMAGE
+    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
+    - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
+    - docker container start $CONTAINER_NAME
+  only:
+    - develop
+
+deploy e2e testserver:
+  stage: deploy
+  dependencies: []
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
+    SERVER: http://10.20.28.164/appsuite/
+  script:
+    - docker pull $DOCKER_IMAGE
+    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
+    - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
+    - docker container start $CONTAINER_NAME
+
+run e2e tests:
+  stage: e2e
+  dependencies:
+    - install_deps_ui
+  image: node:8-alpine
+  services:
+    - selenium/standalone-chrome
+  variables:
+    LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
+    SELENIUM_HOST: selenium-standalone-chrome
+  script:
+    - cd ui
+    - yarn e2e
+  tags:
+    - shm
+  artifacts:
+    paths:
+      - ui/build/e2e/
+    when: on_failure
+    expire_in: 1 day
+
+stop e2e testserver:
+  stage: cleanup
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
+  script:
+    - docker container stop $CONTAINER_NAME || true
+    - docker container wait $CONTAINER_NAME || true
+    - docker container rm $CONTAINER_NAME || true
+  when: always
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy

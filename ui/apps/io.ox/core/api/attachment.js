@@ -23,7 +23,7 @@ define('io.ox/core/api/attachment', [
 
     var api = {
         /**
-         * gets all attachments for a specific object, for exsample a task
+         * gets all attachments for a specific object, for example a task
          * @param  {object} options
          * @return { deferred }
          */
@@ -38,7 +38,7 @@ define('io.ox/core/api/attachment', [
                     folder: options.folder || options.folder_id,
                     columns: '1,800,801,802,803,804,805'
                 }
-            }).pipe(function (data) {
+            }).then(function (data) {
                 //fix for backend bug folder should not be 0
                 for (var i = 0; i < data.length; i++) {
                     data[i].folder = options.folder || options.folder_id;
@@ -187,7 +187,7 @@ define('io.ox/core/api/attachment', [
                     session: ox.session,
                     action: 'document',
                     folder: data.folder,
-                    id: data.id,
+                    id: data.id || data.managedId,
                     module: data.module,
                     attached: data.attached,
                     source: 'task'
@@ -234,7 +234,7 @@ define('io.ox/core/api/attachment', [
                     folder: data.folder,
                     module: data.module,
                     attached: data.attached,
-                    attachment: data.id
+                    attachment: data.id || data.managedId
                 },
                 data: { folder_id: target, description: descriptionText[data.module] || gt('Saved attachment') },
                 appendColumns: false

@@ -60,7 +60,7 @@ define('io.ox/core/folder/actions/add', [
             enter: 'add',
             focus: 'input[name="name"]',
             previousFocus: $(document.activeElement),
-            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.html',
             point: 'io.ox/core/folder/add-popup',
             width: _.device('smartphone') ? window.innerWidth - 30 : 400
         })
@@ -68,19 +68,19 @@ define('io.ox/core/folder/actions/add', [
             addFolder: addFolder,
             getTitle: function () {
                 var module = this.context.module;
-                if (module === 'calendar') return gt('Add new calendar');
+                if (module === 'event') return gt('Add new calendar');
                 else if (module === 'contacts') return gt('Add new address book');
                 return gt('Add new folder');
             },
             getName: function () {
                 var module = this.context.module;
-                if (module === 'calendar') return gt('New calendar');
+                if (module === 'event') return gt('New calendar');
                 else if (module === 'contacts') return gt('New address book');
                 return gt('New folder');
             },
             getLabel: function () {
                 var module = this.context.module;
-                if (module === 'calendar') return gt('Calendar name');
+                if (module === 'event') return gt('Calendar name');
                 else if (module === 'contacts') return gt('Address book name');
                 return gt('Folder name');
             }
@@ -105,7 +105,7 @@ define('io.ox/core/folder/actions/add', [
 
                 if (!this.context.supportsPublicFolders) return;
 
-                var label = this.context.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
+                var label = this.context.module === 'event' ? gt('Add as public calendar') : gt('Add as public folder');
                 var guid = _.uniqueId('form-control-label-');
                 this.$body.append(
                     // public
@@ -155,10 +155,10 @@ define('io.ox/core/folder/actions/add', [
     return function (folder, opt) {
         opt = opt || {};
 
-        if (!folder || !opt.module) return $.when().reject();
+        if (!folder || !opt.module) return $.Deferred().reject();
 
         // only address book, calendar, and tasks do have a "public folder" section
-        var hasPublic = /^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');
+        var hasPublic = /^(contacts|event|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');
 
         // resolves with created folder-id
         return $.when(hasPublic ? api.get('2') : undefined)

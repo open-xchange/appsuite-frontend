@@ -35,7 +35,8 @@ define('io.ox/contacts/distrib/main', [
             name: 'io.ox/contacts/distrib',
             title: gt('Distribution List'),
             userContent: true,
-            closable: true
+            closable: true,
+            floating: !_.device('smartphone')
         });
 
         app.getContextualHelp = function () {
@@ -88,15 +89,6 @@ define('io.ox/contacts/distrib/main', [
                 }
             });
 
-            win.on('show', function () {
-                if (app.model.get('id')) {
-                    //set url parameters
-                    app.setState({ folder: app.model.get('folder_id'), id: app.model.get('id') });
-                } else {
-                    app.setState({ folder: app.model.get('folder_id'), id: null });
-                }
-            });
-
             // go!
             container.append(app.view.render().$el);
             win.show();
@@ -106,7 +98,6 @@ define('io.ox/contacts/distrib/main', [
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
             return contactModel.factory.realm('edit').retain().get(api.reduce(obj)).done(function (data) {
-
                 // actually data IS a model
                 app.model = data;
 
@@ -159,9 +150,11 @@ define('io.ox/contacts/distrib/main', [
         app.setLauncher(function () {
 
             app.setWindow(win = ox.ui.createWindow({
-                title: '',
                 chromeless: true,
-                name: 'io.ox/contacts/distrib'
+                name: 'io.ox/contacts/distrib',
+                title: gt('Distribution List'),
+                floating: !_.device('smartphone'),
+                closable: true
             }));
 
             function fnToggleSave(isDirty) {
@@ -177,7 +170,7 @@ define('io.ox/contacts/distrib/main', [
                     container.find('input[type=text]:visible').eq(0).focus();
                 }
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
-                    app.setTitle(_.noI18n($.trim($(this).val())) || gt('Distribution List'));
+                    app.setTitle($.trim($(this).val()) || gt('Distribution List'));
                     fnToggleSave($(this).val());
                 }, 150));
             });
@@ -188,10 +181,14 @@ define('io.ox/contacts/distrib/main', [
 
             // hash state support
             var state = app.getState();
-            if ('id' in state) {
-                app.edit(state);
-            } else if ('folder' in state) {
-                app.create(state.folder);
+            if ('app' in state && state.app !== 'io.ox/contacts') return $.when();
+
+            if (!app.attributes.floating) {
+                if ('id' in state) {
+                    app.edit(state);
+                } else if ('folder' in state) {
+                    app.create(state.folder);
+                }
             }
         });
 
@@ -202,6 +199,11 @@ define('io.ox/contacts/distrib/main', [
                     def.resolve();
                 } else {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        if (app.getWindow().floating) {
+                            app.getWindow().floating.toggle(true);
+                        } else if (_.device('smartphone')) {
+                            app.getWindow().resume();
+                        }
                         new dialogs.ModalDialog()
                             .text(gt('Do you really want to discard your changes?'))
                             //#. "Discard changes" appears in combination with "Cancel" (this action)

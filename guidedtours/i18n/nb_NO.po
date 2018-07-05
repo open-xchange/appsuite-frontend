@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-11 12:42+0000\n"
+"POT-Creation-Date: 2018-05-09 10:23+0000\n"
 "PO-Revision-Date: 2017-05-09 12:42+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -178,11 +178,6 @@ msgstr ""
 "For å redigere flere kontakter samtidig, klikk avkrysningboksene på venstre "
 "side av kontaktene. Hvis avkrysningsboksene ikke er synlige, klikk Visning > "
 "Avkrysningsbokser på høyre side av verktøylinjen."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "Omvisning av Drive-appen.txt"
 
 #: apps/io.ox/tours/files.js
 #: module:io.ox/tours
@@ -366,13 +361,8 @@ msgstr ""
 
 #: apps/io.ox/tours/files.js
 #: module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Start omvisning på nytt"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Hint: you can always restart guided tours, any time you need them, from the system menu."
-msgstr "Tips: du kan alltid starte omvisninger når som helst fra systemmenyen."
+msgid "The Drive app tour.txt"
+msgstr "Omvisning av Drive-appen.txt"
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
@@ -394,8 +384,8 @@ msgstr "Starte en app"
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
-msgstr "For å starte en app, klikk på en av dem i menylinjen øverst på siden."
+msgid "To launch an app, use the quicklaunch icons on the left side of the menu bar or click on an entry inside the app launcher menu."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
@@ -408,30 +398,6 @@ msgid "To display the help or the settings, click the System menu icon in the me
 msgstr ""
 "For å vise innstillinger eller hjelpedokumentasjonen, klikk systemmeny-"
 "ikonet i menylinjen."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Varslingsikonet"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The New objects icon shows the number of appointment reminders or other notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Varslingsikonet viser antall avtalepåminnelser eller andre varslinger. Klikk "
-"på ikonet for å åpne varslingsområdet."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The info area"
-msgstr "Informasjonsområdet"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "In case of new notifications, e.g. appointment invitations, the info area is opened."
-msgstr ""
-"Når du mottar nye varsler, f.eks. avtaleinvitasjoner, blir varslingsområdet "
-"åpnet."
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
@@ -898,6 +864,37 @@ msgstr ""
 "For å redigere flere oppgaver samtidig, klikk avkrysningsboksene til venstre "
 "for hver oppgave. Hvis avkrysningsboksene ikke er synlige, klikk Visning > "
 "Avkrysningsbokser til høyre i verktøylinjen."
+
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from the "
+#~ "system menu."
+#~ msgstr "Tips: du kan alltid starte omvisninger når som helst fra systemmenyen."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area is "
+#~ "opened."
+#~ msgstr ""
+#~ "Når du mottar nye varsler, f.eks. avtaleinvitasjoner, blir varslingsområdet "
+#~ "åpnet."
+
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Start omvisning på nytt"
+
+#~ msgid "The New objects icon"
+#~ msgstr "Varslingsikonet"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Varslingsikonet viser antall avtalepåminnelser eller andre varslinger. Klikk "
+#~ "på ikonet for å åpne varslingsområdet."
+
+#~ msgid "The info area"
+#~ msgstr "Informasjonsområdet"
+
+#~ msgid "To launch an app, click on an entry on the left side of the menu bar."
+#~ msgstr "For å starte en app, klikk på en av dem i menylinjen øverst på siden."
 
 #~ msgid "Creating a note"
 #~ msgstr "Opprette et notat"

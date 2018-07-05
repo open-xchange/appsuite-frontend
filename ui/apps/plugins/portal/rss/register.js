@@ -42,6 +42,12 @@ define('plugins/portal/rss/register', [
             return rss.getMany(urls).done(function (data) {
                 //limit data manually till api call can be limited
                 data = data.slice(0, 100);
+
+                // fix some special characters
+                _(data).each(function (item) {
+                    item.subject = item.subject.replace(/&nbsp;/g, ' ').replace('&amp;', '&');
+                });
+
                 baton.data = {
                     items: data,
                     title: '',
@@ -78,11 +84,11 @@ define('plugins/portal/rss/register', [
                         $('<li class="paragraph">').append(
                             function () {
                                 if (data.urls.length > 1) {
-                                    return $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' '));
+                                    return $('<span class="gray">').text(entry.feedTitle + ' ');
                                 }
                                 return '';
                             },
-                            $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
+                            $('<span>').text(entry.subject), $.txt('')
                         )
                     );
                 });
@@ -101,7 +107,7 @@ define('plugins/portal/rss/register', [
 
                 this.append(
                     $('<div class="text">').append(
-                        $('<h4>').text(_.noI18n(item.subject)),
+                        $('<h4>').text(item.subject),
                         $body,
                         $('<div class="rss-url">').append(
                             $('<a target="_blank" rel="noopener">').attr('href', item.url).text((item.feedTitle ? item.feedTitle + ' - ' : '') + moment(item.date).format('l'))
@@ -116,7 +122,7 @@ define('plugins/portal/rss/register', [
                     node = $('<div class="portal-feed">');
 
                 if (data.title) {
-                    node.append($('<h2>').text(_.noI18n(data.title)));
+                    node.append($('<h2>').text(data.title));
                 }
 
                 _(data.items).each(drawItem, node);

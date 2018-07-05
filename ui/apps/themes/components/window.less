@@ -24,16 +24,85 @@
     z-index: 10;
 }
 
-#io-ox-windowmanager { overflow: hidden; }
+#io-ox-windowmanager {
+    overflow: hidden;
+}
 
 #io-ox-windowmanager-pane {
     left: 0;
     width: 100%;
 }
 
+#io-ox-taskbar-container {
+    top: auto;
+    height: 40px;
+    padding: 3px 0 2px 0;
+    margin: 0;
+    z-index: 11;
+    pointer-events: none;
+    display: block;
+
+    #io-ox-taskbar {
+        padding: 0 8px;
+        list-style-type: none;
+        overflow: hidden;
+        margin: 0;
+        width: 100%;
+        display: flex;
+
+        li {
+            pointer-events: all;
+            width:240px;
+            margin-left: 8px;
+            overflow: hidden;
+            display: flex;
+            height: 32px;
+            line-height: 26px;
+
+            i {
+                margin-right: 8px;
+            }
+
+            .taskbar-button {
+                border: 3px solid #464646;
+                padding: 0 4px 0px 13px;
+                border-radius: 0;
+                color: white;
+                text-align: left;
+                width: 100%;
+                overflow: hidden;
+                background-color: #464646;
+                display: flex;
+                align-items: center;
+
+                &:focus {
+                    border-color: #00c7ff;
+                    font-weight: bold;
+                }
+
+                &.io-ox-busy:before {
+                    color: white;
+                    margin-top: -15px;
+                }
+
+                .title {
+                    .ellipsis();
+                    margin-right: 8px;
+                    // when there's no space, let the text win over the icon
+                    min-width: 26px;
+                }
+                .count {
+                    padding: 4px 5px;
+                    margin-right: 8px;
+                }
+                .spacing { flex-grow: 1; }
+            }
+        }
+    }
+}
+
 .touch {
     #io-ox-screens { top: 40px; }
-
     #io-ox-windowmanager .window-container-center { width: 100% !important; }
 }
 
@@ -80,6 +149,10 @@
         .container {
             padding-left:0;
             padding-right:0;
+        }
+
+        .inline-yell {
+            display: none;
         }
 
         h1.title { display: none; }
@@ -129,7 +202,7 @@
             padding: 8px 0;
             z-index: 2;
             // yep, a shadow
-            .box-shadow(0 1px 5px rgba(0, 0, 0, 0.10));
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.10);
 
             h1.title {
                 margin: 0.2em 0;
@@ -169,7 +242,7 @@
             padding: 16px 0;
             z-index: 2;
             // yep, a shadow
-            .box-shadow(0 1px 5px rgba(0, 0, 0, 0.10));
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.10);
 
             h1.title {
                 margin: 0.2em 0;
@@ -238,7 +311,7 @@
         margin-left: -200px;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .progress {
             width: 150px;
             margin-left: -75px;
@@ -269,27 +342,7 @@
         }
     }
 
-    .progress .progress-bar { .border-radius(2px); }
-}
-
-.window-head {
-    font-size: @window-head-font-size;
-    background-color: @window-head-color;
-    position: absolute;
-    top: 0;
-    width: @window-head-width;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
-    .user-select(none);
-    filter: none;
-
-    html.high-contrast & { border-right: 1px solid @hc-border-color; }
-
-    &.css-table {
-        table-layout: fixed;
-    }
-
+    .progress .progress-bar { border-radius: 2px; }
 }
 
 .window-sidepanel {
@@ -385,9 +438,9 @@
 .window-body {
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
-    left: @window-head-width;
+    left: 0;
+    right: 0;
     white-space: normal;
     z-index: 1;
     .user-select(text);
@@ -417,7 +470,7 @@
 }
 
 .rightside {
-    outline: none;
+    outline: 0;
     position: absolute;
     top: 0;
     right: 0;
@@ -427,11 +480,159 @@
     overflow: auto;
 }
 
+.floating-window {
+
+    position: absolute;
+    // higher than taskbar
+    z-index: 12;
+    background: transparent;
+    outline: 0;
+    &.active {
+        z-index: 14;
+    }
+    .floating-window-content {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    }
+
+    .window-body, .container {
+        width: 100%;
+    }
+
+    width: 920px;
+    height: 750px;
+
+    &.height-md {
+        height: 650px;
+    }
+
+    right: auto;
+    bottom: auto;
+    // start window in the middle
+    top: ~"calc(50% - 375px)";
+
+    /* width */
+    &.width-xs {
+        width: 640px;
+        // start window in the middle
+        left: ~"calc(50% - 320px)";
+    }
+    &.width-sm {
+        width: 720px;
+        // start window in the middle
+        left: ~"calc(50% - 360px)";
+    }
+    &.width-md {
+        width: 800px;
+        // start window in the middle
+        left: ~"calc(50% - 400px)";
+    }
+    &.width-lg {
+        width: 920px;
+        // start window in the middle
+        left: ~"calc(50% - 460px)";
+    }
+
+    .floating-header .controls button[data-action="normal"] {
+        display: none;
+    }
+
+    .container {
+        width: 100% !important;
+        min-width: auto;
+    }
+
+    &.width-xs:not(.maximized) [data-hidden="xs"] { display: none; }
+
+    &.maximized {
+        width: 1060px;
+        height: ~"calc(100% - 72px)";
+        top: 36px;
+        left: ~"calc(50% - 530px)";
+
+        @media (max-height: 750px) {
+            height: 100%;
+        }
+
+        .floating-header .controls button[data-action="maximized"] {
+            display: none;
+        }
+    }
+
+    @headerHeight: 32px;
+
+    .floating-header {
+        height: @headerHeight;
+        bottom: auto;
+        background: #333;
+        padding: 0 8px 0 16px;
+        display: flex;
+        cursor: move;
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: @headerHeight;
+            color: white;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .count {
+            padding: 3px 7px;
+            position: relative;
+            top: -1px;
+            margin-left: 8px;
+        }
+        .controls {
+            margin-left:auto;
+            flex-shrink: 0;
+
+            button {
+                color: white;
+                line-height: @headerHeight;
+                padding: 0 8px;
+                display: inline-block;
+                &[data-action="close"] {
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+
+    .floating-body {
+        top: @headerHeight;
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-width: 0 1px 1px 1px;
+    }
+}
+
+// used to prevent iframe issues when dragging
+#floating-window-backdrop {
+    z-index: 13;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    // almost transparent
+    background-color: rgba(255, 255, 255, 0.01);
+    position: absolute;
+}
+
 .rightside-navbar { display: none; }
 
 @media (max-width: 900px) {
     .leftside { width: 250px; }
     .rightside { left: 250px; }
+
+    #io-ox-taskbar-container #io-ox-taskbar {
+        padding: 0 4px;
+
+        li {
+            margin-left: 4px;
+        }
+    }
 }
 
 @media (min-width: 1300px) {
@@ -451,26 +652,6 @@
 
 // TINY SCREENS
 @media (max-width: 540px) {
-    .window-head {
-        top: auto;
-        right: 0;
-        width: auto;
-        height: 40px;
-        background-color: #f5f5f5;
-        border-top: 1px solid #ddd;
-        border-right: 0 none;
-
-        .toolbar-button {
-
-            line-height: 44px;
-            float: left;
-            margin: 0;
-
-            & > a {
-                height: 40px;
-            }
-        }
-    }
 
     .window-body {
         bottom: 40px;
@@ -537,18 +718,11 @@
     }
 }
 
-// landscape fullscreen on iPhone
-// iOS will go fullscreen and show an overaly with own buttons
-// we need to position our buttons around them
-@media (height: 320px) and (orientation:landscape) {
-    .window-head { padding-right: 40px; }
-}
-
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
     .window-sidepanel {
         display: block;
         -webkit-backface-visibility: hidden;

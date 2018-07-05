@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.5.18. Unified Mail verwenden</title>
+<title>5.6.17. Unified Mail verwenden</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. E-Mails organisieren">
-<link rel="prev" href="ox.appsuite.user.sect.email.manage.multiple.html" title="5.5.17. Mehrere E-Mails gemeinsam bearbeiten">
-<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. E-Mail Filter verwenden">
+<link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.6. E-Mails organisieren">
+<link rel="prev" href="ox.appsuite.user.sect.email.manage.expungefolder.html" title="5.6.16. E-Mail-Ordner aufräumen">
+<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.7. E-Mail-Filter verwenden">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.multiple.html">Zurück</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.expungefolder.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.mailfilter.html">Weiter</a></li>
@@ -37,8 +37,8 @@
   </h1>
 <h2 class="sr-only">E-Mails organisieren</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.manage.unifiedmail">
-<div class="titlepage"><div><div><h3 class="title">5.5.18. Unified Mail verwenden</h3></div></div></div>
-<a class="indexterm" name="id-1.6.12.24.2"></a><a class="indexterm" name="id-1.6.12.24.3"></a><div class="concept">
+<div class="titlepage"><div><div><h3 class="title">5.6.17. Unified Mail verwenden</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.23.2"></a><a class="indexterm" name="id-1.6.13.23.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.manage.unifiedmail"></a><p id="ox.appsuite.user.concept.email.manage.unifiedmail">Mit Hilfe von Unified Mail können Sie E-Mails von
         mehreren E-Mail-Accounts übersichtlich in einem zentralen Ordner anzeigen. Dadurch erhalten Sie einen schnellen Überblick
         über den Posteingang verschiedener E-Mail-Accounts. Unified Mail besitzt folgende Eigenschaften: </p>
@@ -50,12 +50,11 @@
 <li class="listitem"><p role="presentation">Die E-Mails im Ordner <span class="guilabel"><strong>Unified Mail</strong></span> sind in der Seitenleiste mit dem Namen des Accounts
               gekennzeichnet. Die Kennzeichnung des internen E-Mail-Accounts lautet <span class="guilabel"><strong>Primärer Account</strong></span>.</p></li>
 </ul>
-<p> Die folgenden Funktionen sind verfügbar: </p>
-<ul class="itemizedlist compact" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Um Unified Mail zu nutzen, <a class="link" href="ox.appsuite.user.sect.email.manage.unifiedmail.html#ox.appsuite.user.task.email.manage.unifiedmail.activate">aktivieren</a>
-              Sie die Funktion für einen oder mehrere E-Mail-Accounts.</p></li>
-<li class="listitem"><p role="presentation">Sie können E-Mails im Ordner <span class="guilabel"><strong>Unified Mail</strong></span>
-              <a class="link" href="ox.appsuite.user.sect.email.manage.unifiedmail.html#ox.appsuite.user.task.email.manage.unifiedmail.view">anzeigen</a>.</p></li>
+<p> Die folgenden Funktionen sind verfügbar: 
+        </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Um Unified Mail zu nutzen, aktivieren Sie die Funktion für einen oder mehrere E-Mail-Accounts.</p></li>
+<li class="listitem"><p role="presentation">Sie können E-Mails im Ordner <span class="guilabel"><strong>Unified Mail</strong></span> anzeigen.</p></li>
 </ul>
 <p>
       </p>
@@ -63,10 +62,10 @@
 <div class="task" id="ox.appsuite.user.task.email.manage.unifiedmail.activate">
 <p class="title">So aktivieren Sie Unified Mail für einen E-Mail-Account:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Einstellungen</strong></span>
-              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.manage.unifiedmail.activate.systemmenu"><img src="../../images/appsuite_user_icon_menuebars.png"></span> . Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
+<li class="step"><p role="presentation">Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Einstellungen</strong></span>.
+               Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
 <li class="step"><p role="presentation">Klicken Sie in der Seitenleiste auf <span class="guibutton"><strong>Accounts</strong></span>.</p></li>
-<li class="step"><p role="presentation">Klicken Sie im Anzeigebereich neben einem externen E-Mail-Account auf
+<li class="step"><p role="presentation">Klicken Sie im Anzeigebereich neben einem externen E-Mail-Account auf 
               <span class="guibutton"><strong>Bearbeiten</strong></span>. Ein Popup zeigt die Einstellungen.</p></li>
 <li class="step">
 <p role="presentation">Aktivieren Sie <span class="guibutton"><strong>Unified Mail für diesen Account verwenden</strong></span>.</p>
@@ -77,8 +76,7 @@
 <div class="task" id="ox.appsuite.user.task.email.manage.unifiedmail.view">
 <p class="title">So zeigen Sie E-Mails im Ordner <span class="guilabel"><strong>Unified Mail</strong></span> an:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation"><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select">Öffnen</a> Sie im Ordnerbaum den Ordner
-              <span class="guilabel"><strong>Unified Mail</strong></span>.</p></li>
+<li class="step"><p role="presentation">Öffnen Sie im Ordnerbaum den Ordner <span class="guilabel"><strong>Unified Mail</strong></span>.</p></li>
 <li class="step"><p role="presentation">Optional klicken Sie in <span class="guilabel"><strong>Unified Mail</strong></span> auf einen Unterordner.</p></li>
 </ol></div>
 <div class="taskrelated">
@@ -87,7 +85,10 @@
         </div>
 </div>
 <p class="title">Siehe auch</p>
-<ul class="itemizedlist" id="ox.appsuite.user.concept.email.manage.unifiedmail.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">E-Mails anzeigen</a></p></li></ul>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.manage.unifiedmail.related" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">E-Mails anzeigen</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Account bearbeiten</a></p></li>
+</ul>
 <p id="ox.appsuite.user.concept.email.manage.unifiedmail.parent">Übergeordnetes Thema:
         <a class="xref" href="ox.appsuite.user.sect.email.manage.html">E-Mails organisieren</a>
       </p>

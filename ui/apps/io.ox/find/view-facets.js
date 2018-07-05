@@ -92,6 +92,7 @@ define('io.ox/find/view-facets', [
             ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
             // adjust height by parents height (maybe tokenfield has morge than on line visible)
             this.$el.find('ul.classic-toolbar').outerHeight(this.$el.parent().outerHeight());
+            this.$el.find('ul.classic-toolbar > li > a:not(:first)').attr('tabindex', -1);
             return this;
         },
 
@@ -149,11 +150,12 @@ define('io.ox/find/view-facets', [
                     id = value.getOption().value;
 
                 picker({
+                    async: true,
                     folder: id || api.getDefaultFolder(module),
                     module: module,
                     root: type === 'files' ? '9' : '1',
                     flat: api.isFlat(module),
-                    done: function (target) {
+                    done: function (target, dialog) {
                         //get folder data
                         api.get(target)
                             .always(function (data) {
@@ -164,6 +166,7 @@ define('io.ox/find/view-facets', [
                                     id: target,
                                     name: label
                                 });
+                                dialog.close();
                             });
                     },
                     disable: function (data) {

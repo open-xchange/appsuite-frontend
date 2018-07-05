@@ -103,7 +103,7 @@ define('io.ox/portal/widgets', [
             widgets = {
                 mail_0: {
                     plugin: 'plugins/portal/mail/register',
-                    color: 'blue',
+                    color: 'default',
                     userWidget: true,
                     index: 1,
                     props: {
@@ -112,37 +112,37 @@ define('io.ox/portal/widgets', [
                 },
                 birthdays_0: {
                     plugin: 'plugins/portal/birthdays/register',
-                    color: 'lightgreen',
+                    color: 'default',
                     userWidget: true,
                     index: 4
                 },
                 calendar_0: {
                     plugin: 'plugins/portal/calendar/register',
-                    color: 'red',
+                    color: 'default',
                     userWidget: true,
                     index: 2
                 },
                 tasks_0: {
                     plugin: 'plugins/portal/tasks/register',
-                    color: 'green',
+                    color: 'default',
                     userWidget: true,
                     index: 3
                 },
                 myfiles_0: {
                     plugin: 'plugins/portal/recentfiles/register',
-                    color: 'lightgreen',
+                    color: 'default',
                     userWidget: true,
                     index: 4
                 },
                 twitter_0: {
                     plugin: 'plugins/portal/twitter/register',
-                    color: 'pink',
+                    color: 'default',
                     userWidget: true,
                     index: 5
                 },
                 linkedin_0: {
                     plugin: 'plugins/portal/linkedin/register',
-                    color: 'lightblue',
+                    color: 'default',
                     userWidget: true,
                     index: 6
                 }
@@ -171,9 +171,9 @@ define('io.ox/portal/widgets', [
         },
 
         getEnabled: function () {
-            return _(collection.filter(function (model) {
+            return collection.filter(function (model) {
                 return !model.has('candidate') && (!model.has('enabled') || model.get('enabled') === true);
-            }));
+            });
         },
 
         getSettings: function () {
@@ -263,7 +263,7 @@ define('io.ox/portal/widgets', [
         },
 
         getColors: function () {
-            return 'black red orange lightgreen green lightblue blue purple pink gray'.split(' ');
+            return 'default black red orange lightgreen green lightblue blue purple pink gray'.split(' ');
         },
 
         getTitle: function (data, title) {
@@ -286,11 +286,10 @@ define('io.ox/portal/widgets', [
 
             // find free id
             var defaults = settings.get('widgets/defaults', {}),
-                widget, i = 0, id = type + '_0',
-                colors = api.getColors();
+                widget, i = 0, id = type + '_0';
 
             options = _.extend({
-                color: colors[_.random(colors.length - 1)],
+                color: 'default',
                 enabled: true,
                 inverse: false,
                 plugin: type,

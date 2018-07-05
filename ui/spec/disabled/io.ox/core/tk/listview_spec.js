@@ -11,6 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* eslint no-useless-escape: 0 */
+
 define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView, api, waitsFor) {
 
     'use strict';

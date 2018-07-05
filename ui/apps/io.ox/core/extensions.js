@@ -149,7 +149,9 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
          */
         this.extend = function () {
 
-            _(arguments).each(function (extension) {
+            var items = _(arguments).flatten();
+
+            _(items).each(function (extension) {
 
                 if (extension.invoke) {
                     console.error(extension);
@@ -318,9 +320,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             }
             // manual invoke to consider baton
             if (baton instanceof Baton) {
-                return o
-                    .map(function (ext) {
-                        try {
+                var previousInvoke = baton.invoke;
+                try {
+                    baton.invoke = { name: name, id: this.id };
+                    return o
+                        .map(function (ext) {
                             if (baton.isDisabled(self.id, ext.id) || !_.isFunction(ext[name])) return;
                             // stopped?
                             if (baton.isPropagationStopped()) return;
@@ -330,10 +334,12 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                             baton.extension = ext;
                             // call
                             return ext[name].apply(context, args.slice(3));
-                        } catch (e) {
-                            error(e);
-                        }
-                    });
+                        });
+                } catch (e) {
+                    error(e);
+                } finally {
+                    baton.invoke = previousInvoke;
+                }
             }
             try {
                 return o.invoke.apply(o, args);
@@ -362,18 +368,23 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         };
 
         this.inspect = function () {
-            console.debug('Extension point', this.id, JSON.stringify(this.all()));
+            console.debug('Extension point', this.id, {
+                disabled: disabled,
+                replacements: replacements,
+                extensions: JSON.stringify(this.all())
+            });
         };
 
         // invoke extensions 'perform' as a waterfall
-        this.cascade = function (baton) {
+        this.cascade = function (context, baton) {
+            baton = Baton.ensure(baton);
             var point = this;
             return point.reduce(function (def, ext) {
                 if (!def || !def.then) def = $.when(def);
                 return def.then(function () {
                     if (baton.isPropagationStopped()) return;
                     if (baton.isDisabled(point.id, ext.id)) return;
-                    return ext.perform.apply(undefined, [baton]);
+                    return ext.perform.apply(context, [baton]);
                 });
             }, $.when());
         };
@@ -420,6 +431,18 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
      */
     function returnFalse() { return false; }
     function returnTrue() { return true; }
+
+    function disable(baton, disabled) {
+        _(disabled).each(function (extension, point) {
+            if (_.isArray(extension)) {
+                _(extension).each(function (ext) {
+                    baton.disable(point, ext);
+                });
+            } else {
+                baton.disable(point, extension);
+            }
+        });
+    }
 
     function Baton(obj) {
         // bypass?
@@ -503,6 +526,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         },
 
         disable: function (pointId, extensionId) {
+            if (_.isObject(pointId) || !pointId) return disable(this, pointId);
             // typical developer mistake (forget pointId actually)
             if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');
             var hash = this.flow.disable;
@@ -512,6 +536,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         isDisabled: function (pointId, extensionId) {
             var list = this.flow.disable[pointId];
             return list === undefined ? false : _(list).contains(extensionId);
+        },
+
+        branch: function (id, context, $el) {
+            var previousElement = this.$el;
+            this.$el = $el;
+            that.point(this.invoke.id + '/' + id).invoke(this.invoke.name, context || $el, this);
+            this.$el = previousElement;
+            return $el;
         }
     };
 

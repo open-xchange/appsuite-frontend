@@ -53,7 +53,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '654': 'original_id',
                 '655': 'original_folder_id',
                 '656': 'content_type',
-                '660': 'flagged'
+                '660': 'flagged',
+                // they both add the same property; never use simultaneously!
+                '662': 'text_preview',
+                '663': 'text_preview',
+                '664': 'authenticity_preview'
             },
             'contacts': {
                 '500': 'display_name',
@@ -164,40 +168,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '611': 'yomiLastName',
                 '612': 'yomiCompany'
             },
-            'calendar': {
-                '200': 'title',
-                '201': 'start_date',
-                '202': 'end_date',
-                '203': 'note',
-                '204': 'alarm',
-                '206': 'recurrence_id',
-                '207': 'recurrence_position',
-                '208': 'recurrence_date_position',
-                '209': 'recurrence_type',
-                '210': 'change_exceptions',
-                '211': 'delete_exceptions',
-                '212': 'days',
-                '213': 'day_in_month',
-                '214': 'month',
-                '215': 'interval',
-                '216': 'until',
-                '217': 'notification',
-                '220': 'participants',
-                '221': 'users',
-                '222': 'occurrences',
-                '223': 'uid',
-                '224': 'organizer',
-                '225': 'sequence',
-                '226': 'confirmations',
-                '227': 'organizerId',
-                '228': 'principal',
-                '229': 'principalId',
-                '400': 'location',
-                '401': 'full_time',
-                '402': 'shown_as',
-                '408': 'timezone',
-                '410': 'recurrence_start'
-            },
             'files': {
                 '23': 'meta',
                 '108': 'object_permissions',
@@ -249,6 +219,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '401': 'full_time'
             },
             'folders': {
+                // please note: Any changes inside the folders must be communicated to the MW such that
+                // the rampup attribute folderList contains the correct columns and can be mapped
                 '1': 'id',
                 '2': 'created_by',
                 '3': 'modified_by',
@@ -281,7 +253,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3030': 'com.openexchange.folderstorage.displayName',
                 // 3040 exists; around EAS; no need for it
                 '3050': 'com.openexchange.imap.extAccount',
-                '3060': 'com.openexchange.share.extendedPermissions'
+                '3060': 'com.openexchange.share.extendedPermissions',
+                '3201': 'com.openexchange.calendar.extendedProperties',
+                '3203': 'com.openexchange.calendar.provider',
+                '3220': 'com.openexchange.caldav.url',
+                '3204': 'com.openexchange.calendar.accountError',
+                '3205': 'com.openexchange.calendar.config'
             },
             'user': {
                 '610': 'aliases',
@@ -335,7 +312,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1032': 'pop3_refresh_rate',
                 '1033': 'pop3_expunge_on_quit',
                 '1034': 'pop3_delete_write_through',
-                '1035': 'pop3_storage ',
+                '1035': 'pop3_storage',
                 '1036': 'pop3_path',
                 '1037': 'personal',
                 '1038': 'reply_to',
@@ -631,7 +608,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             ox.trigger('http:error:' + response.code, response, o);
             ox.trigger('http:error', response, o);
             // session expired?
-            var isSessionError = (/^SES\-/i).test(response.code),
+            var isSessionError = (/^SES-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
 
             if (isSessionError && !isLogin && !o.failOnError) {
@@ -709,7 +686,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             }
         } else {
             // e.g. plain text
-            deferred.resolve(response || '');
+            deferred.resolve(response);
         }
     };
 
@@ -794,6 +771,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 var status = (xhr && xhr.status) || 200;
                 if (isLoss(status)) log.loss();
 
+                // translate 503 error message cause mw isn't able at that time
+                if (status === 503 && error && error.error === '503 Server shutting down...') {
+                    var gt = require('gettext!io.ox/core');
+                    //#. server message for a special 503 mw response (service unavailable)
+                    error.error = gt('Server shutting down.');
+                }
+
                 if (isUnreachable(xhr)) {
                     that.trigger('unreachable');
                     ox.trigger('connection:down', error, r.o);
@@ -836,7 +820,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // process response
                 if (r.o.processData) {
                     processResponse(r.def, response, r.o, r.o.type);
-                } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
+                } else if (r.xhr.dataType === 'json' && response.error !== undefined && response.category !== 13) {
                     // error handling if JSON (e.g. for UPLOAD)
                     response.folder = r.o.data.folder;
                     ox.trigger('http:error:' + response.code, response, r.o);
@@ -859,7 +843,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 that.trigger('stop fail', r.xhr);
                 var message = xhr.status !== 0 ? xhr.status + ' ' : '';
                 message += errorThrown || (navigator.onLine ? that.messages.generic : that.messages.offline);
-                r.def.reject({ error: message }, xhr);
+                r.def.reject({ error: message, code: navigator.onLine ? 'NOSERVER' : 'OFFLINE' }, xhr);
                 r = null;
             });
         }
@@ -928,7 +912,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     // create new request
                     r.def.always(function () {
                         // success or failure?
-                        var success = this.state() === 'resolved';
+                        var success = r.def.state() === 'resolved';
                         // at first, remove request from hash (see bug 37113)
                         var reqs = requests[hash];
                         delete requests[hash];
@@ -939,10 +923,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                             r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
                             that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
                         });
-                        hash = null;
+                        r = hash = null;
                     });
                     limitedSend(r);
-                    r = null;
                 }
             } else {
                 limitedSend(r);
@@ -1185,6 +1168,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return _.clone(idMapping[module] || {});
         },
 
+        getRequestLengthLimit: function () {
+            // default to the value from apache documentation
+            return ox.serverConfig.limitRequestLine || 8190;
+        },
+
         /**
          * Transform objects with array-based columns into key-value-based columns
          * @param {Array} data Data
@@ -1382,7 +1370,24 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         messages: {
             // translation will be injected by http_error.js
             generic: 'An unknown error occurred',
+            // add better more specific messages with next release
+            noserver: 'An unknown error occurred',
             offline: 'Cannot connect to server. Please check your connection.'
+        },
+
+        // helper to unify columns for mail API and boot/load
+        defaultColumns: {
+
+            mail: (function () {
+
+                var generic = '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                    // original_id, original_folder_id
+                    unseen = generic + ',654,655',
+                    all = generic + ',X-Open-Xchange-Share-URL',
+                    search = generic + ',654,655';
+
+                return { generic: generic, unseen: unseen, all: all, search: search };
+            }())
         }
     };
 

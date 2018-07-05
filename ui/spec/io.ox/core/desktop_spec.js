@@ -11,7 +11,9 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(['io.ox/core/desktop'], function () {
+define([
+    'io.ox/core/desktop'
+], function (ui) {
     'use strict';
 
     describe('Core', function () {
@@ -21,47 +23,54 @@ define(['io.ox/core/desktop'], function () {
             });
 
             describe('provides the App API which', function () {
-                var app;
+                var app, oldApps = [];
+                beforeEach(function () {
+                    ui.apps.forEach((a) => oldApps.push(a));
+                });
 
                 afterEach(function () {
                     //clean up
                     if (app && app.get('state') === 'running') {
                         return app.quit();
                     }
+                    ui.apps.reset([]);
+                    oldApps.forEach((a) => ui.apps.push(a));
                 });
 
                 describe('has simple applications', function () {
                     beforeEach(function () {
-                        app = new ox.ui.App({
+                        app = new ui.App({
                             name: 'io.ox/testApp'
                         });
-
-                        ox.manifests.apps['io.ox/testApp/main'] = {
-                            path: 'spec/io.ox/testApp',
-                            category: 'tests'
-                        };
                     });
-                    it('should define global ox.ui.App object', function () {
-                        expect(ox.ui.App).to.exist;
+                    it('should define global App object', function () {
+                        expect(ui.App).to.exist;
                     });
 
                     it('should launch a test app', function () {
                         expect(app.get('state')).to.equal('ready');
                         return app.launch().then(function () {
-                            expect(ox.ui.apps.models).to.contain(app);
+                            expect(ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
                         });
                     });
+                });
 
-                    it('should not launch an unregistered app', function () {
-                        var def;
-                        ox.manifests.disabled['io.ox/testApp/main'] = true;
-
-                        def = app.launch();
-
-                        ox.manifests.disabled = {};
-                        expect(ox.ui.apps.models).not.to.contain(app);
-                        expect(def.state()).to.equal('rejected');
+                describe('createApp convenience function', function () {
+                    it('should creates a new app and adds it to the gobal collection', function () {
+                        app = ui.createApp({
+                            id: 'io.ox/testApp'
+                        });
+                        expect(app).to.exist;
+                        expect(ui.apps.get('io.ox/testApp')).to.exist;
+                    });
+                    it('should do checks using "requires" attribute of the app', function () {
+                        app = ui.createApp({
+                            id: 'io.ox/testApp',
+                            requires: 'upsell stuff'
+                        });
+                        expect(app).not.to.exist;
+                        expect(ui.apps.get('io.ox/testApp')).not.to.exist;
                     });
                 });
 
@@ -77,7 +86,7 @@ define(['io.ox/core/desktop'], function () {
                         }, callback;
 
                     beforeEach(function () {
-                        app = new ox.ui.App({
+                        app = new ui.App({
                             name: 'io.ox/testApp',
                             launch: launcher
                         });
@@ -91,7 +100,7 @@ define(['io.ox/core/desktop'], function () {
 
                         expect(app.get('state')).to.equal('ready');
                         var def = app.launch({ callback: callback }).then(function () {
-                            expect(ox.ui.apps.models).to.contain(app);
+                            expect(ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
                             callback();
                         });

@@ -23,6 +23,7 @@
 
 .mixin-expanded() {
     .content { display: block; }
+    .config { display: flex; }
     .fa-chevron-right { display: none; }
     .fa-chevron-down { display: inline-block; }
 }
@@ -76,7 +77,7 @@
         margin: 0;
         &.config {
             font-size: 14px;
-            display: flex;
+            display: none;
             .title, .property, .value { padding: 4px 8px 0 0; }
             .title {
                 font-style: italic;
@@ -99,6 +100,8 @@
             border: 1px lightgray dashed;
             background-color: rgba(255, 255, 255, 0.8);
         }
+
+        pre.config { display: flex; }
 
         .premium {
             .mixin-premium();
@@ -171,19 +174,12 @@
     // desktop
     .wizard-step {
 
-        .box-shadow (@string) {
-            -webkit-box-shadow: @string;
-            -moz-box-shadow:    @string;
-            box-shadow:         @string;
-        }
-
         .transition(@duration:0.2s, @ease:ease-out) {
             -webkit-transition: all @duration @ease;
             -moz-transition: all @duration @ease;
             -o-transition: all @duration @ease;
             transition: all @duration @ease;
         }
-
 
         /**
          * SIMPLE MODE
@@ -272,14 +268,14 @@
                             display: inline-block;
                             background-color: #fff;
                             border-radius: 5px;
-                            .box-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+                            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
                             .transition(0.6s cubic-bezier(0.165, 0.84, 0.44, 1));
                             &:hover, &:focus {
                                 z-index:1000;
-                                .box-shadow(rgba(0, 0, 0, 0.3) 0 8px 8px 0)
+                                box-shadow: rgba(0, 0, 0, 0.3) 0 8px 8px 0;
 
                                 &.disabled {
-                                   .box-shadow(none);
+                                   box-shadow: none;
                                 }
                             }
                         }
@@ -309,7 +305,7 @@
                         }
                     }
 
-                    // back buttona
+                    // back button
                     &.centered {
                         .link.box { display: flex; }
                         //.icon-list { margin: 18px 24px 18px 24px; }

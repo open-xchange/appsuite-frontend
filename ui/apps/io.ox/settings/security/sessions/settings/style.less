@@ -1,0 +1,77 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
+ */
+
+.rightside .scrollable-pane .io-ox-session-settings {
+
+    .settings-list-item {
+        position: relative;
+        cursor: default;
+
+        .list-item-controls {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .primary, .secondary {
+            margin-left: 64px;
+            > * {
+                margin-right: 12px;
+                &:empty {
+                    display: none;
+                }
+            }
+        }
+
+        .primary {
+            font-weight: bold;
+        }
+
+        .secondary {
+            margin-top: 5px;
+            color: #797979;
+        }
+
+        .client-icon {
+            float: left;
+            width: 44px;
+            margin-top: 7px;
+
+            .os {
+                color: #777;
+            }
+
+            &.desktop {
+                .device:before {
+                    content: "\f109";
+                    font-size: 3em;
+                    line-height: 31px;
+                }
+                .os {
+                    top: -3px;
+                }
+            }
+            &.phone {
+                .device:before {
+                    content: "\f10b";
+                    font-size: 4em;
+                }
+            }
+            &.apple .os:before { content: "\f179"; }
+            &.windows .os:before { content: "\f17a"; }
+            &.android .os:before { content: "\f17b"; }
+            &.linux .os:before { content: "\f17c"; }
+        }
+    }
+
+}

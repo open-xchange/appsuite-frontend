@@ -18,43 +18,36 @@ define('io.ox/core/extPatterns/dnd', [
 
     'use strict';
 
-    var UploadZone = function () {
+    // wrapper to create full size DropZones and DropHandlers via ext points
+    var UploadZone = function (options) {
 
-        var dropZone, point, included = false, args = $.makeArray(arguments), options = args.shift();
-
-        point = ext.point(options.ref);
+        var args = $.makeArray(arguments).slice(1),
+            point = ext.point(options.ref),
+            included = false,
+            dropZone;
 
         function handleDrop(event, extensionId, file, action) {
-            var newArgs = [file];
-            _(args).each(function (arg) {
-                newArgs.push(arg);
-            });
-            if (action.extension && action.extension.action) {
-                action.extension.action.apply(action.extension, newArgs);
-            }
+            if (!action.extension || !action.extension.action) return;
+            action.extension.action.apply(action.extension, [file].concat(args));
         }
 
         function handleMultiDrop(e, action, files) {
-            if (action.extension && action.extension.multiple) {
-                action.extension.multiple.apply(action.extension, [files].concat(args));
-            }
+            if (!action.extension || !action.extension.multiple) return;
+            action.extension.multiple.apply(action.extension, [files].concat(args));
         }
 
         function initDropZone() {
             var actions = [];
 
-            if (included) {
-                dropZone.remove();
-            }
+            if (included) dropZone.remove();
 
             if (dropZone) {
                 dropZone.off('drop', handleDrop);
+                dropZone.off('drop', handleMultiDrop);
             }
 
             point.each(function (ext) {
-                if (ext.isEnabled && !ext.isEnabled.apply(ext, args)) {
-                    return;
-                }
+                if (ext.isEnabled && !ext.isEnabled.apply(ext, args)) return;
 
                 actions.push({
                     id: ext.id,
@@ -74,9 +67,7 @@ define('io.ox/core/extPatterns/dnd', [
                 dropZone.on('drop-multiple', handleMultiDrop);
             }
 
-            if (included) {
-                dropZone.include();
-            }
+            if (included) dropZone.include();
         }
 
         initDropZone();
@@ -98,60 +89,7 @@ define('io.ox/core/extPatterns/dnd', [
         };
     };
 
-    // Backbone Dropzone
-    var InplaceDropzone = Backbone.View.extend({
-
-        className: 'inplace-dropzone',
-
-        events: {
-            'drop': 'onDrop'
-        },
-
-        onDrag: function (e) {
-            switch (e.type) {
-                case 'dragenter':
-                    this.show();
-                    break;
-                case 'drop':
-                    e.preventDefault();
-                /* falls through */
-                case 'dragleave':
-                    this.hide();
-                    break;
-                // no default
-            }
-        },
-
-        onDrop: function () {
-            console.log('DROP!');
-        },
-
-        show: function () {
-            console.log('Show!');
-        },
-
-        hide: function () {
-            console.log('Hide!');
-        },
-
-        initialize: function (options) {
-            this.options = options;
-            $(document).on('dragenter dragleave drop', $.proxy(this.onDrag, this));
-            this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
-        },
-
-        render: function () {
-            return this;
-        },
-
-        dispose: function () {
-            this.stopListening();
-            $(document).off('dragenter dragleave drop', this.onDrag);
-        }
-    });
-
     return {
-        UploadZone: UploadZone,
-        InplaceDropzone: InplaceDropzone
+        UploadZone: UploadZone
     };
 });

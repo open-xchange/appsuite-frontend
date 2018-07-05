@@ -12,7 +12,7 @@
  */
 
 
-@media all and (max-width: 480px) {
+@media all and (max-width: @smartphone-breakpoint) {
     .modal.flex[data-point="plugins/core/feedback"] {
         .modal-dialog {
             width: auto;
@@ -41,7 +41,7 @@
 .nps-rating {
 
     @score-color: #ccc;
-    @score-color-checked: #3c73aa;
+    @score-color-checked: @brand-primary;
 
     justify-content: space-between;
 
@@ -109,7 +109,7 @@
 .feedback-button {
 
     color: white;
-    background-color: @topbar-background;
+    background-color: @brand-primary;
     z-index: 50;
     font-size: 13px;
     line-height: 32px;
@@ -120,8 +120,6 @@
     cursor: pointer;
     border-radius: @border-radius-base @border-radius-base 0 0;
     border: 0;
-
-    html.high-contrast & { background-color: @hc-gray; }
 }
 
 .rightside-button {

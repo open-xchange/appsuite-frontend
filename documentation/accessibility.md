@@ -5,7 +5,7 @@ icon: fa-universal-access
 
 # Overview
 
-[Web accessibility][WCAG-INTRO] aims at helping users with disabilities to access the web, i.e. perceiving and interacting with web sites or web-based applications. In order to offer everyone – with or without disabilities – the best possible user experience, we continually strive to meet the [Level AA conformance][WCAG-WAI] as defined by the [Web Content Accessibility Guidelines][WCAG-TR] 2.0. 
+[Web accessibility][WCAG-INTRO] aims at helping users with disabilities to access the web, i.e. perceiving and interacting with web sites or web-based applications. In order to offer everyone – with or without disabilities – the best possible user experience, we continually strive to meet the [Level AA conformance][WCAG-WAI] as defined by the [Web Content Accessibility Guidelines][WCAG-TR] 2.1. 
 
 Accessibility typically covers keyboard support, tab order, focus management, color contrast, semantic markup, WAI-ARIA support, and screen reader support.
 
@@ -42,23 +42,47 @@ Oct 16 | 7.8.3   | Resolving remaining issues from recent audit
 Dec 16 | 7.8.3   | Retest accessibility audit by [the Paciello Group][TPG]
 Jan 17 | 7.8.4   | Fixed newly identified minor issues from Dec 16 TPG retest
 Feb 17 | 7.8.4   | (Address book) Thumb index is now accessible by keyboard
+Mar 17 | 7.8.4   | Accessibility improvements to search and login
+Apr 17 | 7.8.4   | Fixed multiple issues regardings JAWs (labels, verbosity)
+Apr 17 | 7.8.4   | Folder tree improvements for screen readers and keyboard support for home/end
+Apr 17 | 7.8.4   | Added document role to dialogs to force screen readers in correct mode
+Apr 17 | 7.8.4   | Multiple focus improvents throughout apps
+Jul 17 | 7.8.4   | Added distinguishable focus styles for tabbed inbox
+Jul 17 | 7.10.0  | Added explicit labels for form fields where they were missing
+Aug 17 | 7.10.0  | Improved color contrast in Alerts, Settings
+Aug 17 | 7.10.0  | Introduced visual line indicator for list view and vgrid
+Aug 17 | 7.8.4   | Fixed invalid labels in dialogs (calendar, mail, settings)
+Aug 17 | 7.10.0  | Added more contrast to drag and drop helper
+Sep 17 | 7.8.4   | Attachment preview list has now appropriate ARIA roles, states and properties
+Sep 17 | 7.8.4   | Header logo changed to image with alt text
+Sep 17 | 7.8.4   | Signature settings now have proper textual roles and descriptions
+Sep 17 | 7.8.4   | Replaced combobox component with an accessible implementation
+Sep 17 | 7.8.4   | Implicit calendar and address book headings changed to semantically correct headings
+Oct 17 | 7.8.4   | (Help) Landing pages markup improved for users with screen readers
+Oct 17 | 7.8.4   | Fixed guided tours accessiblity issues (keyboard, focus)
+Nov 17 | 7.10.0  | Mail threads expandibles were implemented in an accessible manner
+Nov 17 | 7.10.0  | Workshop/Review with accessibility expert [Marco Zehe][MZ] in Dortmund
+Dec 17 | 7.10.0  | Accessibility audit by [the Paciello Group][TPG]
+Dec 17 | 7.10.0  | Fixed missing labels in Mail
+Dec 17 | 7.10.0  | Tabbed inbox accessibility issues resolved
+Jan 18 | 7.10.0  | New application launcher accessiblity support
+Jan 18 | 7.10.0  | Removed obsolete high contrast setting
+Feb 18 | 7.10.0  | Removed obsolete accessibility improvements setting
+Feb 18 | 7.10.0  | Initial keyboard support for new window management
+Mar 18 | 7.10.0  | Attended CSUN 2018
+Mar 18 | 7.10.0  | Added focus management for new windows
+May 18 | 7.10.0  | Toolbars and menus focus management and roving tabindex
+May 18 | 7.10.0  | Reworked landmark roles
 
 # Roadmap
 
-Date   | Version | Activity
--------| --------| -----------------------------------------------------------------------
-Mar 17 | 7.8.4   | Focussing on JAWs issues
-Q1 17  | 7.8.4   | Working on open issues (see below)
-Q2 17  | 7.8.4   | New accessibility audit
+TBD
 
 # Open issues
 
-- (Calendar) Timezone popup cannot be explored by screen reader users
-- (General) Tokenfield and autocomplete keyboard interaction and screen reader supports needs improvement
-- (General) Folder tree context menu does not respond properly in JAWS (when toggled by button)
-- (General) Folder tree aria markup needs improvement for screen readers (is too verbose)
+TBD
 
-[WCAG-TR]: https://www.w3.org/TR/WCAG20/
+[WCAG-TR]: https://www.w3.org/TR/WCAG21/
 [WCAG-WAI]: https://www.w3.org/WAI/WCAG2AA-Conformance
 [WCAG-INTRO]: https://www.w3.org/WAI/intro/accessibility.php
 

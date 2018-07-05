@@ -45,16 +45,28 @@
 .share-wizard {
 
     .tokenfield {
-        .border-radius(@border-radius-small @border-radius-small 0px 0px);
+        border-radius: @border-radius-small @border-radius-small 0px 0px;
         .twitter-typeahead .tt-dropdown-menu { max-height: 125px; }
         // ensure all inputs share same blank space on the left
         &.form-control { padding-left: 7px; }
     }
-
+    .recipients {
+        z-index: 1;
+        position: relative;
+        .has-picker {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
     .message {
+        z-index: 0;
+        position: relative;
+        &:focus-within {
+            z-index: 2;
+        }
         textarea {
             margin-top: -16px;
-            .border-radius(0px 0px @border-radius-small @border-radius-small);
+            border-radius: 0px 0px @border-radius-small @border-radius-small;
             resize: vertical;
             max-height: ~"calc(50vh - 64px)";
             min-height: 8em;
@@ -78,7 +90,6 @@
 
         &.expiresgroup {
             .date { margin-left: 5px; }
-            .dropdown { vertical-align: middle; }
         }
 
         // resize-polyfill sets z-index 2 onto the parent div of the textarea
@@ -118,7 +129,7 @@
 .myshares-list {
 
     &.visible-selection.has-focus .list-item.selected a,
-    &.visible-selection.has-focus .list-item.selected .type i:not(.gray) { color: white; }
+    &.visible-selection.has-focus .list-item.selected .type i { color: white; }
 
     .list-item-content {
         display: table;
@@ -129,7 +140,7 @@
 
         .breadcrumb-view {
             overflow: hidden;
-            a { color: #333; }
+            a { color: #767676; }
         }
 
         .list-item-column.column-2,
@@ -139,15 +150,46 @@
             text-align: left;
         }
 
-        .list-item-column.type { width: 20px; }
+        .list-item-column.type {
+            width: 40px;
+            color: #717171;
+        }
+    }
+}
+
+.modal.get-link-dialog {
+    .modal-body {
+        .input-group.has-picker:focus-within {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+        .share-wizard .form-inline {
+            .checkbox input[type="checkbox"] {
+                position: absolute;
+            }
+            .dropdown {
+                margin-bottom: 8px;
+                display: inline-block;
+                position: relative;
+                margin-top: 0;
+                vertical-align: middle;
+            }
+            .password-container {
+                margin-top: -10px;
+            }
+        }
     }
 }
 
 .modal.share-permissions-dialog {
 
-    .modal-content {
-        min-height: 450px;
-    }
+    html:not(.ie11) & {
+        .modal-content {
+            min-height: 250px;
+        }
+     }
 
     .modal-header {
 
@@ -170,14 +212,12 @@
         .form-group {
             margin: 8px 0 0 0;
         }
-    }
 
-    .modal-body {
-        padding: 16px 0;
-        min-height: 184px;
-
-        &.IE11 {
-            max-height: 184px; /* workaround for IE11 with resizing the contact list */
+        .input-group.has-picker:focus-within {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
         }
     }
 
@@ -191,12 +231,27 @@
             margin-right: 10px;
             margin-bottom: 0;
         }
+    }
+
+    .modal-body {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+        // also used for edge... no support for resize css attribute...
+        &.IE11 {
+            .share-options {
+                &.IE {
+                    min-width: 100%;
+                    max-width: 100%;
+                }
+            }
+        }
 
         .share-options {
             text-align: left;
-            border-bottom: 1px solid #e5e5e5;
-            margin-left: -16px;
-            width: ~"calc(100% + 32px)";
+            border-top: 1px solid #e5e5e5;
+            margin: 0;
 
             textarea {
                 resize: vertical;
@@ -222,6 +277,14 @@
 
                 .resize-polyfill.resize-polyfill-br { cursor: ns-resize; }
             }
+        }
+
+        .permissions-view {
+            width: 100%;
+            overflow-y: auto;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            min-height: 72px;
         }
     }
 

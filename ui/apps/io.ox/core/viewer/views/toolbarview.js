@@ -10,7 +10,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
- /* global blankshield */
+/* global blankshield */
 define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/disposable',
@@ -22,8 +22,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, CoreSettings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -85,8 +86,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-search-minus',
-                ref: TOOLBAR_ACTION_ID + '/zoomout',
                 label: gt('Zoom out'),
+                section: 'zoom',
+                ref: TOOLBAR_ACTION_ID + '/zoomout',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
                         role: 'button',
@@ -99,6 +101,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'lo',
                 icon: 'fa fa-search-plus',
                 label: gt('Zoom in'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
@@ -111,15 +114,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Fit to screen width'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">'),
-                        sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
-                    this.before(sectionLabel);
-                    this.prepend(checkIcon)
-                        .addClass('viewer-toolbar-fitwidth')
+                    this.addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            role: 'button',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -128,12 +127,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Fit to screen size'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
-                    this.prepend(checkIcon)
-                        .addClass('viewer-toolbar-fitheight').attr({
-                            role: 'button',
+                    this.addClass('viewer-toolbar-fitheight')
+                        .attr({
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -205,7 +203,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
-                    ref: 'io.ox/files/actions/download'
+                    ref: Util.getRefByModelSource('drive')
                 },
                 'open': {
                     prio: 'lo',
@@ -231,7 +229,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;
-                        this.append('<i class="fa fa-caret-down" aria-hidden="true">');
+                        this.append('<i class="fa fa-caret-down" aria-hidden="true"></i>');
 
                         new Dropdown({
                             el: this.parent().addClass('dropdown'),
@@ -272,6 +270,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'share',
                     ref: 'io.ox/files/actions/add-to-portal'
                 },
+                'addtofavorites': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to favorites'),
+                    section: 'favorites',
+                    ref: 'io.ox/files/favorites/add'
+                },
+                'removefromfavorites': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Remove from favorites'),
+                    section: 'favorites',
+                    ref: 'io.ox/files/favorites/remove'
+                },
                 'uploadnewversion': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -288,18 +300,18 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             mail: {
-                'openmailattachment': {
+                'print': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Open in browser tab'),
-                    ref: 'io.ox/mail/actions/open-attachment'
+                    label: gt('Print as PDF'),
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
                 'downloadmailattachment': {
                     prio: 'hi',
                     mobile: 'lo',
                     icon: 'fa fa-download',
                     label: gt('Download'),
-                    ref: 'io.ox/mail/actions/download-attachment'
+                    ref: Util.getRefByModelSource('mail')
                 },
                 'savemailattachmenttodrive': {
                     prio: 'lo',
@@ -310,17 +322,17 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             pim: {
-                'openmailattachment': {
+                'print': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Open in browser tab'),
-                    ref: 'io.ox/core/tk/actions/open-attachment'
+                    label: gt('Print as PDF'),
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
                 'downloadmailattachment': {
                     prio: 'lo',
                     mobile: 'lo',
                     label: gt('Download'),
-                    ref: 'io.ox/core/tk/actions/download-attachment'
+                    ref: Util.getRefByModelSource('pim')
                 },
                 'savemailattachmenttodrive': {
                     prio: 'lo',
@@ -357,7 +369,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
-                    ref: 'oxguard/download'
+                    ref: Util.getRefByModelSource('guardDrive')
                 },
                 'open': {
                     prio: 'lo',
@@ -401,10 +413,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         };
     // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
     _.each(linksMap, function (appMeta, appName) {
-
-        // see bug 55872
-        if (_.device('IE')) { delete appMeta.openmailattachment; }
-
         var index = 0,
             extId = TOOLBAR_LINKS_ID + '/' + appName,
             extPoint = Ext.point(extId),
@@ -428,7 +436,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         capabilities: 'document_preview',
         requires: function (e) {
-            if (!e.collection.has('one', 'read')) {
+            if (!e.collection.has('one')) {
                 return false;
             }
 
@@ -436,7 +444,15 @@ define('io.ox/core/viewer/views/toolbarview', [
             var meta = model.get('meta');
             var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
 
-            return (!isError && model.isFile() && (model.isOffice() || model.isPDF()));
+            if (isError) {
+                return false;
+            }
+
+            if (model.isFile() && !e.collection.has('read')) {
+                return false;
+            }
+
+            return (model.isOffice() || model.isPDF());
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
@@ -486,7 +502,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomIn();
         }
     });
@@ -496,7 +511,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomOut();
         }
     });
@@ -507,8 +521,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
-            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
         }
     });
@@ -519,8 +531,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
-            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
@@ -646,7 +656,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onModelChange: function (changedModel) {
             // ignore events that require no render
-            if (!_.isString(this.model.previous('description')) && changedModel.get('description') === '') {
+            if (changedModel.changed.description && (this.model.previous('description') !== changedModel.get('description'))) {
                 return;
             }
             this.render(changedModel);
@@ -693,7 +703,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         model: model,
                         models: isDriveFile ? [model] : null,
                         data: isDriveFile ? model.toJSON() : origData,
-                        openedBy: this.openedBy
+                        openedBy: this.openedBy,
+                        favorites: CoreSettings.get('favorites/infostore', [])
                     }),
                     appName = model.get('source'),
                     self = this,
@@ -705,7 +716,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
                 // save current data as view model
                 this.model = model;
+                this.stopListening(this.model);
                 this.listenTo(this.model, 'change', this.onModelChange);
+
+                // listener for added/removed favorites
+                this.stopListening(FilesAPI);
+                this.listenTo(FilesAPI, 'favorite:add favorite:remove', function (file) {
+                    if (file.id === _.cid(model.toJSON())) {
+                        self.onModelChange(FilesAPI.pool.get('detail').get(file.id));
+                    }
+                });
                 // set device type
                 Util.setDeviceClass(this.$el);
                 toolbar.empty().append(pageNavigation);
@@ -759,7 +779,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),
                 group = $('<li class="viewer-toolbar-navigation" role="presentation">'),
+                // #58229 - sidebar closed by default for shared files
+                sidebarState = (this.isSharing) ? false : Settings.getSidebarOpenState(),
                 self = this;
+
             function setButtonState(nodes, state) {
                 if (state) {
                     $(nodes).removeClass('disabled').removeAttr('aria-disabled');
@@ -816,7 +839,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             prev.on('click', onPrevPage);
             next.on('click', onNextPage);
             group.append(prev, next, pageInputWrapper, totalPage)
-                .toggleClass('sidebar-offset', Settings.getSidebarOpenState());
+                .toggleClass('sidebar-offset', sidebarState);
             this.$el.prepend(group);
         },
 

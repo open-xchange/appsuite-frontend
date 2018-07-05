@@ -247,7 +247,6 @@ define('io.ox/metrics/util', ['io.ox/core/folder/api'], function (folderAPI) {
                 12: 'trash'
             },
             special = {
-                'virtual/all-my-appointments': 'all-my-appointments',
                 'virtual/myshares': 'all-my-shares',
                 'virtual/favorites/infostore': 'favorites',
                 'virtual/favorites/contacts': 'favorites',

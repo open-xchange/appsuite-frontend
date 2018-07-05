@@ -88,6 +88,30 @@ define('io.ox/files/share/api', [
             return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
         },
 
+        setPermissions: function (value) {
+            var
+                attrs = this.attributes;
+
+            if (this.isFolder()) {
+                if ('com.openexchange.share.extendedPermissions' in attrs) {
+
+                    this.attributes['com.openexchange.share.extendedPermissions'] = value;
+
+                } else if ('permissions' in attrs) {
+
+                    this.attributes.permissions = value;
+                }
+            } else if ('com.openexchange.share.extendedObjectPermissions' in attrs) {
+
+                this.attributes['com.openexchange.share.extendedObjectPermissions'] = value;
+
+            } else if ('object_permissions' in attrs) {
+
+                this.attributes.object_permissions = value;
+            }
+            return this;
+        },
+
         loadExtendedPermissions: (function () {
 
             function fetchFile(model, options) {
@@ -145,9 +169,9 @@ define('io.ox/files/share/api', [
                     timezone: 'UTC'
                 },
                 data: _(data).pick('module', 'folder', 'item')
-            }).then(function (result) {
+            }).then(function (data, timestamp) {
                 api.trigger('new:link');
-                return result;
+                return { data: data, timestamp: timestamp };
             });
         },
 
@@ -164,7 +188,8 @@ define('io.ox/files/share/api', [
                     timezone: 'UTC',
                     timestamp: timestamp || _.now()
                 },
-                data: _(data).pick('module', 'folder', 'item', 'password', 'expiry_date')
+                // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
+                data: _(data).pick('module', 'folder', 'item', 'expiry_date', 'includeSubfolders', 'password')
             });
         },
 

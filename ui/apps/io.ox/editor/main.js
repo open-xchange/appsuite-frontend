@@ -29,9 +29,7 @@ define('io.ox/editor/main', [
             'submit form': 'onSubmit',
             'keydown .title': 'onTitleKeydown',
             'keyup .title': 'onTitleKeyup',
-            'keydown .content': 'onContentKeydown',
-            'click .save': 'onSave',
-            'click .quit': 'onQuit'
+            'keydown .content': 'onContentKeydown'
         },
 
         onSubmit: function (e) {
@@ -126,7 +124,7 @@ define('io.ox/editor/main', [
                 //remove linebreaks
                 .replace(/(\r\n|\n|\r)/gm, '')
                 //remove unsupported characters
-                .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');
+                .replace(/[%&#/$*!`´'"=:@+^\\.+?{}|]/g, '_') || 'unnamed');
 
             // has file extension?
             if (!regex.test(filename)) {
@@ -144,36 +142,29 @@ define('io.ox/editor/main', [
         },
 
         busy: function () {
-            this.$el.find('input.title, button.save').prop('disabled', true);
-            this.$el.find('button.save').empty().append($('<i class="fa fa-refresh fa-spin" aria-hidden="true">'));
+            this.$el.find('input.title').prop('disabled', true);
+            this.app.getWindow().nodes.outer.find('button.save').prop('disabled', true).empty().append($('<i class="fa fa-refresh fa-spin" aria-hidden="true">'));
         },
 
         idle: function () {
-            this.$el.find('input.title, button.save').prop('disabled', false);
-            this.$el.find('button.save').text(gt('Save'));
+            this.$el.find('input.title').prop('disabled', false);
+            this.app.getWindow().nodes.outer.find('button.save').prop('disabled', false).text(gt('Save'));
         },
 
         render: function () {
             var titleId = _.uniqueId('editor_title-'),
-                bodyId = _.uniqueId('editor_body-');
+                bodyId = _.uniqueId('editor_body-'),
+                self = this;
             this.$el.append(
                 $('<form>').append(
                     $('<div class="row">').append(
                         // title
-                        $('<div class="form-group col-xs-12 col-sm-8">').append(
+                        $('<div class="form-group col-xs-12">').append(
                             $('<label class="sr-only">').attr('for', titleId).text(gt('Title')),
                             $('<input type="text" maxlength="350" class="title form-control">').attr({
                                 id: titleId,
                                 placeholder: gt('Enter document title here')
                             })
-                        ),
-
-                        // save & close buttons
-                        $('<div class="form-group col-xs-6 col-sm-2">').append(
-                            $('<button type="button" class="save btn btn-primary btn-block">').text(gt('Save'))
-                        ),
-                        $('<div class="form-group col-xs-6 col-sm-2">').append(
-                            $('<button type="button" class="quit btn btn-default btn-block">').text(gt('Close'))
                         )
                     ),
                     $('<div class="body row">').append(
@@ -187,6 +178,12 @@ define('io.ox/editor/main', [
                 )
             );
 
+            this.app.getWindow().setHeader($('<div>').append(
+            // save & close buttons
+                $('<button type="button" class="save btn btn-primary">').text(gt('Save')).on('click', self.onSave.bind(self)),
+                $('<button type="button" class="quit btn btn-default">').text(gt('Close')).on('click', self.onQuit.bind(self))
+            ));
+
             return this;
         }
     });
@@ -196,7 +193,12 @@ define('io.ox/editor/main', [
 
         var app, win, model = new api.Model(), view, previous = {};
 
-        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true });
+        app = ox.ui.createApp({
+            name: 'io.ox/editor',
+            title: 'Editor',
+            closable: true,
+            floating: _.device('!smartphone')
+        });
 
         // launcher
         app.setLauncher(function (options) {
@@ -205,7 +207,9 @@ define('io.ox/editor/main', [
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/editor',
                 title: gt('Editor'),
-                chromeless: true
+                chromeless: true,
+                floating: _.device('!smartphone'),
+                closable: true
             }));
 
             app.view = view = new EditorView({ model: model, app: app });
@@ -255,21 +259,23 @@ define('io.ox/editor/main', [
             var fixFolder = function () {
 
                 // check file permissions first
-                if (model.hasWritePermissions()) return $.when();
+                return model.hasWritePermissions().then(function (permissionGranted) {
+                    if (permissionGranted) return $.when();
 
-                // switch to default folder on missing grants (or special folders)
-                return folderAPI.get(model.get('folder_id')).done(function (data) {
-                    var required = (model.has('id') && !folderAPI.can('write', data)) ||
-                                   (!model.has('id') && !folderAPI.can('create', data)) ||
-                                   _.contains(['14', '15'], data.id);
-                    if (!required) return;
-                    var defaultFolder = folderAPI.getDefaultFolder('infostore');
-                    if (defaultFolder) {
-                        // update mode and notify user
-                        model.set('folder_id', defaultFolder);
-                        model.unset('id');
-                        notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
-                    }
+                    // switch to default folder on missing grants (or special folders)
+                    return folderAPI.get(model.get('folder_id')).done(function (data) {
+                        var required = (model.has('id') && !folderAPI.can('write', data)) ||
+                                       (!model.has('id') && !folderAPI.can('create', data)) ||
+                                       _.contains(['14', '15'], data.id);
+                        if (!required) return;
+                        var defaultFolder = folderAPI.getDefaultFolder('infostore');
+                        if (defaultFolder) {
+                            // update mode and notify user
+                            model.set('folder_id', defaultFolder);
+                            model.unset('id');
+                            notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
+                        }
+                    });
                 });
             };
 
@@ -320,6 +326,7 @@ define('io.ox/editor/main', [
                     .fail(notifications.yell);
             }, function () {
                 view.idle.apply(app.view);
+                throw arguments;
             });
         };
 
@@ -371,6 +378,11 @@ define('io.ox/editor/main', [
             var def = $.Deferred();
             if (app.isDirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    } else if (_.device('smartphone')) {
+                        app.getWindow().resume();
+                    }
                     new dialogs.ModalDialog()
                     .text(gt('Do you really want to discard your changes?'))
                     //#. "Discard changes" appears in combination with "Cancel" (this action)

@@ -33,7 +33,7 @@ define(function () {
             return require(['file/doesnt/exist']).then(function () {
                 sinon.FakeXMLHttpRequest.useFilters = true;
                 fakeServer.restore();
-                expect(recordAppsLoad.calledOnce).to.be.true;
+                expect(recordAppsLoad.calledOnce, 'apps/load called once').to.be.true;
             });
         });
 
@@ -65,6 +65,48 @@ define(function () {
                     expect(recordAppsLoad.calledWith(3), 'Loaded 3 modules').to.be.true;
                     expect(recordAppsLoad.calledWith(2), 'Loaded 2 modules').to.be.true;
                     expect(recordAppsLoad.calledTwice, 'apps/load called two times').to.be.true;
+                });
+            });
+        });
+
+        describe('caching', function () {
+            it('should fetch uncached files async', function () {
+                require.undef('io.ox/core/session');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session'], cb);
+                expect(cb).not.to.have.been.called;
+                return def.then(function () {
+                    expect(cb).to.have.been.calledOnce;
+                });
+            });
+
+            it('should have sync cache hits using cb style', function () {
+                //make sure the file is in require registry
+                require('io.ox/core/session');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session'], cb);
+                expect(cb).to.have.been.calledOnce;
+                return def;
+            });
+
+            it('should have sync cache hits using done style', function () {
+                //make sure the file is in require registry
+                require('io.ox/core/session');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session']).done(cb);
+                expect(cb).to.have.been.calledOnce;
+                return def;
+            });
+
+            it('should resolve for multiple modules', function () {
+                //make sure the file is in require registry
+                require('io.ox/core/session');
+                require('io.ox/core/api/account');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session', 'io.ox/core/api/account']).done(cb);
+                expect(cb).to.have.been.calledOnce;
+                return def.then(function () {
+                    expect(arguments).to.have.length(2);
                 });
             });
         });

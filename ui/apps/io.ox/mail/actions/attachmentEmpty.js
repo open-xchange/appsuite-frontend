@@ -29,7 +29,8 @@ define('io.ox/mail/actions/attachmentEmpty', [
                 .addButton('cancel', gt('Cancel'), 'cancel')
                 .show(function () {
                     def.notify('empty attachment');
-                }).done(function (action) {
+                })
+                .done(function (action) {
                     if (action === 'send') {
                         def.resolve();
                     } else {

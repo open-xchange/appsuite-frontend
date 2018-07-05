@@ -14,8 +14,8 @@
 /**
  * LESS is distributed under the terms of the Apache License, Version 2.0
  */
-
- /* global assert */
+/* eslint requirejs/no-object-define: 0 */
+/* global assert */
 
 (function () {
 
@@ -37,11 +37,8 @@
         eval(code);
     }
 
-    // needs to be reviewed: "force websql for mobile" (July 2013)
-    // plus: don't know why Safari is explicitly excluded as it doesn't support indexedDB at all
-    // for example, IDBVersionChangeEvent is always undefined for Safari
-    // note: (11.8.2016) changed file cache for Android from localStorage to indexDB
-    if (Modernizr.indexeddb && window.indexedDB && (_.device('desktop && !safari') || _.device('android')) && window.IDBVersionChangeEvent !== undefined) {
+    // With 7.10 Indexeddb should work with all browsers. We do not need to exclude Safari here any more
+    if (Modernizr.indexeddb && window.indexedDB && window.IDBVersionChangeEvent !== undefined) {
 
         // IndexedDB
         (function () {
@@ -276,12 +273,11 @@
     }
 
     function dirname(filename) {
-        return filename.replace(/(?:^|(\/))[^\/]+$/, '$1');
+        return filename.replace(/(?:^|(\/))[^/]+$/, '$1');
     }
 
     function relativeCSS(path, css) {
-        return css.replace(/url\((\s*["']?)(?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
-                           'url($1' + path);
+        return css.replace(/url\((\s*["']?)(?!\/|[A-Za-z][A-Za-z0-9+.-]*:)/g, 'url($1' + path);
     }
 
     function insert(name, css, selector, node) {
@@ -429,7 +425,8 @@
                                 }
                             })();
                         });
-                    }).fail(function loadingFailed() {
+                    })
+                    .fail(function loadingFailed() {
                         var modules = module.split(',');
                         if (modules.length > 1) {
                             console.warn('Problem loading concatenated modules, falling back to separate file loading');
@@ -511,7 +508,6 @@
             ox.theme = name;
             var path = ox.base + '/apps/themes/' + name + '/',
                 icons = {
-                    favicon: 'favicon.ico',
                     icon57: 'icon57.png',
                     icon72: 'icon72.png',
                     icon76: 'icon76.png',
@@ -522,11 +518,14 @@
                     icon167: 'icon167.png',
                     icon180: 'icon180.png',
                     icon192: 'icon192.png',
-                    win8Icon: 'icon144_win.png'
+                    win8Icon: 'icon144_win.png',
+                    // update favicon last; latest chrome (~64) runs into issues (see bug 57324)
+                    favicon: 'favicon.ico'
                 };
-            for (var i in icons) {
-                $('head #' + i).attr({ href: path + icons[i] }).detach().appendTo('head');
-            }
+            _(icons).each(function (file, id) {
+                // firefox needs detach/append (see bug 25287);
+                $('head #' + id).attr({ href: path + file }).detach().appendTo('head');
+            });
             if (name !== 'login') {
                 themeCommon.path = path + 'common';
                 themeStyle.path = path + 'style';

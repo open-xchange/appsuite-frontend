@@ -49,22 +49,31 @@ define('io.ox/mail/detail/main', [
             };
         },
 
-        /*
-         * toogle big screen mode for wide mails
-         */
-        'big-screen-toggle': function (app) {
-            // if the mail is too big and we get some scrollbars,
-            // toggle bigscreen by default
-            app.threadView.on('mail:detail:body:render', function () {
-                var rootNode;
-                if (_.device('chrome')) {
-                    // chrome uses shadow-dom which can not be found by jquery by default
-                    rootNode = app.threadView.$el.find('.shadow-root-container')[0].shadowRoot;
-                } else {
-                    rootNode = app.threadView.$el;
-                }
-                var width = $(rootNode).find('.mail-detail-content').width();
-                if (width >= 850) app.threadView.toggleBigScreen(true);
+        'metrics': function (app) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                var body = app.getWindow().nodes.body;
+                // toolbar actions
+                body.on('mousedown', '.io-ox-action-link:not(.dropdown, [data-toggle="dropdown"])', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropdown
+                body.on('mousedown', '.io-ox-inline-links .dropdown a:not([data-toggle])', function (e) {
+                    var action = $(e.target).closest('.dropdown').find('> a');
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: action.attr('data-action'),
+                        detail: $(e.target).val()
+                    });
+                });
+
             });
         }
     });
@@ -75,6 +84,7 @@ define('io.ox/mail/detail/main', [
         // application object
         var app = ox.ui.createApp({
             closable: true,
+            floating: !_.device('smartphone'),
             name: NAME,
             title: ''
         });
@@ -99,7 +109,9 @@ define('io.ox/mail/detail/main', [
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
-                toolbar: false
+                toolbar: false,
+                closable: true,
+                floating: !_.device('smartphone')
             });
 
             app.setWindow(win);

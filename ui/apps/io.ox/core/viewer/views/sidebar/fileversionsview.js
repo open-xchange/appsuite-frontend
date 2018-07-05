@@ -63,13 +63,13 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (!model || !_.isArray(versions)) { return; }
 
             table = $('<table>').addClass('versiontable table').attr('data-latest-version', (versions.length > 0) && _.last(versions).version).append(
-                        $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
-                        $('<thead>').addClass('sr-only').append(
-                            $('<tr>').append(
-                                $('<th>').text(gt('File'))
-                            )
-                        )
-                    );
+                $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
+                $('<thead>').addClass('sr-only').append(
+                    $('<tr>').append(
+                        $('<th>').text(gt('File'))
+                    )
+                )
+            );
 
             drawAllVersions(versions);
 
@@ -99,9 +99,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     new LinksPattern.Action('io.ox/files/actions/viewer/display-version', {
         capabilities: 'infostore',
         requires: function (e) {
-            var isText = FilesAPI.Model.prototype.isText.call(this, e.baton.data.file_mimetype);
-            var isPDF = FilesAPI.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype);
-            var isOffice = FilesAPI.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype);
+            var isText = FilesAPI.isText(e.baton.data);
+            var isPDF = FilesAPI.isPDF(e.baton.data);
+            var isOffice = FilesAPI.isOffice(e.baton.data);
 
             return (e.baton.isViewer && (isText || isPDF || isOffice));
         },
@@ -161,7 +161,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var isToday = moment().isSame(moment(baton.data.last_modified), 'day'),
                 dateString = (baton.data.last_modified) ? moment(baton.data.last_modified).format(isToday ? 'LT' : 'l LT') : '-';
 
-            this.find('td:last').append($('<div class="last_modified">').text(gt.noI18n(dateString)));
+            this.find('td:last').append($('<div class="last_modified">').text(dateString));
         }
     });
 
@@ -171,7 +171,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 40,
         draw: function (baton) {
             var size = (_.isNumber(baton.data.file_size)) ? _.filesize(baton.data.file_size) : '-';
-            this.find('td:last').append($('<div class="size">').text(gt.noI18n(size)));
+            this.find('td:last').append($('<div class="size">').text(size));
         }
     });
 
@@ -223,7 +223,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 close: this.onClose.bind(this)
             });
             this.listenTo(this.model, 'change:number_of_versions', this.render);
-            this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version change:filename', this.renderVersions);
+            this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version change:com.openexchange.file.sanitizedFilename', this.renderVersions);
         },
 
         onOpen: function () {
@@ -246,7 +246,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         render: function () {
             if (!this.model) return this;
             var count = this.model.get('number_of_versions') || 0;
-            this.setPanelHeader(gt('Versions (%1$d)', _.noI18n(count)));
+            this.setPanelHeader(gt('Versions (%1$d)', count));
             // show the versions panel only if we have at least 2 versions
             this.$el.toggle(count > 1);
             this.togglePanel(count > 1 && !!open[this.model.cid]);

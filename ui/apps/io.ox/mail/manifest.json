@@ -1,16 +1,10 @@
 [{
-    "title": "Mail",
-    "company": "Open-Xchange",
-    "icon": "mail.png",
-    "category": "Basic",
-    "settings": true,
-    "requires": "webmail",
-    "refreshable": true,
-    "index": 200
-}, {
     "namespace": "io.ox/mail/compose/editor/text",
     "path": "io.ox/core/tk/text-editor"
 }, {
     "namespace": "io.ox/mail/compose/editor/html",
     "path": "io.ox/core/tk/contenteditable-editor"
+}, {
+    "namespace": "io.ox/mail/listview/contextmenu",
+    "path": "io.ox/mail/contextmenu"
 }]

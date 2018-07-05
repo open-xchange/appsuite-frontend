@@ -5,7 +5,11 @@ BuildRequires:  ant
 %else
 BuildRequires:  ant-nodeps
 %endif
-BuildRequires:  java-devel >= 1.6.0
+%if 0%{?suse_version}
+BuildRequires: java-1_8_0-openjdk-devel
+%else
+BuildRequires: java-1.8.0-openjdk-devel
+%endif
 %if 0%{?suse_version}
 BuildRequires:  nodejs6
 BuildRequires:  npm6
@@ -13,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 36
+%define         ox_release 10
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -36,6 +40,8 @@ OX App Suite help files
 %package        common
 Group:          Applications/Productivity
 Summary:        Language-independent files of online help for OX App Suite
+Obsoletes:      open-xchange-guard-help-common
+Provides:       open-xchange-guard-help-common
 
 %description    common
 Language-independent files of online help for OX App Suite
@@ -45,6 +51,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (de_DE)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-de-de
+Provides:      open-xchange-guard-help-de-de
 
 %description   de-de
 Online help for OX App Suite (de_DE)
@@ -54,6 +62,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (en_GB)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-en-gb
+Provides:      open-xchange-guard-help-en-gb
 
 %description   en-gb
 Online help for OX App Suite (en_GB)
@@ -63,6 +73,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (en_US)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-en-us
+Provides:      open-xchange-guard-help-en-us
 
 %description   en-us
 Online help for OX App Suite (en_US)
@@ -72,6 +84,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (es_ES)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-es-es
+Provides:      open-xchange-guard-help-es-es
 
 %description   es-es
 Online help for OX App Suite (es_ES)
@@ -81,6 +95,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (es_MX)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-es-mx
+Provides:      open-xchange-guard-help-es-mx
 
 %description   es-mx
 Online help for OX App Suite (es_MX)
@@ -90,6 +106,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (fr_FR)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-fr-fr
+Provides:      open-xchange-guard-help-fr-fr
 
 %description   fr-fr
 Online help for OX App Suite (fr_FR)
@@ -99,6 +117,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (it_IT)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-it-it
+Provides:      open-xchange-guard-help-it-it
 
 %description   it-it
 Online help for OX App Suite (it_IT)
@@ -108,6 +128,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (ja_JP)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-ja-jp
+Provides:      open-xchange-guard-help-ja-jp
 
 %description   ja-jp
 Online help for OX App Suite (ja_JP)
@@ -117,6 +139,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (nl_NL)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-nl-nl
+Provides:      open-xchange-guard-help-nl-nl
 
 %description   nl-nl
 Online help for OX App Suite (nl_NL)
@@ -126,6 +150,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (pl_PL)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-pl-pl
+Provides:      open-xchange-guard-help-pl-pl
 
 %description   pl-pl
 Online help for OX App Suite (pl_PL)
@@ -135,6 +161,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (zh_CN)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-zh-cn
+Provides:      open-xchange-guard-help-zh-cn
 
 %description   zh-cn
 Online help for OX App Suite (zh_CN)
@@ -144,6 +172,8 @@ Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (zh_TW)
 Provides:      open-xchange-appsuite-help
 Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-zh-tw
+Provides:      open-xchange-guard-help-zh-tw
 
 %description   zh-tw
 Online help for OX App Suite (zh_TW)
@@ -233,71 +263,27 @@ done
 
 %changelog
 * Fri Jun 29 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-06-28 (4822)
-* Tue Jun 26 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-07-03 (4817)
-* Wed Jun 20 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-06-25 (4791)
+Fourth candidate for 7.10.0 release
+* Wed Jun 27 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Third candidate for 7.10.0 release
+* Mon Jun 25 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Second candidate for 7.10.0 release
 * Mon Jun 11 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-06-20 (4783)
-* Wed Jun 06 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-06-11 (4771)
-* Tue May 22 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-05-28 (4758)
-* Mon May 07 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-05-07 (4685)
-* Mon Apr 23 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-04-26 (4682)
-* Mon Apr 16 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-04-23 (4670)
-* Thu Apr 12 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-04-23 (4673)
-* Wed Apr 11 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-04-11 (4646)
+First candidate for 7.10.0 release
+* Fri May 18 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Sixth preview of 7.10.0 release
+* Fri Apr 20 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Fifth preview of 7.10.0 release
 * Tue Apr 03 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-04-09 (4642)
-* Tue Mar 20 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-03-26 (4619)
-* Mon Mar 05 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-03-12 (4602)
-* Wed Feb 28 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-03-09 (4597)
-* Mon Feb 19 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-02-26 (4583)
-* Tue Jan 30 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-02-05 (4555)
-* Mon Jan 15 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-01-22 (4538)
-* Thu Jan 04 2018 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2018-01-08 (hotfix-4516)
-* Fri Dec 08 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-12-11 (hotfix-4473)
-* Mon Nov 20 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-11-20 (4441)
-* Wed Oct 25 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-10-30 (4415)
-* Fri Oct 13 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-10-16 (4394)
-* Thu Sep 28 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-10-02 (4377)
-* Thu Sep 21 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-09-22 (4373)
-* Tue Sep 12 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-09-18 (4354)
-* Wed Aug 30 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-09-04 (4328)
-* Tue Aug 15 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-08-21 (4318)
-* Tue Aug 01 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-08-07 (4304)
-* Mon Jul 17 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-07-24 (4285)
-* Fri Jul 07 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-07-10 (4257)
-* Wed Jun 21 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-06-26 (4233)
-* Tue Jun 06 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-06-08 (4180)
+Fourth preview of 7.10.0 release
+* Tue Feb 20 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Third preview of 7.10.0 release
+* Fri Feb 02 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Second preview of 7.10.0 release
+* Fri Dec 01 2017 Marcus Klein <marcus.klein@open-xchange.com>
+First preview for 7.10.0 release
+* Mon Oct 16 2017 Marcus Klein <marcus.klein@open-xchange.com>
+prepare for 7.10.0 release
 * Fri May 19 2017 Marcus Klein <marcus.klein@open-xchange.com>
 First candidate for 7.8.4 release
 * Thu May 04 2017 Marcus Klein <marcus.klein@open-xchange.com>

@@ -20,7 +20,7 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/core/http',
     'io.ox/core/util',
     'gettext!io.ox/core',
-    'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+    'static/3rd.party/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
@@ -143,20 +143,27 @@ define('io.ox/core/tk/tokenfield', [
             /*
              * extension point for a token
              */
+
             ext.point(options.extPoint + '/token').extend({
                 id: 'token',
                 index: 100,
-                draw: function (model) {
+                draw: function (/*model, e, input*/) {
+                    // disabled contact pictures in tokens with 7.10
+                    // Keeping this point for potential customising
                     // add contact picture
-                    $(this).prepend(
+                    /*$(this).prepend(
                         contactAPI.pictureHalo(
                             $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
                             { width: 16, height: 16, scaleType: 'contain', lazyload: true }
                         )
                     );
+                    // when we append the contact picture, the token gets wider, this pushes the input to the next line. To prevent that we update the width of the input field
+                    input.trigger('updateWidth');
+                    */
                 }
             });
+
 
             ext.point(options.extPoint + '/autoCompleteItem').extend({
                 id: 'view',
@@ -206,7 +213,7 @@ define('io.ox/core/tk/tokenfield', [
         register: function () {
             var self = this;
             // register custom event when token is clicked
-            this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
+            this.$el.tokenfield().parent().on('click mousedown', '.token', function (e) {
                 // create new event set attrs property like it's used in the non-custom events
                 var evt = $.extend(true, {}, e, {
                     type: 'tokenfield:clickedtoken',
@@ -250,7 +257,7 @@ define('io.ox/core/tk/tokenfield', [
                         //#. %1$d is the number of search results in the autocomplete field
                         //#, c-format
                         gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
-                        gt.noI18n(numberOfResults)
+                        numberOfResults
                     );
                 }
 
@@ -391,10 +398,6 @@ define('io.ox/core/tk/tokenfield', [
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
 
-                        if (_.device('smartphone') && label.css('max-width') !== 'none') {
-                            // subtract size of right-aligned control (mail compose).
-                            label.css('max-width', label.width() - 16 + 'px');
-                        }
                         // a11y: set title
                         node.attr('aria-label', function () {
                             var token = model.get('token'),
@@ -406,7 +409,7 @@ define('io.ox/core/tk/tokenfield', [
                             return gt('%1$s. Press backspace to delete.', title);
                         });
                         // customize token
-                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
+                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
                     }
                 },
                 'tokenfield:edittoken': function (e) {
@@ -501,6 +504,32 @@ define('io.ox/core/tk/tokenfield', [
 
             // add non-public api;
             this.hiddenapi = this.input.data('ttTypeahead');
+
+            // debug: force dropdown to stay open
+            // this.hiddenapi.dropdown.close = $.noop;
+            // this.hiddenapi.dropdown.empty = $.noop;
+
+            // ignore mouse events when dropdown gets programatically scrolled (see bug 55757)
+            function hasMouseMoved(e) {
+                if (!e || !e.originalEvent) return true;
+                var x = e.originalEvent.movementX,
+                    y = e.originalEvent.movementY;
+                if (x !== 0 || y !== 0) return true;
+            }
+            var dropdown = _.extend(this.hiddenapi.dropdown, {
+                _onSuggestionMouseEnter: function (e) {
+                    if (!hasMouseMoved(e)) return;
+                    this._removeCursor();
+                    this._setCursor($(e.currentTarget), true);
+                },
+                _onSuggestionMouseLeave: function (e) {
+                    if (!hasMouseMoved(e)) return;
+                    this._removeCursor();
+                }
+            });
+            dropdown.$menu.off('mouseenter.tt mouseleave.tt')
+                .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
+                .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
 
             // calculate position for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
@@ -625,7 +654,7 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
-            this.getInput().on('focus blur', function (e) {
+            this.getInput().on('focus blur updateWidth', function (e) {
                 var tokenfield = self.$el.data('bs.tokenfield');
                 tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
                 tokenfield.update();

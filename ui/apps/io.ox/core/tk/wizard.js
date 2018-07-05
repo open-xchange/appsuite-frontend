@@ -49,14 +49,17 @@ define('io.ox/core/tk/wizard', [
         // simple container on desktop for flex layout
         $('<div class="wizard-container abs">');
 
-    function getBounds(elem) {
+    function getBounds(elem, padding) {
+        padding = padding ? padding : 0;
         var o = elem.offset();
-        o.width = elem.outerWidth();
-        o.height = elem.outerHeight();
+        o.width = elem.outerWidth() + padding * 2;
+        o.height = elem.outerHeight() + padding * 2;
         o.availableWidth = $(window).width();
         o.availableHeight = $(window).height();
-        o.right = o.availableWidth - o.width - o.left;
-        o.bottom = o.availableHeight - o.height - o.top;
+        o.right = o.availableWidth - o.width - o.left + padding;
+        o.bottom = o.availableHeight - o.height - o.top + padding;
+        o.top -= padding;
+        o.left -= padding;
         return o;
     }
 
@@ -213,6 +216,7 @@ define('io.ox/core/tk/wizard', [
             this.trigger('stop');
             this.off();
             this.closed = true;
+            $('body').removeClass('wizard-open');
             return this;
         },
 
@@ -247,7 +251,8 @@ define('io.ox/core/tk/wizard', [
                 this.showFirst();
                 this.trigger('start');
             }
-
+            // needed to stop dropdowns from closing
+            $('body').addClass('wizard-open');
             // for debugging
             window.wizard = this;
 

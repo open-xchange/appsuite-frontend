@@ -68,8 +68,8 @@ define('io.ox/backbone/mini-views/quota', [
                     usage: o.usage
                 });
             }
-            if (forceReload && o.module === 'file') {
-                quotaAPI.requestFileQuotaUpdates();
+            if (forceReload) {
+                if (o.module === 'file') quotaAPI.requestFileQuotaUpdates();
                 quotaAPI.reload();
             }
 

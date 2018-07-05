@@ -311,16 +311,17 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                         baton.view.dialog.pause();
 
                         picker({
+                            async: true,
                             context: 'filter',
-                            done: function (id) {
+                            done: function (id, dialog) {
                                 model.set('into', id);
-                            },
-                            close: function () {
-                                baton.view.dialog.resume();
+                                dialog.close();
                             },
                             folder: model.get('into'),
                             module: 'mail',
-                            root: '1'
+                            root: '1',
+                            settings: settings,
+                            persistent: 'folderpopup'
                         });
                     }
 
@@ -377,16 +378,17 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                         baton.view.dialog.pause();
 
                         picker({
+                            async: true,
                             context: 'filter',
-                            done: function (id) {
+                            done: function (id, dialog) {
                                 model.set('into', id);
-                            },
-                            close: function () {
-                                baton.view.dialog.resume();
+                                dialog.close();
                             },
                             folder: model.get('into'),
                             module: 'mail',
-                            root: '1'
+                            root: '1',
+                            settings: settings,
+                            persistent: 'folderpopup'
                         });
                     }
 

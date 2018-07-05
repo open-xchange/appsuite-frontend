@@ -34,13 +34,16 @@ define('io.ox/mail/actions', [
         isDraftMail = function (mail) {
             return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
         },
-        Action = links.Action;
+        Action = links.Action,
+        isGuest = function () {
+            return capabilities.has('guest');
+        };
 
     // actions
 
     new Action('io.ox/mail/actions/compose', {
         requires: function () {
-            return true;
+            return !isGuest();
         },
         action: function (baton) {
             ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
@@ -49,9 +52,9 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/delete', {
         requires: 'toplevel some delete',
-        multiple: function (list) {
+        multiple: function (list, baton) {
             require(['io.ox/mail/actions/delete'], function (action) {
-                action.multiple(list);
+                action.multiple(list, baton);
             });
         }
     });
@@ -67,31 +70,18 @@ define('io.ox/mail/actions', [
             // get first mail
             var data = e.baton.first();
             // has sender? not a draft mail and not a decrypted mail
-            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data);
+            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data) && !isGuest();
         },
         action: function (baton) {
 
+            // also called by inplace-reply-recover extension
             var cid = _.cid(baton.data),
-                // needs baton view
-                view = baton.view,
                 // reply to all, so count, to, from, cc and bcc and subtract 1 (you don't sent the mail to yourself)
-                numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1,
-                // hide inline link
-                link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
+                numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1;
 
-            require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-                view.$('section.body').before(
-                    new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
-                    .on('send', function (cid) {
-                        view.$el.closest('.thread-view-control').data('open', cid);
-                    })
-                    .on('dispose', function () {
-                        link.show().focus();
-                        view = link = null;
-                    })
-                    .render()
-                    .$el
-                );
+            require(['io.ox/mail/inplace-reply'], function (quickreply) {
+                if (quickreply.reuse(cid)) return;
+                quickreply.getApp().launch({ cid: cid, from: baton.data.from, subject: baton.data.subject, numberOfRecipients: numberOfRecipients });
             });
         }
     });
@@ -141,7 +131,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/forward', {
         requires: function (e) {
-            return e.collection.has('toplevel', 'some');
+            return !isGuest() && e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
 
@@ -204,7 +194,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/edit-copy', {
         requires: validDraft,
         action: function (baton) {
-            var data = baton.first();
+            var data = _.extend({}, baton.first());
 
             api.copy(data, data.folder_id).done(function (list) {
                 api.refresh();
@@ -290,10 +280,25 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/flag', {
         requires: function (e) {
-            return settings.get('features/flag/star') && e.collection.has('some');
+            if (!settings.get('features/flag/star') || !e.collection.has('some')) return false;
+
+            return _(e.baton.array()).any(function (obj) {
+                return !util.isFlagged(obj);
+            });
         },
         action: function (baton) {
-            api.flag(baton.data);
+            api.flag(baton.data, true);
+        }
+    });
+
+    new Action('io.ox/mail/actions/unflag', {
+        requires: function (e) {
+            if (!settings.get('features/flag/star') || !e.collection.has('some')) return false;
+
+            return _(e.baton.array()).any(util.isFlagged);
+        },
+        action: function (baton) {
+            api.flag(baton.data, false);
         }
     });
 
@@ -399,10 +404,15 @@ define('io.ox/mail/actions', [
             }, true);
         },
         multiple: function (list) {
-            api.markSpam(list).done(function (result) {
-                var error = _(result).chain().pluck('error').compact().first().value();
-                if (error) notifications.yell(error);
-            });
+            api.markSpam(list)
+                .done(function (result) {
+                    var error = _(result).chain().pluck('error').compact().first().value();
+                    if (error) notifications.yell(error);
+                })
+                .fail(function (error) {
+                    notifications.yell(error);
+                    api.trigger('refresh.all');
+                });
         }
     });
 
@@ -460,18 +470,22 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/download-attachment', {
         requires: function (e) {
-            return _.device('!ios') && e.collection.has('some');
+            // ios 11 supports file downloads
+            return e.collection.has('some') && _.device('!ios || ios >= 11');
         },
         multiple: function (list) {
-
             // download single attachment or zip file
             var url = list.length === 1 ?
                 api.getUrl(_(list).first(), 'download') :
                 api.getUrl(list, 'zip');
 
-            // download via iframe
+            // download via iframe or window open
             require(['io.ox/core/download'], function (download) {
-                download.url(url);
+                if (_.device('ios')) {
+                    download.window(url);
+                } else {
+                    download.url(url);
+                }
             });
         }
     });
@@ -545,6 +559,7 @@ define('io.ox/mail/actions', [
         }
     });
 
+
     // all actions
 
     new Action('io.ox/mail/actions/sendmail', {
@@ -603,23 +618,11 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync',
-        requires: function () {
-            // use client onboarding here, since it is a setting and not a capability
-            return capabilities.has('client-onboarding');
-        },
-        action: function () {
-            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                wizard.run();
-            });
-        }
-    });
-
     // inline links
     var INDEX = 0;
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+    // disabled quick reply for 7.10.0
+    /*ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
@@ -628,11 +631,11 @@ define('io.ox/mail/actions', [
         label: gt('Quick reply'),
         ref: 'io.ox/mail/actions/inplace-reply',
         section: 'standard'
-    }));
+    }));*/
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'lo',
+        prio: 'hi',
         id: 'reply',
         mobile: 'lo',
         label: gt('Reply'),
@@ -647,7 +650,6 @@ define('io.ox/mail/actions', [
         mobile: 'lo',
         label: gt('Reply all'),
         ref: 'io.ox/mail/actions/reply-all',
-        drawDisabled: true,
         section: 'standard'
     }));
 
@@ -793,7 +795,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'none',
+        mobile: 'lo',
         id: 'source',
         //#. source in terms of source code
         label: gt('View source'),
@@ -814,7 +816,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'lo',
+        mobile: 'none',
         id: 'reminder',
         label: gt('Reminder'),
         ref: 'io.ox/mail/actions/reminder',
@@ -835,7 +837,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
-        mobile: 'high',
+        mobile: 'hi',
         index: 50,
         label: gt('Add to address book'),
         ref: 'io.ox/mail/actions/vcard'
@@ -843,7 +845,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'ical',
-        mobile: 'high',
+        mobile: 'hi',
         index: 50,
         label: gt('Add to calendar'),
         ref: 'io.ox/mail/actions/ical'
@@ -852,24 +854,15 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'view_new',
         index: 100,
-        mobile: 'high',
+        mobile: 'hi',
         label: gt('View'),
         ref: 'io.ox/mail/actions/view-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'open',
-        enabled: _.device('!IE'),
-        index: 300,
-        mobile: 'high',
-        label: gt('Open in browser'),
-        ref: 'io.ox/mail/actions/open-attachment'
-    }));
-
-    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
         index: 400,
-        mobile: 'high',
+        mobile: 'hi',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
@@ -877,18 +870,18 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
         index: 500,
-        mobile: 'high',
+        mobile: 'hi',
         //#. %1$s is usually "Drive" (product name; might be customized)
         label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
-    // the mighty Viewer 2.0
+    // uses internal viewer, not "view in browser"
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'viewer',
         index: 600,
-        mobile: 'high',
-        label: gt('View attachment'),
+        mobile: 'hi',
+        label: gt('View'),
         ref: 'io.ox/mail/actions/viewer'
     }));
 
@@ -910,11 +903,4 @@ define('io.ox/mail/actions', [
         classes: 'list-unstyled'
     }));
 
-    ext.point('io.ox/mail/links/premium-links').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'synchronize',
-        label: gt('Synchronize with Outlook'),
-        ref: 'io.ox/mail/premium/actions/synchronize'
-    }));
 });

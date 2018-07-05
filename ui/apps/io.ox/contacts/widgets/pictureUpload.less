@@ -1,0 +1,70 @@
+.picture-upload-view {
+    position: relative;
+    display: inline-block;
+    padding-left: 15px;
+    margin: 10px 30px 0 0;
+    float: left;
+
+    .picture-uploader {
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        float: left;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-clip: content-box;
+
+        &.focussed { border-color: @link-color; }
+
+        .add-img-text {
+            font-size: 12px;
+            line-height: 12px;
+            margin-top: 28px;
+            height: 100%;
+            text-align: center;
+            color: #777;
+            z-index: 2;
+        }
+
+        .close {
+            z-index: 3;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            opacity: 0.6;
+            font-size: 16px;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            background-color: #fff;
+            display: none;
+        }
+    }
+
+    &.preview {
+        .file {
+            height: 1px;
+            width: 1px;
+        }
+        .close { display: block };
+        .add-img-text { display: none };
+    }
+
+    form {
+        position: absolute;
+        z-index: 1;
+    }
+
+    input[type=file] {
+        position: absolute;
+        top: 24px;
+        width: 90px;
+        height: 90px;
+        opacity: 0;
+        cursor: pointer;
+    }
+}

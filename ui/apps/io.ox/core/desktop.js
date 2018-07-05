@@ -16,6 +16,7 @@
 
 define('io.ox/core/desktop', [
     'io.ox/core/event',
+    'io.ox/backbone/views/window',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/cache',
@@ -23,10 +24,12 @@ define('io.ox/core/desktop', [
     'io.ox/core/upsell',
     'io.ox/core/adaptiveLoader',
     'io.ox/core/folder/api',
+    'io.ox/core/api/apps',
     'io.ox/find/main',
+    'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -39,16 +42,14 @@ define('io.ox/core/desktop', [
         appGuid = 0,
         appCache = new cache.SimpleCache('app-cache', true);
 
-    // Apps collection
-    ox.ui.apps = new Backbone.Collection();
-
     function supportsFind(name) {
         // enabled apps
         var list = coreSettings.get('search/modules') || [];
+        //var searchable = apps.get(name) && apps.get(name).get('searchable');
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
-
+        //return list.indexOf(name) > -1 && searchable;
         return list.indexOf(name) > -1;
     }
 
@@ -61,39 +62,13 @@ define('io.ox/core/desktop', [
         initialize: function (options) {
             var self = this;
             this.options = options || {};
-            this.guid = options.guid;
-            this.id = this.id || 'app-' + this.guid;
+            this.guid = this.options.guid || appGuid++;
+            this.id = this.id || (this.options.refreshable ? this.options.name : '') || 'app-' + this.guid;
+            this.set('path', this.options.path ? this.options.path : this.getName() + '/main');
             this.set('id', this.id);
             this.getInstance = function () {
                 return self;
             };
-        },
-
-        setCounter: function (text, options) {
-            if (!this.get('topbarNode')) {
-                return;
-            }
-            if (!this.badge && this.get('topbarNode')) {
-                this.badge = this.get('topbarNode').find('.topbar-launcherbadge');
-                if (this.badge.length === 0) {
-                    this.badge = $('<span class="badge topbar-launcherbadge">');
-                }
-                this.get('topbarNode').find('a.apptitle').append(this.badge);
-            }
-            var oldText = this.badge.text();
-
-            this.badge.text(text);
-            if (options.arialabel) {
-                this.badge.attr('aria-label', options.arialabel);
-            }
-            if (oldText !== text) {
-                ox.trigger('recalculate-topbarsize');
-            }
-            if (!text) {
-                this.badge.hide();
-            } else {
-                this.badge.show();
-            }
         },
 
         getName: function () {
@@ -102,6 +77,12 @@ define('io.ox/core/desktop', [
 
         setTitle: function (title) {
             this.set('title', title);
+            if (this.options.floating) {
+                if (this.getWindow().floating) {
+                    this.getWindow().floating.setTitle(title);
+                }
+                return;
+            }
             return this;
         },
 
@@ -109,38 +90,14 @@ define('io.ox/core/desktop', [
             return this.get('title');
         },
 
+        getWindow: $.noop,
+
         saveRestorePoint: $.noop,
 
         call: $.noop
     });
 
-    ox.ui.AppPlaceholder = AbstractApp.extend({
-
-        initialize: function () {
-            // call super constructor
-            AbstractApp.prototype.initialize.apply(this, arguments);
-        },
-
-        launch: function () {
-            var self = this, id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
-            if (upsell.has(requires)) {
-                //resolve/reject clears busy animation
-                var def = $.Deferred();
-                return ox.launch(id, { launched: def.promise() })
-                         .then(function () { self.quit(); })
-                         .always(def.resolve);
-            }
-            upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
-            return $.when();
-        },
-
-        quit: function () {
-            // mark as not running
-            this.set('state', 'stopped');
-            // remove from list
-            ox.ui.apps.remove(this);
-        }
-    });
+    ox.ui.AppPlaceholder = AbstractApp;
 
     var apputil = {
         LIMIT: 265000,
@@ -213,7 +170,7 @@ define('io.ox/core/desktop', [
                         _.url.hash('folder', null);
                         // update window title?
                         if (win) {
-                            win.setTitle(_.noI18n(''));
+                            win.setTitle('');
                         }
                         // update grid?
                         if (grid) {
@@ -223,7 +180,16 @@ define('io.ox/core/desktop', [
 
                     set: (function () {
 
-                        function change(id, data, app, def) {
+                        /**
+                         * Change folder if the app has changed
+                         * @param {String} id
+                         * @param {file|folder} data
+                         * @param {Application} app
+                         * @param {Deferred} def
+                         * @param {Boolean} favorite
+                         *  change to the favorite section in the tree or not
+                         */
+                        function change(id, data, app, def, favorite) {
                             //app has changed while folder was requested
                             var appchange = _.url.hash('app') !== app;
                             // remember
@@ -232,7 +198,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(_.noI18n(data.title || ''));
+                                    win.setTitle(data.title || '');
                                     win.updateToolbar();
                                 }
                                 // update grid?
@@ -240,11 +206,11 @@ define('io.ox/core/desktop', [
                                     grid.busy().prop('folder', folder);
                                     grid.refresh();
                                     // load fresh folder & trigger update event
-                                    api.reload(id);
+                                    folderAPI.reload(id);
                                 }
                                 // update hash
                                 _.url.hash('folder', folder);
-                                self.trigger('folder:change', folder, data);
+                                self.trigger('folder:change', folder, data, favorite);
                             }
                             def.resolve(data, appchange);
 
@@ -253,20 +219,20 @@ define('io.ox/core/desktop', [
                             }
                         }
 
-                        return function (id) {
+                        return function (id, favorite) {
                             var def = $.Deferred();
                             if (id !== undefined && id !== null && String(id) !== folder) {
 
                                 var app = _.url.hash('app'),
-                                    model = api.pool.getModel(id),
+                                    model = folderAPI.pool.getModel(id),
                                     data = model.toJSON();
 
                                 if (model.has('title')) {
-                                    change(id, data, app, def);
+                                    change(id, data, app, def, favorite);
                                 } else {
-                                    api.get(id).then(
+                                    folderAPI.get(id).then(
                                         function success(data) {
-                                            change(id, data, app, def);
+                                            change(id, data, app, def, favorite);
                                         },
                                         function fail() {
                                             console.warn('Failed to change folder', id);
@@ -276,7 +242,7 @@ define('io.ox/core/desktop', [
                                 }
                             } else if (String(id) === folder) {
                                 // see Bug 34927 - [L3] unexpected application error when clicking on "show all messages in inbox" in notification area
-                                def.resolve(api.pool.getModel(id).toJSON(), false);
+                                def.resolve(folderAPI.pool.getModel(id).toJSON(), false);
                             } else {
                                 def.reject();
                             }
@@ -290,12 +256,12 @@ define('io.ox/core/desktop', [
                     },
 
                     setDefault: function () {
-                        return require(['settings!io.ox/mail']).then(function (mailSettings) {
-                            var defaultFolder = type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
+                        return $.when().then(function () {
+                            var defaultFolder = folderAPI.getDefaultFolder(type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
                             }
-                            return api.getExistingFolder(type).then(
+                            return folderAPI.getExistingFolder(type).then(
                                 function (id) {
                                     return that.set(id);
                                 },
@@ -307,8 +273,8 @@ define('io.ox/core/desktop', [
                     },
 
                     isDefault: function () {
-                        return require(['settings!io.ox/mail']).then(function (mailSettings) {
-                            var defaultFolder = type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
+                        return $.when().then(function () {
+                            var defaultFolder = folderAPI.getDefaultFolder(type);
                             return String(folder) === String(defaultFolder);
                         });
                     },
@@ -321,7 +287,7 @@ define('io.ox/core/desktop', [
 
                         if (folder === null) return $.Deferred().resolve({});
 
-                        var model = api.pool.getModel(folder);
+                        var model = folderAPI.pool.getModel(folder);
                         return $.Deferred().resolve(model.toJSON());
                     },
 
@@ -354,8 +320,8 @@ define('io.ox/core/desktop', [
 
                         var process = _.debounce(function (error) {
                             // refresh parent folder or if flat all
-                            var model = api.pool.getModel(self.folder.get());
-                            if (model) api.list(model.get('folder_id'), { cache: false });
+                            var model = folderAPI.pool.getModel(self.folder.get());
+                            if (model) folderAPI.list(model.get('folder_id'), { cache: false });
                             self.folder.setDefault();
                             notifications.yell(error);
                         }, 1000, true);
@@ -371,6 +337,8 @@ define('io.ox/core/desktop', [
                                 'FLD-0008|' +
                                 // folder storage service no longer available
                                 'FLD-1004|' +
+                                // The supplied folder is not supported. Please select a valid folder and try again.
+                                'CAL-4060|' +
                                 // mail folder "..." could not be found on mail server
                                 'IMAP-1002|' +
                                 // imap no read permission
@@ -390,10 +358,10 @@ define('io.ox/core/desktop', [
                                 var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
                                 if (folder !== self.folder.get()) return;
                                 // don't show expected errors see Bug 56276
-                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && api.isBeingDeleted(folder)) return;
+                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && folderAPI.isBeingDeleted(folder)) return;
                                 if (!regex.test(error.code)) return;
                                 // special handling for no permission. if api.get fails, 'http-error' is triggered again
-                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return api.get(self.folder.get(), { cache: false });
+                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return folderAPI.get(self.folder.get(), { cache: false });
                                 process(error);
                             });
                         };
@@ -423,6 +391,28 @@ define('io.ox/core/desktop', [
         setWindow: function (win) {
             this.set('window', win);
             win.app = this;
+            if (this.options.floating) {
+                var model = this.options.floatingWindowModel || new FloatingWindow.Model(
+                    _.extend(_(this.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title', 'name'), { win: win })
+                );
+                win.floating = new FloatingWindow.View({ el: win.nodes.outer, model: model }).render();
+
+                win.floating.listenTo(model, 'quit', function () {
+                    win.app.quit().done(function () {
+                        model.trigger('close');
+                    });
+                });
+
+                // handle dropzone
+                win.floating.listenTo(model, 'change:active change:minimized', function (model) {
+                    if (!win.app.dropZone) return;
+                    var active = model.get('active') && !model.get('minimized');
+                    if (!active) return win.app.dropZone.remove();
+                    win.app.dropZone.include();
+                });
+
+                win.app.once('quit', function () { model.trigger('close'); });
+            }
             // add app name
             if (this.has('name')) {
                 win.nodes.outer.attr('data-app-name', this.get('name'));
@@ -434,17 +424,18 @@ define('io.ox/core/desktop', [
             return this.get('window');
         },
 
-        searchable: function () {
-            if (this.get('find')) return;
+        isFindSupported: function () {
+            return supportsFind(this.getName());
+        },
 
-            // break for non supported apps
-            if (!supportsFind(this.getName())) return;
+        initFind: function () {
+            if (this.get('find')) return true;
 
             var find = findFactory.getApp({ parent: this });
             //TODO: bottleneck
             find.prepare();
             this.set('find', find);
-            return this;
+            return find;
         },
 
         getWindowNode: function () {
@@ -531,6 +522,7 @@ define('io.ox/core/desktop', [
         },
 
         setState: function (obj) {
+            if (this.options.floating) return;
             for (var id in obj) {
                 _.url.hash(id, ((obj[id] !== null) ? String(obj[id]) : null));
             }
@@ -541,47 +533,44 @@ define('io.ox/core/desktop', [
         },
 
         launch: function (options) {
-
             var deferred = $.when(),
                 self = this,
-                name = this.getName(),
-                isDisabled = ox.manifests.isDisabled(name + '/main');
+                name = this.getName();
 
             // update hash
-            if (name !== _.url.hash('app')) {
+            if (!this.options.floating && name !== _.url.hash('app')) {
                 _.url.hash({ folder: null, perspective: null, id: null });
             }
-            if (name) {
+            if (!this.options.floating && name) {
                 _.url.hash('app', name);
             }
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
                 ox.trigger('app:init', this);
-                if (isDisabled) {
-                    deferred = $.Deferred().reject();
-                } else {
-                    _.extend(this.options, options);
-                    if (name) {
-                        ext.point(name + '/main').invoke('launch', this, this.options);
-                    }
-                    try {
-                        var fn = this.get('launch');
-                        deferred = fn.call(this, this.options) || $.when();
-                    } catch (e) {
-                        console.error('Error while launching application:', e.message, e, this);
-                    }
+                _.extend(this.options, options);
+                if (name) {
+                    ext.point(name + '/main').invoke('launch', this, this.options);
+                }
+                try {
+                    var fn = this.get('launch');
+                    deferred = fn.call(this, this.options) || $.when();
+                } catch (e) {
+                    console.error('Error while launching application:', e.message, e, this);
                 }
                 deferred.then(
                     function success() {
-                        ox.ui.apps.add(self);
+                        apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
                         ox.trigger('app:start', self);
+                        // add cloasable apps that don't use floating windows to the taskbar
+                        if (self.get('closable') && !self.get('floating') && !_.device('smartphone')) FloatingWindow.addNonFloatingApp(self);
                     },
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
                         if (autoStart !== 'none') ox.launch(autoStart);
+                        throw arguments;
                     }
                 );
             } else if (this.has('window')) {
@@ -604,7 +593,7 @@ define('io.ox/core/desktop', [
                 $(window).trigger('resize.lazyload');
             }
 
-            return deferred.pipe(function () {
+            return deferred.then(function () {
                 return $.Deferred().resolveWith(self, arguments);
             });
         },
@@ -618,7 +607,7 @@ define('io.ox/core/desktop', [
                     self.destroy();
                 }
                 // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
-                if ((self.getWindow() && self.getWindow().state.visible) && (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0])) {
+                if (!self.floating && (self.getWindow() && self.getWindow().state.visible) && (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0])) {
                     //we are still in the app to close so we can clear the URL
                     _.url.hash({ app: null, folder: null, perspective: null, id: null });
                 }
@@ -634,8 +623,9 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
+                if (self.dropZone && self.dropZone.remove) self.dropZone.remove();
                 // remove from list
-                ox.ui.apps.remove(self);
+                apps.remove(self);
                 // mark as not running
                 self.trigger('quit');
                 ox.trigger('app:stop', self);
@@ -664,6 +654,7 @@ define('io.ox/core/desktop', [
                         ids = _(list).pluck('id');
                         pos = _(ids).indexOf(uniqueID);
                         if (data) {
+                            data.floating = self.get('floating');
                             data.id = uniqueID;
                             data.timestamp = _.now();
                             data.version = ox.version;
@@ -726,12 +717,11 @@ define('io.ox/core/desktop', [
         canRestore: function () {
             // use get instead of contains since it might exist as empty list
             return this.getSavePoints().then(function (list) {
-                return list && list.length;
+                return list && list.length > 0;
             });
         },
 
         getSavePoints: function () {
-
             if (!saveRestoreEnabled()) return $.when([]);
 
             return appCache.get('savepoints').then(function (list) {
@@ -800,18 +790,73 @@ define('io.ox/core/desktop', [
 
         restore: function () {
             var self = this;
-            return this.getSavePoints().then(function (data) {
+            return this.getSavePoints().then(function (list) {
                 return $.when.apply($,
-                    _(data).map(function (obj) {
+                    _(list).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
-                        return ox.load(requirements).pipe(function (m) {
-                            return m.getApp().launch().then(function () {
+                        return ox.load(requirements).then(function (m) {
+                            var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
+                            // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
+                            if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
+                                var model, win;
+                                if (app.options.floating) {
+                                    model = new FloatingWindow.Model({ minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
+                                    win = new FloatingWindow.TaskbarElement({ model: model }).render();
+                                    FloatingWindow.collection.add(model);
+                                } else {
+                                    win = FloatingWindow.addNonFloatingApp(app, { lazyload: true });
+                                    model = win.model;
+                                }
+                                win.listenToOnce(model, 'lazyload', function () {
+                                    var oldId = obj.id;
+                                    if (app.options.floating) {
+                                        // copy app options over to window model
+                                        model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
+                                        app.launch({ floatingWindowModel: model }).then(function () {
+                                            // update unique id
+                                            obj.id = this.get('uniqueID');
+                                            if (this.failRestore) {
+                                                // restore
+                                                return this.failRestore(obj.point);
+                                            }
+                                            return $.when();
+                                        }).done(function () {
+                                            // replace restore point with old id with restore point with new id (prevents duplicates)
+                                            self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
+                                                sp.push(obj);
+                                                self.setSavePoints(sp);
+                                                if (model.get('quitAfterLaunch')) model.trigger('quit');
+                                            });
+                                        });
+                                        return;
+                                    }
+                                    app.launch().then(function () {
+                                        // update unique id
+                                        obj.id = this.get('uniqueID');
+                                        if (this.failRestore) {
+                                            // restore
+                                            return this.failRestore(obj.point);
+                                        }
+                                        return $.when();
+                                    }).done(function () {
+                                        // replace restore point with old id with restore point with new id (prevents duplicates)
+                                        self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
+                                            sp.push(obj);
+                                            self.setSavePoints(sp);
+                                        });
+                                    });
+                                });
+                                return $.when();
+                            }
+                            return app.launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
                                     // restore
-                                    return this.failRestore(obj.point);
+                                    return this.failRestore(obj.point).then(function () {
+                                        app.set('restored', true);
+                                    });
                                 }
                             });
                         });
@@ -820,21 +865,17 @@ define('io.ox/core/desktop', [
                 .done(function () {
                     // we don't remove that savepoint now because the app might crash during restore!
                     // in this case, data would be lost
-                    self.setSavePoints(data);
+                    self.setSavePoints(list);
                 });
             });
         },
 
         get: function (name) {
-            return ox.ui.apps.filter(function (app) {
-                return app.getName() === name;
-            });
+            return apps.where({ name: name });
         },
 
         getByCid: function (cid) {
-            return ox.ui.apps.chain().filter(function (app) {
-                return app.cid === cid;
-            }).first().value();
+            return apps.get(cid);
         },
 
         reuse: function (cid) {
@@ -850,6 +891,13 @@ define('io.ox/core/desktop', [
             return currentWindow !== null ? currentWindow.app : null;
         },
 
+        getCurrentFloatingApp: function () {
+            return _.chain(ox.ui.apps.pluck('window')).compact()
+                .map(function (win) {
+                    return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
+                }).compact().first().value();
+        },
+
         getCurrentWindow: function () {
             return currentWindow;
         }
@@ -862,7 +910,7 @@ define('io.ox/core/desktop', [
     window.onbeforeunload = function () {
 
         // find all applications with unsaved changes
-        var dirtyApps = ox.ui.apps.filter(function (app) {
+        var dirtyApps = apps.filter(function (app) {
             return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
         });
 
@@ -878,8 +926,9 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
-        options.guid = appGuid++;
-        return new ox.ui.App(options);
+        if (upsell.visible(options.requires) && _.device(options.device)) {
+            return apps.add(new ox.ui.App(options));
+        }
     };
 
     ox.ui.screens = (function () {
@@ -1053,10 +1102,13 @@ define('io.ox/core/desktop', [
         };
 
         that.on('window.open window.show', function (e, win) {
-            // show window managher
+            // show window manager
             this.show();
+
             // move/add window to top of stack
             windows = _(windows).without(win);
+            _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
+            win.nodes.body.attr('role', 'main');
             windows.unshift(win);
             // add current windows to cache
             if (windows.length > 1) {
@@ -1091,7 +1143,8 @@ define('io.ox/core/desktop', [
                 // find first open window
                 for (i = 0, $i = windows.length; i < $i; i++) {
                     w = windows[i];
-                    if (w !== win && w.state.open) {
+                    // don't restore a floating window on close (only fullscreen apps)
+                    if (w !== win && w.state.open && !w.floating) {
                         w.resume();
                         break;
                     }
@@ -1128,7 +1181,7 @@ define('io.ox/core/desktop', [
         // window guid
         var guid = 0,
 
-            pane = $('#io-ox-windowmanager-pane'),
+            defaultPane = $('#io-ox-windowmanager-pane'),
 
             // window class
             Window = function (options) {
@@ -1136,14 +1189,14 @@ define('io.ox/core/desktop', [
                 this.options = options || {};
                 this.id = options.id;
                 this.name = options.name || 'generic';
-                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $(), disabled: $() };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = false;
                 this.simple = false;
                 this.page = options.page;
 
-                if (this.page) pane = this.page;
+                var pane = this.page ? this.page : defaultPane;
 
                 var quitOnClose = false,
                     perspectives = {},
@@ -1172,24 +1225,6 @@ define('io.ox/core/desktop', [
                     id: 'default',
                     draw: function () {
                         return $('<span class="window-title-label">');
-                    }
-                });
-
-                ext.point(name + '/window-toolbar').extend({
-                    id: 'default',
-                    draw: function () {
-                        return $('<ul class="window-toolbar" class="f6-target" attr="toolbar">')
-                            .attr('aria-label', gt('Application Toolbar'));
-                    }
-                });
-
-                ext.point(name + '/window-head').extend({
-                    id: 'default',
-                    draw: function () {
-                        return this.head.append(
-                            this.toolbar = ext.point(name + '/window-toolbar')
-                                .invoke('draw', this).first().value() || $()
-                        );
                     }
                 });
 
@@ -1233,19 +1268,26 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont, resume) {
                     var appchange = false;
+                    //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
-                    if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                    if (!this.floating && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }
+                    ox.trigger('change:document:title', this.app.get('title'));
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
                     // if not current window or if detached (via funny race conditions)
                     if ((!appchange || resume) && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (node.parent().length === 0) {
-                            if (this.simple) {
-                                node.insertAfter('#io-ox-topbar');
-                                $('body').css('overflowY', 'auto');
+                            if (this.floating) {
+                                this.floating.open(true);
+                            } else if (this.simple) {
+                                node.insertAfter('#io-ox-appcontrol');
+
+                                // during the iframe resizing refactoring the body node got some !important styles.
+                                // we don't want to create side effects here and break the resizing again (super fragile), so we just use more important styles to allow scrolling on mobile again
+                                document.body.style.setProperty('overflow-y', 'auto', 'important');
                             } else {
                                 node.appendTo(pane);
                             }
@@ -1254,33 +1296,24 @@ define('io.ox/core/desktop', [
                         this.trigger('beforeshow');
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
-                        if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {
+                        if (!this.floating && (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0])) {
                             //just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
                         node.show();
 
                         if (self === null) return;
-                        if (currentWindow && currentWindow !== self && !this.page) {
+                        // don't hide window if this is a floating one
+                        if (!this.floating && currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
                         }
-                        currentWindow = self;
+                        if (!this.floating) {
+                            currentWindow = self;
+                        }
                         _.call(cont);
                         self.state.visible = true;
                         self.state.open = true;
                         self.trigger('show');
-                        if (_.device('!smartphone')) {
-                            document.title = document.customTitle = gt.format(
-                                //#. Title of the browser window
-                                //#. %1$s is the name of the page, e.g. OX App Suite
-                                //#. %2$s is the title of the active app, e.g. Calendar
-                                gt.pgettext('window title', '%1$s %2$s'),
-                                _.noI18n(ox.serverConfig.pageTitle),
-                                _.noI18n(self.getTitle())
-                            );
-                        } else {
-                            document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
-                        }
 
                         if (firstShow) {
                             shown.resolve();
@@ -1293,7 +1326,7 @@ define('io.ox/core/desktop', [
                             firstShow = false;
                         }
                         ox.ui.windowManager.trigger('window.show', self);
-                        ox.ui.apps.trigger('resume', self.app);
+                        apps.trigger('resume', self.app);
 
                     } else {
                         _.call(cont);
@@ -1302,6 +1335,11 @@ define('io.ox/core/desktop', [
                 };
 
                 this.hide = function () {
+                    // floating windows have their own hiding mechanism
+                    if (this.floating) return;
+
+                    if (!this.trigger) { return this; } // might have been removed (56913)
+
                     // detach if there are no iframes
                     this.trigger('beforehide');
                     // TODO: decide on whether or not to detach nodes
@@ -1316,7 +1354,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.hide', this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                        // document.title = document.customTitle = ox.serverConfig.pageTitle || '';
                     }
                     return this;
                 };
@@ -1333,7 +1371,7 @@ define('io.ox/core/desktop', [
                 this.preQuit = function () {
                     if (!window.cordova) this.hide();
                     this.state.open = false;
-                    this.trigger('pre-quit');
+                    if (this.floating) this.floating.minimize();
                     ox.ui.windowManager.trigger('window.pre-quit', this);
                     return this;
                 };
@@ -1342,6 +1380,8 @@ define('io.ox/core/desktop', [
 
                     // local self
                     var self = this;
+
+                    if (!this.trigger) { return this; } // might have been removed (56913)
 
                     if (quitOnClose && this.app !== null) {
                         this.trigger('beforequit');
@@ -1360,8 +1400,7 @@ define('io.ox/core/desktop', [
                     return this;
                 };
 
-                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button',
-                    TOGGLE_CLASS = 'toggle-disabled';
+                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button';
 
                 this.busy = function (pct, sub, callback) {
                     // use self instead of this to make busy/idle robust for callback use
@@ -1370,8 +1409,8 @@ define('io.ox/core/desktop', [
                         blocker = self.nodes.blocker;
                         // steal focus
                         $('body').focus();
-                        self.nodes.main.find(BUSY_SELECTOR)
-                            .not(':disabled').prop('disabled', true).addClass(TOGGLE_CLASS);
+                        self.nodes.disabled = self.nodes.disabled.add(self.nodes.main.find(BUSY_SELECTOR)
+                            .not(':disabled').prop('disabled', true));
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
                             blocker.idle().find('.progress-bar').eq(0).css('width', (pct * 100) + '%').parent().show();
@@ -1399,8 +1438,8 @@ define('io.ox/core/desktop', [
                         self.nodes.blocker.find('.progress').hide()
                             .end().idle().hide()
                             .find('.header, .footer').empty();
-                        self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
-                            .prop('disabled', false).removeClass(TOGGLE_CLASS);
+                        self.nodes.disabled.prop('disabled', false);
+                        self.nodes.disabled = $();
                         self.trigger('idle');
                     }
                     return this;
@@ -1436,27 +1475,7 @@ define('io.ox/core/desktop', [
                 };
 
                 this.setTitle = function (str) {
-                    if (_.isString(str)) {
-                        title = str;
-                        self.nodes.title.find('span').first().text(title);
-                        if (this === currentWindow) {
-                            if (_.device('!smartphone')) {
-                                document.title = document.customTitle = gt.format(
-                                    //#. Title of the browser window
-                                    //#. %1$s is the name of the page, e.g. OX App Suite
-                                    //#. %2$s is the title of the active app, e.g. Calendar
-                                    gt.pgettext('window title', '%1$s %2$s'),
-                                    _.noI18n(ox.serverConfig.pageTitle),
-                                    _.noI18n(title)
-                                );
-                            } else {
-                                document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
-                            }
-                        }
-                        this.trigger('change:title');
-                    } else {
-                        console.error('window.setTitle(str) expects string!', str);
-                    }
+                    ox.trigger('change:document:title', [str, this.app.get('title')]);
                     return this;
                 };
 
@@ -1495,11 +1514,9 @@ define('io.ox/core/desktop', [
                 this.setChromeless = function (mode) {
                     if (mode) {
                         this.nodes.outer.addClass('chromeless-window');
-                        this.nodes.head.hide();
                         this.nodes.body.css('left', '0px');
                     } else {
                         this.nodes.outer.removeClass('chromeless-window');
-                        this.nodes.head.show();
                         this.nodes.body.css('left', '');
                     }
                 };
@@ -1515,7 +1532,8 @@ define('io.ox/core/desktop', [
                 name: '',
                 title: '',
                 toolbar: false,
-                width: 0
+                width: 0,
+                floating: false
             }, options);
 
             // get width
@@ -1526,8 +1544,7 @@ define('io.ox/core/desktop', [
                 win = new Window(opt);
 
             // window container
-            win.nodes.outer = $('<div class="window-container">')
-                .attr({ id: opt.id, 'data-window-nr': guid });
+            win.nodes.outer = $('<div class="window-container">').attr({ id: opt.id, 'data-window-nr': guid });
 
             // create very simple window?
             if (opt.simple) {
@@ -1535,13 +1552,15 @@ define('io.ox/core/desktop', [
                 win.nodes.outer.addClass('simple-window').append(
                     win.nodes.main = $('<div class="window-content" tabindex="-1">')
                 );
+                //todo check blocker idle/busy
                 win.nodes.blocker = $();
-                win.nodes.sidepanel = $();
+                //todo needed?
+                //win.nodes.sidepanel = $();
                 win.nodes.head = $();
                 win.nodes.body = $();
+                //todo footer?
 
             } else {
-
                 win.nodes.outer.append(
                     $('<div class="window-container-center">')
                     .data({ width: width + unit })
@@ -1554,15 +1573,12 @@ define('io.ox/core/desktop', [
                             $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
-                        // window HEAD
-                        // @deprecated
-                        win.nodes.head = $('<div class="window-head">'),
                         // window HEADER
                         win.nodes.header = $('<div class="window-header">'),
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body">'),
+                        win.nodes.body = $('<div class="window-body" role="main">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )
@@ -1577,11 +1593,9 @@ define('io.ox/core/desktop', [
 
                 // add default css class
                 if (opt.name) {
-                    win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                    win.nodes.outer.addClass(opt.name.replace(/[./]/g, '-') + '-window');
                 }
 
-                // draw window head
-                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
                 ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             }
 
@@ -1654,7 +1668,7 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         baton.$.group.append(
                             // search
-                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search')
@@ -1817,10 +1831,10 @@ define('io.ox/core/desktop', [
         return def;
     };
 
-    ox.ui.apps.on('resume', function (app) {
+    apps.on('resume', function (app) {
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
     });
 
-    return {};
+    return ox.ui;
 });

@@ -39,6 +39,8 @@ define('io.ox/core/viewer/views/types/mailview', [
 
             var data = this.model.get('origData').nested_message;
             if (!this.view) {
+                // add filename that is used as indicator for isEmbedded and is('toplevel')
+                _.extend(data, { filename: this.model.get('filename') });
                 // nested mails may not have full data, use attachments attribute to determine
                 this.view = new detail.View({ data: data, loaded: !!data.attachments });
             }

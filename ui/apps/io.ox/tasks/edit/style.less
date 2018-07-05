@@ -15,11 +15,17 @@
     // baseline adjustments
     padding-top: 16px;
     padding-bottom: 16px;
+
+    // hide collapsed and details on startup
+    .collapsible, .task-edit-details { display: none; }
+
+    &.expanded {
+        .collapsible { display: block; }
+        &.details-expanded .task-edit-details { display: block; }
+    }
 }
 
 .io-ox-tasks-edit-main {
-    // hide collapsed and details on startup
-    .collapsed, .task-edit-details { display: none; }
 
     .progress-field { text-align: center; }
 
@@ -40,4 +46,10 @@
         button[data-action='minus']:focus,
         button[data-action='plus']:focus { z-index: 3; }
     }
+}
+
+.io-ox-tasks-edit-main.expanded {
+    // hide collapsed and details on startup
+    .collapsible { display: block; }
+    &.details-expanded .task-edit-details { display: block; }
 }

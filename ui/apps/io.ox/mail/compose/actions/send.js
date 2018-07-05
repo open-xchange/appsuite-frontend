@@ -102,6 +102,11 @@ define('io.ox/mail/compose/actions/send', [
             index: 550,
             perform: extensions.publishMailAttachments
         },
+        {
+            id: 'check:attachment-missing',
+            index: 560,
+            perform: extensions.attachmentMissingCheck
+        },
         // Placeholder for Guard extensions at index 600-630
         {
             id: 'busy:start',
@@ -131,15 +136,16 @@ define('io.ox/mail/compose/actions/send', [
         {
             id: 'wait-for-pending-images',
             index: 900,
+            // important: replaces mail.attachments[0].content
             perform: extensions.waitForPendingImages
         },
         {
             id: 'disable-manual-close',
-            index: 900,
-            perform: function (baton) {
-                var app = ox.ui.apps.get(baton.app.id);
-                baton.close = $(app.get('topbarNode').find('.closelink')).hide();
-                baton.launcherClose = app.get('launcherNode').find('.closelink').hide();
+            index: 950,
+            perform: function () {
+                // var app = ox.ui.apps.get(baton.app.id);
+                //baton.close = $(app.get('topbarNode').find('.closelink')).hide();
+                //baton.launcherClose = app.get('launcherNode').find('.closelink').hide();
             }
         },
         {
@@ -155,7 +161,7 @@ define('io.ox/mail/compose/actions/send', [
             perform: function (baton) {
                 if (baton.error && !baton.warning) {
                     var win = baton.app.getWindow(),
-                    // check if abort is triggered by the ui
+                        // check if abort is triggered by the ui
                         text = baton.error === 'abort' ? gt('The sending of the message has been canceled.') : baton.error;
                     if (win) {
                         // reenable the close button(s) in toolbar

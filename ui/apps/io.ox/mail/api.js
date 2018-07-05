@@ -26,8 +26,9 @@ define('io.ox/mail/api', [
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities'
-], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/mail/sanitizer'
+], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, sanitizer) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -44,7 +45,10 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
-    var fixtoccbcc = settings.get('features/fixtoccbcc');
+    var fixtoccbcc = settings.get('features/fixtoccbcc'),
+        showDeleted = !settings.get('features/ignoreDeleted', false),
+        sanitize = sanitizer.isEnabled(),
+        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     pool.map = function (data) {
         var cid = _.cid(data), model = this.get(cid);
@@ -77,6 +81,7 @@ define('io.ox/mail/api', [
         return data;
     };
 
+
     // generate basic API
     var api = apiFactory({
         module: 'mail',
@@ -92,7 +97,7 @@ define('io.ox/mail/api', [
                 // received_date
                 sort: '610',
                 order: 'desc',
-                deleted: 'true',
+                deleted: showDeleted,
                 // allow DB cache
                 cache: false
             },
@@ -103,7 +108,8 @@ define('io.ox/mail/api', [
             },
             get: {
                 action: 'get',
-                embedded: 'true'
+                embedded: String(!sandboxedCSS),
+                sanitize: String(!sanitize)
             },
             getUnmodified: {
                 action: 'get',
@@ -260,6 +266,7 @@ define('io.ox/mail/api', [
     }
 
     function allowImages(obj) {
+        if (util.authenticity('block', obj)) return false;
         if (!settings.get('allowHtmlImages', false)) return false;
         if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
@@ -276,6 +283,8 @@ define('io.ox/mail/api', [
             model = pool.get('detail').get(cid),
             cache = options && (options.cache !== undefined) ? options.cache : true;
 
+        if (model && util.authenticity('box', model.toJSON()) === 'trusted') obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
+
         // TODO: make this smarter
         if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 
@@ -286,8 +295,6 @@ define('io.ox/mail/api', [
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         // do not process plain text if we prettify text client-side
-        // was !settings.get('beautifyPlainText');
-        // false until bug 52294 is fixed
         obj.process_plain_text = false;
 
         // never use factory's internal cache, therefore always 'false' at this point
@@ -296,15 +303,20 @@ define('io.ox/mail/api', [
             if (obj.src || obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
-            // split by ; because this field might contain further unwanted data
-            _(data.attachments).each(function (attachment) {
-                if (/^text\/(plain|html)/i.test(attachment.content_type)) {
-                    // only clean-up text and html; otherwise we lose data (see bug 43727)
-                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
-                }
-            });
-
+            if (_.isArray(data.attachments)) {
+                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+                // split by ; because this field might contain further unwanted data
+                data.attachments.forEach(function (attachment) {
+                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                        // only clean-up text and html; otherwise we lose data (see bug 43727)
+                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                        if (sanitize) attachment = sanitizer.sanitize(attachment);
+                    }
+                });
+            } else {
+                // make sure we always have data.attachments (see bug 58631)
+                data.attachments = [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
+            }
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
@@ -375,7 +387,10 @@ define('io.ox/mail/api', [
 
         _(all).each(function (item) {
             var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
+            if (model) {
+                model.preserve = false;
+                collection.remove(model);
+            }
         });
     }
 
@@ -536,7 +551,8 @@ define('io.ox/mail/api', [
                         .then(function () {
                             // reload  settings for virtual folder 'virtual/standard' first (bug 52608)
                             return settings.reload();
-                        }).done(function () {
+                        })
+                        .done(function () {
                             // refresh all folders because the archive folder might be new
                             folderAPI.refresh();
                             // reload mail views
@@ -553,11 +569,13 @@ define('io.ox/mail/api', [
     //
     // Archive all messages inside a folder which are older than 90 days
     //
-    api.archiveFolder = function (id) {
+    api.archiveFolder = function (id, options) {
+
+        options = _.extend({ action: 'archive_folder', folder: id, days: 90 }, options);
 
         return http.PUT({
             module: 'mail',
-            params: { action: 'archive_folder', folder: id, days: 90 },
+            params: options,
             appendColumns: false
         })
         .done(function () {
@@ -591,6 +609,7 @@ define('io.ox/mail/api', [
             includeSent: !accountAPI.is('sent|drafts', options.folder),
             // never use server cache
             cache: false,
+            deleted: showDeleted,
             // apply internal limit to build threads fast enough
             max: options.max || 500
         });
@@ -660,6 +679,20 @@ define('io.ox/mail/api', [
      */
     api.expunge = function (folder_id) {
 
+        var ids = _(pool.getByFolder(folder_id))
+            .chain()
+            .map(function (collection) {
+                return collection.filter(function (model) {
+                    return util.isDeleted(model.attributes);
+                });
+            })
+            .flatten()
+            .pluck('cid')
+            .compact()
+            .value();
+
+        api.trigger('beforeexpunge', ids);
+
         // remove deleted messages immediately
         _(pool.getByFolder(folder_id)).each(function (collection) {
             collection.set(
@@ -698,6 +731,13 @@ define('io.ox/mail/api', [
                 folderAPI.list(id, { cache: false });
                 _(pool.getByFolder(id)).invoke('expire');
             });
+        },
+        'changesAfterReloading:mail': function (model) {
+            // if total or unread changed during a folder reload, we need to update the collection (reload happens independent from refresh)
+            if (_(model.changed).has('unread') || _(model.changed).has('total')) {
+                _(pool.getByFolder(model.id)).invoke('expire');
+                api.trigger('changesAfterReloading');
+            }
         }
     });
 
@@ -991,7 +1031,10 @@ define('io.ox/mail/api', [
                 action: 'autosave',
                 lineWrapAfter: 0
             };
-            if (obj.security && obj.security.decrypted) params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
+            if (obj.security && obj.security.decrypted) {
+                params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
+                if (obj.security.authentication) params.authToken = obj.security.authentication;
+            }
             return http.wait(
                 http.PUT({
                     module: 'mail',
@@ -1124,7 +1167,7 @@ define('io.ox/mail/api', [
                 view: 'html',
                 decrypt: obj.security && obj.security.decrypted
             }, false)
-            .pipe(function (data) {
+            .then(function (data) {
                 return _.chain(data.nested_msgs)
                     .filter(function (obj) {
                         if (obj.id === id) {
@@ -1231,7 +1274,10 @@ define('io.ox/mail/api', [
         data.to = _(data.to).map(flatten);
         data.cc = _(data.cc).map(flatten);
         data.bcc = _(data.bcc).map(flatten);
-
+        if (data.share_attachments && data.share_attachments.expiry_date) {
+            // expiry date should count from mail send
+            data.share_attachments.expiry_date = _.now() + parseInt(data.share_attachments.expiry_date, 10);
+        }
         function mapArgs(obj) {
             return {
                 'args': [{ 'com.openexchange.groupware.contact.pairs': [{ 'folder': obj.folder_id, 'id': obj.id }] }],
@@ -1399,6 +1445,21 @@ define('io.ox/mail/api', [
         };
     }());
 
+    api.fetchTextPreview = function (ids) {
+        return http.fixList(ids, http.PUT({
+            module: 'mail',
+            params: { action: 'list', columns: '600,601,663', timezone: 'utc', deleted: showDeleted },
+            data: http.simplify(ids)
+        }))
+        .then(function (response) {
+            var hash = {};
+            _(response).each(function (item) {
+                hash[_.cid(item)] = item.text_preview || '\u00a0';
+            });
+            return hash;
+        });
+    };
+
     /**
      * save mail attachments in files app
      * @param  {array} list
@@ -1480,7 +1541,7 @@ define('io.ox/mail/api', [
                 });
             }
             // single EML
-            url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
+            url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:/]/g, '_') + '.eml') : '') + '?' +
                 $.param($.extend(api.reduce(first), {
                     action: 'get',
                     src: 1,
@@ -1491,7 +1552,7 @@ define('io.ox/mail/api', [
             return url;
         }
         // inject filename for more convenient file downloads
-        var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
+        var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
             scaling = opt.width && opt.height ? '&scaleType=' + opt.scaleType + '&width=' + opt.width + '&height=' + opt.height : '';
         url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
@@ -1504,7 +1565,8 @@ define('io.ox/mail/api', [
                 context: ox.context_id,
                 decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
-                sequence: 1
+                sequence: 1,
+                session: ox.session
             });
         switch (mode) {
             case 'view':
@@ -1702,9 +1764,10 @@ define('io.ox/mail/api', [
     };
 
     // some settings need a reset of the mail content cache
-    settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted change:beautifyPlainText', function () {
+    settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted', function () {
         pool.get('detail').each(function (model) {
             model.unset('attachments', { silent: true });
+            model.unset('security', { silent: true });
         });
     });
 
@@ -1939,7 +2002,7 @@ define('io.ox/mail/api', [
                     action: 'all',
                     folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
+                    columns: http.defaultColumns.mail.unseen,
                     sort: '610',
                     order: 'desc',
                     unseen: true,
@@ -1952,22 +2015,24 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                    categoryid: params.category_id || params.categoryid,
+                    columns: http.defaultColumns.mail.all,
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
-                    categoryid: params.category_id || params.categoryid,
+                    deleted: showDeleted,
                     timezone: 'utc'
                 };
             }
             return {
                 action: 'all',
                 folder: params.folder,
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                categoryid: params.category_id || params.categoryid,
+                columns: http.defaultColumns.mail.all,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
-                categoryid: params.category_id || params.categoryid,
+                deleted: showDeleted,
                 timezone: 'utc'
             };
         },
@@ -2027,7 +2092,8 @@ define('io.ox/mail/api', [
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
         // in the collection which is wanted behavior.
-        _.extend(obj, last);
+        // use most recent text preview
+        _.extend(obj, last, { text_preview: obj.text_preview || '' });
 
         // only store plain composite keys instead of full objects
         obj.thread = _(thread).map(_.cid);

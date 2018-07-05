@@ -87,9 +87,9 @@
     .participant-email { .ellipsis(); }
 
     .extra-decorator {
-        color: #888;
+        color: #777;
 
-        &:hover { color: #888; text-decoration: none }
+        &:hover { color: #777; text-decoration: none }
     }
 
     &.three-rows {
@@ -140,27 +140,11 @@
         line-height: 24px;
 
         &.unconfirmed { color: @participant-unconfirmed; }
-
-        &.accepted {
-            color: @participant-accepted;
-
-            i {
-                html.high-contrast & { opacity: 1; }
-            }
-
-        }
-
+        &.accepted { color: @participant-accepted; }
         &.declined { color: @participant-declined; }
-
         &.tentative {
             color: @participant-tentative;
-
-            i {
-                opacity: 0.50;
-
-                html.high-contrast & { opacity: 1; }
-            }
-
+            i { opacity: 0.50; }
         }
     }
 
@@ -170,7 +154,7 @@
         min-height: 0;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .io-ox-inline-links.embedded {
             margin: 18px 0 14px 0;
             line-height: 16px;
@@ -222,12 +206,7 @@
                 max-width: 222px;
                 display: inline-block;
 
-                &.accepted {
-                    color: @participant-accepted;
-
-                    html.high-contrast & { color: @hc-green; }
-
-                }
+                &.accepted { color: @participant-accepted; }
 
                 &.declined {
                     text-decoration: line-through;

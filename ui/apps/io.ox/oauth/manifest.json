@@ -6,5 +6,10 @@
     {
         "path": "io.ox/oauth/settings",
         "namespace": "io.ox/settings/accounts/settings/pane"
+    },
+    {
+        "path": "io.ox/oauth/reauth_handler",
+        "namespace": "io.ox/core/main",
+        "requires": "oauth"
     }
 ]

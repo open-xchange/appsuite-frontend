@@ -10,9 +10,29 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/util', [
-], function () {
+    'io.ox/core/capabilities',
+    'io.ox/core/http',
+    'gettext!io.ox/core/viewer'
+], function (Capabilities, http, gt) {
 
     'use strict';
+
+    var // whether the loading performance of the viewer shall be measured
+        logPerformance = false,
+        // a global timer that can be used for performance debugging
+        performanceTimer = null,
+        // object for logging several time stamps
+        performanceLogger = null,
+        // key to recognize the text application
+        textKey = 'io.ox/office/text/main',
+        // key to recognize the presentation application
+        presentationKey = 'io.ox/office/presentation/main',
+        // key to recognize the spreadsheet application
+        spreadsheetKey = 'io.ox/office/spreadsheet/main',
+        // global apps collection
+        apps = ox && ox.ui && ox.ui.apps,
+        // whether at least one office application is installed
+        officeInstalled = !!(apps && (apps.has(textKey) || apps.has(presentationKey) || apps.has(spreadsheetKey)));
 
     var Util = {};
 
@@ -23,7 +43,7 @@ define('io.ox/core/viewer/util', [
     Util.CATEGORY_ICON_MAP = {
         'file': 'fa-file-o',
         'txt': 'fa-file-text-o',
-        'doc': 'fa-file-word-o',
+        'doc': 'fa-file-text-o',
         'ppt': 'fa-file-powerpoint-o',
         'xls': 'fa-file-excel-o',
         'image': 'fa-file-image-o',
@@ -71,8 +91,8 @@ define('io.ox/core/viewer/util', [
 
             text = String(str || '').trim(),
 
-            normal = _.noI18n(_.ellipsis(text, _.extend(opt, { max: opt.maxNormal }))),
-            short = _.noI18n(_.ellipsis(text, _.extend(opt, { max: opt.maxShort })));
+            normal = _.ellipsis(text, _.extend(opt, { max: opt.maxNormal })),
+            short = _.ellipsis(text, _.extend(opt, { max: opt.maxShort }));
 
         return {
             title: text,
@@ -170,6 +190,34 @@ define('io.ox/core/viewer/util', [
         });
     };
 
+    Util.renderItemSize = function (model) {
+        var fileSize, itemCount, resultString;
+
+        // for files
+        if (model.isFile() || model.isMailAttachment() || model.isPIMAttachment()) {
+            fileSize = model.get('file_size');
+            resultString = (_.isNumber(fileSize)) ? _.filesize(fileSize) : '-';
+
+        // for folders
+        } else {
+            itemCount = model.get('total');
+            resultString = (_.isNumber(itemCount)) ? gt.format(gt.ngettext('1 item', '%1$d items', itemCount), itemCount) : '-';
+        }
+
+        return resultString;
+    };
+
+    var ModelSourceRefMap = {
+        drive: 'io.ox/files/actions/download',
+        mail: 'io.ox/mail/actions/download-attachment',
+        pim: 'io.ox/core/tk/actions/download-attachment',
+        guardDrive: 'oxguard/download'
+    };
+
+    Util.getRefByModelSource = function (app) {
+        return ModelSourceRefMap[app];
+    };
+
     /**
      * Restricts the passed value to the specified numeric range.
      *
@@ -189,6 +237,120 @@ define('io.ox/core/viewer/util', [
     Util.minMax = function (value, min, max) {
         return Math.min(Math.max(value, min), max);
     };
+
+    // debugging --------------------------------------------------------------
+
+    // empty default debug functions
+    // -> these functions will be overwritten, if property is available and set
+    Util.startPerformanceTimer = $.noop;
+    Util.logPerformanceTimer = $.noop;
+    Util.addToPerformanceLogger = $.noop;
+    Util.addDefaultPerformanceInfo = $.noop;
+    Util.savePerformanceTimer = $.noop;
+
+    // check if the property 'logPerformanceData' is set for logging performance data
+    // of the editors and the viewer. This property is set in the 'office' module.
+    // Therefore it can only be queried, if at least one office application is installed.
+
+    if (officeInstalled) {
+
+        // check if the capability for at least one office application is specified
+        var isOfficeEnabled = Capabilities.has('text') || Capabilities.has('spreadsheet') || Capabilities.has('presentation');
+
+        if (isOfficeEnabled) {
+
+            // office is installed and enabled -> now office settings can be required
+            require(['settings!io.ox/office']).done(function (settings) {
+
+                // if office is installed and enabled the property can be checked
+                logPerformance = settings.get('module/logPerformanceData', false);
+
+                if (logPerformance) {
+
+                    /**
+                     * Starting the performance timer.
+                     */
+                    Util.startPerformanceTimer = function () {
+                        performanceLogger = {};
+                        performanceTimer = _.now();
+                    };
+
+                    /**
+                     * Logging info with the performance timer.
+                     *
+                     * @param {String} key
+                     *  A message that is saved at the performance timer.
+                     */
+                    Util.logPerformanceTimer = function (key) {
+                        if (performanceTimer) { Util.addToPerformanceLogger(key, (_.now() - performanceTimer)); }
+                    };
+
+                    /**
+                     * Adding one key-value pair to the performance logger object.
+                     *
+                     * @param {String} key
+                     *  The key for the performance logger object.
+                     *
+                     * @param {any} value
+                     *  The value for the performance logger object.
+                     */
+                    Util.addToPerformanceLogger = function (key, value) {
+                        if (performanceLogger) { performanceLogger[key] = value; }
+                    };
+
+                    /**
+                     * Adding some default information about browser, appsuite version, ...
+                     * to the performance data.
+                     *
+                     * @param {Object} [data]
+                     *  The data object given to the launcher of the OX Viewer.
+                     */
+                    Util.addDefaultPerformanceInfo = function (data) {
+                        Util.addToPerformanceLogger('user-agent', navigator.userAgent);
+                        Util.addToPerformanceLogger('platform', navigator.platform);
+                        Util.addToPerformanceLogger('user', ox.user);
+                        Util.addToPerformanceLogger('version', ox.version);
+                        Util.addToPerformanceLogger('server', ox.abs);
+                        Util.addToPerformanceLogger('application', 'viewer');
+                        Util.addToPerformanceLogger('filename', (data && data.selection && data.selection.filename) ? data.selection.filename : '');
+                    };
+
+                    /**
+                     * Saving the collected performance data and sending them to the server.
+                     *
+                     * @param {Object} [data]
+                     *  The data object given to the launcher of the OX Viewer.
+                     *
+                     * @returns {jQuery.Promise}
+                     *  The promise from the http request. If no request is made, the promise
+                     *  is already resolved.
+                     */
+                    Util.savePerformanceTimer = function (data) {
+
+                        var httpPromise = null;
+
+                        if (performanceTimer && performanceLogger) {
+                            // adding default information to the performance logger object
+                            Util.addDefaultPerformanceInfo(data);
+
+                            // debug code
+                            // console.log('Performance: ');
+                            // for (var key in performanceLogger) { console.log(key + ' : ' + performanceLogger[key]); }
+
+                            // sending the http post request to save data
+                            httpPromise = http.POST({ module: 'oxodocumentfilter', params: { action: 'logperformancedata', performanceData: JSON.stringify(performanceLogger) } });
+                            // resetting the logger and the timer
+                            performanceLogger = null;
+                            performanceTimer = null;
+                        }
+
+                        return httpPromise ? httpPromise : $.when();
+
+                    };
+                }
+            });
+        }
+    }
 
     return Util;
 });

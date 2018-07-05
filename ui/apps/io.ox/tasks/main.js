@@ -1,4 +1,4 @@
-    /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -228,13 +228,10 @@ define('io.ox/tasks/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target task-detail-container')
-            .attr({
+            app.right = right.addClass('default-content-padding f6-target task-detail-container').attr({
                 'tabindex': -1,
-                'role': 'main',
                 'aria-label': gt('Task Details')
-            })
-            .scrollable();
+            }).scrollable();
         },
 
         'vgrid': function (app) {
@@ -281,7 +278,7 @@ define('io.ox/tasks/main', [
                 } else {
                     column = 317;
                 }
-                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).pipe(function (data) {
+                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).then(function (data) {
                     if (sort !== 'urgency') {
                         datacopy = _.copy(data, true);
                     } else {
@@ -298,7 +295,7 @@ define('io.ox/tasks/main', [
             };
 
             listRequest = function (ids) {
-                return api.getList(ids).pipe(function (list) {
+                return api.getList(ids).then(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                     var listcopy = _.copy(_.compact(list), true);
 
@@ -639,32 +636,52 @@ define('io.ox/tasks/main', [
             });
         },
 
-        'inplace-find': function (app) {
-
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-            var find = app.searchable().get('find');
-
-            find.on({
-                'find:query': function () {
-                    // hide sort options
-                    app.grid.getToolbar().find('.grid-options:first').hide();
-                },
-                'find:cancel': function () {
-                    // show sort options again
-                    app.grid.getToolbar().find('.grid-options:first').show();
-                }
+        // to update the context menu in the foldertree
+        'api-events': function (app) {
+            api.on('create update delete refresh.all', function () {
+                folderAPI.reload(app.folder.get());
             });
+        },
 
+        'inplace-find': function (app) {
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
+            app.initFind();
+
+            function registerHandler(model, find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.grid.getToolbar().find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.grid.getToolbar().find('.grid-options:first').show();
+                    }
+                });
+            }
+
+            return app.get('find') ? registerHandler(app, app.get('find')) : app.once('change:find', registerHandler);
         },
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.sect.tasks.gui';
+                return 'ox.appsuite.user.sect.tasks.gui.html';
             };
         },
 
-        'sidepanel': function (app) {
+        // reverted for 7.10
+        // 'primary-action': function (app) {
+        //     app.addPrimaryAction({
+        //         point: 'io.ox/tasks/sidepanel',
+        //         label: gt('New task'),
+        //         action: 'io.ox/tasks/actions/create',
+        //         toolbar: 'create'
+        //     });
+        // },
 
+        'sidepanel': function (app) {
+            if (_.device('smartphone')) return;
             ext.point('io.ox/tasks/sidepanel').extend({
                 id: 'tree',
                 index: 100,
@@ -854,6 +871,9 @@ define('io.ox/tasks/main', [
 
         app.grid = grid;
 
+        // workaround: windowmanager not visible so height calculation for grid item fails
+        if (!ox.ui.screens.current()) ox.ui.screens.one('show-windowmanager', grid.paint.bind(grid));
+
         app.getGrid = function () {
             return grid;
         };
@@ -911,7 +931,8 @@ define('io.ox/tasks/main', [
                     app.grid.refresh();
                 });
 
-            this.append($('<div class="grid-options dropdown">').append(
+            this.append(
+                $('<div class="grid-options dropdown">').append(
                     dropdown.render().$el.attr('data-dropdown', 'sort')
                 )
             );

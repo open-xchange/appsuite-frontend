@@ -42,7 +42,7 @@ define('io.ox/contacts/toolbar', [
             ref: 'io.ox/contacts/dropdown/new',
             customize: function (baton) {
 
-                this.append('<i class="fa fa-caret-down" aria-hidden="true">');
+                this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
                 new Dropdown({
                     el: this.parent().addClass('dropdown'),
@@ -83,6 +83,13 @@ define('io.ox/contacts/toolbar', [
         //
         // --- LO ----
         //
+        'export': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Export'),
+            drawDisabled: true,
+            ref: 'io.ox/contacts/actions/export'
+        },
         'vcard': {
             prio: 'lo',
             mobile: 'lo',
@@ -178,7 +185,7 @@ define('io.ox/contacts/toolbar', [
             var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 0 });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbarView.render().$el
+                toolbarView.render().$el
             );
 
             function updateCallback($toolbar) {

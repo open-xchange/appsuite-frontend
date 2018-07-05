@@ -16,8 +16,9 @@ define('io.ox/mail/categories/tabs', [
     'io.ox/mail/api',
     'io.ox/core/yell',
     'io.ox/core/tk/list-dnd',
+    'io.ox/core/a11y',
     'gettext!io.ox/mail'
-], function (api, mailAPI, yell, dnd, gt) {
+], function (api, mailAPI, yell, dnd, a11y, gt) {
 
     'use strict';
 
@@ -27,14 +28,12 @@ define('io.ox/mail/categories/tabs', [
         className: 'classic-toolbar categories',
 
         events: {
-            'click .category .link': 'onChangeTab',
-            'contextmenu .category': 'onConfigureCategories',
-            'dblclick .category': 'onConfigureCategories',
+            'click .category button': 'onChangeTab',
+            'contextmenu': 'onConfigureCategories',
+            'dblclick': 'onConfigureCategories',
             'selection:drop': 'onMove',
-            'mousedown .category a': 'respondToNonKeyboardFocus',
-            'blur .category a': 'respondToNonKeyboardFocus',
-            'mouseover .category': 'onMouseover',
-            'mouseout .category': 'onMouseout'
+            'mousedown .category button': 'respondToNonKeyboardFocus',
+            'blur .category button': 'respondToNonKeyboardFocus'
         },
 
         initialize: function (options) {
@@ -58,15 +57,12 @@ define('io.ox/mail/categories/tabs', [
         respondToNonKeyboardFocus: function (e) {
             if (e.type === 'focusout') return $(e.currentTarget).removeAttr('style');
             // blur event won't get triggered so we reset style for all first
-            if (_.device('safari')) this.$('.category a').removeAttr('style');
+            this.$('.category button').removeAttr('style');
             $(e.currentTarget).css({
                 'border-bottom': '1px solid white',
                 'background': 'white'
             });
         },
-
-        onMouseover: function (e) { $(e.currentTarget).addClass('hover'); },
-        onMouseout: function (e) { $(e.currentTarget).removeClass('hover'); },
 
         render: function () {
 
@@ -74,28 +70,27 @@ define('io.ox/mail/categories/tabs', [
 
             this.$el.empty().append(
                 this.collection.map(function (model) {
-                    return $('<li class="category">')
-                        .append(
-                            $('<a href="#" class="link" role="button" draggable="false">').append(
-                                $('<div class="category-icon">'),
-                                $('<div class="category-name truncate">').text(model.get('name')),
-                                $('<div class="category-counter">').append(
-                                    $('<span class="counter">').text(model.getCount())
-                                )
-                            ),
-                            $('<div class="category-drop-helper">').text(gt('Drop here!'))
-                        )
-                        .toggle(model.isEnabled())
-                        .toggleClass('selected', model.get('id') === current)
-                        .attr({ 'data-id': model.get('id') });
+                    return $('<li class="category" role="presentation">').append(
+                        $('<button type="button" class="btn btn-link" draggable="false" tabindex="-1">').append(
+                            $('<span class="category-name">').text(model.get('name')),
+                            $('<span class="category-counter">').append(
+                                $('<span class="counter">').text(model.getCount()),
+                                $('<span class="sr-only">').text(gt('Unread messages'))
+                            )
+                        ),
+                        $('<div class="category-drop-helper" aria-hidden="true">').text(gt('Drop here!'))
+                    )
+                    .toggle(model.isEnabled())
+                    .toggleClass('selected', model.get('id') === current)
+                    .attr({ 'data-id': model.get('id') });
                 }),
                 $('<li class="free-space" aria-hidden="true">')
             );
+            this.$el.find('li:first > button').removeAttr('tabindex');
             return this;
         },
 
         onChangeTab: function (e) {
-            e.preventDefault();
             var id = $(e.currentTarget).parent().attr('data-id');
             this.props.set('category_id', id);
         },

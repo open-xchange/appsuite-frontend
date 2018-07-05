@@ -291,19 +291,13 @@ define('io.ox/contacts/api', [
      * @returns defered
      */
     function clearUserApiCache(data) {
-        var def = $.Deferred();
-        require(['io.ox/core/api/user'], function (userApi) {
-            $.when(
-                    userApi.caches.get.remove({ id: data.user_id }),
-                    userApi.caches.all.clear(),
-                    userApi.caches.list.remove({ id: data.user_id })
-                ).then(function () {
-                    def.resolve();
-                }, function () {
-                    def.reject();
-                });
+        return require(['io.ox/core/api/user']).then(function (userApi) {
+            return $.when(
+                userApi.caches.get.remove({ id: data.user_id }),
+                userApi.caches.all.clear(),
+                userApi.caches.list.remove({ id: data.user_id })
+            );
         });
-        return def;
     }
 
     /**
@@ -463,6 +457,12 @@ define('io.ox/contacts/api', [
                     api.trigger('update', data);
                     // trigger refresh.all, since position might have changed
                     api.trigger('refresh.all');
+                    // reset image?
+                    if (o.data.image1 === '') {
+                        // to clear picture halo's cache
+                        api.trigger('update:image', data);
+                        api.trigger('reset:image reset:image:' + _.ecid(data), data);
+                    }
                 });
             });
         });
@@ -637,7 +637,7 @@ define('io.ox/contacts/api', [
                     // remove host
                     if (data.image1_url) {
                         data.image1_url = data.image1_url
-                            .replace(/^https?\:\/\/[^\/]+/i, '');
+                            .replace(/^https?:\/\/[^/]+/i, '');
                         data.image1_url = coreUtil.replacePrefix(data.image1_url);
                         data.image1_url = coreUtil.getShardingRoot(data.image1_url);
                     }
@@ -668,7 +668,7 @@ define('io.ox/contacts/api', [
     api.pictureHalo = (function () {
 
         // local hash to recognize URLs that have been fetched already
-        var cachesURLs = {},
+        var cachedURLs = {},
             uniq = ox.t0,
             fallback = api.getFallbackImage();
 
@@ -682,13 +682,17 @@ define('io.ox/contacts/api', [
                 // use lazyload?
                 opt.container = opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
                 if (opt.lazyload || opt.container) {
-                    node.css('background-image', 'url(' + fallback + ')')
-                        .attr('data-original', url)
+                    if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
+                    node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            if (image.width === 1) url = fallback;
-                            else cachesURLs[url] = url;
-                            node.attr('data-original', url)
-                                .css('background-image', 'url(' + url + ')');
+                            if (image.width === 1 || e.type === 'error') {
+                                url = opt.fallback ? fallback : null;
+                            } else {
+                                cachedURLs[url] = url;
+                            }
+                            if (url) {
+                                node.text('').attr('data-original', url).css('background-image', 'url(' + url + ')');
+                            }
                             node = url = opt = null;
                             $(this).off('.lazyload');
                         })
@@ -696,8 +700,8 @@ define('io.ox/contacts/api', [
                 } else {
                     $(new Image()).on('load error', function (e) {
                         var fail = this.width === 1 || e.type === 'error';
-                        if (!fail) cachesURLs[url] = url;
-                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                        if (!fail) cachedURLs[url] = url;
+                        if (!fail || opt.fallback) node.text('').css('background-image', 'url(' + (fail ? fallback : url) + ')');
                         node = null;
                         $(this).off();
                     })
@@ -710,7 +714,6 @@ define('io.ox/contacts/api', [
         return function (node, data, options) {
 
             var params,
-                useApi = options.api || 'contact',
                 url,
                 opt = _.extend({
                     width: 48,
@@ -719,7 +722,8 @@ define('io.ox/contacts/api', [
                     // lazy load block
                     lazyload: false,
                     effect: 'show',
-                    urlOnly: false
+                    urlOnly: false,
+                    fallback: true
                 }, options);
             delete opt.api;
             // use copy of data object because of delete-statements
@@ -760,7 +764,7 @@ define('io.ox/contacts/api', [
                 url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
                 url = coreUtil.getShardingRoot(url);
 
-            } else if (!data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
+            } else if (opt.fallback && !data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
                 url = fallback;
             }
 
@@ -806,11 +810,11 @@ define('io.ox/contacts/api', [
                 }
             }
 
-            url = coreUtil.getShardingRoot((useApi === 'user' ? '/image/user/picture?' : '/halo/contact/picture?') + $.param(params));
+            url = coreUtil.getShardingRoot('/halo/contact/picture?' + $.param(params));
 
             // cached?
-            if (cachesURLs[url]) {
-                return opt.urlOnly ? cachesURLs[url] : node.css('background-image', 'url(' + cachesURLs[url] + ')');
+            if (cachedURLs[url]) {
+                return opt.urlOnly ? cachedURLs[url] : node.text('').css('background-image', 'url(' + cachedURLs[url] + ')');
             }
 
             try {
@@ -842,7 +846,7 @@ define('io.ox/contacts/api', [
 
         // set node content
         set = function (name) {
-            if (options.halo && /\@/.test(data.email) && capabilities.has('contacts')) {
+            if (options.halo && /@/.test(data.email) && capabilities.has('contacts')) {
                 node
                 .addClass('halo-link')
                 .attr('href', '#')
@@ -851,7 +855,7 @@ define('io.ox/contacts/api', [
                     email1: email
                 });
             }
-            node.text(_.noI18n(name + '\u00A0'));
+            node.text(name + '\u00A0');
         };
 
         // clear vars after call stack has cleared
@@ -992,11 +996,11 @@ define('io.ox/contacts/api', [
 
     /**
      * is ressource (duck check)
-     * @param  {object} obj (contact)
+     * @param  {object} obj (contact) or calendar event attendee
      * @return {boolean}
      */
     api.looksLikeResource = function (obj) {
-        return 'mailaddress' in obj && 'description' in obj;
+        return ('mailaddress' in obj && 'description' in obj) || ('cuType' in obj && obj.cuType === 'RESOURCE');
     };
 
     /**
@@ -1059,6 +1063,8 @@ define('io.ox/contacts/api', [
             // use these fields for local lookups
             fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
 
+        if (settings.get('showDepartment')) fields.push('department');
+
         // check for minimum length
         function hasMinLength(str) {
             return str.length >= minLength;
@@ -1081,9 +1087,10 @@ define('io.ox/contacts/api', [
             return def.then(function (data) {
                 return _(data).filter(function (item) {
                     return _(words).every(function (word) {
+                        var regexWord = new RegExp('\\b' + escape(word));
                         return _(item.fulltext).some(function (str) {
-                            // server also uses startsWith() / not contains()
-                            return str.indexOf(word) === 0 || str.indexOf(query) === 0;
+                            // server might use startsWith() or contains() depending whether DB uses a fulltext index
+                            return regexWord.test(str) || str.indexOf(query) > -1;
                         });
                     });
                 });
@@ -1104,6 +1111,11 @@ define('io.ox/contacts/api', [
                     return item;
                 });
             });
+        }
+
+        // escape words for regex
+        function escape(str) {
+            return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
         }
 
         function search(query, options) {
@@ -1163,7 +1175,6 @@ define('io.ox/contacts/api', [
     });
 
     api.on('maybeNewContact', function () {
-        if (ox.debug) console.info('Clearing autocomplete cache');
         api.autocomplete.cache = {};
     });
 

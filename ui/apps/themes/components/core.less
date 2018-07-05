@@ -12,25 +12,10 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-/* High contrast */
-html.high-contrast a:not(.btn) { color: @hc-link-color; }
-
 body {
     // add a bit of perfection
     -webkit-font-feature-settings: "liga", "kern";
     font-feature-settings: "liga", "kern";
-}
-
-/* OpenSans Font Face */
-@font-face {
-    font-family: 'OpenSans';
-    src: local('Open Sans Light'),
-         local('OpenSans-Light'),
-         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.woff') format('woff'),
-         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.ttf') format('truetype'),
-         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.svg#OpenSansLight') format('svg');
-    font-weight: 300;
-    font-style: normal;
 }
 
 textarea,
@@ -113,7 +98,7 @@ legend {
         background: red;
         cursor: inherit;
         display: block;
-        outline: none;
+        outline: 0;
     }
 
     i.fa-paperclip:after { content: '\00a0'; }
@@ -166,7 +151,11 @@ wbr:after { content: "\00200B" }
 .alert {
     padding: 8px 35px 8px 14px;
     margin-bottom: 20px;
+    &.indicator {
+        margin-bottom: 0px;
+    }
 }
+
 
 .row label { padding-top: 8px; }
 
@@ -225,6 +214,7 @@ div.hopscotch-bubble {
         -o-animation: fa-spin 1.5s infinite linear;
         -webkit-animation: fa-spin 1.5s infinite linear;
         animation: fa-spin 1.5s infinite linear;
+        .relogin-required & { animation: none; }
     }
 }
 
@@ -238,6 +228,8 @@ div.hopscotch-bubble {
     &.wallpaper {
         .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
     }
+
+    transition: filter 1s linear, opacity 1s linear;
 
 }
 
@@ -257,8 +249,8 @@ div.hopscotch-bubble {
     background-color: #EA4400;
     cursor: default;
     z-index: 650000;
-    .box-shadow(0 0 20px 0 rgba(0, 0, 0, 0.30));
-    .border-radius(5px 5px 0 0);
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.30);
+    border-radius: 5px 5px 0 0;
 }
 
 // defined in core CSS to guarantee an instant response
@@ -333,13 +325,7 @@ html:not(.internet-explorer) {
 .abs-l { left: 0; }
 
 .bright-text {
-    color: #888;
-    .fontWeight(300);
-
-    html.high-contrast & {
-        color: @hc-gray;
-    }
-
+    color: #767676;
 }
 
 .ellipsis { .ellipsis(); }
@@ -350,36 +336,14 @@ html:not(.internet-explorer) {
     white-space: nowrap;
 }
 
-.person-link {
-    cursor: pointer;
-}
+.person-link { cursor: pointer; }
 
 .default-content-padding { padding: 32px 32px; }
 
-.border-top {
-    border-top: 1px solid @defaultBorderColor;
-
-    html.high-contrast & { border-top: 1px solid @hc-border-color; }
-}
-
-.border-right {
-    border-right: 1px solid @defaultBorderColor;
-
-    html.high-contrast & { border-right: 1px solid @hc-border-color; }
-}
-
-.border-bottom {
-    border-bottom: 1px solid @defaultBorderColor;
-
-    html.high-contrast & { border-bottom: 1px solid @hc-border-color; }
-
-}
-
-.border-left {
-    border-left: 1px solid @defaultBorderColor;
-
-    html.high-contrast & { border-left: 1px solid @hc-border-color; }
-}
+.border-top    { border-top: 1px solid @default-border-color; }
+.border-right  { border-right: 1px solid @default-border-color; }
+.border-bottom { border-bottom: 1px solid @default-border-color; }
+.border-left   { border-left: 1px solid @default-border-color; }
 
 .touch body { font-size: @font-size-touch; }
 
@@ -408,7 +372,11 @@ html:not(.internet-explorer) {
 
 .password-container {
     // space for toggle action and caps-lock indicator
-    input.form-control { padding-right: 50px; }
+    input.form-control {
+        .ellipsis();
+        padding-right: 12px;
+    }
+    &.has-focus input.form-control { padding-right: 50px; }
     .toggle-asterisks.form-control-feedback {
         display: none;
         height: 22px;
@@ -422,7 +390,7 @@ html:not(.internet-explorer) {
         font-size: 16px;
         &:focus {
             color: #ffffff;
-            background-color: #3c73aa;
+            background-color: @brand-primary;
         }
     }
     &.has-focus .toggle-asterisks {
@@ -430,11 +398,36 @@ html:not(.internet-explorer) {
     }
 }
 
+.blur {
+    .ie11 & {
+        opacity: 0;
+    }
+    filter: blur(@bluriness);
+}
+
+h1.unstyled,
+h2.unstyled,
+h3.unstyled,
+h4.unstyled,
+h5.unstyled {
+    margin: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+label.unstyled {
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin-bottom: inherit;
+}
+
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     .default-content-padding { padding: 5px 10px; }
     .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 3px 8px; }
@@ -444,12 +437,12 @@ html:not(.internet-explorer) {
     textarea.flat, input.flat {
         border-width: 0;
         border-bottom-width: 1px;
-        .box-shadow(none);
-        .border-radius(0);
+        box-shadow: none;
+        border-radius: 0;
 
         &:focus {
             border-width: 0;
-            .box-shadow(none);
+            box-shadow: none;
             border-bottom-width: 1px;
             border-color: initial;
         }

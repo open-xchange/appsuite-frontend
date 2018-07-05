@@ -25,7 +25,7 @@
     $.escape = function (str) {
         // escape !"#$%&'()*+,./:;<=>?@[\]^`{|}~
         // see http://api.jquery.com/category/selectors/
-        return String(str).replace(/([!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~])/g, '\\$1');
+        return String(str).replace(/([!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
     };
 
     $.button = function (options) {
@@ -70,7 +70,7 @@
         if (opt.purelink === true) {
             button = $('<a>').addClass(className).append(text);
         } else {
-            button = $('<button>').addClass(className).append(
+            button = $('<button type="button">').addClass(className).append(
                 $('<span>').append(text)
             );
         }

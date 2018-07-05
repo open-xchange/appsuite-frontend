@@ -20,12 +20,11 @@ define('io.ox/mail/threadview', [
     'io.ox/mail/detail/view',
     'io.ox/mail/detail/mobileView',
     'io.ox/core/tk/list-dnd',
-    'io.ox/core/emoji/util',
     'io.ox/core/http',
     'gettext!io.ox/mail',
     'less!io.ox/mail/style',
     'io.ox/mail/listview'
-], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
+], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
 
     'use strict';
 
@@ -60,7 +59,7 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<div class="thread-view-header" role="banner">').attr('aria-label', gt('Conversation')),
+                    $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
                     this.$messages = $('<div class="thread-view list-view" role="region">')
                 )
             );
@@ -91,59 +90,15 @@ define('io.ox/mail/threadview', [
         index: 200,
         draw: function (baton) {
 
-            var keepFirstPrefix = baton.view.collection.length === 1,
+            var keepPrefix = baton.view.collection.length === 1,
                 data = baton.view.model.toJSON(),
-                subject = util.getSubject(api.threads.subject(data) || data.subject, keepFirstPrefix),
-                node = $('<h1 class="subject">').text(subject);
+                subject = util.getSubject(api.threads.subject(data) || data.subject, keepPrefix);
 
-            this.append(node);
-
-            emoji.processEmoji(node.html(), function (text) {
-                node.html(text);
-            });
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'summary',
-        index: 300,
-        draw: function (baton) {
-            var length = baton.view.collection.length;
-            if (length === 1) {
-                this.find('.subject').addClass('spacer');
-                return;
-            }
-            this.find('.subject').after(
-                $('<h2 class="summary">').text(gt('%1$d messages in this conversation', length))
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'toggle-big-screen',
-        index: 110,
-        draw: function (baton) {
-            if (!baton.view.standalone) return;
             this.append(
-                $('<a href="#" role="button" class="toggle-big-screen">')
-                .append('<i class="fa fa-expand">')
-                .attr('aria-label', gt('Toggle viewport size'))
-                .tooltip({
-                    animation: false,
-                    container: 'body',
-                    placement: 'left',
-                    title: gt('Toggle viewport size')
-                })
-                .on('click', function () {
-                    // remove tooltip on click as the viewport changes
-                    var self = $(this);
-                    _.defer(function () { self.tooltip('hide'); });
-                })
+                $('<h1 class="subject">').text(subject)
             );
         }
     });
-
-    // Thread view
 
     var ThreadView = Backbone.View.extend({
 
@@ -155,7 +110,6 @@ define('io.ox/mail/threadview', [
             'click .back-navigation .previous-mail': 'onPrevious',
             'click .back-navigation .next-mail': 'onNext',
             'click .toggle-all': 'onToggleAll',
-            'click .toggle-big-screen': 'onToggleBigscreen',
             'keydown': 'onKeydown'
         },
 
@@ -170,8 +124,8 @@ define('io.ox/mail/threadview', [
 
             var baton = new ext.Baton({ view: this }),
                 node = this.$el.find('.thread-view-list > .thread-view-header').empty(),
-                keepFirstPrefix = baton.view.collection.length === 1,
-                subject = util.getSubject(baton.view.model.toJSON(), keepFirstPrefix);
+                keepPrefix = baton.view.collection.length === 1,
+                subject = util.getSubject(baton.view.model.toJSON(), keepPrefix);
 
             if (this.collection.length > 0) {
                 ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
@@ -224,25 +178,6 @@ define('io.ox/mail/threadview', [
                 this.toggleMail(model.cid, state);
             }, this);
             http.resume();
-        },
-
-        onToggleBigscreen: function (e) {
-            e.preventDefault();
-            this.$el.toggleClass('big-screen');
-            if (_.device('chrome')) {
-                // chrome uses shadow-dom which can not be found by jquery by default
-                var shadow = this.$el.find('.shadow-root-container')[0].shadowRoot;
-                $(shadow).find('.mail-detail-content').toggleClass('big-screen');
-            }
-        },
-
-        toggleBigScreen: function (state) {
-            this.$el.toggleClass('big-screen', state);
-            if (_.device('chrome')) {
-                // chrome uses shadow-dom which can not be found by jquery by default
-                var shadow = this.$el.find('.shadow-root-container')[0].shadowRoot;
-                $(shadow).find('.mail-detail-content').toggleClass('big-screen');
-            }
         },
 
         toggleMail: function (cid, state) {
@@ -314,7 +249,7 @@ define('io.ox/mail/threadview', [
             if (!thread.length) return;
             // reset collection
             var type = this.collection.length === 0 ? 'reset' : 'set';
-            this.collection[type || 'reset'](thread);
+            this.collection[type](thread);
         },
 
         onReset: function () {
@@ -388,7 +323,7 @@ define('io.ox/mail/threadview', [
 
         onRemove: function (model) {
             var children = this.getItems(),
-                li = children.filter('[data-cid="' + model.cid + '"]'),
+                li = children.filter(function () { return $(this).attr('data-cid') === model.cid; }),
                 first = li.length ? li.attr('data-cid') && children.first().attr('data-cid') : false,
                 top = this.$messages.scrollTop();
 
@@ -507,9 +442,6 @@ define('io.ox/mail/threadview', [
                     $(e.target).closest('article').focus();
                 });
             }
-
-            // store app if in options. needed by the mail detailview to access sort options
-            if (options.app) this.app = options.app;
         },
 
         // return alls items of this list
@@ -525,7 +457,7 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var self = this, view = new detail.View({ app: this.app, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });
@@ -548,8 +480,8 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<div class="thread-view-header" role="banner">').attr('aria-label', gt('Conversation')),
-                    this.$messages = $('<ul class="thread-view list-view" role="main">')
+                    $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
+                    this.$messages = $('<ul class="thread-view list-view">')
                 )
             );
         }

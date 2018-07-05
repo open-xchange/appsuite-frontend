@@ -11,15 +11,18 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
+/* global Promise */
+
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    'pdfjs-dist/build/pdf.combined',
+    'io.ox/core/viewer/util',
+    'pdfjs-dist/build/pdf',
     'settings!io.ox/core'
-], function (PDFView, PDFJSCombined, Settings) {
+], function (PDFView, Util, PDFJSLib, Settings) {
 
     'use strict';
 
-    var PDFJS = PDFJSCombined.PDFJS;
+    var PDFJS = PDFJSLib.PDFJS;
 
     // class PDFDocument =======================================================
 
@@ -79,7 +82,7 @@ define('io.ox/core/pdf/pdfdocument', [
         /**
          * Open external links in a new window
          */
-        PDFJS.openExternalLinksInNewWindow = true;
+        PDFJS.externalLinkTarget = PDFJS.LinkTarget.BLANK;
 
         /**
          * Path for image resources, mainly for annotation icons. Include trailing slash.
@@ -205,6 +208,24 @@ define('io.ox/core/pdf/pdfdocument', [
         // convert document to PDF
         PDFJS.getDocument(pdfConverterURL).promise.then(function (document) {
             var error = true;
+            // the original getPage() function
+            var origGetPageFunction = document && document.transport && document.transport.getPage;
+
+            Util.logPerformanceTimer('PDFDocument:PDFJs_getDocument_then_handler'); // after first long running process
+
+            // wrap around original getPage() function
+            // to fix an exception which occurs when rapidly switching documents
+            // and causes PDFjs to stop working and to render white pages only
+            if (origGetPageFunction) {
+                document.transport.getPage = function WorkerTransport_getPage(pageNumber, capability) {
+                    // return rejected promise if no message handler is present
+                    if (!document.transport.messageHandler) {
+                        return Promise.reject();
+                    }
+                    // call original getPage() function
+                    return origGetPageFunction.call(this, pageNumber, capability);
+                };
+            }
 
             if (document) {
                 pdfjsDocument = document;
@@ -232,12 +253,15 @@ define('io.ox/core/pdf/pdfdocument', [
             // a given PDF file and set the password error response accordingly
             var encTestPDFConverterURL = pdfConverterURL + '&enctest=pdf';
 
-            $.get(encTestPDFConverterURL).always(function (data) {
-                loadDef.resolve(
-                  (_.isObject(data) && _.isString(data.responseText)) ?
-                      $.parseJSON(data.responseText) :
-                          { cause: 'filterError' });
+            $.ajax({
+                url: encTestPDFConverterURL,
+                dataType: 'json'
 
+            }).always(function (data) {
+                loadDef.resolve(
+                    (_.isObject(data) && _.isString(data.cause)) ?
+                        data :
+                        { cause: 'filterError' });
             });
         });
 

@@ -41,10 +41,9 @@ define('io.ox/settings/accounts/views', [
 
         /**
          * getAccountState
-         * Used to display a possible error message
-         * in a DSC environment. Returns a jQuery node
-         * containing the error. Will not be used in
-         * non-dsc setups (atm)
+         * Used to display a possible error message.
+         * Returns a jQuery node
+         * containing the error.
          */
         drawAccountState = function (model) {
             if ((typeof model.get('status') === 'undefined') || model.get('status') === 'ok') return;
@@ -150,6 +149,7 @@ define('io.ox/settings/accounts/views', [
                                 },
                                 function fail() {
                                     popup.close();
+                                    throw arguments;
                                 }
                             )
                             .always(function () {

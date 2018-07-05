@@ -14,8 +14,8 @@
 // io.ox/core/tk/autocomplete
 .autocomplete-search {
 
-	height: auto;
-	min-height: 100px;
+    height: auto;
+    min-height: 100px;
     min-width: 300px;
     max-height: 600px;
 
@@ -165,7 +165,7 @@
             position: relative;
             top: 0;
             right: 0;
-            margin-top: 3px;
+            margin-top: 1px;
 
             a {
                 margin-right: 3px;
@@ -218,7 +218,7 @@
                 width: 100%;
                 text-align: center;
 
-                .token-label { padding-right: 4px; }
+                .token-label { padding-right: 4px; max-width: 100%; }
 
                 a { display: none; }
             }
@@ -239,9 +239,6 @@
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
-    // hide head
-    .window-head { display: none; }
-
     .window-body { left: 0; }
 
     // scrollable
@@ -261,8 +258,6 @@
     }
 
     &.window-content {
-
-        .row { max-width: 500px; }
 
         ul, ol { margin-bottom: 0; }
 
@@ -362,9 +357,6 @@
                 }
 
             }
-        }
-        html.high-contrast & .facet-container {
-            color: #333;
         }
     }
 

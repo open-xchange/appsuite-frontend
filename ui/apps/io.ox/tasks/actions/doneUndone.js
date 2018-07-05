@@ -29,16 +29,14 @@ define('io.ox/tasks/actions/doneUndone', [
                 percent_completed: 0,
                 date_completed: null
             };
-            message = gt.ngettext('Task marked as undone',
-                                  'Tasks marked as undone', data.length || 1);
+            message = gt.ngettext('Task marked as undone', 'Tasks marked as undone', data.length || 1);
         } else {
             mods = {
                 status: 3,
                 percent_completed: 100,
                 date_completed: _.now()
             };
-            message = gt.ngettext('Task marked as done',
-                                  'Tasks marked as done', data.length || 1);
+            message = gt.ngettext('Task marked as done', 'Tasks marked as done', data.length || 1);
         }
         require(['io.ox/tasks/api'], function (api) {
             if (data.length > 1) {
@@ -52,7 +50,7 @@ define('io.ox/tasks/actions/doneUndone', [
                         notifications.yell('success', message);
                     })
                     .fail(function (result) {
-                        notifications.yell('error', gt.noI18n(result));
+                        notifications.yell('error', result);
                     });
             } else {
                 if (_.isArray(data)) data = data[0];

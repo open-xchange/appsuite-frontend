@@ -39,7 +39,7 @@ define('io.ox/files/common-extensions', [
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
-                .text(_.noI18n(util.getDateTime(t, options)))
+                .text(util.getDateTime(t, options))
             );
         },
 
@@ -61,7 +61,7 @@ define('io.ox/files/common-extensions', [
                 isWrapFilename = false;
 
             // add suffix for locked files
-            if (baton.model.isLocked()) {
+            if (baton.model && _.isFunction(baton.model.isLocked) && baton.model.isLocked()) {
 
                 filename += ' (' + gt('Locked') + ')';
             }
@@ -88,15 +88,19 @@ define('io.ox/files/common-extensions', [
         filenameTooltip: function (baton) {
             var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
 
-            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
+            var parent = this.parent();
+            parent.tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
                 title: _.breakWord(filename),
                 trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
-              //placement: 'right auto',                // top | bottom | left | right | auto.
+                //placement: 'right auto',                // top | bottom | left | right | auto.
                 placement: 'bottom auto',               // top | bottom | left | right | auto.
                 animation: true,                        // false
-              //delay: { 'show': 400, 'hide': 50000 },
+                //delay: { 'show': 400, 'hide': 50000 },
                 delay: { 'show': 400 },
-                viewport: { selector: '.list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
+                container: parent,
+
+                // Bug-55575: Dropdown indicator shown when hovering over folder symbol
+                viewport: { selector: '.io-ox-files-main .list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
             }).on('dispose', function () {
                 $(this).tooltip('destroy');
             });
@@ -140,7 +144,9 @@ define('io.ox/files/common-extensions', [
         },
 
         locked: function (baton) {
-            this.toggleClass('locked', baton.model.isLocked());
+            if (baton.model && baton.model.isLocked) {
+                this.toggleClass('locked', baton.model.isLocked());
+            }
         },
 
         fileTypeIcon: function () {
@@ -222,7 +228,7 @@ define('io.ox/files/common-extensions', [
                         img = $('<img class="dummy-image invisible">').data('retry', 0);
 
                     // fix URL - would be cool if we had just one call for thumbnails ...
-                    img.attr('data-original', url.replace(/format\=preview_image/, 'format=thumbnail_image'));
+                    img.attr('data-original', url.replace(/format=preview_image/, 'format=thumbnail_image'));
 
                     // use lazyload
                     img.on({ 'load.lazyload': load, 'error.lazyload': error }).lazyload();

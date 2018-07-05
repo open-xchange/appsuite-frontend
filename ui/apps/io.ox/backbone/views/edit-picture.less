@@ -1,0 +1,59 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+.edit-picture {
+
+    .modal-body.croppie-container {
+        min-height: 500px;
+        .smartphone & {
+            min-height: initial;
+        }
+    }
+
+    .empty-state {
+        height: 466px;
+        width: 466px;
+        .smartphone & {
+            height: 322.25px;
+            width: 322.25px;
+        }
+        .flex-center(column);
+        background-color: @light-silver;
+        border: #ccc solid 1px;
+        margin: 0 auto;
+    }
+
+    .inline-actions {
+        .flex-center(row);
+        .btn {  margin: 0 5px; }
+    }
+
+    input.cr-slider:focus {
+        outline: thin dotted;
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: 0;
+    }
+
+    // toggle class
+    &.blank {
+        .modal-body > .inline-actions,
+        .cr-boundary, .cr-slider-wrap {
+            display: none;
+        }
+    }
+    &:not(.blank) {
+        .empty-state { display: none; }
+    }
+
+
+}

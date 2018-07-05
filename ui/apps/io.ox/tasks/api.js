@@ -44,12 +44,6 @@ define('io.ox/tasks/api', [
                     reminderAPI.getReminders();
                 });
             } else {
-                //check alarm
-                if ((modifications.alarm !== undefined) || (create && modifications.alarm)) {
-                    require(['io.ox/core/api/reminder'], function (reminderAPI) {
-                        reminderAPI.getReminders();
-                    });
-                }
                 //check participants
                 if (modifications.participants) {
                     var myId = ox.user_id,
@@ -63,9 +57,22 @@ define('io.ox/tasks/api', [
                     });
                     //user is not in the current participants
                     if (!triggered) {
+                        // user was removed from a task, reset all possible notifications, so no artifacts remain
                         api.trigger('mark:task:confirmed', [currentValues]);
+                        require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                            reminderAPI.getReminders();
+                        });
+                        api.getTasks();
+                        return;
                     }
                 }
+                //check alarm
+                if ((modifications.alarm !== undefined) || (create && modifications.alarm)) {
+                    require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                        reminderAPI.getReminders();
+                    });
+                }
+
                 //check overdue
                 if (modifications.status || (modifications.end_time !== undefined)) {
                     if (currentValues.status !== 3 && currentValues.end_time < _.utc()) {
@@ -308,7 +315,7 @@ define('io.ox/tasks/api', [
                 api.caches.all.grepRemove(task.folder_id + api.DELIM),
                 api.caches.get.add(task),
                 api.caches.list.merge(task)
-           );
+            );
         }).then(function () {
             if (attachmentHandlingNeeded) {
                 //to make the detailview show the busy animation
@@ -360,7 +367,11 @@ define('io.ox/tasks/api', [
 
         //folder is only used by move operation, because here we need 2 folder attributes
         if (newFolder && arguments.length === 2) {
-            task.folder_id = newFolder;
+            // only minimal set for move operation needed
+            task = {
+                folder_id: newFolder,
+                id: task.id
+            };
             move = true;
         }
         //set always (OX6 does this too)
@@ -425,7 +436,15 @@ define('io.ox/tasks/api', [
             //return object with id and folder id needed to save the attachments correctly
             obj = { folder_id: useFolder, id: task.id };
             //notification check
-            if (data) checkForNotifications(data, task, true);
+            if (data) {
+                checkForNotifications(data, task, true);
+            } else {
+                // not enough data, so just get fresh data from the server, to keep the notifications up to date
+                require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                    reminderAPI.getReminders();
+                });
+                api.getTasks();
+            }
             if (attachmentHandlingNeeded) {
                 //to make the detailview show the busy animation
                 api.addToUploadList(_.ecid(task));

@@ -1,4 +1,4 @@
- /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -12,7 +12,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
- /* global DocumentTouch */
+/* global DocumentTouch */
 
 /**
  * This lib is dependency free, do not use underscore or some
@@ -30,6 +30,7 @@
         edge,
         phantom,
         MacOS,
+        Linux,
         Windows,
         Windows8,
         Blackberry,
@@ -40,18 +41,19 @@
         uiwebview,
         chromeIOS,
         firefoxIOS,
-        browserLC = {};
+        browserLC = {},
+        isTouch;
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    50,
-        'Safari':     8,
-        'Firefox':   40,
+        'Chrome':    60,
+        'Safari':    10,
+        'Firefox':   52,
         'IE':        11
     };
 
     us.platformSupport = {
-        'Android':  4.2,
+        'Android':  4.4,
         'iOS':      9.0,
         'WindowsPhone': 99.0 // special case to exclude WindowsPhone as a mobile platform
     };
@@ -87,6 +89,7 @@
             edge = ua.indexOf('Edge/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
+            Linux = ua.indexOf('Linux') > -1;
             Windows = ua.indexOf('Windows') > -1;
             Windows8 = ua.indexOf('Windows NT 6.3') > -1;
             Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
@@ -111,23 +114,28 @@
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
-                IE: edge ?
+                IE: edge
                     // TODO: Handle Edge as IE 12. Is this really wanted?
-                    Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1]) : (
-                        nav.appName === 'Microsoft Internet Explorer' ?
-                            Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
-                                !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)),
+                    ? Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1])
+                    : (
+                        nav.appName === 'Microsoft Internet Explorer'
+                            ? Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1])
+                            : (!!nav.userAgent.match(/Trident/)
+                                ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2])
+                                : undefined)
+                    ),
                 /** is Edge browser? */
-                Edge: edge ?
+                Edge: edge
                     // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.
-                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined,
+                    ? Number(ua.match(/Edge\/(\d+.\d+)$/)[1])
+                    : undefined,
                 /** is Opera? */
                 Opera: opera ? ua.split('OPR/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is WebKit? */
                 WebKit: webkit,
                 /** Safari */
                 Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry && !chromeIOS && !firefoxIOS && !opera ?
-                    (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
+                    (standalone ? iOS : (ua.split('Version/')[1] ? ua.split('Version/')[1].split(' Safari')[0] : undefined)) : undefined,
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
@@ -147,6 +155,7 @@
                 iOS: iOS,
                 MacOS: MacOS,
                 Android: Android,
+                Linux: Linux && !Android,
                 Windows: Windows,
                 Windows8: Windows8
             };
@@ -188,20 +197,24 @@
 
         }
 
+        return us.browser;
+
     }
 
     // first detection
     detectBrowser(navigator);
 
-    var isTouch = (function () {
+    function checkTouch() {
         var reportsTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
         // fix for Firefox and Chrome on Windows convertibles with touchscreen to keep features like d&d alive
-        if ((us.browser.chrome || us.browser.firefox) && us.browser.windows && reportsTouch) {
-            if (window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
+        if ((us.browser.chrome || us.browser.firefox) && (us.browser.windows || us.browser.linux) && reportsTouch) {
+            if (!us.browser.karma && window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
             return false;
         }
         return reportsTouch;
-    }());
+    }
+
+    isTouch = checkTouch();
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -249,6 +262,8 @@
     us.displayInfo = display;
     // extend underscore utilities
     var underscoreExtends = {
+
+        detectBrowser: detectBrowser,
 
         // make this public so that it can be patched by UI plugins
         hasNativeEmoji: function () {
@@ -299,9 +314,9 @@
             // true for undefined, null, empty string
             if (!condition) return true;
             // check condition
-            condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
+            condition = String(condition).replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return browserLC[match] || display[match] || misc[match] || 'false';
+                return browserLC[match] || display[match] || misc[match];
             });
             if (debug) {
                 console.debug(condition);
@@ -318,6 +333,7 @@
 
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);
+        isTouch = checkTouch();
         underscoreExtends.recheckDevice();
         _.browser = us.browser;
     };
@@ -330,7 +346,9 @@
                 supported = true;
             }
         }
-        return supported;
+        return supported ||
+            //support safari on ios if platform is supported
+            !!(us.browser.iOS && us.browser.Safari && isPlatformSupported());
     }
     // helper for platform support
     function isPlatformSupported() {

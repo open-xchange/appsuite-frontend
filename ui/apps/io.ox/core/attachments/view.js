@@ -109,9 +109,9 @@ define('io.ox/core/attachments/view', [
 
             this.$header.append(
                 $('<a href="#" class="toggle-details" aria-expanded="false" role="button">').append(
-                    $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
-                    $('<span class="summary">')
+                    $('<span class="summary">'),
+                    $('<i class="fa toggle-caret" aria-hidden="true">')
                 ),
                 $('<span class="links" role="presentation">'),
                 $('<a href="#" class="pull-right toggle-mode" role="button">').attr('title', gt('Toggle preview'))
@@ -154,12 +154,8 @@ define('io.ox/core/attachments/view', [
             this.$preview.append(this.renderAttachment('preview', model));
         },
 
-        filter: function (model) {
-            return model.isFileAttachment();
-        },
-
         getValidModels: function () {
-            return this.collection.filter(this.filter, this);
+            return this.collection.getValidModels();
         },
 
         updateAriaControls: function () {
@@ -173,6 +169,7 @@ define('io.ox/core/attachments/view', [
         toggleDetails: function (forceOpen) {
             this.$el.toggleClass('open', forceOpen === true || undefined);
             this.$header.find('.toggle-details').attr('aria-expanded', this.$el.hasClass('open'));
+            this.trigger('change:expanded', this.$el.hasClass('open'));
             if (!this.isListRendered) this.renderList();
         },
 
@@ -224,8 +221,8 @@ define('io.ox/core/attachments/view', [
         updateScrollControls: function (index) {
             if (index === undefined) index = this.getScrollIndex();
             var max = this.getMaxScrollIndex();
-            this.$('.scroll-left').attr('disabled', index <= 0 ? 'disabled' : null);
-            this.$('.scroll-right').attr('disabled', index >= max ? 'disabled' : null);
+            this.$('.scroll-left').prop('disabled', index <= 0);
+            this.$('.scroll-right').prop('disabled', index >= max);
         }
     });
 
@@ -262,7 +259,7 @@ define('io.ox/core/attachments/view', [
             if (!extension) return;
             color = this.getColor(extension);
             this.$el.append(
-                $('<div class="abs fallback">')
+                $('<div class="abs fallback ellipsis">')
                     .css({ color: color && 'white', backgroundColor: color })
                     .text(extension)
             );

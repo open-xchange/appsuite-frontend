@@ -21,8 +21,10 @@
     height: @drag-size;
     line-height: @drag-size;
     color: #333;
-    background-color: rgba(240, 240, 240, 0.80);
+    background-color: rgba(240, 240, 240, 0.95);
     padding: 0 14px 0 @drag-size + 14px;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     .ellipsis();
 }
 
@@ -35,7 +37,17 @@
     text-align: center;
     font-weight: bold;
     color: #fff;
-    background-color: rgba(0, 0, 0, 0.50);
+    background-color: @selected-focussed-background;
+}
+
+.dndmask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
 .inplace-dropzone {
@@ -56,8 +68,6 @@
         width: 100%;
         margin-top: -10px;
         z-index: 1;
-
-        html.high-contrast & { color: @black; }
     }
 
     .dropzone-dragover {

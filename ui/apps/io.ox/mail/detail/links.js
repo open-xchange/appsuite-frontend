@@ -10,19 +10,18 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* eslint no-useless-escape: 0 */
 define('io.ox/mail/detail/links', [
     'io.ox/mail/api',
     'io.ox/core/util',
-    'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, emoji, ext, settings, gt) {
+], function (api, util, ext, settings, gt) {
     'use strict';
 
     // fix hosts (still need a configurable list on the backend)
-    // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
+    //ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
 
     function isValidHost(url) {
         var match = url.match(/^https?:\/\/([^\/#]+)/i);
@@ -110,7 +109,7 @@ define('io.ox/mail/detail/links', [
                 data.className = 'deep-link-files';
             } else if (/^(contacts|calendar|tasks)$/.test(data.app)) {
                 data.className = 'deep-link-' + data.app;
-            } else if (deepLinkWhitelist.test(data.app) || /^(io.ox\/mail)$/.test(data.app)) {
+            } else if (deepLinkWhitelist.test(data.app)) {
                 data.className = 'deep-link-app';
             }
             // add folder, id, perspective (jQuery's extend to skip undefined)
@@ -127,7 +126,6 @@ define('io.ox/mail/detail/links', [
                 link = $('<a href="#" target="_blank" class="deep-link" role="button">')
                     .attr('href', data.link)
                     .text(text);
-
             // no white-liste app?
             if (!data.className) return null;
 
@@ -179,6 +177,8 @@ define('io.ox/mail/detail/links', [
         var matches = node.nodeValue.match(regMailMatch);
         if (matches === null || matches.length === 0) return node;
         var prefix = matches[1], address = matches[2], suffix = matches[4];
+        // see bug 58266: ignore urls with email address parameter; returns false to continue processing
+        if (/(http:|https:)$/i.test(prefix) || /^www\./i.test(address)) return false;
 
         var link = $('<a href="#" class="mailto-link" target="_blank">').attr('href', 'mailto:' + address)
             .data({ address: address })

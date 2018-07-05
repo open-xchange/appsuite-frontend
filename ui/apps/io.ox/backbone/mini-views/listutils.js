@@ -41,6 +41,12 @@ define('io.ox/backbone/mini-views/listutils', [
         makeTitle: function (title) {
             return $('<span class="list-item-title">').text(title);
         },
+        makeSubTitle: function (title, label) {
+            return $('<div class="list-item-subtitle">').append(
+                label ? $('<label>').text(label + ':') : $(),
+                $('<span>').text(title)
+            );
+        },
         widgetControlls: function () {
             console.warn('This is only user for old lists. Please use "io.ox/backbone/mini-views/settings-list-view" or "listutils.makeControls" instead.');
             return $('<div class="widget-controls">');
@@ -74,9 +80,9 @@ define('io.ox/backbone/mini-views/listutils', [
             return $('<a href="#" role="button" data-action="toggle" class="action">').text(label);
         },
         dragHandle: function (title, statusClass) {
-            return $('<a href="#" tabindex="-1" role="button" aria-hidden="true">').addClass('drag-handle ' + statusClass).attr('title', title).append(
-                    $('<i class="fa fa-bars" aria-hidden="true">')
-                ).on('click', $.preventDefault);
+            return $('<a href="#" role="button" aria-hidden="true" aria-pressed="false">').addClass('drag-handle ' + statusClass).attr('title', title).append(
+                $('<i class="fa fa-bars" aria-hidden="true">')
+            ).on('click', $.preventDefault);
         },
         controlProcessSub: function (opt) {
             opt = _.extend({

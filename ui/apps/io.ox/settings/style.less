@@ -56,7 +56,7 @@
         li > a, .dropdown a { text-decoration: none; }
         .dropdown > a:focus,.dropdown > a:hover { text-decoration: underline; }
 
-        max-width: 780px;
+        max-width: 800px;
 
         .settings-list-view {
             .settings-list-item {
@@ -76,7 +76,7 @@
                     margin: 13px 14px;
                 }
 
-                @media (max-width: 480px), (max-device-width: 480px) {
+                @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
                     .remove-placeholder {
                         width: 14px;
                     }
@@ -104,8 +104,11 @@
         }
 
         .example-text {
-            height: auto;
-            margin-top: 11px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            background-color: white;
+            border-radius: 4px;
+            padding: 16px;
         }
 
         .io-ox-accounts-settings {
@@ -231,7 +234,7 @@
                 }
             }
 
-            @media (max-width: 480px), (max-device-width: 480px) {
+            @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
                 a[data-action="toggle"] {
                     color: #000000;
                     text-shadow: 0 1px 0 #ffffff;
@@ -281,7 +284,7 @@
     bottom: 5px;
     left: 3px;
     border-right: 0 none;
-    .border-radius(@border-radius-base);
+    border-radius: @border-radius-base;
 }
 
 .sectiondelimiter {
@@ -297,107 +300,98 @@
 
 .settings-detail-pane {
 
+    @vertical-margin: 40px;
+    @horizontal-margin: 32px;
+
     &.default-content-padding {
-        padding: 24px 32px;
+        padding: @horizontal-margin;
     }
 
     fieldset {
         padding: 0;
-        margin: 0;
-        border: 0;
+        margin: 0 0 @vertical-margin 0;
         min-width: 0;
-        margin-bottom: 32px;
+        position: relative;
+        padding: 32px 0 0 32px;
     }
 
-    label, legend { cursor: default; }
+    fieldset[role="presentation"] {
+        padding: 0;
+        margin: 0 0 32px 0;
+    }
 
-    label.checkbox, label.radio { cursor: pointer; }
+    fieldset .form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    legend {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    label {
+        color: #767676;
+        font-weight: 500;
+    }
+
+    .radio label, .checkbox label {
+        font-weight: normal;
+    }
 
     .section { max-width: 800px; }
 
     h1, h1.pane-headline {
+
         font-family: @light-font-family;
         font-weight: 200;
-        font-size: 26px;
+        font-size: 24px;
         line-height: 32px;
-        margin: 2em 0 1em 0;
+        margin: @vertical-margin 0;
 
         &:first-child {
-            margin: 0;
-            padding-bottom: 18px;
-            line-height: 30px;
+            margin-top: 0;
+            line-height: 32px;
         }
+
         &.no-margin { margin: 0; }
     }
 
     h2, h2.pane-headline {
+
         font-size: 20px;
         line-height: 22px;
-        margin: 2em 0 1.5em 0;
+        margin: @vertical-margin 0 (@vertical-margin / 2) 0;
 
         &.no-margin { margin: 0; }
     }
 
     legend.sectiontitle {
-        font-weight: 700;
         display: block;
         width: 100%;
-        font-size: 14px;
-        height: 32px;
+        font-size: 13px;
+        line-height: 24px;
+        font-weight: 700;
         color: #333;
         margin: 0;
-        margin-bottom: 8px;
-
+        border: 0;
+        padding: 0;
         h2 {
+            font-size: 13px;
+            line-height: 24px;
             font-weight: 700;
-            font-size: 14px;
+            color: #333;
             margin: 0;
         }
     }
 
-    .form-group {
-        margin-bottom: 8px;
-
-        label {
-            margin-bottom: 4px;
-        }
+    .fa-toggle-on {
+        color: @switch-background;
+        margin-right: 8px;
+        font-size: 18px;
+        line-height: 18px;
+        vertical-align: middle;
     }
-
-    .radio, .checkbox {
-        margin: 0;
-
-        label {
-            min-height: 24px;
-            margin: 0;
-            line-height: 22px;
-        }
-
-        input { margin-top: 5px; }
-    }
-
-    input, select, button {
-        margin-top: 4px;
-        margin-bottom: 6px;
-    }
-
-    .form-horizontal {
-        .form-group {
-            label {
-                margin-top: 4px;
-            }
-            .checkbox {
-                min-height: 0;
-                margin: 0;
-                padding: 0;
-                label {
-                    margin: 0;
-                    padding-top: 0;
-                }
-            }
-        }
-    }
-
-    .form-inline .controls input { width: 70px; }
 
     .io-ox-accounts-settings {
 
@@ -408,11 +402,16 @@
         }
 
         .hint {
-            &.recover {
-                display: block;
-                margin: 8px 0;
+            .btn {
+                margin-top: 8px;
             }
-            padding-left: 0;
+        }
+    }
+
+    .io-ox-certificate-settings {
+
+        .settings-list-view > li .list-item-controls .remove {
+            padding: 27px 16px;
         }
     }
 
@@ -460,7 +459,7 @@
 
         .datetime {
             float: right;
-            color: #888;
+            color: #767676;
         }
 
         .toggle-request-body {
@@ -478,12 +477,26 @@
 
         .chart-description, .empty, .url {
             font-style: italic;
-            color: #888;
+            color: #767676;
         }
 
         .empty { padding: 0 13px; }
 
         .tab-content { min-height: 150px; }
+    }
+
+    .buttons {
+        margin-bottom: @vertical-margin;
+        .btn-link {
+            padding: 0;
+            margin-right: 16px;
+        }
+        .btn-default {
+            margin-right: 8px;
+        }
+        .btn .fa:first-child {
+            margin-right: 8px;
+        }
     }
 }
 
@@ -500,7 +513,10 @@
     }
 }
 
-@media (max-width: 480px), (max-device-width: 480px)  {
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint)  {
+
+    @font-size: 16px;
+    @line-height: 20px;
 
     .io-ox-settings-window .vgrid-cell {
         font-size: 15px;
@@ -510,83 +526,48 @@
     .settings-detail-pane {
 
         &.default-content-padding {
-            padding: 7px 8px 8px 8px;
+            padding: 16px;
         }
 
         h1:first-child,
-        h1.pane-headline:first-child { margin: 0; }
-
-        .form-group { margin-bottom: 0; }
-
-        .btn.btn-primary { margin-bottom: 7px; }
-
-        h1 + .sectiondelimiter {
-            border: none;
-            margin-top: 0;
+        h1.pane-headline:first-child {
+            margin: 0 0 32px 0;
         }
 
-        .io-ox-mail-settings {
-
-            .form-horizontal .control-group>label {
-                float: none;
-                width: 160px;
-            }
-
-            .form-inline .controls {
-                text-align: left;
-                width: auto;
-
-                span {
-                    display: inherit;
-                    line-height: 29px;
-                }
-
-                input {
-                    width: 70px;
-                    float: left;
-                }
-
-                input + span {
-                    display: inline-block;
-                    padding-left: 5px;
-                    float: none;
+        fieldset {
+            padding: 0;
+            margin-bottom: 32px;
+            legend.sectiontitle {
+                position: relative;
+                h2 {
+                    font-size: @font-size;
+                    line-height: @line-height;
                 }
             }
-
-            legend + .control-group { margin-top: 0; }
         }
 
-        .io-ox-accounts-settings .controls {
-            padding-left: 0;
-
-            .btn-group.pull-right { float: none; }
+        label {
+            font-size: 14px;
+            line-height: @line-height;
         }
 
-        .io-ox-calendar-settings,
-        .io-ox-tasks-settings {
-            .form-horizontal .control-group>label {
-                float: none;
-                width: 160px;
-             }
+        .form-control {
+            font-size: @font-size;
         }
 
-        .form-horizontal {
-            .control-label {
-                margin-bottom: 0;
-                float: none;
-                text-align: left;
-                width: auto;
+        .buttons {
+            .btn {
+                margin-bottom: 16px;
             }
+            margin-bottom: 32px;
+        }
 
-            .control-group > label { text-align: left; }
-
-            .controls, .help-inline,
-            .control-group > label { margin-left: 5px; }
-
-            .control-group label.control-label {
-                float: none;
-                width: auto;
+        .checkbox.custom, .radio.custom {
+            label {
+                font-size: @font-size;
+                line-height: @line-height;
             }
+            margin-bottom: 16px;
         }
     }
 }

@@ -1,11 +1,19 @@
 .recurrence-view {
 
+    display: flex;
+    align-items: baseline;
+
     .checkbox {
+        display: inline-block;
         margin-top: 0;
     }
 
     label {
         margin-right: 5px;
+    }
+
+    .btn {
+        padding-top: 1px;
     }
 }
 
@@ -43,7 +51,7 @@
         }
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .btn-group .btn {
             padding-left: 10px;
             padding-right: 10px;

@@ -21,8 +21,7 @@ define('io.ox/files/upload/main', [
 
     'use strict';
 
-    var limits = [
-        {
+    var limits = [{
             limit: 1000,
             message: function (t) {
                 //#. estimated upload duration
@@ -180,21 +179,19 @@ define('io.ox/files/upload/main', [
         this.getEstimatedTime = getEstimatedTime;
 
         this.abort = function (cid) {
-            uploadCollection.chain()
+            uploadCollection
                 .filter(function (model) {
-                    return (cid === undefined) || (model.cid === cid);
+                    return typeof model !== 'undefined' && typeof cid !== 'undefined' && model.cid === cid;
                 })
-                .each(function (model) {
+                .forEach(function (model) {
                     var request = model.get('request');
-                    if (model !== undefined) {
-                        if (request === null) {
-                            //remove the model from the list
-                            model.set({ abort: true });
-                            remove(model);
-                        } else if (request.state() === 'pending') {
-                            //abort the upload process
-                            request.abort();
-                        }
+                    if (request === null) {
+                        //remove the model from the list
+                        model.set({ abort: true });
+                        remove(model);
+                    } else if (request.state() === 'pending') {
+                        //abort the upload process
+                        request.abort();
                     }
                 });
         };
@@ -303,7 +300,8 @@ define('io.ox/files/upload/main', [
 
                 return request;
             }
-        })).on('start', function () {
+        }))
+        .on('start', function () {
             mainView.addClass('toolbar-bottom-visible');
             $el = $('<div class="upload-wrapper">');
             ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));

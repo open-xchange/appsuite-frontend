@@ -21,58 +21,30 @@ define('io.ox/calendar/actions/edit', [
     'use strict';
 
     return function (baton) {
-        var params = baton.data,
-            o = {
-                id: params.id,
-                folder: params.folder_id
-            };
+        var o = api.reduce(baton.data);
 
-        if (!!params.recurrence_position) {
-            o.recurrence_position = params.recurrence_position;
-        }
+        util.showRecurrenceDialog(baton.data)
+            .done(function (action) {
+                if (action === 'cancel') return;
 
-        if (params.recurrence_type > 0 || params.recurrence_position) {
-            util.getRecurrenceEditDialog()
-                .show()
-                .done(function (action) {
+                if (action === 'series') {
+                    // edit the series, discard recurrenceId and reference to seriesId if exception
+                    delete o.recurrenceId;
+                    o.id = baton.data.seriesId || baton.data.id;
+                }
 
-                    if (action === 'cancel') {
-                        return;
-                    }
-                    if (action === 'series') {
-                        // edit the series, discard recurrence position
-                        if (params.recurrence_id) {
-                            o.id = params.recurrence_id;
-                        }
-                        delete o.recurrence_position;
-                    }
 
-                    // disable cache with second param
-                    api.get(o, false).then(
-                        function (data) {
-                            if (m.reuse('edit', data, { action: action })) return;
-                            m.getApp().launch().done(function () {
-                                if (action === 'appointment') {
-                                    data = api.removeRecurrenceInformation(data);
-                                }
-                                this.edit(data, { action: action });
-                            });
-                        },
-                        notifications.yell
-                    );
-                });
-
-        } else {
-            api.get(o, false).then(
-                function (data) {
-                    if (m.reuse('edit', data)) return;
-                    m.getApp().launch().done(function () {
-                        this.edit(data);
-                    });
-                },
-                notifications.yell
-            );
-        }
+                // disable cache with second param
+                api.get(o, false).then(
+                    function (data) {
+                        if (m.reuse('edit', data, { action: action })) return;
+                        m.getApp().launch().done(function () {
+                            this.edit(data, { action: action });
+                        });
+                    },
+                    notifications.yell
+                );
+            });
     };
 
 });

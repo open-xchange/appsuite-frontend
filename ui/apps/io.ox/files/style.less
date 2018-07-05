@@ -72,7 +72,7 @@
 
         .filename,.subject, .from { .ellipsis(); }
     }
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+    @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
         &.column-layout .list-item { line-height: 40px; }
         &.column-layout, &.grid-layout, &.icon-layout {
             .list-item { font-size: 15px; }
@@ -98,21 +98,20 @@
 
     &:before {
         content: '\f016';                                             // default: fa-file-o
-        color: #afafaf;
-      //color: #767676;
+        color: #767676;
     }
     .file-type-image  &:before { content: '\f03e'; }                  // fa-image
     .file-type-audio  &:before { content: '\f028'; }                  // fa-volume-up
     .file-type-video  &:before { content: '\f008'; }                  // fa-film
-    .file-type-doc    &:before { content: '\f15c'; color: #376CB8; }  // fa-file-text
+    .file-type-doc    &:before { content: '\f0f6'; color: #376CB8; }  // fa-file-text-o
     .file-type-xls    &:before { content: '\f0ce'; color: #26935D; }  // fa-table
     .file-type-ppt    &:before { content: '\f022'; color: #F4502A; }  // fa-list-alt
-    .file-type-pdf    &:before { content: '\f15c'; color: #C01E07; }  // fa-file
+    .file-type-pdf    &:before { content: '\f1c1'; color: #C01E07; }  // fa-file-pdf-o
     .file-type-zip    &:before { content: '\f187'; color: #FF940A; }  // fa-archive
     .file-type-svg    &:before { content: '\f1c9'; color: #F4502A; }  // fa-file-code-o
-    .file-type-txt    &:before { content: '\f0f6'; }                  // fa-file-text-o
+    .file-type-txt    &:before { content: '\f0f6'; }                  // fa-edit
     .file-type-guard  &:before { content: '\f023'; }                  // fa-lock
-    .file-type-folder &:before { content: '\f07b'; color: #767676; }  // fa-folder
+    .file-type-folder &:before { content: '\f07b'; color: #808080; }  // fa-folder - 4% reduced luminance compared to the file-type-icon to compensate the percived grey value (filled vs. outline) a bit
 }
 
 .file-list-view, .myshares-list, .myfavorites-list {
@@ -168,7 +167,7 @@
             > li.list-item {
                 border-width: 0 @default-padding (@default-padding - @base-padding) 0;
 
-                + .tooltip {
+                .tooltip {
                     display: inherit !important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
 
                     padding: 0 5px;
@@ -875,8 +874,6 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
         margin-left: 0.5em;
         float: right;
         opacity: 0.50;
-
-        html.high-contrast & { opacity: 1; }
     }
 
     .locked {

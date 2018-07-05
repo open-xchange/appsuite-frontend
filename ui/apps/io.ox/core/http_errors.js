@@ -19,6 +19,8 @@ define('io.ox/core/http_errors', ['io.ox/core/http', 'gettext!io.ox/core'], func
     http.messages = {
         //#. generic error message
         generic: gt('An unknown error occurred'),
+        //#. generic error message
+        noserver: gt('An unknown error occurred'),
         //#. error message when offline
         offline: gt('Cannot connect to server. Please check your connection.')
     };

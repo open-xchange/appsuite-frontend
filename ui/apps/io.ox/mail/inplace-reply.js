@@ -31,14 +31,6 @@ define('io.ox/mail/inplace-reply', [
         return settings.get('messageFormat', 'html');
     }
 
-    function getContentType() {
-        switch (getFormat()) {
-            case 'alternative': return 'alternative';
-            case 'html': return 'text/html';
-            default: return 'text/plain';
-        }
-    }
-
     function getProperDisplayName(from) {
         return accountAPI.getSenderAddresses().then(function (addresses) {
             var name, address = from[1];
@@ -68,33 +60,38 @@ define('io.ox/mail/inplace-reply', [
 
         events: {
             'input .inplace-editor': 'onChange',
-            'click [data-action="send"]': 'onSend',
-            'click [data-action="cancel"]': 'onCancel',
             'keydown': 'onKeyUpDown',
             'keyup': 'onKeyUpDown'
         },
 
-        onSend: function () {
+        onSend: function (e) {
             // get reply
             this.busy(true).setProgress(30);
             var cid = this.cid;
             // alternativ also asks for HTML
             var view = getFormat() === 'text' ? 'text' : 'html';
-            api.replyall(_.cid(this.cid), view)
-                .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
-                .fail(this.onSendFail.bind(this));
+            if ($(e.currentTarget).attr('data-action') === 'sendall') {
+                api.replyall(_.cid(this.cid), view)
+                    .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
+                    .fail(this.onSendFail.bind(this));
+            } else {
+                api.reply(_.cid(this.cid), view)
+                    .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
+                    .fail(this.onSendFail.bind(this));
+            }
         },
 
         onReplyReady: function (content, cid, data) {
+            var attachment = data.attachments[0];
             // progress
             this.setProgress(70);
             // escape plain text content since we always send HTML
             content = _.escape(content).replace(/\n/g, '<br>');
             // append quoted content of original message
-            content += '<br>' + data.attachments[0].content;
+            content += '<br><br>' + (attachment.content_type === 'text/plain' ? attachment.content.replace(/\n/g, '<br>') : attachment.content);
             // pick other stuff we need
             data = _(data).pick('from', 'to', 'cc', 'bcc', 'headers', 'priority', 'vcard', 'subject', 'sendtype', 'csid', 'msgref');
-            data.attachments = [{ id: 1, content_type: getContentType(), content: content }];
+            data.attachments = [{ id: 1, content_type: attachment.content_type, content: content }];
             getProperDisplayName(data.from[0]).done(function (from) {
                 data.from[0] = from;
                 // go!
@@ -108,33 +105,18 @@ define('io.ox/mail/inplace-reply', [
         onSendComplete: function (cid, response) {
             this.setProgress(100);
             this.trigger('send', transformID(response.data));
-
             delete drafts[cid];
-            var view = this, $el = this.$el;
-            setTimeout(function () {
-                view.renderSuccess();
-                if (!view.disposed) {
-                    setTimeout(function () {
-                        $el.fadeOut(function () {
-                            $el.remove();
-                            $el = view = null;
-                        });
-                    }, 4000);
-                }
-            }, 1000);
+            setTimeout(function () { this.trigger('close'); }.bind(this), 1000);
         },
 
         onSendFail: function (e) {
             yell(e);
-            if (this.disposed) {
-                return;
-            }
             this.busy(false);
         },
 
         onCancel: function () {
             delete drafts[this.cid];
-            this.$el.remove();
+            this.trigger('close');
         },
 
         onChange: function () {
@@ -152,7 +134,8 @@ define('io.ox/mail/inplace-reply', [
 
         busy: function (state) {
             if (this.disposed) return this;
-            this.$('textarea, .form-group').toggle(!state);
+            this.$('textarea').toggle(!state);
+            this.$footer.toggle(!state);
             return this;
         },
 
@@ -167,6 +150,7 @@ define('io.ox/mail/inplace-reply', [
             content = content || $.trim(this.getContent());
             var isEmpty = !content.length;
             this.$send.toggleClass('disabled', isEmpty).prop('disabled', isEmpty);
+            if (this.$sendall) this.$sendall.toggleClass('disabled', isEmpty).prop('disabled', isEmpty);
         },
 
         getContent: function () {
@@ -187,6 +171,7 @@ define('io.ox/mail/inplace-reply', [
 
             this.$send = $();
             this.$textarea = $('<textarea class="inplace-editor form-control">');
+            this.$footer = options.$footer;
 
             // prefill?
             var content = drafts[this.cid] || '';
@@ -194,14 +179,22 @@ define('io.ox/mail/inplace-reply', [
         },
 
         render: function () {
-            var replyText;
-            // do _not_ use gt.ngettext here, see Bug 45798
-            if (this.numberOfRecipients === 1) {
-                //#. Used as a verb to reply to one recipient
-                replyText = gt('Reply');
-            } else {
-                //#. Used as a verb to reply to all recipients
-                replyText = gt('Reply to all');
+
+            var buttons = [
+                this.$sendall = $('<button type="button" class="btn btn-primary disabled" data-action="sendall">')
+                    .on('click', this.onSend.bind(this))
+                    .prop('disabled', true)
+                    .text(gt('Reply to all'))
+            ];
+
+            if (this.numberOfRecipients > 1) {
+                buttons.push(
+                    $.txt(' '),
+                    this.$send = $('<button type="button" class="btn btn-primary disabled" data-action="send">')
+                        .on('click', this.onSend.bind(this))
+                        .prop('disabled', true)
+                        .text(gt('Reply'))
+                );
             }
 
             this.$el.append(
@@ -210,47 +203,26 @@ define('io.ox/mail/inplace-reply', [
                 // progress bar (while sending)
                 $('<div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">')
                     .append($('<div class="progress-bar progress-bar-striped active" style="width: 0%">'))
-                    .hide(),
+                    .hide()
+            );
+
+            this.$footer.append(
                 // buttons
-                $('<div class="form-group">').append(
-                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send">')
-                        .prop('disabled', true)
-                        .text(replyText),
+                $('<div class="container">').append(
+                    buttons,
                     $.txt(' '),
-                    $('<button class="btn btn-default btn-sm" data-action="cancel">')
+                    $('<button type="button" class="btn btn-default" data-action="cancel">')
+                        .on('click', this.onCancel.bind(this))
                         .text(gt('Cancel'))
                 )
             );
 
             this.updateSendButton();
 
-            // interval to grow once
-            this.$textarea.on('input', function () {
-                this.style.height = 'auto';
-                var scrh = this.scrollHeight, h = 0;
-                if (scrh <= 105) h = 105; else if (scrh >= 399) h = 399; else h = scrh + 6;
-                this.style.height = h + 'px';
-            });
-
             // defer initial focus ($el is not yet in DOM)
             setTimeout(function (node) { node.focus(); }, 0, this.$textarea);
 
             return this;
-        },
-
-        renderSuccess: function () {
-            // if already disposed, use yell
-            if (this.disposed) {
-                yell('success', gt('Your reply has been sent'));
-                return;
-            }
-            this.$el.empty().append(
-                $('<div class="success" role="alert">').append(
-                    $('<i class="fa fa-check" aria-hidden="true">'),
-                    $.txt(' '),
-                    $.txt(gt('Your reply has been sent'))
-                )
-            );
         }
     });
 
@@ -261,5 +233,58 @@ define('io.ox/mail/inplace-reply', [
     // accessible for debugging
     InplaceReplyView.drafts = drafts;
 
-    return InplaceReplyView;
+    // multi instance pattern
+    function createInstance() {
+
+        // application object
+        var app = ox.ui.createApp({
+            closable: true,
+            floating: true,
+            name: 'io.ox/mail/quickreply',
+            title: ''
+        });
+
+        // launcher
+        return app.setLauncher(function (options) {
+
+            var win = ox.ui.createWindow({
+                chromeless: true,
+                name: 'io.ox/mail/quickreply',
+                toolbar: false,
+                closable: true,
+                floating: true
+            });
+
+            app.cid = 'io.ox/mail/quickreply.' + options.cid;
+            app.setWindow(win);
+            app.mediate();
+            win.show();
+
+            if (ox.debug) console.log('QuickReply', options);
+            app.setTitle(gt('Quick reply: %1$s', options.subject));
+
+            win.nodes.outer.addClass('header-bottom')
+                .closest('.floating-window').addClass('floating-quick-reply');
+
+            win.nodes.main.append(
+                new InplaceReplyView({
+                    cid: options.cid,
+                    numberOfRecipients: options.numberOfRecipients,
+                    $footer: win.nodes.footer
+                })
+                .on('close', function () {
+                    app.quit();
+                })
+                .render().$el
+            );
+        });
+    }
+
+    return {
+        getApp: createInstance,
+        reuse: function (cid) {
+            return ox.ui.App.reuse('io.ox/mail/quickreply.' + cid);
+        },
+        InplaceReplyView: InplaceReplyView
+    };
 });

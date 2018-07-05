@@ -21,14 +21,12 @@
     }
 
     .end_date {
-        color: #777;
+        color: #767676;
         margin-left: 0.5em;
         margin-right: 0.5em;
         overflow: visible;
         font-weight: 300;
         float: right;
-
-        html.high-contrast & { color: @black; }
     }
 
     .status {
@@ -79,8 +77,21 @@
     .progress {
         height: 13px;
         margin: 0 1em 0 0;
+        background-color: #eee;
+        border-radius: 3px;
+        border: 1px solid #fff;
+        background-position: -1px 0;
+        background-repeat: repeat-y;
+        background-size: 0%;
+        overflow: hidden;
+        // The background image is an opaque #283F73 1px png
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPUsC/+DwADTAHbRU1B9QAAAABJRU5ErkJggg==);
+        transition: background-size 0.6s ease;
     }
 }
+
+.vgrid-cell.tasks.selected .progress { border: 1px solid #ddd; }
+.has-focus .vgrid-cell.tasks.selected .progress { border: 1px solid #283f73; }
 
 .tasks-detailview {
     .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
@@ -163,14 +174,20 @@
     }
 
     .detail-label {
-
         cursor: default;
         color: #767676;
         text-align: left;
         padding-top: 8px;
         line-height: 24px;
-        html.high-contrast & {
-            color: @hc-gray;
+    }
+
+    @media (min-width: 768px) {
+        .dl-horizontal dt.detail-label {
+            width: 220px;
+        }
+
+        .dl-horizontal dd {
+            margin-left: 240px;
         }
     }
 
@@ -198,7 +215,7 @@
     }
 }
 
-@media (max-width: 480px), (max-device-width: 480px) {
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
     .vgrid-cell.tasks {
         z-index: 2;
         width: 100%;
@@ -255,9 +272,6 @@
         margin-left: 0.5em;
         float: right;
         opacity: 0.50;
-        html.high-contrast & {
-            opacity: 1;
-        }
     }
 
     .prog { color: rgb(119, 119, 119); }

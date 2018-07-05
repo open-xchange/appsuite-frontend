@@ -11,18 +11,28 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/widgets/pictureUpload', [
+    'io.ox/backbone/views/edit-picture',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
     'io.ox/core/util',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
-    'less!io.ox/contacts/widgets/widgets'
-], function (notifications, api, util, gt, settings) {
+    'less!io.ox/contacts/widgets/pictureUpload'
+], function (editPicture, notifications, api, util, gt, settings) {
 
     'use strict';
 
-    // For now specific to contacts
-    // Might be generalized, who knows?
+    // disabled for IE (no Promies, no File API Constructor)
+    var disableEditPicture = _.device('IE');
+
+    function getContent(file) {
+        var def = $.Deferred(),
+            reader = new FileReader();
+        reader.onload = function (e) { def.resolve(file, e.target.result); };
+        reader.onerror = function (e) { def.reject(file, e); };
+        reader.readAsDataURL(file);
+        return def;
+    }
 
     function PictureUpload(options) {
         _.extend(this, {
@@ -32,163 +42,158 @@ define('io.ox/contacts/widgets/pictureUpload', [
             className: 'picture-upload-view',
 
             init: function () {
-                this.listenTo(this.model, 'change:image1_url', this.displayImageURL);
+                this.listenTo(this.model, 'change:image1_url', this.onChangeImageUrl);
+                this.listenTo(this.model, 'change:pictureFileEdited', this.onChangeFile);
             },
 
-            resetImage: function (e) {
-                e.stopImmediatePropagation();
-                this.model.set('image1', '', { validate: true });
-                this.closeBtn.hide();
-                this.addImgText.show();
-                this.setImageURL();
+            events: {
+                'click .reset': 'reset',
+                'change .file': 'onFileSelect',
+                'focus .file': 'toggleFocus',
+                'blur .file': 'toggleFocus',
+                'click .file': 'onClick',
+                'click .picture-uploader': 'onClickContainer'
+            },
+
+
+            onClick: function (e, options) {
+                var opt = options || {};
+                e.stopPropagation();
+                if (opt.forceUpload || disableEditPicture) return;
+                e.preventDefault();
+                this.openEditDialog();
+            },
+
+            onClickContainer: function () {
+                return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
+            },
+
+            reset: function (e) {
+                if (e) e.stopImmediatePropagation();
+                this.model.set({
+                    'pictureFile': undefined,
+                    'pictureFileEdited': '',
+                    'crop': '',
+                    'image1': '',
+                    'image1_url': ''
+                });
                 this.fileInput.val('');
-                if (this.oldMode) {
-                    this.fileInput.removeAttr('style');
-                }
+                this.setPreview();
             },
 
-            handleFileSelect: function (e, input) {
+            openFilePicker: function () {
+                this.fileInput.trigger('click', { forceUpload: true });
+            },
 
-                var fileData = {}, $input = $(input);
+            openEditDialog: function () {
+                if (this.editPictureDialog && this.editPictureDialog.close) this.editPictureDialog.close();
+                this.editPictureDialog = editPicture
+                    .getDialog({ model: this.model })
+                    .open()
+                    .on('upload', this.openFilePicker.bind(this));
+            },
 
+            onChangeImageUrl: function () {
+                var url = this.model.get('image1_url');
+                if (url) this.setPreview(url);
+            },
+
+            // preview prefers edited
+            onChangeFile: function () {
+                var file = this.model.get('pictureFileEdited');
+                if (!file || !(file.lastModified || file.lastModifiedDate)) return;
+                this.imgCon.css('background-image', 'initial').busy();
+                this.addImgText.hide();
+                // update preview
+                getContent(file).done(function (file, content) {
+                    this.imgCon.idle();
+                    this.setPreview(content);
+                }.bind(this));
+            },
+
+            onFileSelect: function (e) {
+                var input = e.target,
+                    file = input.files[0];
                 // check for valid image type. especially, svg is not allowed (see Bug 50748)
-                if (input.files.length > 0 && !/(jpg|jpeg|gif|bmp|png)/i.test(input.files[0].type)) {
-                    notifications.yell('error', gt('This filetype is not supported as contact picture. Only image types (JPG, GIF, BMP or PNG) are supported.'));
-                    return;
+                if (file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
+                    return notifications.yell('error', gt('This filetype is not supported as contact picture. Only image types (JPG, GIF, BMP or PNG) are supported.'));
                 }
-
-                if (this.oldMode) {
-                    if ($input.val()) {
-                        fileData = $input.parent();
-                    }
-                    // user information
-                    this.setImageURL();
-                    notifications.yell('success', gt('Your selected picture will be displayed after saving'));
-                } else {
-                    fileData = input.files[0];
-                    // check if the picture is small enough
-                    if (fileData && settings.get('maxImageSize') && fileData.size > settings.get('maxImageSize')) {
-                        require(['io.ox/core/strings'], function (strings) {
-                            //#. %1$s maximum file size
-                            notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
-                        });
-                        return;
-                    }
-                }
-
-                if (!fileData) {
-                    // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
-                    // prevent js error and infinite loading
-                    return;
-                }
-                this.model.set('pictureFile', fileData);
-                this.model.unset('image1');
-
-                // we have to call this manually because not all browsers (e.g. Firefox)
-                // detect a change of fileData properly
-                this.previewPictureFile();
-            },
-
-            displayImageURL: function () {
-                this.setImageURL(this.model.get('image1_url'));
-            },
-
-            setImageURL: function (url, callback) {
-                if (callback) {
-                    var self = this;
-                    //preload Image
-                    $('<img>').attr('src', url).load(function () {
-                        //no memory leaks
-                        $(this).remove();
-                        //image is cached now so no loading time for this
-                        self.imgCon.css('background-image', 'url(' + (url || api.getFallbackImage()) + ')');
-                        callback();
+                // check if the picture is small enough
+                if (file && settings.get('maxImageSize') && file.size > settings.get('maxImageSize')) {
+                    return require(['io.ox/core/strings'], function (strings) {
+                        //#. %1$s maximum file size
+                        notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
                     });
-                } else {
-                    this.imgCon.css('background-image', 'url(' + (url || api.getFallbackImage()) + ')');
                 }
+                // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
+                if (!file) return;
+                // reset cause otherwise we have to remember the original file for case (upload > crop view > cancel)
+                this.reset();
+
+                // no-edit: trigger onChangeFile
+                if (disableEditPicture) {
+                    this.model.unset('pictureFileEdited', { silent: true });
+                    return this.model.set('pictureFileEdited', file);
+                }
+                // edit: trigger proper change event
+                this.model.unset('pictureFile', { silent: true });
+                this.model.set('pictureFile', file);
+                this.openEditDialog();
             },
 
-            previewPictureFile: function () {
+            toggleFocus: function (e) {
+                // applies focus style on container when input has focus
+                this.imgCon.toggleClass('focussed', e.type === 'focusin');
+            },
 
-                if (this.oldMode) {
-                    this.setImageURL();
-                    return;
-                }
-
-                var self = this, file = this.model.get('pictureFile');
-
-                self.imgCon.css('background-image', 'initial').busy();
-                self.addImgText.hide();
-
-                require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
-                    canvasResize(file, {
-                        width: 300,
-                        height: 0,
-                        crop: false,
-                        quality: 80,
-                        callback: function (data) {
-                            self.setImageURL(data, function () {
-                                self.imgCon.idle();
-                                self.closeBtn.show();
-                            });
-                        }
-                    });
+            setPreview: function (url, callback) {
+                // proper handling on restore case
+                var self = this,
+                    isFallback = !url;
+                this.$el.toggleClass('preview', !isFallback);
+                this.addImgText.toggle(isFallback);
+                this.closeBtn.toggle(!isFallback);
+                this.imgCon.busy();
+                url = url || api.getFallbackImage();
+                //preload Image
+                $('<img>').attr('src', url).on('load', function () {
+                    //no memory leaks
+                    $(this).remove();
+                    self.imgCon.idle();
+                    self.imgCon.css('background-image', 'url(' + url + ')');
+                    if (callback) callback();
                 });
             },
 
             render: function () {
-
-                var self = this,
-                    dataUrl,
+                var guid = _.uniqueId('form-picture-upload-'),
                     imageUrl = this.model.get('image1_url'),
-                    guid = _.uniqueId('form-picture-upload-'),
-                    hasImage = false;
-
-                self.oldMode = _.browser.IE < 10;
+                    dataUrl;
 
                 if (imageUrl) {
                     imageUrl = util.getShardingRoot(util.replacePrefix(imageUrl));
-                    hasImage = true;
                 } else if (this.model.get('image1') && this.model.get('image1_content_type')) {
                     // temporary support for data-url images
                     dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
                     this.model.set('image1_url', dataUrl, { silent: true, validate: true });
-                    hasImage = true;
                 }
 
                 this.$el.append(
-                    self.imgCon = $('<div class="picture-uploader thumbnail">').append(
-                        this.closeBtn = $('<div class="close">')
-                            .html('&times;')
-                            .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide'](),
+                    this.imgCon = $('<div class="picture-uploader thumbnail">').append(
+                        this.closeBtn = $('<button type="button" class="reset close">').attr('title', gt('Remove'))
+                            .append('<i class="fa fa-times" aria-hidden="true">'),
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
                                 $('<span>').text(gt('Upload image'))
-                            )[hasImage ? 'hide' : 'show']()
+                            )
                     ),
                     $('<form>').append(
                         $('<label class="sr-only">').attr('for', guid).text(gt('Upload image')),
-                        self.fileInput = $('<input type="file" name="file" accept="image/*">').attr('id', guid)
-                            .on('change', function (e) {
-                                self.handleFileSelect(e, this);
-                            })
-                            .on('focus', function () {
-                                self.imgCon.addClass('focussed');
-                            })
-                            .on('blur', function () {
-                                self.imgCon.removeClass('focussed');
-                            })
+                        this.fileInput = $('<input type="file" name="file" class="file" accept="image/*">').attr('id', guid)
                     )
                 );
 
-                if (!self.oldMode || hasImage) {
-                    self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer' });
-                }
-
-                self.imgCon.on('click', function () { self.fileInput.trigger('click'); });
-
-                self.setImageURL(dataUrl || imageUrl);
+                this.setPreview(dataUrl || imageUrl);
             }
         }, options);
     }

@@ -11,23 +11,27 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/follow-up', function () {
+define('io.ox/calendar/actions/follow-up', [
+    'io.ox/calendar/util'
+], function (util) {
 
     'use strict';
 
-    return function (data) {
+    return function (model) {
 
         // reduce data
-        var copy = _(data).pick(
-            'alarm color_label folder_id full_time location note participants private_flag shown_as title'.split(' ')
+        var copy = model.pick(
+            'color class folder location description participants attendees transp summary'.split(' ')
         );
 
-        // check isBefore once for the start_date; then reuse that information for end_date (see bug 44647)
-        var isBefore = false;
+        // check isBefore once for the startDate; then reuse that information for endDate (see bug 44647)
+        var isBefore = false,
+            isAllday = util.isAllday(model),
+            format = isAllday ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
 
         // copy date/time
-        ['start_date', 'end_date'].forEach(function (field) {
-            var ref = moment(data[field]),
+        ['startDate', 'endDate'].forEach(function (field) {
+            var ref = model.getMoment(field),
                 // set date to today, keep time, then use same weekday
                 d = moment({ hour: ref.hour(), minute: ref.minute() }).weekday(ref.weekday());
             // add 1 week if date is in the past
@@ -35,7 +39,20 @@ define('io.ox/calendar/actions/follow-up', function () {
                 d.add(1, 'w');
                 isBefore = true;
             }
-            copy[field] = d.valueOf();
+            copy[field] = { value: d.format(format), tzid: model.get(field).tzid };
+        });
+
+        // clean up attendees (remove confirmation status comments etc)
+        copy.attendees = _(copy.attendees).map(function (attendee) {
+            var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+            // resources are always set to accepted
+            if (temp.cn === 'RESOURCE') {
+                temp.partStat = 'ACCEPTED';
+                if (attendee.comment) temp.comment = attendee.comment;
+            } else {
+                temp.partStat = 'NEEDS-ACTION';
+            }
+            return temp;
         });
 
         // use ox.launch to have an indicator for slow connections

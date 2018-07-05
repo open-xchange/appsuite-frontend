@@ -22,10 +22,12 @@ define('io.ox/portal/main', [
     'io.ox/portal/util',
     'io.ox/portal/settings/pane',
     'io.ox/portal/settings/widgetview',
+    'io.ox/core/yell',
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
+    'settings!io.ox/core',
     'less!io.ox/portal/style'
-], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, gt, settings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -104,39 +106,39 @@ define('io.ox/portal/main', [
         id: 'header',
         index: 100,
         draw: function (baton) {
-            var $btn,
+            var $header,
                 $greeting;
 
-            this.append($btn = $('<div class="header">'));
+            this.append($header = $('<div class="header">'));
             // greeting
             $greeting = $('<h1 class="greeting">').append(
                 baton.$.greeting = $('<span class="greeting-phrase">'),
-                $('<span class="signin">').text(
+                $('<span class="signin">').append(
                     //#. Portal. Logged in as user
-                    gt('Signed in as %1$s', ox.user)
+                    $('<span>').text(gt('Signed in as')),
+                    $.txt(' '), userAPI.getTextNode(ox.user_id, { type: 'email' })
                 )
             );
 
             if (_.device('!smartphone')) {
                 widgets.loadUsedPlugins().done(function () {
                     // add widgets
-                    ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
+                    ext.point('io.ox/portal/settings/detail/view').map(function (point) {
                         if (point && point.id === 'add') {
-                            point.invoke('draw', $btn);
+                            point.invoke('render', { $el: $header });
                         }
                     });
-                    // please no button
-                    $btn.find('.btn-group-portal').after($greeting);
-                    $btn.find('.btn-group-portal')
-                        .prepend($('<button type="button" class="btn btn-primary">')
-                        .attr({
-                            'data-action': 'customize'
-                        })
-                        .text(gt('Customize this page'))
-                        .on('click', openSettings));
+                    $header.find('[role="log"]').remove();
+                    $header.find('.form-group')
+                        .addClass('pull-right')
+                        .prepend($('<button type="button" class="btn btn-link" data-action="customize">')
+                            .text(gt('Customize this page'))
+                            .on('click', openSettings));
+
+                    $header.append($greeting);
                 });
             } else {
-                $btn.append($greeting);
+                $header.append($greeting);
             }
         }
     });
@@ -161,7 +163,7 @@ define('io.ox/portal/main', [
             // TODO: check for metric capability
             require(['io.ox/metrics/main'], function (metrics) {
                 // track click on concrete dropdown entry to add a widget
-                self.delegate('.io-ox-portal-settings-dropdown', 'mousedown', function (e) {
+                self.on('mousedown', '.io-ox-portal-settings-dropdown', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'toolbar',
@@ -171,7 +173,7 @@ define('io.ox/portal/main', [
                     });
                 });
                 // track click on concrete widget
-                self.delegate('ol.widgets > .widget .content', 'mousedown', function (e) {
+                self.on('mousedown', 'ol.widgets > .widget .content', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'widgets',
@@ -181,7 +183,7 @@ define('io.ox/portal/main', [
                     });
                 });
                 // track removing of concret widget
-                self.delegate('ol.widgets .disable-widget', 'mousedown', function (e) {
+                self.on('mousedown', 'ol.widgets .disable-widget', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'widget',
@@ -497,17 +499,49 @@ define('io.ox/portal/main', [
                 decoration.removeClass('pending error-occurred');
             },
             function fail(e) {
+                function getTrustOption() {
+
+                    var solutionContainer = $('<div>').append(
+                        $('<a class="solution">').text(gt('Inspect certificate')).on('click', function () {
+
+                            require(['io.ox/settings/security/certificates/settings/utils']).done(function (certUtils) {
+                                certUtils.openExaminDialog(e);
+
+                            });
+
+                        })
+                    );
+
+                    setTimeout(function () {
+                        solutionContainer.find('.solution').off('click')
+                        .empty()
+                        .append(
+                            $('<a class="solution">').text(gt('Try again.')).on('click', function () {
+                                node.find('.decoration').addClass('pending');
+                                loadAndPreview(point, node, baton);
+                            })
+                        );
+                    }, 60000);
+
+                    return solutionContainer;
+                }
+                var showCertManager = !coreSettings.get('security/acceptUntrustedCertificates') && coreSettings.get('security/manageCertificates');
                 // special return value?
                 if (e === 'remove') {
                     widgets.remove(baton.model);
                     node.remove();
-                    return;
+                    throw e;
                 }
                 // clean up
                 node.find('.content').remove();
                 decoration.removeClass('pending');
-                // show error message unless it's just missing oauth account
-                if (e.code !== 'OAUTH-0006') {
+                if (e.code === 'ACC-0002') {
+                    // if an account was removed, disable widget (do not delete it)
+                    // to avoid further requests
+                    baton.model.set('enabled', false, { validate: false });
+                    yell('info', gt.format(gt('The widget "%s" was disabled as the account might have been removed or is no longer available.'), baton.model.get('title')));
+                } else if (e.code !== 'OAUTH-0006') {
+                    // show error message unless it's just missing oauth account
                     node.append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
@@ -515,11 +549,12 @@ define('io.ox/portal/main', [
                             $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
                             $('<br>'),
                             // retry
-                            e.retry !== false ?
-                                $('<a class="solution">').text(gt('Try again.')).on('click', function () {
+                            e.retry !== false ? [
+                                (!/SSL/.test(e.code)) ? $('<a class="solution">').text(gt('Try again.')).on('click', function () {
                                     node.find('.decoration').addClass('pending');
                                     loadAndPreview(point, node, baton);
-                                }) : $()
+                                }) : $(), (/SSL/.test(e.code) && showCertManager) ? getTrustOption() : $()] : $()
+
                         )
                     );
                     if (point.prop('stopLoadingOnError')) {
@@ -530,6 +565,7 @@ define('io.ox/portal/main', [
                     // missing oAuth account
                     app.drawDefaultSetup(baton);
                 }
+                throw e;
             }
         );
     }
@@ -554,7 +590,7 @@ define('io.ox/portal/main', [
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
-                $title = node.find('h2 .title').text(_.noI18n(title)),
+                $title = node.find('h2 .title').text(title),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, false).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
@@ -616,7 +652,7 @@ define('io.ox/portal/main', [
             // don't refresh widgets with loading errors automatically so logs don't get spammed (see bug 41740)
             // also handle ignoreGlobalRefresh option (See Bug 49562)
             var options = model.attributes.baton && model.attributes.baton.options;
-            return !options.loadingError && !model.get('ignoreGlobalRefresh');
+            return (!options && !model.get('ignoreGlobalRefresh')) || (!options.loadingError && !model.get('ignoreGlobalRefresh'));
         }).each(app.refreshWidget);
     }, 30000);
 
@@ -641,7 +677,7 @@ define('io.ox/portal/main', [
     ox.on('socket:mail:new', app.mailWidgetRefresh);
 
     app.getContextualHelp = function () {
-        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.sect.portal.gui';
+        return 'ox.appsuite.user.sect.portal.gui.html';
     };
 
     // launcher
@@ -656,7 +692,6 @@ define('io.ox/portal/main', [
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr({
             'tabindex': -1,
-            role: 'main',
             'aria-label': gt('Portal widgets')
         });
 
@@ -677,8 +712,8 @@ define('io.ox/portal/main', [
                 app.drawScaffold(model, false);
             });
 
-            widgets.loadUsedPlugins().done(function (cleanCollection) {
-                cleanCollection.each(app.drawWidget);
+            widgets.loadUsedPlugins().then(function (cleanCollection) {
+                cleanCollection.forEach(app.drawWidget);
                 ox.trigger('portal:items:render');
             });
 
@@ -731,10 +766,10 @@ define('io.ox/portal/main', [
             // portal apps with a fixed position toolbar
             if (_.device('smartphone')) {
                 app.getWindow().on('hide', function () {
-                    $('#io-ox-topbar').removeClass('toolbar-fixed-position');
+                    // $('#io-ox-topbar').removeClass('toolbar-fixed-position');
                     app.getWindow().nodes.outer.removeClass('content-v-shift');
                 }).on('show', function () {
-                    $('#io-ox-topbar').addClass('toolbar-fixed-position');
+                    // $('#io-ox-topbar').addClass('toolbar-fixed-position');
                     app.getWindow().nodes.outer.addClass('content-v-shift');
                 });
             }
@@ -762,11 +797,11 @@ define('io.ox/portal/main', [
         var lazyLayout = _.debounce(function () {
             scrollPos = $(this).scrollTop() + this.innerHeight;
             widgets.loadUsedPlugins().done(function (cleanCollection) {
-                cleanCollection.each(app.drawWidget);
+                cleanCollection.forEach(app.drawWidget);
             });
         }, 300);
 
-        $(window).on('scrollstop resize', lazyLayout);
+        $(window).on('scrollend resize', lazyLayout);
     });
 
     return {

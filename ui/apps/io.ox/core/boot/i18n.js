@@ -18,7 +18,6 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
     util.gt = gt;
 
     // A list of all strings to be included in the POT file.
-    /* jshint unused: false */
     /* eslint-disable no-unused-vars */
     function list() {
         gt('User name');
@@ -46,7 +45,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.');
         //#. 'Google Chrome' is a brand and should not be translated
         gt('For best results we recommend using Google Chrome for Android.');
-        //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
+        //#. The missing word at the end of the sentence ('Play Store') will be injected later by script
         gt('Get the latest version from the ');
         gt('Your operating system is not supported.');
         gt('Your password is expired. Please change your password to continue.');

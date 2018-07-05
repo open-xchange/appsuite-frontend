@@ -31,138 +31,84 @@ img.emoji {
 
 //work-around for Bug 34943 - the second rule can be removed for 7.8.0
 .mceEmojiPane, .mce-container .mceEmojiPane {
+
     @background: #f5f5f5;
-    @emojiTabHeight: 34px;
 
     height: 309px;
-    width: 238px;
+    width: 296px;
     vertical-align: top;
-    border: 1px solid #ccc;
-    border-width: 0 1px 0 1px;
 
-    .emoji-tabs {
-        height: @emojiTabHeight;
-        bottom: auto;
-    }
-
-    .emoji-tab {
-        font-size: 12px;
-        line-height: 20px;
-        color: white;
-        padding: 7px 14px;
-        background-color: #ccc;
-        border: 1px solid white;
-        cursor: pointer;
-
-        &.left {
-            right: 50%;
-            border-right: 0 none;
-        }
-
-        &.right { left: 50%; }
-
-        &.active { background-color: #333; }
-
-        &:focus, &:active {
-            outline: 0;
-            background-color: #555;
-        }
+    .emoji-header, .emoji-icons, .emoji-footer {
+        position: absolute;
+        left: 0;
+        right: 0;
     }
 
     .emoji-header {
-        line-height: 20px;
-        height: 34px;
-        bottom: auto;
-        padding: 0 0 0 14px;
+        height: 32px;
+        border-bottom: 1px solid #ddd;
         background-color: @background;
-
+        bottom: auto;
+        padding: 0 16px;
         .emoji-category {
-            line-height: 34px;
             font-weight: bold;
-            color: #333;
-            display: inline-block;
-            width: 100%;
-            padding-right: 30px;
-            .ellipsis();
-        }
-
-        i { line-height: 20px; }
-    }
-
-    .emoji-use-tabs .emoji-header { top: @emojiTabHeight; }
-
-    .emoji-options {
-        .dropdown-toggle {
-            width: 34px;
-            height: 20px;
-            padding: 7px 0;
-            display: inline-block;
-            text-align: center;
-        }
-        .dropdown-toggle:focus {
-            outline: 0;
-            background-color: #08c;
-
-            i { color: white; }
+            line-height: 32px;
         }
     }
 
     .emoji-icons {
-        top: 34px;
-        bottom: 65px;
-        height: 210px;
-        padding: 14px 8px 14px 14px;
+        top: 32px + 1;
+        bottom: 40px + 16 + 1;
+        padding: 16px;
         white-space: normal;
         overflow: auto;
         background-color: white;
     }
 
-    .emoji-use-tabs .emoji-icons {
-        top: 34px + @emojiTabHeight;
-    }
-
     .reset-recents {
-        color: @link-color;
+        color: @black;
+        background: #eee;
+        padding: 0;
+        width: 100%;
+        color: #333;
+        line-height: 32px;
+        text-align: center;
+        box-sizing: border-box;
         cursor: pointer;
         display: block;
-        margin: 7px 0;
-        text-align: right;
-
-        &:hover { text-decoration: underline; }
+        margin-top: 8px;
     }
 
     .emoji {
-        width: 20px;
-        height: 20px;
-        margin: 0 7px 7px 0;
+        color: @black;
+        font-size: 32px;
+        line-height: 40px;
+        display: inline-block;
         cursor: pointer;
-
-        &:focus {
-            outline: 5px solid #ccc;
+        width: 40px;
+        text-align: center;
+        text-decoration: none;
+        margin-right: 4px;
+        &:focus, &:hover {
             background-color: #ccc;
         }
     }
 
     .emoji-footer {
         top: auto;
-        height: 50px;
-        padding: 7px 0 7px 10px;
+        bottom: 0;
+        height: 40px;
+        padding: 8px 16px;
         white-space: normal;
-        border-top: 1px solid #fff;
+        border-top: 1px solid #ddd;
         overflow: hidden;
         background-color: @background;
-
-        .vertical-gradient(@background, darken(@background, 10%));
-        .emoji { margin: 0 27px 3px 0; }
-    }
-
-    .one-row-footer {
-        .emoji-icons { bottom: 40px; }
-
-        .emoji-footer {
-            height: 25px;
-
-            .emoji { margin: 0 18px 3px 0; }
+        .emoji {
+            filter: saturate(0);
+        }
+        .active {
+            color: @link-color;
+            filter: saturate(1);
         }
     }
 

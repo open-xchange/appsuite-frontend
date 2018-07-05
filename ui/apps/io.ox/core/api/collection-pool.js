@@ -19,7 +19,15 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         collections = {},
         // to avoid unnecessary/endless recursion
         skip = false,
-        skipRemove = false;
+        skipRemove = false,
+        Collection = backbone.Collection.extend({
+            _removeModels: function (models, options) {
+                models = _(models).filter(function (model) {
+                    return model.preserve !== true;
+                });
+                return backbone.Collection.prototype._removeModels.call(this, models, options);
+            }
+        });
 
     function propagateRemove(module, model) {
         if (skip || skipRemove) return;
@@ -27,6 +35,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             _(collections[module]).each(function (entry) {
                 var target = entry.collection.get(model.cid);
                 if (!target) return;
+                target.preserve = model.preserve;
                 skip = true;
                 entry.collection.remove(target);
             });
@@ -72,6 +81,8 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         _(hash).each(function (entry, id) {
             // ignore detail collection
             if (id === 'detail') return;
+            // ignore search collections cause their lack of proper reset handling (TODO)
+            if (id.indexOf('search') === 0) return;
             if (entry.collection.expired) {
                 // remove collections if marked as expired
                 entry.collection.reset();
@@ -89,6 +100,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         // loop over detail collection to find expired models
         var expired = this.get('detail').filter(function (model) {
+            if (model['index/virtual/favorites/infostore']) {
+                return false;
+            }
             return !models[model.cid];
         });
 
@@ -112,7 +126,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         var hash = collections[module] || (collections[module] = {});
 
         options = options || {};
-        this.Collection = options.Collection || backbone.Collection;
+        this.Collection = options.Collection || Collection;
         this.Model = options.Model || backbone.Model;
 
         this.getCollections = function () {
@@ -286,6 +300,13 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             var list = _(this.getByFolder(ids));
             list.invoke('expire');
             return list;
+        },
+
+        preserveModel: function (cid, state) {
+            _(this.getCollections()).each(function (entry) {
+                var model = entry.collection.get(cid);
+                if (model) model.preserve = !!state;
+            });
         }
     });
 

@@ -17,12 +17,13 @@ define('io.ox/core/folder/favorites', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/files/favorites'
 ], function (TreeNodeView, api, ext, upsell, settings, gt) {
 
     'use strict';
 
-    _('mail contacts calendar tasks infostore'.split(' ')).each(function (module) {
+    _('mail contacts calendar tasks'.split(' ')).each(function (module) {
 
         // skip if no capability (use capabilities from upsell to work in demo mode)
         if (module === 'mail' && !upsell.has('webmail')) return;
@@ -36,7 +37,7 @@ define('io.ox/core/folder/favorites', [
             invalid = {};
 
         function store(ids) {
-            settings.set('favorites/' + module, ids).save();
+            settings.set(getSettingsKey(module), ids).save();
         }
 
         function storeCollection() {
@@ -49,7 +50,7 @@ define('io.ox/core/folder/favorites', [
         // define virtual folder
         api.virtual.add(id, function () {
             var cache = !collection.expired && collection.fetched;
-            return api.multiple(settings.get('favorites/' + module, []), { errors: true, cache: cache }).then(function (response) {
+            return api.multiple(getFavorites(module), { errors: true, cache: cache }).then(function (response) {
                 // remove non-existent entries
                 var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
@@ -105,11 +106,6 @@ define('io.ox/core/folder/favorites', [
             model.set('standard_folder', true);
         }
 
-        // respond to collection remove event to sync favorites
-        api.on('collection:remove', function (id, model) {
-            collection.remove(model);
-        });
-
         var extension = {
             id: 'favorites',
             index: 1,
@@ -127,7 +123,7 @@ define('io.ox/core/folder/favorites', [
                         tree: tree,
                         icons: tree.options.icons
                     })
-                    .render().$el.addClass('favorites')
+                        .render().$el.addClass('favorites')
                 );
 
                 // store new order
@@ -139,6 +135,22 @@ define('io.ox/core/folder/favorites', [
         ext.point('io.ox/core/foldertree/' + module + '/popup').extend(_.extend({}, extension));
     });
 
+    function getFavorites(module) {
+        // migrate to chronos API?
+        if (module === 'calendar' && settings.get('favorites/chronos') === undefined) migrateCalendar();
+        return settings.get(getSettingsKey(module), []);
+    }
+
+    // since 7.10 we use another path for calendar not to lose favorites (see bug 58508)
+    function getSettingsKey(module) {
+        return 'favorites/' + (module === 'calendar' ? 'chronos' : module);
+    }
+
+    function migrateCalendar() {
+        var ids = _(settings.get('favorites/calendar', [])).map(function (id) { return 'cal://0/' + id; });
+        settings.set('favorites/chronos', ids).save();
+    }
+
     function getAffectedSubfolders(collection, id) {
         return collection.filter(function (model) {
             var modelId = model.get('id');
@@ -147,31 +159,48 @@ define('io.ox/core/folder/favorites', [
         });
     }
 
-    //
-    // Add to contextmenu
-    //
+    function remove(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
+            collection = api.pool.getCollection(collectionId);
+        collection.remove(model);
+        api.trigger('favorite:remove');
+    }
 
-    function add(e) {
-        var id = e.data.id,
-            module = e.data.module,
-            model = api.pool.getModel(id),
-            collectionId = 'virtual/favorites/' + module,
+    function add(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
             collection = api.pool.getCollection(collectionId);
         model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
+        api.trigger('favorite:add');
     }
 
-    function remove(e) {
-        var id = e.data.id,
-            module = e.data.module,
-            model = api.pool.getModel(id),
-            collection = api.pool.getCollection('virtual/favorites/' + module);
-        collection.remove(model);
+    //
+    // Folder API listeners
+    //
+
+    api.on('collection:remove', function (id, model) {
+        remove(id, model);
+    });
+
+    //
+    // Add to contextmenu
+    //
+
+    function onAdd(e) {
+        add(e.data.id);
+    }
+
+    function onRemove(e) {
+        remove(e.data.id);
     }
 
     function a(action, text) {
-        return $('<a href="#" role="menuitem">')
+        return $('<a href="#" role="menuitem" tabindex="-1">')
             .attr('data-action', action).text(text)
             // always prevent default
             .on('click', $.preventDefault);
@@ -182,6 +211,7 @@ define('io.ox/core/folder/favorites', [
     }
 
     function addLink(node, options) {
+        if (options.data.module === 'infostore') return;
         var link = a(options.action, options.text);
         if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
         node.append($('<li role="presentation">').append(link));
@@ -196,7 +226,7 @@ define('io.ox/core/folder/favorites', [
 
             var id = baton.data.id,
                 module = baton.module,
-                favorites = settings.get('favorites/' + module, []),
+                favorites = getFavorites(module),
                 isFavorite = _(favorites).indexOf(id) > -1;
 
             // don't offer for trash folders
@@ -206,9 +236,14 @@ define('io.ox/core/folder/favorites', [
                 action: 'toggle-favorite',
                 data: { id: id, module: module },
                 enabled: true,
-                handler: isFavorite ? remove : add,
+                handler: isFavorite ? onRemove : onAdd,
                 text: isFavorite ? gt('Remove from favorites') : gt('Add to favorites')
             });
         }
     });
+
+    return {
+        add: add,
+        remove: remove
+    };
 });

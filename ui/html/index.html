@@ -45,7 +45,7 @@
                 margin: 16px;
             }
 
-            #showstopper .timeout, #showstopper .session { display: none };
+            #showstopper .timeout, #showstopper .session { display: none; }
 
             .throbber {
                 position: absolute;
@@ -124,18 +124,7 @@
         </div>
         <!-- Core Panel -->
         <div id="io-ox-core" class="abs unselectable" style="display: none">
-            <!-- banner -->
-            <div id="io-ox-banner">
-                <span class="banner-logo" style="display: none"></span>
-                <span class="banner-title"></span>
-                <span class="banner-content"></span>
-            </div>
-            <!-- top bar -->
-            <div id="io-ox-topbar" class="f6-target" role="banner">
-                <div role="navigation">
-                    <ul class="launchers list-unstyled"></ul>
-                </div>
-            </div>
+            <div id="io-ox-appcontrol" style="display: none"></div>
             <!-- screens -->
             <div id="io-ox-screens" class="abs">
                 <!-- window manager -->
@@ -145,6 +134,11 @@
                 <!-- empty desktop -->
                 <div id="io-ox-desktop" class="abs"></div>
             </div>
+            <!-- container for embeded windows, used to manage flexbox overflow-->
+            <div id="io-ox-taskbar-container" class="abs">
+                <!-- embedded windows -->
+                <ul id="io-ox-taskbar"></ul>
+            </div>
         </div>
         <!-- Login screen -->
         <div id="io-ox-login-screen" class="unselectable" style="display: block">
@@ -153,13 +147,13 @@
             <div id="io-ox-login-blocker" style="display: none"></div>
             <div id="io-ox-login-container-scrollpane">
                 <div id="io-ox-login-container" class="container">
-                    <div id="io-ox-login-header">
+                    <div id="io-ox-login-header" role="banner">
                         <h1>
                             <span id="io-ox-login-header-prefix" aria-hidden="true"></span>
                             <span id="io-ox-login-header-label" aria-hidden="true">...</span>
                         </h1>
                     </div>
-                    <div id="io-ox-login-form-container">
+                    <div id="io-ox-login-form-container" role="main">
                         <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
                         <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
                             <input type="hidden" name="location" value=""><!-- used by redirect servlet -->
@@ -191,13 +185,16 @@
                                 <div class="col-xs-12" id="io-ox-login-feedback"></div>
                             </div>
                             <div class="row options">
-                                <div class="col-sm-6 col-xs-12 checkbox" id="io-ox-login-store">
-                                    <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
-                                        <input type="checkbox" id="io-ox-login-store-box" checked="checked" name="store" value="1">
-                                        Stay signed in
-                                    </label>
+                                <div class="col-sm-6 col-xs-12" id="io-ox-login-store">
+                                    <div class="checkbox custom">
+                                        <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
+                                            <input type="checkbox" class="sr-only" id="io-ox-login-store-box" checked="checked" name="store" value="1">
+                                            <i class="toggle" aria-hidden="true"></i>
+                                            Stay signed in
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 col-xs-12 radio text-right" id="io-ox-forgot-password">
+                                <div class="col-sm-6 col-xs-12 text-right" id="io-ox-forgot-password">
                                     <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
                                 </div>
                             </div>

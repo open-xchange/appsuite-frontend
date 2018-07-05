@@ -1,11 +1,4 @@
-define('io.ox.saml/register', [
-    'io.ox/core/extensions',
-    'io.ox/core/session',
-    'settings!io.ox/core',
-    'io.ox/core/http',
-    'io.ox/core/capabilities',
-    'io.ox.saml/handlers'
-], function (ext, session, settings, http, caps) {
+define('io.ox.saml/register', ['io.ox/core/extensions', 'io.ox/core/session', 'settings!io.ox/core', 'io.ox/core/http', 'io.ox/core/capabilities', 'io.ox.saml/handlers'], function (ext, session, settings, http, caps) {
 
     if (ox.serverConfig.samlLogin) {
         var samlPath = '/saml';
@@ -34,5 +27,4 @@ define('io.ox.saml/register', [
             });
         }
     }
-
 });

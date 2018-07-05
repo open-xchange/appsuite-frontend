@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
+define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user'], function (api, userAPI) {
 
     'use strict';
 
@@ -19,6 +19,9 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
         // helper
         getRight = function (folder, owner, offset) {
+            // no folder, no permissions
+            if (!folder) return false;
+
             // get bits
             var bits = api.bits(folder, offset);
             // check
@@ -93,20 +96,22 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                 return $.when(props);
             }
 
-            function findUserPermissions(item) {
+            function findUserPermissions(item, userData) {
                 // see if user has direct permission or as a member of a group
-                // use rampup data for groups to avoid a request and making this deferred
-                return (item.group === false && item.entity === ox.user_id) || (item.group === true && _(ox.rampup.user.groups).contains(item.entity));
+                return (item.group === false && item.entity === ox.user_id) || (item.group === true && _(userData.groups).contains(item.entity));
             }
 
-            return api.multiple(folders).then(function (array) {
-
+            // pipe/then
+            return $.when(api.multiple(folders), userAPI.get()).pipe(function (array, userData) {
                 var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false, objectPermission;
 
                 for (; i < $l; i++) {
 
                     item = collection[i];
-                    objectPermission = item && item.object_permissions && _(item.object_permissions).find(findUserPermissions);
+                    objectPermission = item && item.object_permissions && _(item.object_permissions).find(function (item) {
+                        return findUserPermissions(item, userData);
+                    });
+                    folder = hash[getFolderId(item)];
 
                     // Check for Guard files or folders
                     if (item.meta && item.meta.Encrypted) props.guard = true;
@@ -122,22 +127,20 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                         props['delete:folder'] = props['delete:folder'] && api.can('delete:folder', item);
                         props['change:seen'] = props['change:seen'] && api.can('change:seen', item);
                         // we unify delete; otherwise the action checks are too complicated
-                        props['delete'] = props['delete'] && api.can('delete:folder', item);
+                        props.delete = props.delete && api.can('delete:folder', item);
 
-                    } else if (objectPermission || (folder = hash[getFolderId(item)])) {
+                    } else if (objectPermission || folder) {
 
                         // get properties
                         items = true;
-                        // item-specific
-                        if (objectPermission) {
-                            props.read = props.read && objectPermission.bits >= 1;
-                            props.modify = props.modify && objectPermission.bits >= 2;
-                            props['delete'] = props['delete'] && objectPermission.bits >= 4;
-                        } else {
-                            props.read = props.read && getRight(folder, item.created_by, 7);
-                            props.modify = props.modify && getRight(folder, item.created_by, 14);
-                            props['delete'] = props['delete'] && getRight(folder, item.created_by, 21);
-                        }
+                        // calendar items use an object here instead of a simple number
+                        var created_by = item.createdBy && item.createdBy.entity ? item.createdBy.entity : item.created_by;
+
+                        // bug #52825, check if permission is granted by the folder or by the object
+                        props.read = props.read && ((objectPermission && objectPermission.bits >= 1) || getRight(folder, created_by, 7));
+                        props.modify = props.modify && ((objectPermission && objectPermission.bits >= 2) || getRight(folder, created_by, 14));
+                        props.delete = props.delete && ((objectPermission && objectPermission.bits >= 4) || getRight(folder, created_by, 21));
+
                         if (folder) {
                             // create new objects
                             props.create = props.create && (folder.own_rights & 127) >= 2;
@@ -146,7 +149,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                     } else {
                         // folder unknown
                         props.unknown = true;
-                        props.read = props.modify = props['delete'] = props.create = props['change:seen'] = false;
+                        props.read = props.modify = props.delete = props.create = props['change:seen'] = false;
                         break;
                     }
                 }

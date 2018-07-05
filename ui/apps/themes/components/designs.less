@@ -1,0 +1,54 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+@top-bar-gradientLeft: #293f72;
+@top-bar-gradientMiddle: #4d6aad;
+@top-bar-gradientRight: #293f72;
+
+@twilight: #4d7155;
+@dawn: #2c6e7f;
+@purple: #5c3173;
+@dusk: #753e93;
+
+/* design mixins */
+.mx-night() { background-image: linear-gradient(70deg, #1a2848, #40498e, #1a2848); }
+.mx-twilight() { background-image: linear-gradient(70deg, #093F4B, #718e5c, #093F4B); }
+.mx-dawn { background-image: linear-gradient(70deg, #0d456d, #469490, #0e466d); }
+.mx-day() { background-image: linear-gradient(70deg, @top-bar-gradientLeft, @top-bar-gradientMiddle, @top-bar-gradientRight); }
+.mx-dusk() { background-image: linear-gradient(70deg, #2a2972, #ac4dad, #292b72); }
+
+#io-ox-appcontrol {
+
+    background-color: @brand-primary;
+
+    html.design-primary & { background-color: @brand-primary; }
+
+    html.design-night & { .mx-night; &:before { .mx-night; opacity: 0; } }
+    html.design-twilight & { .mx-night; &:before { .mx-twilight; opacity: 1; } }
+    html.design-dawn & { .mx-dawn; &:before { .mx-twilight; opacity: 0; } }
+    html.design-day & { .mx-dawn; &:before { .mx-day; opacity: 1; } }
+    html.design-dusk & { .mx-dusk; &:before { .mx-day; opacity: 0; } }
+    html.design-late & { .mx-dusk; &:before { .mx-night; opacity: 1; } }
+}
+
+.primary-action .btn.btn-primary {
+
+    html.design-primary & { background-color: @brand-primary; }
+
+    html.design-night & { background-color: @brand-primary; }
+    html.design-twilight & { background-color: @twilight; }
+    html.design-dawn & { background-color: @dawn; }
+    html.design-day & { background-color: @brand-primary; }
+    html.design-dusk & { background-color: @dusk; }
+    html.design-late & { background-color: @brand-primary; }
+}

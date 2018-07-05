@@ -11,10 +11,23 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+body {
+    margin: 0;
+    padding: 0;
+    // was introduced during the iframe resizing refactoring
+    // changing this can lead to a lot of side effects
+    // note: apps with the 'simple' flag (portal) will overwrite this to allow scrolling on mobile
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
 .mail-detail-content {
 
-    font: normal e('13px/normal') @normal-font-family;
+    box-sizing: border-box;
 
+    font-family:@normal-font-family;
+    font-size: 13px;
+    font-weight: normal;
     font-feature-settings: "liga" 0;
 
     // Max-width does not work here, see Bug #24505
@@ -24,7 +37,7 @@
     position: relative;
 
     // use display: table to cover padding/margin/float issues at the bottom
-    display: table;
+    //display: table;
 
     // TODO: remove / temp. fix for sanitized HTML
     padding: 0;
@@ -58,21 +71,11 @@
         }
     }
 
-
-    img {
-
-        // width: auto;
-        // Commented this out on 29.8.14. Seems this is a relict from Bootstrap 2.x.
-        // As we are now on 3.0 and Bootstrap added a new image-responsive class we do not have to reset this here
-
-        max-width: 10000px;
-        vertical-align: middle;
-
+    // since we're in an iframe we don't longer need to reset boostrap stuff (changeed the following lines due to bug 58660)
+    img[src=""] {
         // Visual indicator for blocked images
-        &[src=""] {
-            background-color: rgba(0,0,0,.1);
-            background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.5) 20px, rgba(255,255,255,.5) 40px);
-        }
+        background-color: rgba(0,0,0,.1);
+        background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.5) 20px, rgba(255,255,255,.5) 40px);
     }
 
     p {
@@ -97,10 +100,8 @@
     }
 
     a[href] {
-        // not @linkColor!
-        color: #007dbc;
+        color: @link-color;
         text-decoration: underline;
-        &:hover { color: #08c; }
     }
 
     th {
@@ -136,13 +137,16 @@
         white-space: pre-wrap;
         background-color: transparent;
         border: 0 none;
-        .border-radius(0);
+        border-radius: 0;
     }
 
     table {
-        border: 0 none;
+        font-family:@normal-font-family;
+        font-size: 13px;
+        font-weight: normal;
+        font-feature-settings: "liga" 0;
         line-height: normal;
-        border-collapse: initial;
+        border-collapse: collapse;
     }
 
     ul, ol {
@@ -170,7 +174,7 @@
         p { font-size: 13px; }
 
         blockquote {
-            border-color: #3C73AA;
+            border-color: @brand-primary;
             margin: 8px 0;
         }
     }
@@ -183,10 +187,10 @@
     }
 
     &.colorQuoted {
-        blockquote blockquote                                   { .blockquote(#3C73AA); }
+        blockquote blockquote                                   { .blockquote(@brand-primary); }
         blockquote blockquote blockquote                        { .blockquote(#DD0880); }
         blockquote blockquote blockquote blockquote             { .blockquote(#8F09C7); }
-        blockquote blockquote blockquote blockquote blockquote  { .blockquote(#777);    }
+        blockquote blockquote blockquote blockquote blockquote  { .blockquote(#767676);    }
     }
 
     &.disable-links a[href] {
@@ -196,12 +200,8 @@
         pointer-events: none !important;;
     }
 
-    .collapsed-blockquote {
-        display: none;
-    }
-
     .blockquote-toggle {
-        color: #777;
+        color: #767676;
         font-size: 13px;
         padding-left: 56px;
         margin: 16px 0;
@@ -210,14 +210,14 @@
         word-break: break-word;
 
         button.bqt {
-            color: #888;
+            color: #696969;
             background-color: #eee;
             padding: 1px 10px;
             display: inline-block;
             font-size: 14px;
             line-height: 16px;
             cursor: pointer;
-            outline: none;
+            outline: 0;
             position: absolute;
             left: 0;
             border: 0;
@@ -231,8 +231,7 @@
     }
 
     .max-size-warning {
-        color: #777;
-        margin: 10px -16px 0 -16px;
+        color: #767676;
         padding: 16px 16px 0 16px;
         border-top: 1px solid #ddd;
     }
@@ -245,7 +244,7 @@
         font-weight: bold;
         font-family: @normal-font-family !important;
         padding: 0.10em 8px;
-        .border-radius(3px);
+        border-radius: 3px;
         &:hover, &:focus, &:active {
             color: white;
             background-color: darken(@btn-primary-bg, 10%);
@@ -256,5 +255,11 @@
     @media print {
         .collapsed-blockquote { display: block !important; }
         .blockquote-toggle { display: none !important; }
+    }
+
+    & > div[id*="ox-"] {
+        & > h1, & > h2, & > h3, & > h4, & > h5 {
+            margin-top: 0;
+        }
     }
 }

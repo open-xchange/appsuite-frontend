@@ -61,7 +61,7 @@
     @viewer-sidebar-description-outline-color: #444444;
     @viewer-sidebar-tab-color: #ffffff;
     @viewer-sidebar-tab-bordercolor: #555555;
-    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bordercolor: @brand-primary;
     @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
     @viewer-sidebar-tab-hovercolor: rgba(255,255,255,0.2);
     @document-thumbnail-link-focus-color: #777777;
@@ -71,6 +71,10 @@
     @document-thumbnail-border-color: #e0e0e0;
     @document-thumbnail-number-color: #999999;
     @document-thumbnail-number-hover-color: #FFFFFF;
+
+    @viewer-displayer-spreadsheet-header-pane-text-color: #e0e0e0;
+    @viewer-displayer-spreadsheet-header-pane-border-color: #999999;
+    @viewer-displayer-spreadsheet-header-pane-background-color: #222222;
 }
 
 .viewer-light-colors () {
@@ -83,12 +87,12 @@
     @viewer-background-color: #f5f5f5;
     @viewer-busy-color: rgba(0, 0, 0, 0.3);
     @viewer-toolbar-bgcolor: #ffffff;
-    @viewer-toolbar-color: #3c73aa;
+    @viewer-toolbar-color: @brand-primary;
     @viewer-toolbar-border-color: #DDDDDD;
     @viewer-toolbar-hover-color: #284d71;
     @viewer-toolbar-hover-bgcolor: #EEEEEE;
     @viewer-toolbar-focus-color: #FFFFFF;
-    @viewer-toolbar-focus-bgcolor: #3c73aa;
+    @viewer-toolbar-focus-bgcolor: @brand-primary;
     @viewer-toolbar-active-color: #284d71;
     @viewer-toolbar-active-bgcolor: #AAAAAA;
     @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
@@ -100,7 +104,7 @@
     @viewer-sidebar-bgcolor: #f5f5f5;
     @viewer-sidebar-border-color: #DDDDDD;
     @viewer-sidebar-active-color: #ffffff;
-    @viewer-sidebar-active-bgcolor: #3c73aa;
+    @viewer-sidebar-active-bgcolor: @brand-primary;
     @viewer-sidebar-active-bordercolor: #ffffff;
     @viewer-sidebar-label-text-color: #999999;
     @viewer-sidebar-uploadnewversion-bgcolor: rgba(0,0,0,.1);
@@ -113,7 +117,7 @@
     @viewer-sidebar-description-outline-color: #777777;
     @viewer-sidebar-tab-color: #333333;
     @viewer-sidebar-tab-bordercolor: rgba(0,0,0,0.2);
-    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bordercolor: @brand-primary;
     @viewer-sidebar-activetab-bgcolor: rgba(0,0,0,0.1);
     @viewer-sidebar-tab-hovercolor: rgba(0,0,0,0.2);
     @document-thumbnail-link-focus-color: rgba(0,0,0,0.1);
@@ -123,6 +127,10 @@
     @document-thumbnail-border-color: #e0e0e0;
     @document-thumbnail-number-color: #333333;
     @document-thumbnail-number-hover-color: #333333;
+
+    @viewer-displayer-spreadsheet-header-pane-text-color: #333333;
+    @viewer-displayer-spreadsheet-header-pane-border-color: #e0e0e0;
+    @viewer-displayer-spreadsheet-header-pane-background-color: #f8f8f8;
 }
 
 
@@ -167,10 +175,7 @@
 .sidebar-panel {
     margin-bottom: 16px;
 
-    .close {
-        position: relative;
-        top: -5px;
-    }
+    .close { font-size: 16px; }
 
     .sidebar-panel-heading {
         position: relative;
@@ -284,7 +289,7 @@
     font-size: 13px;
     background-color: @viewer-background-color;
     color: @viewer-text-color;
-    outline: none;
+    outline: 0;
     z-index: 1000;
 
     scrollbar-base-color: @viewer-scrollbar-base-color;
@@ -326,7 +331,7 @@
                 height: @viewer-toolbar-height;
                 min-width: @viewer-toolbar-link-width;
                 padding: 0 16px;
-                outline: none;
+                outline: 0;
                 text-align: center;
                 text-decoration: none;
                 color: @viewer-toolbar-color;
@@ -452,7 +457,6 @@
             display: inline-block;
         }
 
-        .fitzoom-check { display: none; }
     }
 
     // show active sidebar button in toolbar when sidebar is open
@@ -467,7 +471,7 @@
         top: @viewer-toolbar-height;
         width: 100%;
         bottom: 0;
-        outline: none;
+        outline: 0;
 
         &.toolbar-bottom-visible {
             .toolbar.bottom {
@@ -482,12 +486,10 @@
             }
         }
 
-        #viewer-carousel,
         .carousel-inner,
         .item,
         .swiper-container { height: 100%; }
 
-        #viewer-carousel,
         .swiper-container {
 
             // copied directly from 'io.ox/presenter/style.less' ... see line 278
@@ -576,7 +578,6 @@
         }
 
         .viewer-displayer-image {
-            display: none;
 
             // fix transparent images; see e.g. http://lea.verou.me/css3patterns/#checkerboard
             @g: #eee;
@@ -607,14 +608,18 @@
             }
 
             .play-button {
-                position: absolute;
+                position: relative;
                 width: 280px;
-                height: 280px;
-                padding-top: 100px;
+                height: auto;
                 text-align: center;
                 font-size: 56px;
                 color: #eee;
                 cursor: pointer;
+                &.cover {
+                    height: 280px;
+                    position: absolute;
+                    padding-top: 100px;
+                }
             }
             .player-text {
                 text-align: center;
@@ -634,6 +639,31 @@
             i {
                 font-size: 56px;
                 text-align: center;
+            }
+        }
+
+        .viewer-displayer-spreadsheet {
+
+            .io-ox-office-main.io-ox-office-spreadsheet-main {
+
+                .pane-root {
+                    > .header-pane .cell, > .corner-pane {
+                        color: @viewer-displayer-spreadsheet-header-pane-text-color;
+                        background-color: @viewer-displayer-spreadsheet-header-pane-background-color;
+                        border-right-color: @viewer-displayer-spreadsheet-header-pane-border-color;
+                        border-bottom-color: @viewer-displayer-spreadsheet-header-pane-border-color;
+                    }
+                }
+
+                > .app-pane {
+                    border-top: 1px solid @viewer-displayer-spreadsheet-header-pane-border-color;
+                }
+
+                .grid-layer.drawing-layer.comment-layer {
+                    color: #333333;
+                }
+
+                ::-webkit-scrollbar-corner { background-color: @viewer-displayer-spreadsheet-header-pane-background-color; }
             }
         }
 
@@ -682,7 +712,7 @@
                 padding: 0 15px;
                 color: @viewer-displayer-caption-color;
                 background: @viewer-displayer-caption-bgcolor;
-                .border-radius(4px);
+                border-radius: 4px;
             }
 
             &.smartphone { bottom: 6px; }
@@ -694,7 +724,7 @@
             margin-top: -25px;
             color: @viewer-displayer-navigation-color;
             background: @viewer-displayer-navigation-bgcolor;
-            outline: none;
+            outline: 0;
             width: 50px;
             height: 50px;
             border-radius: 2px;
@@ -765,7 +795,7 @@
         width: @viewer-sidebar-width;
         background-color: @viewer-sidebar-bgcolor;
         border-left: 1px solid @viewer-sidebar-border-color;
-        outline: none;
+        outline: 0;
         z-index: 2;     // hide captions when sidebar is 100% width
 
         &.open { display: block; }
@@ -799,7 +829,6 @@
 
 
         .viewer-sidebar-tabs {
-            display: none;
             list-style: none;
             width: 100%;
             margin-bottom: 20px;
@@ -836,8 +865,6 @@
                 top: 100px;
                 color: @viewer-busy-color;
             }
-
-            &.detail-pane { display: none; }
         }
 
         .document-thumbnail-link {
@@ -897,7 +924,7 @@
 
     .sidebar-panel {
 
-        a.btn, div.dropdown > a { outline: none; }
+        a.btn, div.dropdown > a { outline: 0; }
 
         .sidebar-panel-heading {
 
@@ -980,10 +1007,7 @@
         display: none;
 
         @media print {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
+            .flex-center(row);
             position: absolute;
             z-index: 2;
             background-color: #fff!important;
@@ -1039,7 +1063,7 @@ html.ios .io-ox-viewer {
     .viewer-sidebar, .swiper-slide.swiper-slide-active { -webkit-overflow-scrolling: touch; }
 }
 
-.viewer-sidebar .description-button { outline:0; padding:0; border:0; font-size: 13px; color: #3c73aa; }
+.viewer-sidebar .description-button { outline:0; padding:0; border:0; font-size: 13px; color: @brand-primary; }
 .viewer-dark-theme .viewer-sidebar .description-button { color: #7ba6d1; }
 
 @media print {

@@ -22,8 +22,7 @@ define('io.ox/tasks/listview', [
     ext.point('io.ox/tasks/listview/item').extend({
         id: 'default',
         draw: function (baton) {
-            var isSmall = false;
-            ext.point('io.ox/tasks/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
+            ext.point('io.ox/tasks/listview/item/default').invoke('draw', this, baton);
         }
     });
 

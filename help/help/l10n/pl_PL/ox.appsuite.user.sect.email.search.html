@@ -1,13 +1,13 @@
 <html lang="pl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.7. Wyszukiwanie wiadomości e-mail</title>
+<title>5.8. Wyszukiwanie wiadomości e-mail</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Rozdział 5. E-mail">
-<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.examples.html" title="5.6.4. Zastosowania filtrów poczty e-mail">
-<link rel="next" href="ox.appsuite.user.sect.email.teamwork.html" title="5.8. Wiadomości e-mail w ramach zespołu">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.examples.html" title="5.7.4. Zastosowania filtrów poczty e-mail">
+<link rel="next" href="ox.appsuite.user.sect.email.teamwork.html" title="5.9. Wiadomości e-mail w ramach zespołu">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,11 +31,11 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">E-mail</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.email.search">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">5.7. Wyszukiwanie wiadomości e-mail</h2></div></div></div>
-<a class="indexterm" name="id-1.6.14.2"></a><a class="indexterm" name="id-1.6.14.3"></a><div class="concept">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">5.8. Wyszukiwanie wiadomości e-mail</h2></div></div></div>
+<a class="indexterm" name="id-1.6.15.2"></a><a class="indexterm" name="id-1.6.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.search"></a><p id="ox.appsuite.user.concept.email.search">Aby wyszukać określone wiadomości e-mail, możesz skorzystać z następujących funkcji:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Wyszukanie hasła w temacie, treści wiadomości e-mail, polu nadawcy lub polach adresatów.</p></li>
+<li class="listitem"><p role="presentation">Wyszukanie hasła w temacie, treści wiadomości e-mail, polu nadawcy, polach adresatów lub nazwie załącznika</p></li>
 <li class="listitem">
 <p role="presentation">Hasło pozwalające na przeszukanie przedziału czasu. Możliwe jest wyszukiwanie wiadomości e-mail odebranych w określonych ramach czasowych. Właściwy przedział czasu należy zdefiniować przy użyciu poniższych szczegółów.</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
@@ -58,40 +58,34 @@
 <div class="task" id="ox.appsuite.user.task.email.search">
 <p class="title">Jak wyszukiwać wiadomości e-mail:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Rozpocznij wyszukiwanie</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search"><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> lub pole wejściowe na pasku wyszukiwania. Przycisk folderu wskazuje foldery, które mają zostać przeszukane.</p>
-<div class="informalfigure" id="ox.appsuite.user.fig.email.search.start"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_click.png" alt="Pole wejściowe"></div></div></div>
-</li>
-<li class="step"><p role="presentation">Aby wybrać folder do przeszukania, kliknij przycisk folderu.<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p role="presentation">W przypadku wybrania opcji <span class="guibutton"><strong>Wszystkie foldery</strong></span> zostaną przeszukane wszystkie foldery i podfoldery wewnętrznego konta e-mail..</p>
-<p role="presentation"><span class="phrase"><strong>Uwaga:</strong></span> Przy niektórych konfiguracjach serwera ta funkcja może być niedostępna. W takiej sytuacji przeszukany zostanie wyłącznie folder bieżący, bez podfolderów.</p>
-</li>
-<li class="listitem"><p role="presentation">Przy pewnych ustawieniach serwera w przypadku wybrania folderu <span class="guibutton"><strong>Skrzynka odbiorcza</strong></span> nie można przeszukiwać żadnych podfolderów. W takim przypadku kliknij odpowiedni przycisk pod wynikiem wyszukiwania, aby przeszukać podfoldery.</p></li>
-<li class="listitem"><p role="presentation">W przypadku zaznaczenia określonego folderu wewnętrznego lub zewnętrznego konta e-mail zostanie przeszukany tylko ten folder, ale nie jego podfoldery.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Kliknij pole wejściowe <span class="guibutton"><strong>Szukaj</strong></span>. Pojawią się dodatkowe ikony.</p></li>
 <li class="step">
 <p role="presentation">Wpisz szukane hasło w polu wejściowym. Zostanie otwarte menu wyszukiwania.</p>
 <div class="informalfigure" id="ox.appsuite.user.fig.email.search.searchmenue"><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_searchmenue.png" alt="Menu wyszukiwania"></div></div></div>
 <p role="presentation">Zdefiniuj źródło danych do przeszukania, klikając pozycję w menu wyszukiwania.<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Po kliknięciu szukanego hasła lub naciśnięciu klawisza Enter przeszukane zostaną następujące źródła danych: nadawca, odbiorca, temat i treść wiadomości e-mail.</p></li>
-<li class="listitem"><p role="presentation">W celu wyszukania wiadomości e-mail z określonego przedziału czasu, jako szukanego hasła użyj właściwego przedziału czasu. Gdy przedział czasu zostanie rozpoznany w polu wejściowym, pojawi się on w menu wyszukiwania. Kliknij właściwe ramy czasowe.</p></li>
 <li class="listitem"><p role="presentation">Aby przeszukać wyłącznie temat, kliknij polecenie <span class="guibutton"><strong>w temacie</strong></span>.</p></li>
 <li class="listitem"><p role="presentation">Aby przeszukać wyłącznie treść wiadomości e-mail, kliknij polecenie <span class="guibutton"><strong>w treści wiadomości</strong></span>.</p></li>
-<li class="listitem"><p role="presentation">Aby wyszukać nadawców lub odbiorców pasujących do szukanego hasła, kliknij nazwę.</p></li>
+<li class="listitem"><p role="presentation">Aby przeszukać nazwy plików w załącznikach, kliknij <span class="guibutton"><strong>w nazwach plików załączników</strong></span>.</p></li>
+<li class="listitem">
+<p role="presentation">Aby wyszukać nadawców lub odbiorców pasujących do szukanego hasła, kliknij nazwę.</p>
+<p role="presentation">Możesz określić, czy chcesz wyszukać nadawcę, adresatów, czy obie te strony korespondencji. W tym celu kliknij widoczną obok nazwy ikonę <span class="guibutton"><strong>Opcje</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.adaptfilter"><img src="../../images/appsuite_user_icon_dropdown.png"></span>.</p>
+</li>
+<li class="listitem"><p role="presentation">W celu wyszukania wiadomości e-mail z określonego przedziału czasu, jako szukanego hasła użyj właściwego przedziału czasu. Gdy przedział czasu zostanie rozpoznany w polu wejściowym, pojawi się on w menu wyszukiwania. Kliknij właściwe ramy czasowe.</p></li>
 </ul>
           </p>
-<p role="presentation">wyniki wyszukiwania zostaną wyświetlone na liście w obszarze wyświetlania. </p>
-<p role="presentation">W przypadku każdego wyszukiwania wyświetlany jest folder zawierający znaleziony obiekt. Aby zakończysz wyszukiwanie i wyświetlić zawartość folderu, kliknij ten folder.</p>
+<p role="presentation">Wyniki wyszukiwania zostaną wyświetlone na liście w obszarze wyświetlania. W przypadku każdego wyniku zostanie pokazany folder, w którym znaleziono obiekt.</p>
 </li>
-<li class="step"><p role="presentation">Dostępne są następujące możliwości dostosowania wyników wyszukiwania:<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Aby dostosować kryterium wyszukiwania, kliknij ikonę <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.adaptfilter"><img src="../../images/appsuite_user_icon_dropdown.png"></span>widoczną obok kryterium.</p></li>
-<li class="listitem"><p role="presentation">Aby zawęzić wyniki wyszukiwania, wprowadź dodatkowe hasła do wyszukania. Aby usunąć szukane hasło, kliknij widoczną obok niego ikonę <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>. </p></li>
-<li class="listitem"><p role="presentation">Aby przeszukać inny folder, kliknij przycisk folderu.</p></li>
+<li class="step"><p role="presentation">Aby wybrać folder do przeszukania, kliknij widoczną w polu wejściowym ikonę <span class="guibutton"><strong>Opcje</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. Na liście rozwijanej będzie widoczny bieżący folder. Aby wybrać inny folder, otwórz listę rozwijaną.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">W przypadku wybrania opcji <span class="guibutton"><strong>Wszystkie foldery</strong></span> zostaną przeszukane wszystkie foldery i podfoldery wewnętrznego konta e-mail.</p>
+<p role="presentation"><span class="phrase"><strong>Uwaga:</strong></span> Przy niektórych konfiguracjach serwera ta funkcja może być niedostępna. W takiej sytuacji przeszukany zostanie wyłącznie folder bieżący, bez podfolderów.</p>
+</li>
+<li class="listitem"><p role="presentation">W przypadku zaznaczenia określonego folderu wewnętrznego lub zewnętrznego konta e-mail zostanie przeszukany tylko ten folder, ale nie jego podfoldery.</p></li>
 </ul>
           </p></li>
-<li class="step"><p role="presentation">Aby zakończyć wyszukiwanie, w polu wejściowym kliknij ikonę <span class="guibutton"><strong>Anuluj wyszukiwanie</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
+<li class="step"><p role="presentation">Aby zawęzić wyniki wyszukiwania, wprowadź dodatkowe hasła do wyszukania. Aby usunąć szukane hasło, kliknij ikonę <span class="guibutton"><strong>Usuń</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> widoczną obok szukanego hasła.</p></li>
+<li class="step"><p role="presentation">Aby zakończyć wyszukiwanie, kliknij widoczną w polu wejściowym ikonę <span class="guibutton"><strong>Zamknij</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.search.close"><img src="../../images/appsuite_user_icon_close.png"></span>.</p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.concept.email.search.parent">Temat nadrzędny: <a class="xref" href="ox.appsuite.user.chap.email.html"><i><span class="phrase">E-mail</span></i></a></p>

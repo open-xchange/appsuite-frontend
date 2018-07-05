@@ -14,6 +14,8 @@ for (var file in window.__karma__.files) {
 
 //console.log('-----[ running ' + tests.length + ' test files ]-----');
 
+_.extend(ox, Backbone.Events);
+
 require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function (Stage) {
 
     'use strict';
@@ -37,6 +39,17 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
 
     server.autoRespond = true;
 
+    $('body').prepend('<div id="background-loader">');
+
+    new Stage('io.ox/core/stages', {
+        id: 'basic_settings',
+        index: 1,
+        run: function () {
+            return require(['settings!io.ox/core']).then(function (settings) {
+                settings.set('autoStart', 'none');
+            });
+        }
+    });
     new Stage('io.ox/core/stages', {
         id: 'run_tests',
         index: 99999,
@@ -52,11 +65,7 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
                 callback: function () {
                     server.restore();
                     server = null;
-                    // make sure, we always start in mail app
-                    // this prevents single test runs for apps that quit, ending up with an empty workspace
-                    // and launching the default app. This basically is an attempt to minimize
-                    // unwanted side-effects
-                    ox.launch('io.ox/mail/main').then(window.__karma__.start);
+                    window.__karma__.start();
                 }
             });
         }

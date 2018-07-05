@@ -11,13 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.date-picker {
-
-    @black: #333;
-    @gray: #707070;
-    @hover: #eee;
-    @focus: #555;
-    @red:   #a00;
+.dropdown-style {
 
     display: none;
     position: absolute;
@@ -31,7 +25,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     outline: 0;
     cursor: default;
-    .border-radius(3px);
+    border-radius: 3px;
 
     &:focus {
         border-color: rgba(0, 0, 0, 0.50);
@@ -41,6 +35,17 @@
     &.open {
         display: block;
     }
+}
+
+.date-picker {
+
+    @black: #333;
+    @gray: #707070;
+    @hover: #eee;
+    @focus: #555;
+    @red:   #a00;
+
+    .dropdown-style();
 
     .navigation {
         font-weight: bold;
@@ -53,12 +58,12 @@
 
     button {
         color: @black;
-        background-color: white;
+        background-color: inherit;
         padding: 8px;
         outline: 0;
         border: 0;
         margin: 0;
-        .border-radius(3px);
+        border-radius: 3px;
         &:hover { background-color: @hover; }
         &:focus { background-color: @focus; color: white; }
     }
@@ -71,7 +76,7 @@
         width: 32px;
         text-align: center;
         line-height: 24px;
-        .border-radius(3px);
+        border-radius: 3px;
     }
 
     th {
@@ -130,5 +135,61 @@
         display: block;
         margin: 8px 0 0 0;
         width: 100%;
+    }
+
+    .window-sidepanel & {
+
+        display: block;
+        position: relative;
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #ddd;
+        background-color: inherit;
+        box-shadow: none;
+        padding: 8px;
+        z-index: 9;
+
+        .navigation {
+            margin: 3px 0 13px 0;
+        }
+
+        .grid {
+            margin: 0 auto;
+        }
+
+        td, th {
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+}
+
+.time-picker {
+
+    .dropdown-style();
+    padding: 8px 0;
+    max-height: 160px;
+    max-width: 100px;
+    overflow-y: auto;
+
+    .date {
+        color: #707070;
+        font-size: 13px;
+        line-height: 16px;
+        padding: 0 16px;
+    }
+
+    .date.fullhour {
+        color: #333;
+        font-weight: 500;
+        margin-top: 3px;
+        border-top: 1px solid #ccc;
+        padding-top: 4px;
+    }
+
+    .date.fullhour:first-child {
+        margin-top: 0;
+        border-top: 0;
+        padding-top: 0;
     }
 }

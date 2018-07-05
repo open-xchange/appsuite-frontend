@@ -36,6 +36,12 @@
     }
 }
 
+
+.dropdown-menu-right > li > li.io-ox-upsell-link > a {
+    padding: 3px 20px;
+    white-space: nowrap;
+}
+
 .dropdown-header, .dropdown-footer {
     display: block;
     cursor: default;
@@ -55,10 +61,6 @@
         min-width: 200px;
         white-space: normal;
         cursor: pointer;
-    }
-
-    html.high-contrast & {
-        color: @hc-gray; // HC
     }
 }
 
@@ -142,6 +144,7 @@ ul.dropdown-menu li a.disabled {
 
     ul {
         overflow-y: auto;
+        overflow-x: hidden;
     }
 }
 
@@ -157,22 +160,11 @@ ul.dropdown-menu li a.disabled {
     overflow-y: auto;
 }
 
-// TINY SCREENS
-@media (max-width: 700px) {
-    .window-head {
-        .dropdown-right-side {
-            top: auto;
-            bottom: 40px;
-            left: 5px;
-        }
-    }
-}
-
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
@@ -185,7 +177,7 @@ ul.dropdown-menu li a.disabled {
         bottom: 0;
         left: 0 !important;
         right: 0;
-        .border-radius(0);
+        border-radius: 0;
         border: 0;
         background-color: transparent;
 

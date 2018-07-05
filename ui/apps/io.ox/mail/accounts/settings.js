@@ -136,23 +136,6 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/preselect').extend({
-        id: 'dsc',
-        before: 'oauth',
-        draw: function (baton) {
-            if (!mailSettings.get('dsc/enabled')) {
-                // normal mode for all setups not using DSC
-                return;
-            }
-            // show classic wizard for DSC setups, bypass oauth accounts
-            ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
-            _.defer(function () {
-                baton.popup.getFooter().find('[data-action="add"]').show();
-            }, 1000);
-
-            baton.stopPropagation();
-        }
-
-    }, {
         id: 'oauth',
         index: 100,
         draw: function (baton) {
@@ -162,7 +145,8 @@ define('io.ox/mail/accounts/settings', [
                         return _(service.get('availableScopes')).contains('mail') &&
                             oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
                                 return account.id;
-                            }).reduce(function (acc, oauthId) {
+                            })
+                            .reduce(function (acc, oauthId) {
                                 // make sure, no mail account using this oauth-account exists
                                 return acc && !_(api.cache).chain()
                                     .values()
@@ -180,8 +164,12 @@ define('io.ox/mail/accounts/settings', [
                     ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
                     return;
                 }
+                // Invoke extension point for custom predefined non-oauth accounts
+                ext.point('io.ox/mail/add-account/predefined').invoke('customize', this, mailServices);
+
                 mailServices.push({
                     id: 'mailwizard',
+                    type: 'wizard',
                     displayName: gt('Other')
                 });
 
@@ -194,15 +182,10 @@ define('io.ox/mail/accounts/settings', [
                 a11y.getTabbable($el).first().focus();
 
                 list.listenTo(list, 'select', function (service) {
-                    if (service.id === 'mailwizard') return;
-
-                    var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-                        return !account.hasScopes('mail');
-                    })[0] || new OAuth.Account.Model({
+                    if (service.get('type') === 'wizard') return;
+                    var account = new OAuth.Account.Model({
                         serviceId: service.id,
-                        //#. %1$s is the display name of the account
-                        //#. e.g. My Xing account
-                        displayName: gt('My %1$s account', service.get('displayName'))
+                        displayName: oauthAPI.chooseDisplayName(service)
                     });
 
                     account.enableScopes('mail').save().then(function () {
@@ -221,15 +204,13 @@ define('io.ox/mail/accounts/settings', [
 
                             validateMailaccount(data, baton.popup, def);
                             return def;
-                        }).then(function () {
-                            oauthAPI.accounts.add(account, { merge: true });
-                        }, notifications.yell).always(function () {
+                        }).fail(notifications.yell).always(function () {
                             baton.popup.idle();
                         });
                     });
                 });
 
-                list.listenTo(list, 'select:mailwizard', function () {
+                list.listenTo(list, 'select:wizard', function () {
                     baton.popup.getFooter().find('[data-action="add"]').show();
                     // invoke wizard
                     var data = {};
@@ -378,6 +359,9 @@ define('io.ox/mail/accounts/settings', [
                             function saveFail(response) {
                                 popup.close();
                                 failDialog(response.error);
+                                // error is already shown to the user, don't yell
+                                response.handled = true;
+                                def.reject(response);
                             }
                         );
                     } else if (options && options.onValidationError) {

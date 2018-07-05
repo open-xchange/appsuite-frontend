@@ -10,17 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define.async('io.ox/realtime/polling_transport',
-    [
-        'io.ox/core/extensions',
-        'io.ox/core/event',
-        'io.ox/core/capabilities',
-        'io.ox/core/uuids',
-        'io.ox/core/http',
-        'io.ox/realtime/stanza',
-        'io.ox/realtime/tab_id',
-        'io.ox/realtime/synchronized_http'
-    ],
+define.async('io.ox/realtime/polling_transport', [
+    'io.ox/core/extensions',
+    'io.ox/core/event',
+    'io.ox/core/capabilities',
+    'io.ox/core/uuids',
+    'io.ox/core/http',
+    'io.ox/realtime/stanza',
+    'io.ox/realtime/tab_id',
+    'io.ox/realtime/synchronized_http'
+],
 function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
 
     'use strict';
@@ -57,6 +56,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     var TIMEOUT = 2 * 60 * 1000;
     var INFINITY = TIMEOUT / 5000;
     var offlineCountdown;
+    var lastSend = _.now();
 
     var mode = 'lazy';
     var intervals = {
@@ -111,6 +111,19 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         value: 0,
         threshhold: 10,
         state: 'working',
+        systemSleep: false,
+        isWorking: function () {
+            return this.state === 'working';
+        },
+        isBrokenDueToSystemSleep: function () {
+            return this.systemSleep;
+        },
+        brokenDueToSystemSleep: function () {
+            this.value = this.threshhold;
+            this.state = 'broken';
+            this.systemSleep = true;
+            this.trigger('broken');
+        },
         increase: function (value) {
             this.value += value;
             this.trigger('change');
@@ -124,6 +137,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         },
         reset: function () {
             this.value = 0;
+            this.systemSleep = false;
             if (this.state !== 'working') {
                 this.state = 'working';
                 this.trigger('working');
@@ -208,6 +222,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
             console.log('Starting purge, so setting purging to true');
         }
 
+        lastSend = _.now();
         synchronizedHTTP.PUT({
             module: 'rt',
             params: {
@@ -277,10 +292,20 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
             return;
         }
 
+        var lastSendDiff = (_.now() - lastSend);
         var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
+
+        if ((lastSendDiff > TIMEOUT) && damage.isWorking()) {
+            if (api.debug) {
+                console.log('Connection sent last message 2 minutes ago and state is working. Could be system awake from sleep mode => triggering offline event.');
+            }
+            damage.brokenDueToSystemSleep();
+        }
+
         if (lastFetchInterval >= intervals[mode] && !purging) {
             lastCheck = _.now();
+            lastSend = _.now();
 
             synchronizedHTTP.GET({
                 module: 'rt',
@@ -373,6 +398,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         if (api.debug) {
             console.log('Resetting sequence to ', newSequence);
         }
+        lastSend = _.now();
         flushAllBuffers();
         synchronizedHTTP.PUT({
             module: 'rt',
@@ -526,6 +552,8 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     }
 
     function handleResponse(resp) {
+        lastSend = _.now();
+
         damage.reset();
 
         var result = null;
@@ -559,7 +587,10 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         if (!running) {
             return $.when();
         }
+
         if (!enroled) {
+            lastSend = _.now();
+
             return synchronizedHTTP.GET({
                 module: 'rt',
                 params: {
@@ -614,13 +645,19 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
             console.log('Connection seems to be broken. Waiting 2 minutes for the connection to return.');
         }
 
-        offlineCountdown = setTimeout(function () {
+        function notifyOffline() {
             if (api.debug) {
                 console.log('Connection was still broken after 2 minute grace period. Triggering offline event.');
             }
             api.trigger('offline');
             stop();
-        }, 10000);
+        }
+
+        if (damage.isBrokenDueToSystemSleep()) {
+            notifyOffline();
+        } else {
+            offlineCountdown = setTimeout(notifyOffline, 10000);
+        }
     });
 
     damage.on('working', function () {
@@ -655,6 +692,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         // don't get mixed up
 
         previousOperation.done(function () {
+            lastSend = _.now();
             synchronizedHTTP.PUT({
                 module: 'rt',
                 params: {

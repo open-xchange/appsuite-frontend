@@ -44,20 +44,20 @@ define('io.ox/core/wizard/registry', [
         this.wizardIsRunning = null;
 
         this.navButtons = $('<div/>').append(
-            $('<button class="btn btn-default wizard-next">').text(gt('Next')).on('click', function () {
+            $('<button type="button" class="btn btn-default wizard-next">').text(gt('Next')).on('click', function () {
                 self.next();
             }),
-            $('<button class="btn btn-primary wizard-done">').text(gt('Done')).on('click', function () {
+            $('<button type="button" class="btn btn-primary wizard-done">').text(gt('Done')).on('click', function () {
                 self.done();
             }),
-            $('<button class="btn wizard-prev">').text(gt('Previous')).on('click', function () {
+            $('<button type="button" class="btn wizard-prev">').text(gt('Previous')).on('click', function () {
                 self.back();
             })
         );
 
         if (options.closeable) {
             this.navButtons.append(
-                $('<button class="btn btn-default wizard-close">').text(gt('Close')).on('click', function () {
+                $('<button type="button" class="btn btn-default wizard-close">').text(gt('Close')).on('click', function () {
                     self.close();
                 })
             );
@@ -306,12 +306,9 @@ define('io.ox/core/wizard/registry', [
             if (!isNextEnabled()) {
                 return;
             }
-            var def = null;
+            var def = $.when();
             if (this.currentPage) {
-                def = callMethod(this.currentPage, 'finish', this.index);
-                if (!def) {
-                    def = $.when();
-                }
+                def = callMethod(this.currentPage, 'finish', this.index) || $.when();
             }
             busy();
             def.then(function () {
@@ -327,12 +324,9 @@ define('io.ox/core/wizard/registry', [
             if (!isNextEnabled()) {
                 return;
             }
-            var def = null;
+            var def = $.when();
             if (this.currentPage) {
-                def = callMethod(this.currentPage, 'finish', this.index);
-                if (!def) {
-                    def = $.when();
-                }
+                def = callMethod(this.currentPage, 'finish', this.index) || $.when();
             }
             busy();
             def.done(function () {

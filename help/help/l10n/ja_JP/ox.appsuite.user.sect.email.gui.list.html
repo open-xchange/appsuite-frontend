@@ -38,41 +38,49 @@
 <a name="ox.appsuite.user.reference.email.gui.list"></a><p id="ox.appsuite.user.reference.email.gui.list">現在のフォルダにあるメールの一覧が表示されます。<a class="link" href="ox.appsuite.user.sect.email.gui.tabs.html">カテゴリ</a>を使うと、選択されているカテゴリのメールが受信トレイに表示されます。</p>
 <p class="title">コンテンツ</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.entries" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">各メールの次の詳細情報が表示されます：差出人、件名、受信日時、サイズ。未読のメールは<span class="guilabel"><strong>未読</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.unread"><img src="../../images/appsuite_user_icon_email_unread.png"></span>で表示されます。</p></li>
-<li class="listitem"><p role="presentation">添付ファイルアイコン、カラーラベル、フラグ、スレッド内のメール数、優先度などの追加情報も表示されます。</p></li>
-<li class="listitem"><p role="presentation">暗号化されたメールは<span class="guilabel"><strong>暗号化</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.encrypted"><img src="../../images/appsuite_user_icon_encrypted.png"></span>表示されます。暗号化の情報は<span class="phrase"><span class="guilabel"><strong>ガード</strong></span></span>ユーザガイドを参照してください。</p></li>
+<li class="listitem">
+<p role="presentation">自動応答が有効な場合、通知が一覧の上に表示されます。</p>
+<p role="presentation">通知を閉じても、自動応答は有効のままです。</p>
+</li>
+<li class="listitem">
+<p role="presentation">各メールの次の詳細情報が表示されます：送信者、件名、受信日時、サイズ。未読メールは<span class="guilabel"><strong>未読</strong></span>アイコンで表示されます。<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.unread"><img src="../../images/appsuite_user_icon_email_unread.png"></span> </p>
+<p role="presentation"><span class="guibutton"><strong>テキストプレビュー</strong></span>が<span class="guibutton"><strong>表示</strong></span>ツールバーメニューで有効になると、メールの内容のプレビューが件名の下に表示されます。</p>
+</li>
+<li class="listitem"><p role="presentation">添付ファイルのアイコン、カラーラベル、フラグ、<a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.mailthread">スレッド</a>内のメール数、優先度などの追加情報も表示されます。</p></li>
+<li class="listitem"><p role="presentation">暗号化されたメールは<span class="guilabel"><strong>暗号化</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.gui.list.encrypted"><img src="../../images/appsuite_user_icon_encrypted.png"></span>表示されます。メールの暗号化の詳細は次を参照してください。<a class="xref" href="ox.guard.user.chap.usage.html"><i>データの暗号化</i></a></p></li>
 </ul>
 <p>
         </p>
 <p class="title">関数</p>
 <ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.functions" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">差出人名の代わりに差出人のメールアドレスを表示するには、差出人名にマウスポインタを置きます。元のメールアドレスがヒントに表示されます。</p></li>
 <li class="listitem">
 <p role="presentation">複数のメールを選択するには、ツールバーの<span class="guibutton"><strong>ビュー</strong></span>ドロップダウンメニューの<span class="guibutton"><strong>チェックボックス</strong></span>オプションを有効にします。</p>
 <p role="presentation">このとき、ご利用のシステムの複数選択機能を使用することもできます。</p>
 </li>
+<li class="listitem"><p role="presentation">一覧の上の<span class="guibutton"><strong>すべて</strong></span>ボタンをクリックすると、ドロップダウンメニューが表示されます。現在のメールフォルダのすべてのメールについて次の機能を実行することができます：既読として印をつける、移動、アーカイブ、削除</p></li>
 <li class="listitem">
-<p role="presentation">フォルダ内に表示されているすべてのメールを選択するには、一覧の上にある<span class="guibutton"><strong>すべての選択</strong></span>チェックボックスを有効にします。</p>
-<p role="presentation"><span class="phrase"><strong>注:</strong></span><span class="guibutton"><strong>すべてを選択</strong></span>チェックボックスを選択すると、フォルダ内に表示されているすべてのメールしか選択されません。指定された上限をメール数が超えた場合は、待ち時間を短縮するため、フォルダ内の一部のメールのみがサーバで読み込まれます。フォルダ内のすべてのメールを表示するには、一覧の下にあるチェックボックスを選択します。すべてのメールがサーバで読み込まれるまで待ちます。</p>
-</li>
-<li class="listitem">
-<p role="presentation">一番の上にある<span class="guibutton"><strong>ソート条件</strong></span>ボタンをクリックすると、メールをソートする項目がメニューに表示されます。</p>
+<p role="presentation">一番の上にある<span class="guibutton"><strong>ソート条件</strong></span>ボタンをクリックすると、メールをソートするアイテムがメニューに表示されます。</p>
 <p role="presentation">すべてのメールスレッドを一つのアイテムにするには、<span class="guibutton"><strong>スレッド</strong></span>チェックボックスを有効にします。これは、<span class="guibutton"><strong>ソート条件</strong></span>にあります。</p>
 <p role="presentation">選択されているメールフォルダにソート設定が適用されます。フォルダごとに異なる設定を使用できます。</p>
 </li>
+<li class="listitem"><p role="presentation">送信者名の代わりに送信者のメールアドレスを表示するには、送信者名にマウスポインタを置きます。元のメールアドレスがヒントに表示されます。</p></li>
 <li class="listitem"><p role="presentation">メールをクリックすると、その内容が<a class="link" href="ox.appsuite.user.sect.email.gui.detailview.html">表示エリア</a>に表示されます。</p></li>
+<li class="listitem"><p role="presentation">よく使用する機能を有効にするには、１つのメールまたは複数のメール用のコンテキストメニューを使用できます。</p></li>
 <li class="listitem"><p role="presentation">一覧の幅を調整するには、一覧と詳細ビューの間にある境界線にマウスのポインタを置きます。境界線を左または右にドラッグします</p></li>
 </ul>
 <p>
       </p>
 </div>
 <p class="title">詳細は、次のページを参照してください。</p>
-<ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<ul class="itemizedlist" id="ox.appsuite.user.reference.email.gui.list.related" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">メールの表示</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.reply.html">メールの返信</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.forward.html">メールの転送</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.manage.html">メールの整理</a></p>
-</li></ul>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.vacationnotice.html">自動応答の自動送信</a></p></li>
+</ul>
 <p id="ox.appsuite.user.reference.email.gui.list.parent">親記事：<a class="xref" href="ox.appsuite.user.sect.email.gui.html"><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>の画面構成</a></p>
 </div>
           </div>

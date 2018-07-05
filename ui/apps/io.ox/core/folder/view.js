@@ -13,10 +13,11 @@
 
 define('io.ox/core/folder/view', [
     'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
     'io.ox/core/folder/api',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, api, settings, gt) {
+], function (ext, actions, api, settings, gt) {
 
     'use strict';
 
@@ -37,13 +38,13 @@ define('io.ox/core/folder/view', [
             sidepanel = nodes.sidepanel,
             hiddenByWindowResize = false,
             forceOpen = false,
-            DEFAULT_WIDTH = 250;
+            DEFAULT_WIDTH = 280;
 
         // smart defaults for flat folders
         if (!open) {
             open = {};
             // open private and public by default
-            if (/^(contacts|calendar|tasks)$/.test(module)) {
+            if (/^(contacts|calendar|event|tasks)$/.test(module)) {
                 open[_.display()] = ['virtual/flat/' + module + '/private', 'virtual/flat/' + module + '/public'];
             }
         }
@@ -86,10 +87,10 @@ define('io.ox/core/folder/view', [
             nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
-        var populateResize = _.throttle(function () {
+        var populateResize = function () {
             // trigger generic resize event so that other components can respond to it
             $(document).trigger('resize');
-        }, 50);
+        };
 
         //
         // Add API
@@ -132,7 +133,7 @@ define('io.ox/core/folder/view', [
             resize: (function () {
 
                 var maxSidePanelWidth = 0,
-                    minSidePanelWidth = 150,
+                    minSidePanelWidth = 240,
                     base, width;
 
                 function mousemove(e) {
@@ -178,6 +179,48 @@ define('io.ox/core/folder/view', [
         app.folderViewIsVisible = function () {
             return visible;
         };
+
+        // reverted for 7.10
+        // app.addPrimaryAction = function (options) {
+
+        //     var baton = ext.Baton({ app: this });
+
+        //     var $button = $('<button class="btn btn-primary">')
+        //         .prop('disabled', true)
+        //         .text(options.label)
+        //         .on('click', { baton: baton }, onClick);
+
+        //     ext.point(options.point).extend({
+        //         id: 'primary-action',
+        //         index: 10,
+        //         draw: function () {
+
+        //             this.append(
+        //                 $('<div class="primary-action">').append($button)
+        //             );
+
+        //             updateState();
+        //         }
+        //     });
+
+        //     function onClick(e) {
+        //         actions.invoke(options.action, null, e.data.baton);
+        //     }
+
+        //     function updateState() {
+        //         actions.check(options.action, baton).always(function (bool) {
+        //             $button.prop('disabled', !bool);
+        //         });
+        //     }
+
+        //     this.on('folder:change', updateState);
+
+        //     this.listenTo(this.props, 'change:folderview', function (model, value) {
+        //         // bad style; look for toolbar via selector
+        //         // better: solve this in tolbar locally; however, it's no view yet; no listenTo
+        //         this.getWindow().nodes.outer.find('.classic-toolbar-container .io-ox-action-link[data-action="' + options.toolbar + '"]').parent().toggle(!value);
+        //     });
+        // };
 
         //
         // Respond to window resize
@@ -244,7 +287,7 @@ define('io.ox/core/folder/view', [
             // due to needed support for older androids we use click here
             tree.$el.on('click', '.folder', _.debounce(function (e) {
                 // use default behavior for arrow
-                if ($(e.target).is('.folder-arrow, .fa')) return;
+                if ($(e.target).is('.folder-arrow, .fa, .color-label')) return;
                 // use default behavior for non-selectable virtual folders
                 var targetFolder = $(e.target).closest('.folder'),
                     mobileSelectMode = app.props.get('mobileFolderSelectMode');
@@ -255,7 +298,7 @@ define('io.ox/core/folder/view', [
                     return tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                 }
 
-                // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
+                // return here as we can not change the page to a virtual folder with the exception of a selectable virtual folder
                 if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) return;
 
                 // default 'listView'
@@ -281,7 +324,8 @@ define('io.ox/core/folder/view', [
                         section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
 
                     if (section && /(mail|contacts|calendar|tasks|infostore)/.test(tree.module) && tree.flat && tree.context === 'app') {
-                        ids.push('virtual/flat/' + tree.module + '/' + section);
+                        var module = tree.module === 'calendar' ? 'event' : tree.module;
+                        ids.push('virtual/flat/' + module + '/' + section);
                     }
                     tree.open = _(tree.open.concat(ids)).uniq();
                 })
@@ -337,11 +381,20 @@ define('io.ox/core/folder/view', [
             var ignoreChangeEvent = false;
 
             // on change via app.folder.set
-            app.on('folder:change', function (id) {
+            app.on('folder:change', function (id, data, favorite) {
                 if (ignoreChangeEvent) return;
-                // updates selection manager
-                tree.selection.set(id);
                 tree.traversePath(id, showFolder);
+
+                if (tree.$el.find('[data-id="' + id + '"]').length) {
+                    // check before selection if node is inside tree
+                    tree.selection.set(id, favorite);
+                } else {
+                    // wait for node to appear inside tree before selection
+                    tree.on('appear:' + id, function () {
+                        tree.selection.set(id, favorite);
+                        tree.off('appear:' + id);
+                    });
+                }
             });
 
             // on selection change
@@ -367,7 +420,7 @@ define('io.ox/core/folder/view', [
         // respond to folder removal
         api.on('before:remove', function (data) {
             // select parent or default folder
-            var id = data.folder_id === '1' ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
+            var id = /^1|2$/.test(data.folder_id) ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
             tree.selection.set(id);
         });
 

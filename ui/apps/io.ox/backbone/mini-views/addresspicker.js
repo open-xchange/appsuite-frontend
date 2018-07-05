@@ -41,11 +41,14 @@ define('io.ox/backbone/mini-views/addresspicker', [
 
             var self = this;
             require(['io.ox/contacts/addressbook/popup'], function (popup) {
+                var useGABOnly = self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'));
                 popup.open(function (result) {
                     _.each(result, function (singleData) {
                         var member;
                         if (singleData.folder_id) {
                             api.get(singleData).done(function (data) {
+                                // specifiy address field (email1, email2, ...)
+                                if (singleData.field) data.field = singleData.field;
                                 member = new pModel.Participant(data);
                                 self.opt.process(e, member, singleData);
                             });
@@ -60,7 +63,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
                         }
 
                     });
-                }, self.opt.isPermission && !capabilities.has('invite_guests'));
+                }, useGABOnly);
             });
         },
 

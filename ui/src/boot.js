@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* eslint requirejs/no-assign-require: 0 */
 // change ms-viewport rule for WP8 devices
 // http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html
 if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
@@ -22,7 +22,7 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 }
 
 // not document.ready cause we wait for CSS to be loaded
-$(window).load(function () {
+$(window).on('load', function () {
 
     'use strict';
 
@@ -106,7 +106,14 @@ $(window).load(function () {
                     $(window).trigger('require:require', name);
                 });
                 var def = $.Deferred().done(success).fail(fail || fallback);
-                require(deps, def.resolve, def.reject);
+                try {
+                    def.resolve.apply(def, deps.map(function (dep) {
+                        if (!require.defined(dep)) throw new Error();
+                        return require(dep);
+                    }));
+                } catch (e) {
+                    require(deps, def.resolve, def.reject);
+                }
                 return def.promise();
             }
             // bypass

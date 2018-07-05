@@ -31,14 +31,13 @@ define('io.ox/mail/categories/train', [
                 message: $('<div class="content category-toast">').append(
                     $('<p>').html(getSuccessMessage(addresses, category)),
                     $('<p>').html(getQuestion(addresses)),
-                    $('<button type="button" class="btn btn-default" data-action="move-all">')
-                        .text(gt('Move all messages'))
-                        .on('click', function () {
-                            api.train(options).fail(yell);
-                            yell('close');
-                        })
+                    $('<button type="button" class="btn btn-default" data-action="move-all">').text(gt('Move all messages')).on('click', function () {
+                        api.train(options).fail(yell);
+                        yell('close');
+                    })
                 ),
-                type: 'success'
+                type: 'success',
+                focus: true
             });
         }
     };
@@ -46,7 +45,7 @@ define('io.ox/mail/categories/train', [
     function getSuccessMessage(addresses, category) {
         return gt.format(
             //#. successfully moved a message via drag&drop to another mail category (tab)
-            //#. %1$s represents the name if the target category
+            //#. %1$s represents the name if the target category (non-essential information: can be left out)
             gt.ngettext('Message moved to category "%1$s".', 'Messages moved to category "%1$s".', addresses.length),
             _.escape(category)
         );
@@ -56,7 +55,7 @@ define('io.ox/mail/categories/train', [
         var uniquelist = getSenderList(addresses);
         return gt.format(
             //#. ask user to move all messages from the same sender to the mail category (tab)
-            //#. %1$s represents a email address
+            //#. %1$s represents a single email address (non-essential information: can be left out)
             gt.ngettext(
                 'Do you want to move all messages from %1$s to that category?',
                 'Do you want to move all messages from selected senders to that category?',

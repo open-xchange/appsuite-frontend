@@ -1,21 +1,32 @@
 /* Not supported: @@variables
  */
 
-if (process.argv.length > 2) {
-    console.log('Usage: /opt/open-xchange/sbin/update-dynamic-theme\n' +
-        'Update CSS for the dynamic theme after other plugins are updated.\n' +
-        '  -h, --help  Print this help');
-    process.exit(1 - /^(-h|--help)$/.test(process.argv[2]));
-}
-
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var less = require('./less');
 
-var dynamicVariables = set(
-    ['frameColor', 'iconColor', 'selectionColor', 'logoWidth', 'logoURL'].map(
-        function (s) { return '@io-ox-dynamic-theme-' + s; }));
+var verbosity = 0,
+    usage = '\nUsage: /opt/open-xchange/sbin/update-dynamic-theme\n' +
+        'Update CSS for the dynamic theme after other plugins are updated.\n' +
+        '  -h, --help     Print this help\n' +
+        '  -v, --verbose  Print increasingly verbose information with each\n' +
+        '                 repeated option';
+
+for (var i = 2; i < process.argv.length; i++) {
+    var arg = process.argv[i];
+    if (arg === '-v' || arg === '--verbose') {
+        verbosity++;
+    } else if (arg === '-h' || arg === '--help') {
+        console.log(usage);
+        process.exit(0);
+    } else {
+        console.error('Invalid argument:',
+                      arg.replace(/^(.{20})(.+)$/, '$1...'));
+        console.error(usage);
+        process.exit(1);
+    }
+}
 
 function set(array) {
     var result = {};
@@ -30,40 +41,73 @@ var blockContent = ['Directive', 'Extend', 'Import', 'Media', 'Ruleset', 'Rule',
 var markedClasses = set(blockContent);
 var ignoredClasses = set(['Comment']);
 
-// TODO: output definitions.less only once
+var src = path.join(path.dirname(process.argv[1]), 'src');
+
 var defFiles = [
     'apps/3rd.party/bootstrap/less/variables.less',
     'apps/3rd.party/bootstrap/less/mixins.less',
-    'apps/themes/definitions.less',
     'apps/themes/mixins.less',
-    'apps/io.ox/dynamic-theme/definitions.less.in'];
-var definitions;
-parse(defFiles.map(function (file) { return fs.readFileSync(file, 'utf8'); })
-              .join('\n'),
     'apps/themes/definitions.less',
-    function (css) {
-        definitions = css;
-        dynamicVariables = markTree(css);
-    });
-var output = [''];
-parse(fs.readFileSync('apps/themes/style.less', 'utf8'),
-      'apps/themes/style.less', extract);
-recurse('apps');
-removeUnused(definitions);
-output[0] = less.print(definitions);
-fs.writeFileSync('apps/io.ox/dynamic-theme/theme.less.in', output.join('\n'));
+    src + '/definitions.less'];
 
-function recurse(dir) {
-    var files = fs.readdirSync(dir);
-    for (var i = 0; i < files.length; i++) {
-        var file = path.join(dir, files[i]);
-        if (fs.statSync(file).isDirectory()) {
-            recurse(file);
-        } else {
-            if (file.slice(-5) !== '.less') continue;
-            if (file.slice(0, 12) === 'apps/themes/') continue;
-            parse(fs.readFileSync(file, 'utf8'), file, extract);
+function readFile(file) { return fs.readFileSync(file, 'utf8'); }
+
+function mkdirp(dir) {
+    if (fs.existsSync(dir)) return;
+    mkdirp(path.dirname(dir));
+    fs.mkdirSync(dir);
+}
+
+var themes = [];
+processDynamicTheme(['apps/themes/style.less', src + '/style.dyn.less'],
+                    src + '/style.static.less');
+processDynamicTheme(['apps/themes/login/login.less', src + '/login.dyn.less'],
+                    src + '/login.static.less');
+var excludes = set(['apps/themes', 'apps/io.ox/dynamic-theme']);
+recurse('apps');
+function recurse(file) {
+    if (fs.statSync(file).isDirectory()) {
+        var files = fs.readdirSync(file);
+        for (var i = 0; i < files.length; i++) {
+            var fileInDir = path.join(file, files[i]);
+            if (!(fileInDir in excludes)) recurse(fileInDir);
         }
+    } else if (file.slice(-5) === '.less') {
+        processDynamicTheme([file]);
+    }
+}
+fs.writeFileSync('apps/io.ox/dynamic-theme/files.js',
+    'define(\'io.ox/dynamic-theme/files\', [' + themes.join() + ']);\n');
+
+function processDynamicTheme(files, staticContent) {
+    processFile(files[0], defFiles.concat(files), staticContent);
+}
+
+function processFile(name, files, staticContent) {
+    if (verbosity > 1) console.log('processing', name);
+    var dynamicVariables = set([
+            // login screen: set in as-config.yml
+            'loginColor', 'headerPrefixColor', 'headerColor', 'headerLogo',
+            // main screen: set in settings/open-xchange-dynamic-theme.yml
+            'mainColor', 'linkColor', 'logoURL', 'logoWidth', 'logoHeight',
+            'topbarBackground', 'topbarHover', 'listSelected', 'listHover',
+            'listSelectedFocus', 'folderBackground', 'folderSelected',
+            'folderHover', 'folderSelectedFocus'
+        ].map(function (s) { return '@io-ox-dynamic-theme-' + s; }));
+
+    parse(files.map(readFile).join('\n'), name, extract);
+
+    function extract(css) {
+        expandImports(css);
+        markTree(css, dynamicVariables);
+        removeUnused(css);
+        var output = less.print(css).replace(/\n+/g, '\n');
+        if (staticContent) output += '\n' + readFile(staticContent);
+        if (!output) return;
+        var filename = path.join('apps/io.ox/dynamic-theme/', name + '.dyn');
+        mkdirp(path.dirname(filename));
+        fs.writeFileSync(filename, output);
+        themes.push(JSON.stringify(name.replace(/^apps\/|\.less$/g, '')));
     }
 }
 
@@ -73,7 +117,8 @@ function parse(input, file, callback) {
             relativeUrls: true,
             filename: file,
             syncImport: true,
-            paths: [path.dirname(file), 'apps/3rd.party/bootstrap/less/']
+            paths: [path.dirname(file), 'apps/3rd.party/bootstrap/less/',
+                    'apps/3rd.party/']
         }).parse(input, function (e, css) { e ? die(e) : callback(css); });
     } catch (e) {
         die(e);
@@ -83,13 +128,6 @@ function parse(input, file, callback) {
 function die(e) {
     console.error(less.formatError(e, { color: process.stdout.isTTY }));
     process.exit(1);
-}
-
-function extract(css) {
-    expandImports(css);
-    markTree(css);
-    removeUnused(css);
-    output.push(less.print(css));
 }
 
 function expandImports(css) {
@@ -111,7 +149,7 @@ function trackNested() {
         nested: false,
         track: function (node, next) {
             var oldNested = state.nested;
-            state.nested = state.nested || node.$_called;
+            state.nested = true;
             next();
             state.nested = oldNested;
         }
@@ -119,60 +157,88 @@ function trackNested() {
     return state;
 }
 
-function markTree(css) {
-    var used = false, inMixin = trackNested(), frames = [definitions];
+function markTree(css, variables) {
+    var used = false,frames = [],
+        inUsedMixin = trackNested(), inMixin = trackNested();
+
+    variables = _.clone(variables);
+
+    function walkWithFrames() {
+        return less
+            .walk('MixinDefinition.rules',
+                function (node) {
+                    var params = new less.tree.Ruleset(null, []);
+                    node.parent.params.forEach(function (param) {
+                        if (!param.name) return;
+                        var rule = new less.tree.Rule(param.name, param.value);
+                        params.prependRule(rule);
+                    });
+                    frames.unshift(node.parent, params);
+                },
+                function (node) { frames.splice(0, 2); })
+            .walk(['Ruleset', 'Directive'],
+                function (node) { frames.unshift(node); },
+                function (node) { frames.shift(); });
+    }
+
     function mark(node) {
         if (node.$_used) return false;
         return node.$_used = true;
     }
-    function markMixin(node) {
-        node.$_called = true;
-        return markConstants(node);
+    function markMixin(node, callback) {
+        var found = false;
+        for (var i = 0; i < frames.length; i++) {
+            frames[i].find(node.selector).forEach(function (mixin) {
+                found = true;
+                again = markConstants(mixin) || again;
+                if (callback) callback(mixin);
+            });
+        }
+        if (verbosity > 0 && !found && !inMixin.nested) {
+            console.error('Undefined mixin:', node.selector.toCSS());
+        }
     }
     function markConstants(node) {
         if (!mark(node)) return false;
         var framesBackup = frames;
         frames = frames.slice(0);
-        less
-            // Maintain a stack of scope frames
-            // TODO: inject parameters as separate frame
-            .walk(['Ruleset', 'Directive', 'MixinDefinitinon'],
-                function (node) { frames.unshift(node); },
-                function (node) { frames.shift(); })
+        walkWithFrames()
             .walk('Variable', function (node2) { addConst(node2.name, node); })
             .walk('Quoted', function (node2) {
                 node2.value.replace(/@\{([\w-]+)\}/g, function (_, name) {
                     addConst('@' + name, node2);
                 });
             })
+            .walk('MixinCall', markMixin)
+            // Keep track whether we're inside a mixin
+            .walk('MixinDefinition', inMixin.track)
             .over(node);
         frames = framesBackup;
         return true;
     }
+
+    // Adds a Less variable which depends on the dynamic theme.
     function addVar(name) {
         if (name in variables) return;
         variables[name] = again = true;
-        delete consts[name];
     }
+
+    // Adds a Less variable which may not depend on the dynamic theme,
+    // but is used in a rule which does.
     function addConst(name, node) {
-        if (name in variables || name in consts) return;
-        consts[name] = again = true;
         var variable = less.tree.find((node.frames || []).concat(frames),
             function (frame) { return frame.variable(name); });
-        if (variable) markConstants(variable);
+        if (variable) {
+            again = markConstants(variable) || again;
+        } else if (verbosity > 0 && !(name in variables) && !inMixin.nested) {
+            console.error('Undefined variable:', name);
+        }
     }
-    
+
     // Repeat until no new dependent variables or constants are discovered
-    var variables = _.clone(dynamicVariables);
-    var consts = {};
     do {
         var again = false;
-        less
-            // Maintain a stack of scope frames
-            // TODO: inject parameters as separate frame
-            .walk(['Ruleset', 'Directive', 'MixinDefinitinon'],
-                function (node) { frames.unshift(node); },
-                function (node) { frames.shift(); })
+        walkWithFrames()
             // Find where dynamic variables are used
             .walk('Variable', function (node) {
                 if (node.name in variables) used = true;
@@ -193,31 +259,44 @@ function markTree(css) {
             })
             // Remember variable definitions for the next iteration
             .walk('Rule', null, function (node) {
-                if (!node.variable) return;
-                if (used) addVar(node.name);
-                if (node.name in consts) markConstants(node);
+                if (node.name in variables) used = true;
+                if (!node.variable || !used) return;
+                addVar(node.name);
+                used = false;
             })
             // Find used mixin definitions
             .walk('MixinCall', null, function (node) {
-                if (!used && !inMixin.nested) return;
-                for (var i = 0; i < frames.length; i++) {
-                    frames[i].find(node.selector).forEach(function (mixin) {
-                        if (markMixin(mixin)) again = true;
+                if (!used && !inUsedMixin.nested) return;
+                markMixin(node, function (mixin) {
+                    // Find "return values" defined by the called mixin
+                    mixin.rules.forEach(function (rule) {
+                        if (rule.type === 'Rule' && rule.variable) {
+                            var v = frames[0].variables();
+                            if (!v[rule.name]) v[rule.name] = rule.value;
+                        }
+                        if (rule.type === 'MixinDefinition' &&
+                            !frames[0].find(rule.selectors[0]))
+                        {
+                            frames[0].prependRule(rule);
+                        }
                     });
-                }
+                });
             })
-            // Keep track wether we're inside a used mixin
+            // Keep track whether we're inside a mixin
             .walk('MixinDefinition', inMixin.track)
+            // Keep track whether we're inside a used mixin
+            .walk('MixinDefinition', function (node, next) {
+                if (node.$_used) inUsedMixin.track(node, next); else next();
+            })
             // Mark constants in default values for mixin parameters
             .walk('MixinDefinition', null, function (node) {
-                if (!inMixin.nested) return;
+                if (!inUsedMixin.nested) return;
                 node.params.forEach(function (param) {
                     if (param.value) markConstants(param.value);
                 });
             })
             .over(css);
     } while (again);
-    return variables;
 }
     
 function removeUnused(css) {

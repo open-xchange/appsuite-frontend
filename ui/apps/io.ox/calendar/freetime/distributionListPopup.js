@@ -23,7 +23,7 @@ define('io.ox/calendar/freetime/distributionListPopup', [
 
     var showDialog = function (options) {
         options = options || {};
-        if (!options.participants || options.participants.length < 1) {
+        if (!options.attendees || options.attendees.length < 1) {
             yell('info', gt('Please select at least one participant'));
             return;
         }
@@ -31,32 +31,33 @@ define('io.ox/calendar/freetime/distributionListPopup', [
                 title: gt('Create distribution list'),
                 async: true
             }),
-            input = $('<input type="text" class="form-control">');
+            guid = _.uniqueId('form-control-label-'),
+            input = $('<input type="text" class="form-control">').attr('id', guid);
 
-        popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').text(gt('Name')).append(input),
-            $('<div class="help-block">').text(gt('Please note that distribution lists cannot contain ressources.')));
+        popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').attr('for', guid).text(gt('Name')).append(input),
+            $('<div class="help-block">').text(gt('Please note that distribution lists cannot contain resources.')));
         popup.addCancelButton();
         popup.addButton({ label: options.label || gt('Create distibution list'), action: 'save' });
         popup.on('save', function () {
             if (input.val()) {
                 require(['io.ox/contacts/api', 'io.ox/core/folder/util'], function (api, folderUtil) {
-                    var participants = options.participants.map(function (model) {
-                        // distribution lists may not contain ressources
-                        if (model.get('type') === 3) {
+                    var attendees = options.attendees.map(function (item) {
+                        // distribution lists may not contain resources
+                        if (item.get('cuType') === 'RESOURCE') {
                             return;
                         }
-                        if (_.isNumber(model.getContactID())) {
+                        if (item.get('contactInformation')) {
                             return {
-                                id: model.getContactID(),
-                                folder_id: model.get('folder_id'),
-                                display_name: model.getDisplayName(),
-                                mail: model.getTarget(),
-                                mail_field: model.getFieldNumber()
+                                id: item.get('contactInformation').contact_id,
+                                folder_id: item.get('contactInformation').folder,
+                                display_name: item.get('cn'),
+                                mail: item.get('email'),
+                                mail_field: 1
                             };
                         }
                         return {
-                            display_name: model.getDisplayName(),
-                            mail: model.getTarget(),
+                            display_name: item.get('cn'),
+                            mail: item.get('email'),
                             mail_field: 0
                         };
                     });
@@ -64,8 +65,7 @@ define('io.ox/calendar/freetime/distributionListPopup', [
                         display_name: input.val(),
                         folder_id: folderUtil.getDefaultFolder('contacts'),
                         mark_as_distributionlist: true,
-                        distribution_list: _.compact(participants),
-                        last_name: ''
+                        distribution_list: _.compact(attendees)
                     }).done(function () {
                         yell('success', gt('Distribution list has been saved'));
                     }).fail(function (error) {

@@ -21,7 +21,7 @@ module.exports = function (grunt) {
                 options: { lessrc: '.lessrc' },
                 files: [
                     {
-                        src: ['bower_components/bootstrap/less/bootstrap.less'],
+                        src: ['node_modules/bootstrap/less/bootstrap.less'],
                         expand: true,
                         rename: function (dest) { return dest; },
                         dest: 'build/apps/io.ox/core/bootstrap/css/bootstrap.min.css'
