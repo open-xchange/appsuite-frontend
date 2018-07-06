@@ -152,8 +152,6 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                     // initialize mobiscroll plugin
                     self.nodes.dayField.mobiscroll(self.mobileSettings);
-                    self.nodes.dayField.on('change', _.bind(self.updateModel, self));
-
                     def.resolve();
                 });
             } else {
@@ -218,7 +216,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 this.nodes.timezoneField.text(timestamp.zoneAbbr());
             }
             // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
-            this.nodes.dayField.trigger('change');
+            this.updateModel();
         },
 
         updateModel: function () {
