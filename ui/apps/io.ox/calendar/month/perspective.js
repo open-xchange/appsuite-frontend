@@ -51,6 +51,8 @@ define('io.ox/calendar/month/perspective', [
          */
         showAppointment: function (e, obj) {
             // open appointment details
+            var self = this;
+            this.detailCID = api.cid(obj);
             this.dialog.show(e, function (popup) {
                 popup
                 .busy()
@@ -60,6 +62,7 @@ define('io.ox/calendar/month/perspective', [
                 });
 
                 api.get(obj).then(function success(model) {
+                    if (model.cid !== self.detailCID) return;
                     popup.idle().append(detailView.draw(model));
                 });
             });

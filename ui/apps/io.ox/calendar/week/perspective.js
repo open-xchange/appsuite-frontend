@@ -90,6 +90,7 @@ define('io.ox/calendar/week/perspective', [
                 }, failHandler);
 
             } else {
+                self.detailCID = api.cid(obj);
                 self.dialog.show(e, function (popup) {
                     popup
                     .busy()
@@ -99,6 +100,7 @@ define('io.ox/calendar/week/perspective', [
                     });
 
                     api.get(obj).then(function (model) {
+                        if (model.cid !== self.detailCID) return;
                         popup.idle().append(detailView.draw(model));
                         applyDate(model);
                     }, failHandler);
