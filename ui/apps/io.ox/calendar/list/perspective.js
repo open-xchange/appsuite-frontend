@@ -80,7 +80,7 @@ define('io.ox/calendar/list/perspective', [
                     app.listView.selection.clear();
                 });
                 // draw details to page
-                p.idle().empty().append(viewDetail.draw(model, options));
+                p.idle().empty().append(viewDetail.draw(new ext.Baton({ model: model }), options));
                 // update toolbar with new baton
                 this.app.pages.getToolbar('detailView').setBaton(baton);
 
