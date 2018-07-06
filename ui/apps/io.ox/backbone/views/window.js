@@ -96,12 +96,12 @@ define('io.ox/backbone/views/window', [
             var isNormal = this.model.get('mode') === 'normal';
             return $('<div class="controls" role="toolbar">').append(
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">')),
+                $('<button type="button" class="btn btn-link" data-action="minimize">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))),
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('title', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">')).toggleClass('hidden', isNormal),
+                $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal),
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('title', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">')).toggleClass('hidden', !isNormal),
-                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">') : ''
+                $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal),
+                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))) : ''
             );
         },
 
