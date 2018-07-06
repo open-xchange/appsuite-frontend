@@ -376,7 +376,7 @@ define('plugins/notifications/calendar/register', [
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
-                        var title = model.get('title'),
+                        var title = model.get('summary'),
                             date = ', ' + util.getDateInterval(model.attributes),
                             time = ', ' + util.getTimeInterval(model.attributes);
 
