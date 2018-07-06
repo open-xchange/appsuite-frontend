@@ -662,7 +662,9 @@ define('io.ox/calendar/util', [
 
             // if weekly, shift bits
             if (type === 2) {
-                var shift = date.diff(oldDate, 'days') % 7,
+                var newDay = moment(date).startOf('day'),
+                    oldDay = moment(oldDate).startOf('day'),
+                    shift = newDay.diff(oldDay, 'days') % 7,
                     days = rruleMapModel.get('days');
                 if (shift < 0) shift += 7;
                 for (var i = 0; i < shift; i++) {
