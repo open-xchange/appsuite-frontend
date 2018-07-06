@@ -44,9 +44,13 @@ define('io.ox/settings/accounts/settings/pane', [
                             dialog.show();
                         });
                     },
-                    updateStatuses: function () {
+                    updateListAndStatuses: function () {
                         var collection = this.collection;
-                        return accountAPI.getStatus().done(function (status) {
+
+                        return $.when(api.getAll(), accountAPI.getStatus()).done(function (accounts, status) {
+                            collection.reset(keychainModel.wrap(accounts).models);
+
+                            status = status[0];
                             for (var id in status) {
                                 // to avoid double ids the collection has the account type as prefix see Bug 50219
                                 var model = collection.get('mail' + id),
@@ -116,8 +120,8 @@ define('io.ox/settings/accounts/settings/pane', [
                     view.render().$el
                 );
 
-                this.updateStatuses();
-                this.listenTo(api, 'refresh.all refresh.list', this.updateStatuses);
+                this.updateListAndStatuses();
+                this.listenTo(api, 'refresh.all refresh.list', this.updateListAndStatuses);
             }
         },
         {
