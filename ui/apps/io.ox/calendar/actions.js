@@ -250,8 +250,8 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/export', {
         requires: 'some read',
         action: function (baton) {
-            require(['io.ox/core/export'], function (exportDialog) {
-                exportDialog.open('calendar', { list: [].concat(baton.data) });
+            require(['io.ox/core/download'], function (download) {
+                download.exported({ list: [].concat(baton.data), format: 'ical' });
             });
         }
     });

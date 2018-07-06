@@ -349,9 +349,15 @@ define('io.ox/core/folder/contextmenu', [
         //
         exportData: (function () {
 
-            function handler(e) {
+            function exportDialog(e) {
                 require(['io.ox/core/export'], function (exportDialog) {
                     exportDialog.open(e.data.baton.data.module, { folder: e.data.baton.data.id });
+                });
+            }
+
+            function download(e) {
+                require(['io.ox/core/download'], function (download) {
+                    download.exported({ folder: e.data.baton.data.id, format: 'ical' });
                 });
             }
 
@@ -361,6 +367,9 @@ define('io.ox/core/folder/contextmenu', [
                 if (!api.can('export', baton.data)) return;
                 if (baton.data.total === 0) return;
                 if (!_.isNumber(baton.data.total) && baton.data.total !== null) return;
+
+                var handler = exportDialog;
+                if (baton.data.module === 'calendar') handler = download;
 
                 contextUtils.addLink(this, {
                     action: 'export',
