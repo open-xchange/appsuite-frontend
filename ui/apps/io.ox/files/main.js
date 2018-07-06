@@ -50,7 +50,7 @@ define('io.ox/files/main', [
     'use strict';
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
+    var app = ox.ui.createApp({ id: 'io.ox/files', name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
         sidebarView = new Sidebarview({ closable: true, app: app }),
