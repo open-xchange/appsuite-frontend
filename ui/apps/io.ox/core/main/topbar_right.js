@@ -40,7 +40,7 @@ define('io.ox/core/main/topbar_right', [
         }, currentApp && currentApp.get('help'));
     }
 
-    ext.point('io.ox/core/topbar/right').extend({
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'upsell',
         index: 50,
         draw: function () {
