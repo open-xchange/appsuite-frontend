@@ -26,6 +26,53 @@ define('io.ox/backbone/views/window', [
         // used when dragging, prevents iframe event issues
         backdrop = $('<div id="floating-window-backdrop">');
 
+    var TaskbarView = DisposableView.extend({
+        tagName: 'ul',
+        id: 'io-ox-taskbar',
+        className: 'f6-target',
+        attributes: {
+            role: 'toolbar',
+            'aria-hidden': true
+            // Adding aria-roledescription would be nice in the future, but this is part of wai-aria 1.1
+            // and should not be enabled for now, as there are inconsistencies between screen readers atm.
+            // 'aria-roledescription': gt('Taskbar')
+        },
+        initialize: function () {
+            this.listenTo(ox.ui.apps, 'launch resume', this.onLaunchResume);
+        },
+        onLaunchResume: function (app) {
+            var model = app && app.get('window') && app.get('window').floating && app.get('window').floating.model;
+            if (!model) return;
+            model.set('minimized', false);
+            collection.add(model);
+            this.updateAriaAttributes();
+        },
+        addByCid: function (cid) {
+            // minimizing a window moves it to the last position
+            return this.add(this.$el.find('[data-cid="' + cid + '"]')).show();
+        },
+        updateAriaAttributes: function () {
+            var items = this.$el.find('li').filter(function () {
+                return $(this).css('display') !== 'none';
+            });
+            var hasItems = items.length > 0;
+            this.$el.toggleClass('f6-target', hasItems);
+            if (hasItems) this.$el.removeAttr('aria-hidden');
+            else this.$el.attr('aria-hidden', true);
+        },
+        add: function (el) {
+            this.$el.append(el);
+            this.updateAriaAttributes();
+            return el;
+        },
+        render: function () {
+            $('#io-ox-taskbar-container').empty().append(this.$el);
+            return this;
+        }
+    });
+
+    var taskbar = new TaskbarView().render();
+
     var WindowModel = Backbone.Model.extend({
         defaults: {
             minimized: false,
@@ -310,11 +357,7 @@ define('io.ox/backbone/views/window', [
             // don't animate multiple times
             if (this.minimizing) return;
             var self = this;
-
-            var taskBarEl = $('#io-ox-taskbar').find('[data-cid="' + this.model.cid + '"]');
-            // minimizing a window moves it to the last position
-            $('#io-ox-taskbar').append(taskBarEl);
-            taskBarEl.show();
+            var taskBarEl = taskbar.addByCid(this.model.cid);
             var windowWidth = this.model.get('mode') === 'normal' ? this.$el.width() : $('body').width();
             var left = taskBarEl.offset().left + taskBarEl.width() / 2 - windowWidth / 2;
             var top = $('body').height() - this.$el.height() / 2;
@@ -361,10 +404,14 @@ define('io.ox/backbone/views/window', [
 
     function remove() {
         collection.remove(this.model);
+        taskbar.updateAriaAttributes();
     }
 
     var TaskbarElement = DisposableView.extend({
         tagName: 'li',
+        attributes: {
+            role: 'presentation'
+        },
         events: {
             'click [data-action="restore"]': 'onClick'
         },
@@ -414,7 +461,7 @@ define('io.ox/backbone/views/window', [
         onChangeTitle: function () {
             var title = this.model.get('title').trim();
             this.$title.text(title);
-            this.$button.attr('title', title);
+            this.$button.attr('aria-label', title);
             if (!this.model.get('minimized')) ox.trigger('change:document:title', this.model.get('title'));
         },
 
@@ -427,17 +474,18 @@ define('io.ox/backbone/views/window', [
             this.$el.toggle(this.model.get('minimized'));
             // don't grab the focus if this is just called from the render function (savepoints start minimized but shouldn't grab the focus when drawn for the first time)
             if (!options.isRender && this.model.get('minimized')) this.$el.find('[data-action="restore"]').focus();
+            taskbar.updateAriaAttributes();
         },
 
         render: function () {
             this.$el.attr('data-cid', this.model.cid).append(
                 this.$button = $('<button type="button" class="taskbar-button" data-action="restore">').append(
                     this.$icon = this.model.get('taskbarIcon') ? $('<i class="fa" aria-hidden="true">').addClass(this.model.get('taskbarIcon')) : $(),
-                    this.$title = $('<span class="title" aria-hidden="true">'),
-                    this.$count = $('<span class="count label label-danger">'),
+                    this.$title = $('<span role="presentation" class="title" aria-hidden="true">'),
+                    this.$count = $('<span role="presentation" class="count label label-danger">'),
                     // margin-right-auto for flex
-                    $('<span class="spacing">'),
-                    $('<i class="maximize-icon pull-right fa fa-window-maximize" aria-hidden="true">')
+                    $('<span role="presentation" class="spacing">'),
+                    $('<i role="presentation" class="maximize-icon pull-right fa fa-window-maximize" aria-hidden="true">')
                 )
             );
 
@@ -445,25 +493,10 @@ define('io.ox/backbone/views/window', [
             this.onChangeCount();
             this.onChangeMinimized({ isRender: true });
 
-            $('#io-ox-taskbar').append(this.$el);
+            taskbar.add(this.$el);
             return this;
         }
     });
-
-    var TaskbarView = DisposableView.extend({
-        el: '#io-ox-taskbar',
-        initialize: function () {
-            this.listenTo(ox.ui.apps, 'launch resume', this.onLaunchResume);
-        },
-        onLaunchResume: function (app) {
-            var model = app && app.get('window') && app.get('window').floating && app.get('window').floating.model;
-            if (!model) return;
-            model.set('minimized', false);
-            collection.add(model);
-        }
-    });
-
-    new TaskbarView().render();
 
     // used to add apps that do not use floating windows to the taskbar => office, planningview etc
     // options: lazyload - used by restore points to create taskbarentries without starting the app
@@ -509,7 +542,7 @@ define('io.ox/backbone/views/window', [
             app.getWindow().on('hide show', function () {
                 model.set('minimized', !this.state.visible);
                 // minimizing a window moves it to the last position
-                if (!this.state.visible) $('#io-ox-taskbar').append(taskbarItem.$el);
+                if (!this.state.visible) taskbar.add(taskbarItem.$el);
             });
         }
 
