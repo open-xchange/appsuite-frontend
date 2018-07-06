@@ -84,7 +84,7 @@ define('io.ox/calendar/week/perspective', [
                 api.get(obj).then(function (model) {
                     var data = model.toJSON(),
                         b = new ext.Baton({ data: data, model: model });
-                    p.idle().empty().append(detailView.draw(model));
+                    p.idle().empty().append(detailView.draw(new ext.Baton({ model: model })));
                     self.app.pages.getToolbar('detailView').setBaton(b);
                     applyDate(model);
                 }, failHandler);
@@ -101,7 +101,7 @@ define('io.ox/calendar/week/perspective', [
 
                     api.get(obj).then(function (model) {
                         if (model.cid !== self.detailCID) return;
-                        popup.idle().append(detailView.draw(model));
+                        popup.idle().append(detailView.draw(new ext.Baton({ model: model })));
                         applyDate(model);
                     }, failHandler);
                 });
