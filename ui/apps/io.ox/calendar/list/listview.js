@@ -43,6 +43,9 @@ define('io.ox/calendar/list/listview', [
                 time = $('<div class="time custom_shown_as" aria-hidden="true">'),
                 colorLabel = $('<div class="color-label">');
 
+            // reset classes in case the div gets reused
+            this.attr('class', 'list-item-content');
+
             if (model.get('folder')) {
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 folderAPI.get(model.get('folder')).done(function (folder) {
