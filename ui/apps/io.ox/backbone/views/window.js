@@ -32,6 +32,7 @@ define('io.ox/backbone/views/window', [
         className: 'f6-target',
         attributes: {
             role: 'toolbar',
+            'aria-label': gt('Minimized windows'),
             'aria-hidden': true
             // Adding aria-roledescription would be nice in the future, but this is part of wai-aria 1.1
             // and should not be enabled for now, as there are inconsistencies between screen readers atm.
