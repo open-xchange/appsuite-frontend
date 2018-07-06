@@ -19,8 +19,9 @@ define('io.ox/calendar/list/listview', [
     'io.ox/core/folder/api',
     'io.ox/core/tk/list',
     'gettext!io.ox/calendar',
+    'settings!io.ox/calendar',
     'io.ox/calendar/list/view-options'
-], function (util, models, api, ext, folderAPI, ListView, gt) {
+], function (util, models, api, ext, folderAPI, ListView, gt, settings) {
 
     'use strict';
 
@@ -218,11 +219,66 @@ define('io.ox/calendar/list/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('chronos-item');
             this.connect(api.collectionLoader);
-            this.on('collection:set', this.onCollectionSet);
+            this.listenTo(settings, 'change:showDeclinedAppointments', this.rerender);
+            this.on('collection:change:attendees', this.onChangeAttendee);
         },
 
-        onCollectionSet: function () {
+        onChangeAttendee: function (model) {
+            // only call rerender, if the confirmation status is false and declined appointments are not shown
+            if (util.getConfirmationStatus(model) !== 'DECLINED') return;
+            if (settings.get('showDeclinedAppointments', false)) return;
+            this.collection.remove(model);
+            this.selection.dodge();
+        },
+
+        rerender: function () {
+            function cont() {
+                if (!this.originalCollection) return;
+                this.setCollection(this.originalCollection);
+                this.collection.trigger('reset');
+            }
+            if (this.$el.is(':visible')) cont.call(this); else this.app.getWindow().one('show', cont.bind(this));
+        },
+
+        setCollection: function (collection) {
+            function filter(model) {
+                if (util.getConfirmationStatus(model) !== 'DECLINED') return true;
+                return settings.get('showDeclinedAppointments', false);
+            }
+
+            // use intermediate collection to filter declined appointments if necessary
+            if (this.originalCollection) this.stopListening(this.originalCollection);
+            this.originalCollection = collection;
+            collection = new models.Collection(collection.filter(filter));
+            collection.cid = this.originalCollection.cid;
+
+            // apply intermediate collection to ListView
+            ListView.prototype.setCollection.call(this, collection);
+
+            this.listenTo(this.originalCollection, {
+                'all': function (event) {
+                    var args = _(arguments).toArray();
+                    if (/(add|remove|reset|sort)/.test(event)) return;
+                    this.collection.trigger.apply(this.collection, args);
+                }.bind(this),
+                'add': function (model) {
+                    if (!filter(model)) return;
+                    this.collection.add(model);
+                }.bind(this),
+                'reset': function (data) {
+                    if (!data) return;
+                    this.collection.reset(data.filter(filter));
+                }.bind(this),
+                'remove': function (data) {
+                    this.collection.remove(data);
+                },
+                'remove sort': function () {
+                    this.collection.sort();
+                }.bind(this)
+            });
+
             this.listenTo(this.collection, 'paginate', _.debounce(this.onPaginatenEvent, 20));
+            return this;
         },
 
         getLabel: function (model) {
@@ -253,7 +309,7 @@ define('io.ox/calendar/list/listview', [
             // only render if in listview. not in search
             if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
-            var m = moment(this.collection.originalStart).add(this.collection.range, 'month');
+            var m = moment(this.originalCollection.originalStart).add(this.originalCollection.range, 'month');
             this.$el.append(
                 this.tail = $('<li class="tail">').append(
                     $('<a href="#">')
@@ -266,7 +322,7 @@ define('io.ox/calendar/list/listview', [
         onLoadMore: function (e) {
             e.preventDefault();
             if (this.tail) this.tail.remove();
-            this.loader.collection = this.collection;
+            this.loader.collection = this.originalCollection;
             // must send paginate: true because pagination in calendar is somehow special
             this.paginate();
         },

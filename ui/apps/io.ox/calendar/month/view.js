@@ -62,6 +62,8 @@ define('io.ox/calendar/month/view', [
             this.app = options.app;
             this.perspective = options.perspective;
             this.weekType = options.weekType;
+
+            this.listenTo(settings, 'change:showDeclinedAppointments', this.rerenderAppointments);
         },
 
         setCollection: function (collection) {
@@ -73,6 +75,7 @@ define('io.ox/calendar/month/view', [
             this.renderAppointments();
 
             this
+                .listenTo(this.collection, 'change:attendees', this.onChangeAttendee)
                 .listenTo(this.collection, 'change', this.renderAppointments, this)
                 .listenTo(this.collection, 'add remove reset', _.debounce(this.renderAppointments), this);
         },
@@ -84,6 +87,12 @@ define('io.ox/calendar/month/view', [
                 folders: _(this.folders).pluck('id'),
                 view: 'month'
             };
+        },
+
+        onChangeAttendee: function (model) {
+            if (util.getConfirmationStatus(model) !== 'DECLINED') return;
+            if (settings.get('showDeclinedAppointments', false)) return;
+            this.perspective.dialog.close();
         },
 
         onClickAppointment: function (e) {
@@ -244,6 +253,10 @@ define('io.ox/calendar/month/view', [
             }
 
             return this;
+        },
+
+        rerenderAppointments: function () {
+            if (this.$el.is(':visible')) this.renderAppointments(); else this.app.getWindow().one('show', this.renderAppointments.bind(this));
         },
 
         renderAppointment: function (a) {
