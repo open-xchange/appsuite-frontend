@@ -2875,6 +2875,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Șterge schița."
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Șterge semnăturile vechi după importare"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4051,7 +4058,7 @@ msgstr "Extinde formularul"
 msgid "Expert user?"
 msgstr "Utilizator expert?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Expirare"
@@ -5960,6 +5967,12 @@ msgstr "Mini calendar"
 msgid "Minimize"
 msgstr "Minimizează"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "Ferestre integrate"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7409,11 +7422,6 @@ msgstr "Introduceți o dată după data de început."
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Atenție: listele de distribuție nu pot conține resurse."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Atenție: ceilalți participanți vor fi eliminați la exportarea calendarului."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8709,6 +8717,7 @@ msgstr "Selectează toate mesajele"
 msgid "Select calendar"
 msgstr "Selectați calendarul"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11989,10 +11998,6 @@ msgstr "respins"
 msgid "delete all objects"
 msgstr "șterge toate obiectele"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "șterge dacă a expirat"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -14699,9 +14704,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Email notification for task participant?"
 #~ msgstr "Notificare pe e-mail pentru participantul la sarcină?"
 
-#~ msgid "Embedded windows"
-#~ msgstr "Ferestre integrate"
-
 #~ msgid "Employee ID:"
 #~ msgstr "Identificator angajat:"
 
@@ -16944,6 +16946,11 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Atenție: lista de distribuție nu poate conține resurse."
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Atenție: ceilalți participanți vor fi eliminați la exportarea "
+#~ "calendarului."
 
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
@@ -20067,6 +20074,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "default"
 #~ msgstr "predefinit"
+
+#~ msgid "delete if expired"
+#~ msgstr "șterge dacă a expirat"
 
 #~ msgid "disable"
 #~ msgstr "dezactivează"

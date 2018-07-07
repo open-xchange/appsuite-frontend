@@ -2896,6 +2896,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Slett utkast"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Slett gamle signaturer etter import"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4061,7 +4068,7 @@ msgstr "Utvid skjema"
 msgid "Expert user?"
 msgstr "Ekspertbruker?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Utløp"
@@ -5983,6 +5990,12 @@ msgstr ""
 msgid "Minimize"
 msgstr "Minimer"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "Minimized windows"
+msgstr "Hovedvindu"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7451,10 +7464,6 @@ msgstr "Vennligst angi en dato senere enn startdatoen"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Merk at distribusjonslister ikke kan inneholde ressurser."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8745,6 +8754,7 @@ msgstr "Slett alle meldinger"
 msgid "Select calendar"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -12004,10 +12014,6 @@ msgstr "avslått"
 msgid "delete all objects"
 msgstr "slett alle objekter"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "slett hvis utløpt"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -13376,9 +13382,6 @@ msgstr "plattformen din"
 #~ msgid "Mail saved as draft"
 #~ msgstr "E-post lagret som kladd"
 
-#~ msgid "Main window"
-#~ msgstr "Hovedvindu"
-
 #~ msgid "Manage applications"
 #~ msgstr "Administrer programmer"
 
@@ -14384,6 +14387,9 @@ msgstr "plattformen din"
 
 #~ msgid "dd"
 #~ msgstr "dd"
+
+#~ msgid "delete if expired"
+#~ msgstr "slett hvis utløpt"
 
 #~ msgid "disable"
 #~ msgstr "deaktiver"

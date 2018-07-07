@@ -2855,6 +2855,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Eliminar borrador"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Eliminar las firmas antiguas después de importar"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4020,7 +4027,7 @@ msgstr "Expandir formulario"
 msgid "Expert user?"
 msgstr "¿Usuario experto?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Caducidad"
@@ -5930,6 +5937,12 @@ msgstr "Mini calendario"
 msgid "Minimize"
 msgstr "Minimizar"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "Ventanas incrustadas"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7383,12 +7396,6 @@ msgstr ""
 "Por favor, tenga en cuenta que las listas de distribución no pueden contener "
 "recursos."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Por favor, tenga en cuenta que los otros participantes se eliminan al "
-"exportar el calendario."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8688,6 +8695,7 @@ msgstr "Seleccionar todos los mensajes"
 msgid "Select calendar"
 msgstr "Seleccionar calendario"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11949,10 +11957,6 @@ msgstr "rechazada"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
 msgstr "borrar todos los objetos"
-
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "borrar si está caducado"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -16254,9 +16258,6 @@ msgstr "su plataforma"
 #~ msgid "Email notification for task participant?"
 #~ msgstr "¿Notificación por correo a participantes de la tarea?"
 
-#~ msgid "Embedded windows"
-#~ msgstr "Ventanas incrustadas"
-
 #~ msgid "Employee ID:"
 #~ msgstr "ID de empleado:"
 
@@ -18992,6 +18993,11 @@ msgstr "su plataforma"
 #~ msgstr ""
 #~ "Por favor, tenga en cuenta que la lista de distribución no puede contener "
 #~ "recursos."
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Por favor, tenga en cuenta que los otros participantes se eliminan al "
+#~ "exportar el calendario."
 
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
@@ -22988,6 +22994,9 @@ msgstr "su plataforma"
 
 #~ msgid "default"
 #~ msgstr "predeterminado"
+
+#~ msgid "delete if expired"
+#~ msgstr "borrar si está caducado"
 
 #~ msgid "disable"
 #~ msgstr "desactivar"

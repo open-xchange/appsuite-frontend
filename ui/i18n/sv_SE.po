@@ -2846,6 +2846,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Ta bort utkast"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Ta bort gamla signaturer efter import"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -3999,7 +4006,7 @@ msgstr "Fäll ut formulär"
 msgid "Expert user?"
 msgstr "Expertanvändare?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Utgår om"
@@ -5900,6 +5907,12 @@ msgstr "Minikalender"
 msgid "Minimize"
 msgstr "Minimera"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Minimera"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7341,10 +7354,6 @@ msgstr "Ange ett datum efter startdatumet"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Observera att sändlistor inte får innehålla resurser."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "Observera att andra deltagare tas bort vid kalenderexport."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Observera att andra deltagare tas bort vid kalenderimport."
@@ -8632,6 +8641,7 @@ msgstr "Välj alla meddelanden"
 msgid "Select calendar"
 msgstr "Välj kalender"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11870,10 +11880,6 @@ msgstr "nekad"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
 msgstr "ta bort alla objekt"
-
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "radera vid utgångsdatum"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -16482,6 +16488,9 @@ msgstr "din plattform"
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Observera att sändlistor inte får innehålla resurser."
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "Observera att andra deltagare tas bort vid kalenderexport."
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Definiera dessa saknade variabler: "
 
@@ -19865,6 +19874,9 @@ msgstr "din plattform"
 
 #~ msgid "dd"
 #~ msgstr "dd"
+
+#~ msgid "delete if expired"
+#~ msgstr "radera vid utgångsdatum"
 
 #~ msgid "disable"
 #~ msgstr "avaktivera"

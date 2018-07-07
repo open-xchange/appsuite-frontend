@@ -2870,6 +2870,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Dzēst melnrakstu"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Pēc importa dzēst visus parakstus"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4043,7 +4050,7 @@ msgstr "Atritināt formu"
 msgid "Expert user?"
 msgstr "Eksperts?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Derīgums"
@@ -5950,6 +5957,12 @@ msgstr "Mini kalendārs"
 msgid "Minimize"
 msgstr "Minimzēt"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "Ievietoti logi"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7402,12 +7415,6 @@ msgstr "Norādiet datumu pēc sākuma datuma"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Lūdzu ievērojiet ka izplatīšanas saraksti nevar saturēt resursus."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Lūdzu ņemiet vērā, ka pie kalendāra eksportēšanas citi dalībnieki tiks "
-"noņemti."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8699,6 +8706,7 @@ msgstr "Izvēlēties visus ziņojumus"
 msgid "Select calendar"
 msgstr "Kalendāra izvēle"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11954,10 +11962,6 @@ msgstr "atteikts"
 msgid "delete all objects"
 msgstr "dzēst visus objektus"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "dzēst, ja derīguma termiņš beidzies"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -14636,9 +14640,6 @@ msgstr "jūsu platforma"
 #~ msgid "Email notification for task participant?"
 #~ msgstr "E-pasta paziņojums uzdevuma dalībniekiem?"
 
-#~ msgid "Embedded windows"
-#~ msgstr "Ievietoti logi"
-
 #~ msgid "Employee ID:"
 #~ msgstr "Darbinieka ID:"
 
@@ -16861,6 +16862,11 @@ msgstr "jūsu platforma"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Lūdzu, ņemiet vērā, ka adresātu saraksti nevar saturēt resursus."
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Lūdzu ņemiet vērā, ka pie kalendāra eksportēšanas citi dalībnieki tiks "
+#~ "noņemti."
 
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
@@ -19943,6 +19949,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "default"
 #~ msgstr "noklusēts"
+
+#~ msgid "delete if expired"
+#~ msgstr "dzēst, ja derīguma termiņš beidzies"
 
 #~ msgid "disable"
 #~ msgstr "atspējot"

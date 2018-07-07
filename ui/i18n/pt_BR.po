@@ -2856,6 +2856,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Excluir rascunho"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete this action"
+msgid "Delete files after expiration"
+msgstr "Excluir essa ação"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4023,7 +4030,7 @@ msgstr "Expandir formulário"
 msgid "Expert user?"
 msgstr "Usuário avançado?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Expiração"
@@ -5927,6 +5934,12 @@ msgstr "Mini calendário"
 msgid "Minimize"
 msgstr "Minimizar"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "Janelas incorporadas"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7374,11 +7387,6 @@ msgid "Please note that distribution lists cannot contain resources."
 msgstr ""
 "Por favor, note que as listas de distribuição não podem conter recursos."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Note que outros participantes são removidos na exportação do calendário."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8670,6 +8678,7 @@ msgstr "Selecionar todas as mensagens"
 msgid "Select calendar"
 msgstr "Selecionar calendário"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11922,10 +11931,6 @@ msgstr "recusado"
 msgid "delete all objects"
 msgstr "excluir todos os objetos"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "excluir se expirado"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -13933,9 +13938,6 @@ msgstr "sua plataforma"
 #~ msgid "Delete own"
 #~ msgstr "Excluir próprio"
 
-#~ msgid "Delete this action"
-#~ msgstr "Excluir essa ação"
-
 #~ msgid "Delete whole series"
 #~ msgstr "Excluir série inteira"
 
@@ -14308,9 +14310,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Email notification for task participant?"
 #~ msgstr "Notificação de e-mail para participante da tarefa?"
-
-#~ msgid "Embedded windows"
-#~ msgstr "Janelas incorporadas"
 
 #~ msgid "Employee ID:"
 #~ msgstr "Identificação do funcionário:"
@@ -16320,6 +16319,10 @@ msgstr "sua plataforma"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Note que as litas de distribuição não podem conter recursos."
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Note que outros participantes são removidos na exportação do calendário."
 
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
@@ -19170,6 +19173,9 @@ msgstr "sua plataforma"
 
 #~ msgid "dd/MM/yyyy"
 #~ msgstr "dd/MM/aaaa"
+
+#~ msgid "delete if expired"
+#~ msgstr "excluir se expirado"
 
 #~ msgid "disable"
 #~ msgstr "desativar"

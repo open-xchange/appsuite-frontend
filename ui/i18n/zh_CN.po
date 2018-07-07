@@ -2786,6 +2786,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "删除草稿"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "在导入后删除旧的签名"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -3912,7 +3919,7 @@ msgstr "展开表格"
 msgid "Expert user?"
 msgstr "专家用户？"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "过期"
@@ -5789,6 +5796,12 @@ msgstr "迷你日历"
 msgid "Minimize"
 msgstr "最小化"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "嵌入窗口"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7220,10 +7233,6 @@ msgstr "请插入一个开始日期之后的日期"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "请注意通讯组列表不能包括资源。"
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "请注意其他参与者在导出日历时被移除。"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "请注意其他参与者在导入日历时被移除。"
@@ -8490,6 +8499,7 @@ msgstr "選擇所有消息"
 msgid "Select calendar"
 msgstr "选择日历"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11603,10 +11613,6 @@ msgstr "已拒绝"
 msgid "delete all objects"
 msgstr "删除所有对象"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "过期时删除"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -14143,9 +14149,6 @@ msgstr "您的平台"
 #~ msgid "Email notification for task participant?"
 #~ msgstr "向任务参与者发送电子邮件通知？"
 
-#~ msgid "Embedded windows"
-#~ msgstr "嵌入窗口"
-
 #~ msgid "Employee ID:"
 #~ msgstr "员工 ID："
 
@@ -15538,6 +15541,9 @@ msgstr "您的平台"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "请注意通讯组列表不能包含资源。"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "请注意其他参与者在导出日历时被移除。"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "请指定这些缺少的变量："
@@ -17295,6 +17301,9 @@ msgstr "您的平台"
 
 #~ msgid "dd"
 #~ msgstr "日"
+
+#~ msgid "delete if expired"
+#~ msgstr "过期时删除"
 
 #~ msgid "disable"
 #~ msgstr "停用"

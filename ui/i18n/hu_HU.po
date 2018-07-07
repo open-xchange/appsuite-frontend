@@ -2851,6 +2851,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Vázlat törlése"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Régi aláírás törlése importálás után"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4021,7 +4028,7 @@ msgstr "Űrlap kibontása"
 msgid "Expert user?"
 msgstr "Szakértő felhasználó?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Lejárat"
@@ -5922,6 +5929,12 @@ msgstr "Mini naptár"
 msgid "Minimize"
 msgstr "Minimalizálás"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Minimalizálás"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7368,12 +7381,6 @@ msgstr ""
 "Kérjük, vegye figyelembe, hogy a disztribúciós listák nem tartalmazhatnak "
 "erőforrásokat."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Vegye figyelembe, hogy a többi résztvevő eltávolításra kerül a naptár "
-"exportálásakor."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8666,6 +8673,7 @@ msgstr "Összes üzenet kiválasztása"
 msgid "Select calendar"
 msgstr "Naptár kiválasztása"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11910,10 +11918,6 @@ msgstr "elutasítva"
 msgid "delete all objects"
 msgstr "minden elem törlése"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "törlés lejáratkor"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -13540,6 +13544,11 @@ msgstr "az Ön rendszere"
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "A disztribúciós listák nem tartalmazhatnak erőforrásokat."
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Vegye figyelembe, hogy a többi résztvevő eltávolításra kerül a naptár "
+#~ "exportálásakor."
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Adja meg ezeket a hiányzó változókat:"
 
@@ -14390,6 +14399,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "dd"
 #~ msgstr "dd"
+
+#~ msgid "delete if expired"
+#~ msgstr "törlés lejáratkor"
 
 #~ msgid "disable"
 #~ msgstr "letiltás"

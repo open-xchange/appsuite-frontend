@@ -2889,6 +2889,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Kustuta mustand"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Kustuta vanad allkirjad importimise järel"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4054,7 +4061,7 @@ msgstr "Laienda vormi"
 msgid "Expert user?"
 msgstr "Edasijõudnud kasutaja?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Aegumine"
@@ -5976,6 +5983,12 @@ msgstr ""
 msgid "Minimize"
 msgstr "Minimeeri"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Minimeeri"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7440,10 +7453,6 @@ msgstr "Palun sisesta kuupäev, mis on hilisem alguskuupäevast"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Pange tähele, et leviloendid ei tohi sisaldada ressursse."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8736,6 +8745,7 @@ msgstr "Kustuta kõik sõnumid"
 msgid "Select calendar"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11982,10 +11992,6 @@ msgstr "keeldutud"
 msgid "delete all objects"
 msgstr "kõigi objektide kustutamine"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "kustutada aegumise järel"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -13747,6 +13753,9 @@ msgstr "teie platvorm"
 
 #~ msgid "dd"
 #~ msgstr "pp"
+
+#~ msgid "delete if expired"
+#~ msgstr "kustutada aegumise järel"
 
 #~ msgid "disable"
 #~ msgstr "keela"

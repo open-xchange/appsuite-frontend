@@ -2864,6 +2864,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Smazat koncept"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Po importu smazat staré podpisy"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4031,7 +4038,7 @@ msgstr "Rozvinout formulář"
 msgid "Expert user?"
 msgstr "Uživatel expert?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Platnost"
@@ -5928,6 +5935,12 @@ msgstr "Mini kalendář"
 msgid "Minimize"
 msgstr "Minimalizovat"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "Vložená okna"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7377,12 +7390,6 @@ msgstr "Zadejte, prosím, pozdější datum, než je datum začátku"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Distribuční seznamy nemohou obsahovat zdroje."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Vezměte, prosím, na vědomí, že při exportu kalendáře jsou ostatní účastníci "
-"odstraněni."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8673,6 +8680,7 @@ msgstr "Vybrat všechny zprávy"
 msgid "Select calendar"
 msgstr "Vybrat kalendář"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11907,10 +11915,6 @@ msgstr "odmítnuté"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
 msgstr "mazání všech objektů"
-
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "smazat, pokud již doba vypršela"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -16224,9 +16228,6 @@ msgstr "vaše platforma"
 #~ msgid "Email notification for task participant?"
 #~ msgstr "E-mailové oznámení pro účastníka úkolu?"
 
-#~ msgid "Embedded windows"
-#~ msgstr "Vložená okna"
-
 #~ msgid "Employee ID:"
 #~ msgstr "ID zaměstnance:"
 
@@ -18937,6 +18938,11 @@ msgstr "vaše platforma"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Distribuční seznamy nemohou obsahovat zdroje."
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Vezměte, prosím, na vědomí, že při exportu kalendáře jsou ostatní "
+#~ "účastníci odstraněni."
 
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
@@ -22890,6 +22896,9 @@ msgstr "vaše platforma"
 
 #~ msgid "default"
 #~ msgstr "výchozí"
+
+#~ msgid "delete if expired"
+#~ msgstr "smazat, pokud již doba vypršela"
 
 #~ msgid "disable"
 #~ msgstr "zakázat"

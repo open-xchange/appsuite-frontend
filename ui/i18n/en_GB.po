@@ -2842,6 +2842,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Delete draft"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Delete old signatures after import"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -4011,7 +4018,7 @@ msgstr "Expand form"
 msgid "Expert user?"
 msgstr "Expert user?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Expiration"
@@ -5911,6 +5918,12 @@ msgstr "Mini calendar"
 msgid "Minimize"
 msgstr "Minimise"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Minimise"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7353,10 +7366,6 @@ msgstr "Please insert a date after the start date"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Please note that distribution lists cannot contain resources."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "Please note that other participants are removed on calendar export."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Please note that other participants are removed on calendar import."
@@ -8646,6 +8655,7 @@ msgstr "Select all messages"
 msgid "Select calendar"
 msgstr "Select calendar"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11862,10 +11872,6 @@ msgstr "declined"
 msgid "delete all objects"
 msgstr "delete all objects"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "delete if expired"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -14366,6 +14372,9 @@ msgstr "your platform"
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Please note that distribution lists cannot contain resources."
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "Please note that other participants are removed on calendar export."
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Please specify these missing variables: "
 
@@ -16029,6 +16038,9 @@ msgstr "your platform"
 
 #~ msgid "dd"
 #~ msgstr "dd"
+
+#~ msgid "delete if expired"
+#~ msgstr "delete if expired"
 
 #~ msgid "disable"
 #~ msgstr "disable"

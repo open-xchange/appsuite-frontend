@@ -2806,6 +2806,13 @@ msgctxt "dialog"
 msgid "Delete draft"
 msgstr "下書きを削除"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "インポート後に古い署名を削除してください"
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -3952,7 +3959,7 @@ msgstr "フォームを展開"
 msgid "Expert user?"
 msgstr "エキスパートユーザー?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "期限"
@@ -5846,6 +5853,12 @@ msgstr "ミニ予定表"
 msgid "Minimize"
 msgstr "最小化"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "Minimized windows"
+msgstr "メイン ウィンドウ"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -7283,10 +7296,6 @@ msgstr "開始日以降の日付を指定してください"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "配布リストにリソースを含めることはできません。"
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "他の参加者は予定表エクスポートから削除されます。"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "他の参加者は予定表インポートから削除されます。"
@@ -8563,6 +8572,7 @@ msgstr "すべてのメッセージを選択"
 msgid "Select calendar"
 msgstr "予定表を選択"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -11755,10 +11765,6 @@ msgstr "辞退済み"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
 msgstr "すべてのオブジェクトを削除"
-
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "期限後に削除"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -16643,9 +16649,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Mailing list %s"
 #~ msgstr "メーリング リスト %s"
 
-#~ msgid "Main window"
-#~ msgstr "メイン ウィンドウ"
-
 #~ msgid "Malawi"
 #~ msgstr "マラウイ"
 
@@ -17584,6 +17587,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "連絡先グループにリソースを含めることはできません。"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "他の参加者は予定表エクスポートから削除されます。"
 
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
@@ -20835,6 +20841,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "default"
 #~ msgstr "デフォルト"
+
+#~ msgid "delete if expired"
+#~ msgstr "期限後に削除"
 
 #~ msgid "description|Title:"
 #~ msgstr "説明|件名:"
