@@ -145,6 +145,11 @@ define('io.ox/core/notifications', [
                     subviews[id].render(self.listNode);
                 }
             });
+            // manually calculate max-height, since this element is positioned absolute below the topbar
+            // and depends on the actual hight of the content (see Bug 59226)
+            self.listNode.css({
+                'max-height': _.device('smartphone') ? 'none' : $('#io-ox-screens').height() - 5
+            });
 
             if (this.listNode.children('.notifications').length === 0) {
                 this.listNode.prepend(
