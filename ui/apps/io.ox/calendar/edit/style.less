@@ -44,6 +44,9 @@
 
     .color-picker-dropdown {
         display: inline-block;
+        .dropdown-menu a:first-child i {
+            margin-right: 8px;
+        };
     }
 
     .color-container {
@@ -56,13 +59,9 @@
         width: 20px;
         height: 20px;
         border-radius: 3px;
-        margin-right: 16px;
         background-color: rgb(255, 255, 255);
         display: inline-block;
 
-        &.no-color:before {
-            border: 1px solid #888;
-        }
         &:before {
             font-family: 'FontAwesome';
             content: '\00a0';

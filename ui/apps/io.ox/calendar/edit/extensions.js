@@ -657,25 +657,33 @@ define('io.ox/calendar/edit/extensions', [
                     allowUndefined: true
                 }),
                 pickedColor = $('<span class="picked-color">');
-            dropdown.option('color', undefined, gt('No color'));
+            //#. showed inside a color picker. Used if an appointment should not have a custom color
+            dropdown.option('color', undefined, gt('Use calendar color'));
             dropdown.divider();
             menu.append($('<li role="presentation">').append(picker.render().$el));
 
             this.$el.append(
-                pickedColor,
-                dropdown.render().$el
+                dropdown.render().$el,
+                pickedColor
             );
 
             function onChangeColor() {
                 if (!self.model.get('color')) {
-                    pickedColor.addClass('no-color').css('background-color', '#fff');
+                    // try to get the folder color
+                    var model = folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model(),
+                        props = model.get('com.openexchange.calendar.extendedProperties') || {},
+                        color = '#fff';
+
+                    if (props.color && props.color.value) color = props.color.value;
+
+                    pickedColor.css({ 'background-color': color });
                     picker.$el.find(':checked').prop('checked', false);
                     return;
                 }
-                pickedColor.removeClass('no-color').css('background-color', self.model.get('color'));
+                pickedColor.css('background-color', self.model.get('color'));
             }
 
-            this.model.on('change:color', onChangeColor);
+            this.model.on('change:color change:folder', onChangeColor);
             onChangeColor();
         }
     }, {
