@@ -491,8 +491,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js
 #: module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js
-#: module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr ""
 
@@ -1953,6 +1951,12 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
 msgid "Appointment color"
+msgstr ""
+
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+msgid "Use calendar color"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js

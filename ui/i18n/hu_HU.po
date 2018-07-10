@@ -6400,7 +6400,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "Nincsenek születésnapok a következő %1$d héten"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr "Nincs szín"
 
@@ -10879,6 +10878,13 @@ msgstr "%1$s használata"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
 msgstr "Böngésző alapértelmezés használata"
+
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "Use calendar color"
+msgstr "Új naptár"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
