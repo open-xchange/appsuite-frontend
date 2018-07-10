@@ -1677,6 +1677,8 @@ define('io.ox/core/main', [
                             dialog.remove();
                             dialog = null;
                         }),
+                        // get number of items (canRestore is false or number of items (due to return list && list.length)
+                        n = baton.canRestore || 0,
                         btn1, btn2;
 
                     $('#io-ox-core').append(
@@ -1685,7 +1687,10 @@ define('io.ox/core/main', [
                                 $('<div class="header">').append(
                                     $('<h1 id="restore-heading">').text(gt('Restore applications')),
                                     $('<div id="restore-description">').text(
-                                        gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                                        //#. %1$s is placeholder for the product name like "App Suite"
+                                        gt.ngettext('The below item was open last time you exited %1$s.', 'The below items were open last time you exited %1$s.', n, ox.serverConfig.productName) + ' ' +
+                                        gt('Please click "Continue" if you\'d like to continue editing.') + ' ' +
+                                        gt.ngettext('If you do not wish to keep the item, please click on the trash icon.', 'If you do not wish to keep an item, please click on the trash icon.', n)
                                     )
                                 ),
                                 $('<ul class="list-unstyled content">'),
@@ -1704,6 +1709,7 @@ define('io.ox/core/main', [
 
                     // draw savepoints to allow the user removing them
                     ox.ui.App.getSavePoints().done(function (list) {
+
                         _(list).each(function (item) {
                             var info = item.description || item.module,
                                 versionInfo = $();

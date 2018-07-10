@@ -476,8 +476,12 @@ define('io.ox/files/filepicker', [
                 }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
                 self.selection.clear();
                 self.selection.init(files); // - provide the filtered model ... see 1st point above.
-                if (options.multiselect) {
-                    self.selection.markFirst();
+
+                // at first load: the file list should be focused
+                if (options.multiselect && options.wasLoaded === undefined) {
+                    self.selection.selectFirst(true);
+                    // flag to indicate the initial load
+                    options.wasLoaded = true;
                 } else {
                     self.selection.selectFirst();
                 }

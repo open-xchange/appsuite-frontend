@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-27 16:01+0200\n"
+"PO-Revision-Date: 2018-07-03 16:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -679,7 +679,7 @@ msgstr "Пригласить на новую встречу"
 #: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Save as distribution list"
-msgstr "Сохранить как список рассылки"
+msgstr "Создать список рассылки"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Synchronize calendar"
@@ -2598,7 +2598,8 @@ msgid "Postcode"
 msgstr "Индекс"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Town"
+#: apps/io.ox/contacts/print.js
+msgid "City"
 msgstr "Город"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2980,10 +2981,6 @@ msgid "Messenger"
 msgstr "Обмен сообщениями"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-msgid "City"
-msgstr "Город"
-
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -3283,7 +3280,8 @@ msgstr "Эта платформа не поддерживается."
 msgid ""
 "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
 msgstr ""
-"Поддерживается начиная Chrome %1$d, Firefox %2$d, IE %3$d и Safari %4$d."
+"Поддержка предоставляется начиная с Chrome %1$d, Firefox %2$d, IE %3$d и "
+"Safari %4$d."
 
 #. 'Google Chrome' is a brand and should not be translated
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -3356,7 +3354,7 @@ msgid "%1$s item selected"
 msgid_plural "%1$s items selected"
 msgstr[0] "выбран %1$s элемент"
 msgstr[1] "выбраны %1$s элемента"
-msgstr[2] "выбрано %1$s элемента"
+msgstr[2] "выбрано %1$s элементов"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
@@ -4313,7 +4311,7 @@ msgid ""
 "choose 'Connect your device' from the menu."
 msgstr ""
 "Знаете ли вы, что вы можете взять %1$s с собой в дорогу? Просто щелкните "
-"этот значок и в открывшемся меню выберите «Подключить устройство»."
+"значок и в открывшемся меню выберите «Подключить устройство»."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4331,13 +4329,31 @@ msgstr "Авторизуйтесь для продолжения"
 msgid "Restore applications"
 msgstr "Восстановить приложения"
 
+#. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"Приложения могут быть восстановлены. Чтобы отменить их восстановление, "
-"удалите точку восстановления."
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] ""
+"Нижеуказанный элемент был открыт во время вашего последнего выхода %1$s."
+msgstr[1] ""
+"Нижеуказанные элементы были открыты во время вашего последнего выхода %1$s."
+msgstr[2] ""
+"Нижеуказанные элементы были открыты во время вашего последнего выхода %1$s."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Нажмите «Продолжить» если желаете продолжить редактирование."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Если не желаете хранить этот элемент, нажмите на значок в виде корзины."
+msgstr[1] ""
+"Если не желаете хранить эти элементы, нажмите на значок в виде корзины."
+msgstr[2] ""
+"Если не желаете хранить эти элементы, нажмите на значок в виде корзины."
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -5384,6 +5400,16 @@ msgstr "90 дней бесплатно."
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Получить бесплатное обновление"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "К сожалению, предварительный просмотр недоступен."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"Чтобы распечатать файл, в режиме просмотра используйте функцию «Печать в "
+"PDF»."
 
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
@@ -6654,8 +6680,8 @@ msgstr[2] "%1$d дней"
 msgid "%1$d week"
 msgid_plural "%1$d weeks"
 msgstr[0] "%1$d неделя"
-msgstr[1] "%1$d недели%1$d недель"
-msgstr[2] ""
+msgstr[1] "%1$d недели"
+msgstr[2] "%1$d недель"
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "A new version for \"%1$s\" has been added."
@@ -7260,13 +7286,13 @@ msgid "All future messages from %1$s will be moved to the selected folder."
 msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "Все будущие сообщения от %1$s будут переноситься в выбранную папку."
+msgstr[0] "В будущем сообщения от %1$s будут переноситься в выбранную папку."
 msgstr[1] ""
-"Все будущие сообщения от отправителей выбранных писем будут переноситься в "
-"выбранную папку."
+"Все последующие сообщения от отправителей выбранных сообщений будут "
+"переноситься в выбранную папку."
 msgstr[2] ""
-"Все будущие сообщения от отправителей выбранных писем будут переноситься в "
-"выбранную папку."
+"Все последующие сообщения от отправителей выбранных сообщений будут "
+"переноситься в выбранную папку."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7411,8 +7437,8 @@ msgstr "Перенесите сюда"
 msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Сообщение перемещено в категорию «%1$s»"
-msgstr[1] "Сообщение перемещено в категорию «%1$s»"
-msgstr[2] "Сообщение перемещено в категорию «%1$s»"
+msgstr[1] "Сообщения перемещены в категорию «%1$s»"
+msgstr[2] "Сообщения перемещены в категорию «%1$s»"
 
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
@@ -8807,7 +8833,7 @@ msgstr "Подпись по умолчанию"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for replies or forwardings"
-msgstr "Подпись по умолчанию для ответов или перенаправлений"
+msgstr "Подпись по умолчанию для пересылки и ответных писем"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
@@ -9201,7 +9227,7 @@ msgstr "Premium"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
-msgstr "Подключите устройство"
+msgstr "Подключить устройство"
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -11166,7 +11192,7 @@ msgid ""
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
 msgstr ""
-"Для подтверждения регистрации вам было отправлено электронное письмо. \n"
+"Для подтверждения регистрации вам было отправлено письмо. \n"
 "Следуйте инструкциям в письме, затем вернитесь в это окно, чтобы завершить "
 "настройку учетной записи."
 
@@ -11246,13 +11272,1269 @@ msgstr "Пригласить на %s"
 msgid "Add on %s"
 msgstr "Добавить в %s"
 
+#~ msgid "Notify %1$s before start."
+#~ msgstr "Уведомить %1$s до начала."
+
+#~ msgid "Notify %1$s after start."
+#~ msgstr "Уведомить %1$s после начала."
+
+#~ msgid "Notify %1$s before end."
+#~ msgstr "Уведомить %1$s до окончания."
+
+#~ msgid "Notify %1$s after end."
+#~ msgstr "Уведомить %1$s после окончания."
+
+#~ msgid "Notify at %1$s."
+#~ msgstr "Уведомить %1$s."
+
+#~ msgid "Notify at start."
+#~ msgstr "Уведомить в начале."
+
+#~ msgid "Notify at end."
+#~ msgstr "Уведомить в конце."
+
+#~ msgid "Play sound %1$s before start."
+#~ msgstr "Воспроизвести звук %1$s до начала."
+
+#~ msgid "Play sound %1$s after start."
+#~ msgstr "Воспроизвести звук %1$s после начала."
+
+#~ msgid "Play sound %1$s before end."
+#~ msgstr "Воспроизвести звук %1$s до окончания."
+
+#~ msgid "Play sound %1$s after end."
+#~ msgstr "Воспроизвести звук %1$s после окончания."
+
+#~ msgid "Play sound at %1$s."
+#~ msgstr "Воспроизвести звук %1$s."
+
+#~ msgid "Play sound at start."
+#~ msgstr "Воспроизвести звук в начале."
+
+#~ msgid "Play sound at end."
+#~ msgstr "Воспроизвести звук по окончании."
+
+#~ msgid "%1$s %2$s before start."
+#~ msgstr "%1$s %2$s до начала."
+
+#~ msgid "%1$s %2$s after start."
+#~ msgstr "%1$s %2$s после начала."
+
+#~ msgid "%1$s %2$s before end."
+#~ msgstr "%1$s %2$s до конца."
+
+#~ msgid "%1$s %2$s after end."
+#~ msgstr "%1$s %2$s после окончания."
+
+#~ msgid "%1$s at %2$s."
+#~ msgstr "%1$s, %2$s."
+
+#~ msgid "%1$s at start."
+#~ msgstr "%1$s в начале."
+
+#~ msgid "%1$s at end."
+#~ msgstr "%1$s в конце."
+
+#~ msgid "Add reminder"
+#~ msgstr "Добавить напоминание"
+
+#~ msgid "Audio"
+#~ msgstr "Аудио"
+
+#~ msgid "Edit reminders"
+#~ msgstr "Изменить напоминания"
+
+#~ msgid "Drag to reorder items"
+#~ msgstr "Перетащите, чтобы изменить порядок."
+
+#~ msgid "Please grant access to your webcam first."
+#~ msgstr "Разрешите доступ к вашей веб-камере."
+
+#~ msgid "Requesting device information. Please wait..."
+#~ msgstr "Запрашивается информация об устройстве. Пожалуйста, подождите..."
+
+#~ msgid "Currently there are no compatible webcams available on your device."
+#~ msgstr "На вашем устройстве нет совместимых веб-камер."
+
+#~ msgid "Take a photo"
+#~ msgstr "Сделать фотографию"
+
+#~ msgid "Webcam"
+#~ msgstr "Веб-камера"
+
+#~ msgid "Switch camera"
+#~ msgstr "Включить камеру"
+
+#~ msgid "Edit image"
+#~ msgstr "Изменить изображение"
+
+#~ msgid "Take photo"
+#~ msgstr "Сделать фотографию"
+
+#~ msgid "Rotate image"
+#~ msgstr "Повернуть изображение"
+
+#~ msgid "New search ... (prototype)"
+#~ msgstr "Новый поиск... (прототип)"
+
+#~ msgid "After"
+#~ msgstr "После"
+
+#~ msgid "Before"
+#~ msgstr "До"
+
+#~ msgid "Shrink"
+#~ msgstr "Сжать"
+
+#~ msgid "Maximize"
+#~ msgstr "Развернуть"
+
 #~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
+#~ "Do you want to decline the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr "Отклонить отдельную встречу или всю последовательность?"
+
+#~ msgid "Participant related actions"
+#~ msgstr "Действия участников"
+
+#~ msgid "You are currently acting on behalf of the calendar owner."
+#~ msgstr "Вы действуете от лица владельца календаря."
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just this appointment within "
+#~ "the series?"
+#~ msgstr "Удалить отдельную встречу или всю последовательность?"
+
+#~ msgid "This appointment"
+#~ msgstr "Эта встреча"
+
+#~ msgid ""
+#~ "Do you want to delete this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr "Хотите удалить только эту встречу или включая все последующие?"
+
+#~ msgid "All future appointments"
+#~ msgstr "Все будущие встречи"
+
+#~ msgid "My Google Calendar"
+#~ msgstr "Мой календарь Google"
+
+#~ msgid "iCal URL"
+#~ msgstr "URL iCal"
+
+#~ msgid "Subscribe to iCal feed"
+#~ msgstr "Подписаться на ленту iCal"
+
+#~ msgid "iCal feed has been imported successfully"
+#~ msgstr "Лента iCal успешно импортирована."
+
+#~ msgid "Secret"
+#~ msgstr "Секретное"
+
+#~ msgid "Sent by"
+#~ msgstr "Отправил(а)"
+
+#~ msgid "Select calendar"
+#~ msgstr "Выбрать календарь"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Создать календарь"
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "В вашем часовом поясе (%1$s): %2$s (продолжительность: %3$s)"
+
+#~ msgid "Standard"
+#~ msgstr "Стандартно"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "Встреча будет видна всем пользователям в совместных календарях."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
 #~ msgstr ""
-#~ "Знаете ли вы, что вы можете взять OX App Suite с собой в дорогу? Просто "
-#~ "щелкните этот значок и в открывшемся меню выберите «Подключить "
-#~ "устройство»."
+#~ "В совместных календарях пользователи, которые не пойдут на встречу, "
+#~ "вместо встречи увидят обычный отрезок времени."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "Эта встреча будет скрыта от пользователей, которые на неё не пойдут, не "
+#~ "будет учитываться при поиске конфликтов и не будет показана в расписании "
+#~ "(эта опция недоступна, если встреча блокирует ресурсы)."
+
+#~ msgid "Visibility"
+#~ msgstr "Видимость"
+
+#~ msgid "Appointment color"
+#~ msgstr "Цвет встречи"
+
+#~ msgid "Show as free"
+#~ msgstr "Показать как «Свободно»"
+
+#~ msgid "Edit Appointment"
+#~ msgstr "Изменить встречу"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Обратите внимание: списки рассылки не могут содержать ресурсы."
+
+#~ msgid "Next week"
+#~ msgstr "Следующая неделя"
+
+#~ msgid "Next month"
+#~ msgstr "Следующий месяц"
+
+#~ msgid "Show fine grid"
+#~ msgstr "Показать тонкую сетку"
+
+#~ msgid "Date range"
+#~ msgstr "Диапазон"
+
+#~ msgid "Blocked time frame"
+#~ msgstr "Время заблокировано"
+
+#~ msgid "Could not get appointment information"
+#~ msgstr "Не удалось получить информацию о встрече"
+
+#~ msgid "Error: Failed to load appointments"
+#~ msgstr "Ошибка: не удалось загрузить встречи."
+
+#~ msgid "Load appointments until %1$s"
+#~ msgstr "Загрузить встречи до %1$s"
+
+#~ msgid "Could't load appointment data."
+#~ msgstr "Не удалось загрузить информацию о встрече."
+
+#~ msgid "No appointment selected"
+#~ msgstr "Не выбрано ни одной встречи."
+
+#~ msgid "%1$s appointments selected"
+#~ msgstr "Выбрано встреч: %1$s"
+
+#~ msgid "Calendar account error"
+#~ msgstr "Ошибка аккаунта календаря"
+
+#~ msgid "Try again"
+#~ msgstr "Повторите попытку"
+
+#~ msgid "Refreshing calendar might take some time..."
+#~ msgstr "Обновление календаря может занять некоторое время..."
+
+#~ msgid "Successfully refreshed calendar"
+#~ msgstr "Календарь обновлен"
+
+#~ msgid "Appointment options"
+#~ msgstr "Параметры встречи"
+
+#~ msgid "Show next month"
+#~ msgstr "Показать следующий месяц"
+
+#~ msgid "Show previous month"
+#~ msgstr "Показать предыдущий месяц"
+
+#~ msgid ""
+#~ "You cannot mark the appointment as secret, when blocking a ressource."
+#~ msgstr ""
+#~ "Вы не можете установить секретный статус встречи при блокировании ресурса."
+
+#~ msgid "%1$d minutes"
+#~ msgstr "%1$d минут"
+
+#~ msgctxt "noun"
+#~ msgid "View"
+#~ msgstr "Вид"
+
+#~ msgid "Time scale"
+#~ msgstr "Масштаб времени"
+
+#~ msgid "Show birthday calendar"
+#~ msgstr "Показать календарь дней рождения"
+
+#~ msgid "Birthday calendar"
+#~ msgstr "Календарь дней рождения"
+
+#~ msgid "Workweek view"
+#~ msgstr "Рабочая неделя"
+
+#~ msgid "Week start"
+#~ msgstr "Неделя начинается"
+
+#~ msgid "Workweek length"
+#~ msgstr "Продолжительность рабочей недели"
+
+#~ msgid "Default reminder for all-day appointments"
+#~ msgstr "Стандартное напоминание о встречах на весь день"
+
+#~ msgid "Default reminder for appointments in birthday calendar"
+#~ msgstr "Стандартное напоминание для событий в календаре дней рождения"
+
+#~ msgid "Add calendar"
+#~ msgstr "Добавить календарь"
+
+#~ msgid "The integration of the subscribed calendars might take a while."
+#~ msgstr "Интеграция подключенных календарей может занять некоторое время."
+
+#~ msgid "subscribe to calendar"
+#~ msgstr "Подписаться на календарь"
+
+#~ msgid "Mini calendar"
+#~ msgstr "Миникалендарь"
+
+#~ msgid "Weekends"
+#~ msgstr "Выходные"
+
+#~ msgid "light red"
+#~ msgstr "светло-красный"
+
+#~ msgid "light orange"
+#~ msgstr "светло-оранжевый"
+
+#~ msgid "light yellow"
+#~ msgstr "светло-желтый"
+
+#~ msgid "light olive"
+#~ msgstr "светло-оливковый"
+
+#~ msgid "light cyan"
+#~ msgstr "светло-голубой"
+
+#~ msgid "light azure"
+#~ msgstr "светло-лазурный"
+
+#~ msgid "light indigo"
+#~ msgstr "светлый индиго"
+
+#~ msgid "light purple"
+#~ msgstr "светло-сиреневый"
+
+#~ msgid "light magenta"
+#~ msgstr "светло-пурпурный"
+
+#~ msgid "light pink"
+#~ msgstr "светло-розовый"
+
+#~ msgid "light gray"
+#~ msgstr "светло-серый"
+
+#~ msgid "olive"
+#~ msgstr "оливковый"
+
+#~ msgid "green"
+#~ msgstr "зеленый"
+
+#~ msgid "cyan"
+#~ msgstr "голубой"
+
+#~ msgid "azure"
+#~ msgstr "лазурный"
+
+#~ msgid "blue"
+#~ msgstr "синий"
+
+#~ msgid "indigo"
+#~ msgstr "индиго"
+
+#~ msgid "magenta"
+#~ msgstr "пурпурный"
+
+#~ msgid "dark red"
+#~ msgstr "темно-красный"
+
+#~ msgid "dark orange"
+#~ msgstr "темно-оранжевый"
+
+#~ msgid "dark yellow"
+#~ msgstr "темно-желтый"
+
+#~ msgid "dark olive"
+#~ msgstr "темно-оливковый"
+
+#~ msgid "dark cyan"
+#~ msgstr "темно-голубой"
+
+#~ msgid "dark azure"
+#~ msgstr "темно-лазурный"
+
+#~ msgid "dark indigo"
+#~ msgstr "темный индиго"
+
+#~ msgid "dark purple"
+#~ msgstr "темно-сиреневый"
+
+#~ msgid "dark magenta"
+#~ msgstr "темно-пурпурный"
+
+#~ msgid "dark pink"
+#~ msgstr "темно-розовый"
+
+#~ msgid "dark gray"
+#~ msgstr "темно-серый"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just this appointment within the "
+#~ "series?"
+#~ msgstr "Изменить отдельную встречу или всю последовательность? "
+
+#~ msgid ""
+#~ "Do you want to edit this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr "Хотите изменить только эту встречу или включая все последующие?"
+
+#~ msgid "Confidential"
+#~ msgstr "Конфиденциально"
+
+#~ msgid "Recurrence"
+#~ msgstr "Повтор"
+
+#~ msgid "Merge"
+#~ msgstr "Объединить"
+
+#~ msgid "Split"
+#~ msgstr "Разделить"
+
+#~ msgid "Click to merge all folders into one column"
+#~ msgstr "Щелкните, чтобы объединить папки в один столбец"
+
+#~ msgid "Click to split all folders into separate columns"
+#~ msgstr "Щелкните, чтобы распределить папки по столбцам"
+
+#~ msgid "Next year"
+#~ msgstr "Следующий год"
+
+#~ msgid "First name must not be empty for internal users"
+#~ msgstr "Имя внутреннего пользователя не может быть пустым."
+
+#~ msgid "Last name must not be empty for internal users"
+#~ msgstr "Фамилия внутреннего пользователя не может быть пустой."
+
+#~ msgid "Something went wrong. Please close this browser tab and try again."
+#~ msgstr "Что-то пошло не так. Закройте окно браузера и повторите попытку."
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalendar"
+
+#~ msgid "Export selected"
+#~ msgstr "Экспорт выбранных"
+
+#~ msgid "Format: %1$s"
+#~ msgstr "Формат: %1$s"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Обратите внимание, что при экспорте календаря другие участники будут "
+#~ "исключены."
+
+#~ msgid "No export format available"
+#~ msgstr "Формат экспорта недоступен"
+
+#~ msgid "Subscribe to IMAP folders"
+#~ msgstr "Подписаться на папки IMAP"
+
+#~ msgid "A folder cannot be moved into itself"
+#~ msgstr "Папка не может быть перемещена в саму себя."
+
+#~ msgid "A folder cannot be moved to one of its subfolders"
+#~ msgstr "Папка не может быть перемещена в одну из своих вложенных папок."
+
+#~ msgid "Last updated"
+#~ msgstr "Последнее обновление"
+
+#~ msgid "iCal feed"
+#~ msgstr "Лента iCal"
+
+#~ msgid "Google subscription"
+#~ msgstr "Подписка Google"
+
+#~ msgid "Calendars of interest"
+#~ msgstr "Интересные календари"
+
+#~ msgid "Do you really want to delete calendar \"%s\"?"
+#~ msgstr "Вы действительно хотите удалить календарь «%s»?"
+
+#~ msgid ""
+#~ "This calendar is shared with others. It won't be available for them any "
+#~ "more."
+#~ msgstr ""
+#~ "К этому календарю был открыт совместный доступ. В дальнейшем доступ "
+#~ "других пользователей будет невозможен."
+
+#~ msgid "All my public appointments"
+#~ msgstr "Все мои общедоступные встречи"
+
+#~ msgid "Archive old messages"
+#~ msgstr "Архивировать старые сообщения"
+
+#~ msgid "Delete forever"
+#~ msgstr "Удалить навсегда"
+
+#~ msgid "Restore"
+#~ msgstr "Восстановить"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Разрешения / Пригласить людей"
+
+#~ msgid "Show in Drive"
+#~ msgstr "Показать на Диске"
+
+#~ msgid "Refresh this calendar"
+#~ msgstr "Обновить календарь"
+
+#~ msgid "Show all calendars"
+#~ msgstr "Показать все календари"
+
+#~ msgid "Show this calendar only"
+#~ msgstr "Показать только этот календарь"
+
+#~ msgid "Select all messages"
+#~ msgstr "Выбрать все сообщения"
+
+#~ msgid "Subscribe to address book"
+#~ msgstr "Подписаться на адресную книгу"
+
+#~ msgid "Personal calendar"
+#~ msgstr "Персональный календарь"
+
+#~ msgid "Subscribe to calendar"
+#~ msgstr "Подписаться на календарь"
+
+#~ msgid "Browse calendars of interest"
+#~ msgstr "Просмотреть интересные календари"
+
+#~ msgid "Google calendar"
+#~ msgstr "Календарь Google"
+
+#~ msgid "Subscribe via URL (iCal)"
+#~ msgstr "Подписаться по URL (iCal)"
+
+#~ msgid "Import calendar"
+#~ msgstr "Импорт календаря"
+
+#~ msgid "Imported calendar"
+#~ msgstr "Импортированный календарь"
+
+#~ msgid "New calendar name"
+#~ msgstr "Новое название календаря"
+
+#~ msgid "Ignore existing appointments"
+#~ msgstr "Игнорировать существующие встречи"
+
+#~ msgid ""
+#~ "Ignoring existing appointments is helpful to import public holiday "
+#~ "calendars, for example."
+#~ msgstr ""
+#~ "Игнорирование событий подходит для импорта календаря праздничных дней и т."
+#~ "п."
+
+#~ msgid "Please note that other participants are removed on calendar import."
+#~ msgstr ""
+#~ "Обратите внимание, что при импорте календаря другие участники будут "
+#~ "исключены."
+
+#~ msgid "You must enter a folder name"
+#~ msgstr "Необходимо ввести имя папки"
+
+#~ msgid "Navigate to:"
+#~ msgstr "Перейти:"
+
+#~ msgctxt "app"
+#~ msgid "Notes"
+#~ msgstr "Заметки"
+
+#~ msgid "Connect this Device"
+#~ msgstr "Подключить устройство"
+
+#~ msgid ""
+#~ "There are currently no compatible media devices available on your device."
+#~ msgstr "На вашем устройстве нет совместимых медиаустройств."
+
+#~ msgid ""
+#~ "Access to your media devices has been denied. Please refer to your "
+#~ "browser help pages for how to reset authorization."
+#~ msgstr ""
+#~ "Отказано в доступе к вашим медиаустройствам. О том, как сбросить "
+#~ "настройки авторизации, можно узнать из справочных страниц браузера."
+
+#~ msgid "This feature isn't available for non-secure connections."
+#~ msgstr "Эта возможность недоступна для незащищенных соединений."
+
+#~ msgid "Microphone %1$s"
+#~ msgstr "Микрофон %1$s"
+
+#~ msgid "Camera %1$s"
+#~ msgstr "Камера %1$s"
+
+#~ msgid "Unknown %1$s"
+#~ msgstr "Неизвестное устройство %1$s"
+
+#~ msgid ""
+#~ "Unfortunately your browser doesn't support listing available media "
+#~ "devices."
+#~ msgstr ""
+#~ "К сожалению, ваш браузер не поддерживает просмотр списка доступных "
+#~ "медиаустройств."
+
+#~ msgid "Unicolor"
+#~ msgstr "Одноцветная"
+
+#~ msgid "Multicolor"
+#~ msgstr "Многоцветная"
+
+#~ msgid "Purple/Magenta"
+#~ msgstr "Сиреневый/Пурпурный"
+
+#~ msgid "Automatic"
+#~ msgstr "Автоматически"
+
+#~ msgid "Time-dependent"
+#~ msgstr "В зависимости от времени"
+
+#~ msgid "Design"
+#~ msgstr "Дизайн"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "Быстрый запуск %s"
+
+#~ msgid "Manage browser permissions now"
+#~ msgstr "Настроить разрешения браузера"
+
+#~ msgid "%1$s must not be empty."
+#~ msgstr "%1$s не может быть пустым."
+
+#~ msgid ""
+#~ "\n"
+#~ " Please download the file using the button below."
+#~ msgstr ""
+#~ "\n"
+#~ " Нажмите кнопку, чтобы скачать файл."
+
+#~ msgid "Download %1$s"
+#~ msgstr "Скачать %1$s"
+
+#~ msgid "Downlad"
+#~ msgstr "Скачать"
+
+#~ msgid "There is no preview for this file type."
+#~ msgstr "Предпросмотр этого типа файлов не поддерживается."
+
+#~ msgid ""
+#~ "Restored into multiple folders:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Восстановлено в разные папки:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Restored into folder:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Восстановлено в папку:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Ссылка для доступа к файлу «%1$s» создана"
+#~ msgstr[1] "Создана ссылка для доступа к %2$d объектам"
+#~ msgstr[2] "Создана ссылка для доступа к %2$d объектам"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Ссылка для доступа к папке «%1$s» создана"
+#~ msgstr[1] "Создана ссылка для доступа к %2$d объектам"
+#~ msgstr[2] "Создана ссылка для доступа к %2$d объектам"
+
+#~ msgid "Add folder"
+#~ msgstr "Добавить папку"
+
+#~ msgid "Edit Share"
+#~ msgstr "Настроить общий доступ"
+
+#~ msgid "%1$d seconds"
+#~ msgstr "%1$d секунд"
+
+#~ msgid "Duration per image"
+#~ msgstr "Время на одно изображение"
+
+#~ msgid "Advanced settings"
+#~ msgstr "Дополнительные параметры"
+
+#~ msgid "Internal and external users"
+#~ msgstr "Внутренние и внешние пользователи"
+
+#~ msgid "External users"
+#~ msgstr "Внешние пользователи"
+
+#~ msgid "Share with subfolders"
+#~ msgstr "Поделиться с подпапками"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Добавить в избранное"
+
+#~ msgid "Inspect certificate"
+#~ msgstr "Проверить сертификат"
+
+#~ msgid ""
+#~ "All future messages from the sender will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "папку."
+#~ msgstr[1] ""
+#~ "Все последующие сообщения от этих отправителей будут перемещены в "
+#~ "указанную папку."
+#~ msgstr[2] ""
+#~ "Все последующие сообщения от этих отправителей будут перемещены в "
+#~ "указанную папку."
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Редактируемые в данный момент черновики с вложениями не могут быть "
+#~ "удалены до тех пор, пока вы не закроете окна, в которых они создаются."
+
+#~ msgid "Authentication details"
+#~ msgstr "Свойства аутентификации"
+
+#~ msgid "Category name"
+#~ msgstr "Название категории"
+
+#~ msgid "Warning:"
+#~ msgstr "Предупреждение:"
+
+#~ msgid "Note:"
+#~ msgstr "Примечание:"
+
+#~ msgid "Enable Links"
+#~ msgstr "Разрешить ссылки"
+
+#~ msgid "Links have been disabled to protect you against potential spam!"
+#~ msgstr "Ссылки были заблокированы с целью защиты от спама."
+
+#~ msgid ""
+#~ "see attached|see attachment|see included|is attached|attached is|are "
+#~ "attached|attached are|attached to this email|attached to this message|I'm "
+#~ "attaching|I am attaching|I've attached|I have attached|I attach|I "
+#~ "attached|find attached|find the attached|find included|find the included|"
+#~ "attached file|see the attached|see attachments|attached files|see the "
+#~ "attachment"
+#~ msgstr ""
+#~ "см. приложения|см. вложения|см. приложенные|приложено|прикреплено|"
+#~ "приложены|прикреплены|приложены к этому письму|приложены к этому "
+#~ "сообщению|я прикладываю|я приложил(а)|я прикрепляю|я прикрепил(а)|к "
+#~ "письму приложены|письмо включает|приложенный файл|прикрепленный файл|"
+#~ "приложенные файлы|прикрепленные файлы"
+
+#~ msgid "Forgot attachment?"
+#~ msgstr "Забыли прикрепить файлы?"
+
+#~ msgid "Send without attachment"
+#~ msgstr "Отправить без вложений"
+
+#~ msgid "It appears as if you forgot to attach a file."
+#~ msgstr "Кажется, вы забыли прикрепить файл."
+
+#~ msgid "You mentioned \"%s\" in your email, but there are no files attached."
+#~ msgstr "Вы упомянули «%s» в письме, но ничего не прикрепили."
+
+#~ msgid ""
+#~ "This email just contains your email address as sender. Your real name is "
+#~ "not used."
+#~ msgstr ""
+#~ "Это письмо содержит только ваш электронный адрес; ваше настоящее имя не "
+#~ "используется."
+
+#~ msgid "One of the embedded images could not be used."
+#~ msgstr "Одно из встроенных изображений не может быть использовано."
+
+#~ msgid "Use password"
+#~ msgstr "Использовать пароль"
+
+#~ msgid "Receive notification when someone finished downloading file(s)"
+#~ msgstr "Получать уведомление о скачивании файлов"
+
+#~ msgid "Receive notification when the link expires"
+#~ msgstr "Получать уведомление, когда истечет срок действия ссылки"
+
+#~ msgid "Receive notification when someone accesses the file(s)"
+#~ msgstr "Получать уведомление при обращении к файлам"
+
+#~ msgid "%1$s options"
+#~ msgstr "Параметры %1$s"
+
+#~ msgctxt "verb"
+#~ msgid "Unflag"
+#~ msgstr "Снять пометку"
+
+#~ msgid "Email content"
+#~ msgstr "Содержимое письма"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Быстрый ответ: %1$s"
+
+#~ msgid "Auto forwarding is active"
+#~ msgstr "Автоматическая пересылка включена"
+
+#~ msgid "Unable to load your auto forward settings. Please retry later."
+#~ msgstr ""
+#~ "Не удалось загрузить настройки автоматической пересылки. Повторите "
+#~ "попытку позже."
+
+#~ msgid "Auto forward"
+#~ msgstr "Автопересылка"
+
+#~ msgid "Enable or disable auto forward"
+#~ msgstr "Включить/Отключить автопересылку"
+
+#~ msgid "Your vacation notice is active"
+#~ msgstr "Сообщение автоответчика включено"
+
+#~ msgid "The time frame is in the past."
+#~ msgstr "Отрезок времени находится в прошлом."
+
+#~ msgid "Unable to load your vacation notice. Please retry later."
+#~ msgstr ""
+#~ "Не удалось загрузить ваше сообщение автоответчика. Повторите попытку "
+#~ "позже."
+
+#~ msgid "Vacation notice"
+#~ msgstr "Автоматический ответ"
+
+#~ msgid "Default sender"
+#~ msgstr "Отправитель по умолчанию"
+
+#~ msgid "Enable or disable vacation notice"
+#~ msgstr "Включить/Отключить сообщение автоответчика"
+
+#~ msgid "Message"
+#~ msgstr "Сообщение"
+
+#~ msgid "Days between notices to the same sender"
+#~ msgstr "Интервал повтора сообщений автоответчика отправителю (в днях)"
+
+#~ msgctxt "settings"
+#~ msgid "Mail Compose"
+#~ msgstr "Составление писем"
+
+#~ msgid "Behavior"
+#~ msgstr "Реакция на событие"
+
+#~ msgid ""
+#~ "You can import all existing signatures from the previous product "
+#~ "generation at once."
+#~ msgstr "Вы можете импортировать подписи из предыдущих версий программы."
+
+#~ msgid "No preview available"
+#~ msgstr "Предварительный просмотр недоступен."
+
+#~ msgid "Default signature for replies or forwards"
+#~ msgstr "Подпись по умолчанию для пересылки и ответных писем"
+
+#~ msgid "Text preview"
+#~ msgstr "Текстовый просмотр"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Мы не смогли убедиться, что это письмо действительно получено от %1$s."
+
+#~ msgid "We could not verify that this email is from %1$s."
+#~ msgstr "Мы не смогли подтвердить, что это письмо действительно от %1$s."
+
+#~ msgid "We could verify that this email is from %1$s."
+#~ msgstr "Мы убедились, что это письмо действительно от %1$s."
+
+#~ msgid "Search in"
+#~ msgstr "Искать в"
+
+#~ msgid "Current folder"
+#~ msgstr "Текущая папка"
+
+#~ msgid "Contains words"
+#~ msgstr "Содержит слова"
+
+#~ msgid "Has attachments"
+#~ msgstr "Есть вложения"
+
+#~ msgctxt "dropdown"
+#~ msgid "Sort"
+#~ msgstr "Сортировать"
+
+#~ msgid "All messages in this folder"
+#~ msgstr "Все сообщения в этой папке"
+
+#~ msgctxt "dropdown"
+#~ msgid "All"
+#~ msgstr "Все"
+
+#~ msgid "Connect this device"
+#~ msgstr "Подключить устройство"
+
+#~ msgid "Signed in as"
+#~ msgstr "Пользователь:"
+
+#~ msgid ""
+#~ "The widget \"%s\" was disabled as the account might have been removed or "
+#~ "is no longer available."
+#~ msgstr ""
+#~ "Виджет «%s» был отключен, так как учетная запись недоступна или была "
+#~ "удалена."
+
+#~ msgid "Default"
+#~ msgstr "По умолчанию"
+
+#~ msgid "Security"
+#~ msgstr "Безопасность"
+
+#~ msgid "Active clients"
+#~ msgstr "Активные клиенты"
+
+#~ msgid "Certificates"
+#~ msgstr "Сертификаты"
+
+#~ msgid "Remove certificate"
+#~ msgstr "Удалить сертификат"
+
+#~ msgid "Do you really want to remove this certificate?"
+#~ msgstr "Вы действительно хотите удалить этот сертификат?"
+
+#~ msgid "The certificate list is empty"
+#~ msgstr "Список сертификатов пуст."
+
+#~ msgid "Fingerprint"
+#~ msgstr "Отпечаток"
+
+#~ msgid "Untrust certificate %1$s"
+#~ msgstr "Не доверять сертификату %1$s"
+
+#~ msgid "Untrust"
+#~ msgstr "Не доверять"
+
+#~ msgid "Trust certificate %1$s"
+#~ msgstr "Доверять сертификату %1$s"
+
+#~ msgid "Trust"
+#~ msgstr "Доверять"
+
+#~ msgid "Remove certificate %1$s"
+#~ msgstr "Удалить сертификат %1$s"
+
+#~ msgid "Common name"
+#~ msgstr "Общее имя"
+
+#~ msgid "Expired"
+#~ msgstr "Истек"
+
+#~ msgid "Failure reason"
+#~ msgstr "Причина сбоя"
+
+#~ msgid "Hostname"
+#~ msgstr "Имя узла"
+
+#~ msgid "Issued by"
+#~ msgstr "Выдан"
+
+#~ msgid "Issued on"
+#~ msgstr "Дата выдачи"
+
+#~ msgid "Serial number"
+#~ msgstr "Серийный номер"
+
+#~ msgid "Signature"
+#~ msgstr "Подпись"
+
+#~ msgid "Trusted"
+#~ msgstr "Доверенный"
+
+#~ msgid "Certificate details"
+#~ msgstr "Свойства сертификата"
+
+#~ msgid "Trust certificate"
+#~ msgstr "Доверять сертификату"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#~ msgid "Mac"
+#~ msgstr "Mac"
+
+#~ msgid "iOS"
+#~ msgstr "iOS"
+
+#~ msgid "Android"
+#~ msgstr "Android"
+
+#~ msgid "Chrome"
+#~ msgstr "Chrome"
+
+#~ msgid "Safari"
+#~ msgstr "Safari"
+
+#~ msgid "Firefox"
+#~ msgstr "Firefox"
+
+#~ msgid "Edge"
+#~ msgstr "Edge"
+
+#~ msgid "Internet Explorer"
+#~ msgstr "Internet Explorer"
+
+#~ msgid "Opera"
+#~ msgstr "Opera"
+
+#~ msgid "Chromium"
+#~ msgstr "Chromium"
+
+#~ msgid "Addressbook"
+#~ msgstr "Адресная книга"
+
+#~ msgid "Calendar/Addressbook"
+#~ msgstr "Календарь/Адресная книга"
+
+#~ msgid "Thunderbird Lightning"
+#~ msgstr "Thunderbird Lightning"
+
+#~ msgid "eM Client"
+#~ msgstr "eM Client"
+
+#~ msgid "Appsuite eM Client"
+#~ msgstr "Appsuite eM Client"
+
+#~ msgid "CalDav"
+#~ msgstr "CalDAV"
+
+#~ msgid "CardDav"
+#~ msgstr "CardDAV"
+
+#~ msgid "DAVdroid"
+#~ msgstr "DAVdroid"
+
+#~ msgid "CalDav/CardDav"
+#~ msgstr "CalDav/CardDav"
+
+#~ msgid "Exchange Active Sync"
+#~ msgstr "Exchange Active Sync"
+
+#~ msgid "Unknown application"
+#~ msgstr "Неизвестное приложение"
+
+#~ msgid "Unknown device"
+#~ msgstr "Неизвестное устройство"
+
+#~ msgid "Now active"
+#~ msgstr "Активно"
+
+#~ msgid "Do you really want to sign out from that device?"
+#~ msgstr "Вы действительно хотите завершить сеанс на этом устройстве?"
+
+#~ msgid "You are currently signed in with the following devices"
+#~ msgstr "Вы выполнили вход на следующих устройствах:"
+
+#~ msgid "Sign out from all clients"
+#~ msgstr "Выйти на всех клиентах"
+
+#~ msgid ""
+#~ "Do you really want to sign out from all clients except the current one?"
+#~ msgstr ""
+#~ "Вы действительно хотите завершить сеанс на всех клиентах за исключением "
+#~ "этого?"
+
+#~ msgid "Show email authenticity"
+#~ msgstr "Показывать подлинность писем"
+
+#~ msgid "Disabled"
+#~ msgstr "Отключено"
+
+#~ msgid "Suspicious and unclassified emails only"
+#~ msgstr "Подозрительные и неклассифицированные письма"
+
+#~ msgid "All emails"
+#~ msgstr "Все письма"
+
+#~ msgid "App Launcher"
+#~ msgstr "Агент запуска приложений"
+
+#~ msgid ""
+#~ "To navigate between the %1$s applications, just click on the new App "
+#~ "Launcher icon."
+#~ msgstr ""
+#~ "Для переключения между приложениями %1$s щелкните новый значок агента "
+#~ "запуска."
+
+#~ msgid "Click on the application that you would like to use."
+#~ msgstr "Щелкните на значке приложения, которое вы хотите запустить."
+
+#~ msgid "New Windows"
+#~ msgstr "Новые окна"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "Письма будут открываться в новом окне. Окна можно развернуть, свернуть и "
+#~ "закрыть."
+
+#~ msgid ""
+#~ "Windows you have minimized will appear in all applications for easy "
+#~ "access. You can maximize a window again by clicking on it."
+#~ msgstr ""
+#~ "Минимизированные окна будут доступны во всех приложениях. Чтобы "
+#~ "развернуть окно, щелкните его еще раз."
+
+#~ msgid "What's new"
+#~ msgstr "Что нового"
+
+#~ msgid "To learn more about the new and improved features you can visit "
+#~ msgstr "Чтобы узнать о новых возможностях, посетите "
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Что нового в %1$s 7.10.0"
+
+#~ msgid ""
+#~ "Welcome to %1$s.\n"
+#~ "We've made some exciting changes to %1$s. This quick tour will guide you "
+#~ "through some of the new and improved features."
+#~ msgstr ""
+#~ "Добро пожаловать в %1$s.\n"
+#~ "Мы внесли качественные изменения в %1$s. Этот обзор познакомит вас с "
+#~ "новыми возможностями."
+
+#~ msgid "Never show again"
+#~ msgstr "Никогда не показывать"
+
+#~ msgid "Open in calendar"
+#~ msgstr "Открыть в календаре"
+
+#~ msgid "Remove all reminders"
+#~ msgstr "Удалить все напоминания"
+
+#~ msgid "Appointment reminder"
+#~ msgstr "Напоминание о встрече"
+
+#~ msgid "Encrypt"
+#~ msgstr "Зашифровать"
+
+#~ msgid "Show Links"
+#~ msgstr "Показать ссылки"
+
+#~ msgid "Add attachment"
+#~ msgstr "Добавить вложение"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "Лента iCal успешно импортирована."
+
+#~ msgid "Change color"
+#~ msgstr "Изменить цвет"
+
+#~ msgid "Town"
+#~ msgstr "Город"
+
+#~ msgid "iCal-Feed"
+#~ msgstr "Лента iCal"
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Игнорировать существующие встречи. Подходит для импорта календаря "
+#~ "праздничных дней и т.п."
+
+#~ msgid "Internal & external users"
+#~ msgstr "Внутренние и внешние пользователи"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Все последующие сообщения от отправителей, указанных в выбранных "
+#~ "сообщениях, будут переноситься в выбранную папку"
+
+#~ msgid "never"
+#~ msgstr "никогда"
+
+#~ msgid "Use Password"
+#~ msgstr "Использовать пароль"
+
+#~ msgid "%1$s Options"
+#~ msgstr "Параметры %1$s"
+
+#~ msgid "Account is being created"
+#~ msgstr "Учетная запись создается."
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Мы не смогли удостовериться, что это письмо действительно получено от "
+#~ "%1$s, и не можем гарантировать, что оно не является фишинговым."
+
+#~ msgid "in"
+#~ msgstr "в"
+
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Только опасные письма"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Опасные и доверенные письма"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Опасные, доверенные и действительные письма"
+
+#~ msgid "Add new reminder"
+#~ msgstr "Добавить напоминание"
+
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "Ошибка аутентификации. Введите логин и пароль."
+
+#~ msgid "Public"
+#~ msgstr "Общедоступное"
+
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "Встреча будет видна всем пользователям в общих папках."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "В общих папках для пользователей, которые не пойдут на встречу, она будет "
+#~ "представлена в виде обычного отрезка времени."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Пользователи, не идущие на встречу, не увидят ее в общих папках. Эта "
+#~ "встреча не будет учитываться при поиске конфликтов и не будет видна "
+#~ "режиме планирования."
+
+#~ msgid "Birthday"
+#~ msgstr "День рождения"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Список публичных календарей и событий"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Быстрый запуск 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Быстрый запуск 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Быстрый запуск 3"
 
 #~ msgid ""
 #~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
@@ -11262,99 +12544,153 @@ msgstr "Добавить в %s"
 #~ msgstr[1] "Файлы не могут быть добавлены, так как они превышают квоту %1$s"
 #~ msgstr[2] "Файлы не могут быть добавлены, так как они превышают квоту %1$s"
 
-#~ msgid "via"
-#~ msgstr "через"
-
-#~ msgid "in"
-#~ msgstr "в"
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Это письмо получено от доверенного отправителя."
 
 #~ msgid ""
-#~ "Use up and down keys to change the time. Close selection by pressing ESC "
-#~ "key."
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
 #~ msgstr ""
-#~ "Используйте стрелки, чтобы изменить время. Нажмите ESC, чтобы закрыть "
-#~ "окно."
+#~ "Мы не смогли удостовериться, что это письмо действительно получено от "
+#~ "%1$s, и не можем гарантировать, что оно не является фишинговым."
 
-#~ msgid "Line %1$d: %2$s"
-#~ msgstr "Строка %1$d: %2$s"
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Это письмо было отправлено %1$s."
 
-#~ msgid "continue if any of these condition is met"
-#~ msgstr "продолжить, если выполнено любое из условий"
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "Мы не смогли подтвердить, что это письмо действительно от %1$s."
 
-#~ msgid "Size (bytes)"
-#~ msgstr "Размер (в байтах)"
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Истекает: %1$d"
+
+#~ msgid "Has Attachment"
+#~ msgstr "Есть вложение"
+
+#~ msgid "Show message authenticity"
+#~ msgstr "Показывать подлинность писем"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Только опасные"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Опасные и доверенные"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Отметить все напоминания как прочитанные"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s из %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "Клиент %s для Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "Клиент %s для Mac"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "Клиент %s для Windows"
+
+#, fuzzy
+#~| msgid "%s client for iOS"
+#~ msgid "%1$s for iOS"
+#~ msgstr "Клиент %s для iOS"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Поделиться %1$s «%2$s»"
+
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "закрыть для %1$s"
+
+#, fuzzy
+#~| msgid "Currently refreshing"
+#~ msgid "Current session"
+#~ msgstr "Обновляется..."
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Знаете ли вы, что вы можете взять OX App Suite с собой в дорогу? Просто "
+#~ "щелкните этот значок и в открывшемся меню выберите «Подключить "
+#~ "устройство»."
+
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Вы действительно хотите удалить учетную запись?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Вы действительно хотите удалить эту версию?"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Заканчивается %1$s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s из %2$s"
 
 #~ msgid "Header exists"
 #~ msgstr "Заголовок существует"
 
-#~ msgid "Prettify plain text mails"
-#~ msgstr "Форматировать обычные текстовые письма"
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "Добавлено: %1$s."
 
-#~ msgid "Configure %1$s"
-#~ msgstr "Настроить %1$s"
+#, fuzzy
+#~| msgid "Other address"
+#~ msgid "Other clients"
+#~ msgstr "Другие адреса"
 
-#~ msgid "Loop once only"
-#~ msgstr "Проиграть один раз"
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Удалить из списка получателей"
 
-#~ msgid "Keep looping endlessly"
-#~ msgstr "Непрерывный цикл"
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Поделиться %1$s «%2$s»"
 
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "Режим слайд-шоу/автозапуска"
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Приложения могут быть восстановлены. Чтобы отменить их восстановление, "
+#~ "удалите точку восстановления."
 
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "Пауза при автопроигрывании (сек.)"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Неизвестный отправитель"
 
-#~ msgid "Copy message to folder"
-#~ msgstr "Копировать сообщение в папку"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Неизвестный отправитель"
 
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "продолжить, если выполнено любое из условий"
-
-#~ msgid "original timezone"
-#~ msgstr "исходный часовой пояс"
-
-#~ msgid "Rule applies from"
-#~ msgstr "Правило применяется с"
-
-#~ msgid "Rule applies until"
-#~ msgstr "Правило применяется до"
-
-#~ msgid "Rule applies on"
-#~ msgstr "Правило применяется"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "Правило не применяется в"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "Правило не применяется с"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "Правило не применяется до"
-
-#~ msgid "Apply rule if any condition is met."
-#~ msgstr "Применить правило, если выполнено любое условие"
-
-#~ msgid "Content"
-#~ msgstr "Содержимое"
-
-#~ msgid "Envelope - To"
-#~ msgstr "Конверт - Кому"
-
-#~ msgid "Flag mail with"
-#~ msgstr "Флаг: "
-
-#~ msgid "Reply All"
-#~ msgstr "Ответить всем"
-
-#~ msgid "Sender address"
-#~ msgstr "Адрес отправителя"
-
-#~ msgid "Sender/From"
-#~ msgstr "Отправитель/от кого"
-
-#~ msgid "Tag mail with"
-#~ msgstr "Метка: "
+#~ msgid "via"
+#~ msgstr "через"
 
 #~| msgid "is not a valid user or group."
 #~ msgid " is not a valid user or group."
@@ -11567,9 +12903,6 @@ msgstr "Добавить в %s"
 #~ msgid "Advanced facets block was opened."
 #~ msgstr "Секция дополнительных критериев открыта."
 
-#~ msgid "Advanced options"
-#~ msgstr "Дополнительные"
-
 #, fuzzy
 #~| msgid "Advanced Facets"
 #~ msgid "Advanced user?"
@@ -11584,13 +12917,6 @@ msgstr "Добавить в %s"
 #~| msgid "Add contact"
 #~ msgid "All contacts"
 #~ msgstr "Добавить участника"
-
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr ""
-#~ "Все последующие сообщения от отправителей, указанных в выбранных "
-#~ "сообщениях, будут переноситься в выбранную папку"
 
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Разрешить использование вашей учетной записи %s"
@@ -11609,6 +12935,9 @@ msgstr "Добавить в %s"
 
 #~ msgid "Applications"
 #~ msgstr "Приложения"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Применить правило, если выполнено любое условие"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Применить ко всем сообщениям?"
@@ -11701,6 +13030,9 @@ msgstr "Добавить в %s"
 
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Автоматически переносить текст после знака:"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Пауза при автопроигрывании (сек.)"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -11854,6 +13186,9 @@ msgstr "Добавить в %s"
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Создание сообщения"
 
+#~ msgid "Configure %1$s"
+#~ msgstr "Настроить %1$s"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Настроить вкладки входящих"
 
@@ -11862,6 +13197,9 @@ msgstr "Добавить в %s"
 
 #~ msgid "Confirmation status"
 #~ msgstr "Статус подтверждения"
+
+#~ msgid "Content"
+#~ msgstr "Содержимое"
 
 #, fuzzy
 #~ msgid "Continue Presentation"
@@ -11876,17 +13214,14 @@ msgstr "Добавить в %s"
 #~ msgid "Copy (CC) to"
 #~ msgstr "Копия (СС):"
 
+#~ msgid "Copy message to folder"
+#~ msgstr "Копировать сообщение в папку"
+
 #~ msgid "Copy to"
 #~ msgstr "Копировать в "
 
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "Не удалось загрузить список участников для этой задачи."
-
-#~ msgid "Could not save auto forward"
-#~ msgstr "Не удалось сохранить автоперенаправление."
-
-#~ msgid "Could not save vacation notice"
-#~ msgstr "Не удалось сохранить сообщение автоответчика"
 
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "Не удалось загрузить изображения контактов."
@@ -11972,9 +13307,6 @@ msgstr "Добавить в %s"
 #~ msgid "Delete all accounts"
 #~ msgstr "Удалить все учетные записи"
 
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "Удалить все сообщения из этой папки"
-
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Удалить черновик после отправки."
 
@@ -11998,9 +13330,6 @@ msgstr "Добавить в %s"
 
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Прямая ссылка: %1$s"
-
-#~ msgid "Disabled"
-#~ msgstr "Отключено"
 
 #~ msgid "Display Name"
 #~ msgstr "Краткое имя"
@@ -12046,9 +13375,6 @@ msgstr "Добавить в %s"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Перетаскивание"
-
-#~ msgid "Drive Client"
-#~ msgstr "Клиент Drive"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "Перетащите сюда для добавления <b class='dndignore'>вложения</b>."
@@ -12214,6 +13540,9 @@ msgstr "Добавить в %s"
 #~ msgid "Entire thread"
 #~ msgstr "Все обсуждение"
 
+#~ msgid "Envelope - To"
+#~ msgstr "Конверт - Кому"
+
 #~ msgid "Every %1$d days."
 #~ msgstr "Каждые %1$d дн."
 
@@ -12305,6 +13634,9 @@ msgstr "Добавить в %s"
 #~| msgid "Fit to screen width"
 #~ msgid "Fit to screen height"
 #~ msgstr "По ширине экрана"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Флаг: "
 
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Имя папки не может содержать «/»"
@@ -12573,6 +13905,9 @@ msgstr "Добавить в %s"
 #~ msgid "Just open %1$s"
 #~ msgstr "Заканчивается %1$s"
 
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Непрерывный цикл"
+
 #~ msgid "Label"
 #~ msgstr "Метка"
 
@@ -12601,6 +13936,9 @@ msgstr "Добавить в %s"
 #~ msgid "Liked a link: %s"
 #~ msgstr "Понравилось: %s"
 
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Строка %1$d: %2$s"
+
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"
 #~ msgstr "Перенос строк после"
@@ -12624,10 +13962,8 @@ msgstr "Добавить в %s"
 #~ msgid "Logout now"
 #~ msgstr "Выйти"
 
-#, fuzzy
-#~| msgid "March"
-#~ msgid "Mac"
-#~ msgstr "Март"
+#~ msgid "Loop once only"
+#~ msgstr "Проиграть один раз"
 
 #~ msgid "Mail Details"
 #~ msgstr "Свойства почты"
@@ -12974,6 +14310,9 @@ msgstr "Добавить в %s"
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "Нажмите [Enter], чтобы выбрать время напоминания."
 
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Форматировать обычные текстовые письма"
+
 #~ msgid "Prev"
 #~ msgstr "Назад"
 
@@ -13037,8 +14376,8 @@ msgstr "Добавить в %s"
 #~ msgid "Remove facet"
 #~ msgstr "Удалить критерий"
 
-#~ msgid "Remove from recipient list"
-#~ msgstr "Удалить из списка получателей"
+#~ msgid "Reply All"
+#~ msgstr "Ответить всем"
 
 #~ msgid "Reply to"
 #~ msgstr "Ответить"
@@ -13062,6 +14401,24 @@ msgstr "Добавить в %s"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "сегодня вечером"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Правило применяется с"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Правило не применяется с"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Правило не применяется в"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Правило не применяется до"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Правило применяется"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Правило применяется до"
 
 #~ msgid "Running applications"
 #~ msgstr "Работающие приложения"
@@ -13114,9 +14471,6 @@ msgstr "Добавить в %s"
 #~ msgid "Search within application"
 #~ msgstr "Показать в приложении"
 
-#~ msgid "Searched in"
-#~ msgstr "Поиск выполнен в"
-
 #~ msgid "Searching for objects"
 #~ msgstr "Поиск объектов"
 
@@ -13143,6 +14497,12 @@ msgstr "Добавить в %s"
 
 #~ msgid "Send feedback"
 #~ msgstr "Отправить отзыв"
+
+#~ msgid "Sender address"
+#~ msgstr "Адрес отправителя"
+
+#~ msgid "Sender/From"
+#~ msgstr "Отправитель/от кого"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Отправка сообщения на заданный адрес"
@@ -13254,9 +14614,6 @@ msgstr "Добавить в %s"
 #~ msgid "Sidebar"
 #~ msgstr "Боковая панель"
 
-#~ msgid "Signature"
-#~ msgstr "Подпись"
-
 #~ msgid "Signature position"
 #~ msgstr "Расположение подписи"
 
@@ -13271,11 +14628,17 @@ msgstr "Добавить в %s"
 #~ msgid "Simple phone list"
 #~ msgstr "Телефонный список"
 
+#~ msgid "Size (bytes)"
+#~ msgstr "Размер (в байтах)"
+
 #~ msgid "Skip this step"
 #~ msgstr "Пропустить"
 
 #~ msgid "Slideshow"
 #~ msgstr "Слайд-шоу"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Режим слайд-шоу/автозапуска"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
@@ -13363,6 +14726,9 @@ msgstr "Добавить в %s"
 #~| msgid "Enable"
 #~ msgid "Tablet"
 #~ msgstr "Включить"
+
+#~ msgid "Tag mail with"
+#~ msgstr "Метка: "
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Приглашение задачи. %1$s %2$s %3$s. Чтобы открыть, нажмите [Enter]"
@@ -14085,6 +15451,13 @@ msgstr "Добавить в %s"
 #~ "apply functions."
 #~ msgstr "Выберите объект на боковой панели для просмотра его содержимого."
 
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Используйте стрелки, чтобы изменить время. Нажмите ESC, чтобы закрыть "
+#~ "окно."
+
 #~ msgid "Using the reminder function"
 #~ msgstr "Напоминание"
 
@@ -14254,9 +15627,6 @@ msgstr "Добавить в %s"
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 #~ msgstr "Размер файла «%1$s» превышает максимально допустимый размер %2$s"
 
-#~ msgid "Your vacation notice has been saved"
-#~ msgstr "Сообщение автоответчика сохранено"
-
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "Масштаб: %1$d%"
 
@@ -14287,6 +15657,12 @@ msgstr "Добавить в %s"
 
 #~ msgid "collapsed"
 #~ msgstr "свернуто"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "продолжить, если выполнено любое из условий"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "продолжить, если выполнено любое из условий"
 
 #~ msgid "daily"
 #~ msgstr "каждый день"
@@ -14447,6 +15823,9 @@ msgstr "Добавить в %s"
 
 #~ msgid "optional password"
 #~ msgstr "дополнительный пароль"
+
+#~ msgid "original timezone"
+#~ msgstr "исходный часовой пояс"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "последовательная обработка правил"

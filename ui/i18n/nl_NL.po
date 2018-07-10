@@ -1,12 +1,12 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
-# Ivar Snaaijer <ivar@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2015, 2016, 2017.
-# Reinout van Schouwen <reinout@bureau-cornavin.com>, 2012, 2013, 2014, 2015.
+# Ivar Snaaijer <ivar@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018.
+# Reinout van Schouwen <reinout@workshop-chapina.com>, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-27 15:56+0200\n"
-"Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2018-07-03 16:01+0200\n"
+"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
@@ -609,11 +609,11 @@ msgstr "Voer alstublieft een positief nummer in"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please insert a date after the start date"
-msgstr "Voer een datum in die na de startdatum valt."
+msgstr "Voer een datum in die na de startdatum valt"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
-msgstr "Selecteer alstublieft minimaal één dag."
+msgstr "Selecteer alstublieft minimaal één dag"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Edit recurrence"
@@ -787,7 +787,7 @@ msgid ""
 msgstr ""
 "Weet u zeker dat u een afspraak wilt maken <b>namens de mapeigenaar</b> of "
 "wilt u een afspraak maken <b>met de eigenaar van de map</b> in uw eigen "
-"agenda."
+"agenda?"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -1255,7 +1255,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please select at least one participant"
-msgstr "Voeg alstublieft minimaal één deelnemer toe."
+msgstr "Voeg alstublieft minimaal één deelnemer toe"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -1504,7 +1504,7 @@ msgstr "Mappenoverzicht sluiten"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
-msgstr "Geen overeenkomstige elementen gevonden"
+msgstr "Geen overeenkomstige elementen gevonden."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
@@ -1694,7 +1694,7 @@ msgid ""
 "decline"
 msgstr ""
 "Ontvang een e-mailkennisgeving voor u als organisator als een deelnemer "
-"accepteert of weigert?"
+"accepteert of weigert"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid ""
@@ -1702,7 +1702,7 @@ msgid ""
 "accept or decline"
 msgstr ""
 "Ontvang een e-mailkennisgeving voor u als deelnemer als andere deelnemers "
-"accepteren of weigeren?"
+"accepteren of weigeren"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid ""
@@ -2025,7 +2025,7 @@ msgstr[1] "%1$d Weken"
 #. make sure that the leading and trailing spaces are also in the translation
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
-msgstr "en"
+msgstr " en "
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
@@ -2041,7 +2041,7 @@ msgctxt "daily"
 msgid "Every day."
 msgid_plural "Every %1$d days."
 msgstr[0] "Elke dag."
-msgstr[1] "Elke %1$d dagen. "
+msgstr[1] "Elke %1$d dagen."
 
 #. recurrence string
 #. %1$d: numeric
@@ -2123,7 +2123,7 @@ msgstr "Elk jaar in %1$s op dag %2$d."
 #. Example: Every year on the first Tuesday in December
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every year on the %1$s %2$s in %3$d."
-msgstr "Elk jaar op de %1$s %2$s in %3$d"
+msgstr "Elk jaar op de %1$s %2$s in %3$d."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends on %1$s."
@@ -2565,7 +2565,7 @@ msgstr "Bewerken om een naam in te voeren."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
-msgstr "Kan contactgegevens niet laden"
+msgstr "Kan contactgegevens niet laden."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
@@ -2622,8 +2622,9 @@ msgid "Postcode"
 msgstr "Postcode"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Town"
-msgstr "Stad"
+#: apps/io.ox/contacts/print.js
+msgid "City"
+msgstr "Plaats"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "State"
@@ -3005,10 +3006,6 @@ msgid "Messenger"
 msgstr "Messenger"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-msgid "City"
-msgstr "Plaats"
-
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -3020,7 +3017,7 @@ msgstr[1] ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
-msgstr "Deze notitie zal niet worden afgedrukt."
+msgstr "Deze notitie zal niet worden afgedrukt"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -3313,7 +3310,7 @@ msgstr "Voor het beste resultaat adviseren wij Google Chrome voor Android."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr "Krijg de meest recente versie van de"
+msgstr "Krijg de meest recente versie van de "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
@@ -3344,7 +3341,7 @@ msgid ""
 "until general release later this year"
 msgstr ""
 "Niet ondersteund voorbeeld - Sommige functionaliteiten zijn uitgeschakeld of "
-"mogelijk instabiel tot algemene oplevering later dit jaar."
+"mogelijk instabiel tot algemene oplevering later dit jaar"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Offline mode"
@@ -3581,7 +3578,7 @@ msgstr ""
 "De zoekresultaten pagina toont alle filters zodanig dat deze eenvoudig zijn "
 "aan te passen of te verwijderen. Onder deze algemene filters worden "
 "geavanceerde filters getoond. Om het aantal zoekresultaten te reduceren moet "
-"u de active filters aanpassen of nieuwe toevoegen."
+"u de active filters aanpassen of nieuwe toevoegen"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
@@ -3607,7 +3604,7 @@ msgstr "Formaat"
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
-msgstr "Selecteer formaat"
+msgstr "selecteer formaat"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
@@ -4173,7 +4170,7 @@ msgstr "Gegevens zijn gedeeltelijk geïmporteerd (%1$s van %2$s records)"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
-msgstr "Niet opgeslagen documenten gaan verloren. Wilt u nu afmelden? "
+msgstr "Niet opgeslagen documenten gaan verloren. Wilt u nu afmelden?"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4350,13 +4347,25 @@ msgstr "Meld opnieuw aan om door te gaan"
 msgid "Restore applications"
 msgstr "Applicaties herstellen"
 
+#. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"De volgende applicaties kunnen worden hersteld. Verwijder het herstelpunt "
-"als u dit niet wilt."
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "Het onderstaande item was open tijdens het sluiten van %1$s."
+msgstr[1] "De onderstaande items waren open tijdens het sluiten van %1$s."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "Klik alstublieft op \"Doorgaan\" als u door wilt gaan met bewerken."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] ""
+"Als u het item niet wilt behouden klikt u op het prullenbak pictogram."
+msgstr[1] ""
+"Als u de items niet wilt behouden klikt u op het prullenbak pictogram."
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4474,47 +4483,47 @@ msgstr "submappen en objecten aanmaken"
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "no read permissions"
-msgstr "Geen leesrechten"
+msgstr "geen leesrechten"
 
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "read own objects"
-msgstr "Lees alleen eigen objecten"
+msgstr "lees alleen eigen objecten"
 
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "read all objects"
-msgstr "Lees alle objecten"
+msgstr "lees alle objecten"
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "no edit permissions"
-msgstr "Geen bewerkrechten"
+msgstr "geen bewerkrechten"
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "edit own objects"
-msgstr "Bewerk alleen eigen objecten"
+msgstr "bewerk alleen eigen objecten"
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "edit all objects"
-msgstr "Bewerk alle objecten"
+msgstr "bewerk alle objecten"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "no delete permissions"
-msgstr "Geen verwijderrechten"
+msgstr "geen verwijderrechten"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
-msgstr "Verwijder alleen eigen objecten"
+msgstr "verwijder alleen eigen objecten"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
-msgstr "Verwijder alle objecten"
+msgstr "verwijder alle objecten"
 
 #. Role: Owner (same as admin)
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -4793,7 +4802,7 @@ msgid ""
 "to take effect."
 msgstr ""
 "Sommige instellingen (taal, tijdzone, thema) vereisen dat u de pagina "
-"opnieuw in laad of dat u zich opnieuw aanmeld."
+"opnieuw laadt of dat u zich opnieuw aanmeldt."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
@@ -5061,7 +5070,7 @@ msgstr "Abonneren"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
-msgstr "Er is geen abonnementsdienst beschikbaar voor deze module."
+msgstr "Er is geen abonnementsdienst beschikbaar voor deze module"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Error:"
@@ -5164,7 +5173,7 @@ msgstr "Geannuleerd"
 #: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
-msgstr "lichtgroen"
+msgstr "Lichtgroen"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -5378,7 +5387,7 @@ msgstr "Leeg"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Could not load this list"
-msgstr "Kan deze lijst niet laden."
+msgstr "Kan deze lijst niet laden"
 
 #. finish the tour
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
@@ -5413,6 +5422,15 @@ msgstr "De eerste 90 dagen zijn gratis."
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Ontvang een gratis upgrade"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "Sorry, er is geen voorbeeld beschikbaar."
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"Om dit bestand af te drukken gebruikt u \"Afdrukken als PDF\" in de viewer."
 
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
@@ -5703,7 +5721,7 @@ msgstr ""
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "This document is password protected and cannot be displayed."
 msgstr ""
-"Dit document is beveiligd met een wachtwoord en kan niet worden getoond. "
+"Dit document is beveiligd met een wachtwoord en kan niet worden getoond."
 
 #. text of a viewer document page caption
 #. Example result: "Page 5 of 10"
@@ -5774,7 +5792,7 @@ msgstr "Geef hier de titel van het document"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
-msgstr "U kunt uw wijzigingen snel opslaan met Ctrl+Enter"
+msgstr "U kunt uw wijzigingen snel opslaan met Ctrl+Enter."
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
@@ -6097,7 +6115,7 @@ msgstr "Selecteer bestand"
 
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "You have to select a file to upload."
-msgstr "Selecteer een bestand om te uploaden"
+msgstr "Selecteer een bestand om te uploaden."
 
 #: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
 msgctxt "One file only"
@@ -6456,12 +6474,12 @@ msgstr "Verwijderrechten"
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete own objects"
-msgstr "Eigen objecten verwijderen "
+msgstr "Eigen objecten verwijderen"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
-msgstr "Alle objecten verwijderen "
+msgstr "Alle objecten verwijderen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Administrative role"
@@ -6968,7 +6986,7 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
-msgstr "Verbinding mislukt"
+msgstr "Verbinding mislukt."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
@@ -6992,7 +7010,7 @@ msgstr "Kan geen beveiligde verbinding maken. Wilt u toch doorgaan?"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
-msgstr "Dit is geen geldig e-mailadres!"
+msgstr "Dit is geen geldig e-mailadres"
 
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7304,11 +7322,10 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] ""
-"Alle toekomstige berichten ouder dan %1$s worden verplaatst naar de gekozen "
-"map."
+"Alle toekomstige berichten van %1$s worden verplaatst naar de gekozen map."
 msgstr[1] ""
-"Alle toekomstige berichten ouder dan %1$s worden verplaatst naar de gekozen "
-"map."
+"Alle toekomstige berichten van de verzenders van de gekozen e-mailberichten "
+"worden verplaatst naar de gekozen map."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7390,7 +7407,7 @@ msgstr "Automatisch Doorsturen"
 
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Forward all incoming emails to this address"
-msgstr "Alle inkomende berichten doorsturen naar dit adres:"
+msgstr "Alle inkomende berichten doorsturen naar dit adres"
 
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
@@ -7519,7 +7536,7 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
-msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
+msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn"
 
 #. read receipt; German "Lesebestätigung"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -7768,7 +7785,7 @@ msgstr "Gebruik de zelfbedachte naam"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Custom name"
-msgstr "zelfbedachte naam"
+msgstr "Zelfbedachte naam"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
@@ -7991,7 +8008,7 @@ msgstr "Verwijder %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "This rule contains unsupported properties. "
-msgstr "Deze regel bevat niet ondersteunde eigenschappen"
+msgstr "Deze regel bevat niet ondersteunde eigenschappen. "
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Drag to reorder filter rules"
@@ -8026,7 +8043,7 @@ msgstr "Toevoegoegen IMAP sleutelwoord"
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "Set color flag"
-msgstr "Stel vlagkleur in"
+msgstr "Stel markeerkleur in"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -8754,7 +8771,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
-msgstr "Verzoek om de mailto link te registreren."
+msgstr "Verzoek om de mailto link te registreren"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -8939,7 +8956,7 @@ msgstr "Categorie instellen"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgctxt "verb"
 msgid "Flag"
-msgstr "Vlag"
+msgstr "Markeren"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -9006,7 +9023,7 @@ msgstr "Primair account"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "message"
-msgstr "Bericht"
+msgstr "bericht"
 
 #: apps/io.ox/mail/vacationnotice/settings/filter.js module:io.ox/mail
 msgid "The start date must be before the end date."
@@ -9086,7 +9103,7 @@ msgstr ""
 #. Sort by messages which are flagged, "Flag" is used in dropdown
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Flag"
-msgstr "Vlag"
+msgstr "Markeer"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -9130,7 +9147,7 @@ msgstr "Mac App Store"
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s."
-msgstr "Download de App vanuit %1$s"
+msgstr "Download de App vanuit %1$s."
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -9446,7 +9463,7 @@ msgstr "Uw %1$s account toevoegen"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "An error occurred."
-msgstr "Er is een fout opgetreden"
+msgstr "Er is een fout opgetreden."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Try again."
@@ -10250,7 +10267,7 @@ msgstr "In het geheel niet waarschijnlijk"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
-msgstr "%1$d van 10 punten"
+msgstr "%1$d van 10 punten."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Extremely likely"
@@ -10298,7 +10315,7 @@ msgstr "Bedankt voor uw feedback"
 #. popup error message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback could not be sent"
-msgstr "Feedback kon niet verstuurd worden."
+msgstr "Feedback kon niet verstuurd worden"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
@@ -10435,7 +10452,7 @@ msgstr ""
 #: apps/plugins/notifications/tasks/register.js
 #, c-format
 msgid "Invitation for %1$s."
-msgstr "uitnodiging voor %1$s."
+msgstr "Uitnodiging voor %1$s."
 
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
@@ -11110,7 +11127,7 @@ msgstr "Wachtwoord wijzigen en afmelden"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your new password may not be empty."
-msgstr "Uw nieuwe wachtwoord mag niet leeg zijn"
+msgstr "Uw nieuwe wachtwoord mag niet leeg zijn."
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "The two newly entered passwords do not match."
@@ -11118,7 +11135,7 @@ msgstr "De twee nieuwe wachtwoorden zijn niet hetzelfde."
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
-msgstr "Gebruikersgegevens "
+msgstr "Gebruikersgegevens"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "My password"
@@ -11210,7 +11227,7 @@ msgstr "%1$s heeft hun profiel bijgewerkt:"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Successfully reauthorized your %s account"
-msgstr "U heeft dit %s account opnieuw gemachtigd."
+msgstr "U heeft dit %s account opnieuw gemachtigd"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/xing/main.js
@@ -11318,12 +11335,1294 @@ msgstr "Uitnodigingen voor %s"
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
 
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
+#~ msgid "Notify %1$s before start."
+#~ msgstr "Informeer %1$s voor het starten."
+
+#~ msgid "Notify %1$s after start."
+#~ msgstr "Informeer %1$s na het starten."
+
+#~ msgid "Notify %1$s before end."
+#~ msgstr "Informeer %1$s voor het einde."
+
+#~ msgid "Notify %1$s after end."
+#~ msgstr "Informeer %1$s na het einde."
+
+#~ msgid "Notify at %1$s."
+#~ msgstr "Informeer op %1$s."
+
+#~ msgid "Notify at start."
+#~ msgstr "Informeer bij het starten."
+
+#~ msgid "Notify at end."
+#~ msgstr "Informeer bij het einde."
+
+#~ msgid "Play sound %1$s before start."
+#~ msgstr "Speel geluid %1$s voor het starten."
+
+#~ msgid "Play sound %1$s after start."
+#~ msgstr "Speel geluid %1$s na het starten."
+
+#~ msgid "Play sound %1$s before end."
+#~ msgstr "Speel geluid %1$s voor het einde."
+
+#~ msgid "Play sound %1$s after end."
+#~ msgstr "Speel geluid %1$s na het einde."
+
+#~ msgid "Play sound at %1$s."
+#~ msgstr "Speel geluid af op %1$s."
+
+#~ msgid "Play sound at start."
+#~ msgstr "Speel geluid bij het starten af."
+
+#~ msgid "Play sound at end."
+#~ msgstr "Speel geluid bij het einde af."
+
+#~ msgid "%1$s %2$s before start."
+#~ msgstr "%1$s %2$s voor het starten."
+
+#~ msgid "%1$s %2$s after start."
+#~ msgstr "%1$s %2$s na het starten."
+
+#~ msgid "%1$s %2$s before end."
+#~ msgstr "%1$s %2$s voor het einde."
+
+#~ msgid "%1$s %2$s after end."
+#~ msgstr "%1$s %2$s na het einde."
+
+#~ msgid "%1$s at %2$s."
+#~ msgstr "%1$s op %2$s."
+
+#~ msgid "%1$s at start."
+#~ msgstr "%1$s bij het starten."
+
+#~ msgid "%1$s at end."
+#~ msgstr "%1$s bij het einde."
+
+#~ msgid "Add reminder"
+#~ msgstr "Herinnering toevoegen"
+
+#~ msgid "Audio"
+#~ msgstr "Audio"
+
+#~ msgid "Edit reminders"
+#~ msgstr "Herinneringen bewerken"
+
+#~ msgid "Drag to reorder items"
+#~ msgstr "Sleep de items om de volgorde te veranderen"
+
+#~ msgid "Please grant access to your webcam first."
+#~ msgstr "Geef eerst toestemming om uw webcam te gebruiken."
+
+#~ msgid "Requesting device information. Please wait..."
 #~ msgstr ""
-#~ "Wist u dat u de OX App Suite mee kan nemen? Klik op dit pictogram en kies "
-#~ "'Koppel uw apparaat' vanuit het menu."
+#~ "Toegang tot het apparaat aanvragen. Een ogenblik geduld alstublieft..."
+
+#~ msgid "Currently there are no compatible webcams available on your device."
+#~ msgstr ""
+#~ "Momenteel zijn er geen compatibele webcams beschikbaar op uw apparaat."
+
+#~ msgid "Take a photo"
+#~ msgstr "Maak een foto"
+
+#~ msgid "Webcam"
+#~ msgstr "Webcam"
+
+#~ msgid "Switch camera"
+#~ msgstr "Camera wisselen"
+
+#~ msgid "Edit image"
+#~ msgstr "Afbeelding bewerken"
+
+#~ msgid "Take photo"
+#~ msgstr "Maak foto"
+
+#~ msgid "Rotate image"
+#~ msgstr "Afbeelding draaien"
+
+#~ msgid "New search ... (prototype)"
+#~ msgstr "Nieuwe zoekopdracht ... (prototype)"
+
+#~ msgid "After"
+#~ msgstr "Na"
+
+#~ msgid "Before"
+#~ msgstr "Voor"
+
+#~ msgid "Shrink"
+#~ msgstr "Verkleinen"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximaliseren"
+
+#~ msgid ""
+#~ "Do you want to decline the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr ""
+#~ "Wilt u de hele reeks of slechts enkele afspraken uit de reeks afwijzen?"
+
+#~ msgid "Participant related actions"
+#~ msgstr "Acties met betrekking tot deelnemer"
+
+#~ msgid "You are currently acting on behalf of the calendar owner."
+#~ msgstr "U handelt nu namens de eigenaar van de agenda."
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just this appointment within "
+#~ "the series?"
+#~ msgstr ""
+#~ "Wilt u de hele reeks of alleen deze afspraak uit de reeks verwijderen?"
+
+#~ msgid "This appointment"
+#~ msgstr "Deze afspraak"
+
+#~ msgid ""
+#~ "Do you want to delete this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr ""
+#~ "Wilt u alleen deze afspraak of alle toekomstige afspraken uit deze reeks "
+#~ "verwijderen?"
+
+#~ msgid "All future appointments"
+#~ msgstr "Alle toekomstige afspraken"
+
+#~ msgid "My Google Calendar"
+#~ msgstr "Mijn Google Agenda"
+
+#~ msgid "iCal URL"
+#~ msgstr "iCal URL"
+
+#~ msgid "Subscribe to iCal feed"
+#~ msgstr "Abonneren op iCal gegevens"
+
+#~ msgid "iCal feed has been imported successfully"
+#~ msgstr "iCal gegevens zijn succesvol geïmporteerd"
+
+#~ msgid "Secret"
+#~ msgstr "Geheim"
+
+#~ msgid "Sent by"
+#~ msgstr "Verzonden door"
+
+#~ msgid "Select calendar"
+#~ msgstr "Selecteer agenda"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Maak een nieuwe agenda"
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "In uw tijdzone (%1$s): %2$s (Looptijd: %3$s)"
+
+#~ msgid "Standard"
+#~ msgstr "Standaard"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde agenda's."
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr ""
+#~ "In gedeelde agenda's wordt de afspraak getoond als een eenvoudige periode "
+#~ "voor niet aanwezige gebruikers."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
+#~ msgstr ""
+#~ "De afspraak is helemaal niet zichtbaar voor niet aanwezige gebruikers in "
+#~ "gedeelde agenda's. Er wordt geen rekening gehouden met deze afspraak bij "
+#~ "conflicten en verschijnt ook niet in het planningsoverzicht. Deze optie "
+#~ "kan niet gebruikt worden als de afspraak bronnen blokkeert."
+
+#~ msgid "Visibility"
+#~ msgstr "Zichtbaarheid"
+
+#~ msgid "Appointment color"
+#~ msgstr "Afspraakkleur"
+
+#~ msgid "Show as free"
+#~ msgstr "Als beschikbaar tonen"
+
+#~ msgid "Edit Appointment"
+#~ msgstr "Afspraak Bewerken"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr ""
+#~ "Houd er rekening mee dat distributielijsten geen bronnen kunnen bevatten."
+
+#~ msgid "Next week"
+#~ msgstr "Volgende week"
+
+#~ msgid "Next month"
+#~ msgstr "Volgende maand"
+
+#~ msgid "Show fine grid"
+#~ msgstr "Toon fijne schaal"
+
+#~ msgid "Date range"
+#~ msgstr "Datumbereik"
+
+#~ msgid "Blocked time frame"
+#~ msgstr "Geblokkeerd tijdsvak"
+
+#~ msgid "Could not get appointment information"
+#~ msgstr "Was niet in staat afspraakgegevens op te halen"
+
+#~ msgid "Error: Failed to load appointments"
+#~ msgstr "Fout tijdens het lezen van de afspraken"
+
+#~ msgid "Load appointments until %1$s"
+#~ msgstr "Afspraken inlezen tot %1s"
+
+#~ msgid "Could't load appointment data."
+#~ msgstr "Kan afspraak-gegevens niet laden."
+
+#~ msgid "No appointment selected"
+#~ msgstr "Geen afspraak geselecteerd"
+
+#~ msgid "%1$s appointments selected"
+#~ msgstr "%1$s geselecteerde afspraken"
+
+#~ msgid "Calendar account error"
+#~ msgstr "Agenda-account fout"
+
+#~ msgid "Try again"
+#~ msgstr "Opnieuw"
+
+#~ msgid "Refreshing calendar might take some time..."
+#~ msgstr "Het verversen van de agenda gaat enige tijd duren..."
+
+#~ msgid "Successfully refreshed calendar"
+#~ msgstr "De agenda is succesvol ververst"
+
+#~ msgid "Appointment options"
+#~ msgstr "Afspraak options"
+
+#~ msgid "Show next month"
+#~ msgstr "Toon volgende maand"
+
+#~ msgid "Show previous month"
+#~ msgstr "Toon vorige maand"
+
+#~ msgid ""
+#~ "You cannot mark the appointment as secret, when blocking a ressource."
+#~ msgstr ""
+#~ "U kan de afspraak niet als geheim markeren als deze bronnen blokkeert."
+
+#~ msgid "%1$d minutes"
+#~ msgstr "%1$d minuten"
+
+#~ msgctxt "noun"
+#~ msgid "View"
+#~ msgstr "Overzicht"
+
+#~ msgid "Time scale"
+#~ msgstr "Intervaltijd"
+
+#~ msgid "Show birthday calendar"
+#~ msgstr "Toon verjaardagskalender"
+
+#~ msgid "Birthday calendar"
+#~ msgstr "Verjaardagskalender"
+
+#~ msgid "Workweek view"
+#~ msgstr "Werkweekoverzicht"
+
+#~ msgid "Week start"
+#~ msgstr "Werkweek start"
+
+#~ msgid "Workweek length"
+#~ msgstr "Werkweek lengte"
+
+#~ msgid "Default reminder for all-day appointments"
+#~ msgstr "Standaardherinnering voor dagafspraken"
+
+#~ msgid "Default reminder for appointments in birthday calendar"
+#~ msgstr "Standaardherinnering voor afspraken in de verjaardagskalender"
+
+#~ msgid "Add calendar"
+#~ msgstr "Agenda toevoegen"
+
+#~ msgid "The integration of the subscribed calendars might take a while."
+#~ msgstr "Het samenvoegen van de agenda's kan enige tijd kosten."
+
+#~ msgid "subscribe to calendar"
+#~ msgstr "abonneren op agenda"
+
+#~ msgid "Mini calendar"
+#~ msgstr "Mini agenda"
+
+#~ msgid "Weekends"
+#~ msgstr "Weekeinden"
+
+#~ msgid "light red"
+#~ msgstr "lichtrood"
+
+#~ msgid "light orange"
+#~ msgstr "licht-oranje"
+
+#~ msgid "light yellow"
+#~ msgstr "lichtgeel"
+
+#~ msgid "light olive"
+#~ msgstr "licht-olijfgroen"
+
+#~ msgid "light cyan"
+#~ msgstr "licht-cyaan"
+
+#~ msgid "light azure"
+#~ msgstr "licht azuurblauw"
+
+#~ msgid "light indigo"
+#~ msgstr "licht indigo"
+
+#~ msgid "light purple"
+#~ msgstr "light paars"
+
+#~ msgid "light magenta"
+#~ msgstr "light magenta"
+
+#~ msgid "light pink"
+#~ msgstr "lichtroze"
+
+#~ msgid "light gray"
+#~ msgstr "lichtgrijs"
+
+#~ msgid "olive"
+#~ msgstr "olijfgroen"
+
+#~ msgid "green"
+#~ msgstr "groen"
+
+#~ msgid "cyan"
+#~ msgstr "cyaan"
+
+#~ msgid "azure"
+#~ msgstr "azuurblauw"
+
+#~ msgid "blue"
+#~ msgstr "blauw"
+
+#~ msgid "indigo"
+#~ msgstr "indigo"
+
+#~ msgid "magenta"
+#~ msgstr "magenta"
+
+#~ msgid "dark red"
+#~ msgstr "donkerrood"
+
+#~ msgid "dark orange"
+#~ msgstr "donker-oranje"
+
+#~ msgid "dark yellow"
+#~ msgstr "donkergeel"
+
+#~ msgid "dark olive"
+#~ msgstr "donker olijfgroen"
+
+#~ msgid "dark cyan"
+#~ msgstr "donker cyaan"
+
+#~ msgid "dark azure"
+#~ msgstr "donker azuurblauw"
+
+#~ msgid "dark indigo"
+#~ msgstr "donker indigo"
+
+#~ msgid "dark purple"
+#~ msgstr "donkerpaars"
+
+#~ msgid "dark magenta"
+#~ msgstr "donker magenta"
+
+#~ msgid "dark pink"
+#~ msgstr "donker roze"
+
+#~ msgid "dark gray"
+#~ msgstr "donkergrijs"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just this appointment within the "
+#~ "series?"
+#~ msgstr ""
+#~ "Wilt u de hele reeks of slechts deze afspraak uit de reeks bewerken?"
+
+#~ msgid ""
+#~ "Do you want to edit this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr ""
+#~ "Wilt u alleen deze afspraak of alle toekomstige afspraken uit deze reeks "
+#~ "bewerken?"
+
+#~ msgid "Confidential"
+#~ msgstr "Vertrouwelijk"
+
+#~ msgid "Recurrence"
+#~ msgstr "Herhaling"
+
+#~ msgid "Merge"
+#~ msgstr "Samenvoegen"
+
+#~ msgid "Split"
+#~ msgstr "Splitsen"
+
+#~ msgid "Click to merge all folders into one column"
+#~ msgstr "Klik om alle mappen in een kolom samen te voegen"
+
+#~ msgid "Click to split all folders into separate columns"
+#~ msgstr "Klik om alle mappen in individuele kolommen te verdelen"
+
+#~ msgid "Next year"
+#~ msgstr "Volgend jaar"
+
+#~ msgid "First name must not be empty for internal users"
+#~ msgstr "Voornaam mag niet leeg zijn voor interne gebruikers"
+
+#~ msgid "Last name must not be empty for internal users"
+#~ msgstr "Achternaam mag niet leeg zijn voor interne gebruikers"
+
+#~ msgid "Something went wrong. Please close this browser tab and try again."
+#~ msgstr ""
+#~ "Er is iets mis gegaan.Sluit alstublieft dit tabblad en probeer het "
+#~ "opnieuw."
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalendar"
+
+#~ msgid "Export selected"
+#~ msgstr "Geselecteerde exporteren"
+
+#~ msgid "Format: %1$s"
+#~ msgstr "Formaat: %1$s"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Houd er rekening mee dat andere deelnemers verwijderd worden bij het "
+#~ "exporteren van de agenda."
+
+# (Reinout)
+# Elma: links wordt veel vaker gebruikt?
+#~ msgid "No export format available"
+#~ msgstr "Geen exporteer-formaat beschikbaar"
+
+#~ msgid "Subscribe to IMAP folders"
+#~ msgstr "Abonneren op IMAP mappen"
+
+#~ msgid "A folder cannot be moved into itself"
+#~ msgstr "Een map kan niet naar zichzelf verplaatst worden"
+
+#~ msgid "A folder cannot be moved to one of its subfolders"
+#~ msgstr "Een map kan niet verplaatst worden naar één van haar submappen"
+
+#~ msgid "Last updated"
+#~ msgstr "Laatst bijgewerkt"
+
+#~ msgid "iCal feed"
+#~ msgstr "iCal-feed"
+
+#~ msgid "Google subscription"
+#~ msgstr "Google abonnement"
+
+#~ msgid "Calendars of interest"
+#~ msgstr "Interessante agenda's"
+
+#~ msgid "Do you really want to delete calendar \"%s\"?"
+#~ msgstr "Weet u zeker dat u de agenda \"%s\" wilt verwijderen?"
+
+#~ msgid ""
+#~ "This calendar is shared with others. It won't be available for them any "
+#~ "more."
+#~ msgstr ""
+#~ "Deze agenda is gedeeld met anderen. Deze zal niet meer beschikbaar zijn "
+#~ "voor hen."
+
+#~ msgid "All my public appointments"
+#~ msgstr "Al mijn publieke afspraken"
+
+#~ msgid "Archive old messages"
+#~ msgstr "Oude berichten archiveren"
+
+#~ msgid "Delete forever"
+#~ msgstr "Voor altijd verwijderen"
+
+#~ msgid "Restore"
+#~ msgstr "Herstel"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Rechten / Mensen uitnodigingen"
+
+#~ msgid "Show in Drive"
+#~ msgstr "Toon in Drive"
+
+#~ msgid "Refresh this calendar"
+#~ msgstr "Ververs deze agenda"
+
+#~ msgid "Show all calendars"
+#~ msgstr "Toon alle agenda's"
+
+#~ msgid "Show this calendar only"
+#~ msgstr "Toon alleen deze agenda"
+
+#~ msgid "Select all messages"
+#~ msgstr "Alle berichten selecteren"
+
+#~ msgid "Subscribe to address book"
+#~ msgstr "Abonneren op adresboek"
+
+#~ msgid "Personal calendar"
+#~ msgstr "Persoonlijke agenda"
+
+#~ msgid "Subscribe to calendar"
+#~ msgstr "Abonneren op agenda"
+
+#~ msgid "Browse calendars of interest"
+#~ msgstr "Blader door interessante agenda's"
+
+#~ msgid "Google calendar"
+#~ msgstr "Google Agenda"
+
+#~ msgid "Subscribe via URL (iCal)"
+#~ msgstr "Abonneren met URL (iCal)"
+
+#~ msgid "Import calendar"
+#~ msgstr "Agenda importeren"
+
+#~ msgid "Imported calendar"
+#~ msgstr "Geïmporteerde agenda"
+
+#~ msgid "New calendar name"
+#~ msgstr "Nieuwe agendanaam"
+
+#~ msgid "Ignore existing appointments"
+#~ msgstr "Negeer bestaande afspraken"
+
+#~ msgid ""
+#~ "Ignoring existing appointments is helpful to import public holiday "
+#~ "calendars, for example."
+#~ msgstr ""
+#~ "Het negeren van bestaande afspraken is praktisch bij het importeren van "
+#~ "bijvoorbeeld algemene feestdagen."
+
+#~ msgid "Please note that other participants are removed on calendar import."
+#~ msgstr ""
+#~ "Houd er rekening mee dat andere deelnemers verwijderd worden bij het "
+#~ "importeren van de agenda."
+
+#~ msgid "You must enter a folder name"
+#~ msgstr "U moet een nieuwe mapnaam ingeven"
+
+#~ msgid "Navigate to:"
+#~ msgstr "Navigeer naar:"
+
+#~ msgctxt "app"
+#~ msgid "Notes"
+#~ msgstr "Opmerkingen"
+
+#~ msgid "Connect this Device"
+#~ msgstr "Koppel dit Apparaat"
+
+#~ msgid ""
+#~ "There are currently no compatible media devices available on your device."
+#~ msgstr ""
+#~ "Er zijn momenteel geen compatibele media-apparaten beschikbaar op uw "
+#~ "apparaat."
+
+#~ msgid ""
+#~ "Access to your media devices has been denied. Please refer to your "
+#~ "browser help pages for how to reset authorization."
+#~ msgstr ""
+#~ "Toegang tot de media-apparaten is niet toegestaan. Raadpleeg uw browser "
+#~ "help-pagina's voor het opnieuw instellen van autorisatie."
+
+#~ msgid "This feature isn't available for non-secure connections."
+#~ msgstr "Deze optie is niet beschikbaar als de verbinding onbeveiligd is."
+
+#~ msgid "Microphone %1$s"
+#~ msgstr "Microfoon %1$s"
+
+#~ msgid "Camera %1$s"
+#~ msgstr "Camera %1$s"
+
+#~ msgid "Unknown %1$s"
+#~ msgstr "Onbekend %1$s"
+
+#~ msgid ""
+#~ "Unfortunately your browser doesn't support listing available media "
+#~ "devices."
+#~ msgstr ""
+#~ "Helaas ondersteund uw browser ondersteunt het benoemen van beschikbare "
+#~ "media-apparatuur niet."
+
+#~ msgid "Unicolor"
+#~ msgstr "Monochrome"
+
+#~ msgid "Multicolor"
+#~ msgstr "Kleur"
+
+#~ msgid "Purple/Magenta"
+#~ msgstr "Paars/Magenta"
+
+#~ msgid "Automatic"
+#~ msgstr "Automatisch"
+
+#~ msgid "Time-dependent"
+#~ msgstr "Tijdsafhankelijk"
+
+#~ msgid "Design"
+#~ msgstr "Stijlelementen"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "Snel-start %s"
+
+#~ msgid "Manage browser permissions now"
+#~ msgstr "Beheer nu uw browsertoestemmingen"
+
+#~ msgid "%1$s must not be empty."
+#~ msgstr "%1$s mag niet leeg zijn."
+
+#~ msgid ""
+#~ "\n"
+#~ " Please download the file using the button below."
+#~ msgstr ""
+#~ "\n"
+#~ "Download alstublieft het bestand met de knop hieronder."
+
+#~ msgid "Download %1$s"
+#~ msgstr "Download %1$s"
+
+#~ msgid "Downlad"
+#~ msgstr "Downloaden"
+
+#~ msgid "There is no preview for this file type."
+#~ msgstr "Er is geen voorbeeld beschikbaar voor dit bestandstype."
+
+#~ msgid ""
+#~ "Restored into multiple folders:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Hersteld naar meerdere mappen:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Restored into folder:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Hersteld naar map:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "De link om het bestand \"%1$s\" te delen is aangemaakt"
+#~ msgstr[1] "Links zijn aangemaakt om %2$d elementen te delen"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "Deelbare link is aangemaakt voor de map \"%1$s\""
+#~ msgstr[1] "Deelbare link is aangemaakt voor %2$d elementen"
+
+#~ msgid "Add folder"
+#~ msgstr "Map toevoegen"
+
+#~ msgid "Edit Share"
+#~ msgstr "Bewerk Gedeeld object"
+
+#~ msgid "%1$d seconds"
+#~ msgstr "%1$d seconden"
+
+#~ msgid "Duration per image"
+#~ msgstr "Tijd per afbeelding"
+
+#~ msgid "Advanced settings"
+#~ msgstr "Geavanceerde instellingen"
+
+#~ msgid "Internal and external users"
+#~ msgstr "Interne en externe gebruikers"
+
+#~ msgid "External users"
+#~ msgstr "Externe gebruikers"
+
+#~ msgid "Share with subfolders"
+#~ msgstr "Deel inclusief submappen"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Toevoegen aan Favorieten"
+
+#~ msgid "Inspect certificate"
+#~ msgstr "Het certificaat controleren"
+
+#~ msgid ""
+#~ "All future messages from the sender will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Alle toekomstige berichten van de verzender worden verplaatst naar de "
+#~ "gekozen map."
+#~ msgstr[1] ""
+#~ "Alle toekomstige berichten van de verzenders van de geselecteerde e-"
+#~ "mailberichten worden verplaatst naar de gekozen map."
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Concepten met bijlagen waar aan gewerkt wordt kunnen niet verwijderd "
+#~ "worden tot het bijbehorende scherm voor het opstellen van deze mail wordt "
+#~ "gesloten."
+
+#~ msgid "Authentication details"
+#~ msgstr "Authenticatie details"
+
+#~ msgid "Category name"
+#~ msgstr "Categorienaam"
+
+#~ msgid "Warning:"
+#~ msgstr "Waarschuwing:"
+
+#~ msgid "Note:"
+#~ msgstr "Notitie:"
+
+#~ msgid "Enable Links"
+#~ msgstr "Links Inschakelen"
+
+#~ msgid "Links have been disabled to protect you against potential spam!"
+#~ msgstr ""
+#~ "Links zijn uitgeschakeld om u te beschermen tegen ongewenste e-mail!"
+
+#~ msgid ""
+#~ "see attached|see attachment|see included|is attached|attached is|are "
+#~ "attached|attached are|attached to this email|attached to this message|I'm "
+#~ "attaching|I am attaching|I've attached|I have attached|I attach|I "
+#~ "attached|find attached|find the attached|find included|find the included|"
+#~ "attached file|see the attached|see attachments|attached files|see the "
+#~ "attachment"
+#~ msgstr ""
+#~ "zie bijlage|zie bijlagen|zie toegevoegd document|is bijlage|toegevoegd is|"
+#~ "zijn toegevoegd| toegevoegd zijn|toegevoegd aan dit bericht|toegevoegd "
+#~ "aan deze mail|stuur bijlage|zie de bijlage||zoals in de bijlage|in de "
+#~ "bijlage"
+
+#~ msgid "Forgot attachment?"
+#~ msgstr "Bijlage vergeten?"
+
+#~ msgid "Send without attachment"
+#~ msgstr "Verzenden zonder een e-mailbijlage"
+
+#~ msgid "It appears as if you forgot to attach a file."
+#~ msgstr "Het lijkt er op dat u een bijlage bent vergeten."
+
+#~ msgid "You mentioned \"%s\" in your email, but there are no files attached."
+#~ msgstr ""
+#~ "U heeft \"%s\" geschreven in uw bericht, maar er zijn geen bijlagen "
+#~ "toegevoegd."
+
+#~ msgid ""
+#~ "This email just contains your email address as sender. Your real name is "
+#~ "not used."
+#~ msgstr ""
+#~ "Dit e-mailbericht bevat uw e-mailadres als de verzender. Uw werkelijke "
+#~ "naam wordt niet gebruikt."
+
+#~ msgid "One of the embedded images could not be used."
+#~ msgstr "Eén van de ingesloten afbeeldingen kan niet gebruikt worden."
+
+#~ msgid "Use password"
+#~ msgstr "Gebruik wachtwoord"
+
+#~ msgid "Receive notification when someone finished downloading file(s)"
+#~ msgstr ""
+#~ "Ontvang meldingen als iemand klaar is met het downloaden van de bestanden"
+
+#~ msgid "Receive notification when the link expires"
+#~ msgstr "Ontvang een melding als de link verloopt"
+
+#~ msgid "Receive notification when someone accesses the file(s)"
+#~ msgstr "Ontvang een melding als iemand de bestanden download"
+
+#~ msgid "%1$s options"
+#~ msgstr "%1$s opties"
+
+#~ msgctxt "verb"
+#~ msgid "Unflag"
+#~ msgstr "Demarkeren"
+
+#~ msgid "Email content"
+#~ msgstr "E-mailinhoud"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Snel antwoord: %1$s"
+
+#~ msgid "Auto forwarding is active"
+#~ msgstr "Automatisch doorsturen is ingeschakeld"
+
+#~ msgid "Unable to load your auto forward settings. Please retry later."
+#~ msgstr ""
+#~ "Het is niet mogelijk uw instellingen voor het automatisch doorsturen. "
+#~ "Probeer het later opnieuw."
+
+#~ msgid "Auto forward"
+#~ msgstr "Automatisch doorsturen"
+
+# (Reinout) Portal = portaal, niet portable
+#~ msgid "Enable or disable auto forward"
+#~ msgstr "In- of uitschakelen van automatisch doorsturen"
+
+#~ msgid "Your vacation notice is active"
+#~ msgstr "Uw afwezigheidsmelding is niet actief"
+
+#~ msgid "The time frame is in the past."
+#~ msgstr "Het tijdsvak is in het verleden."
+
+#~ msgid "Unable to load your vacation notice. Please retry later."
+#~ msgstr "Kan uw afwezigheidsmelding niet laden. Probeer het later opnieuw."
+
+#~ msgid "Vacation notice"
+#~ msgstr "Afwezigheidsmelding"
+
+#~ msgid "Default sender"
+#~ msgstr "Standaard verzender"
+
+#~ msgid "Enable or disable vacation notice"
+#~ msgstr "Afwezigheidsmelding in- of uitschakelen"
+
+#~ msgid "Message"
+#~ msgstr "Bericht"
+
+#~ msgid "Days between notices to the same sender"
+#~ msgstr "Aantal dagen tussen afwezigheidsmeldingen naar dezelfde afzender"
+
+#~ msgctxt "settings"
+#~ msgid "Mail Compose"
+#~ msgstr "E-mailbericht opstellen"
+
+#~ msgid "Behavior"
+#~ msgstr "Gedrag"
+
+#~ msgid ""
+#~ "You can import all existing signatures from the previous product "
+#~ "generation at once."
+#~ msgstr ""
+#~ "U kan alle bestaande ondertekeningen in één keer importeren vanuit een "
+#~ "eerdere product versie."
+
+#~ msgid "No preview available"
+#~ msgstr "Geen voorbeeld beschikbaar"
+
+#~ msgid "Default signature for replies or forwards"
+#~ msgstr "Standaard ondertekening bij reageren of doorsturen"
+
+#~ msgid "Text preview"
+#~ msgstr "Tekstvoorbeeld"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Dit is een verdachte e-mail omdat we niet konden vaststellen dat deze "
+#~ "werkelijk van %1$s afkomstig is."
+
+#~ msgid "We could not verify that this email is from %1$s."
+#~ msgstr "We kunnen niet controleren dat dit bericht van %1$s is."
+
+#~ msgid "We could verify that this email is from %1$s."
+#~ msgstr "We kunnen bevestigen dat dit bericht van %1$s is."
+
+#~ msgid "Search in"
+#~ msgstr "Zoeken in"
+
+#~ msgid "Current folder"
+#~ msgstr "Huidige map"
+
+#~ msgid "Contains words"
+#~ msgstr "Bevat de woorden"
+
+#~ msgid "Has attachments"
+#~ msgstr "Heeft bijlagen"
+
+#~ msgctxt "dropdown"
+#~ msgid "Sort"
+#~ msgstr "Sorteren"
+
+#~ msgid "All messages in this folder"
+#~ msgstr "Alle berichten in deze map"
+
+#~ msgctxt "dropdown"
+#~ msgid "All"
+#~ msgstr "Alle"
+
+#~ msgid "Connect this device"
+#~ msgstr "Koppel dit apparaat"
+
+#~ msgid "Signed in as"
+#~ msgstr "Aangemeld als"
+
+#~ msgid ""
+#~ "The widget \"%s\" was disabled as the account might have been removed or "
+#~ "is no longer available."
+#~ msgstr ""
+#~ "De widget \"%s\" was uitgeschakeld omdat het account mogelijk was "
+#~ "afgesloten en waarschijnlijk verwijderd of niet meer beschikbaar."
+
+#~ msgid "Default"
+#~ msgstr "Standaard"
+
+#~ msgid "Security"
+#~ msgstr "Beveiliging"
+
+#~ msgid "Active clients"
+#~ msgstr "Active clients"
+
+#~ msgid "Certificates"
+#~ msgstr "Certificaten"
+
+#~ msgid "Remove certificate"
+#~ msgstr "Verwijder certificaat"
+
+#~ msgid "Do you really want to remove this certificate?"
+#~ msgstr "Weet u zeker dat u dit certificaat wilt verwijderen?"
+
+#~ msgid "The certificate list is empty"
+#~ msgstr "De certificaatlijst is leeg"
+
+#~ msgid "Fingerprint"
+#~ msgstr "Vingerafdruk"
+
+#~ msgid "Untrust certificate %1$s"
+#~ msgstr "Certificaat %1$s opschorten"
+
+#~ msgid "Untrust"
+#~ msgstr "Opschorten"
+
+#~ msgid "Trust certificate %1$s"
+#~ msgstr "Certificaat %1$s vertrouwen"
+
+#~ msgid "Trust"
+#~ msgstr "Vertrouw"
+
+#~ msgid "Remove certificate %1$s"
+#~ msgstr "Verwijder certificaat %1$s"
+
+#~ msgid "Common name"
+#~ msgstr "Algemene naam"
+
+#~ msgid "Expired"
+#~ msgstr "Verlopen"
+
+#~ msgid "Failure reason"
+#~ msgstr "Reden van de fout"
+
+#~ msgid "Hostname"
+#~ msgstr "Computernaam"
+
+#~ msgid "Issued by"
+#~ msgstr "Afgegeven door"
+
+#~ msgid "Issued on"
+#~ msgstr "Afgegeven op"
+
+#~ msgid "Serial number"
+#~ msgstr "Serienummer"
+
+#~ msgid "Signature"
+#~ msgstr "Ondertekening"
+
+#~ msgid "Trusted"
+#~ msgstr "Vertrouwd"
+
+#~ msgid "Certificate details"
+#~ msgstr "Certificaat details"
+
+#~ msgid "Trust certificate"
+#~ msgstr "Vertrouw certificaat"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#~ msgid "Mac"
+#~ msgstr "Mac"
+
+#~ msgid "iOS"
+#~ msgstr "iOS"
+
+#~ msgid "Android"
+#~ msgstr "Android"
+
+#~ msgid "Chrome"
+#~ msgstr "Chrome"
+
+#~ msgid "Safari"
+#~ msgstr "Safari"
+
+#~ msgid "Firefox"
+#~ msgstr "Firefox"
+
+#~ msgid "Edge"
+#~ msgstr "Edge"
+
+#~ msgid "Internet Explorer"
+#~ msgstr "Internet Explorer"
+
+#~ msgid "Opera"
+#~ msgstr "Opera"
+
+#~ msgid "Chromium"
+#~ msgstr "Chromium"
+
+#~ msgid "Addressbook"
+#~ msgstr "Adresboek"
+
+#~ msgid "Calendar/Addressbook"
+#~ msgstr "Agenda/Adresboek"
+
+#~ msgid "Thunderbird Lightning"
+#~ msgstr "Thunderbird Lightning"
+
+#~ msgid "eM Client"
+#~ msgstr "eM Client"
+
+#~ msgid "Appsuite eM Client"
+#~ msgstr "Appsuite eM Client"
+
+#~ msgid "CalDav"
+#~ msgstr "CalDav"
+
+#~ msgid "CardDav"
+#~ msgstr "CardDav"
+
+#~ msgid "DAVdroid"
+#~ msgstr "DAVdroid"
+
+#~ msgid "CalDav/CardDav"
+#~ msgstr "CalDAV/CardDav"
+
+#~ msgid "Exchange Active Sync"
+#~ msgstr "Exchange Active Sync"
+
+#~ msgid "Unknown application"
+#~ msgstr "Onbekende apllicatie"
+
+#~ msgid "Unknown device"
+#~ msgstr "Onbekend apparaat"
+
+#~ msgid "Now active"
+#~ msgstr "Nu actief"
+
+#~ msgid "Do you really want to sign out from that device?"
+#~ msgstr "Weet u zeker dat u van dat apparaat wilt afmelden?"
+
+#~ msgid "You are currently signed in with the following devices"
+#~ msgstr "U bent momenteel aangemeld op de volgende apparaten"
+
+#~ msgid "Sign out from all clients"
+#~ msgstr "Van alle apparaten afmelden"
+
+#~ msgid ""
+#~ "Do you really want to sign out from all clients except the current one?"
+#~ msgstr ""
+#~ "Weet u zeker dat u van alle cliets wilt afmelden behalve van dit apparaat?"
+
+#~ msgid "Show email authenticity"
+#~ msgstr "Toon bericht authenticiteit"
+
+#~ msgid "Disabled"
+#~ msgstr "Uitgeschakeld"
+
+#~ msgid "Suspicious and unclassified emails only"
+#~ msgstr "Alleen verdachte en ongeclassificeerde e-mailberichten"
+
+#~ msgid "All emails"
+#~ msgstr "Alle e-mailberichten"
+
+#~ msgid "App Launcher"
+#~ msgstr "App Launcher"
+
+#~ msgid ""
+#~ "To navigate between the %1$s applications, just click on the new App "
+#~ "Launcher icon."
+#~ msgstr ""
+#~ "Om te navigeren tussen de %1$s applicaties klikt u op het App Launcher "
+#~ "pictogram."
+
+#~ msgid "Click on the application that you would like to use."
+#~ msgstr "Klik op de applicatie welke u wilt gebruiken."
+
+#~ msgid "New Windows"
+#~ msgstr "Nieuwe schermen"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr ""
+#~ "E-mailberchten worden geopend in een nieuw scherm. Deze schermen kunnen "
+#~ "worden geminimaliseerd en gesloten."
+
+#~ msgid ""
+#~ "Windows you have minimized will appear in all applications for easy "
+#~ "access. You can maximize a window again by clicking on it."
+#~ msgstr ""
+#~ "Schermen die u heeft geminimaliseerd zijn in alle applicaties te zien om "
+#~ "deze snel te kunnen benaderen. U kan een scherm opnieuw maximaliseren "
+#~ "door er op te klikken."
+
+#~ msgid "What's new"
+#~ msgstr "Wat is nieuw"
+
+#~ msgid "To learn more about the new and improved features you can visit "
+#~ msgstr ""
+#~ "Om meer te weten te komen van de nieuwe en verbeterde functies kan u naar "
+#~ "de volgende pagina gaan "
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Wat is nieuw in %1$s 7.10.0"
+
+#~ msgid ""
+#~ "Welcome to %1$s.\n"
+#~ "We've made some exciting changes to %1$s. This quick tour will guide you "
+#~ "through some of the new and improved features."
+#~ msgstr ""
+#~ "Welkom bij %1$s.\n"
+#~ "We hebben een aantal bijzondere aanpassingen gemaakt in %1$s. Deze korte "
+#~ "rondleiding laat u een aantal van de nieuwe en verbeterde mogelijkheden "
+#~ "zien."
+
+#~ msgid "Never show again"
+#~ msgstr "Toon dit nooit meer"
+
+#~ msgid "Open in calendar"
+#~ msgstr "Open in Agenda"
+
+#~ msgid "Remove all reminders"
+#~ msgstr "Verwijder alle herinneringen"
+
+#~ msgid "Appointment reminder"
+#~ msgstr "Afspraakherinnering"
+
+#~ msgid "Encrypt"
+#~ msgstr "Coderen"
+
+#~ msgid "Show Links"
+#~ msgstr "Toon Links"
+
+#~ msgid "Add attachment"
+#~ msgstr "Voeg bijlage toe"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "iCal gegevens zijn succesvol geïmporteerd"
+
+#~ msgid "Change color"
+#~ msgstr "Wijzig kleur"
+
+#~ msgid "Town"
+#~ msgstr "Stad"
+
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal-Feed"
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Negeer bestaande afspraken. Praktisch bij het importeren van bijvoorbeeld "
+#~ "algemene feestdagen."
+
+#~ msgid "Internal & external users"
+#~ msgstr "Interne & externe gebruikers"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Alle toekomstige berichten van de verzenders van de geselecteerde e-"
+#~ "mailberichten worden verplaatst naar de gekozen map."
+
+#~ msgid "never"
+#~ msgstr "nooit"
+
+#~ msgid "Use Password"
+#~ msgstr "Gebruik Wachtwoord"
+
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s Opties"
+
+#~ msgid "Account is being created"
+#~ msgstr "Account wordt aangemaakt"
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Dit bericht is mogelijk een phishing e-mailbericht omdat we niet kunnen "
+#~ "controleren dat deze werkelijk van %1$s is."
+
+#~ msgid "in"
+#~ msgstr "in"
+
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Alleen gevaarlijke e-mailberichten"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Gevaarlijke en vertrouwde e-mailberichten"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Gevaarlijke, vertrouwde en geldige mailberichten"
+
+#~ msgid "Add new reminder"
+#~ msgstr "Nieuwe herinnering toevoegen"
+
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr ""
+#~ "Authenticatie is mislukt. Voer alstublieft de loginnaam en het wachtwoord "
+#~ "opnieuw in."
+
+#~ msgid "Public"
+#~ msgstr "Openbaar"
+
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "De afspraak is zichtbaar voor alle gebruikers in gedeelde mappen."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "In gededelde mappen, wordt de afspraak getoond als een eenvoudige periode "
+#~ "voor niet aanwezige gebruikers."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "De afspraak is in het geheel niet zichtbaar voor niet aanwezige "
+#~ "gebruikers in gedeelde mappen. Er wordt geen rekening gehouden met deze "
+#~ "afspraak bij conflicten en verschijnt ook niet in het planningsoverzicht."
+
+#~ msgid "Birthday"
+#~ msgstr "Verjaardag"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Lijst van publieke agenda's en evenementen"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Snel-start 1:"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Snel-start 2:"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Snel-start 3:"
 
 #~ msgid ""
 #~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
@@ -11336,99 +12635,152 @@ msgstr "Toegevoegd  op %s"
 #~ "De bestanden kunnen niet worden geüpload omdat deze boven de quotalimiet "
 #~ "van %1$s komen"
 
-#~ msgid "via"
-#~ msgstr "via"
-
-#~ msgid "in"
-#~ msgstr "in"
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Dit bericht is van een vertrouwde verzender."
 
 #~ msgid ""
-#~ "Use up and down keys to change the time. Close selection by pressing ESC "
-#~ "key."
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
 #~ msgstr ""
-#~ "Gebruik de op en neer toetsen om de tijd te wijzigen. Sluit de selectie "
-#~ "door de ESC toets te drukken."
+#~ "Dit bericht is mogelijk een phishing bericht omdat we niet kunnen "
+#~ "controleren dat dit bericht is werkelijk van %1$s."
 
-#~ msgid "Line %1$d: %2$s"
-#~ msgstr "Regel %1$d: %2$s"
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Dit e-mailbericht is verzonden vanuit %1$s."
 
-#~ msgid "continue if any of these condition is met"
-#~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "We kunnen niet controleren dat dit bericht werkelijk van %1$s is."
 
-#~ msgid "Size (bytes)"
-#~ msgstr "Grootte (bytes)"
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Verloopdatum: %1$d"
+
+#~ msgid "Has Attachment"
+#~ msgstr "Heeft Bijlage"
+
+#~ msgid "Show message authenticity"
+#~ msgstr "Toon de authenticiteit van het bericht "
+
+#~ msgid "Dangerous only"
+#~ msgstr "Alleen gevaarlijke"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Gevaarlijke en vertrouwde"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Bevestig alle herinneringen"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s van %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s client voor Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s client voor Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s client voor Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s van %2$s"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Deel %1$s \"%2$s\""
+
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "sluiten voor %1$s"
+
+#, fuzzy
+#~| msgid "Currently refreshing"
+#~ msgid "Current session"
+#~ msgstr "Bezig met verversen"
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Wist u dat u de OX App Suite mee kan nemen? Klik op dit pictogram en kies "
+#~ "'Koppel uw apparaat' vanuit het menu."
+
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Weet u zeker dat u dit account wilt verwijderen?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Weet u zeker dat u deze versie wilt verwijderen?"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Vervalt op %1$s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s van %2$s"
 
 #~ msgid "Header exists"
 #~ msgstr "Kop bestaat"
 
-#~ msgid "Prettify plain text mails"
-#~ msgstr "Maak platte tekst e-mails mooier"
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "%1$s toegevoegd."
 
-#~ msgid "Configure %1$s"
-#~ msgstr "Configureer %1$s"
+#, fuzzy
+#~| msgid "Other Address"
+#~ msgid "Other clients"
+#~ msgstr "Ander Adres"
 
-#~ msgid "Loop once only"
-#~ msgstr "Eén maal afspelen"
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Verwijder uit verzendlijst"
 
-#~ msgid "Keep looping endlessly"
-#~ msgstr "Eindeloos doorspelen"
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Deel %1$s \"%2$s\""
 
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "Diapresentatie / Autoplay modus"
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "De volgende applicaties kunnen worden hersteld. Verwijder het herstelpunt "
+#~ "als u dit niet wilt."
 
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "Autoplay pauzes in seconden"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Onbekende verzender"
 
-#~ msgid "Copy message to folder"
-#~ msgstr "Kopieer bericht naar een map"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Onbekende verzender"
 
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
-
-#~ msgid "original timezone"
-#~ msgstr "originele tijdzone"
-
-#~ msgid "Rule applies from"
-#~ msgstr "Regel toepassen van"
-
-#~ msgid "Rule applies until"
-#~ msgstr "Regel toepassen tot"
-
-#~ msgid "Rule applies on"
-#~ msgstr "Regel toepassen op"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "Regel niet toepassen op"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "Regel niet toepassen van"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "Regel niet toepassen voor"
-
-#~ msgid "Apply rule if any condition is met."
-#~ msgstr "Pas regel toe als aan één voorwaarde is voldaan"
-
-#~ msgid "Content"
-#~ msgstr "Inhoud"
-
-#~ msgid "Envelope - To"
-#~ msgstr "Envelope - Aan"
-
-#~ msgid "Flag mail with"
-#~ msgstr "Markeer met vlag"
-
-#~ msgid "Reply All"
-#~ msgstr "Allen Beantwoorden"
-
-#~ msgid "Sender address"
-#~ msgstr "Verzendadres"
-
-#~ msgid "Sender/From"
-#~ msgstr "Verzender/Van"
-
-#~ msgid "Tag mail with"
-#~ msgstr "Labelen met"
+#~ msgid "via"
+#~ msgstr "via"
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -11471,6 +12823,11 @@ msgstr "Toegevoegd  op %s"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s e-mailbericht, %2$s ongelezen"
 #~ msgstr[1] "%1$s e-mailberichten, %2$s ongelezen"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s van %2$s"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
@@ -11606,10 +12963,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgstr "Geavanceerde Filters blok is geopend."
 
 #, fuzzy
-#~ msgid "Advanced options"
-#~ msgstr "Geavanceerde Instellingen"
-
-#, fuzzy
 #~| msgid "Advanced Facets"
 #~ msgid "Advanced user?"
 #~ msgstr "Geavanceerde Filters"
@@ -11624,13 +12977,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "All contacts"
 #~ msgstr "Contactpersoon toevoegen"
 
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr ""
-#~ "Alle toekomstige berichten van de verzenders van de geselecteerde e-"
-#~ "mailberichten worden verplaatst naar de gekozen map."
-
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Sta ons toe uw %s account hier te gebruiken"
 
@@ -11639,6 +12985,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Applications"
 #~ msgstr "Applicaties"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Pas regel toe als aan één voorwaarde is voldaan"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Toepassen op alle berichten?"
@@ -11698,6 +13047,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Automatische terugloop in platte tekst na teken:"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Autoplay pauzes in seconden"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -11841,6 +13193,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Nieuw e-mailbericht opstellen"
 
+#~ msgid "Configure %1$s"
+#~ msgstr "Configureer %1$s"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Configureer uw postvak IN tabbladen"
 
@@ -11849,6 +13204,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Confirmation status"
 #~ msgstr "bevestigingsstatus"
+
+#~ msgid "Content"
+#~ msgstr "Inhoud"
 
 #, fuzzy
 #~ msgid "Continue Presentation"
@@ -11862,6 +13220,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Copy (CC) to"
 #~ msgstr "Kopie (CC) aan"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Kopieer bericht naar een map"
 
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "Kan niet alle deelnemers van deze taak laden."
@@ -11940,9 +13301,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Delete all %1$d messages"
 #~ msgstr "Verwijderde berichten"
 
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "Verwijder alle berichten uit deze map"
-
 #~ msgid "Delete whole series"
 #~ msgstr "De gehele reeks verwijderen"
 
@@ -11965,9 +13323,6 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Directe link: %1$s"
-
-#~ msgid "Disabled"
-#~ msgstr "Uitgeschakeld"
 
 #~ msgid "Display Name"
 #~ msgstr "Weergavenaam"
@@ -12004,9 +13359,6 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Slepen en neerzetten"
-
-#~ msgid "Drive Client"
-#~ msgstr "Drive Client"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "Laat het bestand ergens vallen om de bijlage toe te voegen"
@@ -12084,10 +13436,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Enabled"
 #~ msgstr "Activeren"
 
-# (Reinout) Portal = portaal, niet portable
-#~ msgid "Enabled for all mail folders"
-#~ msgstr "Ingeschakeld voor alle e-mailmappen"
-
 #~ msgid "Enabled for inbox only"
 #~ msgstr "Alleen ingeschakeld voor Postvak IN"
 
@@ -12157,6 +13505,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Entire thread"
 #~ msgstr "Gehele conversatie"
 
+#~ msgid "Envelope - To"
+#~ msgstr "Envelope - Aan"
+
 #~ msgid "Every %1$d days."
 #~ msgstr "Elke %1$d dagen."
 
@@ -12186,6 +13537,11 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Volledig scherm verlaten"
+
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "Versturen als vCard"
 
 #~ msgid "Extended view"
 #~ msgstr "Uitgebreid overzicht"
@@ -12231,6 +13587,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Files View"
 #~ msgstr "Bestandenoverzicht"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Markeer met vlag"
 
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Mapnamen mogen geen schuine streep bevatten"
@@ -12472,6 +13831,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Just open %1$s"
 #~ msgstr "Vervalt op %1$s"
 
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Eindeloos doorspelen"
+
 #~ msgid "Label"
 #~ msgstr "Label"
 
@@ -12494,6 +13856,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Liked a link: %s"
 #~ msgstr "Liked een link: %s"
 
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Regel %1$d: %2$s"
+
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"
 #~ msgstr "Regel afbreken bij het verzenden van berichten in platte tekst na:"
@@ -12501,6 +13866,9 @@ msgstr "Toegevoegd  op %s"
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after how much characters"
 #~ msgstr "Regel afbreken bij het verzenden van berichten in platte tekst na:"
+
+#~ msgid "Loop once only"
+#~ msgstr "Eén maal afspelen"
 
 #~ msgid "Mail Details"
 #~ msgstr "E-mail details"
@@ -12521,9 +13889,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgstr ""
 #~ "E-mailbericht is niet geïmporteerd, alleen .eml bestanden worden "
 #~ "ondersteund."
-
-#~ msgid "Main window"
-#~ msgstr "Hoofdscherm"
 
 #~ msgid "Manage applications"
 #~ msgstr "Beheer applicaties"
@@ -12582,6 +13947,11 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "Namen en e-mailadressen"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Drive Client"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Navigatiebalk"
@@ -12804,6 +14174,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "Toets [enter] om een herinneringstijd in te stellen"
 
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Maak platte tekst e-mails mooier"
+
 #~ msgid "Prev"
 #~ msgstr "Vorige"
 
@@ -12852,8 +14225,8 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Remove facet"
 #~ msgstr "Verwijder filter"
 
-#~ msgid "Remove from recipient list"
-#~ msgstr "Verwijder uit verzendlijst"
+#~ msgid "Reply All"
+#~ msgstr "Allen Beantwoorden"
 
 #~ msgid "Reply to"
 #~ msgstr "Antwoorden naar"
@@ -12877,6 +14250,24 @@ msgstr "Toegevoegd  op %s"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "vanavond"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Regel toepassen van"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Regel niet toepassen van"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Regel niet toepassen op"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Regel niet toepassen voor"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Regel toepassen op"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Regel toepassen tot"
 
 #~ msgid "Running applications"
 #~ msgstr "Applicaties starten"
@@ -12925,9 +14316,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Search within application"
 #~ msgstr "Zoek binnen een applicatie"
 
-#~ msgid "Searched in"
-#~ msgstr "Gezocht in"
-
 #~ msgid "Searching for objects"
 #~ msgstr "Zoeken naar objecten"
 
@@ -12950,6 +14338,12 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Send feedback"
 #~ msgstr "Stuur feedback"
+
+#~ msgid "Sender address"
+#~ msgstr "Verzendadres"
+
+#~ msgid "Sender/From"
+#~ msgstr "Verzender/Van"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Versturen van e-mailberichten naar een contactpersoon"
@@ -13047,9 +14441,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Sidebar"
 #~ msgstr "Zijbalk"
 
-#~ msgid "Signature"
-#~ msgstr "Ondertekening"
-
 #~ msgid "Signature position"
 #~ msgstr "Positie ondertekening"
 
@@ -13064,8 +14455,14 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Simple phone list"
 #~ msgstr "Telefoonlijst"
 
+#~ msgid "Size (bytes)"
+#~ msgstr "Grootte (bytes)"
+
 #~ msgid "Slideshow"
 #~ msgstr "Diashow"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Diapresentatie / Autoplay modus"
 
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
@@ -13145,6 +14542,9 @@ msgstr "Toegevoegd  op %s"
 #~| msgid "Your name"
 #~ msgid "Suriname"
 #~ msgstr "Uw naam"
+
+#~ msgid "Tag mail with"
+#~ msgstr "Labelen met"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Taakuitnodiging. %1$s %2$s %3$s. Toets [enter] om te openen"
@@ -13849,6 +15249,13 @@ msgstr "Toegevoegd  op %s"
 #~ "Gebruik de zijbalk om een object te selecteren om de inhoud te kunnen "
 #~ "zien en functies uit te voeren."
 
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Gebruik de op en neer toetsen om de tijd te wijzigen. Sluit de selectie "
+#~ "door de ESC toets te drukken."
+
 #~ msgid "Using the reminder function"
 #~ msgstr "De herinneringsfunctie gebruiken"
 
@@ -14018,6 +15425,12 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "collapsed"
 #~ msgstr "ingeklapt"
 
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
+
 #~ msgid "daily"
 #~ msgstr "dagelijks"
 
@@ -14137,6 +15550,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "optional password"
 #~ msgstr "optioneel wachtwoord"
 
+#~ msgid "original timezone"
+#~ msgstr "originele tijdzone"
+
 #~ msgid "process subsequent rules"
 #~ msgstr "verwerk de volgende regels"
 
@@ -14178,6 +15594,11 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "weekly"
 #~ msgstr "wekelijks"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "Hoofdscherm"
 
 #~ msgid "work days"
 #~ msgstr "werkdagen"

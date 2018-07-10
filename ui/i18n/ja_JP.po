@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-06 12:25+0200\n"
+"PO-Revision-Date: 2018-07-03 16:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -369,7 +369,7 @@ msgstr "カーソルキーで移動できます。"
 #. Tooltip for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Use cursor keys to navigate"
-msgstr "カーソルキーで移動できます"
+msgstr "移動にはカーソルキーを使用できます。"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid number"
@@ -1138,8 +1138,9 @@ msgid ""
 "saved in the timezone of the appointment's start date. A different end date "
 "timezone only allows a convenient conversion."
 msgstr ""
-"予定の開始日と終了日に異なるタイムゾーンを選択すると予定は開始日のタイムゾーンで保存されます。"
-"異なる終了日のタイムゾーンによって変換が便利に行えます。"
+"異なるタイムゾーンを選択すると、アポイントの開始日および終了日がアポイントの"
+"開始日のタイムゾーンに保存されます。異なる終了日のタイムゾーンによって変換が"
+"便利に行えます。"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Convert the entered start and end dates to match the modified timezones"
@@ -1189,12 +1190,12 @@ msgid ""
 "You will automatically return to the appointment dialog. The selected start "
 "and end time as well as the current participant list will be applied."
 msgstr ""
-"自動的に予定の編集に戻ります。選択された開始時間と終了時間、"
-"および現在の参加者のリストが適用されます。"
+"この後、自動的にアポイントダイアログに戻ります。選択された開始時間と終了時"
+"間、および現在の出席者リストが適用されます。"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
-msgstr "予定の作成方法について"
+msgstr "アポイントの作成方法について"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/help/center.js
@@ -1204,7 +1205,7 @@ msgstr "ヘルプ"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Back to appointment"
-msgstr "予定に戻る"
+msgstr "アポイントに戻る"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -1224,8 +1225,8 @@ msgid ""
 "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
 "Appointments will therefore be created in your private calendar."
 msgstr ""
-"%2$s が所有者である \"%1$s\" には予定を作成できません。"
-"予定は自身のプライベートな予定表に作成されます。"
+"%2$s が所有者となっている \"%1$s\" にアポイントを作成することは許可されていま"
+"せん。アポイントは、自身のプライベートの予定表に作成されます。"
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
@@ -1234,8 +1235,8 @@ msgid ""
 "You are not allowed to create appointments in \"%1$s\". Appointments will "
 "therefore be created in your private calendar."
 msgstr ""
-"%1$s\" に予定を作成できません。"
-"予定は自身のプライベートな予定表に作成されます。"
+"\"%1$s\" にアポイントを作成することは許可されていません。アポイントは、自身の"
+"プライベートの予定表に作成されます。"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please select at least one participant"
@@ -2095,7 +2096,8 @@ msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series."
 msgstr ""
-"予定の日付を変更すると、繰り返しの予定に例外を作成しますか?"
+"アポイントの日付を変更すると、定期的なアポイントにアポイントの例外が作成され"
+"ます。"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Create exception"
@@ -2158,7 +2160,7 @@ msgstr "お気に入りを管理"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Doubleclick in this row for whole day appointment"
-msgstr "終日の予定を作成には この行をダブルクリックしてください"
+msgstr "終日のアポイントを作成するには、この行をダブルクリックしてください。"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Week"
@@ -2977,7 +2979,7 @@ msgstr "名 姓"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Last name, First name"
-msgstr "姓, 名"
+msgstr "姓、名"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Display of names"
@@ -3765,7 +3767,7 @@ msgstr "%1$s: %2$s"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "All my appointments"
-msgstr "すべての予定"
+msgstr "すべてのアポイント"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "Unread messages"
@@ -4106,8 +4108,7 @@ msgstr "オフライン"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-msgstr ""
-"ランチャー ドロップダウンです。Enter キーでドロップダウンに移動します。"
+msgstr "ランチャードロップダウンです。Enter キーでドロップダウンに移動します。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -4262,13 +4263,21 @@ msgstr "続行するにはもう一度ログインしてください"
 msgid "Restore applications"
 msgstr "アプリケーションを復元"
 
+#. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"次のアプリケーションを復元できます。復元しない場合は、復元ポイントを削除して"
-"ください。"
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "次のアイテムは、前回%1$sを終了した時に開かれました。"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "編集を続行するには、「続ける」をクリックしてください。"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] "アイテムを保持しない場合は、ゴミ箱をクリックします。"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4578,7 +4587,7 @@ msgstr "Windows 用 %s クライアント"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Windows (Installation via the OX Updater)"
-msgstr "Windows 用 %s クライアント (OX Updater によるインストール)"
+msgstr "%s クライアント (Windows 用) (OX Updater によるインストール)"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
@@ -5305,6 +5314,15 @@ msgstr "最初の 90 日間は無償です。"
 msgid "Get free upgrade"
 msgstr "無償のアップグレードを入手"
 
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "利用できるプレビューがありません。"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr ""
+"このファイルを印刷するには、ビューアで”PDFとして印刷”を使用してください。"
+
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
@@ -5652,7 +5670,7 @@ msgstr "この通知を閉じる"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
-msgstr "タイトル"
+msgstr "敬称"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
@@ -8845,7 +8863,7 @@ msgstr "次のアドレスに有効にする"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Default sender for vacation notice"
-msgstr "休暇通知の既定差出人"
+msgstr "自動応答の既定の差出人"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Email addresses"
@@ -8862,7 +8880,7 @@ msgstr "終了"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
-msgstr "休暇通知をこの期間のみ送信"
+msgstr "次の期間に限り自動応答を送信する"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send from"
@@ -10211,7 +10229,7 @@ msgstr ""
 msgid ""
 "Your default reminder could not be set for this appointment due to "
 "insufficient permissions"
-msgstr "権限が不十分なため既定のアラームをこの予定に設定できませんでした"
+msgstr "権限が不十分なため、既定のアラームをこのアポイントに設定できません。"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -11183,6 +11201,9 @@ msgstr "%s に追加"
 #~ msgid "Webcam"
 #~ msgstr "Webカメラ"
 
+#~ msgid "Switch camera"
+#~ msgstr "カメラの変更"
+
 #~ msgid "Edit image"
 #~ msgstr "画像を編集"
 
@@ -11403,6 +11424,9 @@ msgstr "%s に追加"
 #~ msgid "Mini calendar"
 #~ msgstr "ミニ予定表"
 
+#~ msgid "Weekends"
+#~ msgstr "週末"
+
 #~ msgid "light red"
 #~ msgstr "薄い赤"
 
@@ -11529,6 +11553,11 @@ msgstr "%s に追加"
 #~ msgid "Last name must not be empty for internal users"
 #~ msgstr "内部ユーザの場合、姓は空にできません"
 
+#~ msgid "Something went wrong. Please close this browser tab and try again."
+#~ msgstr ""
+#~ "エラーが発生しました。このブラウザタブを閉じて、もう一度やり直してくださ"
+#~ "い。"
+
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
 
@@ -11546,6 +11575,12 @@ msgstr "%s に追加"
 
 #~ msgid "Subscribe to IMAP folders"
 #~ msgstr "IMAP フォルダに登録"
+
+#~ msgid "A folder cannot be moved into itself"
+#~ msgstr "フォルダをフォルダ内に移動できません。"
+
+#~ msgid "A folder cannot be moved to one of its subfolders"
+#~ msgstr "フォルダは、その配下のいずれのサブフォルダにも移動できません。"
 
 #~ msgid "Last updated"
 #~ msgstr "最新の更新"
@@ -11699,8 +11734,14 @@ msgstr "%s に追加"
 #~ msgid "Design"
 #~ msgstr "デザイン"
 
+#~ msgid "Quick launch %s"
+#~ msgstr "クイック起動 %s"
+
 #~ msgid "Manage browser permissions now"
 #~ msgstr "今ブラウザ権限を管理する"
+
+#~ msgid "%1$s must not be empty."
+#~ msgstr "%1$sは空にしてはいけません。"
 
 #~ msgid ""
 #~ "\n"
@@ -11750,9 +11791,6 @@ msgstr "%s に追加"
 #~ msgid "Edit Share"
 #~ msgstr "共有ファイルを編集する"
 
-#~ msgid "Encrypt"
-#~ msgstr "暗号化"
-
 #~ msgid "%1$d seconds"
 #~ msgstr "%1$d 秒"
 
@@ -11778,6 +11816,13 @@ msgstr "%s に追加"
 #~ msgstr "証明書を確認"
 
 #~ msgid ""
+#~ "All future messages from the sender will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "差出人からのすべてのメッセージは選択したフォルダに移動します。"
+
+#~ msgid ""
 #~ "Currently edited drafts with attachments can not be deleted until you "
 #~ "close the correspondig mail compose window."
 #~ msgstr ""
@@ -11795,6 +11840,9 @@ msgstr "%s に追加"
 
 #~ msgid "Note:"
 #~ msgstr "注: "
+
+#~ msgid "Enable Links"
+#~ msgstr "有効リンク"
 
 #~ msgid "Links have been disabled to protect you against potential spam!"
 #~ msgstr "迷惑メールの危険性を回避するため、リンクを無効にしました。"
@@ -11830,6 +11878,9 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "このメールには差出人としてメールアドレスのみが含まれます。本当の名前は使用"
 #~ "されていません。"
+
+#~ msgid "One of the embedded images could not be used."
+#~ msgstr "埋め込み画像の一枚が使用できませんでした。"
 
 #~ msgid "Use password"
 #~ msgstr "パスワードを使用"
@@ -12114,6 +12165,9 @@ msgstr "%s に追加"
 #~ msgid "You are currently signed in with the following devices"
 #~ msgstr "現在次のデバイスでサインインしています。"
 
+#~ msgid "Sign out from all clients"
+#~ msgstr "すべてのクライアントからサインアウト"
+
 #~ msgid ""
 #~ "Do you really want to sign out from all clients except the current one?"
 #~ msgstr ""
@@ -12192,6 +12246,9 @@ msgstr "%s に追加"
 
 #~ msgid "Appointment reminder"
 #~ msgstr "予定のアラーム"
+
+#~ msgid "Encrypt"
+#~ msgstr "暗号化"
 
 #~ msgid "Show Links"
 #~ msgstr "リンクを表示"
@@ -18499,7 +18556,7 @@ msgstr "%s に追加"
 #~ msgstr "スーダン"
 
 #~ msgid "Suffix:"
-#~ msgstr "敬称:"
+#~ msgstr "敬称（後）:"
 
 #~ msgid "Sun"
 #~ msgstr "日曜日"
@@ -18923,6 +18980,13 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "次のアドレスは出席者のリストに既に存在しているため、追加されませんでした:"
 #~ "%s"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "次のアプリケーションを復元できます。復元しない場合は、復元ポイントを削除し"
+#~ "てください。"
 
 #~ msgid "The following task is already past due:"
 #~ msgstr "次の仕事は既に締切日を過ぎています:"
@@ -19712,7 +19776,7 @@ msgstr "%s に追加"
 #~ "無効にしてください。"
 
 #~ msgid "Use for appointment"
-#~ msgstr "予定に戻る"
+#~ msgstr "アポイントに戻る"
 
 #~| msgid ""
 #~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "

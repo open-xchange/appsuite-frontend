@@ -206,7 +206,7 @@
         > ul {
             display: inline-block;
             overflow: auto;
-            width: 50%;
+            width: 33%;
             height: 100%;
             margin: 0;
             vertical-align: top;
@@ -288,6 +288,31 @@
         .folder-tree { border-right: 1px solid #ddd; }
 
         .io-ox-fileselection {
+
+            &.has-focus > li.file {
+                &.selected {
+                    background-color: @foldertree-selected-focus-background;
+                    * { color: @foldertree-focused-label-color; }
+                }
+
+                &.marked:not(.selected) {
+                    box-shadow: inset 0px 0px 0px 2px #86acd2;
+                }
+
+                &.selected:not(.marked):focus {
+                    background-color: darken(@foldertree-selected-focus-background, 5%);
+
+                    * { color: @foldertree-focused-label-color; }
+                }
+
+                &.selected.marked:focus {
+                    background-color: darken(@foldertree-selected-focus-background, 5%);
+
+                    * { color: @foldertree-focused-label-color; }
+                    box-shadow: inset 0px 0px 0px 2px #86acd2;
+                }
+            }
+
             li.file {
                 outline: none;
                 line-height: 30px;
@@ -307,15 +332,8 @@
                 }
 
                 &.selected {
-                    background-color: @foldertree-selected-focus-background;
-
-                    * { color: @foldertree-focused-label-color; }
-                }
-
-                &:focus {
-                    background-color: darken(@foldertree-selected-focus-background, 5%);
-
-                    * { color: @foldertree-focused-label-color; }
+                    background-color: @foldertree-selected-background;
+                    * { color: @foldertree-selected-label-color; }
                 }
 
                 .checkbox-inline { display: none; }
@@ -429,6 +447,22 @@
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
+    }
+
+    &.mobile-dialog {
+        .modal-dialog {
+            width: 96%;
+        }
+        .modal-footer {
+            .row {
+                [class*="col-"] { margin-left: 0; }
+
+                .btn {
+                    width: 100%;
+                    margin: 2px 0;
+                }
+            }
+        }
     }
 
     &.maximize {

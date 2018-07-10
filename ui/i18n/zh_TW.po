@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-27 16:07+0200\n"
+"PO-Revision-Date: 2018-07-03 16:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -2559,7 +2559,8 @@ msgid "Postcode"
 msgstr "郵遞區號"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Town"
+#: apps/io.ox/contacts/print.js
+msgid "City"
 msgstr "城市"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2941,10 +2942,6 @@ msgid "Messenger"
 msgstr "Messenger"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-msgid "City"
-msgstr "城市"
-
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] "注意：有 1 位聯絡人因為缺少電話號碼，並未顯示"
@@ -3232,7 +3229,7 @@ msgstr "目前不支援此平台。"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
-msgstr "開始支援 Chrome %1$d、Firefox %2$d、IE %3$d 以及 Safari %4$d。"
+msgstr "支援 Chrome %1$d、Firefox %2$d、IE %3$d 及 Safari %4$d。"
 
 #. 'Google Chrome' is a brand and should not be translated
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -4233,8 +4230,8 @@ msgid ""
 "Did you know that you can take %1$s with you? Just click this icon and "
 "choose 'Connect your device' from the menu."
 msgstr ""
-"您知道您可以把 %1$s 隨身帶著走嗎？只要點擊此按鈕，選擇選單中的「連線至您的裝"
-"置」即可。"
+"您知道可以把 %1$s 隨身帶著走嗎？僅需點擊此圖是，然後點擊選單中的「連結您的裝"
+"置」。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4252,11 +4249,23 @@ msgstr "請再次登入以繼續"
 msgid "Restore applications"
 msgstr "還原應用程式"
 
+#. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main.js module:io.ox/core
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr "下列應用程式可被還原，若您不想還原請直接移除還原點。"
+msgid "The below item was open last time you exited %1$s."
+msgid_plural "The below items were open last time you exited %1$s."
+msgstr[0] "下列項目，是在您上次結束 %1$s 時開啟的。"
+msgstr[1] "下列項目，是在您上次結束 %1$s 時開啟的。"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Please click \"Continue\" if you'd like to continue editing."
+msgstr "若您想繼續編輯，請點擊「繼續」。"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "If you do not wish to keep the item, please click on the trash icon."
+msgid_plural ""
+"If you do not wish to keep an item, please click on the trash icon."
+msgstr[0] "若您不想保留該項目，請點擊垃圾桶圖示。"
+msgstr[1] "若您不想保留該項目，請點擊垃圾桶圖示。"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4988,7 +4997,7 @@ msgstr "新增附件"
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add from Drive"
-msgstr "自 Drive 新增"
+msgstr "自雲端空間新增"
 
 #. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
@@ -5277,6 +5286,14 @@ msgstr "前 90 天內免費。"
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Get free upgrade"
 msgstr "取得免費升級"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "Sorry, there is no preview available."
+msgstr "抱歉，沒有預覽可用。"
+
+#: apps/io.ox/core/viewer/main.js module:io.ox/core
+msgid "To print this file, please use \"Print as PDF\" in the viewer."
+msgstr "若要列印這個擋案，請使用檢視器中的「列印為 PDF」。"
 
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
@@ -6545,13 +6562,13 @@ msgstr "請注意，更改或移除副檔名將會導致檢視或編輯發生問
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
-msgstr "確定要從你的檔案名稱移除延伸檔名 \".%1$s\" 嗎？"
+msgstr "確定要從你的檔案名稱移除副檔名「.%1$s」嗎？"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
 "\" ?"
-msgstr "確定要把檔案延伸名稱從 \".%1$s\" 改成 \".%2$s\" 嗎？"
+msgstr "確定要把檔案副檔名從「.%1$s」改成「.%2$s」嗎？"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -7104,7 +7121,7 @@ msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
 msgstr[0] "將 %1$s 未來寄來的所有訊息移動至選擇的信件匣。"
-msgstr[1] "將所選郵件寄件者未來寄來的所有訊息，皆移動至選擇的信件匣。"
+msgstr[1] "將所選郵件寄件者未來寄來的所有訊息，都移動至選擇的信件匣。"
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -8095,7 +8112,7 @@ msgstr "完全符合"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not an exact, full match "
-msgstr "不完全符合"
+msgstr "不完全符合 "
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8697,7 +8714,7 @@ msgstr "設定分類"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgctxt "verb"
 msgid "Flag"
-msgstr "標誌"
+msgstr "標示"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -11026,12 +11043,1222 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#~ msgid "Notify %1$s before start."
+#~ msgstr "於開始前%1$s通知。"
+
+#~ msgid "Notify %1$s after start."
+#~ msgstr "於開始後%1$s通知。"
+
+#~ msgid "Notify %1$s before end."
+#~ msgstr "於結束前%1$s通知。"
+
+#~ msgid "Notify %1$s after end."
+#~ msgstr "於結束後%1$s通知。"
+
+#~ msgid "Notify at %1$s."
+#~ msgstr "於%1$s通知。"
+
+#~ msgid "Notify at start."
+#~ msgstr "於開始時通知。"
+
+#~ msgid "Notify at end."
+#~ msgstr "於結束時通知。"
+
+#~ msgid "Play sound %1$s before start."
+#~ msgstr "在開始前 %1$s 播放音效。"
+
+#~ msgid "Play sound %1$s after start."
+#~ msgstr "在開始後 %1$s 播放音效。"
+
+#~ msgid "Play sound %1$s before end."
+#~ msgstr "在結束前 %1$s 播放音效。"
+
+#~ msgid "Play sound %1$s after end."
+#~ msgstr "在結束後 %1$s 播放音效。"
+
+#~ msgid "Play sound at %1$s."
+#~ msgstr "在 %1$s 播放音效。"
+
+#~ msgid "Play sound at start."
+#~ msgstr "在開始時播放音效。"
+
+#~ msgid "Play sound at end."
+#~ msgstr "在結束時播放音效。"
+
+#~ msgid "%1$s %2$s before start."
+#~ msgstr "開始前 %2$s 發出 %1$s。"
+
+#~ msgid "%1$s %2$s after start."
+#~ msgstr "開始後 %2$s 發出 %1$s。"
+
+#~ msgid "%1$s %2$s before end."
+#~ msgstr "結束前 %2$s 發出 %1$s。"
+
+#~ msgid "%1$s %2$s after end."
+#~ msgstr "結束後 %2$s 發出 %1$s。"
+
+#~ msgid "%1$s at %2$s."
+#~ msgstr "在 %2$s 發出 %1$s。"
+
+#~ msgid "%1$s at start."
+#~ msgstr "在開始時發出 %1$s。"
+
+#~ msgid "%1$s at end."
+#~ msgstr "在結束時發出 %1$s。"
+
+#~ msgid "Add reminder"
+#~ msgstr "新增提醒"
+
+#~ msgid "Audio"
+#~ msgstr "聲音"
+
+#~ msgid "Edit reminders"
+#~ msgstr "編輯提醒"
+
+#~ msgid "Drag to reorder items"
+#~ msgstr "拖曳即可重排項目"
+
+#~ msgid "Please grant access to your webcam first."
+#~ msgstr "請先授權使用您的視訊攝影機。"
+
+#~ msgid "Requesting device information. Please wait..."
+#~ msgstr "取得裝置資訊中，請稍候…"
+
+#~ msgid "Currently there are no compatible webcams available on your device."
+#~ msgstr "您的裝置上目前沒有相容的視訊攝影機。"
+
+#~ msgid "Take a photo"
+#~ msgstr "拍照"
+
+#~ msgid "Webcam"
+#~ msgstr "視訊攝影機"
+
+#~ msgid "Switch camera"
+#~ msgstr "切換攝影機"
+
+#~ msgid "Edit image"
+#~ msgstr "編輯圖片"
+
+#~ msgid "Take photo"
+#~ msgstr "拍照"
+
+#~ msgid "Rotate image"
+#~ msgstr "旋轉圖片"
+
+#~ msgid "New search ... (prototype)"
+#~ msgstr "進行新搜尋…（原型）"
+
+#~ msgid "After"
+#~ msgstr "之後"
+
+#~ msgid "Before"
+#~ msgstr "之前"
+
+#~ msgid "Shrink"
+#~ msgstr "縮小"
+
+#~ msgid "Maximize"
+#~ msgstr "最大化"
+
 #~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
+#~ "Do you want to decline the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr "您要拒絕參加整個約會序列，還是序列中的單次約會？"
+
+#~ msgid "Participant related actions"
+#~ msgstr "與與會者相關的操作"
+
+#~ msgid "You are currently acting on behalf of the calendar owner."
+#~ msgstr "您目前正以行事曆擁有者身分操作。"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just this appointment within "
+#~ "the series?"
+#~ msgstr "您要刪除整個約會序列，還是序列中的單次約會？"
+
+#~ msgid "This appointment"
+#~ msgstr "此約會"
+
+#~ msgid ""
+#~ "Do you want to delete this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr "您要刪除這次以及未來的所有約會，還是僅有序列中的這一次約會？"
+
+#~ msgid "All future appointments"
+#~ msgstr "所有未來的約會"
+
+#~ msgid "My Google Calendar"
+#~ msgstr "我的 Google 行事曆"
+
+#~ msgid "iCal URL"
+#~ msgstr "iCal 網址"
+
+#~ msgid "Subscribe to iCal feed"
+#~ msgstr "訂閱 iCal 資訊來源"
+
+#~ msgid "iCal feed has been imported successfully"
+#~ msgstr "已成功匯入 iCal 資訊來源"
+
+#~ msgid "Secret"
+#~ msgstr "私密"
+
+#~ msgid "Sent by"
+#~ msgstr "寄件人"
+
+#~ msgid "Select calendar"
+#~ msgstr "選擇行事曆"
+
+#~ msgid "Create new calendar"
+#~ msgstr "建立新行事曆"
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "於您的時區（%1$s）: %2$s（長度: %3$s）"
+
+#~ msgid "Standard"
+#~ msgstr "標準"
+
+#~ msgid "The appointment is visible for all users in shared calendars."
+#~ msgstr "約會可被共享行事曆中的所有使用者看見。"
+
+#~ msgid ""
+#~ "In shared calendars, the appointment is displayed as a simple time slot "
+#~ "for non-attending users."
+#~ msgstr "在共享行事曆中，若使用者不會參加，約會將會顯示為簡單的時間帶。"
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared calendars "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view. This option cannot be used, if the "
+#~ "appointment blocks resources."
 #~ msgstr ""
-#~ "您知道您可以把 OX App Suite 隨身帶著走嗎？只要點擊此按鈕，選擇選單中的「連"
-#~ "線至您的裝置」即可。"
+#~ "在共享行事曆中，若使用者不參與約會，就不會見到約會內容。不會在判斷約會衝突"
+#~ "時考慮此類約會，也不會顯示在排程畫面中。若約會會使用資源，就無法使用此選"
+#~ "項。"
+
+#~ msgid "Visibility"
+#~ msgstr "可見度"
+
+#~ msgid "Appointment color"
+#~ msgstr "約會色彩"
+
+#~ msgid "Show as free"
+#~ msgstr "顯示為有空"
+
+#~ msgid "Edit Appointment"
+#~ msgstr "編輯約會"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "請注意通訊組清單中不得包含資源。"
+
+#~ msgid "Next week"
+#~ msgstr "下一週"
+
+#~ msgid "Next month"
+#~ msgstr "下個月"
+
+#~ msgid "Show fine grid"
+#~ msgstr "顯示網格"
+
+#~ msgid "Date range"
+#~ msgstr "日期範圍"
+
+#~ msgid "Blocked time frame"
+#~ msgstr "要占用的時間範圍"
+
+#~ msgid "Could not get appointment information"
+#~ msgstr "無法取得約會資訊"
+
+#~ msgid "Error: Failed to load appointments"
+#~ msgstr "錯誤: 約會載入失敗"
+
+#~ msgid "Load appointments until %1$s"
+#~ msgstr "載入 %1$s 前的所有約會"
+
+#~ msgid "Could't load appointment data."
+#~ msgstr "無法載入約會資料。"
+
+#~ msgid "No appointment selected"
+#~ msgstr "未選擇約會"
+
+#~ msgid "%1$s appointments selected"
+#~ msgstr "選擇了 %1$s 場約會"
+
+#~ msgid "Calendar account error"
+#~ msgstr "帳號變更錯誤"
+
+#~ msgid "Try again"
+#~ msgstr "再試一次"
+
+#~ msgid "Refreshing calendar might take some time..."
+#~ msgstr "可能要花一些時間重新整理行事曆…"
+
+#~ msgid "Successfully refreshed calendar"
+#~ msgstr "已成功重新整理行事曆"
+
+#~ msgid "Appointment options"
+#~ msgstr "約會選項"
+
+#~ msgid "Show next month"
+#~ msgstr "顯示下個月"
+
+#~ msgid "Show previous month"
+#~ msgstr "顯示上個月"
+
+#~ msgid ""
+#~ "You cannot mark the appointment as secret, when blocking a ressource."
+#~ msgstr "當約會會占用資源時，就無法標示為秘密約會。"
+
+#~ msgid "%1$d minutes"
+#~ msgstr "%1$d 分鐘"
+
+#~ msgctxt "noun"
+#~ msgid "View"
+#~ msgstr "檢視"
+
+#~ msgid "Time scale"
+#~ msgstr "时间尺度"
+
+#~ msgid "Show birthday calendar"
+#~ msgstr "顯示生日行事曆"
+
+#~ msgid "Birthday calendar"
+#~ msgstr "生日行事曆"
+
+#~ msgid "Workweek view"
+#~ msgstr "工作週畫面"
+
+#~ msgid "Week start"
+#~ msgstr "每週開始於"
+
+#~ msgid "Workweek length"
+#~ msgstr "工作週長度"
+
+#~ msgid "Default reminder for all-day appointments"
+#~ msgstr "全日約會的預設提醒時間"
+
+#~ msgid "Default reminder for appointments in birthday calendar"
+#~ msgstr "生日行事曆的預設約會提醒時間"
+
+#~ msgid "Add calendar"
+#~ msgstr "新增行事曆"
+
+#~ msgid "The integration of the subscribed calendars might take a while."
+#~ msgstr "可能需要花點時間來整合訂閱的行事曆。"
+
+#~ msgid "subscribe to calendar"
+#~ msgstr "訂閱行事曆"
+
+#~ msgid "Mini calendar"
+#~ msgstr "迷你行事曆"
+
+#~ msgid "Weekends"
+#~ msgstr "週末"
+
+#~ msgid "light red"
+#~ msgstr "亮紅"
+
+#~ msgid "light orange"
+#~ msgstr "亮橘"
+
+#~ msgid "light yellow"
+#~ msgstr "亮黃"
+
+#~ msgid "light olive"
+#~ msgstr "亮橄欖"
+
+#~ msgid "light cyan"
+#~ msgstr "亮青"
+
+#~ msgid "light azure"
+#~ msgstr "亮蔚藍"
+
+#~ msgid "light indigo"
+#~ msgstr "亮靛藍"
+
+#~ msgid "light purple"
+#~ msgstr "亮紫"
+
+#~ msgid "light magenta"
+#~ msgstr "亮洋紅"
+
+#~ msgid "light pink"
+#~ msgstr "亮粉紅"
+
+#~ msgid "light gray"
+#~ msgstr "亮灰"
+
+#~ msgid "olive"
+#~ msgstr "橄欖"
+
+#~ msgid "green"
+#~ msgstr "綠"
+
+#~ msgid "cyan"
+#~ msgstr "青"
+
+#~ msgid "azure"
+#~ msgstr "蔚藍"
+
+#~ msgid "blue"
+#~ msgstr "藍"
+
+#~ msgid "indigo"
+#~ msgstr "靛藍"
+
+#~ msgid "magenta"
+#~ msgstr "洋紅"
+
+#~ msgid "dark red"
+#~ msgstr "深紅"
+
+#~ msgid "dark orange"
+#~ msgstr "深橘"
+
+#~ msgid "dark yellow"
+#~ msgstr "深黃"
+
+#~ msgid "dark olive"
+#~ msgstr "深橄欖"
+
+#~ msgid "dark cyan"
+#~ msgstr "深青"
+
+#~ msgid "dark azure"
+#~ msgstr "深蔚藍"
+
+#~ msgid "dark indigo"
+#~ msgstr "深靛藍"
+
+#~ msgid "dark purple"
+#~ msgstr "深紫"
+
+#~ msgid "dark magenta"
+#~ msgstr "深洋紅"
+
+#~ msgid "dark pink"
+#~ msgstr "深粉紅"
+
+#~ msgid "dark gray"
+#~ msgstr "深灰"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just this appointment within the "
+#~ "series?"
+#~ msgstr "您想要編輯整個序列，或是只編輯序列中的這場約會？"
+
+#~ msgid ""
+#~ "Do you want to edit this and all future appointments or just this "
+#~ "appointment within the series?"
+#~ msgstr "您想要編輯序列中這場與未來所有的活動，或是只編輯這場約會？"
+
+#~ msgid "Confidential"
+#~ msgstr "機密"
+
+#~ msgid "Recurrence"
+#~ msgstr "重複發生"
+
+#~ msgid "Merge"
+#~ msgstr "合併"
+
+#~ msgid "Split"
+#~ msgstr "分割"
+
+#~ msgid "Click to merge all folders into one column"
+#~ msgstr "點擊此處將所有資料夾合併為一欄"
+
+#~ msgid "Click to split all folders into separate columns"
+#~ msgstr "點擊此處將所有資料夾分割為不同欄位"
+
+#~ msgid "Next year"
+#~ msgstr "下一年"
+
+#~ msgid "First name must not be empty for internal users"
+#~ msgstr "內部使用者的名字不得為空白"
+
+#~ msgid "Last name must not be empty for internal users"
+#~ msgstr "內部使用者的姓氏不得為空白"
+
+#~ msgid "Something went wrong. Please close this browser tab and try again."
+#~ msgstr "有些東西怪怪的。請關閉此分頁並重試。"
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalendar"
+
+#~ msgid "Export selected"
+#~ msgstr "匯出選擇項目"
+
+#~ msgid "Format: %1$s"
+#~ msgstr "格式: %1$s"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "請注意，在匯出行事曆時將移除其他參與者。"
+
+#~ msgid "No export format available"
+#~ msgstr "無匯出格式可用"
+
+#~ msgid "Subscribe to IMAP folders"
+#~ msgstr "訂閱 IMAP 信件匣"
+
+#~ msgid "A folder cannot be moved into itself"
+#~ msgstr "無法將資料夾移動到自身當中"
+
+#~ msgid "A folder cannot be moved to one of its subfolders"
+#~ msgstr "無法將資料夾移動到其子資料夾當中"
+
+#~ msgid "Last updated"
+#~ msgstr "最後更新於"
+
+#~ msgid "iCal feed"
+#~ msgstr "iCal 資訊來源"
+
+#~ msgid "Google subscription"
+#~ msgstr "Google 訂閱"
+
+#~ msgid "Calendars of interest"
+#~ msgstr "有興趣的行事曆"
+
+#~ msgid "Do you really want to delete calendar \"%s\"?"
+#~ msgstr "您真的要刪除行事曆「%s」嗎？"
+
+#~ msgid ""
+#~ "This calendar is shared with others. It won't be available for them any "
+#~ "more."
+#~ msgstr "此行事曆已與他人分享，他們將無法再使用本行事曆。"
+
+#~ msgid "All my public appointments"
+#~ msgstr "我的所有公開約會"
+
+#~ msgid "Archive old messages"
+#~ msgstr "封存舊訊息"
+
+#~ msgid "Delete forever"
+#~ msgstr "永遠刪除"
+
+#~ msgid "Restore"
+#~ msgstr "還原"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "權限 / 邀請人員"
+
+#~ msgid "Show in Drive"
+#~ msgstr "於雲端空間顯示"
+
+#~ msgid "Refresh this calendar"
+#~ msgstr "重新整理此行事曆"
+
+#~ msgid "Show all calendars"
+#~ msgstr "顯示所有行事曆"
+
+#~ msgid "Show this calendar only"
+#~ msgstr "只顯示此行事曆"
+
+#~ msgid "Select all messages"
+#~ msgstr "選擇所有訊息"
+
+#~ msgid "Subscribe to address book"
+#~ msgstr "訂閱通訊錄"
+
+#~ msgid "Personal calendar"
+#~ msgstr "個人行事曆"
+
+#~ msgid "Subscribe to calendar"
+#~ msgstr "訂閱行事曆"
+
+#~ msgid "Browse calendars of interest"
+#~ msgstr "瀏覽有興趣的行事曆"
+
+#~ msgid "Google calendar"
+#~ msgstr "Google 行事曆"
+
+#~ msgid "Subscribe via URL (iCal)"
+#~ msgstr "透過網址（iCal）訂閱"
+
+#~ msgid "Import calendar"
+#~ msgstr "匯入行事曆"
+
+#~ msgid "Imported calendar"
+#~ msgstr "匯入的行事曆"
+
+#~ msgid "New calendar name"
+#~ msgstr "新行事曆名稱"
+
+#~ msgid "Ignore existing appointments"
+#~ msgstr "忽略現有約會"
+
+#~ msgid ""
+#~ "Ignoring existing appointments is helpful to import public holiday "
+#~ "calendars, for example."
+#~ msgstr "舉例來說，忽略現有約會對例如匯入國定假日類的行事曆很有幫助。"
+
+#~ msgid "Please note that other participants are removed on calendar import."
+#~ msgstr "請注意，在匯入行事曆時將移除其他參與者。"
+
+#~ msgid "You must enter a folder name"
+#~ msgstr "您必須輸入資料夾名稱。"
+
+#~ msgid "Navigate to:"
+#~ msgstr "導航至:"
+
+#~ msgctxt "app"
+#~ msgid "Notes"
+#~ msgstr "Notes"
+
+#~ msgid "Connect this Device"
+#~ msgstr "連線至此裝置"
+
+#~ msgid ""
+#~ "There are currently no compatible media devices available on your device."
+#~ msgstr "您的裝置上目前沒有相容的媒體裝置。"
+
+#~ msgid ""
+#~ "Access to your media devices has been denied. Please refer to your "
+#~ "browser help pages for how to reset authorization."
+#~ msgstr "存取您的媒體裝置被拒絕。請參考您的瀏覽器說明頁面來重設授權。"
+
+#~ msgid "This feature isn't available for non-secure connections."
+#~ msgstr "無法在不安全連線的狀態使用此功能。"
+
+#~ msgid "Microphone %1$s"
+#~ msgstr "麥克風 %1$s"
+
+#~ msgid "Camera %1$s"
+#~ msgstr "攝影機 %1$s"
+
+#~ msgid "Unknown %1$s"
+#~ msgstr "未知 %1$s"
+
+#~ msgid ""
+#~ "Unfortunately your browser doesn't support listing available media "
+#~ "devices."
+#~ msgstr "很可惜，您的瀏覽器不支援列出可用媒體裝置。"
+
+#~ msgid "Unicolor"
+#~ msgstr "單色"
+
+#~ msgid "Multicolor"
+#~ msgstr "多色"
+
+#~ msgid "Purple/Magenta"
+#~ msgstr "紫/洋紅"
+
+#~ msgid "Automatic"
+#~ msgstr "自動"
+
+#~ msgid "Time-dependent"
+#~ msgstr "與時間相關"
+
+#~ msgid "Design"
+#~ msgstr "設計"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "快速啟動 %s"
+
+#~ msgid "Manage browser permissions now"
+#~ msgstr "立刻管理瀏覽器權限"
+
+#~ msgid "%1$s must not be empty."
+#~ msgstr "%1$s 不得空白。"
+
+#~ msgid ""
+#~ "\n"
+#~ " Please download the file using the button below."
+#~ msgstr ""
+#~ "\n"
+#~ "請點擊下面的按鈕下載檔案。"
+
+#~ msgid "Download %1$s"
+#~ msgstr "下載 %1$s"
+
+#~ msgid "Downlad"
+#~ msgstr "下載"
+
+#~ msgid "There is no preview for this file type."
+#~ msgstr "此類格式的檔案無法預覽。"
+
+#~ msgid ""
+#~ "Restored into multiple folders:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "恢復至多個資料夾:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Restored into folder:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "恢復至資料夾:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "已為檔案「%1$s」建立共享鏈結"
+#~ msgstr[1] "已為 %2$d 個項目建立共享鏈結"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgid_plural "Sharing link created for %2$d items"
+#~ msgstr[0] "已為資料夾「%1$s」建立共享鏈結"
+#~ msgstr[1] "已為 %2$d 個項目建立共享鏈結"
+
+#~ msgid "Add folder"
+#~ msgstr "新增資料夾"
+
+#~ msgid "Edit Share"
+#~ msgstr "編輯共享項目"
+
+#~ msgid "%1$d seconds"
+#~ msgstr "%1$d 秒"
+
+#~ msgid "Duration per image"
+#~ msgstr "每張圖片的持續時間"
+
+#~ msgid "Advanced settings"
+#~ msgstr "進階設定"
+
+#~ msgid "Internal and external users"
+#~ msgstr "內部與外部使用者"
+
+#~ msgid "External users"
+#~ msgstr "外部使用者"
+
+#~ msgid "Share with subfolders"
+#~ msgstr "與子資料夾一同分享"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "新增至我的最愛"
+
+#~ msgid "Inspect certificate"
+#~ msgstr "檢查憑證"
+
+#~ msgid ""
+#~ "All future messages from the sender will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "未來所有來自該寄件者的信件，將移動至所選的信件匣。"
+#~ msgstr[1] "未來所有來自所選擇信件的寄件者的信件，將移動至所選的信件匣。"
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr "在您關閉郵件編寫視窗前，無法刪除正在編輯的有附件的草稿。"
+
+#~ msgid "Authentication details"
+#~ msgstr "驗證詳細資訊"
+
+#~ msgid "Category name"
+#~ msgstr "分類名稱"
+
+#~ msgid "Warning:"
+#~ msgstr "警告:"
+
+#~ msgid "Note:"
+#~ msgstr "註:"
+
+#~ msgid "Enable Links"
+#~ msgstr "開啟鏈結"
+
+#~ msgid "Links have been disabled to protect you against potential spam!"
+#~ msgstr "已停用連結，以保護您不受詐騙與垃圾信件攻擊！"
+
+#~ msgid ""
+#~ "see attached|see attachment|see included|is attached|attached is|are "
+#~ "attached|attached are|attached to this email|attached to this message|I'm "
+#~ "attaching|I am attaching|I've attached|I have attached|I attach|I "
+#~ "attached|find attached|find the attached|find included|find the included|"
+#~ "attached file|see the attached|see attachments|attached files|see the "
+#~ "attachment"
+#~ msgstr ""
+#~ "see attached|see attachment|see included|is attached|attached is|are "
+#~ "attached|attached are|attached to this email|attached to this message|I'm "
+#~ "attaching|I am attaching|I've attached|I have attached|I attach|I "
+#~ "attached|find attached|find the attached|find included|find the included|"
+#~ "attached file|see the attached|see attachments|attached files|see the "
+#~ "attachment|詳參附件|參考附件|附件|附加檔案"
+
+#~ msgid "Forgot attachment?"
+#~ msgstr "忘記加入附件了嗎？"
+
+#~ msgid "Send without attachment"
+#~ msgstr "無附件發送"
+
+#~ msgid "It appears as if you forgot to attach a file."
+#~ msgstr "您可能忘記附加檔案了。"
+
+#~ msgid "You mentioned \"%s\" in your email, but there are no files attached."
+#~ msgstr "您在信件中提到「%s」，但沒有附加檔案。"
+
+#~ msgid ""
+#~ "This email just contains your email address as sender. Your real name is "
+#~ "not used."
+#~ msgstr "這封郵件的寄件者只會有您的電子郵件地址，不會加入您的本名。"
+
+#~ msgid "One of the embedded images could not be used."
+#~ msgstr "無法使用其中一張嵌入的圖片。"
+
+#~ msgid "Use password"
+#~ msgstr "使用密碼"
+
+#~ msgid "Receive notification when someone finished downloading file(s)"
+#~ msgstr "當某人完成檔案下載時接收通知"
+
+#~ msgid "Receive notification when the link expires"
+#~ msgstr "當連結過期時接收通知"
+
+#~ msgid "Receive notification when someone accesses the file(s)"
+#~ msgstr "當某人存取檔案時接收通知"
+
+#~ msgid "%1$s options"
+#~ msgstr "%1$s 選向"
+
+#~ msgctxt "verb"
+#~ msgid "Unflag"
+#~ msgstr "取消標示"
+
+#~ msgid "Email content"
+#~ msgstr "郵件內容"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "快速回覆: %1$s"
+
+#~ msgid "Auto forwarding is active"
+#~ msgstr "已開啟自動轉寄"
+
+#~ msgid "Unable to load your auto forward settings. Please retry later."
+#~ msgstr "無法載入您的自動轉寄設定，請稍候再試。"
+
+#~ msgid "Auto forward"
+#~ msgstr "自動轉寄"
+
+#~ msgid "Enable or disable auto forward"
+#~ msgstr "開啟或關閉自動轉寄"
+
+#~ msgid "Your vacation notice is active"
+#~ msgstr "已開啟假期通知功能"
+
+#~ msgid "The time frame is in the past."
+#~ msgstr "時間範圍在過去。"
+
+#~ msgid "Unable to load your vacation notice. Please retry later."
+#~ msgstr "無法載入您的假期通知，請稍候再試。"
+
+#~ msgid "Vacation notice"
+#~ msgstr "假期通知"
+
+#~ msgid "Default sender"
+#~ msgstr "預設寄件者"
+
+#~ msgid "Enable or disable vacation notice"
+#~ msgstr "開啟或關閉假期通知"
+
+#~ msgid "Message"
+#~ msgstr "訊息"
+
+#~ msgid "Days between notices to the same sender"
+#~ msgstr "傳送假期通知給寄件者的間隔日期"
+
+#~ msgctxt "settings"
+#~ msgid "Mail Compose"
+#~ msgstr "撰寫郵件"
+
+#~ msgid "Behavior"
+#~ msgstr "行為"
+
+#~ msgid ""
+#~ "You can import all existing signatures from the previous product "
+#~ "generation at once."
+#~ msgstr "您可以一次匯入所有於先前版本建立的簽名檔。"
+
+#~ msgid "No preview available"
+#~ msgstr "沒有預覽可用"
+
+#~ msgid "Default signature for replies or forwards"
+#~ msgstr "回信或轉寄郵件時預設使用的簽名檔"
+
+#~ msgid "Text preview"
+#~ msgstr "文字預覽"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr "這是一封可疑電子郵件，我們無法驗證它是否真來自 %1$s。"
+
+#~ msgid "We could not verify that this email is from %1$s."
+#~ msgstr "我們無法確認這封信是否真的來自 %1$s。"
+
+#~ msgid "We could verify that this email is from %1$s."
+#~ msgstr "我們可以確認這封信的確來自 %1$s。"
+
+#~ msgid "Search in"
+#~ msgstr "搜尋於"
+
+#~ msgid "Current folder"
+#~ msgstr "目前資料夾"
+
+#~ msgid "Contains words"
+#~ msgstr "包含文字"
+
+#~ msgid "Has attachments"
+#~ msgstr "有附件"
+
+#~ msgctxt "dropdown"
+#~ msgid "Sort"
+#~ msgstr "排序"
+
+#~ msgid "All messages in this folder"
+#~ msgstr "此資料夾中的所有訊息"
+
+#~ msgctxt "dropdown"
+#~ msgid "All"
+#~ msgstr "全部"
+
+#~ msgid "Connect this device"
+#~ msgstr "連線至此裝置"
+
+#~ msgid "Signed in as"
+#~ msgstr "已登入為"
+
+#~ msgid ""
+#~ "The widget \"%s\" was disabled as the account might have been removed or "
+#~ "is no longer available."
+#~ msgstr "由於帳號可能已被移除或不再可用，已停用小工具「%s」。"
+
+#~ msgid "Default"
+#~ msgstr "預設"
+
+#~ msgid "Security"
+#~ msgstr "安全性"
+
+#~ msgid "Active clients"
+#~ msgstr "連線中的客戶端"
+
+#~ msgid "Certificates"
+#~ msgstr "憑證"
+
+#~ msgid "Remove certificate"
+#~ msgstr "移除憑證"
+
+#~ msgid "Do you really want to remove this certificate?"
+#~ msgstr "您真的要移除此憑證嗎？"
+
+#~ msgid "The certificate list is empty"
+#~ msgstr "憑證清單空白"
+
+#~ msgid "Fingerprint"
+#~ msgstr "指紋"
+
+#~ msgid "Untrust certificate %1$s"
+#~ msgstr "取消信任憑證 %1$s"
+
+#~ msgid "Untrust"
+#~ msgstr "取消信任"
+
+#~ msgid "Trust certificate %1$s"
+#~ msgstr "信任憑證 %1$s"
+
+#~ msgid "Trust"
+#~ msgstr "信任"
+
+#~ msgid "Remove certificate %1$s"
+#~ msgstr "移除憑證 %1$s"
+
+#~ msgid "Common name"
+#~ msgstr "一般名稱"
+
+#~ msgid "Expired"
+#~ msgstr "過期於"
+
+#~ msgid "Failure reason"
+#~ msgstr "失敗原因"
+
+#~ msgid "Hostname"
+#~ msgstr "主機名稱"
+
+#~ msgid "Issued by"
+#~ msgstr "簽發者"
+
+#~ msgid "Issued on"
+#~ msgstr "簽發於"
+
+#~ msgid "Serial number"
+#~ msgstr "序號"
+
+#~ msgid "Signature"
+#~ msgstr "簽名"
+
+#~ msgid "Trusted"
+#~ msgstr "受信任"
+
+#~ msgid "Certificate details"
+#~ msgstr "憑證詳細資訊"
+
+#~ msgid "Trust certificate"
+#~ msgstr "信任憑證"
+
+#~ msgid "Windows"
+#~ msgstr "Windows"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#~ msgid "Mac"
+#~ msgstr "Mac"
+
+#~ msgid "iOS"
+#~ msgstr "iOS"
+
+#~ msgid "Android"
+#~ msgstr "Android"
+
+#~ msgid "Chrome"
+#~ msgstr "Chrome"
+
+#~ msgid "Safari"
+#~ msgstr "Safari"
+
+#~ msgid "Firefox"
+#~ msgstr "Firefox"
+
+#~ msgid "Edge"
+#~ msgstr "Edge"
+
+#~ msgid "Internet Explorer"
+#~ msgstr "Internet Explorer"
+
+#~ msgid "Opera"
+#~ msgstr "Opera"
+
+#~ msgid "Chromium"
+#~ msgstr "Chromium"
+
+#~ msgid "Addressbook"
+#~ msgstr "通訊錄"
+
+#~ msgid "Calendar/Addressbook"
+#~ msgstr "行事曆/通訊錄"
+
+#~ msgid "Thunderbird Lightning"
+#~ msgstr "Thunderbird Lightning"
+
+#~ msgid "eM Client"
+#~ msgstr "eM 客戶端"
+
+#~ msgid "Appsuite eM Client"
+#~ msgstr "Appsuite eM 客戶端"
+
+#~ msgid "CalDav"
+#~ msgstr "CalDav"
+
+#~ msgid "CardDav"
+#~ msgstr "CardDav"
+
+#~ msgid "DAVdroid"
+#~ msgstr "DAVdroid"
+
+#~ msgid "CalDav/CardDav"
+#~ msgstr "CalDav/CardDav"
+
+#~ msgid "Exchange Active Sync"
+#~ msgstr "Exchange Active Sync"
+
+#~ msgid "Unknown application"
+#~ msgstr "未知應用程式"
+
+#~ msgid "Unknown device"
+#~ msgstr "未知裝置"
+
+#~ msgid "Now active"
+#~ msgstr "目前連線中"
+
+#~ msgid "Do you really want to sign out from that device?"
+#~ msgstr "您真的要從該裝置登出嗎？"
+
+#~ msgid "You are currently signed in with the following devices"
+#~ msgstr "您目前正從下列裝置登入"
+
+#~ msgid "Sign out from all clients"
+#~ msgstr "登出所有客戶端"
+
+#~ msgid ""
+#~ "Do you really want to sign out from all clients except the current one?"
+#~ msgstr "您真的要只保留目前連線，該其他所有裝置登出嗎？"
+
+#~ msgid "Show email authenticity"
+#~ msgstr "顯示郵件真實性"
+
+#~ msgid "Disabled"
+#~ msgstr "禁用"
+
+#~ msgid "Suspicious and unclassified emails only"
+#~ msgstr "僅危險與未分類郵件"
+
+#~ msgid "All emails"
+#~ msgstr "所有郵件"
+
+#~ msgid "App Launcher"
+#~ msgstr "應用程式啟動器"
+
+#~ msgid ""
+#~ "To navigate between the %1$s applications, just click on the new App "
+#~ "Launcher icon."
+#~ msgstr "只要點擊全新的應用程式啟動器圖示，即可在不同 %1$s 應用程式間切換。"
+
+#~ msgid "Click on the application that you would like to use."
+#~ msgstr "點擊您想要使用的應用程式。"
+
+#~ msgid "New Windows"
+#~ msgstr "新增視窗"
+
+#~ msgid ""
+#~ "Emails will appear in a new window. These windows can be maximized, "
+#~ "minimized and closed."
+#~ msgstr "將在新視窗顯示郵件。可最大化、最小化或關閉這些視窗。"
+
+#~ msgid ""
+#~ "Windows you have minimized will appear in all applications for easy "
+#~ "access. You can maximize a window again by clicking on it."
+#~ msgstr ""
+#~ "被最小化的視窗將會顯示在所有應用程式中，方便您快速切換。再次點擊視窗後即可"
+#~ "最大化。"
+
+#~ msgid "What's new"
+#~ msgstr "最新消息"
+
+#~ msgid "To learn more about the new and improved features you can visit "
+#~ msgstr "要了解新功能與改善過的功能，請造訪 "
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "%1$s 7.10.0 版的最新內容"
+
+#~ msgid ""
+#~ "Welcome to %1$s.\n"
+#~ "We've made some exciting changes to %1$s. This quick tour will guide you "
+#~ "through some of the new and improved features."
+#~ msgstr ""
+#~ "歡迎使用 %1$s。\n"
+#~ "我們為 %1$s 推出了許多令人高興的變更，接下來的快速導覽將帶著您體驗一些全新"
+#~ "與改善過的功能。"
+
+#~ msgid "Never show again"
+#~ msgstr "不要再顯示"
+
+#~ msgid "Open in calendar"
+#~ msgstr "於行事曆開啟"
+
+#~ msgid "Remove all reminders"
+#~ msgstr "移除所有提醒"
+
+#~ msgid "Appointment reminder"
+#~ msgstr "約會提醒"
+
+#~ msgid "Encrypt"
+#~ msgstr "加密"
+
+#~ msgid "Show Links"
+#~ msgstr "顯示鏈結"
+
+#~ msgid "Add attachment"
+#~ msgstr "新增附件"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "已成功匯入 iCal"
+
+#~ msgid "Change color"
+#~ msgstr "變更色彩"
+
+#~ msgid "Town"
+#~ msgstr "城市"
+
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal 資訊來源"
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr "忽略現有約會。對例如匯入國定假日類的行事曆很有幫助。"
+
+#~ msgid "Internal & external users"
+#~ msgstr "內部與外部使用者"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr "將選擇的郵件的寄件者未來寄來的所有訊息移動至選擇的信件匣。"
+
+#~ msgid "never"
+#~ msgstr "永不"
+
+#~ msgid "Use Password"
+#~ msgstr "使用密碼"
+
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s 選項"
+
+#~ msgid "Account is being created"
+#~ msgstr "正在建立帳號"
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr "我們無法確認這封信是否真的來自 %1$s，請小心有可能是釣魚信。"
+
+#~ msgid "in"
+#~ msgstr "於"
+
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "僅危險郵件"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "危險與受信任的郵件"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "危險、受信任與有效的郵件"
+
+#~ msgid "Add new reminder"
+#~ msgstr "新增提醒"
+
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "驗證失敗，請填寫帳號與密碼。"
+
+#~ msgid "Public"
+#~ msgstr "公開"
+
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "共享資料夾中的所有使用者都能看到此約會。"
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr "在共享資料夾中，對未參加的使用者來說約會就是一個簡單的時段。"
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "共享資料夾中不汆加的使用者將看不到約會。不會在判斷約會衝突時考慮此約會，也"
+#~ "不會顯示於排程畫面中。"
+
+#~ msgid "Birthday"
+#~ msgstr "生日"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "公開行事曆與事件清單"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "快速啟動 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "快速啟動 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "快速啟動 3"
 
 #~ msgid ""
 #~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
@@ -11040,97 +12267,148 @@ msgstr "新增至 %s"
 #~ msgstr[0] "因為超過配額限制 %1$s，無法上傳檔案"
 #~ msgstr[1] "因為超過配額限制 %1$s，無法上傳檔案"
 
-#~ msgid "via"
-#~ msgstr "經由"
-
-#~ msgid "in"
-#~ msgstr "於"
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "此郵件是由受信任的寄件者寄送。"
 
 #~ msgid ""
-#~ "Use up and down keys to change the time. Close selection by pressing ESC "
-#~ "key."
-#~ msgstr "使用上下鍵修改時間，按下 ESC 鍵關閉選擇範圍。"
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr "我們無法確認這封郵件真的是來自 %1$s，可能是釣魚郵件。"
 
-#~ msgid "Line %1$d: %2$s"
-#~ msgstr "行 %1$s: %2$s"
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "此郵件是由 %1$s 寄送。"
 
-#~ msgid "continue if any of these condition is met"
-#~ msgstr "若符合下列任一條件就繼續"
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "我們無法確認這封郵件真的是來自 %1$s。"
 
-#~ msgid "Size (bytes)"
-#~ msgstr "大小 (位元組)"
+#~ msgid "Expiration: %1$d"
+#~ msgstr "過期於: %1$d"
+
+#~ msgid "Has Attachment"
+#~ msgstr "有附件"
+
+#~ msgid "Show message authenticity"
+#~ msgstr "顯示訊息真實性"
+
+#~ msgid "Dangerous only"
+#~ msgstr "僅危險的"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "危險與信任的"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "確認所有提醒"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%2$s 的 %1$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s Android 客戶端"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s Mac OS 客戶端"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s Windows 客戶端"
+
+#, fuzzy
+#~| msgid "%s client for iOS"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%s iOS 客戶端"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "分享「%2$s」%1$s"
+
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "關閉 %1$s"
+
+#, fuzzy
+#~| msgid "Current Costs:"
+#~ msgid "Current session"
+#~ msgstr "當前費用："
+
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "您知道您可以把 OX App Suite 隨身帶著走嗎？只要點擊此按鈕，選擇選單中的「連"
+#~ "線至您的裝置」即可。"
+
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "確定要刪除此帳號？"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "您真的要刪除這個版本嗎？"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "結束於 %s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%2$s 的 %1$s"
 
 #~ msgid "Header exists"
 #~ msgstr "存在檔頭"
 
-#~ msgid "Prettify plain text mails"
-#~ msgstr "美觀化純文字文件"
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "已新增 %1$s。"
 
-#~ msgid "Configure %1$s"
-#~ msgstr "設定 %1$s"
+#, fuzzy
+#~| msgid "Other address"
+#~ msgid "Other clients"
+#~ msgstr "其他地址"
 
-#~ msgid "Loop once only"
-#~ msgstr "僅重播一次"
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "自收件人清單移除"
 
-#~ msgid "Keep looping endlessly"
-#~ msgstr "持續重播"
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "分享「%2$s」%1$s"
 
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "簡報 / 自動播放模式"
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr "下列應用程式可被還原，若您不想還原請直接移除還原點。"
 
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "自動播放暫停秒數"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "未知的寄件者"
 
-#~ msgid "Copy message to folder"
-#~ msgstr "複製訊息至信件匣"
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "未知的寄件者"
 
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "若符合上述任一條件就繼續。"
-
-#~ msgid "original timezone"
-#~ msgstr "原始時區"
-
-#~ msgid "Rule applies from"
-#~ msgstr "規則套用自"
-
-#~ msgid "Rule applies until"
-#~ msgstr "規則套用至"
-
-#~ msgid "Rule applies on"
-#~ msgstr "規則套用於"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "規則不適用於"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "規則從下列時間起適用"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "規則適用至下列時間為止"
-
-#~ msgid "Apply rule if any condition is met."
-#~ msgstr "符合任何條件時套用規則。"
-
-#~ msgid "Content"
-#~ msgstr "內容"
-
-#~ msgid "Envelope - To"
-#~ msgstr "信封 - 給"
-
-#~ msgid "Flag mail with"
-#~ msgstr "為郵件加入旗標"
-
-#~ msgid "Reply All"
-#~ msgstr "全部回覆"
-
-#~ msgid "Sender address"
-#~ msgstr "寄件地址"
-
-#~ msgid "Sender/From"
-#~ msgstr "寄件者/自"
-
-#~ msgid "Tag mail with"
-#~ msgstr "為郵件加入標籤"
+#~ msgid "via"
+#~ msgstr "經由"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"
@@ -11523,10 +12801,6 @@ msgstr "新增至 %s"
 #~ msgstr "進階 facet 區塊已被開啟。"
 
 #, fuzzy
-#~ msgid "Advanced options"
-#~ msgstr "進階設定"
-
-#, fuzzy
 #~| msgid "Advanced Facets"
 #~ msgid "Advanced user?"
 #~ msgstr "進階 Facet"
@@ -11560,11 +12834,6 @@ msgstr "新增至 %s"
 #~| msgid "Add contact"
 #~ msgid "All contacts"
 #~ msgstr "新增號碼..."
-
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr "將選擇的郵件的寄件者未來寄來的所有訊息移動至選擇的信件匣。"
 
 #~ msgid "All users"
 #~ msgstr "所有用戶"
@@ -11619,6 +12888,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Applications"
 #~ msgstr "應用程式"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "符合任何條件時套用規則。"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "要套用到所有訊息嗎？"
@@ -11811,6 +13083,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "超過多少字元後自動換行:"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "自動播放暫停秒數"
 
 #~ msgid "Availability"
 #~ msgstr "可用性"
@@ -12163,9 +13438,6 @@ msgstr "新增至 %s"
 #~ "客戶端 PC 作業系統：最新版本的 Windows XP、Windows 7（皆含 32 與 64 位元版"
 #~ "本）（不支援使用模擬器執行的 Mac OS X 客戶端）"
 
-#~ msgid "Close Window"
-#~ msgstr "關閉窗口"
-
 #~ msgid "Close document"
 #~ msgstr "關閉文件"
 
@@ -12237,6 +13509,9 @@ msgstr "新增至 %s"
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "配置已被破壞，請通知管理員。"
 
+#~ msgid "Configure %1$s"
+#~ msgstr "設定 %1$s"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "設定您的收件匣分頁"
 
@@ -12258,6 +13533,9 @@ msgstr "新增至 %s"
 #~ msgid "Contact overview"
 #~ msgstr "聯繫人概覽"
 
+#~ msgid "Content"
+#~ msgstr "內容"
+
 #~ msgid "Content-Type:"
 #~ msgstr "內容類型："
 
@@ -12277,6 +13555,9 @@ msgstr "新增至 %s"
 #~ msgid "Copy (CC) to"
 #~ msgstr "副本 (CC) 致"
 
+#~ msgid "Copy message to folder"
+#~ msgstr "複製訊息至信件匣"
+
 #~ msgid "Copy to"
 #~ msgstr "複製到"
 
@@ -12288,12 +13569,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "無法載入此工作中的所有參與者。"
-
-#~ msgid "Could not save auto forward"
-#~ msgstr "無法儲存自動轉寄設定"
-
-#~ msgid "Could not save vacation notice"
-#~ msgstr "無法儲存假期通知"
 
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "無法載入所有聯絡人圖片。"
@@ -12383,9 +13658,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Cuba"
 #~ msgstr "古巴"
-
-#~ msgid "Current Costs:"
-#~ msgstr "當前費用："
 
 #~ msgid "Current Date"
 #~ msgstr "今日"
@@ -12536,9 +13808,6 @@ msgstr "新增至 %s"
 #~ msgid "Delete all accounts"
 #~ msgstr "刪除所有帳號"
 
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "刪除此資料夾中的所有訊息"
-
 #~ msgid "Delete drawing object"
 #~ msgstr "刪除繪圖物件"
 
@@ -12606,9 +13875,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Disable all"
 #~ msgstr "全部禁用"
-
-#~ msgid "Disabled"
-#~ msgstr "禁用"
 
 #~ msgid "Display Name"
 #~ msgstr "顯示名稱"
@@ -12747,9 +14013,6 @@ msgstr "新增至 %s"
 #~ msgid "Drawing position"
 #~ msgstr "繪圖位置"
 
-#~ msgid "Drive Client"
-#~ msgstr "Drive 客戶端"
-
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "放到此處以上傳 <b class='dndignore'>新附件</b>"
 
@@ -12825,9 +14088,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Ecuador"
 #~ msgstr "厄瓜多"
-
-#~ msgid "Edit Appointment"
-#~ msgstr "編輯約會"
 
 #~ msgid "Edit Furigana"
 #~ msgstr "編輯假名"
@@ -12975,9 +14235,6 @@ msgstr "新增至 %s"
 #~ msgid "End date is before start date"
 #~ msgstr "結束日期在開始日期前"
 
-#~ msgid "End date:"
-#~ msgstr "結束日期："
-
 #~ msgid "End of Slides"
 #~ msgstr "投影片播放結束"
 
@@ -13076,6 +14333,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Entire thread"
 #~ msgstr "整個討論串"
+
+#~ msgid "Envelope - To"
+#~ msgstr "信封 - 給"
 
 #~ msgid "Equatorial Guinea"
 #~ msgstr "赤道幾內亞"
@@ -13220,6 +14480,9 @@ msgstr "新增至 %s"
 #~| msgid "Fit to screen width"
 #~ msgid "Fit to screen height"
 #~ msgstr "調整成螢幕寬度"
+
+#~ msgid "Flag mail with"
+#~ msgstr "為郵件加入旗標"
 
 #~ msgid "Float Left"
 #~ msgstr "置左"
@@ -13592,6 +14855,9 @@ msgstr "新增至 %s"
 #~ msgid "Justify"
 #~ msgstr "左右對齊"
 
+#~ msgid "Keep looping endlessly"
+#~ msgstr "持續重播"
+
 #~ msgid "Label"
 #~ msgstr "標籤"
 
@@ -13629,6 +14895,9 @@ msgstr "新增至 %s"
 #~ msgid "Liked a link: %s"
 #~ msgstr "對連結說讚: %s"
 
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "行 %1$s: %2$s"
+
 #~ msgid "Line Spacing"
 #~ msgstr "行距"
 
@@ -13655,10 +14924,8 @@ msgstr "新增至 %s"
 #~ msgid "Logout now"
 #~ msgstr "立刻登出"
 
-#, fuzzy
-#~| msgid "March"
-#~ msgid "Mac"
-#~ msgstr "三月"
+#~ msgid "Loop once only"
+#~ msgstr "僅重播一次"
 
 #~ msgid "Mail Details"
 #~ msgstr "郵件詳細資訊"
@@ -14087,6 +15354,9 @@ msgstr "新增至 %s"
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "按 Enter 以選擇您想被再次提醒的時間。"
 
+#~ msgid "Prettify plain text mails"
+#~ msgstr "美觀化純文字文件"
+
 #~ msgid "Prev"
 #~ msgstr "上一個"
 
@@ -14107,9 +15377,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Promote One Level"
 #~ msgstr "升級"
-
-#~ msgid "Public"
-#~ msgstr "公開"
 
 #~ msgid "Publication"
 #~ msgstr "發佈"
@@ -14160,11 +15427,11 @@ msgstr "新增至 %s"
 #~ msgid "Remove facet"
 #~ msgstr "移除 facet"
 
-#~ msgid "Remove from recipient list"
-#~ msgstr "自收件人清單移除"
-
 #~ msgid "Rename Document"
 #~ msgstr "更名文件"
+
+#~ msgid "Reply All"
+#~ msgstr "全部回覆"
 
 #~ msgid "Reply to"
 #~ msgstr "回復給"
@@ -14201,6 +15468,24 @@ msgstr "新增至 %s"
 #~| msgid "Romanian"
 #~ msgid "Romania"
 #~ msgstr "羅馬尼亞文"
+
+#~ msgid "Rule applies from"
+#~ msgstr "規則套用自"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "規則從下列時間起適用"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "規則不適用於"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "規則適用至下列時間為止"
+
+#~ msgid "Rule applies on"
+#~ msgstr "規則套用於"
+
+#~ msgid "Rule applies until"
+#~ msgstr "規則套用至"
 
 #~ msgid "Running applications"
 #~ msgstr "執行中的應用程式"
@@ -14262,9 +15547,6 @@ msgstr "新增至 %s"
 #~ msgid "Search within application"
 #~ msgstr "在應用程式內搜尋"
 
-#~ msgid "Searched in"
-#~ msgstr "搜尋於"
-
 #~ msgid "Searching for objects"
 #~ msgstr "搜尋物件"
 
@@ -14290,6 +15572,12 @@ msgstr "新增至 %s"
 
 #~ msgid "Send feedback"
 #~ msgstr "寄送意見回饋"
+
+#~ msgid "Sender address"
+#~ msgstr "寄件地址"
+
+#~ msgid "Sender/From"
+#~ msgstr "寄件者/自"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "傳送郵件給某個聯絡人"
@@ -14405,9 +15693,6 @@ msgstr "新增至 %s"
 #~ msgid "Sidebar"
 #~ msgstr "側邊欄"
 
-#~ msgid "Signature"
-#~ msgstr "簽名"
-
 #~ msgid "Signature position"
 #~ msgstr "簽名位置"
 
@@ -14430,11 +15715,17 @@ msgstr "新增至 %s"
 #~ msgid "Singapore"
 #~ msgstr "單行"
 
+#~ msgid "Size (bytes)"
+#~ msgstr "大小 (位元組)"
+
 #~ msgid "Skip this step"
 #~ msgstr "略過此步驟"
 
 #~ msgid "Slideshow"
 #~ msgstr "幻燈片"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "簡報 / 自動播放模式"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
@@ -14566,6 +15857,9 @@ msgstr "新增至 %s"
 #~| msgid "Table"
 #~ msgid "Tablet"
 #~ msgstr "表格"
+
+#~ msgid "Tag mail with"
+#~ msgstr "為郵件加入標籤"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "任務邀請。%1$s %2$s %3$s。按 Enter 以開啟。"
@@ -15235,6 +16529,11 @@ msgstr "新增至 %s"
 #~ "apply functions."
 #~ msgstr "使用側邊欄來選擇物件以檢視其內容或套用功能。"
 
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr "使用上下鍵修改時間，按下 ESC 鍵關閉選擇範圍。"
+
 #~ msgid "Using the reminder function"
 #~ msgstr "使用提醒功能"
 
@@ -15343,9 +16642,6 @@ msgstr "新增至 %s"
 #~ msgid "Work"
 #~ msgstr "工作"
 
-#~ msgid "Workweek View"
-#~ msgstr "工作週視圖"
-
 #~ msgid "Yearly on %1$s %2$d"
 #~ msgstr "每年的 %1$s %2$d 日"
 
@@ -15434,9 +16730,6 @@ msgstr "新增至 %s"
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 #~ msgstr "因為超過了檔案大小限制 %2$s，無法上傳檔案「%1$s」"
 
-#~ msgid "Your vacation notice has been saved"
-#~ msgstr "已儲存您的假期通知"
-
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "縮放: %1$d%"
 
@@ -15469,6 +16762,12 @@ msgstr "新增至 %s"
 
 #~ msgid "collapsed"
 #~ msgstr "摺疊"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "若符合下列任一條件就繼續"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "若符合上述任一條件就繼續。"
 
 #~ msgid "daily"
 #~ msgstr "每天"
@@ -15635,6 +16934,9 @@ msgstr "新增至 %s"
 
 #~ msgid "optional password"
 #~ msgstr "非必要的密碼"
+
+#~ msgid "original timezone"
+#~ msgstr "原始時區"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "處理後續規則"
