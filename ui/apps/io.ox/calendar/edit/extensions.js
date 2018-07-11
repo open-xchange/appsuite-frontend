@@ -681,7 +681,7 @@ define('io.ox/calendar/edit/extensions', [
             //#. showed inside a color picker. Used if an appointment should not have a custom color
             dropdown.option('color', undefined, gt('Use calendar color'));
             dropdown.divider();
-            menu.append($('<li role="presentation">').append(picker.render().$el));
+            menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append(picker.render().$el));
 
             this.$el.append(
                 dropdown.render().$el,

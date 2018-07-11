@@ -584,7 +584,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 var listItem, container = this.parent();
 
-                this.append(listItem = $('<li role="presentation">'));
+                this.append(listItem = $('<li role="presentation" class="io-ox-calendar-color-picker-container">'));
 
                 require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
                     listItem.append(

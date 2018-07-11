@@ -27,7 +27,8 @@ define('io.ox/calendar/color-picker', [
             this.opt = _.extend({
                 noColorOption: false,
                 additionalColor: undefined,
-                attribute: 'color'
+                attribute: 'color',
+                rows: 3
             }, opt);
 
             // make sure, that the additional color is not a duplicate
@@ -71,15 +72,17 @@ define('io.ox/calendar/color-picker', [
         },
 
         render: function () {
-            var self = this;
+            var self = this,
+                rowLength = Math.floor(util.colors.length / this.opt.rows);
             if (this.opt.noColorOption) {
                 this.$el.append(
                     this.renderOption({ label: gt('no color') })
                         .addClass('no-color')
                 );
             }
-            util.colors.forEach(function (color) {
+            util.colors.forEach(function (color, index) {
                 self.$el.append(self.renderOption(color));
+                if (index % rowLength === rowLength - 1) self.$el.append($('<br>'));
             });
             if (this.opt.additionalColor) {
                 this.$el.append(this.renderOption(this.opt.additionalColor));
