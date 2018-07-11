@@ -174,6 +174,7 @@ define.async('io.ox/oauth/keychain', [
                         filestorageApi.deleteAccount(filestorageAccount, { softDelete: true });
                     }
                 }
+                ox.trigger('refresh^');
             });
         };
 
