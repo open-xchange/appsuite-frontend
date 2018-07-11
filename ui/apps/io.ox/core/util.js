@@ -133,7 +133,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'stat
                 var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
                 var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(fix.url))).append(that.breakableHTML(fix.url));
-                return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a', 'wbr'], SAFE_FOR_JQUERY: true }) + fix.suffix;
+                return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true }) + fix.suffix;
             }.bind(this));
         },
 
