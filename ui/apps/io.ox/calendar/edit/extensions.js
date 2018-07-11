@@ -274,15 +274,28 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 1000,
-        id: 'folder-selection',
-        draw: function (baton) {
-            this.append(
-                new CalendarSelectionView({ model: baton.model }).render().$el
-            );
-        }
-    });
+    if (_.device('smartphone')) {
+        point.extend({
+            id: 'folder-selection',
+            index: 725,
+            className: 'col-xs-12',
+            render: function () {
+                this.$el.append(
+                    new CalendarSelectionView({ model: this.model }).render().$el
+                );
+            }
+        });
+    } else {
+        ext.point('io.ox/calendar/edit/section/buttons').extend({
+            index: 1000,
+            id: 'folder-selection',
+            draw: function (baton) {
+                this.append(
+                    new CalendarSelectionView({ model: baton.model }).render().$el
+                );
+            }
+        });
+    }
 
     // title
     point.extend({
