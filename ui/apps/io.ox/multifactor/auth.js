@@ -19,9 +19,15 @@ define('io.ox/multifactor/auth', [
 
     'use strict';
 
+    var authenticating = false;
+
     var auth = {
 
         getAuthentication: function () {
+            if (authenticating) {
+                return $.when();
+            }
+            authenticating = true;
             var def = $.Deferred();
             api.getDevices().then(function (list) {
                 if (list && list.length > 0) {
@@ -37,8 +43,32 @@ define('io.ox/multifactor/auth', [
 
             });
             return def;
-        }
+        },
+
+        doAuthentication: authenticate
+
     };
+
+    function authenticate() {
+        var def = $.Deferred();
+        auth.getAuthentication().then(function (data) {
+            authenticating = false;
+            if (data) {
+                api.doAuth(data.provider, data.id, data.response).then(function (data) {
+                    def.resolve(data);
+                }, function (rejection) {
+                    if (rejection === 'AUTHENTICATION_DENIED') {
+                        authenticate().then(def.resolve, def.reject);
+                    } else {
+                        def.reject();
+                    }
+                });
+            } else {
+                def.reject();
+            }
+        }, def.reject);
+        return def;
+    }
 
     return auth;
 

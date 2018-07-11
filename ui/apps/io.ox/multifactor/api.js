@@ -89,7 +89,6 @@ define('io.ox/multifactor/api', [
                 if (checkError(data)) {
                     def.reject(checkError(data));
                 }
-                console.log(data);
                 def.resolve(data);
             }, def.reject);
             return def;

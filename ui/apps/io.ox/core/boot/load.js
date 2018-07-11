@@ -51,6 +51,7 @@ define('io.ox/core/boot/load', [
     function loadUserTheme() {
         // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
         _.device.cache = {};
+
         var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
             loadTheme = themes.set(theme);
 
