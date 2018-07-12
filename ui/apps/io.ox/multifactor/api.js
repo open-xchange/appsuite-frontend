@@ -26,7 +26,8 @@ define('io.ox/multifactor/api', [
             return $.when(
                 http.PUT({
                     module: 'multifactor',
-                    params: { action: 'get' }
+                    params: { action: 'get' },
+                    force: true
                 })
             );
         },
@@ -63,7 +64,8 @@ define('io.ox/multifactor/api', [
             return $.when(
                 http.GET({
                     module: 'multifactor',
-                    params: { action: 'begin', deviceId: id, providerName: provider }
+                    params: { action: 'begin', deviceId: id, providerName: provider },
+                    force: true
                 }));
         },
         beginRegistration: function (provider, name) {
@@ -84,7 +86,8 @@ define('io.ox/multifactor/api', [
             var def = $.Deferred();
             http.POST({
                 module: 'multifactor',
-                params: { action: 'doAuth', deviceId: id, providerName: provider, secret_code: code }
+                params: { action: 'doAuth', deviceId: id, providerName: provider, secret_code: code },
+                force: true
             }).then(function (data) {
                 if (checkError(data)) {
                     def.reject(checkError(data));
