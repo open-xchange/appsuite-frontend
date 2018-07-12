@@ -366,6 +366,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
         // extended permissions
         idMappingExcludes = ['3060', '7010'],
+
         // list of error codes, which are not logged (see bug 46098)
         errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006'];
 
@@ -607,9 +608,24 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             isError = 'error' in response && !isWarning;
 
         if (isError) {
+            var isMultifactorError = (/^MFA-/i).test(response.code);
+            if (isMultifactorError) {
+                that.disconnect(deferred, o);
+                require(['io.ox/multifactor/auth'], function (auth) {
+                    auth.doAuthentication().then(function () {
+                        that.reConnect();
+                    }, function () {
+                        // TODO
+                        // NOTIFY OR RELOAD
+                        deferred.reject();
+                    });
+                });
+                return;
+            }
             // forward all errors to respond to special codes
             ox.trigger('http:error:' + response.code, response, o);
             ox.trigger('http:error', response, o);
+
             // session expired?
             var isSessionError = (/^SES-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
@@ -700,6 +716,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         slow = _.url.hash('slow') !== undefined,
         // fail mode
         fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
+
+    var disconnected = false,
+        disconnectedQueue = [];
 
     var ajax = (function () {
 
@@ -963,6 +982,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 queue.push({ deferred: def, options: o });
                 return def;
             }
+
+            // If http disconnected and the call isn't being forced, add to queue
+            if (disconnected === true && !o.force) {
+                disconnectedQueue.push({ deferred: def, options: o });
+                console.log(disconnectedQueue);
+                return def;
+            }
+
             // build request object
             r = {
                 def: def,
@@ -1262,6 +1289,41 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         isPaused: function () {
             return paused;
+        },
+
+        // Shut down http service due to some other required action.  Queue requests
+        disconnect: function (deferred, o) {
+            require.config({ waitSeconds: 0 });  // Requires will time out if sitting in queue
+            if (deferred && o) {
+                disconnectedQueue.push({ deferred: deferred, options: o });
+            }
+            disconnected = true;
+        },
+
+        isDisconnected: function () {
+            return disconnected;
+        },
+
+        // Resume http service, executing pending requests as individual requests
+        reConnect: function () {
+            disconnected = false;
+            var count = 0; // eslint-disable-line no-unused-vars
+            var pending = disconnectedQueue.slice();
+
+            function checkDone() {
+                count++;
+                if (count = pending.length) {  // Once all outstanding calls done, reset the require timeout
+                    require.config({ waitSeconds: document.cookie.indexOf('selenium=true') !== -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15) });
+                    return true;
+                }
+                return false;
+            }
+            // Loop through each pending request
+            for (var i = 0; i < pending.length; i++) {
+                var req = pending[i];
+                ajax(req.options, req.options.type).then(req.deferred.resolve, req.deferred.reject)
+                .always(checkDone);
+            }
         },
 
         /**
