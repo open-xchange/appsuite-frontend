@@ -58,11 +58,14 @@ define('io.ox/files/actions/add-storage-account', [
             });
         view.listenTo(view, 'select', function (service) {
             createAccount(service).fail(function (e) {
-                if (e) {
+                if (e && e.code === 'EEXISTS') {
+                    //#. error message shown to the user after trying to create a duplicate account
+                    yell('error', gt('Account already exists'));
+                } else if (e) {
                     yell(e);
-                    return;
+                } else {
+                    yell('error', gt('Account could not be added'));
                 }
-                yell('error', gt('Account could not be added'));
             }).always(function () {
                 view.trigger('done');
             });
