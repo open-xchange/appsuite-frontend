@@ -92,6 +92,13 @@
     }
 }
 
+// Fix for IE see bug 58917
+.internet-explorer {
+    .tokenfield .twitter-typeahead {
+        & > .token-input.tt-input { width: inherit !important; }
+    }
+}
+
 .smartphone {
     .tokenfield .twitter-typeahead {
         & > .token-input.tt-hint,
