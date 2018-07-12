@@ -2029,8 +2029,7 @@ define('io.ox/calendar/week/view', [
                     'workweek': 'cp_weekview_table_appsuite.tmpl',
                     'week': 'cp_weekview_table_appsuite.tmpl'
                 },
-                data = null,
-                styleNode = $('<style type="text/css">').text(printStyle);
+                data = null;
 
             if (folderID && folderID !== 'virtual/all-my-appointments') {
                 data = { folder_id: folderID };
@@ -2044,18 +2043,29 @@ define('io.ox/calendar/week/view', [
                 work_day_end_time: self.workEnd * 36e5
             });
 
-            if (this.app.props.get('colorScheme') === 'custom') {
-                // apply custom colors
-                win.onload = function () {
-                    $(win.document.head).append(styleNode);
-                    // apply folder color to appointments that don't have their own
-                    $(win.document.body).addClass('print-view-custom-colors').find('.colorLabel-0').addClass('colorLabel-' + folder.meta.color_label);
-                    win.onload = null;
-                };
+            function applyCustomColors() {
+                // Edge does not like to append untrimmed html with jquery in new windows
+                // see https://stackoverflow.com/questions/38591575/jquery-append-into-new-window-not-working-with-microsoft-edge
+                $(win.document.head).append('<style type="text/css">' + printStyle + '</style>');
+                // apply folder color to appointments that don't have their own
+                $(win.document.body).addClass('print-view-custom-colors');
             }
 
-            if (_.browser.firefox) {
+            if (this.app.props.get('colorScheme') === 'custom') {
+                // apply custom colors
+                // IE only accepts attachEvent for "onload" (see bug 59367)
+                if (_.browser.edge) {
+                    win.addEventListener('load', applyCustomColors, false);
+                } else if (_.browser.ie) {
+                    win.attachEvent('onload', applyCustomColors);
+                } else {
+                    $(win).on('load', applyCustomColors);
+                }
+            }
+
+            if (_.browser.firefox || _.browser.safari) {
                 // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                // added Safari because it showed the same behavior
                 var limit = 50,
                     counter = 0,
                     interval;
