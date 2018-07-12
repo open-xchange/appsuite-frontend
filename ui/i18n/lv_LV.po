@@ -11106,6 +11106,12 @@ msgstr "Skatītāja rīkjosla"
 msgid "Visibility"
 msgstr "Redzamība"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Visibility"
+msgid "Visibility Help"
+msgstr "Redzamība"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"

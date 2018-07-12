@@ -1925,6 +1925,11 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+msgid "Visibility Help"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
 msgid "Standard"
 msgstr ""
 
