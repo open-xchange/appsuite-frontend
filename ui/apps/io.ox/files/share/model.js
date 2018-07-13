@@ -13,9 +13,10 @@
 
 define('io.ox/files/share/model', [
     'io.ox/files/share/api',
+    'io.ox/core/api/group',
     'io.ox/core/yell',
     'gettext!io.ox/core'
-], function (api, yell, gt) {
+], function (api, groupApi, yell, gt) {
 
     'use strict';
 
@@ -149,6 +150,9 @@ define('io.ox/files/share/model', [
             switch (action) {
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (result) {
+                        // refresh the guest group (id = int max value)
+                        groupApi.refreshGroup(2147483647);
+
                         var data = result.data,
                             timestamp = result.timestamp;
                         // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
@@ -200,6 +204,10 @@ define('io.ox/files/share/model', [
                     //
                     // SCR-97: BREAKPOINT one line beneath for debugging
                     return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
+                        .done(function () {
+                            // refresh the guest group (id = int max value)
+                            groupApi.refreshGroup(2147483647);
+                        })
                         .done(this.send.bind(this))
                         .fail(function (error) {
                             yell(error);
