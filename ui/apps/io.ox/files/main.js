@@ -968,6 +968,8 @@ define('io.ox/files/main', [
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
                     app.listView.reload();
+                } else {
+                    ox.trigger('refresh^');
                 }
             }, 100));
             // use throttled updates for add:file - in case many small files are uploaded
