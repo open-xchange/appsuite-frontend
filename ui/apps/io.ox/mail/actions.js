@@ -427,6 +427,9 @@ define('io.ox/mail/actions', [
                 if (memo === false) return false;
                 // is not primary account?
                 if (!account.isPrimary(obj.folder_id)) return false;
+                // do not show in subfolders of spam folder
+                var spamfolders = account.getFoldersByType('spam').concat(account.getFoldersByType('confirmed_spam'));
+                if (spamfolders.indexOf(obj.folder_id) < 0) return false;
                 // else
                 return account.is('spam|confirmed_spam', obj.folder_id) || util.isSpam(obj);
             }, true);
