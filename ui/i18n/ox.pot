@@ -725,8 +725,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js
 #: apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js
+#: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
+#: apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr ""
 
@@ -8203,6 +8204,12 @@ msgstr ""
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 msgid "Share your folders"
+msgstr ""
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "Account already exists"
 msgstr ""
 
 #: apps/io.ox/files/actions/add-storage-account.js

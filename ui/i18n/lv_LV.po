@@ -645,6 +645,13 @@ msgstr "Konta vārds"
 msgid "Account added successfully"
 msgstr "Konts ir veiksmīgi pievienots"
 
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "This Team name already exists"
+msgid "Account already exists"
+msgstr "Šis grupas vārds jau eksistē"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account could not be added"
@@ -4211,7 +4218,7 @@ msgstr "Pievienots izlasē"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Izlase"
 
@@ -18672,9 +18679,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "This Signature name already exists"
 #~ msgstr "Šis paraksta vārds jau eksistē"
-
-#~ msgid "This Team name already exists"
-#~ msgstr "Šis grupas vārds jau eksistē"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Šis konts nevar tikt pārbaudīts"

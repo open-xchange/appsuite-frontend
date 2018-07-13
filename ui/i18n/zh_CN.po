@@ -597,6 +597,13 @@ msgstr "户口名称"
 msgid "Account added successfully"
 msgstr "户口添加成功"
 
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Account added successfully"
+msgid "Account already exists"
+msgstr "户口添加成功"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account could not be added"
@@ -4072,7 +4079,7 @@ msgstr "已加最爱"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "最爱"
 

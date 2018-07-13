@@ -626,6 +626,13 @@ msgstr "Nombre de cuenta"
 msgid "Account added successfully"
 msgstr "Cuenta añadida satisfactoriamente"
 
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "This Team name already exists"
+msgid "Account already exists"
+msgstr "Este nombre de equipo ya existe"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account could not be added"
@@ -4189,7 +4196,7 @@ msgstr "Marcado como favorito"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Favoritos"
 
@@ -21059,9 +21066,6 @@ msgstr "su plataforma"
 
 #~ msgid "This Signature name already exists"
 #~ msgstr "Este nombre de firma ya existe"
-
-#~ msgid "This Team name already exists"
-#~ msgstr "Este nombre de equipo ya existe"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "La cuenta no se puede validar"
