@@ -16,9 +16,20 @@ define('io.ox/multifactor/api', [
     'use strict';
 
     function checkError(data) {
-        if (data && data.value === 'AUTHENTICATION_DENIED') {
-            return data.value;
+        if (data && data.error) {
+            require(['io.ox/core/notifications'], function (notifications) {
+                notifications.yell('error', data.error);
+            });
+            return data.error;
         }
+        return data;
+    }
+
+    function checkFail(data) {
+        if (data && data.value === 'AUTHENTICATION_DENIED') {
+            return true;
+        }
+        return false;
     }
 
     var api = {
@@ -53,7 +64,7 @@ define('io.ox/multifactor/api', [
                 module: 'multifactor',
                 params: { action: 'delete', deviceToDelete: deviceToDelete, deviceToDeleteProvider: deviceToDeleteProvider, deviceId: id, providerName: provider, secret_code: code }
             }).then(function (data) {
-                if (checkError(data)) {
+                if (data && data.error) {
                     def.reject(checkError(data));
                 }
                 def.resolve(data);
@@ -68,12 +79,14 @@ define('io.ox/multifactor/api', [
                     force: true
                 }));
         },
-        beginRegistration: function (provider, name) {
+        beginRegistration: function (provider, name, additParams) {
+            var params = _.extend({ action: 'startRegistration', providerName: provider, name: name }, additParams);
             return $.when(
                 http.GET({
                     module: 'multifactor',
-                    params: { action: 'startRegistration', providerName: provider, name: name }
-                }));
+                    params: params
+                }))
+                .then(checkError, checkError);
         },
         finishRegistration: function (provider, id, confirmation) {
             return $.when(
@@ -89,10 +102,14 @@ define('io.ox/multifactor/api', [
                 params: { action: 'doAuth', deviceId: id, providerName: provider, secret_code: code },
                 force: true
             }).then(function (data) {
-                if (checkError(data)) {
+                if (data && data.error) {
                     def.reject(checkError(data));
                 }
-                def.resolve(data);
+                if (checkFail(data)) {
+                    def.reject(data);
+                } else {
+                    def.resolve(data);
+                }
             }, def.reject);
             return def;
         }
