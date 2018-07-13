@@ -29,20 +29,20 @@ define('io.ox/multifactor/views/selectDeviceView', [
     var dialog;
     var def;
 
-    function open(device, _def) {
-        dialog = openModalDialog(device);
+    function open(device, _def, error) {
+        dialog = openModalDialog(device, error);
         def = _def;
         return dialog;
     }
 
-    function openModalDialog(devices) {
+    function openModalDialog(devices, error) {
 
         return new ModalView({
             async: true,
             point: POINT,
             title: gt('Additional Authentication Required'),
             width: 640,
-            model: new Backbone.Model({ 'devices': devices })
+            model: new Backbone.Model({ 'devices': devices, error: error })
         })
         .build(function () {
         })
@@ -73,10 +73,21 @@ define('io.ox/multifactor/views/selectDeviceView', [
                 .append(renderer.render(baton.model.get('devices')));
                 selection.find('.multifactordevice')
                 .on('click', function () {
-                    deviceAuthenticator.getAuth($(this).attr('data-provider'), $(this).attr('data-deviceid'), def);
+                    deviceAuthenticator.getAuth($(this).attr('data-provider'), $(this).attr('data-deviceid'), def, baton.model.get('error'));
                     dialog.close();
                 });
                 this.$body.append(selection);
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'error',
+            render: function (baton) {
+                var error = baton.model.get('error');
+                if (error) {
+                    var div = $('<div class="multifactorError">').append(error);
+                    this.$body.append(div);
+                }
             }
         }
 

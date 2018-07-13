@@ -14,8 +14,9 @@
 define('io.ox/multifactor/auth', [
     'io.ox/multifactor/api',
     'io.ox/multifactor/views/selectDeviceView',
-    'io.ox/multifactor/deviceAuthenticator'
-], function (api, selectDeviceView, deviceAuthenticator) {
+    'io.ox/multifactor/deviceAuthenticator',
+    'gettext!multifactor'
+], function (api, selectDeviceView, deviceAuthenticator, gt) {
 
     'use strict';
 
@@ -23,7 +24,7 @@ define('io.ox/multifactor/auth', [
 
     var auth = {
 
-        getAuthentication: function () {
+        getAuthentication: function (error) {
             if (authenticating) {
                 return $.when();
             }
@@ -32,10 +33,10 @@ define('io.ox/multifactor/auth', [
             api.getDevices().then(function (list) {
                 if (list && list.length > 0) {
                     if (list && list.length > 1) {
-                        selectDeviceView.open(list, def);
+                        selectDeviceView.open(list, def, error);
                     } else {
                         var device = list[0];
-                        deviceAuthenticator.getAuth(device.provider.name, device.id, def);
+                        deviceAuthenticator.getAuth(device.provider.name, device.id, def, error);
                     }
                 } else {
                     def.reject();
@@ -49,24 +50,29 @@ define('io.ox/multifactor/auth', [
 
     };
 
-    function authenticate() {
+    function authenticate(error) {
         var def = $.Deferred();
-        auth.getAuthentication().then(function (data) {
+        ox.idle();
+        auth.getAuthentication(error).then(function (data) {
             authenticating = false;
             if (data) {
                 api.doAuth(data.provider, data.id, data.response).then(function (data) {
                     def.resolve(data);
                 }, function (rejection) {
-                    if (rejection === 'AUTHENTICATION_DENIED') {
-                        authenticate().then(def.resolve, def.reject);
+                    if (rejection.value === 'AUTHENTICATION_DENIED') {
+                        error = gt('Authentication was denied.  Attempt %i of %i allowed attempts', rejection.failedCount, rejection.maxFailedAllowed);
                     } else {
-                        def.reject();
+                        error = rejection.error + ': ' + rejection.error_desc;
                     }
+                    authenticate(error).then(def.resolve, def.reject);
                 });
             } else {
                 def.reject();
             }
-        }, def.reject);
+        }, function (data) {
+            debugger;
+            def.reject(data);
+        });
         return def;
     }
 

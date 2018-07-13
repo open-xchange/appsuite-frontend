@@ -17,7 +17,8 @@ define('io.ox/multifactor/views/smsProvider', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'gettext!multifactor'
+    'gettext!multifactor',
+    'less!io.ox/multifactor/style'
 ], function (api, views, ext, mini, ModalView, gt) {
 
     'use strict';
@@ -28,13 +29,13 @@ define('io.ox/multifactor/views/smsProvider', [
     var dialog;
     var def;
 
-    function open(provider, deviceId, challenge, _def) {
-        dialog = openModalDialog(provider, deviceId, challenge);
+    function open(provider, deviceId, challenge, _def, error) {
+        dialog = openModalDialog(provider, deviceId, challenge, error);
         def = _def;
         return dialog;
     }
 
-    function openModalDialog(provider, deviceId, challenge) {
+    function openModalDialog(provider, deviceId, challenge, error) {
 
         return new ModalView({
             async: true,
@@ -44,7 +45,8 @@ define('io.ox/multifactor/views/smsProvider', [
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
                 deviceId: deviceId,
-                challenge: challenge
+                challenge: challenge,
+                error: error
             })
         })
         .build(function () {
@@ -78,8 +80,10 @@ define('io.ox/multifactor/views/smsProvider', [
         {
             index: INDEX += 100,
             id: 'header',
-            render: function () {
-                var label = $('<label>').append('Please enter the code that was sent to your SMS device')
+            render: function (baton) {
+                var label = $('<label>').append(
+                    baton.model.get('error') ? gt('A new code was sent to your SMS device.  Please enter the code.') :
+                        gt('Please enter the code that was sent to your SMS device'))
                 .append('<br>');
                 this.$body.append(
                     label
@@ -94,6 +98,17 @@ define('io.ox/multifactor/views/smsProvider', [
                 var selection = $('<div class="multifactorAuthDiv">')
                 .append(input);
                 this.$body.append(selection);
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'error',
+            render: function (baton) {
+                var error = baton.model.get('error');
+                if (error) {
+                    var div = $('<div class="multifactorError">').append(error);
+                    this.$body.append(div);
+                }
             }
         }
 

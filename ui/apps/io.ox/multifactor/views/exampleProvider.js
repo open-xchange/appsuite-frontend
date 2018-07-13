@@ -27,13 +27,13 @@ define('io.ox/multifactor/views/exampleProvider', [
     var dialog;
     var def;
 
-    function open(provider, deviceId, challenge, _def) {
-        dialog = openModalDialog(provider, deviceId, challenge);
+    function open(provider, deviceId, challenge, _def, error) {
+        dialog = openModalDialog(provider, deviceId, challenge, error);
         def = _def;
         return dialog;
     }
 
-    function openModalDialog(provider, deviceId, challenge) {
+    function openModalDialog(provider, deviceId, challenge, error) {
 
         return new ModalView({
             async: true,
@@ -43,7 +43,8 @@ define('io.ox/multifactor/views/exampleProvider', [
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
                 deviceId: deviceId,
-                challenge: challenge
+                challenge: challenge,
+                error: error
             })
         })
         .build(function () {
@@ -62,7 +63,7 @@ define('io.ox/multifactor/views/exampleProvider', [
             } else {
                 def.reject();
             }
-            dialog.close();
+            if (dialog) dialog.close();
         })
         .on('cancel', function () {
             def.reject();
@@ -93,6 +94,17 @@ define('io.ox/multifactor/views/exampleProvider', [
                 var selection = $('<div class="multifactorAuthDiv">')
                 .append(input);
                 this.$body.append(selection);
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'error',
+            render: function (baton) {
+                var error = baton.model.get('error');
+                if (error) {
+                    var label = $('<label class="multifactorError">').append(error);
+                    this.$body.append(label);
+                }
             }
         }
 

@@ -14,21 +14,21 @@ define('io.ox/multifactor/deviceAuthenticator', [
 ], function (api) {
     'use strict';
 
-    function doDeviceAuth(providerName, deviceId, challengeData, def) {
+    function doDeviceAuth(providerName, deviceId, challengeData, def, error) {
         switch (providerName) {
             case 'EXAMPLE-MFA':
                 require(['io.ox/multifactor/views/exampleProvider'], function (viewer) {
-                    viewer.open(providerName, deviceId, challengeData, def);
+                    viewer.open(providerName, deviceId, challengeData, def, error);
                 });
                 break;
             case 'TOTP':
                 require(['io.ox/multifactor/views/totpProvider'], function (viewer) {
-                    viewer.open(providerName, deviceId, challengeData, def);
+                    viewer.open(providerName, deviceId, challengeData, def, error);
                 });
                 break;
             case 'SMS':
                 require(['io.ox/multifactor/views/smsProvider'], function (viewer) {
-                    viewer.open(providerName, deviceId, challengeData, def);
+                    viewer.open(providerName, deviceId, challengeData, def, error);
                 });
                 break;
             default:
@@ -36,9 +36,9 @@ define('io.ox/multifactor/deviceAuthenticator', [
         }
     }
 
-    function getAuth(providerName, deviceId, def) {
+    function getAuth(providerName, deviceId, def, error) {
         api.beginAuth(providerName, deviceId).then(function (data) {
-            doDeviceAuth(providerName, deviceId, data, def);
+            doDeviceAuth(providerName, deviceId, data, def, error);
         }, def.reject);
     }
 
