@@ -26,6 +26,11 @@ define('io.ox/multifactor/deviceAuthenticator', [
                     viewer.open(providerName, deviceId, challengeData, def);
                 });
                 break;
+            case 'SMS':
+                require(['io.ox/multifactor/views/smsProvider'], function (viewer) {
+                    viewer.open(providerName, deviceId, challengeData, def);
+                });
+                break;
             default:
                 def.reject();
         }

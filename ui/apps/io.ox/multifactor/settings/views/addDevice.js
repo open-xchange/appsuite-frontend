@@ -84,8 +84,39 @@ define('io.ox/multifactor/settings/views/addDevice', [
                 .append(input);
                 this.$body.append(selection);
             }
+        },
+        {
+            index: INDEX += 100,
+            id: 'deviceSpecific',
+            render: function (baton) {
+                ext.point(POINT + '/' + baton.model.get('provider')).invoke('render', this, baton);
+            }
         }
 
+    );
+
+    ext.point(POINT + '/SMS').extend(
+        {
+            index: INDEX += 100,
+            id: 'header',
+            render: function () {
+                var label = $('<label>').append(gt('Please enter the phone number for the device.'))
+                .append('<br>');
+                this.$body.append(
+                    label
+                );
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'nameInput',
+            render: function () {
+                var input = $('<input type="text" id="deviceNumber">');
+                var selection = $('<div class="deviceNumber">')
+                .append(input);
+                this.$body.append(selection);
+            }
+        }
     );
 
     // Find and open the correct view for this provider
@@ -120,7 +151,15 @@ define('io.ox/multifactor/settings/views/addDevice', [
     }
 
     function startRegistration(provider, name) {
-        api.beginRegistration(provider, name).then(function (resp) {
+        var additParams = {};
+        switch (provider) {
+            case 'SMS':
+                additParams.phoneNumber = $('#deviceNumber').val();
+                break;
+            default:
+        }
+        api.beginRegistration(provider, name, additParams).then(function (resp) {
+            debugger;
             openView(provider, resp);
         });
     }
