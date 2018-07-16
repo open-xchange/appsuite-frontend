@@ -1556,7 +1556,11 @@ define('io.ox/files/main', [
         var model = folderAPI.pool.getModel(app.folder.get());
         if (model) folderAPI.list(model.get('folder_id'), { cache: false });
         app.folder.setDefault();
-        if (error) notifications.yell(error);
+        if (!error) return;
+        folderAPI.path(model.get('folder_id')).done(function (folder) {
+            error.error += '\n' + _(folder).pluck('title').join('/');
+            notifications.yell(error);
+        });
     }, 1000, true);
 
     // launcher
