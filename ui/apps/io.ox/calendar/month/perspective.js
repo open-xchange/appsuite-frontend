@@ -64,6 +64,7 @@ define('io.ox/calendar/month/perspective', [
                 api.get(obj).then(function success(model) {
                     if (model.cid !== self.detailCID) return;
                     popup.idle().append(detailView.draw(new ext.Baton({ model: model })));
+                    self.gotoMonth(util.getMoment(model.get('startDate')));
                 });
             });
         },
