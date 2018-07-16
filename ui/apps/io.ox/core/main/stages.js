@@ -45,9 +45,9 @@ define('io.ox/core/main/stages', [
         if (settings.get('autoStart') === 'none') {
             autoStart = [];
         } else {
-            var favoritePaths = apps.pluck('path');
+            var favoritePaths = _.map(apps.forLauncher(), function (m) { return m.get('path'); });
 
-            autoStart = _([].concat(settings.get('autoStart'), 'io.ox/mail', favoritePaths))
+            autoStart = _([].concat(settings.get('autoStart'), favoritePaths))
                 .chain()
                 .filter(function (o) {
                     if (_.isUndefined(o)) return false;
