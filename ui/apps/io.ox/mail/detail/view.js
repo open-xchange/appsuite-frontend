@@ -397,7 +397,8 @@ define('io.ox/mail/detail/view', [
         draw: function (baton) {
 
             baton.content = content.get(baton.data, {}, baton.flow).content;
-            var $content = $(baton.content), resizing = 0;
+            var $content = $(baton.content), resizing = 0,
+                self = this;
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -407,7 +408,7 @@ define('io.ox/mail/detail/view', [
                     // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
-                    // trigger click on body when theres a click in the iframe -> to close dropdownscorrectly etc
+                    // trigger click on iframe node when theres a click in the iframe -> to close dropdowns correctly etc
                     html.on('keydown', onKeyDown)
                         .on('click', onClick);
 
@@ -427,7 +428,9 @@ define('io.ox/mail/detail/view', [
                 this.closest('.window-container').find('.folder-tree .folder.selected, .list-item.selectable.selected').last().focus();
             }.bind(this);
 
-            function onClick() { $('body').trigger('click'); }
+            function onClick() {
+                self.trigger('click');
+            }
 
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins
