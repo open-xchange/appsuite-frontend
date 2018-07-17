@@ -216,6 +216,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 this.nodes.timezoneField.text(timestamp.zoneAbbr());
             }
             // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
+            if (!this.mobileMode) this.nodes.dayField.trigger('change');
             this.updateModel();
         },
 
