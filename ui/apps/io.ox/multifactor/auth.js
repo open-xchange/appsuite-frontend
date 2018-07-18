@@ -50,6 +50,13 @@ define('io.ox/multifactor/auth', [
 
     };
 
+    function notifyFailure(message) {
+        require(['io.ox/core/notifications'], function (notify) {
+            notify.yell('error', message);
+            $('#io-ox-core').show();  // May be hidden in login
+        });
+    }
+
     function authenticate(error) {
         var def = $.Deferred();
         ox.idle();
@@ -60,17 +67,26 @@ define('io.ox/multifactor/auth', [
                     def.resolve(data);
                 }, function (rejection) {
                     if (rejection.value === 'AUTHENTICATION_DENIED') {
-                        error = gt('Authentication was denied.  Attempt %i of %i allowed attempts', rejection.failedCount, rejection.maxFailedAllowed);
+                        if (rejection.lockoutResult) {
+                            error = gt('Authentication was denied.  Attempt %i of %i allowed attempts', rejection.lockoutResult.count, rejection.lockoutResult.maxAllowed);
+                        } else {
+                            error = gt('Authentication was denied.');
+                        }
                     } else {
-                        error = rejection.error + ': ' + rejection.error_desc;
+                        notifyFailure(rejection.error);
+                        def.reject();
+                        return;
                     }
                     authenticate(error).then(def.resolve, def.reject);
                 });
             } else {
+                debugger;
                 def.reject();
             }
         }, function (data) {
-            debugger;
+            if (data.error) {
+                notifyFailure(data.error);
+            }
             def.reject(data);
         });
         return def;

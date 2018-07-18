@@ -73,7 +73,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
                 .append(renderer.render(baton.model.get('devices')));
                 selection.find('.multifactordevice')
                 .on('click', function () {
-                    deviceAuthenticator.getAuth($(this).attr('data-provider'), $(this).attr('data-deviceid'), def, baton.model.get('error'));
+                    deviceAuthenticator.getAuth($(this).attr('data-provider'), $(this).attr('data-deviceid'), def);
                     dialog.close();
                 });
                 this.$body.append(selection);
