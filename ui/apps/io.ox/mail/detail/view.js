@@ -438,6 +438,8 @@ define('io.ox/mail/detail/view', [
                     html.on('keydown', onKeyDown)
                         .on('click', onClick);
 
+                    if (_.device('ios && smartphone')) html.attr('class', 'ios smartphone');
+
                     $(this.contentDocument)
                         .find('head').append('<style>' + contentStyle + '</style>').end()
                         .find('body').append($content);
