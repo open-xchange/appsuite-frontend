@@ -167,7 +167,7 @@ define('io.ox/contacts/addressbook/popup', [
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,610,611',
+                columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
                 exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch
             }, options);
