@@ -37,7 +37,7 @@ define('io.ox/mail/sanitizer', [
         // this is not optional any more
         // the setting is deprecated
         // return mailSettings.get('features/sanitize', true);
-        return true
+        return true;
     }
 
     function sanitize(data, options) {
