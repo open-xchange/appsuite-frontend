@@ -19,7 +19,8 @@ define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/calendar/util',
     'io.ox/core/notifications',
     'settings!io.ox/calendar',
-    'gettext!io.ox/calendar'
+    'gettext!io.ox/calendar',
+    'less!io.ox/calendar/style'
 ], function (calApi, AlarmsView, ModalDialog, folderAPI, util, notifications, settings, gt) {
 
     'use strict';
@@ -69,7 +70,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     alarmsModel = new Backbone.Model(appointmentData);
                     alarmsView = new AlarmsView.linkView({ model: alarmsModel });
                     reminderSelect = $('<fieldset>').append(
-                        $('<legend>').text(gt('Reminder')),
+                        $('<legend class="confirm-dialog-legend">').text(gt('Reminder')),
                         alarmsView.render().$el
                     );
                 }
@@ -120,7 +121,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             )
                         );
                     })
-                    .addCancelButton()
+                    .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
                     .addButton({ action: 'declined', label: gt('Decline'), className: 'btn-danger' })
                     .addButton({ action: 'tentative', label: gt('Tentative'), className: 'btn-warning' })
                     .addButton({ action: 'accepted', label: gt('Accept'), className: 'btn-success' })
