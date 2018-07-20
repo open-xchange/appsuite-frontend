@@ -392,32 +392,6 @@ define('io.ox/mail/detail/view', [
     });
 
     ext.point('io.ox/mail/detail/body/iframe').extend({
-        id: 'style',
-        index: 50,
-        draw: function () {
-            // inject theme's common style (see bug 58593)
-            this.on('load', function () {
-                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
-                _.defer(function () {
-                    var styleNode = this.contentDocument.createElement('STYLE');
-                    styleNode.id = 'io.ox/mail/detail/body/iframe/inject';
-                    this.contentDocument.documentElement.firstChild.appendChild(styleNode);
-                    var rules = $(document).find('style[data-require-src*="common"]').text();
-                    try {
-                        styleNode.innerHTML = rules;
-                    } catch (exc) {
-                        console.log('%c' + '!!!', 'color: white; background-color: grey');
-                        var parts = rules.split(/\s*[{}]\s*/);
-                        for (var i = 0; i < parts.length; i += 2) {
-                            styleNode.styleSheet.addRule(parts[i], parts[i + 1]);
-                        }
-                    }
-                }.bind(this));
-            });
-        }
-    });
-
-    ext.point('io.ox/mail/detail/body/iframe').extend({
         id: 'content',
         index: 100,
         draw: function (baton) {
