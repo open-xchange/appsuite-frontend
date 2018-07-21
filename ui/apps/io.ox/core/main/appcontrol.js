@@ -23,7 +23,6 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/autologout'
 ], function (http, upsell, ext, capabilities, icons, Dropdown, settings, gt) {
 
-
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
@@ -227,6 +226,11 @@ define('io.ox/core/main/appcontrol', [
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         $toggle: $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+        initialize: function () {
+            Dropdown.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.collection, 'add remove', this.update);
+            this.update();
+        },
         update: function () {
             this.$ul.empty();
             this.collection.forLauncher().forEach(function (model, i) {
@@ -241,11 +245,6 @@ define('io.ox/core/main/appcontrol', [
                     );
                 }.bind(this));
             }
-        },
-        initialize: function () {
-            Dropdown.prototype.initialize.apply(this, arguments);
-            this.listenTo(this.collection, 'add remove', this.update);
-            this.update();
         }
     });
 
