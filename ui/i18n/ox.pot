@@ -952,6 +952,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js
@@ -2523,6 +2524,15 @@ msgstr ""
 #: apps/io.ox/find/main.js
 #: module:io.ox/core
 msgid "No matching items found."
+msgstr ""
+
+#: apps/io.ox/calendar/main.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+#: apps/io.ox/settings/main.js
+#: module:io.ox/core
+msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -10851,6 +10861,16 @@ msgstr ""
 msgid "Resent-To"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "String"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Part"
@@ -11340,13 +11360,6 @@ msgid "Sending 1 message ... %2$d%"
 msgid_plural "Sending %1$d messages ... %2$d%"
 msgstr[0] ""
 msgstr[1] ""
-
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-#: apps/io.ox/settings/main.js
-#: module:io.ox/core
-msgid "Application may not work as expected until this problem is solved."
-msgstr ""
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js
 #: module:io.ox/mail

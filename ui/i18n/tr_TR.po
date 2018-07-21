@@ -1269,8 +1269,8 @@ msgstr "Vcard iliştir"
 msgid "Apple Maps"
 msgstr ""
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Bu sorun çözülene kadar uygulama çalışmayabilir"
 
@@ -1836,6 +1836,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -9671,6 +9672,11 @@ msgstr "Seçenekleri sırala"
 msgid "Sound"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Kaynak"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9804,6 +9810,12 @@ msgstr "Oturumu açık bırak"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Street"
 msgstr "Sokak"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+msgid "String"
+msgstr "Paylaş"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
@@ -13859,9 +13871,6 @@ msgstr "Platformunuz"
 #~ msgstr ""
 #~ "Üzgünüz, size burada yardımcı olamıyoruz. Sağlayıcınızın LinkedIn'den "
 #~ "mesajları okuyabilme izni için bir anahtar edinmesi gerekiyor. "
-
-#~ msgid "Source"
-#~ msgstr "Kaynak"
 
 #, fuzzy
 #~ msgid "Start presentation"

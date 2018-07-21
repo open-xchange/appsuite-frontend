@@ -1255,8 +1255,8 @@ msgstr "Manusta vCard"
 msgid "Apple Maps"
 msgstr "Apple Maps"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Kuni probleem pole lahendatud, ei pruugi rakendus ootuspäraselt toimida."
@@ -1814,6 +1814,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -9398,6 +9399,11 @@ msgstr "Sorteerimisvalikud"
 msgid "Sound"
 msgstr "Helisignaal"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Allikas"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9524,6 +9530,13 @@ msgstr "Püsi sisselogituna"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Street"
 msgstr "Tänav"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Sharing"
+msgid "String"
+msgstr "Jagamine"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
@@ -13375,9 +13388,6 @@ msgstr "teie platvorm"
 #~ msgstr ""
 #~ "Kahjuks ei saa me teid siin aidata. Teie teenusepakkuja peab hankima "
 #~ "LinkedIn'ilt võtme, mis annab õiguse sõnumite lugemiseks."
-
-#~ msgid "Source"
-#~ msgstr "Allikas"
 
 #~ msgid "Start local presentation"
 #~ msgstr "Käivita kohalik esitlus"
