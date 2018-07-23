@@ -30,12 +30,12 @@ define('io.ox/multifactor/settings/views/addDevice', [
     var def;
     var dialog;
 
-    function open(provider, _def) {
-        dialog = openModalDialog(provider);
+    function open(provider, _def, backup) {
+        dialog = openModalDialog(provider, backup);
         def = _def;
     }
 
-    function openModalDialog(provider) {
+    function openModalDialog(provider, backup) {
 
         return new ModalView({
             async: true,
@@ -43,7 +43,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
             title: gt('Add Multifactor Device'),
             width: 640,
             enter: 'OK',
-            model: new Backbone.Model({ provider: provider })
+            model: new Backbone.Model({ provider: provider, backup: backup })
         })
         .build(function () {
         })
@@ -54,7 +54,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         })
         .on('OK', function () {
             var name = $('#deviceName').val();
-            startRegistration(provider, name);
+            startRegistration(provider, name, backup);
             dialog.close();
         })
         .on('open', function () {
@@ -150,7 +150,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         }
     }
 
-    function startRegistration(provider, name) {
+    function startRegistration(provider, name, backup) {
         var additParams = {};
         switch (provider) {
             case 'SMS':
@@ -158,8 +158,10 @@ define('io.ox/multifactor/settings/views/addDevice', [
                 break;
             default:
         }
+        if (backup) {
+            additParams.backup = true;
+        }
         api.beginRegistration(provider, name, additParams).then(function (resp) {
-            debugger;
             openView(provider, resp);
         });
     }

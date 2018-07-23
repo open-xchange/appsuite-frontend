@@ -61,29 +61,18 @@ define('io.ox/multifactor/settings/pane', [
             }
         },
         {
-            id: 'test',
+            id: 'recovery',
             index: INDEX += 100,
             render: function () {
-                var div = $('<div style="margin-top:50px;">');
-                var testButton = $('<button type="button" class="btn btn-default multifactorButton" data-action="remove-multifactor">')
-                .append($.txt(gt('Test verify')))
-                .on('click', tryVerify);
-                this.$el.append(div.append(testButton));
+                var recoverySection = $('<div class="multifactorRecoverySection">');
+                var recoveryDiv = $('<div id="multifactorRecovery" class="multifactorRecoveryDiv">');
+                this.$el.append(recoverySection.append(util.fieldset(
+                    gt('Recovery'),
+                    addRecovery(recoveryDiv)
+                )));
             }
         }
     );
-
-    function tryVerify() {
-        require(['io.ox/multifactor/auth'], function (auth) {
-            auth.getAuthentication().then(function (result) {
-                api.doAuth(result.provider, result.id, result.response).then(function () {
-                    yell('success', 'Success');
-                }, function () {
-                    yell('error', 'Bad auth');
-                });
-            });
-        });
-    }
 
     // Refresh the status div and update buttons
     function refresh(statusDiv) {
@@ -102,11 +91,13 @@ define('io.ox/multifactor/settings/pane', [
             if (devices && devices.length > 0) {
                 node.append(factorRenderer.render(devices));
                 addButtons(node, addButton, removeButton);
+                $('.multifactorRecoverySection').show();
                 return;
             }
         }
         node.append(gt('No multifactor devices registered yet.'));
         addButtons(node, addButton);
+        $('.multifactorRecoverySection').hide();
     }
 
     // Buttons
@@ -120,6 +111,17 @@ define('io.ox/multifactor/settings/pane', [
             }
         }
         node.append(div);
+    }
+
+    function addRecovery(node) {
+        var div = $('<div class="multifactorRecovery">');
+        var button = $('<button type="button" class="btn btn-default multifactorButton" data-action="recovery-multifactor">')
+            .append($.txt(gt('Manage Account Recovery')))
+            .on('click', function (e) {
+                e.preventDefault();
+                manageRecover(true);
+            });
+        return node.append(div.append(button));
     }
 
     // Creates the add Button
@@ -169,12 +171,33 @@ define('io.ox/multifactor/settings/pane', [
                 ox.load(['io.ox/multifactor/settings/views/addMultifactorView']).done(function (view) {
                     view.open(data.providers).then(function () {
                         refresh();
+                        manageRecover();
                     });
                 });
             } else {
                 yell('error', gt('Problem getting and multifactor providers'));
             }
 
+        });
+    }
+
+    function manageRecover(showExisting) {
+        api.getDevices(true).then(function (devices) {
+            if (devices && devices.length > 0) {
+                if (showExisting) {
+                    ox.load(['io.ox/multifactor/views/recoveryDeviceView']).done(function (view) {
+                        view.open(devices);
+                    });
+                }
+            } else {
+                api.getProviders(true).then(function (data) {
+                    ox.load(['io.ox/multifactor/settings/views/addMultifactorView']).done(function (view) {
+                        view.open(data.providers, true).then(function () {
+                            refresh();
+                        });
+                    });
+                });
+            }
         });
     }
 

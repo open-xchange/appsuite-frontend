@@ -16,15 +16,17 @@ define('io.ox/multifactor/factorRenderer', [
     'use strict';
 
     // Create table entry for the device
-    function createTable(icon, type, device) {
+    function createTable(icon, type, device, viewOnly) {
         var div = $('<div class="multifactordevice">')
         .attr('data-deviceId', device.id)
         .attr('data-deviceName', device.name)
         .attr('data-provider', device.provider.name)
         .on('click', function (e) {
             e.preventDefault();
-            $('.multifactordevice').removeClass('selected');
-            div.addClass('selected');
+            if (!viewOnly) {
+                $('.multifactordevice').removeClass('selected');
+                div.addClass('selected');
+            }
         });
         var link = $('<a href="#" class="multifactorDivLink" aria-label="' + device.name + '">');
         var table = $('<table class="multifactorDeviceTable">');
@@ -39,28 +41,28 @@ define('io.ox/multifactor/factorRenderer', [
     }
 
     // Create Table entry based on provider type
-    function getDeviceTable(device) {
+    function getDeviceTable(device, viewOnly) {
         switch (device.provider.name) {
             case 'SMS':
-                return createTable('fa-mobile', gt('SMS Text Messaging'), device);
+                return createTable('fa-mobile', gt('SMS Text Messaging'), device, viewOnly);
             case 'EXAMPLE-MFA':
-                return createTable('fa-id-card', 'Example MFA', device);
-            case 'U2F':
-                return createTable('fa-microchip', gt('U2F'), device);
+                return createTable('fa-id-card', 'Example MFA', device, viewOnly);
+            case 'WEB-AUTH':
+                return createTable('fa-microchip', gt('U2F'), device, viewOnly);
             case 'YUBIKEY':
-                return createTable('fa-id-badge', gt('Yubikey'), device);
+                return createTable('fa-id-badge', gt('Yubikey'), device, viewOnly);
             case 'TOTP':
-                return createTable('fa-google', gt('Google Authenticator'), device);
+                return createTable('fa-google', gt('Google Authenticator'), device, viewOnly);
             default:
                 return $('<span>').append(gt('UNKNOWN'));
         }
     }
 
     var renderer = {
-        render: function (devices) {
+        render: function (devices, viewOnly) {  // Backup flag shows devices marked as backup
             var div = $('<div>').addClass('MultifactorDiv');
             devices.forEach(function (device) {
-                div.append(getDeviceTable(device));
+                div.append(getDeviceTable(device, viewOnly));
             });
             return div;
         }

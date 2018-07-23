@@ -94,7 +94,8 @@ define('io.ox/multifactor/settings/views/deleteMultifactorView', [
     }
 
     return {
-        open: open
+        open: open,
+        doDelete: doDelete
     };
 
 });

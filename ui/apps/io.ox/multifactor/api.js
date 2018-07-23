@@ -33,23 +33,41 @@ define('io.ox/multifactor/api', [
     }
 
     var api = {
-        getProviders: function () {
+        getProviders: function (backup) {
             return $.when(
                 http.PUT({
                     module: 'multifactor',
                     params: { action: 'get' },
                     force: true
-                })
-            );
+                }).then(function (data) {
+                    if (data && data.providers) {
+                        var list = [];
+                        data.providers.forEach(function (prov) {
+                            if (backup && prov.backupProvider) {
+                                list.push(prov);
+                            }
+                            if (!backup && !prov.backupOnlyProvider) {
+                                list.push(prov);
+                            }
+                        });
+                        return { providers: list };
+                    }
+                }
+                ));
         },
-        getDevices: function () {
+        getDevices: function (backup) {
             return this.getProviders().then(function (data) {
                 var devices = [];
                 if (_.isArray(data.providers)) {
                     data.providers.forEach(function (provider) {
                         provider.devices.forEach(function (device) {
                             device.provider = provider;
-                            devices.push(device);
+                            if (backup && device.backupDevice) {
+                                devices.push(device);
+                            }
+                            if (!backup && !device.backupDevice) {
+                                devices.push(device);
+                            }
                         });
                     });
                 }

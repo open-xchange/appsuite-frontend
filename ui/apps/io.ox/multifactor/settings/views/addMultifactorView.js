@@ -30,21 +30,21 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
     var def;
     var dialog;
 
-    function open(providers) {
-        dialog = openModalDialog(providers);
+    function open(providers, backup) {
+        dialog = openModalDialog(providers, backup);
         def = new $.Deferred();
         return def;
     }
 
-    function openModalDialog(providers) {
+    function openModalDialog(providers, backup) {
 
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Add Multifactor Device'),
+            title: backup ? gt('Add a recovery device') : gt('Add Multifactor Device'),
             width: 640,
             enter: 'add',
-            model: new Backbone.Model({ providers: providers })
+            model: new Backbone.Model({ providers: providers, backup: backup })
         })
         .build(function () {
         })
@@ -58,9 +58,21 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
     ext.point(POINT).extend(
         {
             index: INDEX += 100,
-            id: 'header',
+            id: 'backupHelp',
             render: function () {
-                var label = $('<label>').append(gt('Please select a device type to add'))
+                var label = $('<label class="backupDescr">').append(gt('In the event you lose or are unable to use your authentication device, your account will be locked out unless you set up a backup device.  We strongly recommend that you do so now.'))
+                .append('<br>');
+                this.$body.append(
+                    label
+                );
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'header',
+            render: function (baton) {
+                var label = $('<label>').append(
+                    baton.model.get('backup') ? gt('Please select a backup device to add') : gt('Please select a device type to add'))
                 .append('<br>');
                 this.$body.append(
                     label
@@ -78,14 +90,14 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 }
                 var node = this;
                 providers.forEach(function (provider) {
-                    node.$body.append(getProviderSelection(provider));
+                    node.$body.append(getProviderSelection(provider, baton.model.get('backup')));
                 });
             }
         }
 
     );
 
-    function getProviderSelection(provider) {
+    function getProviderSelection(provider, backup) {
         var icon;
         var text;
         switch (provider.name) {
@@ -97,7 +109,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 icon = 'fa-id-card';
                 text = gt('An example provider');
                 break;
-            case 'U2F':
+            case 'WEB-AUTH':
                 text = gt('Use a device to authenticated your identity.  Must be compatible with U2F');
                 icon = 'fa-microchip';
                 break;
@@ -115,7 +127,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
         }
         var div = $('<div class="multifactordevice">');
         div.on('click', function (e) {
-            addDevice(provider.name);
+            addDevice(provider.name, backup);
             e.preventDefault();
         });
         var link = $('<a href="#" class="multifactorDivLink">');
@@ -127,9 +139,9 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
 
     }
 
-    function addDevice(name) {
+    function addDevice(name, backup) {
         require(['io.ox/multifactor/settings/views/addDevice'], function (addDevice) {
-            addDevice.start(name, def);
+            addDevice.start(name, def, backup);
         });
         dialog.close();
     }
