@@ -251,11 +251,14 @@ define('io.ox/core/notifications', [
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
                                     node.css({
-                                        right: '400px'
+                                        right: '550px'
                                     });
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
                                 var cont = function (data) {
+
+                                    data = data && data.get ? data.attributes : data;
+
                                     // work with real model view or just draw method with baton
                                     if (renderer.View) {
                                         var view = new renderer.View({ data: data }, options);
