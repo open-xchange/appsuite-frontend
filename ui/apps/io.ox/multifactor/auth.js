@@ -66,25 +66,24 @@ define('io.ox/multifactor/auth', [
                 api.doAuth(data.provider, data.id, data.response).then(function (data) {
                     def.resolve(data);
                 }, function (rejection) {
-                    if (rejection.value === 'AUTHENTICATION_DENIED') {
+                    if (rejection && rejection.value === 'AUTHENTICATION_DENIED') {
                         if (rejection.lockoutResult) {
                             error = gt('Authentication was denied.  Attempt %i of %i allowed attempts', rejection.lockoutResult.count, rejection.lockoutResult.maxAllowed);
                         } else {
                             error = gt('Authentication was denied.');
                         }
                     } else {
-                        notifyFailure(rejection.error);
+                        if (rejection) notifyFailure(rejection.error);
                         def.reject();
                         return;
                     }
                     authenticate(error).then(def.resolve, def.reject);
                 });
             } else {
-                debugger;
                 def.reject();
             }
         }, function (data) {
-            if (data.error) {
+            if (data && data.error) {
                 notifyFailure(data.error);
             }
             def.reject(data);
