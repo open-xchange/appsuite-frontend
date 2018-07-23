@@ -617,7 +617,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     }, function () {
                         // TODO
                         // NOTIFY OR RELOAD
-                        deferred.reject();
+                        location.reload();
                     });
                 });
                 return;
@@ -986,7 +986,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             // If http disconnected and the call isn't being forced, add to queue
             if (disconnected === true && !o.force) {
                 disconnectedQueue.push({ deferred: def, options: o });
-                console.log(disconnectedQueue);
                 return def;
             }
 
@@ -1313,11 +1312,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             function checkDone() {
                 count++;
                 if (count = pending.length) {  // Once all outstanding calls done, reset the require timeout
-                    require.config({ waitSeconds: document.cookie.indexOf('selenium=true') !== -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15) });
+                    window.setTimeout(function () {
+                        require.config({ waitSeconds: document.cookie.indexOf('selenium=true') !== -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15) });
+                    }, 100);
                     return true;
                 }
                 return false;
             }
+
             // Loop through each pending request
             for (var i = 0; i < pending.length; i++) {
                 var req = pending[i];
