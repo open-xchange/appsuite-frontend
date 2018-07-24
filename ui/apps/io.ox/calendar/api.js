@@ -366,10 +366,16 @@ define('io.ox/calendar/api', [
                     params.rangeEnd = options.rangeEnd;
                 }
 
+                var data = {
+                    event: obj
+                };
+
+                if (options.comment) data.comment = options.comment;
+
                 if (options.attachments && options.attachments.length) {
                     var formData = new FormData();
 
-                    formData.append('json_0', JSON.stringify(obj));
+                    formData.append('json_0', JSON.stringify(data));
                     for (var i = 0; i < options.attachments.length; i++) {
                         // the attachment data is given via the options parameter
                         formData.append('file_' + options.attachments[i].cid, options.attachments[i].file);
@@ -384,7 +390,7 @@ define('io.ox/calendar/api', [
                     def = http.PUT({
                         module: 'chronos',
                         params: params,
-                        data: obj
+                        data: data
                     });
                 }
                 return def.then(processResponse)
@@ -410,10 +416,22 @@ define('io.ox/calendar/api', [
                 list = _.isArray(list) ? list : [list];
 
                 var params = {
-                    action: 'delete',
-                    timestamp: _.then(),
-                    fields: api.defaultFields
-                };
+                        action: 'delete',
+                        timestamp: _.then(),
+                        fields: api.defaultFields
+                    },
+                    data = {
+                        events: _(list).map(function (obj) {
+                            obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                            var params = {
+                                id: obj.id,
+                                folder: obj.folder
+                            };
+                            if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+                            if (obj.recurrenceRange) params.recurrenceRange = obj.recurrenceRange;
+                            return params;
+                        })
+                    };
 
                 if (options.expand) {
                     params.expand = true;
@@ -421,19 +439,12 @@ define('io.ox/calendar/api', [
                     params.rangeEnd = options.rangeEnd;
                 }
 
+                if (options.comment) data.comment = options.comment;
+
                 return http.PUT({
                     module: 'chronos',
                     params: params,
-                    data: _(list).map(function (obj) {
-                        obj = obj instanceof Backbone.Model ? obj.attributes : obj;
-                        var params = {
-                            id: obj.id,
-                            folder: obj.folder
-                        };
-                        if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
-                        if (obj.recurrenceRange) params.recurrenceRange = obj.recurrenceRange;
-                        return params;
-                    })
+                    data: data
                 })
                 .then(function (data) {
                     data.forEach(processResponse);
