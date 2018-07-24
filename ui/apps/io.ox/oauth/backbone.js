@@ -141,7 +141,6 @@ define('io.ox/oauth/backbone', [
                     }).done(options.success).fail(options.error);
                 case 'update':
                     return model.reauthorize({ force: false }).then(function () {
-                        if (!model.changed.displayName) return;
                         return http.PUT({
                             module: 'oauth/accounts',
                             params: {
