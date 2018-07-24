@@ -15,13 +15,12 @@ define('io.ox/backbone/mini-views/alarms', [
     'io.ox/calendar/util',
     'io.ox/backbone/views/disposable',
     'gettext!io.ox/calendar',
-    'settings!io.ox/mail',
     'less!io.ox/backbone/mini-views/alarms'
-], function (util, DisposableView, gt, mailSettings) {
+], function (util, DisposableView, gt) {
 
     'use strict';
-    // TODO enable email when mw supports this
-    var standardTypes = ['DISPLAY', 'AUDIO'/*, 'EMAIL'*/],
+
+    var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL'],
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
             'START-': gt('before start'),
@@ -74,30 +73,50 @@ define('io.ox/backbone/mini-views/alarms', [
             'AUDIOEND0': gt('Play sound at end.'),
 
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'EMAILSTART-': gt('Send mail %1$s before start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'EMAILSTART': gt('Send mail %1$s after start.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'EMAILEND-': gt('Send mail %1$s before end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+            'EMAILEND': gt('Send mail %1$s after end.'),
+            //#. Used to display reminders for appointments
+            //#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+            'EMAILABS': gt('Send mail at %1$s.'),
+            //#. Used to display reminders for appointments
+            'EMAILSTART0': gt('Send mail at start.'),
+            //#. Used to display reminders for appointments
+            'EMAILEND0': gt('Send mail at end.'),
+
+            //#. Used to display reminders for appointments
+            //#. %1$s: the reminder type, SMS etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICSTART-': gt('%1$s %2$s before start.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the reminder type, SMS etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICSTART': gt('%1$s %2$s after start.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the reminder type, SMS etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICEND-': gt('%1$s %2$s before end.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the reminder type, SMS etc
             //#. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
             'GENERICEND': gt('%1$s %2$s after end.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the reminder type, SMS etc
             //#. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
             'GENERICABS': gt('%1$s at %2$s.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the reminder type, SMS etc
             'GENERICSTART0': gt('%1$s at start.'),
             //#. Used to display reminders for appointments
-            //#. %1$s: the reminder type, SMS/EMAIL etc
+            //#. %1$s: the reminder type, SMS etc
             'GENERICEND0': gt('%1$s at end.')
         };
 
@@ -184,9 +203,8 @@ define('io.ox/backbone/mini-views/alarms', [
                     $('<label class="sr-only">').attr('for', 'action-' + uid).text(gt('type')),
                     $('<select class="form-control alarm-action">').attr('id', 'action-' + uid).append(
                         $('<option>').text(gt('Notification')).val('DISPLAY'),
-                        $('<option>').text(gt('Audio')).val('AUDIO')
-                        // TODO enable when mw supports this
-                        //$('<option>').text(gt('Mail')).val('EMAIL')
+                        $('<option>').text(gt('Audio')).val('AUDIO'),
+                        $('<option>').text(gt('Mail')).val('EMAIL')
                     ).val(alarm.action)
                 );
             }
@@ -241,11 +259,7 @@ define('io.ox/backbone/mini-views/alarms', [
 
                 switch (alarm.action) {
                     // don't use empty string as summary or description if not available. Produces problems with ical
-                    case 'EMAIL':
-                        alarm.summary = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
-                        alarm.description = self.model ? self.model.get('description') || 'reminder' : 'reminder';
-                        alarm.attendee = 'mailto:' + mailSettings.get('defaultaddress');
-                        break;
+                    // with mail or audio alarms everything is optional and handled by the backend (we could add attendees, description, attachments etc but we want to keep things simple until needed)
                     case 'DISPLAY':
                         alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
