@@ -56,7 +56,7 @@ define('io.ox/multifactor/api', [
                 ));
         },
         getDevices: function (backup) {
-            return this.getProviders().then(function (data) {
+            return this.getProviders(backup).then(function (data) {
                 var devices = [];
                 if (_.isArray(data.providers)) {
                     data.providers.forEach(function (provider) {

@@ -139,6 +139,9 @@ define('io.ox/multifactor/settings/views/addDevice', [
                 case 'TOTP':
                     view = 'io.ox/multifactor/settings/views/totpRegistrationView';
                     break;
+                case 'BACKUP_STRING':
+                    view = 'io.ox/multifactor/settings/views/backupStringRegistrationView';
+                    break;
                 default:
                     def.reject();
             }

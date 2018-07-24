@@ -33,7 +33,10 @@ define('io.ox/multifactor/factorRenderer', [
         var row = $('<tr>');
         var iconCol = $('<td class="multifactorIcon">').append('<icon class="fa ' + icon + '">');
         var textCol = $('<td class="multifactorText">').append(type);
-        var detailCol = $('<td class="multifactorDetail">').append(gt('Name:') + ' ' + device.name).append('<br/>').append(gt('ID:') + ' ' + device.id);
+        var detailCol = $('<td class="multifactorDetail">');
+        if (device.name && device.name.length > 1) {
+            detailCol.append(device.name);
+        }
         return div.append(
             link.append(table.append(
                 row.append(iconCol).append(textCol).append(detailCol))));
@@ -53,6 +56,8 @@ define('io.ox/multifactor/factorRenderer', [
                 return createTable('fa-id-badge', gt('Yubikey'), device, viewOnly);
             case 'TOTP':
                 return createTable('fa-google', gt('Google Authenticator'), device, viewOnly);
+            case 'BACKUP_STRING':
+                return createTable('fa-file-text', gt('Recovery code'), device, viewOnly);
             default:
                 return $('<span>').append(gt('UNKNOWN'));
         }

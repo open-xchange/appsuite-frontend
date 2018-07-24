@@ -121,6 +121,10 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 text = gt('Use Google Authenticator or other TOTP compatible authenticator');
                 icon = 'fa-google';
                 break;
+            case 'BACKUP_STRING':
+                text = gt('Long recovery code that you print or save to unlock your account');
+                icon = 'fa-file-text';
+                break;
             default:
                 text = gt('Unknown system');
                 icon = 'fa-error';

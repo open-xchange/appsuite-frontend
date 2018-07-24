@@ -165,6 +165,7 @@ define('io.ox/core/print', [
                 .value()
             )
             .done(function () {
+
                 var args = _.chain(arguments).toArray(), all = args.value().length;
                 // filter?
                 if (options.filter) {
