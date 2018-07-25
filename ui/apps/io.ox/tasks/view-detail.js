@@ -238,12 +238,13 @@ define('io.ox/tasks/view-detail', [
                 //else build new
                 attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);
             }
+            // TODO: Use io.ox/core/tk/attachments here!
             $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({ folder_id: task.folder_id, id: task.id, module: 4 }).done(function (data) {
                     _(data).each(function (a) {
                         // draw
-                        buildDropdown(attachmentNode, a.filename, a);
+                        buildDropdown(attachmentNode, $.txt(a.filename), a);
                     });
                     if (data.length > 1) {
                         buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
