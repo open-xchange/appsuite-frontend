@@ -31,6 +31,11 @@ define('io.ox/multifactor/deviceAuthenticator', [
                     viewer.open(providerName, deviceId, challengeData, def, error);
                 });
                 break;
+            case 'BACKUP_STRING':
+                require(['io.ox/multifactor/views/backupProvider'], function (viewer) {
+                    viewer.open(providerName, deviceId, challengeData, def, error);
+                });
+                break;
             default:
                 def.reject();
         }
