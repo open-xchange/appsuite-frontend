@@ -69,6 +69,22 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
         mailQuota: mailQuota,
         fileQuota: fileQuota,
 
+        checkQuota: function (folder, files) {
+            if (folder.module !== 'infostore') return {};
+
+            return http.PUT({
+                module: 'infostore',
+                params: { action: 'quotacheck' },
+                data: {
+                    folder: folder.id,
+                    type: folder.module,
+                    files: files.map(function (file) {
+                        return { file_size: file.size, file_name: file.name, file_type: file.type };
+                    })
+                }
+            });
+        },
+
         getModel: function (type) {
             if (type === 'mail') return mailQuota;
             return fileQuota;
