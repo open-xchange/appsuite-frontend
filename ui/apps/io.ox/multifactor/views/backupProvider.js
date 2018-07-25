@@ -27,13 +27,13 @@ define('io.ox/multifactor/views/backupProvider', [
     var dialog;
     var def;
 
-    function open(provider, deviceId, challenge, _def, error) {
-        dialog = openModalDialog(provider, deviceId, challenge, error);
+    function open(provider, device, challenge, _def, error) {
+        dialog = openModalDialog(provider, device, challenge, error);
         def = _def;
         return dialog;
     }
 
-    function openModalDialog(provider, deviceId, challenge, error) {
+    function openModalDialog(provider, device, challenge, error) {
 
         return new ModalView({
             async: true,
@@ -42,7 +42,7 @@ define('io.ox/multifactor/views/backupProvider', [
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
-                deviceId: deviceId,
+                deviceId: device.id,
                 challenge: challenge,
                 error: error
             })
@@ -56,7 +56,7 @@ define('io.ox/multifactor/views/backupProvider', [
             if (response && response !== '') {
                 var resp = {
                     response: response,
-                    id: deviceId,
+                    id: device.id,
                     provider: provider
                 };
                 def.resolve(resp);
@@ -72,7 +72,7 @@ define('io.ox/multifactor/views/backupProvider', [
             uploadRecovery().then(function (data) {
                 var resp = {
                     response: data,
-                    id: deviceId,
+                    id: device.id,
                     provider: provider
                 };
                 def.resolve(resp);

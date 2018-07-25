@@ -27,13 +27,13 @@ define('io.ox/multifactor/views/exampleProvider', [
     var dialog;
     var def;
 
-    function open(provider, deviceId, challenge, _def, error) {
-        dialog = openModalDialog(provider, deviceId, challenge, error);
+    function open(provider, device, challenge, _def, error) {
+        dialog = openModalDialog(provider, device, challenge, error);
         def = _def;
         return dialog;
     }
 
-    function openModalDialog(provider, deviceId, challenge, error) {
+    function openModalDialog(provider, device, challenge, error) {
 
         return new ModalView({
             async: true,
@@ -42,7 +42,7 @@ define('io.ox/multifactor/views/exampleProvider', [
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
-                deviceId: deviceId,
+                deviceId: device.id,
                 challenge: challenge,
                 error: error
             })
@@ -51,13 +51,13 @@ define('io.ox/multifactor/views/exampleProvider', [
         })
         .addCancelButton()
         .addButton({ label: gt('OK'), action: 'OK' })
-        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost' })
+        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('OK', function () {
             var response = $('#verification').val();
             if (response && response !== '') {
                 var resp = {
                     response: response,
-                    id: deviceId,
+                    id: device.id,
                     provider: provider
                 };
                 def.resolve(resp);

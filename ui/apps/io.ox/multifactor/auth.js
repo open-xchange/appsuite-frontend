@@ -36,7 +36,7 @@ define('io.ox/multifactor/auth', [
                         selectDeviceView.open(list, def, error);
                     } else {
                         var device = list[0];
-                        deviceAuthenticator.getAuth(device.provider.name, device.id, def, error);
+                        deviceAuthenticator.getAuth(device.provider.name, device, def, error);
                     }
                 } else {
                     def.reject();

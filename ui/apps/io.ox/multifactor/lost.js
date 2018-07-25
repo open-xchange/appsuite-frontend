@@ -31,7 +31,7 @@ define('io.ox/multifactor/lost', [
             }
             var device = devices[0];
             var authDef = $.Deferred();
-            deviceAuthenticator.getAuth(device.provider.name, device.id, authDef);
+            deviceAuthenticator.getAuth(device.provider.name, device, authDef);
             authDef.then(function (data) {
                 if (data) {
                     api.doAuth(data.provider, data.id, data.response).then(function (data) {
