@@ -265,7 +265,7 @@ define('io.ox/core/tk/attachments', [
                         }
                     }
                     return new links.Dropdown({
-                        label: label || data.filename,
+                        label: $.txt(label || data.filename),
                         classes: 'attachment-link',
                         ref: 'io.ox/core/tk/attachment/links'
                     }).draw.call($node, { data: data, options: options });
