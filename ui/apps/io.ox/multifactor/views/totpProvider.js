@@ -51,6 +51,7 @@ define('io.ox/multifactor/views/totpProvider', [
         })
         .addCancelButton()
         .addButton({ label: gt('OK'), action: 'OK' })
+        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost' })
         .on('OK', function () {
             var response = $('#authentication').val();
             if (response && response !== '') {
@@ -70,6 +71,12 @@ define('io.ox/multifactor/views/totpProvider', [
         })
         .on('open', function () {
             $('#authentication').focus();
+        })
+        .on('lost', function () {
+            dialog.close();
+            require(['io.ox/multifactor/lost'], function (lost) {
+                lost(def);
+            });
         })
         .open();
     }

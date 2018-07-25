@@ -51,6 +51,7 @@ define('io.ox/multifactor/views/exampleProvider', [
         })
         .addCancelButton()
         .addButton({ label: gt('OK'), action: 'OK' })
+        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost' })
         .on('OK', function () {
             var response = $('#verification').val();
             if (response && response !== '') {
@@ -70,6 +71,12 @@ define('io.ox/multifactor/views/exampleProvider', [
         })
         .on('open', function () {
             $('#verification').focus();
+        })
+        .on('lost', function () {
+            dialog.close();
+            require(['io.ox/multifactor/lost'], function (lost) {
+                lost(def);
+            });
         })
         .open();
     }
