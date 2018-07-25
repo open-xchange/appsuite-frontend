@@ -86,6 +86,16 @@ define('io.ox/multifactor/views/smsProvider', [
     ext.point(POINT).extend(
         {
             index: INDEX += 100,
+            id: 'identifier',
+            render: function (baton) {
+                var div = $('<div class="smsIdentifier">');
+                //#.  Multifactor authentication text was sent to a phone with the number ending with %s
+                var label = $('<label>').append(gt('Device with number ending with %s', baton.model.get('challenge').phoneNumberTail));
+                this.$body.append(div.append(label));
+            }
+        },
+        {
+            index: INDEX += 100,
             id: 'header',
             render: function (baton) {
                 var label = $('<label>').append(
