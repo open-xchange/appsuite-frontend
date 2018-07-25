@@ -24,7 +24,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
 
     'use strict';
 
-    var POINT = 'multifactor/settings/addDevice',
+    var POINT = 'multifactor/settings/addDevice/',
         INDEX = 0;
 
     var def;
@@ -37,9 +37,23 @@ define('io.ox/multifactor/settings/views/addDevice', [
 
     function openModalDialog(provider, backup) {
 
+        var extension;
+        // Set extension point
+        switch (provider) {
+            case 'BACKUP_STRING':
+                startRegistration(provider, '', backup);
+                return;
+            case 'SMS':
+                extension = POINT + 'SMS';
+                break;
+            default:
+                extension = POINT + 'common';
+                break;
+        }
+
         return new ModalView({
             async: true,
-            point: POINT,
+            point: extension,
             title: gt('Add Multifactor Device'),
             width: 640,
             enter: 'OK',
@@ -53,7 +67,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
             def.reject();
         })
         .on('OK', function () {
-            var name = $('#deviceName').val();
+            var name = $('#deviceName').length ? $('#deviceName').val() : '';
             startRegistration(provider, name, backup);
             dialog.close();
         })
@@ -63,7 +77,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         .open();
     }
 
-    ext.point(POINT).extend(
+    ext.point(POINT + 'common').extend(
         {
             index: INDEX += 100,
             id: 'header',
@@ -84,18 +98,10 @@ define('io.ox/multifactor/settings/views/addDevice', [
                 .append(input);
                 this.$body.append(selection);
             }
-        },
-        {
-            index: INDEX += 100,
-            id: 'deviceSpecific',
-            render: function (baton) {
-                ext.point(POINT + '/' + baton.model.get('provider')).invoke('render', this, baton);
-            }
         }
-
     );
 
-    ext.point(POINT + '/SMS').extend(
+    ext.point(POINT + 'SMS').extend(
         {
             index: INDEX += 100,
             id: 'header',
