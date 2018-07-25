@@ -187,7 +187,7 @@ define('io.ox/contacts/view-detail', [
         draw: function (contact) {
 
             var section = this.show();
-
+            // TODO: Use io.ox/core/tk/attachments for attachment list here
             require(['io.ox/core/api/attachment'], function (api) {
                 // this request might take a while; not cached
                 api.getAll({ folder_id: contact.folder_id, id: contact.id, module: 7 }).then(
@@ -195,7 +195,7 @@ define('io.ox/contacts/view-detail', [
                         section.empty();
                         _(data).each(function (a) {
                             // draw
-                            buildDropdown(section, _.noI18n(a.filename), a);
+                            buildDropdown(section, $.txt(a.filename), a);
                         });
                         if (data.length > 1) {
                             buildDropdown(section, gt('All attachments'), data).find('a').removeClass('attachment-item');
