@@ -68,7 +68,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         })
         .on('OK', function () {
             var name = $('#deviceName').length ? $('#deviceName').val() : '';
-            startRegistration(provider, name, backup);
+            startRegistration(provider, name, backup, this.model);
             dialog.close();
         })
         .on('open', function () {
@@ -106,18 +106,43 @@ define('io.ox/multifactor/settings/views/addDevice', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append(gt('Please enter the phone number for the device.'))
-                .append('<br>');
+                var label = $('<label for="deviceNumber">').append(gt('Please enter the phone number for the device.'));
                 this.$body.append(
                     label
-                );
+                ).append('<br>');
             }
         },
         {
             index: INDEX += 100,
-            id: 'nameInput',
+            id: 'localInput',
+            render: function (baton) {
+                var div = $('<div class="countryCodes">');
+                require(['io.ox/onboarding/clients/codes'], function (codes) {
+                    var select = new mini.SelectView({
+                        name: 'code',
+                        model: baton.model,
+                        list: codes.get()
+                    });
+                    var input = select.render().$el
+                        .removeClass('form-control')
+                        .addClass('select form-control countryCodes')
+                        .attr('title', 'Country Codes')
+                        .attr('list', 'addresses');
+                    var lang = navigator.languages ? navigator.languages[0] : navigator.language;
+                    if (lang.indexOf('-') > 0) lang = lang.substring(lang.indexOf('-') + 1);
+                    if (codes.hash[lang]) {
+                        input.val(codes.hash[lang].code).trigger('change');
+                    }
+                    div.append(input);
+                });
+                this.$body.append(div);
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'numberInput',
             render: function () {
-                var input = $('<input type="text" id="deviceNumber">');
+                var input = $('<input type="text" id="deviceNumber" class="form-control">');
                 var selection = $('<div class="deviceNumber">')
                 .append(input);
                 this.$body.append(selection);
@@ -159,11 +184,11 @@ define('io.ox/multifactor/settings/views/addDevice', [
         }
     }
 
-    function startRegistration(provider, name, backup) {
+    function startRegistration(provider, name, backup, model) {
         var additParams = {};
         switch (provider) {
             case 'SMS':
-                additParams.phoneNumber = $('#deviceNumber').val();
+                additParams.phoneNumber = model.get('code') + $('#deviceNumber').val();
                 break;
             default:
         }
