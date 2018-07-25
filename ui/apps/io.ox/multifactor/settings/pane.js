@@ -89,7 +89,7 @@ define('io.ox/multifactor/settings/pane', [
     function drawStatus(node, devices) {
         if (devices) {
             if (devices && devices.length > 0) {
-                node.append(factorRenderer.render(devices));
+                node.append(factorRenderer.renderSelectable(devices));
                 addButtons(node, addButton, removeButton);
                 $('.multifactorRecoverySection').show();
                 return;

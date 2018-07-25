@@ -81,7 +81,7 @@ define('io.ox/multifactor/views/recoveryDeviceView', [
             id: 'selection',
             render: function (baton) {
                 var selection = $('<div class="multifactorSelector">')
-                .append(renderer.render(baton.model.get('devices', true), true));
+                .append(renderer.renderList(baton.model.get('devices'), true));
                 this.$body.append(selection);
             }
         }

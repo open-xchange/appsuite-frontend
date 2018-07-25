@@ -16,18 +16,19 @@ define('io.ox/multifactor/factorRenderer', [
     'use strict';
 
     // Create table entry for the device
-    function createTable(icon, type, device, viewOnly) {
+    function createTable(icon, type, device, selectable) {
         var div = $('<div class="multifactordevice">')
         .attr('data-deviceId', device.id)
         .attr('data-deviceName', device.name)
         .attr('data-provider', device.provider.name)
         .on('click', function (e) {
             e.preventDefault();
-            if (!viewOnly) {
+            if (!selectable) {
                 $('.multifactordevice').removeClass('selected');
                 div.addClass('selected');
             }
         });
+        if (!selectable) div.addClass('multifactordeviceSelectable');
         var link = $('<a href="#" class="multifactorDivLink" aria-label="' + device.name + '">');
         var table = $('<table class="multifactorDeviceTable">');
         var row = $('<tr>');
@@ -44,32 +45,39 @@ define('io.ox/multifactor/factorRenderer', [
     }
 
     // Create Table entry based on provider type
-    function getDeviceTable(device, viewOnly) {
+    function getDeviceTable(device, selectable) {
         switch (device.provider.name) {
             case 'SMS':
-                return createTable('fa-mobile', gt('SMS Text Messaging'), device, viewOnly);
+                return createTable('fa-mobile', gt('SMS Text Messaging'), device, selectable);
             case 'EXAMPLE-MFA':
-                return createTable('fa-id-card', 'Example MFA', device, viewOnly);
+                return createTable('fa-id-card', 'Example MFA', device, selectable);
             case 'WEB-AUTH':
-                return createTable('fa-microchip', gt('U2F'), device, viewOnly);
+                return createTable('fa-microchip', gt('U2F'), device, selectable);
             case 'YUBIKEY':
-                return createTable('fa-id-badge', gt('Yubikey'), device, viewOnly);
+                return createTable('fa-id-badge', gt('Yubikey'), device, selectable);
             case 'TOTP':
-                return createTable('fa-google', gt('Google Authenticator'), device, viewOnly);
+                return createTable('fa-google', gt('Google Authenticator'), device, selectable);
             case 'BACKUP_STRING':
-                return createTable('fa-file-text', gt('Recovery code'), device, viewOnly);
+                return createTable('fa-file-text', gt('Recovery code'), device, selectable);
             default:
                 return $('<span>').append(gt('UNKNOWN'));
         }
     }
 
+    function doRender(devices, selectable) {
+        var div = $('<div>').addClass('MultifactorDiv');
+        devices.forEach(function (device) {
+            div.append(getDeviceTable(device, selectable));
+        });
+        return div;
+    }
+
     var renderer = {
-        render: function (devices, viewOnly) {  // Backup flag shows devices marked as backup
-            var div = $('<div>').addClass('MultifactorDiv');
-            devices.forEach(function (device) {
-                div.append(getDeviceTable(device, viewOnly));
-            });
-            return div;
+        renderSelectable: function (devices) {
+            return doRender(devices, false);
+        },
+        renderList: function (devices) {
+            return doRender(devices, true);
         }
     };
 

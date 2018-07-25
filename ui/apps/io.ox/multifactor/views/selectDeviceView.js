@@ -70,7 +70,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
             id: 'selection',
             render: function (baton) {
                 var selection = $('<div class="multifactorSelector">')
-                .append(renderer.render(baton.model.get('devices')));
+                .append(renderer.renderSelectable(baton.model.get('devices')));
                 selection.find('.multifactordevice')
                 .on('click', function () {
                     deviceAuthenticator.getAuth($(this).attr('data-provider'), $(this).attr('data-deviceid'), def);
