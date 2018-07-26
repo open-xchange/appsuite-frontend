@@ -95,7 +95,6 @@ define('plugins/notifications/calendar/register', [
             var cid = _.cid(model.attributes),
                 strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() }),
                 recurrenceString = util.getRecurrenceString(model.attributes);
-
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
