@@ -368,7 +368,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         idMappingExcludes = ['3060', '7010'],
 
         // list of error codes, which are not logged (see bug 46098)
-        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006'];
+        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006', 'MFA-0001'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -608,18 +608,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             isError = 'error' in response && !isWarning;
 
         if (isError) {
+            // Check for multifactor error
             var isMultifactorError = (/^MFA-/i).test(response.code);
             if (isMultifactorError) {
-                that.disconnect(deferred, o);
-                require(['io.ox/multifactor/auth'], function (auth) {
-                    auth.doAuthentication().then(function () {
-                        that.reConnect();
-                    }, function () {
-                        // TODO
-                        // NOTIFY OR RELOAD
-                        location.reload();
-                    });
-                });
+                handleMultifactorError(response, o, deferred);
                 return;
             }
             // forward all errors to respond to special codes
@@ -708,6 +700,37 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             deferred.resolve(response);
         }
     };
+
+    function handleMultifactorError(response, o, deferred) {
+        if ((/^MFA-0001/i).test(response.code)) {  // Session error, pause all pending and authenticate
+            that.disconnect(deferred, o);
+            require(['io.ox/multifactor/auth'], function (auth) {
+                auth.doAuthentication().then(function () {
+                    that.reConnect();
+                }, function () {
+                    console.error('MF login failed, reload required');
+                    ox.session = '';
+                    that.resetDisconnect(response);
+                    ox.relogin();
+                    location.reload();
+                });
+            });
+            return;
+        }
+        if ((/^MFA-0015/i).test(response.code)) { // This action requires MF auth.  Get and add to parameters
+            require(['io.ox/multifactor/auth'], function (auth) {
+                auth.getAuthentication().then(function (data) {
+                    o.params = _.extend(o.params, { secret_code: data.response, authProviderName: data.provider, authDeviceId: data.id });
+                    ajax(o, o.type).then(deferred.resolve, deferred.reject);
+                }, function () {
+                    deferred.reject();
+                });
+            });
+            return;
+        }
+        // General Multifactor Error
+        deferred.reject(response);
+    }
 
     // internal queue
     var paused = false,
@@ -1326,6 +1349,18 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 ajax(req.options, req.options.type).then(req.deferred.resolve, req.deferred.reject)
                 .always(checkDone);
             }
+            disconnectedQueue = [];
+        },
+        // Wipe the disconnect queue and resume
+        resetDisconnect: function (resp) {
+            var pending = disconnectedQueue.slice();
+            // Loop through each pending request
+            for (var i = 0; i < pending.length; i++) {
+                var req = pending[i];
+                req.deferred.reject(resp);
+            }
+            disconnected = false;
+            disconnectedQueue = [];
         },
 
         /**
