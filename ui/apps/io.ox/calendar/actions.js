@@ -197,7 +197,12 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (action) {
-                action(baton.data, { noFolderCheck: baton.noFolderCheck });
+                // get full data if possible
+                api.get(baton.data).then(function (obj) {
+                    action(obj.toJSON(), { noFolderCheck: baton.noFolderCheck });
+                }, function () {
+                    action(baton.data, { noFolderCheck: baton.noFolderCheck });
+                });
             });
         }
     });
