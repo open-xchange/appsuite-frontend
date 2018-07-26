@@ -72,7 +72,10 @@ define('io.ox/multifactor/settings/views/addDevice', [
             dialog.close();
         })
         .on('open', function () {
-            $('#deviceName').focus();
+            _.defer(function () {
+                if ($('#deviceName')) $('#deviceName').focus();
+                if ($('#deviceNumber')) $('#deviceNumber').focus();
+            });
         })
         .open();
     }
@@ -82,7 +85,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append(gt('Please choose a name for this device.  It can be anything you like, but should be specific to the device you are adding, and something you will easily recognize.'))
+                var label = $('<label for="deviceName">').append(gt('Please choose a name for this device.  It can be anything you like, but should be specific to the device you are adding, and something you will easily recognize.'))
                 .append('<br>');
                 this.$body.append(
                     label

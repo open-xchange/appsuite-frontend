@@ -72,7 +72,9 @@ define('io.ox/multifactor/views/smsProvider', [
             def.reject();
         })
         .on('open', function () {
-            $('#verification').focus();
+            _.defer(function () {
+                $('#verification').focus();
+            });
         })
         .on('lost', function () {
             dialog.close();
@@ -98,7 +100,7 @@ define('io.ox/multifactor/views/smsProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function (baton) {
-                var label = $('<label>').append(
+                var label = $('<label for="verification">').append(
                     baton.model.get('error') ? gt('A new code was sent to your SMS device.  Please enter the code.') :
                         gt('Please enter the code that was sent to your SMS device'))
                 .append('<br>');

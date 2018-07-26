@@ -70,7 +70,9 @@ define('io.ox/multifactor/views/exampleProvider', [
             def.reject();
         })
         .on('open', function () {
-            $('#verification').focus();
+            _.defer(function () {
+                $('#verification').focus();
+            });
         })
         .on('lost', function () {
             dialog.close();
@@ -86,7 +88,7 @@ define('io.ox/multifactor/views/exampleProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append('Please enter the example verification code (0815)')
+                var label = $('<label for="verification">').append('Please enter the example verification code (0815)')
                 .append('<br>');
                 this.$body.append(
                     label

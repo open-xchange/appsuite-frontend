@@ -70,7 +70,9 @@ define('io.ox/multifactor/views/totpProvider', [
             def.reject();
         })
         .on('open', function () {
-            $('#authentication').focus();
+            _.defer(function () {
+                $('#authentication').focus();
+            });
         })
         .on('lost', function () {
             dialog.close();
@@ -86,7 +88,7 @@ define('io.ox/multifactor/views/totpProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append('Please enter the code on the authenticator application')
+                var label = $('<label for="authentication">').append('Please enter the code on the authenticator application')
                 .append('<br>');
                 this.$body.append(
                     label
