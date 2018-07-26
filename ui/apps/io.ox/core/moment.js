@@ -59,7 +59,10 @@ define('io.ox/core/moment', [
         // we need do it this way to avoid the use of anonymous defines
         require(['static/3rd.party/moment/locale/' + langISO + '.js'], function () {
             require(['moment/locale/' + langISO]);
+            ox.trigger('moment:locale:ready', langISO);
         });
+    } else {
+        ox.trigger('moment:locale:ready', langISO);
     }
 
     // set timezone

@@ -23,6 +23,7 @@ define('io.ox/core/boot/load', [
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
     'io.ox/core/sockets',
+    'io.ox/core/locale',
     'io.ox/core/moment'
 ], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket) {
 

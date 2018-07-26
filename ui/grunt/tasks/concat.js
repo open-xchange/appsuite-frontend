@@ -74,6 +74,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/settings.js',
                             'apps/io.ox/core/gettext.js',
                             'apps/io.ox/core/event.js',
+                            'apps/io.ox/core/locale.js',
                             'apps/io.ox/core/cache/indexeddb.js',
                             'apps/io.ox/core/cache/localstorage.js',
                             'apps/io.ox/core/cache/simple.js',
