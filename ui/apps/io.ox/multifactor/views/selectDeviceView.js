@@ -18,7 +18,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/factorRenderer',
     'io.ox/multifactor/deviceAuthenticator',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, renderer, deviceAuthenticator, gt) {
 
     'use strict';

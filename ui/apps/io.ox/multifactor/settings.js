@@ -11,7 +11,7 @@
  */
 define('io.ox/multifactor/settings', [
     'io.ox/core/extensions',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (ext, gt) {
     'use strict';
 

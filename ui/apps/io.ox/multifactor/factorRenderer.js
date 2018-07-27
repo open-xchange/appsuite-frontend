@@ -10,7 +10,7 @@
  * Copyright (C) 2016-2020 OX Software GmbH
  */
 define('io.ox/multifactor/factorRenderer', [
-    'gettext!multifactor',
+    'gettext!io.ox/core/boot',
     'less!io.ox/multifactor/style'
 ], function (gt) {
     'use strict';

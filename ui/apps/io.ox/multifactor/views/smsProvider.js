@@ -17,7 +17,7 @@ define('io.ox/multifactor/views/smsProvider', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'gettext!multifactor',
+    'gettext!io.ox/core/boot',
     'less!io.ox/multifactor/style'
 ], function (api, views, ext, mini, ModalView, gt) {
 

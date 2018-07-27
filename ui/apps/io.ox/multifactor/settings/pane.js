@@ -17,7 +17,7 @@ define('io.ox/multifactor/settings/pane', [
     'io.ox/multifactor/factorRenderer',
     'io.ox/core/yell',
     'settings!io.ox/multifactor',
-    'gettext!multifactor',
+    'gettext!io.ox/core/boot',
     'less!io.ox/multifactor/settings/style'
 ], function (ext, ExtensibleView, util, api, factorRenderer, yell, settings, gt) {
     'use strict';

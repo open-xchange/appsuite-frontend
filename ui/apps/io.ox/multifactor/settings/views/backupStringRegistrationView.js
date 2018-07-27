@@ -18,7 +18,7 @@ define('io.ox/multifactor/settings/views/backupStringRegistrationView', [
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/api',
     'io.ox/core/print',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, api, print, gt) {
 
     'use strict';

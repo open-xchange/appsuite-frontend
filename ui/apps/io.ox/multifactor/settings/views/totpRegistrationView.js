@@ -17,7 +17,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/api',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, api, gt) {
 
     'use strict';

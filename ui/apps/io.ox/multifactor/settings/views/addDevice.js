@@ -18,7 +18,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
     'io.ox/backbone/views/modal',
     'io.ox/core/yell',
     'io.ox/multifactor/api',
-    'gettext!multifactor',
+    'gettext!io.ox/core/boot',
     'less!io.ox/multifactor/style'
 ], function (views, ext, mini, ModalView, yell, api, gt) {
 
@@ -200,6 +200,9 @@ define('io.ox/multifactor/settings/views/addDevice', [
         }
         api.beginRegistration(provider, name, additParams).then(function (resp) {
             openView(provider, resp);
+        }, function (error) {
+            debugger;
+            console.log(error);
         });
     }
 

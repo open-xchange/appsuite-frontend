@@ -19,7 +19,7 @@ define('io.ox/multifactor/settings/views/deleteMultifactorView', [
     'io.ox/core/yell',
     'io.ox/multifactor/api',
     'io.ox/multifactor/auth',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, yell, api, auth, gt) {
 
     'use strict';

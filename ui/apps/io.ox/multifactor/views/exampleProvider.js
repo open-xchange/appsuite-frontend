@@ -16,7 +16,7 @@ define('io.ox/multifactor/views/exampleProvider', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, gt) {
 
     'use strict';

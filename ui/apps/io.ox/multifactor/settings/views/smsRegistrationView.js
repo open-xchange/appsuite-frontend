@@ -17,7 +17,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/api',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, api, gt) {
 
     'use strict';
@@ -92,7 +92,11 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
         api.finishRegistration(provider, device.id, response).then(function () {
             console.log('done');
             def.resolve();
-        }, def.reject);
+        }, function (error) {
+            console.log(error);
+            debugger;
+            def.reject();
+        });
     }
 
     return {

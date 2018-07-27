@@ -13,7 +13,7 @@
 
 define('io.ox/multifactor/settings/views/printBackupString', [
     'io.ox/core/print',
-    'gettext!multifactor'],
+    'gettext!io.ox/core/boot'],
 function (print, gt) {
 
     'use strict';

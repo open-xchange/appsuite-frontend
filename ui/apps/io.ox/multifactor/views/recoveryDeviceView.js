@@ -17,7 +17,7 @@ define('io.ox/multifactor/views/recoveryDeviceView', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/factorRenderer',
-    'gettext!multifactor'
+    'gettext!io.ox/core/boot'
 ], function (views, ext, mini, ModalView, renderer, gt) {
 
     'use strict';
