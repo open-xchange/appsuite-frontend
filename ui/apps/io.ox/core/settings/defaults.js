@@ -30,6 +30,7 @@ define('io.ox/core/settings/defaults', function () {
 
     return {
         language: defaultLanguage,
+        region: '',
         refreshInterval: 5 * 60000,
         design: 'primary',
         autoStart: 'io.ox/mail/main',

@@ -21,6 +21,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/upsell',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
+    'io.ox/core/locale',
     'io.ox/core/desktopNotifications',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
@@ -29,7 +30,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol',
     'io.ox/core/settings/quickLauncherDialog'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define('io.ox/core/settings/pane', [
                 new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings })
                 .inject({
 
-                    showNoticeFields: ['language', 'timezone', 'theme'],
+                    showNoticeFields: ['language', 'region', 'timezone', 'theme'],
 
                     showNotice: function (attr) {
                         return _(this.showNoticeFields).some(function (id) {
@@ -71,6 +72,10 @@ define('io.ox/core/settings/pane', [
                         return _(ox.serverConfig.languages).map(function (key, val) {
                             return { label: key, value: val };
                         });
+                    },
+
+                    getRegionOptions: function () {
+                        return [{ label: gt('Based on language'), value: '' }].concat(locale.getLocaleOptions());
                     },
 
                     getThemeOptions: function () {
@@ -310,6 +315,21 @@ define('io.ox/core/settings/pane', [
                 this.listenTo(this.model, 'change:language', function (language) {
                     _.setCookie('language', language);
                 });
+            }
+        },
+        //
+        // Region
+        //
+        {
+            id: 'region',
+            index: INDEX += 100,
+            render: function (baton) {
+
+                if (!settings.isConfigurable('region')) return;
+
+                baton.$el.append(
+                    util.compactSelect('region', gt('Region'), this.model, this.getRegionOptions())
+                );
             }
         },
         //
