@@ -56,7 +56,7 @@ define('io.ox/core/settings/pane', [
                 new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings })
                 .inject({
 
-                    showNoticeFields: ['language', 'region', 'timezone', 'theme'],
+                    showNoticeFields: ['language', 'region', 'locale', 'timezone', 'theme'],
 
                     showNotice: function (attr) {
                         return _(this.showNoticeFields).some(function (id) {
@@ -65,8 +65,8 @@ define('io.ox/core/settings/pane', [
                     },
 
                     reloadHint: AUTOLOGIN ?
-                        gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
-                        gt('Some settings (language, timezone, theme) require a relogin to take effect.'),
+                        gt('Some settings (e.g. language and region) require a page reload or relogin to take effect.') :
+                        gt('Some settings (e.g. language and region) require a relogin to take effect.'),
 
                     getLanguageOptions: function () {
                         return _(ox.serverConfig.languages).map(function (key, val) {
@@ -329,7 +329,21 @@ define('io.ox/core/settings/pane', [
 
                 baton.$el.append(
                     util.compactSelect('region', gt('Region'), this.model, this.getRegionOptions())
+                    .find('.col-md-6').append(
+                        $('<div class="help-block">').append(
+                            $('<a href="#" role="button" data-action="reload">')
+                            .text(gt('Edit regional settings')).on('click', editLocale)
+                        )
+                    )
+                    .end()
                 );
+
+                function editLocale(e) {
+                    e.preventDefault();
+                    require(['io.ox/core/settings/editLocale'], function (dialog) {
+                        dialog.open();
+                    });
+                }
             }
         },
         //
