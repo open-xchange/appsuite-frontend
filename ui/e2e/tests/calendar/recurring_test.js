@@ -54,6 +54,12 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.click('.modal-dialog [name="recurrence_type"]');
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
 
+    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
+
+    I.waitForElement('.modal-dialog [name="occurrences"]');
+    I.fillField('[name="occurrences"]', '5');
+
+    I.click('Apply', '.modal-dialog');
     I.click('Apply', '.modal-dialog');
 
     I.waitForDetached('.modal-dialog');
@@ -71,6 +77,8 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.click('List');
 
     I.see('test recurring', '.list-view .appointment .title');
+
+    I.seeNumberOfElements('.list-view .appointment .title', 5);
 
     I.logout();
 
@@ -94,12 +102,19 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.click('List');
 
     I.see('test recurring', '.list-view .appointment .title');
+
     I.click('test recurring', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="changestatus"]');
-    I.click('Status');
-    I.waitForElement('.modal-dialog');
+    I.waitForDetached('.rightside .multi-selection-message');
+    I.see('test recurring', '.rightside');
+    I.see('invite location', '.rightside');
 
+    I.waitForVisible('[data-action="changestatus"]');
+
+    I.click('Status');
+
+    I.waitForElement('.modal-dialog');
+    I.click('Series', '.modal-dialog');
     I.click('Accept', '.modal-dialog');
 
     I.waitForDetached('.modal-dialog', 5);
@@ -107,11 +122,6 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
 
     I.logout();
-
-    // reset user1 settings
-    I.haveSetting('io.ox/core//autoOpenNotification', true, { user: users[1] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', false, { user: users[1] });
 
     // login owner
     I.login('app=io.ox/calendar');
@@ -132,5 +142,77 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');
     // accepted
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
+
+    // edit
+    I.waitForVisible('[data-action="edit"]');
+    I.click('[data-action="edit"]');
+    I.waitForVisible('.io-ox-dialog-popup');
+    I.click('Cancel', '.io-ox-dialog-popup');
+
+    I.click('[data-action="edit"]');
+    I.waitForVisible('.io-ox-dialog-popup');
+    I.click('Series', '.io-ox-dialog-popup');
+
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'test recurring edit');
+    I.fillField('Location', 'invite location edit');
+    I.click('Save', '.io-ox-calendar-edit-window');
+
+    // check in list view
+    I.clickToolbar('View');
+    I.click('List');
+
+    I.see('test recurring edit', '.list-view .appointment .title');
+
+    I.seeNumberOfElements('.list-view .appointment .title', 5);
+
+    I.logout();
+
+    // login new user1 for decline
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+
+    I.selectFolder('Calendar');
+
+    I.clickToolbar('View');
+    I.click('List');
+
+    I.see('test recurring edit', '.list-view .appointment .title');
+    I.seeNumberOfElements('.list-view .appointment .title', 5);
+
+    I.click('test recurring edit', '.list-view .list-item .title');
+
+    I.waitForDetached('.rightside .multi-selection-message');
+    I.see('test recurring edit', '.rightside');
+    I.see('invite location', '.rightside');
+
+    I.waitForVisible('[data-action="changestatus"]');
+    I.click('Status');
+
+    I.waitForVisible('.modal-dialog');
+
+    I.click('Series', '.modal-dialog');
+
+    I.click('Decline', '.modal-dialog');
+
+    I.waitForDetached('.modal-dialog', 5);
+
+    I.waitForElement('.rightside .participant a.declined[title="' + users[1].userdata.primaryEmail + '"]');
+    I.seeNumberOfElements('.list-view .appointment .declined', 5);
+
+    I.click('test recurring edit', '.list-view .list-item .title');
+    I.waitForVisible('[data-action="changestatus"]');
+    I.click('Status');
+
+    I.waitForVisible('.modal-dialog');
+    I.click('Appointment', '.modal-dialog');
+    I.waitForVisible('.modal-dialog [data-action="tentative"]');
+    I.click('Tentative', '.modal-dialog');
+
+    I.seeNumberOfElements('.list-view .appointment .tentative', 1);
+    I.seeNumberOfElements('.list-view .appointment .declined', 4);
+
+    I.logout();
 
 });
