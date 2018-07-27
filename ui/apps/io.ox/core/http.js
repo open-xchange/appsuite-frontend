@@ -832,7 +832,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }
                 if (error.code && errorBlacklist.indexOf(error.code) >= 0) return;
                 error = _.extend({ status: status, took: took }, error);
-                log.add(error, r.o);
+                if (r) log.add(error, r.o);
             });
 
             // TODO: remove backend fix
