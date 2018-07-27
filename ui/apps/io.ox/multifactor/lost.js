@@ -13,20 +13,30 @@
 
 define('io.ox/multifactor/lost', [
     'io.ox/multifactor/api',
-    'io.ox/multifactor/deviceAuthenticator'
-], function (api, deviceAuthenticator) {
+    'io.ox/multifactor/deviceAuthenticator',
+    'gettext!io.ox/core/boot'
+], function (api, deviceAuthenticator, gt) {
 
     'use strict';
 
-    function failBackup(def) {
-        alert('fail');
-        def.reject();
+    function failBackup(def, message) {
+        notifyFailure(message);
+        window.setTimeout(function () {
+            def.reject();
+        }, 10000);
+    }
+
+    function notifyFailure(message) {
+        require(['io.ox/core/notifications'], function (notify) {
+            notify.yell('error', message);
+            $('#io-ox-core').show();  // May be hidden in login
+        });
     }
 
     function handleLost(def) {
         api.getDevices(true).then(function (devices) {
             if (devices.length === 0) {
-                failBackup(def);
+                failBackup(def, gt('There are no backup devices available for this account.  Please notify support for help.'));
                 return;
             }
             var device = devices[0];
@@ -41,7 +51,7 @@ define('io.ox/multifactor/lost', [
                     });
                     return;
                 }
-                failBackup(def);
+                failBackup(def, gt('Authentication failure.  Please reload browser and try again.'));
             }, function (fail) {
                 failBackup(def, fail);
             });
