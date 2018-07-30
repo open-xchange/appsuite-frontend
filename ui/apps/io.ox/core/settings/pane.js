@@ -330,9 +330,9 @@ define('io.ox/core/settings/pane', [
                 baton.$el.append(
                     util.compactSelect('region', gt('Region'), this.model, this.getRegionOptions())
                     .find('.col-md-6').append(
-                        $('<div class="help-block">').append(
+                        $('<div class="help-block text-right">').append(
                             $('<a href="#" role="button" data-action="reload">')
-                            .text(gt('Edit regional settings')).on('click', editLocale)
+                            .text(gt('Customize regional settings')).on('click', editLocale)
                         )
                     )
                     .end()

@@ -36,37 +36,6 @@ define('io.ox/core/moment', [
 
     'use strict';
 
-    console.log('init moment');
-
-    // var defaultLang = 'en';
-
-    // function isMomentLanguage(lang) {
-    //     return ox.momentLanguages ? ox.momentLanguages.indexOf(lang) > -1 : false;
-    // }
-
-    // function normalizeLocale(key) {
-    //     if (_.isEmpty(key)) return defaultLang;
-    //     var l = key.toLowerCase().replace('_', '-').split('-'),
-    //         iso = l[0] !== l[1] ? l[0] + '-' + l[1] : l[0];
-    //     if (isMomentLanguage(iso)) {
-    //         return iso;
-    //     }
-    //     return isMomentLanguage(l[0]) ? l[0] : defaultLang;
-    // }
-
-    // // set locale
-    // var langISO = normalizeLocale(settings.get('language'));
-    // if (langISO !== defaultLang) {
-    //     // load the file that contains the define, then load the define itself
-    //     // we need do it this way to avoid the use of anonymous defines
-    //     require(['static/3rd.party/moment/locale/' + langISO + '.js'], function () {
-    //         require(['moment/locale/' + langISO]);
-    //         ox.trigger('moment:locale:ready', langISO);
-    //     });
-    // } else {
-    //     ox.trigger('moment:locale:ready', langISO);
-    // }
-
     // set timezone
     moment.tz.setDefault(settings.get('timezone'));
 
