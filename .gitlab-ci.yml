@@ -4,6 +4,7 @@ include:
   - local: "/gitlab-ci/docker.yml"
   - local: "/gitlab-ci/preview_apps.yml"
   - local: "/gitlab-ci/documentation.yml"
+  - local: "/gitlab-ci/packaging.yml"
   - local: "/gitlab-ci/e2e.yml"
 
 stages:
@@ -26,10 +27,17 @@ stages:
   image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
   variables:
     build_tasks: dist:build
+    build_script: grunt ${build_tasks}
   script:
     - cd ${PROJECT_PATH}
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - grunt ${build_tasks}
+    - echo ${build_script}
+    - eval "${build_script}"
+    - "[ -z \"$PACKAGE_NAME\" ] && export PACKAGE_NAME=${PROJECT_PATH}"
+    - "[ -z \"$HTDOCS_PACKAGE_NAME\" ] && export HTDOCS_PACKAGE_NAME=${PACKAGE_NAME}"
+    - "[ -z \"$L10N_PACKAGE_NAME\" ] && export L10N_PACKAGE_NAME=${PACKAGE_NAME}"
+    - npx grunt install:dist --prefix=../${PACKAGE_NAME}/build/pkg --htdoc=../${HTDOCS_PACKAGE_NAME}/build/pkg
+    - npx grunt install:languages --prefix=../${L10N_PACKAGE_NAME}/build/pkg
   stage: build
   artifacts:
     expire_in: 2hours
@@ -45,21 +53,37 @@ build ui:
   parallel: 2
   variables:
     PROJECT_PATH: ui
-    build_tasks_1: lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
+    PACKAGE_NAME: open-xchange-appsuite-manifest
+    HTDOCS_PACKAGE_NAME: open-xchange-appsuite
+    L10N_PACKAGE_NAME: open-xchange-appsuite-l10n
+    build_script: eval "grunt \$${build_tasks_$$CI_NODE_INDEX}"
+    build_tasks_1: lint copy_build compile_po concat uglify:dist_largeFiles less copy_dist
     build_tasks_2: copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
-  script:
-    - cd ${PROJECT_PATH}
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - eval "grunt \${build_tasks_$CI_NODE_INDEX}"
   tags:
     - openstack
   only:
     changes:
       - ui/**/*
+      - update-themes/**/*
       - open-xchange-appsuite/**/*
       - open-xchange-appsuite-l10n/**/*
       - open-xchange-appsuite-manifest/**/*
-      - gitlab_ci
+      - gitlab_ci/*
+      - .gitlab-ci.yml
+
+build update-themes:
+  extends: .build ui plugin
+  variables:
+    PROJECT_PATH: update-themes
+    PACKAGE_NAME: open-xchange-appsuite-manifest
+  only:
+    changes:
+      - ui/**/*
+      - update-themes/**/*
+      - open-xchange-appsuite/**/*
+      - open-xchange-appsuite-l10n/**/*
+      - open-xchange-appsuite-manifest/**/*
+      - gitlab_ci/*
       - .gitlab-ci.yml
 
 build ui docker image:

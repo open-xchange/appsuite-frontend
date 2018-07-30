@@ -1,0 +1,43 @@
+---
+
+stages:
+  - test
+  - deploy
+  - cleanup
+
+cleanup packaging repo:
+  image: gitlab.open-xchange.com:4567/frontend/osc_env:latest
+  stage: cleanup
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - echo "${OBS_OSCRC}" >> ~/.oscrc
+  script:
+    - for P in open-xchange-appsuite open-xchange-appsuite-manifest open-xchange-appsuite-l10n open-xchange-dynamic-theme open-xchange-guidedtours open-xchange-appsuite-help open-xchange-appsuite-saml open-xchange-appsuite-spamexperts; do osc rdelete frontend-${CI_COMMIT_REF_SLUG} $P -m "GitLab CI environment stopped for $P" || echo "Could not remove $P, ignoring"; done
+    - osc rdelete frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped" || echo "Leaving non-empty project on OBS"
+  when: manual
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    action: stop
+
+upload:
+  image: gradle:5.5-jre8
+  stage: deploy
+  variables:
+    OBS_PROJECT: frontend-$CI_COMMIT_REF_SLUG
+  script:
+    # only run subtasks for projects which have been build previously (contain some built project files)
+    - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
+    - gradle --no-daemon $TASKS
+  only:
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    on_stop: "cleanup packaging repo"
+    url: https://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_SLUG/
+  dependencies:
+    - build ui
+    - build update-themes

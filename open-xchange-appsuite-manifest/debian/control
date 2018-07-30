@@ -1,0 +1,16 @@
+Source: open-xchange-appsuite-manifest
+Section: non-free/web
+Priority: optional
+Maintainer: Julian Baeume <julian.baeume@open-xchange.com>
+Build-Depends: debhelper (>= 10), lsb-release
+Standards-Version: 3.9.2
+Homepage: http://open-xchange.com
+Vcs-Git: https://gitlab.open-xchange.com/frontend/core.git
+Vcs-Browser: https://gitlab.open-xchange.com/frontend/core/tree/develop
+
+Package: open-xchange-appsuite-manifest
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-core, nodejs (>= 0.6.0) | open-xchange-halo, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
+Replaces: open-xchange-documents-ui (<< 7.2.1-0), open-xchange-appsuite-saml
+Conflicts: open-xchange-documents-ui (<< 7.2.1-0), open-xchange-appsuite-saml
+Description: Manifest and apps included in the OX App Suite HTML5 client
