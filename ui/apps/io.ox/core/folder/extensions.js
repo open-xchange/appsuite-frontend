@@ -40,18 +40,22 @@ define('io.ox/core/folder/extensions', [
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
             var defaultFolders = mailSettings.get('defaultFolder') || {},
-                list = [];
+                list = [],
+                // hash to avoid duplicates (see bug 59060)
+                hash = {};
             http.pause();
             // collect get requests
             list.push(api.get(INBOX));
+            hash[INBOX] = true;
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
             // ensure fixed order; rely on defaultFolders (see bug 56563)
             ['drafts', 'sent', 'spam', 'trash', 'archive'].forEach(function (type) {
                 var folder = defaultFolders[type];
-                if (!folder) return;
+                if (!folder || hash[folder]) return;
                 if (type === 'archive' && !capabilities.has('archive_emails')) return;
                 list.push(api.get(folder));
+                hash[folder] = true;
             });
             http.resume();
             return this.concat.apply(this, list);
