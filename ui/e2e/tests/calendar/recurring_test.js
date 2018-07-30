@@ -102,6 +102,7 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.click('List');
 
     I.see('test recurring', '.list-view .appointment .title');
+    I.seeNumberOfElements('.list-view .appointment .title', 5);
 
     I.click('test recurring', '.list-view .list-item .title');
 
@@ -167,6 +168,35 @@ Scenario('Create recurring appointments with one participant', function (I, user
 
     I.seeNumberOfElements('.list-view .appointment .title', 5);
 
+    // edit
+    I.see('test recurring edit', '.list-view .appointment .title');
+    I.click('test recurring edit', '.list-view .list-item .title');
+
+    I.waitForVisible('[data-action="edit"]');
+    I.click('[data-action="edit"]');
+
+    I.waitForVisible('.io-ox-dialog-popup');
+    I.click('This appointment', '.io-ox-dialog-popup');
+
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'test recurring edit new');
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+
+    I.click('//div[@class="title" and text()="test recurring edit new"]');
+
+
+    I.waitForVisible('[data-action="delete"]');
+    I.click('[data-action="delete"]');
+
+    I.waitForVisible('.io-ox-dialog-popup');
+    I.click('Delete', '.io-ox-dialog-popup');
+
+    I.waitForDetached('.io-ox-dialog-popup');
+
+    I.seeNumberOfElements('//div[@class="title" and text()="test recurring edit"]', 4);
+
     I.logout();
 
     // login new user1 for decline
@@ -179,7 +209,7 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.click('List');
 
     I.see('test recurring edit', '.list-view .appointment .title');
-    I.seeNumberOfElements('.list-view .appointment .title', 5);
+    I.seeNumberOfElements('.list-view .appointment .title', 4);
 
     I.click('test recurring edit', '.list-view .list-item .title');
 
@@ -199,7 +229,7 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.waitForDetached('.modal-dialog', 5);
 
     I.waitForElement('.rightside .participant a.declined[title="' + users[1].userdata.primaryEmail + '"]');
-    I.seeNumberOfElements('.list-view .appointment .declined', 5);
+    I.seeNumberOfElements('.list-view .appointment .declined', 4);
 
     I.click('test recurring edit', '.list-view .list-item .title');
     I.waitForVisible('[data-action="changestatus"]');
@@ -211,7 +241,7 @@ Scenario('Create recurring appointments with one participant', function (I, user
     I.click('Tentative', '.modal-dialog');
 
     I.seeNumberOfElements('.list-view .appointment .tentative', 1);
-    I.seeNumberOfElements('.list-view .appointment .declined', 4);
+    I.seeNumberOfElements('.list-view .appointment .declined', 3);
 
     I.logout();
 
