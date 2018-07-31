@@ -586,7 +586,7 @@ define('io.ox/mail/common-extensions', [
                         url, contentType;
 
                     new links.Dropdown({
-                        label: this.model.getShortTitle(),
+                        label: $.txt(this.model.getShortTitle()),
                         noCaret: true,
                         ref: 'io.ox/mail/attachment/links'
                     })
