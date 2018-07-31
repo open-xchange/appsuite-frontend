@@ -265,7 +265,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                 'data-editor-id': editorId
             })
             .append(
-                toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
+                toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId)
+                    .on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }),
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
                     //.css('margin-bottom', '32px')
@@ -426,6 +427,11 @@ define('io.ox/core/tk/contenteditable-editor', [
         function resizeEditor() {
 
             if (el === null) return;
+
+            // This is needed for keyboard to work in small windows with buttons that are hidden
+            var buttons = toolbar.find('.mce-btn').filter('[data-hidden="xs"]');
+            buttons.filter(':hidden').attr({ role: 'presentation', 'aria-hidden': true });
+            buttons.filter(':visible').removeAttr('aria-hidden').attr('role', 'button');
 
             var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
 
