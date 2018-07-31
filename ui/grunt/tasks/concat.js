@@ -297,8 +297,8 @@ module.exports = function (grunt) {
                     {
                         src: [
                             'node_modules/tinymce/tinymce.min.js',
-                            'node_modules/@open-xchange/tinymce/themes/unobtanium/theme.min.js',
-                            'node_modules/tinymce/plugins/{autolink,code,link,paste,textcolor,lists}/plugin.min.js',
+                            'node_modules/tinymce/themes/modern/theme.min.js',
+                            'node_modules/tinymce/plugins/{autoresize,autolink,code,link,paste,textcolor,lists}/plugin.min.js',
                             'node_modules/@open-xchange/tinymce/plugins/ox{image,paste,drop}/plugin.min.js'
                         ],
                         dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',

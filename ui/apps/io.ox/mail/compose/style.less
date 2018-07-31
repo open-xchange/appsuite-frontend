@@ -137,19 +137,21 @@
     .contenteditable-editor {
         position: relative;
         z-index: 3;
+        margin-bottom: 16px;
     }
 
-    .editable-toolbar {
-        position: relative;
-        height: 100%;
+    .toolbar-fixed > .mce-tinymce > .mce-stack-layout > .mce-top-part {
+        position: fixed;
+        min-height: 34px;
+        z-index: 1;
+        border-bottom: 1px solid #ccc;
+        opacity: 0.9;
 
-        &.fixed{
-            position: fixed;
-            min-height: 34px;
-            z-index: 1;
-            border-bottom: 1px solid #ccc;
-            opacity: 0.9;
-        }
+        .width-xs.maximized & { width: 1028px; }
+        .width-xs:not(.maximized) & { width: 608px; }
+    }
+
+    .mce-tinymce > .mce-stack-layout > .mce-top-part {
 
         input.file-input:hover { cursor: pointer; }
 
