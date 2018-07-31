@@ -35,8 +35,8 @@ define('io.ox/files/listview', [
         // context menu when clicked below the list.
         // var linkOutsideList = link + '/outsideList'; Disabled for now
 
-        // no contextmenu event on small devices
-        if (_.device('smartphone')) return;
+        // android sends context events on long tap, but currently we don't want a context menu on smartphones and tablets
+        if (_.device('smartphone') || _.device('android')) { return; }
 
         var list = view.selection.get();
         if (!list) return;

@@ -23,7 +23,6 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/autologout'
 ], function (http, upsell, ext, capabilities, icons, Dropdown, settings, gt) {
 
-
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
@@ -141,7 +140,7 @@ define('io.ox/core/main/appcontrol', [
             this.$el.empty().attr({
                 'data-id': this.model.get('id'),
                 'data-app-name': this.model.get('name')
-            }).append(this.icon = this.drawIcon());
+            }).toggleClass('active', ox.ui.App.isCurrent(this)).append(this.icon = this.drawIcon());
             this.updateTooltip();
             this.addAccessKey();
             // used on mobile, reverted for 7.10
@@ -227,6 +226,11 @@ define('io.ox/core/main/appcontrol', [
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         $toggle: $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+        initialize: function () {
+            Dropdown.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.collection, 'add remove', this.update);
+            this.update();
+        },
         update: function () {
             this.$ul.empty();
             this.collection.forLauncher().forEach(function (model, i) {
@@ -241,11 +245,6 @@ define('io.ox/core/main/appcontrol', [
                     );
                 }.bind(this));
             }
-        },
-        initialize: function () {
-            Dropdown.prototype.initialize.apply(this, arguments);
-            this.listenTo(this.collection, 'add remove', this.update);
-            this.update();
         }
     });
 
@@ -270,7 +269,16 @@ define('io.ox/core/main/appcontrol', [
             initRefreshAnimation();
 
             ox.ui.apps.on('launch resume', function (model) {
-                $('.launcher-dropdown').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+                if (model.get('floating')) return;
+
+                $('.launcher-dropdown').find('.lcell[data-app-name]')
+                    .removeClass('active').end()
+                    .find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active');
+
+                $('#io-ox-quicklaunch').find('.lcell[data-id]')
+                    .removeClass('active').end()
+                    .find('.lcell[data-id="' + model.get('name') + '"]').addClass('active');
+
                 _.defer(function () {
                     $(document).trigger('resize');
                 });

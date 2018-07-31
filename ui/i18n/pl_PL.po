@@ -520,10 +520,22 @@ msgstr "10 minut"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 godzin"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minut"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 godziny"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -646,6 +658,13 @@ msgstr "Nazwa konta"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
+msgstr "Konto zostało pomyślnie dodane"
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Account added successfully"
+msgid "Account already exists"
 msgstr "Konto zostało pomyślnie dodane"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1250,8 +1269,8 @@ msgstr "Dołącz wizytówkę"
 msgid "Apple Maps"
 msgstr "Apple Maps"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Dopóki ten problem nie zostanie rozwiązany, aplikacja może działać "
@@ -1266,6 +1285,7 @@ msgstr "Zastosuj"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -1800,6 +1820,7 @@ msgstr "Kamera %1$s"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -2696,7 +2717,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2751,8 +2772,10 @@ msgstr "Odrzuć"
 msgid "Declined"
 msgstr "Odrzucono"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Domyślne"
 
@@ -2877,6 +2900,13 @@ msgstr "Usuń kontakt"
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Usuń wersję roboczą"
+
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Po zakończeniu importu usuń stare podpisy"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -4057,7 +4087,7 @@ msgstr "Rozwiń formularz"
 msgid "Expert user?"
 msgstr "Jesteś zaawansowanym użytkownikiem?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Termin ważności"
@@ -4219,7 +4249,7 @@ msgstr "Ulubione"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Ulubione"
 
@@ -4361,6 +4391,12 @@ msgstr "Zakończono przenoszenie"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "dzień tygodnia"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4374,6 +4410,10 @@ msgstr "Imię Nazwisko"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "Imię nie może być puste dla użytkowników wewnętrznych"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -5961,6 +6001,12 @@ msgstr "Minikalendarz"
 msgid "Minimize"
 msgstr "Minimalizuj"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Minimalizuj"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -5989,6 +6035,13 @@ msgstr "Model jest niekompletny."
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "Zmodyfikowane"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "Poniedziałek"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -6426,7 +6479,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "Brak urodzin w ciągu następnych %1$d tyg."
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr "Bez koloru"
 
@@ -6680,6 +6732,12 @@ msgstr "Powiadom mnie ponownie później"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Teraz aktywne"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Członkowie"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7410,11 +7468,6 @@ msgstr "Wprowadź datę przypadającą po dacie rozpoczęcia"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Pamiętaj, że listy dystrybucyjne nie mogą zawierać zasobów."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Pamiętaj, że inni uczestnicy są usuwani podczas eksportowania kalendarza."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Pamiętaj, że inni uczestnicy są usuwani podczas importu kalendarza."
@@ -8055,6 +8108,12 @@ msgstr "Odświeżenie kalendarza może trochę potrwać..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Wyrażenie regularne"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Dodatkowe ustawienia"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -8705,6 +8764,7 @@ msgstr "Wybierz wszystkie wiadomości"
 msgid "Select calendar"
 msgstr "Wybierz kalendarz"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -9341,6 +9401,11 @@ msgstr "Opcje sortowania"
 msgid "Sound"
 msgstr "Dźwięk"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Źródło"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9465,6 +9530,13 @@ msgstr "Nie wylogowuj"
 msgid "Street"
 msgstr "Ulica"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Sharing"
+msgid "String"
+msgstr "Udostępnianie"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
 msgstr "Student/uczeń"
@@ -9547,6 +9619,13 @@ msgstr "Sufiks"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Podsumowanie"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "Niedziela"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -10494,6 +10573,7 @@ msgid "Tiles"
 msgstr "Kafelki"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Godzina"
 
@@ -10932,6 +11012,13 @@ msgstr "Użyj aplikacji %1$s"
 msgid "Use browser default"
 msgstr "Użyj ustawienia domyślnego przeglądarki"
 
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "Use calendar color"
+msgstr "Nowy kalendarz"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "Użyj kategorii"
@@ -11114,6 +11201,12 @@ msgstr "Pasek narzędzi przeglądarki"
 msgid "Visibility"
 msgstr "Widoczność"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Visibility"
+msgid "Visibility Help"
+msgstr "Widoczność"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
@@ -11184,6 +11277,14 @@ msgstr "Tydzień"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Początek tygodnia"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11973,10 +12074,6 @@ msgstr "odrzucone"
 msgid "delete all objects"
 msgstr "usuwanie wszystkich obiektów"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "Usuń po terminie ważności"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -12644,9 +12741,6 @@ msgstr "Twoja platforma"
 #~ msgid "1 week"
 #~ msgstr "1 tydzień"
 
-#~ msgid "12 hour"
-#~ msgstr "12 godzin"
-
 #~ msgid "150%"
 #~ msgstr "150%"
 
@@ -12664,9 +12758,6 @@ msgstr "Twoja platforma"
 
 #~ msgid "4 days"
 #~ msgstr "4 dni"
-
-#~ msgid "4 hour"
-#~ msgstr "4 godziny"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 tygodnie"
@@ -12775,9 +12866,6 @@ msgstr "Twoja platforma"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Dodawanie subskrypcji. Może to chwilę potrwać..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Dodatkowe ustawienia"
 
 #~ msgid "Addresses"
 #~ msgstr "Adresy"
@@ -14508,6 +14596,10 @@ msgstr "Twoja platforma"
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Pamiętaj, że listy dystrybucyjne nie mogą zawierać zasobów."
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Pamiętaj, że inni uczestnicy są usuwani podczas eksportowania kalendarza."
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Podaj następujące brakujące zmienne:"
 
@@ -15013,9 +15105,6 @@ msgstr "Twoja platforma"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Sortowanie zadań"
-
-#~ msgid "Source"
-#~ msgstr "Źródło"
 
 #~ msgid "Spam folder"
 #~ msgstr "Wiadomości-śmieci"
@@ -16225,9 +16314,6 @@ msgstr "Twoja platforma"
 #~ msgid "date range"
 #~ msgstr "zakres dat"
 
-#~ msgid "day of the week"
-#~ msgstr "dzień tygodnia"
-
 #~ msgid "day of the weekend"
 #~ msgstr "dzień tygodnia"
 
@@ -16236,6 +16322,9 @@ msgstr "Twoja platforma"
 
 #~ msgid "december"
 #~ msgstr "grudzień"
+
+#~ msgid "delete if expired"
+#~ msgstr "Usuń po terminie ważności"
 
 #~ msgid "disable"
 #~ msgstr "wyłącz"

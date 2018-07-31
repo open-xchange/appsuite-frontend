@@ -73,9 +73,16 @@ define('io.ox/core/tk/tokenfield', [
 
         return this.$element.get(0);
     };
+    // totally annoying IE11/Edge Fix (who else could it be) so the dropdown stays open when clicking on the scrollbars
+    // see for example https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15558714/, https://github.com/corejavascript/typeahead.js/issues/166, https://github.com/twitter/typeahead.js/issues/705
+    var mouseIsInDropdown = false;
 
     // needs overwrite because of bug 54034
     $.fn.tokenfield.Constructor.prototype.blur = function (e) {
+        if (mouseIsInDropdown) {
+            this.$input.focus();
+            return;
+        }
         this.focused = false;
         this.$wrapper.removeClass('focus');
 
@@ -530,11 +537,31 @@ define('io.ox/core/tk/tokenfield', [
                 _onSuggestionMouseLeave: function (e) {
                     if (!hasMouseMoved(e)) return;
                     this._removeCursor();
+                },
+                onDropdownMouseEnter: function () {
+                    mouseIsInDropdown = true;
+                },
+                onDropdownMouseLeave: function () {
+                    mouseIsInDropdown = false;
                 }
             });
+
             dropdown.$menu.off('mouseenter.tt mouseleave.tt')
                 .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
                 .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
+
+            if (_.browser.IE || _.browser.Edge) {
+
+                this.input.off('blur.tt').on('blur.tt', function () {
+                    if (mouseIsInDropdown) return;
+                    this.resetInputValue();
+                    this.trigger('blurred');
+                }.bind(this.hiddenapi.input));
+
+                dropdown.$menu
+                    .on('mouseenter.tt', dropdown.onDropdownMouseEnter.bind(dropdown))
+                    .on('mouseleave.tt', dropdown.onDropdownMouseLeave.bind(dropdown));
+            }
 
             // calculate position for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {

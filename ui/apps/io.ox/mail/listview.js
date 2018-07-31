@@ -34,6 +34,20 @@ define('io.ox/mail/listview', [
         }, 0));
     }
 
+    // if the most recent mail in a thread is deleted remove that data and use the data of the first undeleted mail instead
+    function removeDeletedMailThreadData(data) {
+        // most recent mail is not deleted
+        if (!util.isDeleted(data)) return;
+
+        var firstUndeletedMail = _(data.thread).findWhere(function (mail) {
+            return !util.isDeleted(mail);
+        });
+        // seems there is no undeleted mail
+        if (!firstUndeletedMail) return;
+
+        data = _.extend(data, firstUndeletedMail);
+    }
+
     ext.point('io.ox/mail/listview/item').extend(
         {
             id: 'default',
@@ -43,6 +57,7 @@ define('io.ox/mail/listview', [
                 // fix missing threadSize (aparently only used by tests)
                 fixThreadSize(baton.data);
 
+                removeDeletedMailThreadData(baton.data);
                 if (!baton.app) {
                     ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);
                     return;

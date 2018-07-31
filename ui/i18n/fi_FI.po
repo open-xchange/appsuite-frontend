@@ -495,10 +495,22 @@ msgstr "10 minuuttia"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 tunnin"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minuuttia"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 tunnin"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -621,6 +633,13 @@ msgstr "Tilin nimi"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
+msgstr "Tili onnistuneesti päivitetty"
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Account added successfully"
+msgid "Account already exists"
 msgstr "Tili onnistuneesti päivitetty"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1219,8 +1238,8 @@ msgstr "Lisää vCard käyntikorttini"
 msgid "Apple Maps"
 msgstr "Apple Maps-kartat"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman korjaamista."
@@ -1234,6 +1253,7 @@ msgstr "Käytä"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -1763,6 +1783,7 @@ msgstr "Kamera %1$s"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -2654,7 +2675,7 @@ msgstr "Data vain osittain tuotu (%1$s /%2$s tietueesta)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2709,8 +2730,10 @@ msgstr "Kieltäydy"
 msgid "Declined"
 msgstr "Evätty"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Oletus"
 
@@ -2835,6 +2858,13 @@ msgstr "Poista yhteystieto"
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Poista luonnos"
+
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Poista vanhat allekirjoitukset tuonnin jälkeen"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -3996,7 +4026,7 @@ msgstr "Laajenna lomake"
 msgid "Expert user?"
 msgstr "Asiantuntijakäyttäjä?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Vanhentuminen"
@@ -4154,7 +4184,7 @@ msgstr "Suosikit"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Suosikit"
 
@@ -4295,6 +4325,12 @@ msgstr "Siirto päättyi"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "työpäivä"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4308,6 +4344,10 @@ msgstr "Etunimi Sukunimi"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "Sisäisten käyttäjien etunimikenttä ei saa olla tyhjä"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -5891,6 +5931,12 @@ msgstr "Minikalenteri"
 msgid "Minimize"
 msgstr "Minimoi"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Minimoi"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -5919,6 +5965,13 @@ msgstr "Malli on keskeneräinen."
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "Muutettu"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "Maanantaina"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -6356,7 +6409,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "Ei syntymäpäiviä seuraavan %1$d viikon aikana"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr "Ei väriä"
 
@@ -6607,6 +6659,12 @@ msgstr "Muistuta minua myöhemmin"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Nyt käynnissä"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Jäsenet"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7333,10 +7391,6 @@ msgstr "Päättymispäivämäärän täytyy olla alkamispäivämäärän jälkee
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Huomioi, että jakelulistat eivät voi sisältää resursseja."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "Huomaa, että muut osallistujat poistetaan kun kalenteri siirretään."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Huomaa, että muut osallistujat poistetaan kalenteria tuotaessa."
@@ -7978,6 +8032,12 @@ msgstr "Kalenterin virkistäminen saattaa kestää hetken..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Säännöllinen lauseke (regex)"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Lisäasetukset"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -8625,6 +8685,7 @@ msgstr "Valitse kaikki viestit"
 msgid "Select calendar"
 msgstr "Valitse kalenteri"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -9254,6 +9315,11 @@ msgstr "Lajitteluvaihtoehdot"
 msgid "Sound"
 msgstr "Ääni"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Lähde"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9378,6 +9444,13 @@ msgstr "Pysy kirjautuneena"
 msgid "Street"
 msgstr "Katu"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Sharing"
+msgid "String"
+msgstr "Jaetaan"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
 msgstr "Opiskelija"
@@ -9460,6 +9533,13 @@ msgstr "Jälkiliite"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Yhteenveto"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "Sunnuntaina"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -10379,6 +10459,7 @@ msgid "Tiles"
 msgstr "Sovellusikkunat"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Aika"
 
@@ -10816,6 +10897,13 @@ msgstr "Käytä %1$s"
 msgid "Use browser default"
 msgstr "Aseta selaimen oletusta"
 
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "Use calendar color"
+msgstr "Uusi kalenteri"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "Käytä kategorioita"
@@ -10998,6 +11086,12 @@ msgstr "Esikatselun työkalurivi"
 msgid "Visibility"
 msgstr "Näkyvyys"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Visibility"
+msgid "Visibility Help"
+msgstr "Näkyvyys"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
@@ -11067,6 +11161,14 @@ msgstr "Viikko"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Viikko alkaa"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11851,10 +11953,6 @@ msgstr "hylännyt"
 msgid "delete all objects"
 msgstr "poista kaikki kohteet"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "poista jos vanhentunut"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -12502,9 +12600,6 @@ msgstr "alustasi"
 #~ msgid "1 week"
 #~ msgstr "1 viikko"
 
-#~ msgid "12 hour"
-#~ msgstr "12 tunnin"
-
 #~ msgid "2 days"
 #~ msgstr "2 päivää"
 
@@ -12516,9 +12611,6 @@ msgstr "alustasi"
 
 #~ msgid "4 days"
 #~ msgstr "4 päivää"
-
-#~ msgid "4 hour"
-#~ msgstr "4 tunnin"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 viikkoa"
@@ -12617,9 +12709,6 @@ msgstr "alustasi"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lisätään tilaus. Tämä voi kestää muutaman sekunnin..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Lisäasetukset"
 
 #~ msgid "Addresses"
 #~ msgstr "Osoitteet"
@@ -14092,6 +14181,9 @@ msgstr "alustasi"
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Jakelulistoihin ei voi sisältyä resursseja."
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "Huomaa, että muut osallistujat poistetaan kun kalenteri siirretään."
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Määrittele nämä puuttuvat muuttujat:"
 
@@ -14524,9 +14616,6 @@ msgstr "alustasi"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Tehtävien lajittelu"
-
-#~ msgid "Source"
-#~ msgstr "Lähde"
 
 #~ msgid "Spam folder"
 #~ msgstr "Roskaposti"
@@ -15610,14 +15699,14 @@ msgstr "alustasi"
 #~ msgid "date range"
 #~ msgstr "päivämäärävalikoima"
 
-#~ msgid "day of the week"
-#~ msgstr "työpäivä"
-
 #~ msgid "day of the weekend"
 #~ msgstr "viikonlopun päivä"
 
 #~ msgid "dd"
 #~ msgstr "pp"
+
+#~ msgid "delete if expired"
+#~ msgstr "poista jos vanhentunut"
 
 #~ msgid "disable"
 #~ msgstr "Kytke pois päältä"

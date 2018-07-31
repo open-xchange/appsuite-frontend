@@ -245,42 +245,29 @@ define('io.ox/calendar/view-detail', [
     }));
 
     function redraw(e, baton) {
+        // new calendar api returns models. Make sure that data and model is not mixed
+        baton.model = baton.data;
+        delete baton.data;
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
     return {
 
         draw: function (baton, options) {
-            if (baton && !(baton instanceof ext.Baton) && baton.data) {
-                baton = baton.data;
-            }
-
-            // keep event info but remove it from baton (baton sometimes is the actual event model)
-            var isCreateEvent;
-            if (baton && baton.isCreateEvent !== undefined) {
-                isCreateEvent = baton.isCreateEvent;
-                delete baton.isCreateEvent;
-            }
             // make sure we have a baton
-            baton = baton instanceof Backbone.Model ? new ext.Baton({ model: baton, data: baton.toJSON() }) : ext.Baton.ensure(baton);
+            baton = ext.Baton.ensure(baton);
 
             // if we only have one create the other
-            if (baton.data && !baton.model) {
-                baton.model = new ChronosModel.Model(baton.data);
-            }
-            if (baton.model && !baton.data) {
-                baton.data = baton.model.toJSON();
-            }
+            if (baton.data && _.isEmpty(baton.model)) baton.model = new ChronosModel.Model(baton.data);
+            if (baton.model && _.isEmpty(baton.data)) baton.data = baton.model.toJSON();
 
             options = _.extend({ minimaldata: !baton.data.folder }, options);
             if (_.device('smartphone') && !options.deeplink) {
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
             }
             try {
-                var node = $.createViewContainer(baton.data, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
+                var node = $.createViewContainer(baton, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
                 node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
-                baton.isCreateEvent = isCreateEvent;
-                baton.noFolderCheck = options.noFolderCheck;
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
                 return node;
 

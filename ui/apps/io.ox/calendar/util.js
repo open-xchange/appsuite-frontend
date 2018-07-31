@@ -662,7 +662,9 @@ define('io.ox/calendar/util', [
 
             // if weekly, shift bits
             if (type === 2) {
-                var shift = date.diff(oldDate, 'days') % 7,
+                var newDay = moment(date).startOf('day'),
+                    oldDay = moment(oldDate).startOf('day'),
+                    shift = newDay.diff(oldDay, 'days') % 7,
                     days = rruleMapModel.get('days');
                 if (shift < 0) shift += 7;
                 for (var i = 0; i < shift; i++) {
@@ -1072,10 +1074,10 @@ define('io.ox/calendar/util', [
 
         showRecurrenceDialog: function (model) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
-            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
+            if (model.get('recurrenceId')) {
                 var dialog = new dialogs.ModalDialog();
                 // first occurence or exception (we need to load the series master as the exception data doesn't work for changing the series )
-                if (model.hasFlag('first_occurrence')) {
+                if (model.hasFlag('first_occurrence') || model.get('id') !== model.get('seriesId')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else if (model.hasFlag('last_occurrence')) {

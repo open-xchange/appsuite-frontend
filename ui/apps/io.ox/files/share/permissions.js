@@ -34,9 +34,10 @@ define('io.ox/files/share/permissions', [
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
     'io.ox/core/util',
+    'io.ox/core/api/group',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi) {
 
     'use strict';
 
@@ -1151,6 +1152,8 @@ define('io.ox/files/share/permissions', [
 
                 def.then(
                     function success() {
+                        // refresh the guest group (id = int max value)
+                        groupApi.refreshGroup(2147483647);
                         objModel.reload().then(
                             function () {
                                 dialog.close();

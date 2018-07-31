@@ -295,19 +295,19 @@ define('io.ox/calendar/week/extensions', [
                     }, { silent: true });
                     switch (d.my.handle) {
                         case 'n':
-                            date = event.getMoment('startDate');
+                            date = moment(self.startDate);
                             curTimezone = moment().tz();
                             eventTimezone = date.tz();
                             // translate to current user timezone apply offset and translate back to appointments timezone
-                            date.tz(curTimezone).startOf('day').add(self.getTimeFromPos(d.my.top), 'ms').tz(eventTimezone);
+                            date.tz(curTimezone).startOf('day').add(d.my.day, 'days').add(self.getTimeFromPos(d.my.top), 'ms').tz(eventTimezone);
                             event.set('startDate', { value: date.format('YYYYMMDD[T]HHmmss'), tzid: event.get('startDate').tzid });
                             break;
                         case 's':
-                            date = event.getMoment('startDate');
+                            date = moment(self.startDate);
                             curTimezone = moment().tz();
                             eventTimezone = date.tz();
                             // translate to current user timezone apply offset and translate back to appointments timezone
-                            date.tz(curTimezone).startOf('day').add(self.getTimeFromPos(d.my.bottom), 'ms').tz(eventTimezone);
+                            date.tz(curTimezone).startOf('day').add(d.my.day, 'days').add(self.getTimeFromPos(d.my.bottom), 'ms').tz(eventTimezone);
                             event.set('endDate', { value: date.format('YYYYMMDD[T]HHmmss'), tzid: event.get('endDate').tzid });
                             break;
                         default:

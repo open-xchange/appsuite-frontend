@@ -50,7 +50,7 @@ define('io.ox/files/main', [
     'use strict';
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
+    var app = ox.ui.createApp({ id: 'io.ox/files', name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
         sidebarView = new Sidebarview({ closable: true, app: app }),
@@ -968,6 +968,8 @@ define('io.ox/files/main', [
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
                     app.listView.reload();
+                } else {
+                    ox.trigger('refresh^');
                 }
             }, 100));
             // use throttled updates for add:file - in case many small files are uploaded
@@ -1105,6 +1107,13 @@ define('io.ox/files/main', [
                 _.defer(function () {
                     app.listView.reload({ pregenerate_previews: false });
                 });
+            });
+        },
+
+        'account:delete': function () {
+            ox.on('account:delete', function (id) {
+                if (!id || app.folder.get().indexOf(id) === -1) return;
+                switchToDefaultFolder();
             });
         },
 
@@ -1525,27 +1534,34 @@ define('io.ox/files/main', [
             });
         },
 
-        // FLD-0008 -> not found
-        //  => Bug 56943: error handling on external folder delete
         // FLD-0003 -> permission denied
         //  => Bug 57149: error handling on permission denied
+        // FLD-0008 -> not found
+        //  => Bug 56943: error handling on external folder delete
+        // FILE_STORAGE-0004 -> account missing
+        //  => Bug 58354: error handling on account missing
         // FILE_STORAGE-0055
-        //  => Bug 54793 : error handling when folder does not exists anymore
+        //  => Bug 54793: error handling when folder does not exists anymore
         'special-error-handling': function (app) {
-            var process = _.debounce(function (error) {
-                var model = folderAPI.pool.getModel(app.folder.get());
-                if (model) folderAPI.list(model.get('folder_id'), { cache: false });
-                app.folder.setDefault();
-                notifications.yell(error);
-            }, 1000, true);
-            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003 http:error:FILE_STORAGE-0055', function (error, request) {
+            app.listenTo(ox, 'http:error:FLD-0003 http:error:FLD-0008 http:error:FILE_STORAGE-0004 http:error:FILE_STORAGE-0055 CHECK_CURRENT_FOLDER', function (error, request) {
                 var folder = request.params.parent || request.data.parent;
                 if (!folder || folder !== this.folder.get()) return;
                 if (folderAPI.isBeingDeleted(folder)) return;
-                process(error);
+                switchToDefaultFolder(error);
             });
         }
     });
+
+    var switchToDefaultFolder = _.debounce(function (error) {
+        var model = folderAPI.pool.getModel(app.folder.get());
+        if (model) folderAPI.list(model.get('folder_id'), { cache: false });
+        app.folder.setDefault();
+        if (!error) return;
+        folderAPI.path(model.get('folder_id')).done(function (folder) {
+            error.error += '\n' + _(folder).pluck('title').join('/');
+            notifications.yell(error);
+        });
+    }, 1000, true);
 
     // launcher
     app.setLauncher(function (options) {

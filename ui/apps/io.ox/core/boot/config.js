@@ -49,12 +49,12 @@ define('io.ox/core/boot/config', [
     }
 
     function fetch(type) {
-
         var data;
 
         // try rampup data
         if (type === 'user' && (data = ox.rampup.serverConfig)) {
             propagate(data, type === 'user');
+
             return $.when(data);
         }
 
@@ -64,7 +64,8 @@ define('io.ox/core/boot/config', [
         return http.GET({
             module: 'apps/manifests',
             params: { action: 'config' },
-            appendSession: type === 'user'
+            appendSession: type === 'user',
+            failOnError: true
         })
         .done(function (data) {
             propagate(data, type === 'user');

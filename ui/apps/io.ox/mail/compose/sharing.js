@@ -86,7 +86,7 @@ define('io.ox/mail/compose/sharing', [
                 id: 'expiration-select-box'
             });
 
-            //#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+            //#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
             this.dialogNode.append($('<label for="expiration-select-box">').text(gt('Expiration')), selectbox.render().$el);
         }
     }, {
@@ -97,7 +97,8 @@ define('io.ox/mail/compose/sharing', [
             var node = new mini.CustomCheckboxView({
                 model: this.sharingModel,
                 name: 'autodelete',
-                label: gt('delete if expired')
+                //#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+                label: gt('Delete files after expiration')
             }).render().$el;
 
             // disable when forced

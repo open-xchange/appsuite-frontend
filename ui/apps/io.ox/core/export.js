@@ -77,15 +77,6 @@ define('io.ox/core/export', [
                         )
                     );
                 },
-                'calendar-hint': function () {
-                    if (this.options.module !== 'calendar') return;
-
-                    this.$body.append(
-                        $('<div class="help-block">').text(
-                            gt('Please note that other participants are removed on calendar export.')
-                        )
-                    );
-                },
                 'multi-format': function (baton) {
                     if (baton.formats.length < 2) return;
                     var guid = _.uniqueId('form-control-label-');

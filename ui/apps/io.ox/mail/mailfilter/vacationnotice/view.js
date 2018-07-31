@@ -199,6 +199,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
 
                 this.listenTo(this.model, 'change:dateFrom', function (model, value) {
                     var length = (model.get('dateUntil') - model.previous('dateFrom')) || 0;
+                    if (length < 0) return;
                     model.set('dateUntil', value + length);
                 });
             }

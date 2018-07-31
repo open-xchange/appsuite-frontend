@@ -518,10 +518,22 @@ msgstr "10 minut"
 msgid "100%"
 msgstr "100 %"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 hodin"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minut"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 hodiny"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -646,6 +658,13 @@ msgstr "Název účtu"
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
 msgstr "Účet úspěšně přidán"
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "This Team name already exists"
+msgid "Account already exists"
+msgstr "Tento název týmu již existuje"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -1249,8 +1268,8 @@ msgstr "Připojit vCard"
 msgid "Apple Maps"
 msgstr "Mapy Apple"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikace nemusí pracovat podle očekávání, dokud nebude tento problém vyřešen."
@@ -1264,6 +1283,7 @@ msgstr "Použít"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -1790,6 +1810,7 @@ msgstr "Kamera %1$s"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -2682,7 +2703,7 @@ msgstr "Data byla importována pouze částečně (%1$s z %2$s záznamů)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2737,8 +2758,10 @@ msgstr "Odmítnout"
 msgid "Declined"
 msgstr "Odmítnuto"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Výchozí"
 
@@ -2863,6 +2886,13 @@ msgstr "Smazat kontakt"
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Smazat koncept"
+
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "Po importu smazat staré podpisy"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -4031,7 +4061,7 @@ msgstr "Rozvinout formulář"
 msgid "Expert user?"
 msgstr "Uživatel expert?"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Platnost"
@@ -4186,7 +4216,7 @@ msgstr "Označené jaké oblíbené"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Oblíbené"
 
@@ -4327,6 +4357,12 @@ msgstr "Přesouvání dokončeno"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "den týdne"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4340,6 +4376,10 @@ msgstr "Jméno Příjmení"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "U interních uživatelů nemůže být křestní jméno prázdné"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -5928,6 +5968,12 @@ msgstr "Mini kalendář"
 msgid "Minimize"
 msgstr "Minimalizovat"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Embedded windows"
+msgid "Minimized windows"
+msgstr "Vložená okna"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -5956,6 +6002,13 @@ msgstr "Model není kompletní."
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "Upraveno"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "pondělí"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -6393,7 +6446,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "Žádné narozeniny v průběhu příštích %1$d týdnů"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr "žádná barva"
 
@@ -6648,6 +6700,12 @@ msgstr "Připomenout znovu později"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Nyní aktivní"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Členové"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7377,12 +7435,6 @@ msgstr "Zadejte, prosím, pozdější datum, než je datum začátku"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Distribuční seznamy nemohou obsahovat zdroje."
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-"Vezměte, prosím, na vědomí, že při exportu kalendáře jsou ostatní účastníci "
-"odstraněni."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8025,6 +8077,12 @@ msgstr "Obnovení kalendáře může chvilku trvat..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Regex"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Další nastavení"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -8673,6 +8731,7 @@ msgstr "Vybrat všechny zprávy"
 msgid "Select calendar"
 msgstr "Vybrat kalendář"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -9309,6 +9368,11 @@ msgstr "Možnosti řazení"
 msgid "Sound"
 msgstr "Zvuk"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Zdroj"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9433,6 +9497,13 @@ msgstr "Zůstat přihlášený(á)"
 msgid "Street"
 msgstr "Ulice"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Sharing"
+msgid "String"
+msgstr "Sdílení"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
 msgstr "Student"
@@ -9515,6 +9586,13 @@ msgstr "Přípona"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Shrnutí"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "neděli"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -10438,6 +10516,7 @@ msgid "Tiles"
 msgstr "Dlaždice"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Čas"
 
@@ -10875,6 +10954,13 @@ msgstr "Použít %1$s"
 msgid "Use browser default"
 msgstr "Použít výchozí nastavení prohlížeče"
 
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "Use calendar color"
+msgstr "Nový kalendář"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "Používat kategorie"
@@ -11056,6 +11142,12 @@ msgstr "Nástrojová lišta prohlížeče"
 msgid "Visibility"
 msgstr "Viditelnost"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Visibility"
+msgid "Visibility Help"
+msgstr "Viditelnost"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
@@ -11125,6 +11217,14 @@ msgstr "Týden"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Začátek pracovního týdne"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11907,10 +12007,6 @@ msgstr "odmítnuté"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
 msgstr "mazání všech objektů"
-
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "smazat, pokud již doba vypršela"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -12792,9 +12888,6 @@ msgstr "vaše platforma"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 hodin"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12821,9 +12914,6 @@ msgstr "vaše platforma"
 
 #~ msgid "4 days"
 #~ msgstr "4 dny"
-
-#~ msgid "4 hour"
-#~ msgstr "4 hodiny"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 týdny"
@@ -13348,9 +13438,6 @@ msgstr "vaše platforma"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Další nastavení"
 
 #~ msgid "Additional:"
 #~ msgstr "Dodatečné:"
@@ -16224,9 +16311,6 @@ msgstr "vaše platforma"
 #~ msgid "Email notification for task participant?"
 #~ msgstr "E-mailové oznámení pro účastníka úkolu?"
 
-#~ msgid "Embedded windows"
-#~ msgstr "Vložená okna"
-
 #~ msgid "Employee ID:"
 #~ msgstr "ID zaměstnance:"
 
@@ -18938,6 +19022,11 @@ msgstr "vaše platforma"
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Distribuční seznamy nemohou obsahovat zdroje."
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr ""
+#~ "Vezměte, prosím, na vědomí, že při exportu kalendáře jsou ostatní "
+#~ "účastníci odstraněni."
+
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
 #~ "to a folder on your local IMAP account."
@@ -20052,9 +20141,6 @@ msgstr "vaše platforma"
 #~ msgid "Sorting your tasks"
 #~ msgstr "Řazení úkolů"
 
-#~ msgid "Source"
-#~ msgstr "Zdroj"
-
 #~ msgid "South Africa"
 #~ msgstr "Jihoafrická republika"
 
@@ -20956,9 +21042,6 @@ msgstr "vaše platforma"
 
 #~ msgid "This Signature name already exists"
 #~ msgstr "Tento název podpisu již existuje"
-
-#~ msgid "This Team name already exists"
-#~ msgstr "Tento název týmu již existuje"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Tento účet nelze ověřit"
@@ -22861,9 +22944,6 @@ msgstr "vaše platforma"
 #~ msgid "day every"
 #~ msgstr "den každý"
 
-#~ msgid "day of the week"
-#~ msgstr "den týdne"
-
 #~ msgid "day of the weekend"
 #~ msgstr "den víkendu"
 
@@ -22890,6 +22970,9 @@ msgstr "vaše platforma"
 
 #~ msgid "default"
 #~ msgstr "výchozí"
+
+#~ msgid "delete if expired"
+#~ msgstr "smazat, pokud již doba vypršela"
 
 #~ msgid "disable"
 #~ msgstr "zakázat"

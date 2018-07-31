@@ -506,10 +506,24 @@ msgstr "10 dakika"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d hour"
+#| msgid_plural "%1$d hours"
+msgid "12 hours"
+msgstr "%1$d saat%1$d saat"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 dakika"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "%d hour"
+#| msgid_plural "%d hours"
+msgid "24 hours"
+msgstr "%d saat%d saat"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -634,6 +648,13 @@ msgstr "Hesap ismi"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
+msgstr "Hesap başarıyla eklendi"
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Account added successfully"
+msgid "Account already exists"
 msgstr "Hesap başarıyla eklendi"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1262,8 +1283,8 @@ msgstr "Vcard iliştir"
 msgid "Apple Maps"
 msgstr ""
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Bu sorun çözülene kadar uygulama çalışmayabilir"
 
@@ -1277,6 +1298,7 @@ msgstr "Kuralı uygula"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #, fuzzy
@@ -1829,6 +1851,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -2761,7 +2784,7 @@ msgstr "Veri yalnızca kısmen taşındı (%2$s kayıttan %1$s kadarı)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2817,8 +2840,10 @@ msgstr "Reddet"
 msgid "Declined"
 msgstr "Reddedildi"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr ""
 
@@ -2951,6 +2976,13 @@ msgstr "İletişim bilgisini sil"
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "Parçacığı sil"
+
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "İçe aktarım sonrası eski imzaları sil"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -4154,7 +4186,7 @@ msgstr "Formu genişlet"
 msgid "Expert user?"
 msgstr ""
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
 msgid "Expiration"
@@ -4320,7 +4352,7 @@ msgstr "Tercih edilen"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Favoriler"
 
@@ -4470,6 +4502,12 @@ msgstr ""
 msgid "Firefox"
 msgstr ""
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "haftanın günü "
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4482,6 +4520,10 @@ msgstr "Ad , Soyad"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6139,6 +6181,12 @@ msgstr ""
 msgid "Minimize"
 msgstr "Küçült"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Minimize"
+msgid "Minimized windows"
+msgstr "Küçült"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -6167,6 +6215,10 @@ msgstr "Model tamamlanmamış"
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "Değiştirilmiş"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Monday"
+msgstr ""
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -6624,7 +6676,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "İleriki %1$d hafta içerisinde yeni doğum günü yok. "
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
 msgid "No color"
 msgstr "renk yok"
@@ -6894,6 +6945,12 @@ msgstr ""
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Üyeler"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7635,10 +7692,6 @@ msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr ""
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr ""
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -8320,6 +8373,12 @@ msgstr ""
 msgid "Regex"
 msgstr "Düzenli ifade"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Ek Ayarlar"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
 msgstr ""
@@ -8989,6 +9048,7 @@ msgstr "Silinmiş mesajlar"
 msgid "Select calendar"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
@@ -9655,6 +9715,11 @@ msgstr "Seçenekleri sırala"
 msgid "Sound"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Kaynak"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9789,6 +9854,12 @@ msgstr "Oturumu açık bırak"
 msgid "Street"
 msgstr "Sokak"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+msgid "String"
+msgstr "Paylaş"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
 msgstr "Öğrenci"
@@ -9871,6 +9942,10 @@ msgstr "Ek"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Özet"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Sunday"
+msgstr ""
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -10794,6 +10869,7 @@ msgid "Tiles"
 msgstr "Döşemeler"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Zaman"
 
@@ -11240,6 +11316,13 @@ msgstr "Sona erme tarihi %1$s"
 msgid "Use browser default"
 msgstr ""
 
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "Use calendar color"
+msgstr "Yeni takvim"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 msgid "Use categories"
@@ -11437,6 +11520,10 @@ msgstr "Araç çubuğu görüntüleyicisi"
 msgid "Visibility"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Visibility Help"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
@@ -11510,6 +11597,14 @@ msgstr "Hafta"
 #, fuzzy
 msgid "Week start"
 msgstr "Başlangıç tarihi"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12327,11 +12422,6 @@ msgstr "reddedilmiş"
 msgid "delete all objects"
 msgstr "bütün nesneleri sil "
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, fuzzy
-msgid "delete if expired"
-msgstr "seansının süresi doldu"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -12909,10 +12999,6 @@ msgstr "Platformunuz"
 #~ msgid_plural "%d days"
 #~ msgstr[0] "%d gün%d gün"
 
-#~ msgid "%d hour"
-#~ msgid_plural "%d hours"
-#~ msgstr[0] "%d saat%d saat"
-
 #~ msgctxt "in"
 #~ msgid "%d hour"
 #~ msgid_plural "%d hours"
@@ -12981,9 +13067,6 @@ msgstr "Platformunuz"
 
 #~ msgid "Add new folder for this subscription"
 #~ msgstr "Bu üyelik için yeni klasör ekle"
-
-#~ msgid "Additional settings"
-#~ msgstr "Ek Ayarlar"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Gelişmiş özellikler engeli kapatıldı. "
@@ -13838,9 +13921,6 @@ msgstr "Platformunuz"
 #~ "Üzgünüz, size burada yardımcı olamıyoruz. Sağlayıcınızın LinkedIn'den "
 #~ "mesajları okuyabilme izni için bir anahtar edinmesi gerekiyor. "
 
-#~ msgid "Source"
-#~ msgstr "Kaynak"
-
 #, fuzzy
 #~ msgid "Start presentation"
 #~ msgstr "Sunumlar"
@@ -14249,14 +14329,15 @@ msgstr "Platformunuz"
 #~ msgid "daily"
 #~ msgstr "günlük"
 
-#~ msgid "day of the week"
-#~ msgstr "haftanın günü "
-
 #~ msgid "day of the weekend"
 #~ msgstr "haftasonu günü"
 
 #~ msgid "dd"
 #~ msgstr "dd"
+
+#, fuzzy
+#~ msgid "delete if expired"
+#~ msgstr "seansının süresi doldu"
 
 #, fuzzy
 #~ msgid "disable"

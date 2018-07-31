@@ -99,6 +99,7 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
                     (isSelective ? '' : '&folder=' + opt.folder) +
                     '&export_dlists=' + (opt.include ? 'true' : 'false') +
                     '&content_disposition=attachment' +
+                    (opt.columns && opt.format.toUpperCase() === 'CSV' ? '&columns=' + opt.columns : '') +
                     '&session=' + ox.session,
                 body: (isSelective ? JSON.stringify(_.map(opt.list, map)) : '')
             });

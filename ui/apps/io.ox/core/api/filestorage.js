@@ -240,7 +240,9 @@ define('io.ox/core/api/filestorage', [
                 var account = api.getAccountForOauth(oauthAccount);
                 // allow only one account per Oauth, 2 storages for the same Oauth account don't make sense
                 if (account) {
-                    return $.Deferred().reject();
+                    return $.Deferred().reject({
+                        code: 'EEXISTS'
+                    });
                 }
                 var config = _.copy(serviceConfigsCache[oauthAccount.serviceId], true);
                 if (config) {

@@ -258,7 +258,12 @@ define('io.ox/calendar/api', [
                                 obj = data[index];
                             }
 
-                            if (isRecurrenceMaster(obj)) return api.pool.get('detail').add(data);
+                            if (isRecurrenceMaster(obj)) {
+                                var res = api.pool.get('detail').add(data);
+                                // return an object, no array
+                                if (_.isArray(res)) res = res[0];
+                                return res;
+                            }
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
                         });

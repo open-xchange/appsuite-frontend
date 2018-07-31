@@ -100,7 +100,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                 var oldsIds = [];
                 ed.on('BeforeSetContent change Focus Blur', function (e) {
                     // use e.content for BeforeSetContent events
-                    var ids = getImageIds(e.content || ed.getContent()),
+                    // no events is important or the style nodes get the mce-bogus attribute. this causes the toolbar buttons to have the wrong state aver a couple of clicks, see Bug 59394
+                    var ids = getImageIds(e.content || ed.getContent({ no_events: true })),
                         removed = _.difference(oldsIds, ids);
                     removed.forEach(function (id) {
                         var editorElement = $(ed.getElement());

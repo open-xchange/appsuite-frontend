@@ -37,12 +37,6 @@ define('io.ox/files/actions/add-storage-account', [
         if (oauthAPI.accounts.forService(service.id)[0] && _(account.attributes.enabledScopes).contains('drive') && !filestorageApi.getAccountForOauth(account.attributes)) {
             return filestorageApi.createAccountFromOauth(account.attributes).done(function () {
                 yell('success', gt('Account added successfully'));
-            }).fail(function (e) {
-                if (e) {
-                    yell(e);
-                    return;
-                }
-                yell('error', gt('Account could not be added'));
             });
         }
 
@@ -63,7 +57,16 @@ define('io.ox/files/actions/add-storage-account', [
                 collection: new Backbone.Collection(availableServices)
             });
         view.listenTo(view, 'select', function (service) {
-            createAccount(service).always(function () {
+            createAccount(service).fail(function (e) {
+                if (e && e.code === 'EEXISTS') {
+                    //#. error message shown to the user after trying to create a duplicate account
+                    yell('error', gt('Account already exists'));
+                } else if (e) {
+                    yell(e);
+                } else {
+                    yell('error', gt('Account could not be added'));
+                }
+            }).always(function () {
                 view.trigger('done');
             });
         });

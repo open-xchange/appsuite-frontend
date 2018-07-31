@@ -932,6 +932,13 @@ define('io.ox/calendar/main', [
                     app.mediate();
                     win.show();
                 })
+                .fail(function (result) {
+                    var message = gt('Application may not work as expected until this problem is solved.');
+                    if (result && result.error) message = result.error + ' ' + message;
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        notifications.yell('error', message);
+                    });
+                })
                 .done(function () {
                     // app perspective
                     var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');

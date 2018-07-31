@@ -239,7 +239,7 @@ define('io.ox/core/extPatterns/links', [
         baton = ext.Baton.ensure(baton);
 
         var nav = baton.$el ||
-            $('<ul class="list-unstyled" role="menubar">')
+            $('<ul class="list-unstyled" role="toolbar">')
             .addClass(extension.classes || '')
             .attr(extension.attributes || {})
             .appendTo(node),
@@ -399,9 +399,12 @@ define('io.ox/core/extPatterns/links', [
             var multiple = _.isArray(baton.data) && baton.data.length > 1,
                 all = nav.children(),
                 lo = all.children().filter('[data-prio="lo"]').parent(),
+                hi = all.children().filter('[data-prio="hi"]').parent(),
                 links = lo.find('a'),
                 allDisabled = links.length === links.filter('.disabled').length,
                 isSmartphone = _.device('smartphone');
+
+            if (hi.length > 0 && !allDisabled) hi.find('a').attr('role', 'button');
 
             // remove unimportant links on smartphone (prio='none')
             if (isSmartphone) all.children().filter('[data-prio="none"]').parent().remove();
@@ -419,7 +422,7 @@ define('io.ox/core/extPatterns/links', [
                         .append(lo);
 
                 nav.append(
-                    new MiniViewDropdown({ tagName: 'li', $ul: node, $toggle: dd }).render().$el
+                    new MiniViewDropdown({ tagName: 'li', attributes: { role: 'presentation' }, $ul: node, $toggle: dd }).render().$el
                 );
 
                 // ugly workaround to prevent IE scrolling the parent object when Scrollbar is at the Top/Bottom and the Mousewheel/Touchpad is used
@@ -543,13 +546,12 @@ define('io.ox/core/extPatterns/links', [
     };
 
     var drawDropDown = function (options, baton) {
-
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
             ul = $('<ul class="dropdown-menu" role="menu">'),
             dropdownView = new MiniViewDropdown({
-                el: node.addClass('dropdown'),
+                el: node.addClass('dropdown').attr('role', 'presentation'),
                 $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
                 })

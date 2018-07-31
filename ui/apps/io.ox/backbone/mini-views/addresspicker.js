@@ -17,8 +17,9 @@ define('io.ox/backbone/mini-views/addresspicker', [
     'io.ox/contacts/api',
     'io.ox/core/capabilities',
     'io.ox/mail/util',
+    'gettext!io.ox/core',
     'less!io.ox/backbone/mini-views/addresspicker'
-], function (AbstractView, pModel, api, capabilities, util) {
+], function (AbstractView, pModel, api, capabilities, util, gt) {
 
     'use strict';
 
@@ -69,8 +70,8 @@ define('io.ox/backbone/mini-views/addresspicker', [
 
         render: function () {
             this.$el.addClass('input-group-btn').append(
-                $('<button type="button" class="btn btn-default">').append(
-                    $('<i class="fa fa-address-book" aria-hidden="true">')
+                $('<button type="button" class="btn btn-default">').attr('aria-label', gt('Select contacts')).append(
+                    $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', gt('Select contacts'))
                 )
             );
 

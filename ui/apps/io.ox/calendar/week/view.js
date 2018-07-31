@@ -181,6 +181,7 @@ define('io.ox/calendar/week/view', [
                 });
             }
 
+            this.listenTo(settings, 'change:showDeclinedAppointments', this.rerender);
             if (this.mode === 'workweek') this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', this.rerender);
             if (this.mode === 'day') {
                 this.listenTo(settings, 'change:mergeview', this.rerender);
@@ -1543,8 +1544,13 @@ define('io.ox/calendar/week/view', [
          */
         redrawAppointment: function (a) {
             var positionFieldChanged = _(['startDate', 'endDate', 'allDay'])
-                .any(function (attr) { return !_.isUndefined(a.changed[attr]); });
-            if (positionFieldChanged) {
+                    .any(function (attr) { return !_.isUndefined(a.changed[attr]); }),
+                declinedAndHidden = util.getConfirmationStatus(a) === 'DECLINED' && !settings.get('showDeclinedAppointments', false);
+
+            if (declinedAndHidden) {
+                $('[data-cid="' + a.id + '"]', this.$el).remove();
+                this.perspective.dialog.close();
+            } else if (positionFieldChanged) {
                 this.renderAppointments();
             } else {
                 var el = $('[data-cid="' + a.id + '"]', this.$el),

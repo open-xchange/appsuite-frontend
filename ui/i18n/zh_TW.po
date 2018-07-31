@@ -493,10 +493,22 @@ msgstr "10 分鐘"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 小時"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 分鐘"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 小時"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -615,6 +627,13 @@ msgstr "帳號名稱"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
+msgstr "成功新增帳號"
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Account added successfully"
+msgid "Account already exists"
 msgstr "成功新增帳號"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1206,8 +1225,8 @@ msgstr "附加 vCard"
 msgid "Apple Maps"
 msgstr "Apple Maps"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
@@ -1220,6 +1239,7 @@ msgstr "套用"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -1741,6 +1761,7 @@ msgstr "攝影機 %1$s"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -2626,7 +2647,7 @@ msgstr "只匯入部分資料〈%1$s 筆記錄，共 %2$s 筆〉"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2681,8 +2702,10 @@ msgstr "拒絕"
 msgid "Declined"
 msgstr "拒絕"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "預設"
 
@@ -2807,6 +2830,13 @@ msgstr "刪除聯絡人"
 msgctxt "dialog"
 msgid "Delete draft"
 msgstr "刪除草稿"
+
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete old signatures after import"
+msgid "Delete files after expiration"
+msgstr "匯出後刪除舊簽章"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -3945,7 +3975,7 @@ msgstr "展開表單"
 msgid "Expert user?"
 msgstr "進階使用者？"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "過期於"
@@ -4097,7 +4127,7 @@ msgstr "已加入最愛"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "最愛"
 
@@ -4238,6 +4268,12 @@ msgstr "已完成移動"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "每週日期"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4251,6 +4287,10 @@ msgstr "名 姓"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "內部使用者的名字不得為空白"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -5824,6 +5864,12 @@ msgstr "迷你行事曆"
 msgid "Minimize"
 msgstr "最小化"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "Minimized windows"
+msgstr "主視窗"
+
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 #, c-format
@@ -5852,6 +5898,13 @@ msgstr "模型不完整。"
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "已修改"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "星期一"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -6289,7 +6342,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "下 %1$d 週內沒有人生日"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr "無色彩"
 
@@ -6537,6 +6589,12 @@ msgstr "稍後再通知我"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "目前連線中"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "成員"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7257,10 +7315,6 @@ msgstr "請輸入開始日期後的日期"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "請注意通訊組清單中不得包含資源。"
 
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "請注意，在匯出行事曆時將移除其他參與者。"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "請注意，在匯入行事曆時將移除其他參與者。"
@@ -7884,6 +7938,12 @@ msgstr "可能要花一些時間重新整理行事曆…"
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Regex"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "其他選項"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -8529,6 +8589,7 @@ msgstr "選擇所有訊息"
 msgid "Select calendar"
 msgstr "選擇行事曆"
 
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
@@ -9155,6 +9216,11 @@ msgstr "排序選項"
 msgid "Sound"
 msgstr "音效"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "來源"
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -9279,6 +9345,13 @@ msgstr "保持登入"
 msgid "Street"
 msgstr "街道"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Sharing"
+msgid "String"
+msgstr "共享"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
 msgstr "學生"
@@ -9361,6 +9434,13 @@ msgstr "尾碼"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "摘要"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "星期日"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -10227,6 +10307,7 @@ msgid "Tiles"
 msgstr "磚塊"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "時間"
 
@@ -10655,6 +10736,13 @@ msgstr "使用 %1$s"
 msgid "Use browser default"
 msgstr "使用瀏覽器預設值"
 
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "Use calendar color"
+msgstr "新行事曆"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "使用分類"
@@ -10833,6 +10921,12 @@ msgstr "檢視器工具列"
 msgid "Visibility"
 msgstr "可見度"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Visibility"
+msgid "Visibility Help"
+msgstr "可見度"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
@@ -10902,6 +10996,14 @@ msgstr "週"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "每週開始於"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11667,10 +11769,6 @@ msgstr "已拒絕"
 msgid "delete all objects"
 msgstr "刪除所有物件"
 
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "過期時刪除"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete only own objects"
@@ -12405,9 +12503,6 @@ msgstr "您的平台"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 小時"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12434,9 +12529,6 @@ msgstr "您的平台"
 
 #~ msgid "4 days"
 #~ msgstr "4 天"
-
-#~ msgid "4 hour"
-#~ msgstr "4 小時"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 週"
@@ -12644,9 +12736,6 @@ msgstr "您的平台"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "正在新增訂閱，這可能需要幾秒鐘.."
-
-#~ msgid "Additional settings"
-#~ msgstr "其他選項"
 
 #~ msgid "Additional:"
 #~ msgstr "其他："
@@ -15110,9 +15199,6 @@ msgstr "您的平台"
 #~ msgid "Mailfilter updated"
 #~ msgstr "已更新郵件篩選"
 
-#~ msgid "Main window"
-#~ msgstr "主視窗"
-
 #~ msgid "Manage applications"
 #~ msgstr "管理應用程式"
 
@@ -15498,6 +15584,9 @@ msgstr "您的平台"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "請注意，通訊組清單中不能包含資源。"
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "請注意，在匯出行事曆時將移除其他參與者。"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "請指定這些缺少的變數: "
@@ -16058,9 +16147,6 @@ msgstr "您的平台"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "排序您的任務"
-
-#~ msgid "Source"
-#~ msgstr "來源"
 
 #~ msgid "Spam folder"
 #~ msgstr "垃圾信件匣"
@@ -17224,14 +17310,14 @@ msgstr "您的平台"
 #~ msgid "date range"
 #~ msgstr "日期範圍"
 
-#~ msgid "day of the week"
-#~ msgstr "每週日期"
-
 #~ msgid "day of the weekend"
 #~ msgstr "周末日期"
 
 #~ msgid "dd"
 #~ msgstr "日"
+
+#~ msgid "delete if expired"
+#~ msgstr "過期時刪除"
 
 #~ msgid "disable"
 #~ msgstr "停用"

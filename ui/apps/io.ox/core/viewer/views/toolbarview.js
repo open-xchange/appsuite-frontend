@@ -474,10 +474,11 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
         capabilities: 'infostore',
-        requires: function () {
+        requires: function (e) {
+            var model = e.baton.model;
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/mail/compose' && currentApp !== 'io.ox/files/detail';
+            return model.get('group') !== 'localFile' && currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
             var fileModel;

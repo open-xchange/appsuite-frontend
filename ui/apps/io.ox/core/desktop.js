@@ -887,6 +887,11 @@ define('io.ox/core/desktop', [
             return false;
         },
 
+        isCurrent: function (app) {
+            var current = ox.ui.App.getCurrentApp();
+            return !!(current && current.get('name') === (_.isString(app) ? app : app.model.get('name')));
+        },
+
         getCurrentApp: function () {
             return currentWindow !== null ? currentWindow.app : null;
         },

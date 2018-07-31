@@ -274,15 +274,28 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 1000,
-        id: 'folder-selection',
-        draw: function (baton) {
-            this.append(
-                new CalendarSelectionView({ model: baton.model }).render().$el
-            );
-        }
-    });
+    if (_.device('smartphone')) {
+        point.extend({
+            id: 'folder-selection',
+            index: 725,
+            className: 'col-xs-12',
+            render: function () {
+                this.$el.append(
+                    new CalendarSelectionView({ model: this.model }).render().$el
+                );
+            }
+        });
+    } else {
+        ext.point('io.ox/calendar/edit/section/buttons').extend({
+            index: 1000,
+            id: 'folder-selection',
+            draw: function (baton) {
+                this.append(
+                    new CalendarSelectionView({ model: baton.model }).render().$el
+                );
+            }
+        });
+    }
 
     // title
     point.extend({
@@ -598,9 +611,9 @@ define('io.ox/calendar/edit/extensions', [
             // visibility flag only works in private folders
             var folder = this.model.get('folder');
             if (!folderAPI.pool.getModel(folder).is('private')) return;
-
-            var helpNode = $('<a href="#" tabindex="0" role="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="focus hover" data-placement="left" data-content=" ">').append('<i class="fa fa-question-circle">')
-                .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div>' +
+            var popoverUid = _.uniqueId('popover-'),
+                helpNode = $('<button type="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="manual" data-placement="left" data-content=" ">').attr('aria-label', gt('Visibility Help')).append('<i class="fa fa-question-circle" aria-hidden="true">')
+                .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div id="' + popoverUid + '">' +
                     '<div class="ox-popover-title">' + gt('Standard') + '</div>' +
                     '<div>' + gt('The appointment is visible for all users in shared calendars.') + '</div>' +
                     '<div class="ox-popover-title">' + gt('Private') + '</div>' +
@@ -610,12 +623,20 @@ define('io.ox/calendar/edit/extensions', [
                     '</div></div>')
                     .popover({
                         container: '#' + this.baton.app.get('window').id + ' .window-content.scrollable'
+                    })
+                    .on('blur', function () { helpNode.popover('hide'); })
+                    .on('click', function () { helpNode.popover('toggle'); })
+                    .on('keydown', function (e) {
+                        if (e.which !== 27) return;
+                        if ($('#' + popoverUid).is(':visible')) e.stopImmediatePropagation();
+                        helpNode.popover('hide');
                     }),
                 guid = _.uniqueId('form-control-label-');
 
             this.$el.append(
                 $('<div>').append(
-                    $('<label class="simple">').attr('for', guid).text(gt('Visibility')).append(helpNode),
+                    $('<label class="simple">').attr('for', guid).text(gt('Visibility')),
+                    helpNode,
                     new mini.SelectView({ id: guid, label: gt('Visibility'), name: 'class', model: this.model, list: [
                         { value: 'PUBLIC', label: gt('Standard') },
                         { value: 'CONFIDENTIAL', label: gt('Private') },
@@ -657,25 +678,33 @@ define('io.ox/calendar/edit/extensions', [
                     allowUndefined: true
                 }),
                 pickedColor = $('<span class="picked-color">');
-            dropdown.option('color', undefined, gt('No color'));
+            //#. showed inside a color picker. Used if an appointment should not have a custom color
+            dropdown.option('color', undefined, gt('Use calendar color'));
             dropdown.divider();
-            menu.append($('<li role="presentation">').append(picker.render().$el));
+            menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append(picker.render().$el));
 
             this.$el.append(
-                pickedColor,
-                dropdown.render().$el
+                dropdown.render().$el,
+                pickedColor
             );
 
             function onChangeColor() {
                 if (!self.model.get('color')) {
-                    pickedColor.addClass('no-color').css('background-color', '#fff');
+                    // try to get the folder color
+                    var model = folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model(),
+                        props = model.get('com.openexchange.calendar.extendedProperties') || {},
+                        color = '#fff';
+
+                    if (props.color && props.color.value) color = props.color.value;
+
+                    pickedColor.css({ 'background-color': color });
                     picker.$el.find(':checked').prop('checked', false);
                     return;
                 }
-                pickedColor.removeClass('no-color').css('background-color', self.model.get('color'));
+                pickedColor.css('background-color', self.model.get('color'));
             }
 
-            this.model.on('change:color', onChangeColor);
+            this.model.on('change:color change:folder', onChangeColor);
             onChangeColor();
         }
     }, {

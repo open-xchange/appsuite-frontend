@@ -20,9 +20,10 @@ define('plugins/notifications/calendar/register', [
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
     'settings!io.ox/core',
+    'settings!io.ox/calendar',
     'io.ox/core/tk/sounds-util',
     'io.ox/core/notifications'
-], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil, notifications) {
+], function (calAPI, yell, ext, Subview, gt, util, settings, settingsCalendar, soundUtil, notifications) {
 
     'use strict';
 
@@ -36,6 +37,16 @@ define('plugins/notifications/calendar/register', [
         autoOpen = false;
         settings.set('autoOpenNotification', false);
         settings.save();
+    }
+
+    function getLayout(model) {
+        if (_.device('smartphone')) return 'week:day';
+
+        var isWeekend = /(0|6)/.test(util.getMoment(model.get('startDate')).day()),
+            layout = settingsCalendar.get('viewView') || 'week:week';
+        if (layout === 'week:workweek' && isWeekend) layout = 'week:week';
+        if (/(year|list)/.test(layout)) layout = 'week:week';
+        return layout;
     }
 
     ext.point('io.ox/core/notifications/invites/item').extend({
@@ -84,7 +95,6 @@ define('plugins/notifications/calendar/register', [
             var cid = _.cid(model.attributes),
                 strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() }),
                 recurrenceString = util.getRecurrenceString(model.attributes);
-
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
@@ -105,7 +115,7 @@ define('plugins/notifications/calendar/register', [
                         var options = {
                             folder: model.get('folder'),
                             id: model.get('id'),
-                            perspective: 'week:week'
+                            perspective: getLayout(model)
                         };
 
                         if (_.device('smartphone')) notifications.dropdown.close();
@@ -117,18 +127,24 @@ define('plugins/notifications/calendar/register', [
                             var currentPage = this.pages ? this.pages.getCurrentPage() : false;
                             // resume calendar app
                             if (this.folders && this.folderView && currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
-                                var e = $.Event('click', { target: currentPage.perspective.main });
-                                currentPage.perspective.setNewStart = true;
-                                currentPage.perspective.showAppointment(e, options, { arrow: false });
+                                // workaround: set layout
+                                ox.ui.Perspective.show(this, options.perspective, { disableAnimations: true }).then(function () {
+                                    var e = $.Event('click', { target: currentPage.perspective.main });
+                                    currentPage.perspective.setNewStart = true;
+                                    currentPage.perspective.showAppointment(e, options, { arrow: false });
+                                });
                             } else {
                                 // perspective is not initialized yet on newly launched calendar app
                                 this.once('aftershow:done', function (perspective) {
                                     this.folders.add(options.folder);
                                     // no need for a redraw, just select the folder
                                     this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
-                                    var e = $.Event('click', { target: perspective.main });
-                                    perspective.setNewStart = true;
-                                    perspective.showAppointment(e, options, { arrow: false });
+                                    // workaround: use defer to handle tricky page controller loading smartphone
+                                    _.defer(function () {
+                                        var e = $.Event('click', { target: perspective.main });
+                                        perspective.setNewStart = true;
+                                        perspective.showAppointment(e, options, { arrow: false });
+                                    });
                                 });
                             }
                         });
@@ -376,7 +392,7 @@ define('plugins/notifications/calendar/register', [
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
-                        var title = model.get('title'),
+                        var title = model.get('summary'),
                             date = ', ' + util.getDateInterval(model.attributes),
                             time = ', ' + util.getTimeInterval(model.attributes);
 

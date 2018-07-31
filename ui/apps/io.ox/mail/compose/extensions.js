@@ -323,8 +323,9 @@ define('io.ox/mail/compose/extensions', [
 
                 if (usePicker) {
                     node.addClass('has-picker').append(
-                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-address-book" aria-hidden="true"></i></a>')
-                        .attr('aria-label', gt('Select contacts'))
+                        $('<a href="#" role="button" class="open-addressbook-popup">').append(
+                            $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', gt('Select contacts'))
+                        ).attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }

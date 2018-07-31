@@ -1052,6 +1052,33 @@ settings!plugins/portal/oxdriveclients
 **standaloneWindowsClient**
 > (true/false)
 
+## Tours
+
+```
+settings!io.ox/tours
+```
+
+**server/disableTours**
+> feature toggle
+
+**server/startOnFirstLogin**
+> starts the first start tour on the first login
+
+**user/alreadySeenVersion**
+> determine if the first start tour was seen at all
+
+**whatsNew/autoShow**
+> number of times the what's new tour should be shown to the user
+
+**whatsNew/neverShowAgain**
+> overwrites the autoshow counter and disables the autostart of the tour
+
+**whatsNew/whatsNew/menuEntry**
+> Determines if a menu entry for the what's new tour should be created
+
+**whatsNew/whatsNew/helpUrl**
+> url to the what's new help page (https://www.open-xchange.com/whats-new-7-10)
+
 ## Upsell
 
 ```

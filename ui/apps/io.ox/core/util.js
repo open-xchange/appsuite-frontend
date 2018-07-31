@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], function (ext, settings) {
+define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'static/3rd.party/purify.min.js'], function (ext, settings, DOMPurify) {
 
     'use strict';
 
@@ -132,7 +132,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
             return text.replace(regUrl, function (url) {
                 var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
-                return '<a href="' + fix.url + '" target="_blank" rel="noopener">' + that.breakableHTML(fix.url) + '</a>' + fix.suffix;
+                var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(fix.url))).append(that.breakableHTML(fix.url));
+                return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true }) + fix.suffix;
             }.bind(this));
         },
 
