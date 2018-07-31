@@ -536,6 +536,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js
@@ -556,6 +557,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js
 #: module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr ""
 
@@ -2001,6 +2003,8 @@ msgstr ""
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -6661,6 +6665,65 @@ msgstr ""
 msgid "Downloads"
 msgstr ""
 
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Regional settings"
+msgstr ""
+
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Default"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "12 hours"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "24 hours"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Sunday"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Monday"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Numbers"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "First day of week"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "First week of year"
+msgstr ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: module:io.ox/core
 msgid "Error log"
@@ -6791,13 +6854,6 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 msgid "Unicolor"
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js
-#: module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Default"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js

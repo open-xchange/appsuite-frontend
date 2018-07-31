@@ -519,10 +519,22 @@ msgstr "10 minute"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 ore"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minute"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 ore"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -1273,6 +1285,7 @@ msgstr "Aplică"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2701,7 +2714,7 @@ msgstr "Datele au fost importate doar parțial (%1$s din %2$s înregistrări)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2756,8 +2769,10 @@ msgstr "Respinge"
 msgid "Declined"
 msgstr "Respins"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Implicit"
 
@@ -4370,6 +4385,12 @@ msgstr "Mutarea a fost terminată"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "zi din săptămână"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4383,6 +4404,10 @@ msgstr "Prenume Nume"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "Prenumele nu poate fi gol pentru utilizatorii interni"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -6010,6 +6035,13 @@ msgstr "Modelul nu este complet."
 msgid "Modified"
 msgstr "Modificat"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "Luni"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6700,6 +6732,12 @@ msgstr "Amintește-mi din nou mai târziu"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Activ acum"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Membri"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8075,6 +8113,12 @@ msgstr "Reîmprospătarea calendarului poate dura..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Expresie regulată"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Setări suplimentare"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -9581,6 +9625,13 @@ msgstr "Sufix"
 msgid "Summary"
 msgstr "Rezumat"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "Duminică"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10531,6 +10582,7 @@ msgid "Tiles"
 msgstr "Dale"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Oră"
 
@@ -11239,6 +11291,14 @@ msgstr "Săptămână"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Săptămâna începe"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12806,9 +12866,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 ore"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12835,9 +12892,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "4 days"
 #~ msgstr "4 zile"
-
-#~ msgid "4 hour"
-#~ msgstr "4 ore"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 săptămâni"
@@ -13056,9 +13110,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr ""
 #~ "Se adaugă abonamentul. Această operație poate să dureze câteva secunde ..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Setări suplimentare"
 
 #~ msgid "Additional:"
 #~ msgstr "Adițional:"
@@ -20070,9 +20121,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "day every"
 #~ msgstr "zi o dată la"
-
-#~ msgid "day of the week"
-#~ msgstr "zi din săptămână"
 
 #~ msgid "day of the weekend"
 #~ msgstr "zi din weekend"

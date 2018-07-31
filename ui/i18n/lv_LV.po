@@ -517,10 +517,22 @@ msgstr "10 minūtes"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 stundas"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minūtes"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 stundas"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -1268,6 +1280,7 @@ msgstr "Piemērot"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2696,7 +2709,7 @@ msgstr "Dati ir tikai daļēji importēti ( %1$s no %2$s ierakstiem)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2751,8 +2764,10 @@ msgstr "Atteikt"
 msgid "Declined"
 msgstr "Atteikts"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Noklusētais"
 
@@ -4360,6 +4375,12 @@ msgstr "Pārvietošana pabeigta"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "nedēļas diena"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4373,6 +4394,10 @@ msgstr "Vārds, Uzvārds"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "Iekšējiem lietotājiem vārds nevar būt tukšs"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -6000,6 +6025,13 @@ msgstr "Modelis nav pabeigts."
 msgid "Modified"
 msgstr "Izmainīts"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "Pirmdienā"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6693,6 +6725,12 @@ msgstr "Atgādināt vēlāk vēlreiz"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Pašlaik aktīvs"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Locekļi"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8064,6 +8102,12 @@ msgstr "Kalendāra jaunināšana var prasīt zināmu laiku..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Regex"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Papildus iestatījumi"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -9568,6 +9612,13 @@ msgstr "Sufikss"
 msgid "Summary"
 msgstr "Kopsavilkums"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "Svētdienā"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10499,6 +10550,7 @@ msgid "Tiles"
 msgstr "Flīzes"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Laiks"
 
@@ -11201,6 +11253,14 @@ msgstr "Nedēļa"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Nedēļa sākas"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12764,9 +12824,6 @@ msgstr "jūsu platforma"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 stundas"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12793,9 +12850,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "4 days"
 #~ msgstr "4 dienas"
-
-#~ msgid "4 hour"
-#~ msgstr "4 stundas"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 nedēļas"
@@ -13009,9 +13063,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Tiek pievienots abonements. Process var aizņemt dažas sekundes ..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Papildus iestatījumi"
 
 #~ msgid "Additional:"
 #~ msgstr "Papildus:"
@@ -19945,9 +19996,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "day every"
 #~ msgstr "diena katrā"
-
-#~ msgid "day of the week"
-#~ msgstr "nedēļas diena"
 
 #~ msgid "day of the weekend"
 #~ msgstr "izejamā diena"

@@ -499,10 +499,22 @@ msgstr "10 minutes"
 msgid "100%"
 msgstr "100 %"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 heures"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minutes"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 heures"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -1256,6 +1268,7 @@ msgstr "Appliquer"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2694,7 +2707,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2749,8 +2762,10 @@ msgstr "Décliner"
 msgid "Declined"
 msgstr "Décliné"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Par défaut"
 
@@ -4374,6 +4389,12 @@ msgstr "Fin du déplacement"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "jour en semaine"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4387,6 +4408,10 @@ msgstr "Prénom Nom"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "Le prénom est obligatoire pour les utilisateurs internes."
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -6019,6 +6044,13 @@ msgstr "Le modèle est incomplet."
 msgid "Modified"
 msgstr "Date de modification"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "Lundi"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6710,6 +6742,12 @@ msgstr "Me le rappeler ultérieurement"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Actuellement actif"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Membres"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8096,6 +8134,12 @@ msgstr "Rafraîchir l'agenda peut prendre un peu de temps..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Expression rationnelle"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Réglages supplémentaires"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -9598,6 +9642,13 @@ msgstr "Suffixe"
 msgid "Summary"
 msgstr "Résumé"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "Dimanche"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10553,6 +10604,7 @@ msgid "Tiles"
 msgstr "Pavés"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Heure"
 
@@ -11264,6 +11316,14 @@ msgstr "Semaine"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Premier jour de la semaine"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12744,9 +12804,6 @@ msgstr "votre plate-forme"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 heures"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12773,9 +12830,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "4 days"
 #~ msgstr "4 jours"
-
-#~ msgid "4 hour"
-#~ msgstr "4 heures"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 semaines"
@@ -12939,9 +12993,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Abonnement en cours d'ajout. Cela peut prendre quelques secondes…"
-
-#~ msgid "Additional settings"
-#~ msgstr "Réglages supplémentaires"
 
 #~ msgid "Addresses"
 #~ msgstr "Adresses"
@@ -16723,9 +16774,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "date range"
 #~ msgstr "intervalle de dates"
-
-#~ msgid "day of the week"
-#~ msgstr "jour en semaine"
 
 #~ msgid "day of the weekend"
 #~ msgstr "jour de la fin de semaine"

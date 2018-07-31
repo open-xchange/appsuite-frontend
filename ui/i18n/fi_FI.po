@@ -495,10 +495,22 @@ msgstr "10 minuuttia"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 tunnin"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 minuuttia"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 tunnin"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -1241,6 +1253,7 @@ msgstr "Käytä"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2662,7 +2675,7 @@ msgstr "Data vain osittain tuotu (%1$s /%2$s tietueesta)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2717,8 +2730,10 @@ msgstr "Kieltäydy"
 msgid "Declined"
 msgstr "Evätty"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "Oletus"
 
@@ -4310,6 +4325,12 @@ msgstr "Siirto päättyi"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "työpäivä"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4323,6 +4344,10 @@ msgstr "Etunimi Sukunimi"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "Sisäisten käyttäjien etunimikenttä ei saa olla tyhjä"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -5941,6 +5966,13 @@ msgstr "Malli on keskeneräinen."
 msgid "Modified"
 msgstr "Muutettu"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "Maanantaina"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6627,6 +6659,12 @@ msgstr "Muistuta minua myöhemmin"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "Nyt käynnissä"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "Jäsenet"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7994,6 +8032,12 @@ msgstr "Kalenterin virkistäminen saattaa kestää hetken..."
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Säännöllinen lauseke (regex)"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "Lisäasetukset"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -9490,6 +9534,13 @@ msgstr "Jälkiliite"
 msgid "Summary"
 msgstr "Yhteenveto"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "Sunnuntaina"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10408,6 +10459,7 @@ msgid "Tiles"
 msgstr "Sovellusikkunat"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Aika"
 
@@ -11109,6 +11161,14 @@ msgstr "Viikko"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "Viikko alkaa"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12540,9 +12600,6 @@ msgstr "alustasi"
 #~ msgid "1 week"
 #~ msgstr "1 viikko"
 
-#~ msgid "12 hour"
-#~ msgstr "12 tunnin"
-
 #~ msgid "2 days"
 #~ msgstr "2 päivää"
 
@@ -12554,9 +12611,6 @@ msgstr "alustasi"
 
 #~ msgid "4 days"
 #~ msgstr "4 päivää"
-
-#~ msgid "4 hour"
-#~ msgstr "4 tunnin"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 viikkoa"
@@ -12655,9 +12709,6 @@ msgstr "alustasi"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lisätään tilaus. Tämä voi kestää muutaman sekunnin..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Lisäasetukset"
 
 #~ msgid "Addresses"
 #~ msgstr "Osoitteet"
@@ -15647,9 +15698,6 @@ msgstr "alustasi"
 
 #~ msgid "date range"
 #~ msgstr "päivämäärävalikoima"
-
-#~ msgid "day of the week"
-#~ msgstr "työpäivä"
 
 #~ msgid "day of the weekend"
 #~ msgstr "viikonlopun päivä"

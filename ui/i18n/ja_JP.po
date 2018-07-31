@@ -477,10 +477,22 @@ msgstr "10 分"
 msgid "100%"
 msgstr "100%"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hour"
+msgid "12 hours"
+msgstr "12 時間"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
 msgstr "15 分"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "4 hour"
+msgid "24 hours"
+msgstr "4 時間"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -1218,6 +1230,7 @@ msgstr "適用"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2632,7 +2645,7 @@ msgstr "データの一部のみしました ( %1$s レコード / %2$s レコ�
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
+#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2687,8 +2700,10 @@ msgstr "辞退"
 msgid "Declined"
 msgstr "辞退"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Default"
 msgstr "既定"
 
@@ -4266,6 +4281,12 @@ msgstr "移動を終了する"
 msgid "Firefox"
 msgstr "Firefox"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "day of the week"
+msgid "First day of week"
+msgstr "稼働日"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -4279,6 +4300,12 @@ msgstr "名 姓"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
 msgstr "内部ユーザの場合、名前は空にできません"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "List week view"
+msgid "First week of year"
+msgstr "リスト週ビュー"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -5896,6 +5923,13 @@ msgstr "モデルが不完全です。"
 msgid "Modified"
 msgstr "更新日"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Monday"
+msgid "Monday"
+msgstr "月曜"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6580,6 +6614,12 @@ msgstr "後で再通知"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Now active"
 msgstr "現在有効"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Members"
+msgid "Numbers"
+msgstr "メンバー"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7933,6 +7973,12 @@ msgstr "予定表の再読み込みにしばらく時間がかかります。"
 #: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "正規表現にマッチする"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Additional settings"
+msgid "Regional settings"
+msgstr "追加設定"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -9425,6 +9471,13 @@ msgstr "敬称"
 msgid "Summary"
 msgstr "概要"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgctxt "superessive"
+#| msgid "Sunday"
+msgid "Sunday"
+msgstr "日曜"
+
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10327,6 +10380,7 @@ msgid "Tiles"
 msgstr "タイル"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "時間"
 
@@ -11022,6 +11076,14 @@ msgstr "週"
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Week start"
 msgstr "週の開始日"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12550,9 +12612,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 時間"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12579,9 +12638,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "4 days"
 #~ msgstr "4 日"
-
-#~ msgid "4 hour"
-#~ msgstr "4 時間"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 週間"
@@ -12807,9 +12863,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Additional"
 #~ msgstr "追加情報"
-
-#~ msgid "Additional settings"
-#~ msgstr "追加設定"
 
 #~ msgid "Additional:"
 #~ msgstr "追加情報:"
@@ -16566,9 +16619,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "List of public calendars and events"
 #~ msgstr "パブリック予定表とイベントの一覧"
-
-#~ msgid "List week view"
-#~ msgstr "リスト週ビュー"
 
 #~ msgid "List workweek view"
 #~ msgstr "リスト稼働日ビュー"
@@ -20837,9 +20887,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "day every"
 #~ msgstr "日。　毎"
-
-#~ msgid "day of the week"
-#~ msgstr "稼働日"
 
 #~ msgid "day of the weekend"
 #~ msgstr "週末"
