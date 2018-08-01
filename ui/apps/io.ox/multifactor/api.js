@@ -106,18 +106,19 @@ define('io.ox/multifactor/api', [
                 }))
                 .then(checkError, checkError);
         },
-        finishRegistration: function (provider, id, confirmation) {
+        finishRegistration: function (provider, id, confirmation, additParams) {
             return $.when(
                 http.POST({
                     module: 'multifactor',
-                    params: { action: 'finishRegistration', deviceId: id, providerName: provider, secret_code: confirmation }
+                    params: _.extend({ action: 'finishRegistration', deviceId: id, providerName: provider, secret_code: confirmation },
+                        additParams)
                 }));
         },
-        doAuth: function (provider, id, code) {
+        doAuth: function (provider, id, code, additParams) {
             var def = $.Deferred();
             http.POST({
                 module: 'multifactor',
-                params: { action: 'doAuth', authDeviceId: id, authProviderName: provider, secret_code: code },
+                params: _.extend({ action: 'doAuth', authDeviceId: id, authProviderName: provider, secret_code: code }, additParams),
                 force: true
             }).then(function (data) {
                 if (data && data.error) {

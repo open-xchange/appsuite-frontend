@@ -63,7 +63,7 @@ define('io.ox/multifactor/auth', [
         auth.getAuthentication(error).then(function (data) {
             authenticating = false;
             if (data) {
-                api.doAuth(data.provider, data.id, data.response).then(function (data) {
+                api.doAuth(data.provider, data.id, data.response, data.parameters).then(function (data) {
                     def.resolve(data);
                 }, function (rejection) {
                     if (rejection && rejection.value === 'AUTHENTICATION_DENIED') {
