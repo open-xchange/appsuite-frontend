@@ -31,6 +31,11 @@ define('io.ox/multifactor/deviceAuthenticator', [
                     viewer.open(providerName, device, challengeData, def, error);
                 });
                 break;
+            case 'U2F':
+                require(['io.ox/multifactor/views/u2fProvider'], function (viewer) {
+                    viewer.open(providerName, device, challengeData, def, error);
+                });
+                break;
             case 'BACKUP_STRING':
                 require(['io.ox/multifactor/views/backupProvider'], function (viewer) {
                     viewer.open(providerName, device, challengeData, def, error);

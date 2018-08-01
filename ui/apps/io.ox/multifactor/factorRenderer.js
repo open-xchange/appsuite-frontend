@@ -52,6 +52,8 @@ define('io.ox/multifactor/factorRenderer', [
             case 'EXAMPLE-MFA':
                 return createTable('fa-id-card', 'Example MFA', device, selectable);
             case 'WEB-AUTH':
+                return createTable('fa-microchip', gt('Web auth'), device, selectable);
+            case 'U2F':
                 return createTable('fa-microchip', gt('U2F'), device, selectable);
             case 'YUBIKEY':
                 return createTable('fa-id-badge', gt('Yubikey'), device, selectable);

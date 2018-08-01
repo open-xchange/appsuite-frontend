@@ -113,6 +113,10 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 text = gt('Use a device to authenticated your identity.  Must be compatible with U2F');
                 icon = 'fa-microchip';
                 break;
+            case 'U2F':
+                text = gt('Use a device to authenticated your identity.  Must be compatible with U2F');
+                icon = 'fa-microchip';
+                break;
             case 'YUBIKEY':
                 text = gt('Use Yubikey\'s One Time Password System');
                 icon = 'fa-id-badge';
