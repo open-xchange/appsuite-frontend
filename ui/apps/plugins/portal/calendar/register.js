@@ -82,8 +82,7 @@ define('plugins/portal/calendar/register', [
 
         return {
             start: moment().startOf('day').valueOf(),
-            end: moment().startOf('day').add(1, 'month').valueOf(),
-            folders: ['cal://0/all']
+            end: moment().startOf('day').add(1, 'month').valueOf()
         };
     }
 
