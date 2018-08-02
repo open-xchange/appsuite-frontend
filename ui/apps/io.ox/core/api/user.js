@@ -115,6 +115,14 @@ define('io.ox/core/api/user', [
             if (o.data.anniversary && moment.utc(o.data.anniversary).local(true).year() <= 1) {
                 o.data.anniversary = util.gregorianToJulian(o.data.anniversary);
             }
+
+            // remove empty values before updating
+            o.data = _(o.data).each(function (value, key) {
+                if (!value) {
+                    o.data[key] = null;
+                }
+            });
+
             return http.PUT({
                 module: 'user',
                 params: {

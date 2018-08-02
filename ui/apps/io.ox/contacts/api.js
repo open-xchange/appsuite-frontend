@@ -63,6 +63,22 @@ define('io.ox/contacts/api', [
                 }
             });
             return response;
+        },
+        // removes empty values before updating/creating
+        // update mode=> send null
+        // create mode => don't send at all
+        cleanUpData = function (data, options) {
+            options = options || { mode: 'update' };
+
+            return _(data).each(function (value, key) {
+                if (!value) {
+                    if (options.mode === 'update') {
+                        data[key] = null;
+                    } else {
+                        delete data[key];
+                    }
+                }
+            });
         };
 
     // mapped ids for msisdn
@@ -346,7 +362,7 @@ define('io.ox/contacts/api', [
             };
 
         delete data.tempAttachmentIndicator;
-
+        data = cleanUpData(data, { mode: 'create' });
         if (file) {
             if (window.FormData && file instanceof window.File) {
                 method = 'UPLOAD';
@@ -424,6 +440,8 @@ define('io.ox/contacts/api', [
         if (o.data.anniversary && moment.utc(o.data.anniversary).local(true).year() <= 1) {
             o.data.anniversary = util.gregorianToJulian(o.data.anniversary);
         }
+
+        o.data = cleanUpData(o.data, { mode: 'update' });
 
         // go!
         return http.PUT({
