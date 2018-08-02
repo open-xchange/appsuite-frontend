@@ -71,7 +71,7 @@ define('io.ox/contacts/api', [
             options = options || { mode: 'update' };
 
             return _(data).each(function (value, key) {
-                if (!value) {
+                if (value === '' || value === undefined) {
                     if (options.mode === 'update') {
                         data[key] = null;
                     } else {

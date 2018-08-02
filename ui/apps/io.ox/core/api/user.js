@@ -118,7 +118,7 @@ define('io.ox/core/api/user', [
 
             // remove empty values before updating
             o.data = _(o.data).each(function (value, key) {
-                if (!value) {
+                if (value === '' || value === undefined) {
                     o.data[key] = null;
                 }
             });
