@@ -509,6 +509,8 @@ define('io.ox/calendar/main', [
                     year = initArgs.length > 0 ? initArgs[0] : oldDate.year(),
                     month = initArgs.length > 1 ? initArgs[1] : oldDate.month(),
                     day = initArgs.length > 2 ? initArgs[2] : oldDate.date();
+                // don't try to select dates that don't exist
+                if (_.isNaN(moment([year, month, day]).valueOf())) day = 1;
                 app.props.set('date', moment([year, month, day]).valueOf(), opt);
             };
         },

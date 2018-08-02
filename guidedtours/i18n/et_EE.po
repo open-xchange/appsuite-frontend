@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 10:17+0000\n"
+"POT-Creation-Date: 2018-07-31 11:26+0000\n"
 "PO-Revision-Date: 2017-04-12 05:43+0000\n"
 "Last-Translator: marko <marko.toom@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -659,8 +659,6 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 #, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr "Rakenduse käivitamiseks klõpsake kirjel menüüriba vasakul poolel."
 
@@ -697,11 +695,6 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 #, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
@@ -714,9 +707,6 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 #, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
@@ -770,9 +760,6 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 #, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""

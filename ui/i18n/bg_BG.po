@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 10:12+0000\n"
-"PO-Revision-Date: 2017-05-17 22:59+0000\n"
+"POT-Creation-Date: 2018-07-31 11:20+0000\n"
+"PO-Revision-Date: 2018-06-29 02:42+0000\n"
 "Last-Translator: martimarkov <marti.markov@icloud.com>\n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1495061997.000000\n"
+"X-POOTLE-MTIME: 1530240125.000000\n"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -254,7 +254,6 @@ msgstr "%1$s %2$s"
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s."
 
@@ -263,7 +262,6 @@ msgstr "%1$s %2$s."
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s."
 
@@ -272,7 +270,6 @@ msgstr "%1$s %2$s."
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s."
 
@@ -281,7 +278,6 @@ msgstr "%1$s %2$s."
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s."
 
@@ -312,7 +308,6 @@ msgstr "%1$s в %2$s"
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s at %2$s"
 msgid "%1$s at %2$s."
 msgstr "%1$s в %2$s"
 
@@ -320,7 +315,6 @@ msgstr "%1$s в %2$s"
 #. %1$s: the reminder type, SMS/EMAIL etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s at %2$s"
 msgid "%1$s at end."
 msgstr "%1$s в %2$s"
 
@@ -328,7 +322,6 @@ msgstr "%1$s в %2$s"
 #. %1$s: the reminder type, SMS/EMAIL etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s at %2$s"
 msgid "%1$s at start."
 msgstr "%1$s в %2$s"
 
@@ -393,7 +386,6 @@ msgstr "%1$s от %2$s"
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "%1$s of %2$s"
 msgid "%1$s options"
 msgstr "%1$s от %2$s"
 
@@ -663,7 +655,6 @@ msgstr "Акантът беше добавен успешно"
 #. error message shown to the user after trying to create a duplicate account
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
-#| msgid "Account added successfully"
 msgid "Account already exists"
 msgstr "Акантът беше добавен успешно"
 
@@ -889,7 +880,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder"
 msgid "Add reminder"
 msgstr "Напомняне"
 
@@ -1048,7 +1038,6 @@ msgstr "Контакти"
 #. Context: Session Management. Refers to the macos addressbook
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Address Book"
 msgid "Addressbook"
 msgstr "Контакти"
 
@@ -1093,12 +1082,11 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "All"
-msgstr ""
+msgstr "Цял ден"
 
 #. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
-#| msgid "All day"
 msgctxt "dropdown"
 msgid "All"
 msgstr "Цял ден"
@@ -1178,7 +1166,6 @@ msgstr ""
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
-#| msgid "Delete all messages in this folder"
 msgid "All messages in this folder"
 msgstr "Изтрий всички съобщение в тази папка"
 
@@ -1487,7 +1474,7 @@ msgstr "Прикаченият файл беше запазен"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Audio"
-msgstr ""
+msgstr "Звук"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1641,7 +1628,6 @@ msgstr ""
 #. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
-#| msgid "My calendars"
 msgid "Birthday calendar"
 msgstr "Мои календари"
 
@@ -1697,9 +1683,8 @@ msgstr ""
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "Burnt orange"
-msgstr "оранжев"
+msgstr "Изгорено оранжево"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
@@ -2722,20 +2707,18 @@ msgstr "работни дни"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "Dark azure"
-msgstr "Маркирай като непрочетен"
+msgstr "Тъмно синьо"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "Dark green"
-msgstr "тъмно зелен"
+msgstr "Тъмно зелено"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Dark olive"
-msgstr ""
+msgstr "Тъмно маслинено"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Data imported successfully"
@@ -2940,7 +2923,6 @@ msgstr "Изтрий задача"
 #. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "Delete old signatures after import"
 msgid "Delete files after expiration"
 msgstr "Изтрий старите подписи след импорт"
 
@@ -3105,7 +3087,6 @@ msgstr ""
 #. Status for mail authenticity features. Do not show any information at all
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 #, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
 msgstr "Изключи"
 
@@ -3708,7 +3689,6 @@ msgstr "Редактирай правило"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Create reminder"
 msgid "Edit reminders"
 msgstr "Създай напомняне"
 
@@ -3850,7 +3830,6 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid "Enable"
 msgid "Enable Links"
 msgstr "Включи"
 
@@ -4420,7 +4399,6 @@ msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "day of the week"
 msgid "First day of week"
 msgstr "ден от седмицата"
 
@@ -4777,7 +4755,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #, fuzzy
-#| msgid "Description"
 msgid "Google subscription"
 msgstr "Описание"
 
@@ -5112,7 +5089,6 @@ msgstr "Импорт подписи"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "Shared calendars"
 msgid "Imported calendar"
 msgstr "Споделени календари"
 
@@ -5171,7 +5147,7 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/settings/pane.js
 msgid "Indigo"
-msgstr ""
+msgstr "Индиго"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
@@ -5471,7 +5447,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #, fuzzy
-#| msgid "Exact dates"
 msgid "Last updated"
 msgstr "Точни дати"
 
@@ -5533,9 +5508,8 @@ msgid "Light green"
 msgstr "Светло зелен"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "Light sky blue"
-msgstr "Светло син"
+msgstr "Светло небесно синьо"
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Like"
@@ -5561,8 +5535,6 @@ msgstr "Линк"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid ""
-#| "External images have been blocked to protect you against potential spam!"
 msgid "Links have been disabled to protect you against potential spam!"
 msgstr "Отдалечените картинки са блокирани с цел защита от спам!"
 
@@ -6538,9 +6510,8 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "No color"
-msgstr "Избери цвят"
+msgstr "Без цвят"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -6708,7 +6679,6 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid "Note"
 msgid "Note:"
 msgstr "Бележка"
 
@@ -6727,7 +6697,6 @@ msgstr ""
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
 msgstr "Бележка"
@@ -6838,7 +6807,7 @@ msgstr "Ок"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Olive"
-msgstr ""
+msgstr "Маслинено"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -7468,9 +7437,8 @@ msgid "Please enter a valid number"
 msgstr "Моля въведете валидно число"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
-#, fuzzy
 msgid "Please enter a valid object"
-msgstr "Моля въведете валидна дата"
+msgstr "Моля въведете валиден обект"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
@@ -7514,7 +7482,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
 msgid "Please grant access to your webcam first."
-msgstr ""
+msgstr "Моля, първо позволете достъп до камерата."
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -7643,7 +7611,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Plum"
-msgstr ""
+msgstr "Слива"
 
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
@@ -8163,7 +8131,6 @@ msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "Additional settings"
 msgid "Regional settings"
 msgstr "Допълнителни настройки"
 
@@ -8242,7 +8209,6 @@ msgstr "Напомняне"
 #. %1$d: is the number of the reminder
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder"
 msgid "Reminder %1$d"
 msgstr "Напомняне"
 
@@ -8297,7 +8263,6 @@ msgstr ""
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 #, fuzzy
-#| msgid "Create reminder"
 msgid "Remove all reminders"
 msgstr "Създай напомняне"
 
@@ -8344,7 +8309,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Create reminder"
 msgid "Remove reminder"
 msgstr "Създай напомняне"
 
@@ -8443,7 +8407,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
 msgid "Requesting device information. Please wait..."
-msgstr ""
+msgstr "Заявка за информация за устройството. Моля Изчакай..."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
@@ -8806,7 +8770,6 @@ msgstr "Избери всички"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #, fuzzy
-#| msgid "Delete all %1$d messages"
 msgid "Select all messages"
 msgstr "Изтрий всичките %1$d съобщения"
 
@@ -8986,7 +8949,7 @@ msgstr ""
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
-msgstr ""
+msgstr "Сървърът е недостъпен"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -9058,8 +9021,6 @@ msgstr ""
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
-#| msgid "Share selected folder"
-#| msgid_plural "Share selected folders"
 msgid "Share with subfolders"
 msgstr "Сподели избраната папка"
 
@@ -9490,7 +9451,6 @@ msgstr "Таблици"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Standard timezone"
 msgid "Standard"
 msgstr "Стандартна часова зона"
 
@@ -9529,7 +9489,6 @@ msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 #, fuzzy
-#| msgid "Cancel search"
 msgid "Start search"
 msgstr "Откажи търсене"
 
@@ -9950,7 +9909,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Appointments in shared calendars"
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Срещи в споделени календари"
 
@@ -10842,7 +10800,6 @@ msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Unknown sender"
 msgid "Unknown application"
 msgstr "Незнаен подател"
 
@@ -11002,6 +10959,9 @@ msgid ""
 "change year or shift-key to change month. Close date-picker by pressing ESC "
 "key."
 msgstr ""
+"Изплозвайте стрелките на клавиатурата за да смените деня. Натиснете Control, "
+"за да смените годините. Натиснете Shift, за да смените месеца. За да "
+"затворите натиснете Escape."
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
@@ -11027,7 +10987,6 @@ msgstr ""
 #. checkbox label to determine if a password should be used
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "Change password"
 msgid "Use password"
 msgstr "Промени парола"
 
@@ -11101,9 +11060,8 @@ msgstr "Вертикален"
 
 #. color names for screenreaders
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "Very dark gray"
-msgstr "всеки ден"
+msgstr "Много тъмно сиво"
 
 #. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
@@ -11642,7 +11600,6 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "Please enter a valid name"
 msgid "You must enter a folder name"
 msgstr "Моля въведете валидно име"
 
@@ -11843,14 +11800,12 @@ msgstr "Приета"
 #. Used in a selectbox when the reminder for an appointment is after the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "never ends"
 msgid "after end"
 msgstr "никога не приключва"
 
 #. Used in a selectbox when the reminder for an appointment is after the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "after start"
 msgstr "%1$s %2$s."
 
@@ -11891,7 +11846,6 @@ msgstr ""
 #. Used in a selectbox when the reminder for an appointment is before the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "before end"
 msgstr "%1$s %2$s."
 
@@ -12121,7 +12075,6 @@ msgstr "Календар"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Mail has been imported"
 msgid "iCal feed has been imported successfully"
 msgstr "Мейлът беше импортиран"
 
@@ -12439,7 +12392,7 @@ msgstr "Започни презентация"
 #. title of toggle button within password field
 #: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 msgid "toggle password visibility"
-msgstr ""
+msgstr "превключи показване на паролата"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 #, fuzzy

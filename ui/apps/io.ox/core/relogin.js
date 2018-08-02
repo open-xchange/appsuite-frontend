@@ -103,7 +103,7 @@ define('io.ox/core/relogin', [
             // set flag
             pending = true;
 
-            new ModalDialog({ async: true, width: '400px', enter: 'relogin', backdrop: true, focus: 'input', title: getReason(error) })
+            new ModalDialog({ async: true, width: '400px', enter: 'relogin', backdrop: 'static', focus: 'input', title: getReason(error) })
                 .build(function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.addClass('relogin');
@@ -115,9 +115,9 @@ define('io.ox/core/relogin', [
                         $('<input type="password" name="relogin-password" class="form-control">').attr('id', guid)
                     );
                 })
-                .addButton({ className: 'btn-default', label: gt('Cancel'), placement: 'left' })
+                .addButton({ className: 'btn-default', label: gt('Cancel'), placement: 'left', action: 'cancel' })
                 .addButton({ action: 'relogin', label: gt('Sign in') })
-                .on('cancel close', function () {
+                .on('cancel', function () {
                     ox.trigger('relogin:cancel');
                     gotoLogoutLocation();
                     $blocker.css('z-index', '');

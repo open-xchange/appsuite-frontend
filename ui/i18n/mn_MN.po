@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 10:19+0000\n"
+"POT-Creation-Date: 2018-07-31 11:28+0000\n"
 "PO-Revision-Date: 2015-04-13 10:00+0000\n"
 "Last-Translator: batuyanga <batuyanga@gmail.com>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -288,8 +288,6 @@ msgstr ""
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "every %1$d week"
-#| msgid_plural "every %1$d weeks"
 msgid "%1$s at %2$s."
 msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
 
@@ -854,7 +852,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder"
 msgid "Add reminder"
 msgstr "Сануулагч"
 
@@ -1011,7 +1008,6 @@ msgstr "Хаягийн дэвтэр"
 #. Context: Session Management. Refers to the macos addressbook
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Address Book"
 msgid "Addressbook"
 msgstr "Хаягийн дэвтэр"
 
@@ -1060,7 +1056,6 @@ msgstr ""
 #. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
-#| msgid "All day"
 msgctxt "dropdown"
 msgid "All"
 msgstr "Бүтэн өдөр"
@@ -1144,7 +1139,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #, fuzzy
-#| msgid "Edit appointment"
 msgid "All my public appointments"
 msgstr "Уулзалтыг засварлах"
 
@@ -1295,7 +1289,6 @@ msgstr "Уулзалтын дэлгэрэнгүй"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Appointment"
 msgid "Appointment color"
 msgstr "Уулзалт"
 
@@ -3641,7 +3634,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder"
 msgid "Edit reminders"
 msgstr "Сануулагч"
 
@@ -4336,7 +4328,6 @@ msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "day of the week"
 msgid "First day of week"
 msgstr "долоо хоногийн гариг"
 
@@ -4691,7 +4682,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #, fuzzy
-#| msgid "Description"
 msgid "Google subscription"
 msgstr "Тайлбар"
 
@@ -4978,7 +4968,6 @@ msgstr "Зөрчилдөөнийг эс тоох"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "Invite to new appointment"
 msgid "Ignore existing appointments"
 msgstr "Шинэ уулзалтанд урих"
 
@@ -6583,7 +6572,6 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid "Note"
 msgid "Note:"
 msgstr "Тэмдэглэл"
 
@@ -6602,7 +6590,6 @@ msgstr ""
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
 msgstr "Тэмдэглэл"
@@ -8110,7 +8097,6 @@ msgstr "Сануулагч"
 #. %1$d: is the number of the reminder
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder"
 msgid "Reminder %1$d"
 msgstr "Сануулагч"
 
@@ -8210,7 +8196,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder"
 msgid "Remove reminder"
 msgstr "Сануулагч"
 
@@ -9790,7 +9775,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Appointments in shared calendars"
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Дундын хуанли дах болзоонууд"
 
@@ -11676,7 +11660,6 @@ msgstr ""
 #. Used in a selectbox when the reminder for an appointment is after the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "never ends"
 msgid "after end"
 msgstr "хэзээ ч дуусахгүй"
 
@@ -11723,7 +11706,6 @@ msgstr ""
 #. Used in a selectbox when the reminder for an appointment is before the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "never ends"
 msgid "before end"
 msgstr "хэзээ ч дуусахгүй"
 
@@ -11865,7 +11847,6 @@ msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Other Address"
 msgid "eM Client"
 msgstr "Бусад хаяг"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 10:27+0000\n"
+"POT-Creation-Date: 2018-07-31 11:37+0000\n"
 "PO-Revision-Date: 2015-05-29 13:25+0000\n"
 "Last-Translator: resellerclub <ameya.d@directi.com>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -230,7 +230,6 @@ msgstr "%1$s %2$s"
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s."
 
@@ -239,7 +238,6 @@ msgstr "%1$s %2$s."
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s %3$s."
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s %3$s."
 
@@ -248,7 +246,6 @@ msgstr "%1$s %2$s %3$s."
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s."
 
@@ -257,7 +254,6 @@ msgstr "%1$s %2$s."
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s %3$s."
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s %3$s."
 
@@ -289,7 +285,6 @@ msgstr "%2$s da %1$s"
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s at %2$s"
 msgid "%1$s at %2$s."
 msgstr "%2$s da %1$s"
 
@@ -297,7 +292,6 @@ msgstr "%2$s da %1$s"
 #. %1$s: the reminder type, SMS/EMAIL etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s at %2$s"
 msgid "%1$s at end."
 msgstr "%2$s da %1$s"
 
@@ -305,7 +299,6 @@ msgstr "%2$s da %1$s"
 #. %1$s: the reminder type, SMS/EMAIL etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s at %2$s"
 msgid "%1$s at start."
 msgstr "%2$s da %1$s"
 
@@ -358,7 +351,6 @@ msgstr ""
 #. %1$s is a name/label of an input field (for example: URL or Login)
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 #, fuzzy, c-format
-#| msgid "Username must not be empty."
 msgid "%1$s must not be empty."
 msgstr "Kullanıcı adı boş bırakılmamalıdır. "
 
@@ -508,8 +500,6 @@ msgstr "100%"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$d hour"
-#| msgid_plural "%1$d hours"
 msgid "12 hours"
 msgstr "%1$d saat%1$d saat"
 
@@ -520,8 +510,6 @@ msgstr "15 dakika"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "%d hour"
-#| msgid_plural "%d hours"
 msgid "24 hours"
 msgstr "%d saat%d saat"
 
@@ -546,7 +534,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #, fuzzy
-#| msgid "Tasks can not be moved to or out of shared folders"
 msgid "A folder cannot be moved to one of its subfolders"
 msgstr "Görev taşınamaz veya paylaşılan klasörlerin dışında"
 
@@ -653,7 +640,6 @@ msgstr "Hesap başarıyla eklendi"
 #. error message shown to the user after trying to create a duplicate account
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
-#| msgid "Account added successfully"
 msgid "Account already exists"
 msgstr "Hesap başarıyla eklendi"
 
@@ -882,7 +868,6 @@ msgstr "Alıcı ekle"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "No reminder"
 msgid "Add reminder"
 msgstr "Herhangi bir hatırlatma bulunamadı"
 
@@ -1042,7 +1027,6 @@ msgstr "Adres Defteri"
 #. Context: Session Management. Refers to the macos addressbook
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Address Book"
 msgid "Addressbook"
 msgstr "Adres Defteri"
 
@@ -1094,7 +1078,6 @@ msgstr "Tümü"
 #. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
-#| msgid "All"
 msgctxt "dropdown"
 msgid "All"
 msgstr "Tümü"
@@ -1130,7 +1113,6 @@ msgstr "Dağıtım listesi ekle"
 #. Status for mail authenticity features. Show information for any mail
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 #, fuzzy
-#| msgid "All files"
 msgid "All emails"
 msgstr "Tüm dosyalar"
 
@@ -1176,7 +1158,6 @@ msgstr "Değişiklikler reddedildi"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
-#| msgid "%1$d messages in this conversation"
 msgid "All messages in this folder"
 msgstr "%1$d bu görüşmedeki mesajlar"
 
@@ -1186,7 +1167,6 @@ msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #, fuzzy
-#| msgid "All my appointments"
 msgid "All my public appointments"
 msgstr "Tüm randevularım"
 
@@ -1341,7 +1321,6 @@ msgstr "Randevu Ayrıntıları"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Appointment list"
 msgid "Appointment color"
 msgstr "Randevu Listesi"
 
@@ -1644,7 +1623,6 @@ msgstr "Muhasebe bilgisi"
 #. settings: context of a birthday calendar
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
-#| msgid "My calendars"
 msgid "Birthday calendar"
 msgstr "Takvimlerim"
 
@@ -1825,7 +1803,6 @@ msgstr "Takvim görünüşü"
 #. Context: Session Management. Refers to ios calendar and/or addressbook
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Shared address books"
 msgid "Calendar/Addressbook"
 msgstr "Paylaşılan adres defterleri"
 
@@ -2980,7 +2957,6 @@ msgstr "Parçacığı sil"
 #. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "Delete old signatures after import"
 msgid "Delete files after expiration"
 msgstr "İçe aktarım sonrası eski imzaları sil"
 
@@ -2988,7 +2964,6 @@ msgstr "İçe aktarım sonrası eski imzaları sil"
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 #, fuzzy
-#| msgid "Delete version"
 msgid "Delete forever"
 msgstr "Sürümü sil"
 
@@ -3151,7 +3126,6 @@ msgstr "Widgetı devre dışı bırak"
 #. Status for mail authenticity features. Do not show any information at all
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 #, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
 msgstr "Devre dışı bırak"
 
@@ -3260,7 +3234,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 #, fuzzy
-#| msgid "Do you really want to delete folder \"%s\"?"
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr " \"%s\" klasörünü gerçekten silmek istiyor musunuz?"
 
@@ -3778,7 +3751,6 @@ msgstr "Kaynağı düzenle"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Mail reminder"
 msgid "Edit reminders"
 msgstr "E posta hatırlatıcısı"
 
@@ -4504,7 +4476,6 @@ msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "day of the week"
 msgid "First day of week"
 msgstr "haftanın günü "
 
@@ -4880,7 +4851,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #, fuzzy
-#| msgid "New subscription"
 msgid "Google subscription"
 msgstr "Yeni abonelik"
 
@@ -5176,7 +5146,6 @@ msgstr "Sorunları görmezden gel"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "Invite to appointment"
 msgid "Ignore existing appointments"
 msgstr "Görüşmeye davet et"
 
@@ -5191,9 +5160,6 @@ msgstr "Uyarıları görmezden gel"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid ""
-#| "Ignore existing events. Helpful to import public holiday calendars, for "
-#| "example."
 msgid ""
 "Ignoring existing appointments is helpful to import public holiday "
 "calendars, for example."
@@ -5229,7 +5195,6 @@ msgstr "İmzaları içeri aktar"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "Shared calendars"
 msgid "Imported calendar"
 msgstr "Paylaşımlı takvimler"
 
@@ -5684,8 +5649,6 @@ msgstr "Linkler"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid ""
-#| "External images have been blocked to protect you against potential spam!"
 msgid "Links have been disabled to protect you against potential spam!"
 msgstr "Olası spam hareketlerden korumak için harici resimler engellendi!"
 
@@ -6081,7 +6044,6 @@ msgstr "Eşleşmeler"
 #. window resize
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 #, fuzzy
-#| msgid "Minimize"
 msgid "Maximize"
 msgstr "Küçült"
 
@@ -6183,7 +6145,6 @@ msgstr "Küçült"
 
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 #, fuzzy
-#| msgid "Minimize"
 msgid "Minimized windows"
 msgstr "Küçült"
 
@@ -6480,7 +6441,6 @@ msgstr "Yeni  E posta "
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 #, fuzzy
-#| msgid "Main window"
 msgid "New Windows"
 msgstr "E posta penceresi"
 
@@ -6519,7 +6479,6 @@ msgstr "Yeni takvim"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "New calendar"
 msgid "New calendar name"
 msgstr "Yeni takvim"
 
@@ -6849,7 +6808,6 @@ msgstr "CVS dosyaları hakkında not:"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid "Note"
 msgid "Note:"
 msgstr "Not"
 
@@ -6872,7 +6830,6 @@ msgstr ""
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #, fuzzy
-#| msgid "Note"
 msgctxt "app"
 msgid "Notes"
 msgstr "Not"
@@ -6932,7 +6889,6 @@ msgstr "Uyarılar"
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Not started"
 msgid "Notify at start."
 msgstr "Başlamadı"
 
@@ -6948,7 +6904,6 @@ msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "Members"
 msgid "Numbers"
 msgstr "Üyeler"
 
@@ -7021,7 +6976,6 @@ msgstr[0] ""
 #. broken image inside a mail
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 #, fuzzy
-#| msgid "Sorry, the audio file could not be played."
 msgid "One of the embedded images could not be used."
 msgstr "Üzgünüz, bu ses dosyası oynatılmamaktadır. "
 
@@ -7389,7 +7343,6 @@ msgstr "İzinler"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js
 #, fuzzy
-#| msgid "Invite people"
 msgid "Permissions / Invite people"
 msgstr "İnsanları davet et"
 
@@ -8203,21 +8156,18 @@ msgstr "Görüşme değişiklikleri için bildirim alın"
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "Receive notification for appointment changes"
 msgid "Receive notification when someone accesses the file(s)"
 msgstr "Görüşme değişiklikleri için bildirim alın"
 
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "Receive notification for appointment changes"
 msgid "Receive notification when someone finished downloading file(s)"
 msgstr "Görüşme değişiklikleri için bildirim alın"
 
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "Receive notification for appointment changes"
 msgid "Receive notification when the link expires"
 msgstr "Görüşme değişiklikleri için bildirim alın"
 
@@ -8375,7 +8325,6 @@ msgstr "Düzenli ifade"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "Additional settings"
 msgid "Regional settings"
 msgstr "Ek Ayarlar"
 
@@ -8456,7 +8405,6 @@ msgstr "Hatırlatma"
 #. %1$d: is the number of the reminder
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Reminder date %1$s"
 msgid "Reminder %1$d"
 msgstr "Hatırlatma Tarihi %1$s"
 
@@ -8511,7 +8459,6 @@ msgstr ""
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 #, fuzzy
-#| msgid "New task reminders"
 msgid "Remove all reminders"
 msgstr "Yeni görev hatırlatıcıları"
 
@@ -8559,7 +8506,6 @@ msgstr "Üyeyi çıkar"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "New task reminders"
 msgid "Remove reminder"
 msgstr "Yeni görev hatırlatıcıları"
 
@@ -9376,7 +9322,6 @@ msgstr "Göster"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #, fuzzy
-#| msgid "Advanced options"
 msgid "Show advanced options"
 msgstr "Gelişmiş Seçenekler"
 
@@ -9661,7 +9606,6 @@ msgstr "Hesabın  %s yeniden yetkilendirilmesinde bir sorun oluşmaktadır"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
-#| msgid "Something went wrong reauthorizing the account."
 msgid "Something went wrong. Please close this browser tab and try again."
 msgstr "Hesabın yeniden yetkilendirilmesinde bir sorun oluşmaktadır"
 
@@ -9746,7 +9690,6 @@ msgstr "Özet çizelgesi "
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Standard folders"
 msgid "Standard"
 msgstr "Standart klasörler"
 
@@ -10214,7 +10157,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Appointments in shared calendars"
 msgid "The appointment is visible for all users in shared calendars."
 msgstr "Paylaşımlı takvimlerdeki görüşmeler"
 
@@ -11166,7 +11108,6 @@ msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Running applications"
 msgid "Unknown application"
 msgstr "Çalışmakta olan uygulamalar"
 
@@ -11319,7 +11260,6 @@ msgstr ""
 #. showed inside a color picker. Used if an appointment should not have a custom color
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "New calendar"
 msgid "Use calendar color"
 msgstr "Yeni takvim"
 
@@ -11368,7 +11308,6 @@ msgstr ""
 #. checkbox label to determine if a password should be used
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
-#| msgid "New password"
 msgid "Use password"
 msgstr "Yeni parola"
 
@@ -12028,7 +11967,6 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "Please enter a valid name"
 msgid "You must enter a folder name"
 msgstr "Lütfen geçerli bir isim giriniz."
 
@@ -12241,14 +12179,12 @@ msgstr "kabul edildi"
 #. Used in a selectbox when the reminder for an appointment is after the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "never ends"
 msgid "after end"
 msgstr "asla bitmez"
 
 #. Used in a selectbox when the reminder for an appointment is after the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s %3$s."
 msgid "after start"
 msgstr "%1$s %2$s %3$s."
 
@@ -12293,7 +12229,6 @@ msgstr "Geri bildirim "
 #. Used in a selectbox when the reminder for an appointment is before the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
-#| msgid "%1$s %2$s."
 msgid "before end"
 msgstr "%1$s %2$s."
 
@@ -12439,7 +12374,6 @@ msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Other Address"
 msgid "eM Client"
 msgstr "Diğer adres"
 
@@ -12529,7 +12463,6 @@ msgstr "Takvim"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Data imported successfully"
 msgid "iCal feed has been imported successfully"
 msgstr "Veri başarıyla taşındı"
 
