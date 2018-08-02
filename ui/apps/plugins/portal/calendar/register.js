@@ -157,7 +157,7 @@ define('plugins/portal/calendar/register', [
             var popup = this.busy();
             require(['io.ox/calendar/view-detail'], function (view) {
                 var model = baton.item;
-                popup.idle().append(view.draw(model, { deeplink: true }));
+                popup.idle().append(view.draw(model.toJSON(), { deeplink: true }));
             });
         },
 
