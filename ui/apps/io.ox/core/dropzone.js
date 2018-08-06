@@ -145,11 +145,7 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         isFile: function (e) {
-            // we need this function to make sure the user drags
-            // a file and not just selected text, for example.
-            // adopted from: http://stackoverflow.com/questions/6848043/how-do-i-detect-a-file-is-being-dragged-rather-than-a-draggable-element-on-my-pa
             var dt = e.originalEvent.dataTransfer;
-            if (_.browser.Firefox) return e.type === 'dragleave' ? dt.dropEffect === 'none' : dt.dropEffect !== 'none';
             return _(dt.types).contains('Files') || _(dt.types).contains('application/x-moz-file');
         },
 
