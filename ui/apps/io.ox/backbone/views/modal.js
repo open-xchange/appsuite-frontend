@@ -225,8 +225,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             return this.addButton();
         },
 
-        addCancelButton: function () {
-            return this.addButton({ className: 'btn-default', label: gt('Cancel') });
+        addCancelButton: function (options) {
+            options = options || {};
+            var data = { className: 'btn-default', label: gt('Cancel') };
+            if (options.left) data.placement = 'left';
+            return this.addButton(data);
         },
 
         addAlternativeButton: function (options) {
