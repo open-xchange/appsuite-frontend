@@ -17,20 +17,21 @@ define('io.ox/calendar/actions/delete', [
     'io.ox/core/yell',
     'gettext!io.ox/calendar',
     'io.ox/core/tk/dialogs',
-    'io.ox/backbone/mini-views/common'
-], function (api, util, yell, gt, dialogs, mini) {
+    'io.ox/backbone/mini-views/common',
+    'settings!io.ox/calendar'
+], function (api, util, yell, gt, dialogs, mini, settings) {
 
     'use strict';
 
     return function (list) {
         api.getList(list).done(function (list) {
-            var displayComment = _(list).some(function (event) {
+            var displayComment = settings.get('notifyNewModifiedDeleted', true) && _(list).some(function (event) {
                     return event.get('attendees').length > 1;
                 }),
                 guid,
                 model = new Backbone.Model({ comment: '' }),
                 commentView = [
-                    $('<label>').text(gt('Leave a message for the other participants')).attr({ for: guid = _.uniqueId('containerlabel-') }),
+                    $('<label>').text(gt('Leave a message for the other participants. The message will be sent via email only.')).attr({ for: guid = _.uniqueId('containerlabel-') }),
                     new mini.InputView({ name: 'comment', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                 ];
             commentView[1].find('input').attr('id', guid);
@@ -62,28 +63,35 @@ define('io.ox/calendar/actions/delete', [
             };
 
             var hasSeries = _(list).some(function (event) {
-                if (event.hasFlag('last_occurrence')) return false;
-                return event.has('recurrenceId') && event.get('id') === event.get('seriesId');
-            });
+                    if (event.hasFlag('last_occurrence')) return false;
+                    return event.has('recurrenceId') && event.get('id') === event.get('seriesId');
+                }),
+                text, dialog;
             if (hasSeries) {
                 var hasFirstOccurence = _(list).some(function (event) {
-                        return event.hasFlag('first_occurrence') || !event.hasFlag('organizer');
-                    }),
-                    dialog = new dialogs.ModalDialog({ addClass: 'delete-dialog' });
+                    return event.hasFlag('first_occurrence') || !event.hasFlag('organizer');
+                });
+                dialog = new dialogs.ModalDialog({ addClass: 'delete-dialog' });
 
                 if (hasFirstOccurence) {
+                    text = gt('Do you want to delete the whole series or just this appointment within the series?');
                     dialog
-                    .text(gt('Do you want to delete the whole series or just this appointment within the series?'))
                         .addPrimaryButton('series', gt('Series'), 'series')
                         .addButton('appointment', gt('This appointment'), 'appointment');
                 } else {
+                    text = gt('Do you want to delete this and all future appointments or just this appointment within the series?');
                     dialog
-                        .text(gt('Do you want to delete this and all future appointments or just this appointment within the series?'))
                         .addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture')
                         .addButton('appointment', gt('This appointment'), 'appointment');
                 }
 
-                if (displayComment) dialog.append(commentView);
+                if (displayComment) {
+                    dialog.header($('<h1>').text(gt('Delete appointment')))
+                        .append($('<div>').text(text))
+                        .append(commentView);
+                } else {
+                    dialog.append($('<h1>').text(text));
+                }
 
                 dialog
                     .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
@@ -93,12 +101,21 @@ define('io.ox/calendar/actions/delete', [
                         cont(action);
                     });
             } else {
-                new dialogs.ModalDialog({ addClass: 'delete-dialog' })
-                    .text(gt('Do you want to delete this appointment?'))
-                    .append(displayComment ? commentView : $())
+
+                dialog = new dialogs.ModalDialog({ addClass: 'delete-dialog' })
                     .addPrimaryButton('ok', gt('Delete'), 'ok')
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel');
+                text = gt('Do you want to delete this appointment?');
+
+                if (displayComment) {
+                    dialog.header($('<h1>').text(gt('Delete appointment')))
+                        .append($('<div>').text(text))
+                        .append(commentView);
+                } else {
+                    dialog.append($('<h1>').text(text));
+                }
+
+                dialog.show()
                     .done(function (action) {
                         if (action === 'cancel') return;
                         cont('appointment');
