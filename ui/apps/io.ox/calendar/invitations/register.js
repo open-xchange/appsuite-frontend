@@ -245,6 +245,7 @@ define('io.ox/calendar/invitations/register', [
 
         getActions: function () {
             if (this.getConfirmationStatus() === 'ACCEPTED') return [];
+            if (this.model.hasFlag('event_cancelled')) return [];
             return ['decline', 'tentative', 'accept'];
         },
 
@@ -823,6 +824,11 @@ define('io.ox/calendar/invitations/register', [
             return { module: module, folder_id: reminder[1], id: reminder[0] };
         },
 
+        getType: function () {
+            var headers = this.model.get('headers') || {};
+            return headers['X-Open-Xchange-Type'];
+        },
+
         hasEvent: function () {
             var cid = this.getCid();
             if (!cid) return false;
@@ -836,6 +842,13 @@ define('io.ox/calendar/invitations/register', [
             return require(['io.ox/calendar/api', 'io.ox/calendar/util', 'io.ox/backbone/mini-views/alarms']).then(function (api, util, AlarmsView) {
                 return api.resolve(cid.id, true).then(function (model) {
                     if (self.disposed) return;
+
+                    if (self.getType() === 'Deleted') {
+                        // make sure, that event_cancelled flag is added if it has been deleted
+                        // this is necessary, when the resolve requests returns a recurrence master whereas just a single occurence has been deleted
+                        model = model.clone();
+                        model.set('flags', ['event_cancelled'].concat(model.get('flags')));
+                    }
 
                     var intView = new InternalAppointmentView({
                         model: model,
