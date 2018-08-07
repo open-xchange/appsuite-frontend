@@ -203,7 +203,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     this.$body.hide();
                     this.$header.css('border-bottom', 'none');
                 })
-                .addCancelButton()
+                .addCancelButton({ left: true })
                 .addButton({ className: 'btn-default', label: gt('Appointment'), action: 'appointment' })
                 .addButton({ action: 'series',
                     //#. Use singular in this context

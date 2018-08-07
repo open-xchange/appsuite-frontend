@@ -143,7 +143,7 @@ define('io.ox/find/main', [
                 if (!app.get('inplace')) return;
 
                 // check for vgrid
-                var grid = app.get('parent').grid;
+                var grid = app.get('parent').grid, fnEmpty;
                 if (!grid || !grid.addTemplate) return;
 
                 // search: all request
@@ -168,9 +168,16 @@ define('io.ox/find/main', [
                 app.on({
                     'find:query': function () {
                         grid.setMode('search');
+                        fnEmpty = grid.getEmptyMessage();
+                        grid.setEmptyMessage(function () {
+                            //#. search feature returns an empty result
+                            return gt('No matching items found.');
+                        });
                     },
                     'find:idle': function () {
-                        if (grid.getMode() !== 'all') grid.setMode('all');
+                        if (grid.getMode() === 'all') return;
+                        grid.setMode('all');
+                        grid.setEmptyMessage(fnEmpty);
                     }
                 });
             },

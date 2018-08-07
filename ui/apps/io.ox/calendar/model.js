@@ -450,6 +450,8 @@ define('io.ox/calendar/model', [
                 data = _(data)
                     .chain()
                     .map(function (data) {
+                        // no folders defaults to all folder
+                        if (!self.folders) return data;
                         if (data.events) return data.events;
                         api.trigger('all:fail', data.folder);
                     })

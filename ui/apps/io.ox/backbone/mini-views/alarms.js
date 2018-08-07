@@ -310,7 +310,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     this.$body.append(alarmView.render().$el);
                     this.$el.addClass('alarms-view-dialog');
                 })
-                .addCancelButton()
+                .addCancelButton({ left: true })
                 .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
                     // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually

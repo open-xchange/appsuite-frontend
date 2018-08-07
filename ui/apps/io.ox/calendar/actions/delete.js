@@ -69,7 +69,7 @@ define('io.ox/calendar/actions/delete', [
                 }
 
                 dialog
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .done(function (action) {
                         if (action === 'cancel') return;
@@ -79,7 +79,7 @@ define('io.ox/calendar/actions/delete', [
                 new dialogs.ModalDialog()
                     .text(gt('Do you want to delete this appointment?'))
                     .addPrimaryButton('ok', gt('Delete'), 'ok')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .done(function (action) {
                         if (action === 'cancel') return;

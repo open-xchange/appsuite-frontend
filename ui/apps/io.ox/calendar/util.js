@@ -1088,7 +1088,7 @@ define('io.ox/calendar/util', [
                 }
 
                 return dialog.addButton('appointment', gt('This appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show();
             }
             return $.when('appointment');
