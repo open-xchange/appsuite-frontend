@@ -513,6 +513,40 @@ define('io.ox/calendar/api', [
                 });
             },
 
+            updateAlarms: function (obj, options) {
+
+                var params = {
+                    action: 'updateAlarms',
+                    id: obj.id,
+                    folder: obj.folder,
+                    timestamp: _.now(),
+                    fields: api.defaultFields + ',alarms,rrule'
+                };
+
+                if (obj.recurrenceId) {
+                    params.recurrenceId = obj.recurrenceId;
+                }
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
+                return http.PUT({
+                    module: 'chronos/alarm',
+                    params: params,
+                    data: obj.alarms
+                })
+                .then(function (data) {
+                    // somehow the backend misses the alarms property when alarms are set to 0
+                    if (obj.alarms.length === 0 && !obj.recurrenceId) {
+                        data.updated[0].alarms = [];
+                    }
+                    processResponse(data);
+                });
+            },
+
             // returns freebusy data
             freebusy: function (list, options) {
                 if (list.length === 0) {

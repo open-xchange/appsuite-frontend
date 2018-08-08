@@ -169,6 +169,34 @@ define('io.ox/calendar/actions', [
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/changeAlarms', {
+        requires: function (e) {
+            function cont(model, folderData) {
+                // folder must be support alarms. We don'T show the action if the attendee flag is present (change status is shown instead). We only offer this for the birthday calendar for now
+                return e.collection.has('one') && !util.hasFlag(model, 'attendee') && folderData['com.openexchange.calendar.provider'] === 'birthdays' && folderData.supported_capabilities.indexOf('alarms') !== -1;
+            }
+
+            var model = e.baton.model,
+                data = e.baton.data;
+
+            // cannot confirm appointments without proper id (happens when detail view was opened from mail invitation from external calendar)
+            // must use buttons in invitation mail instead
+            if (!data.id) return false;
+
+            // incomplete
+            if (data && !model) {
+                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont);
+            }
+            return $.when(model, folderAPI.get(data.folder)).then(cont);
+        },
+        action: function (baton) {
+            // load & call
+            ox.load(['io.ox/calendar/actions/change-alarms']).done(function (action) {
+                action(baton.data);
+            });
+        }
+    });
+
     new Action('io.ox/calendar/detail/actions/changestatus', {
         requires: function (e) {
             function cont(model, folderData) {
@@ -621,6 +649,16 @@ define('io.ox/calendar/actions', [
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
+    }));
+
+    // 155 because it's either changestatus or changereminder, never both
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 155,
+        prio: 'hi',
+        mobile: 'hi',
+        id: 'changereminder',
+        label: gt('Change reminder'),
+        ref: 'io.ox/calendar/detail/actions/changeAlarms'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
