@@ -555,7 +555,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         attribute: 'until',
                         clearButton: true,
                         display: 'DATE'
-                    }), formGroup,
+                    }), formGroup = $('<div class="form-group">'),
                     update = function (model) {
                         var type = model.get('recurrence_type'),
                             visible = type > 0 && model.has('until');
@@ -565,7 +565,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 input.listenTo(this.model, 'change:recurrence_type change:until', update);
 
                 this.$body.append(
-                    formGroup = $('<div class="form-group">').append(
+                    formGroup.append(
                         $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Ends on')),
                         $('<div class="col-sm-8">').append(
                             input.render().$el,
