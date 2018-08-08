@@ -110,11 +110,11 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 text = gt('An example provider');
                 break;
             case 'WEB-AUTH':
-                text = gt('Use a device to authenticated your identity.  Must be compatible with U2F');
+                text = gt('Use a FIDO2 compatible device to authenticate your identity.');
                 icon = 'fa-microchip';
                 break;
             case 'U2F':
-                text = gt('Use a device to authenticated your identity.  Must be compatible with U2F');
+                text = gt('Use a U2F device');
                 icon = 'fa-microchip';
                 break;
             case 'YUBIKEY':

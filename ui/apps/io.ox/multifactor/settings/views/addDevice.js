@@ -167,6 +167,9 @@ define('io.ox/multifactor/settings/views/addDevice', [
                 case 'U2F':
                     view = 'io.ox/multifactor/settings/views/u2fRegistrationView';
                     break;
+                case 'WEB-AUTH':
+                    view = 'io.ox/multifactor/settings/views/webAuthnRegistrationView';
+                    break;
                 case 'YUBIKEY':
                     view = 'io.ox/multifactor/settings/views/yubikeyRegistrationView';
                     break;
@@ -201,7 +204,6 @@ define('io.ox/multifactor/settings/views/addDevice', [
         api.beginRegistration(provider, name, additParams).then(function (resp) {
             openView(provider, resp);
         }, function (error) {
-            debugger;
             console.log(error);
         });
     }
