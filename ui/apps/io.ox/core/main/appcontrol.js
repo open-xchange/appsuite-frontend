@@ -54,11 +54,7 @@ define('io.ox/core/main/appcontrol', [
         },
         checkUpsell: function () {
             var requires = this.model.get('requires');
-            if (!upsell.has(requires)) {
-                upsell.trigger({ type: 'app', id: this.model.get('id'), missing: upsell.missing(requires) });
-                return true;
-            }
-            return false;
+            return !upsell.has(requires);
         },
         drawUpsellIcon: function (elem) {
             if (this.checkUpsell()) {
@@ -77,6 +73,9 @@ define('io.ox/core/main/appcontrol', [
                     return;
                 }
                 ox.launch(this.model.get('path'));
+            } else {
+                var requires = this.model.get('requires');
+                upsell.trigger({ type: 'app', id: this.model.get('id'), missing: upsell.missing(requires) });
             }
         },
         quitApp: function (e) {
