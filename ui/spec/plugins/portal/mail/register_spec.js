@@ -17,7 +17,7 @@ define([
     'use strict';
 
     describe('Portal plugins Stickymail', function () {
-        const fakeMail = {
+        var fakeMail = {
             id: '1337',
             folder: 'default0/INBOX',
             from: [['Thorsten Tester', 'test@example.com']],
@@ -34,7 +34,7 @@ define([
         };
 
         function invokeXSS(method) {
-            const el = $('<div>'),
+            var el = $('<div>'),
                 baton = ext.Baton.ensure(fakeMail);
             ext.point('io.ox/portal/widget/stickymail').invoke(method, el, baton);
             return el;
@@ -47,7 +47,7 @@ define([
 
         describe('preview', function () {
             it('should not inject plain text as html', function () {
-                const el = invokeXSS('preview');
+                var el = invokeXSS('preview');
                 expect(el.find('img').length).to.equal(0);
                 expect(el.text()).to.contain('<img src="x" onerror="alert(1337);">test1337');
             });
