@@ -47,7 +47,8 @@ define('io.ox/multifactor/views/u2fProvider', [
             model: new Backbone.Model({ provider: provider,
                 deviceId: device.id,
                 challenge: challenge,
-                error: error
+                error: error,
+                device: device
             })
         })
         .build(function () {
@@ -73,8 +74,10 @@ define('io.ox/multifactor/views/u2fProvider', [
         {
             index: INDEX += 100,
             id: 'header',
-            render: function () {
-                var label = $('<label for="verification">').append(gt('Please activate your authentication device'))
+            render: function (baton) {
+                var label = $('<label for="verification">').append(
+                    baton.model.get('device').name ? gt('Please activate your authentication device named %s', baton.model.get('device').name) :
+                        gt('Please activate your authentication device'))
                 .append('<br>');
                 this.$body.append(
                     label
