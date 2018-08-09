@@ -1350,6 +1350,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 .always(checkDone);
             }
             disconnectedQueue = [];
+            ox.trigger('http:reconnected');
         },
         // Wipe the disconnect queue and resume
         resetDisconnect: function (resp) {

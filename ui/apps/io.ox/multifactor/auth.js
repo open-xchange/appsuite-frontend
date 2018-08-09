@@ -15,7 +15,8 @@ define('io.ox/multifactor/auth', [
     'io.ox/multifactor/api',
     'io.ox/multifactor/views/selectDeviceView',
     'io.ox/multifactor/deviceAuthenticator',
-    'gettext!io.ox/core/boot'
+    'gettext!io.ox/core/boot',
+    'io.ox/multifactor/bundle'
 ], function (api, selectDeviceView, deviceAuthenticator, gt) {
 
     'use strict';

@@ -384,6 +384,29 @@ module.exports = function (grunt) {
                         nonull: true
                     }
                 ]
+            },
+            multifactor: {
+                options: {
+                    banner: 'define("io.ox/multifactor/bundle", [], function () {\n\n' +
+                                '"use strict";\n\n',
+                    footer: '});\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'apps/io.ox/multifactor/api.js',
+                            'apps/io.ox/multifactor/deviceAuthenticator.js',
+                            'apps/io.ox/multifactor/factorRenderer.js',
+                            'apps/io.ox/multifactor/views/constants.js',
+                            'apps/io.ox/multifactor/views/selectDeviceView.js',
+                            'apps/io.ox/multifactor/views/smsProvider.js',
+                            'apps/io.ox/multifactor/views/totpProvider.js',
+                            'apps/io.ox/multifactor/views/webAuthProvider.js'
+                        ],
+                        dest: 'build/apps/io.ox/multifactor/bundle.js',
+                        nonull: true
+                    }
+                ]
             }
         }
     });
