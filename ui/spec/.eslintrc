@@ -9,8 +9,7 @@
         // adds all of the Jasmine testing global variables for version 1.3 and 2.0.
         "jasmine": true,
         // phantomjs global variables.
-        "phantomjs": true,
-        "es6": true
+        "phantomjs": true
 	},
 
 	"globals": {
