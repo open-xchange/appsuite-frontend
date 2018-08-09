@@ -401,7 +401,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/multifactor/views/selectDeviceView.js',
                             'apps/io.ox/multifactor/views/smsProvider.js',
                             'apps/io.ox/multifactor/views/totpProvider.js',
-                            'apps/io.ox/multifactor/views/webAuthProvider.js'
+                            'apps/io.ox/multifactor/views/webAuthProvider.js',
+                            'apps/io.ox/multifactor/lib/u2f-api.js'
                         ],
                         dest: 'build/apps/io.ox/multifactor/bundle.js',
                         nonull: true

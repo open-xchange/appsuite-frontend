@@ -18,7 +18,8 @@ define('io.ox/multifactor/views/u2fProvider', [
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/api',
     'gettext!io.ox/core/boot',
-    'io.ox/multifactor/views/constants'
+    'io.ox/multifactor/views/constants',
+    'io.ox/multifactor/lib/u2f-api'
 ], function (views, ext, mini, ModalView, api, gt, constants) {
 
     'use strict';
@@ -78,6 +79,17 @@ define('io.ox/multifactor/views/u2fProvider', [
                 this.$body.append(
                     label
                 );
+            }
+        },
+        {
+            index: INDEX += 100,
+            id: 'error',
+            render: function (baton) {
+                var error = baton.model.get('error');
+                if (error) {
+                    var label = $('<label class="multifactorError">').append(error);
+                    this.$body.append(label);
+                }
             }
         }
 

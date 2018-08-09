@@ -19,7 +19,8 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
     'io.ox/core/yell',
     'io.ox/multifactor/api',
     'gettext!io.ox/core/boot',
-    'less!io.ox/multifactor/style'
+    'less!io.ox/multifactor/style',
+    'io.ox/multifactor/lib/u2f-api'
 ], function (views, ext, mini, ModalView, yell, api, gt) {
 
     'use strict';
