@@ -94,7 +94,6 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
             def.resolve();
         }, function (error) {
             console.log(error);
-            debugger;
             def.reject();
         });
     }

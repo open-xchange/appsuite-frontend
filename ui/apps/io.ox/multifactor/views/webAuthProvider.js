@@ -18,8 +18,9 @@ define('io.ox/multifactor/views/webAuthProvider', [
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/api',
     'io.ox/multifactor/lib/base64',
-    'gettext!io.ox/core/boot'
-], function (views, ext, mini, ModalView, api, base64, gt) {
+    'gettext!io.ox/core/boot',
+    'io.ox/multifactor/views/constants'
+], function (views, ext, mini, ModalView, api, base64, gt, constants) {
 
     'use strict';
 
@@ -40,7 +41,7 @@ define('io.ox/multifactor/views/webAuthProvider', [
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Authenticate'),
+            title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
@@ -52,7 +53,7 @@ define('io.ox/multifactor/views/webAuthProvider', [
         .build(function () {
         })
         .addCancelButton()
-        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
+        .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('cancel', function () {
             def.reject();
         })
@@ -73,7 +74,7 @@ define('io.ox/multifactor/views/webAuthProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label for="verification">').append('Please touch your authentication device')
+                var label = $('<label for="verification">').append(gt('Please activate your authentication device'))
                 .append('<br>');
                 this.$body.append(
                     label

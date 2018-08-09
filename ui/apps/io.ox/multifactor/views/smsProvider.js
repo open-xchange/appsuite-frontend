@@ -18,8 +18,9 @@ define('io.ox/multifactor/views/smsProvider', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core/boot',
+    'io.ox/multifactor/views/constants',
     'less!io.ox/multifactor/style'
-], function (api, views, ext, mini, ModalView, gt) {
+], function (api, views, ext, mini, ModalView, gt, constants) {
 
     'use strict';
 
@@ -40,7 +41,7 @@ define('io.ox/multifactor/views/smsProvider', [
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Authenticate'),
+            title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
@@ -52,8 +53,8 @@ define('io.ox/multifactor/views/smsProvider', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
-        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
+        .addButton({ label: constants.OKButton, action: 'OK' })
+        .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('OK', function () {
             var response = $('#verification').val();
             if (response && response !== '') {
@@ -88,12 +89,15 @@ define('io.ox/multifactor/views/smsProvider', [
     ext.point(POINT).extend(
         {
             index: INDEX += 100,
-            id: 'identifier',
+            id: 'help',
             render: function (baton) {
-                var div = $('<div class="smsIdentifier">');
-                //#.  Multifactor authentication text was sent to a phone with the number ending with %s
-                var label = $('<label>').append(gt('Device with number ending with %s', baton.model.get('challenge').phoneNumberTail));
-                this.$body.append(div.append(label));
+                var label = $('<p style="multifactor-help">')
+                .append(gt('You will receive an SMS with a confirmation code. Please check your device with ending with numbers %s and enter it below to proceed.',
+                    baton.model.get('challenge').phoneNumberTail))
+                .append('<br>');
+                this.$body.append(
+                    label
+                );
             }
         },
         {

@@ -17,8 +17,9 @@ define('io.ox/multifactor/views/u2fProvider', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/api',
-    'gettext!io.ox/core/boot'
-], function (views, ext, mini, ModalView, api, gt) {
+    'gettext!io.ox/core/boot',
+    'io.ox/multifactor/views/constants'
+], function (views, ext, mini, ModalView, api, gt, constants) {
 
     'use strict';
 
@@ -39,7 +40,7 @@ define('io.ox/multifactor/views/u2fProvider', [
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Authenticate'),
+            title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
@@ -51,7 +52,7 @@ define('io.ox/multifactor/views/u2fProvider', [
         .build(function () {
         })
         .addCancelButton()
-        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
+        .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('cancel', function () {
             def.reject();
         })
@@ -72,7 +73,7 @@ define('io.ox/multifactor/views/u2fProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label for="verification">').append('Please touch your authentication device')
+                var label = $('<label for="verification">').append(gt('Please activate your authentication device'))
                 .append('<br>');
                 this.$body.append(
                     label

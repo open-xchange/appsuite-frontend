@@ -16,8 +16,8 @@ define('io.ox/multifactor/views/exampleProvider', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/core/boot'
-], function (views, ext, mini, ModalView, gt) {
+    'io.ox/multifactor/views/constants'
+], function (views, ext, mini, ModalView, constants) {
 
     'use strict';
 
@@ -38,7 +38,7 @@ define('io.ox/multifactor/views/exampleProvider', [
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Authenticate'),
+            title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
@@ -50,8 +50,8 @@ define('io.ox/multifactor/views/exampleProvider', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
-        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
+        .addButton({ label: constants.OKButton, action: 'OK' })
+        .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('OK', function () {
             var response = $('#verification').val();
             if (response && response !== '') {
@@ -84,6 +84,17 @@ define('io.ox/multifactor/views/exampleProvider', [
     }
 
     ext.point(POINT).extend(
+        {
+            index: INDEX += 100,
+            id: 'help',
+            render: function () {
+                var label = $('<p style="multifactor-help">').append('This is an example device only.  This is where additional instructions would be provided.')
+                .append('<br>');
+                this.$body.append(
+                    label
+                );
+            }
+        },
         {
             index: INDEX += 100,
             id: 'header',

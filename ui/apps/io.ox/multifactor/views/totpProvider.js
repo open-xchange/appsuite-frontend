@@ -16,8 +16,9 @@ define('io.ox/multifactor/views/totpProvider', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/core/boot'
-], function (views, ext, mini, ModalView, gt) {
+    'gettext!io.ox/core/boot',
+    'io.ox/multifactor/views/constants'
+], function (views, ext, mini, ModalView, gt, constants) {
 
     'use strict';
 
@@ -38,7 +39,7 @@ define('io.ox/multifactor/views/totpProvider', [
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Authenticate'),
+            title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
             model: new Backbone.Model({ provider: provider,
@@ -50,8 +51,8 @@ define('io.ox/multifactor/views/totpProvider', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
-        .addAlternativeButton({ label: gt('Device Lost'), action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
+        .addButton({ label: constants.OKButton, action: 'OK' })
+        .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('OK', function () {
             var response = $('#authentication').val();
             if (response && response !== '') {
@@ -84,6 +85,18 @@ define('io.ox/multifactor/views/totpProvider', [
     }
 
     ext.point(POINT).extend(
+        {
+            index: INDEX += 100,
+            id: 'help',
+            render: function () {
+                var label = $('<p style="multifactor-help">')
+                .append(gt('Additional authentication is needed.  Please use the authenticator application you previously set up with this service.'))
+                .append('<br>');
+                this.$body.append(
+                    label
+                );
+            }
+        },
         {
             index: INDEX += 100,
             id: 'header',
