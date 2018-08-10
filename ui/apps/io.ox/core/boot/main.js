@@ -104,6 +104,43 @@ define.async('io.ox/core/boot/main', [
             return require('io.ox/core/boot/login/auto')();
         },
 
+        multifactorLoad: function () {
+            util.debug('Load MF UI ... load core plugins and current language', ox.language);
+
+            // signin phase is over (important for gettext)
+            ox.signin = false;
+
+            // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
+            _.device.cache = {};
+            $.when(
+                gettext.setLanguage(ox.language),
+                manifests.manager.loadPluginsFor('i18n')
+            )
+            .then(function () {
+                util.debug('Load UI > current language and core plugins DONE.');
+                gettext.enable();
+            })
+            .then(function () {
+                require(['io.ox/core/boot/warning'], function () {
+                    ext.point('io.ox/core/boot/warning').invoke('draw');
+                });
+                return;
+            })
+            .done(function () {
+                require(['io.ox/multifactor/auth', 'themes', 'settings!io.ox/core'], function (auth, themes, coreSettings) {
+                    var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
+                        loadTheme = themes.set(theme);
+                    $.when(loadTheme).then(function () {
+                        auth.doAuthentication().then(function () {
+                            debugger;
+                            // Reload all rampup
+                            // call loadUI
+                        });
+                    });
+                });
+            });
+        },
+
         loadUI: function (sessionData) {
 
             util.debug('Load UI ... load core plugins and current language', ox.language);
@@ -177,14 +214,17 @@ define.async('io.ox/core/boot/main', [
             $('#background-loader').fadeIn(util.DURATION, function () {
                 $('#io-ox-login-screen').hide().empty();
             });
-
             // load user config
             config.user().done(function () {
                 // apply session data (again) & page title
                 if (data) session.set(data);
                 ox.trigger('change:document:title');
                 // load UI
-                exports.loadUI(data);
+                if (data.requires_multifactor) {
+                    exports.multifactorLoad();
+                } else {
+                    exports.loadUI(data);
+                }
             });
         },
 
