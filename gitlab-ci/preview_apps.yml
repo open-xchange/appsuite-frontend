@@ -10,7 +10,7 @@ deploy preview app:
   variables:
     GIT_STRATEGY: none
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     SERVER: http://10.20.28.164/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
