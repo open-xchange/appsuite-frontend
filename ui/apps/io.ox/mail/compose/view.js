@@ -420,7 +420,8 @@ define('io.ox/mail/compose/view', [
             ext.point(POINT + '/mailto').invoke('setup');
 
             // add dynamic extensionpoint to trigger saveAsDraft on logout
-            this.logoutPointId = 'saveMailOnDraft' + this.app.id;
+            this.logoutPointId = 'saveMailOnDraft_' + this.app.id;
+
             ext.point('io.ox/core/logout').extend({
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
@@ -762,9 +763,13 @@ define('io.ox/mail/compose/view', [
             this.stopAutoSave();
         },
 
+        removeLogoutPoint: function () {
+            ext.point('io.ox/core/logout').disable(this.logoutPointId);
+        },
+
         dispose: function () {
             // disable dynamic extensionpoint to trigger saveAsDraft on logout
-            ext.point('io.ox/core/logout').disable(this.logoutPointId);
+            this.removeLogoutPoint();
             this.stopListening();
             this.model = null;
             delete this.editor;
@@ -809,7 +814,9 @@ define('io.ox/mail/compose/view', [
                     });
             }
 
-            return def.then(function () { self.clean(); });
+            return def.then(function () {
+                self.clean();
+            });
         },
 
         send: function () {
