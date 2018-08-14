@@ -1,9 +1,9 @@
 {
   "name": "open-xchange-appsuite-help",
   "version": "7.6.3-33",
-  "dependencies": {
-  },
+  "dependencies": {},
   "optionalDependencies": {
+    "bower": "^1.8.4",
     "jshint": "^2.5.0",
     "open-xchange-shared-grunt-config": "^0.8.0"
   },
