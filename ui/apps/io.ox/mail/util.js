@@ -544,6 +544,31 @@ define('io.ox/mail/util', [
             return data.folder_id === undefined && data.filename !== undefined;
         },
 
+        asList: _.memoize(function (str) {
+            // comma-seperated, stringbased list
+            return (str || '')
+                // linebreak, whitespace
+                .replace(/[\s\n]+/g, ',')
+                // duplicate commas
+                .replace(/(,+),/g, ',')
+                // trailing commas
+                .replace(/^,|,$/g, '')
+                .toLowerCase()
+                .split(',');
+        }),
+
+        isWhiteListed: function (data, list) {
+            var whitelist = that.asList(settings.get('feature/trusted', list || '')),
+                address = _.isObject(data) ?
+                    data.from && data.from.length && String(data.from[0][1] || '') :
+                    data || '';
+            // normalize
+            address = (address || '').trim().toLowerCase();
+            return _.some(whitelist, function (whitelisted) {
+                return address.endsWith(whitelisted.trim());
+            });
+        },
+
         authenticity: (function () {
 
             function getAuthenticityLevel() {
