@@ -620,6 +620,7 @@ define('io.ox/mail/util', [
                     level = getAuthenticityLevel();
 
                 // always show trusted
+                if (that.isWhiteListed(data)) return;
                 if (level === 'none' && status !== 'trusted') return;
                 if (!/^(fail|neutral|pass|trusted)$/.test(status)) return;
 
