@@ -75,7 +75,6 @@ define('io.ox/core/boot/load', [
             console.error('Could not load default theme');
             ox.trigger('boot:fail');
         }
-
         util.debug('Loading theme failed', theme);
 
         // failed to load theme?

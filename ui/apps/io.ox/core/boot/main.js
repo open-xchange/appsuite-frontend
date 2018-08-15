@@ -132,7 +132,10 @@ define.async('io.ox/core/boot/main', [
                         loadTheme = themes.set(theme);
                     $.when(loadTheme).then(function () {
                         auth.doAuthentication().then(function () {
-                            debugger;
+                            session.rampup().then(function (data) {
+                                if (data) session.set(data);
+                                exports.loadUI();
+                            });
                             // Reload all rampup
                             // call loadUI
                         });
