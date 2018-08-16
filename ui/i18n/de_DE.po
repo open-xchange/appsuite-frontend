@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-07-11 11:32+0200\n"
+"PO-Revision-Date: 2018-08-09 14:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -329,7 +329,6 @@ msgstr "%1$s hochgeladen"
 
 #. '%1$s contact's display name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
-#, fuzzy
 msgid "%1$s could not be added as the contact has no valid email field."
 msgstr ""
 "%1$s konnte nicht hinzugefügt werden, da der Kontakt kein gültiges E-Mail-"
@@ -504,8 +503,6 @@ msgid "100%"
 msgstr "100%"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "12 hour"
 msgid "12 hours"
 msgstr "12 Stunden"
 
@@ -515,10 +512,8 @@ msgid "15 minutes"
 msgstr "15 Minuten"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "4 hour"
 msgid "24 hours"
-msgstr "4 Stunden"
+msgstr "24 Stunden"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -646,10 +641,8 @@ msgstr "Account erfolgreich hinzugefügt"
 
 #. error message shown to the user after trying to create a duplicate account
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#, fuzzy
-#| msgid "Account added successfully"
 msgid "Account already exists"
-msgstr "Account erfolgreich hinzugefügt"
+msgstr "Account ist bereits vorhanden"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -4380,10 +4373,8 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "day of the week"
 msgid "First day of week"
-msgstr "Tag der Woche"
+msgstr "Erster Tag der Woche"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4401,7 +4392,7 @@ msgstr "Vorname für interne Benutzer darf nicht leer sein"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "First week of year"
-msgstr ""
+msgstr "Erste Woche des Jahres"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -6723,7 +6714,6 @@ msgstr "jetzt aktiv"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
-#| msgid "Members"
 msgid "Numbers"
 msgstr "Mitglieder"
 
@@ -8113,10 +8103,8 @@ msgid "Regex"
 msgstr "Regex"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Regional settings"
-msgstr "Zusätzliche Einstellungen"
+msgstr "Regionale Einstellungen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -9313,7 +9301,6 @@ msgid "SoftBank"
 msgstr "SoftBank"
 
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
-#, fuzzy
 msgid "Some contacts could not be added as they have no valid email field."
 msgstr ""
 "Einige Kontakte konnten nicht hinzugefügt werden, da sie kein gültiges E-"
@@ -9527,10 +9514,8 @@ msgstr "Straße"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Sharing"
 msgid "String"
-msgstr "Freigaben"
+msgstr "Zeichenkette"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
@@ -11202,9 +11187,8 @@ msgstr "Sichtbarkeit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
-#| msgid "Visibility"
 msgid "Visibility Help"
-msgstr "Sichtbarkeit"
+msgstr "Hilfe zur Sichtbarkeit"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -11279,12 +11263,14 @@ msgid "Week start"
 msgstr "Wochenstart"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
 msgid "Week that contains January 1st"
-msgstr ""
+msgstr "Woche, die den ersten Januar enthält"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
 msgid "Week that contains the first Thursday"
-msgstr ""
+msgstr "Woche, die den ersten Donnerstag enthält"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main

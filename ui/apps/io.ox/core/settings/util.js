@@ -65,11 +65,13 @@ define('io.ox/core/settings/util', ['io.ox/backbone/mini-views/common'], functio
             return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));
         },
 
-        input: function (id, label, model) {
-            var guid = _.uniqueId('form-control-label-');
+        input: function (id, label, model, description) {
+            var guid = _.uniqueId('form-control-label-'),
+                attributes = description ? { 'aria-describedby': _.uniqueId('form-control-description_') } : {};
             return [
                 $('<label>').attr('for', guid).text(label),
-                new miniViews.InputView({ name: id, model: model, className: 'form-control', id: guid }).render().$el
+                new miniViews.InputView({ name: id, model: model, className: 'form-control', id: guid, attributes: attributes }).render().$el,
+                description ? $('<div class="help-block">').text(description).prop('id', attributes['aria-describedby']) : $()
             ];
         }
     };

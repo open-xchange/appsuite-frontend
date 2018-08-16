@@ -85,9 +85,11 @@ define('io.ox/core/notifications/subview', [
                     var requestData = _(items.slice(0, max)).map(function (obj) {
                         return obj.attributes;
                     });
-                    api.getList(requestData).then(function (data) {
+                    // no cache here, or we might show reminders for deleted requests
+                    api.getList(requestData, false).then(function (data) {
                         for (i = 0; i < max && items[i]; i++) {
-                            drawItem(data[i], items[i]);
+                            // some list requests return null for items that were deleted meanwhile (request doesn't fail so the other data can still be used). Dont show these
+                            if (data[i]) drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
                     }, function () {

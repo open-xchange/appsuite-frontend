@@ -70,6 +70,7 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr('id', this.id);
+            if (this.attributes) this.$el.attr(this.attributes);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             if (this.options.mandatory) this.$el.attr('aria-required', true);
             if (_.isBoolean(this.options.autocomplete) && !this.options.autocomplete) this.$el.attr('autocomplete', 'off');

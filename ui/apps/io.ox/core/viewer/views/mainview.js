@@ -137,16 +137,20 @@ define('io.ox/core/viewer/views/mainview', [
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
-            var viewerRootEl = this.$el,
-                self = this,
-                handleChangeSlide = _.throttle(function (direction) {
-                    if (direction === 'right') {
-                        self.displayerView.slideNext();
-                    } else {
-                        self.displayerView.slidePrev();
-                    }
-                    self.displayerView.focusActiveSlide();
-                }, 200);
+            var viewerRootEl = this.$el;
+            var swiper = this.displayerView.swiper;
+            var self = this;
+
+            var handleChangeSlide = _.throttle(function (direction) {
+                if (!swiper) { return; }
+
+                if (direction === 'right') {
+                    swiper.slideNext();
+                } else {
+                    swiper.slidePrev();
+                }
+                self.displayerView.focusActiveSlide();
+            }, 200);
 
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
@@ -181,16 +185,10 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    // bug #55252
-                    // if ($(event.target).hasClass('swiper-slide-active')) {
                     handleChangeSlide('left');
-                    // }
                     break;
                 case 39: // right arrow
-                    // bug #55252
-                    // if ($(event.target).hasClass('swiper-slide-active')) {
                     handleChangeSlide('right');
-                    // }
                     break;
                 case 33: // page up
                     event.preventDefault();
@@ -230,18 +228,18 @@ define('io.ox/core/viewer/views/mainview', [
             var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0;
             var displayerEl = this.displayerView.$el;
             var activeSlide = this.displayerView.getActiveSlideNode();
-            var activeSlideIndex = activeSlide.index();
+            // var activeSlideIndex = activeSlide.index();
             var swiper = this.displayerView.swiper;
 
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
 
             if (swiper) {
-                swiper.onResize();
+                swiper.update();
                 this.viewerEvents.trigger('viewer:resize');
                 // workaround for a possible bug from swiper plugin that happens sporadically:
                 // After an on resize call, the plugin 'resets' the active slide to the beginning.
-                swiper.slideTo(activeSlideIndex);
+                // swiper.slideTo(activeSlideIndex);
             }
         },
 

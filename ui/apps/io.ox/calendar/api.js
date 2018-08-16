@@ -232,7 +232,7 @@ define('io.ox/calendar/api', [
                         return obj;
                     });
 
-                    var def, reqList = list;
+                    var def, reqList = list, deletedEvents = false;
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
@@ -245,7 +245,15 @@ define('io.ox/calendar/api', [
 
                     return def.then(function (data) {
                         if (data) {
-                            data.forEach(function (obj) {
+                            data.forEach(function (obj, index) {
+                                if (obj === null) {
+                                    deletedEvents = true;
+                                    // null means the event was deleted, clean up the caches
+                                    processResponse({
+                                        deleted: [reqList[index]]
+                                    });
+                                    return;
+                                }
                                 if (isRecurrenceMaster(obj)) return;
                                 api.pool.propagateAdd(obj);
                             });
@@ -256,6 +264,9 @@ define('io.ox/calendar/api', [
                             // you can request exceptions without recurrence id because they have own ids, but in the reponse they still have a recurrence id, which is needed for the correct cid
                             if (data && data[index]) {
                                 obj = data[index];
+                            } else if (data && data[index] === null) {
+                                // null is returned when the event was deleted meanwhile
+                                return null;
                             }
 
                             if (isRecurrenceMaster(obj)) {
@@ -264,6 +275,11 @@ define('io.ox/calendar/api', [
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
                         });
+                    })
+                    .then(function (data) {
+                        // get fresh alarms if there were some deleted events
+                        if (deletedEvents) api.getAlarms();
+                        return data;
                     });
                 };
             }()),

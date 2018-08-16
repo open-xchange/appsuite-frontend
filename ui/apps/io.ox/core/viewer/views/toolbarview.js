@@ -136,6 +136,19 @@ define('io.ox/core/viewer/views/toolbarview', [
                         });
                 }
             },
+            'autoplaystart': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Run auto-play '),
+                ref: TOOLBAR_ACTION_ID + '/autoplaystart',
+                customize: function () {
+                    this.addClass('viewer-toolbar-autoplay-start')
+                        .attr({
+                            'aria-label': gt('Run auto-play ')
+                        });
+                }
+
+            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -536,6 +549,19 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
+    new Action(TOOLBAR_ACTION_ID + '/autoplaystart', {
+        requires: function (e) {
+            var model = e.baton.model;
+            var imageModelCount = model.collection.reduce(function (memo, model) { return (model.isImage() ? memo + 1 : memo); }, 0);
+            var autoplayStarted = e.baton.context.autoplayStarted;
+
+            return model.isImage() && !autoplayStarted && (imageModelCount >= 2);
+        },
+        action: function (baton) {
+            baton.context.onAutoplayStart();
+        }
+    });
+
     // define the Backbone view
     var ToolbarView = DisposableView.extend({
 
@@ -559,10 +585,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
             // listen to sidebar toggle for document navigation positioning
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
+            // listen to autoplay events
+            this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
+            // the current autoplay state
+            this.autoplayStarted = false;
         },
 
         /**
@@ -664,6 +694,25 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         /**
+         * Handles when autoplay is started or stopped
+         *
+         * @param {Object} state
+         */
+        onAutoplayRunningStateChanged: function (state) {
+            if (!state) { return; }
+
+            this.autoplayStarted = state.autoplayStarted;
+            this.onModelChange(this.model);
+        },
+
+        /**
+         * Publishes autoplay event to the MainView event aggregator.
+         */
+        onAutoplayStart: function () {
+            this.viewerEvents.trigger('viewer:autoplay:toggle', 'running');
+        },
+
+        /**
          * Renders this DisplayerView with the supplied model.
          *
          * @param {Object} model
@@ -728,6 +777,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         self.onModelChange(FilesAPI.pool.get('detail').get(file.id));
                     }
                 });
+
                 // set device type
                 Util.setDeviceClass(this.$el);
                 // enable only the link set for the current app
