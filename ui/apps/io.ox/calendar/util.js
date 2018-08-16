@@ -1171,17 +1171,15 @@ define('io.ox/calendar/util', [
         getCurrentRangeOptions: function () {
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};
-            var window = app.getWindow();
-            if (!window) return {};
-            var perspective = window.getPerspective();
+            var perspective = app.perspective;
             if (!perspective) return;
 
             var rangeStart, rangeEnd;
-            switch (perspective.name) {
+            switch (perspective.getName()) {
                 case 'week':
-                    var view = perspective.view;
-                    rangeStart = moment(view.startDate).utc();
-                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
+                    var model = perspective.model;
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('startDate')).utc().add(perspective.numColumns, 'days');
                     break;
                 case 'month':
                     rangeStart = moment(perspective.firstMonth).startOf('week').utc();

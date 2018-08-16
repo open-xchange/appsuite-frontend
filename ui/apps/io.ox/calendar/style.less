@@ -11,24 +11,37 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.week-view, .month-view, .year-view {
+.weekview-container, .month-view, .year-view {
 
-    .toolbar {
+    .header {
         /* Mobile */
         @media (max-width:  @smartphone-breakpoint) and (orientation: portrait),
                (max-height: @smartphone-breakpoint) and (orientation: landscape) { display: none; }
 
+        .flex-display(flex);
         height: @calendar-toolbar-height;
         padding-top: @calendar-toolbar-top-padding;
 
+        .control {
+            padding: 9px;
+            color: @black;
+            background: none;
+            border: none;
+            height: 35px;
+            width: 28px;
+
+            &.prev {
+                margin-left: @weekview-time-width - 2 * 28;
+            }
+        }
+
         .info {
             text-align: left;
-            max-width: 30%;
-            left: @weekview-time-width;
-            line-height: 24px;
             font-size: 20px;
             color: #333;
             text-decoration: none;
+            line-height: 34px;
+            height: 30px;
 
             .ellipsis();
             .fontWeight(bold);
@@ -37,50 +50,6 @@
                 font-size: 14px;
                 color: @hc-gray;
                 .fontWeight(normal);
-            }
-        }
-    }
-
-    .controls-container {
-        display: inline-block;
-        padding-top: 3px;
-        width: @weekview-time-width;
-        text-align: right;
-
-        a {
-            padding: 9px;
-            color: @black;
-        }
-    }
-
-    .footer-container {
-        height: @weekview-footer-height;
-        left: 0;
-        right: 0;
-        width: 100%;
-        .overflow(hidden);
-
-        .footer {
-            position: absolute;
-            line-height: normal;
-            right: 0;
-            left: @weekview-time-width;
-            white-space: nowrap;
-            padding-top: 13px;
-
-            .weekday {
-                display: inline-block;
-                font-size: 13px;
-                line-height: 14px;
-                text-align: center;
-                padding: 2px 3px;
-                .ellipsis();
-
-                &.today {
-                    font-weight: bold;
-                    background-color: @calendar-today;
-                    color: #fff;
-                }
             }
         }
     }
@@ -173,9 +142,9 @@
     @media (min-width: 1281px) {
         @adjusted-width: @weekview-time-width * 1.25;
 
-        .toolbar .info { left: @adjusted-width; }
-
-        .controls-container { width: @adjusted-width; }
+        .header .control.prev {
+            margin-left: @adjusted-width - 2 * 28;
+        }
 
         .footer-container .footer { left: @adjusted-width; }
     }

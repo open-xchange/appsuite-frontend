@@ -160,7 +160,17 @@ define('io.ox/calendar/main', [
             });
 
             app.pages.addPage({
-                name: 'week',
+                name: 'week:day',
+                container: c
+            });
+
+            app.pages.addPage({
+                name: 'week:workweek',
+                container: c
+            });
+
+            app.pages.addPage({
+                name: 'week:week',
                 container: c
             });
 
@@ -426,6 +436,35 @@ define('io.ox/calendar/main', [
             });
         },
 
+        'views': function (app) {
+            var list = ['week:day', 'week:workweek', 'week:week', 'month', 'year'],
+                views = {};
+            list.forEach(function (item) {
+                var node = app.pages.getPage(item);
+                node.one('pagebeforeshow', function () {
+                    var split = item.split(':'),
+                        view = split[0] || 'week',
+                        mode = split[1] || 'workweek';
+
+                    require(['io.ox/calendar/' + view + '/view']).then(function success(View) {
+                        var view = new View({ mode: mode, app: app });
+                        node.append(view.$el);
+                        view.render();
+                        app.getWindow().trigger('change:perspective');
+                        app.perspective = views[item] = view;
+                    }, function fail() {
+                        if (item !== 'week:workweek') return app.pages.changePage('week:workweek');
+                    });
+                });
+                node.on('pagebeforeshow', function () {
+                    _.url.hash('perspective', item);
+                    if (!views[item]) return;
+                    views[item].trigger('show');
+                    app.perspective = views[item];
+                });
+            });
+        },
+
         'listview': function (app) {
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true, noPullToRefresh: true });
             app.listView.model.set({ view: 'list' }, { silent: true });
@@ -593,7 +632,8 @@ define('io.ox/calendar/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                ox.ui.Perspective.show(app, value, { disableAnimations: true });
+                //ox.ui.Perspective.show(app, value, { disableAnimations: true });
+                app.pages.changePage(value, { disableAnimations: true });
             });
         },
 
@@ -688,6 +728,7 @@ define('io.ox/calendar/main', [
          */
         'change:navbar:date-mobile': function (app) {
             if (_.device('!smartphone')) return;
+            // TODO move this code into the header view
             app.pages.getPage('week').on('change:navbar:date', function (e, dates) {
                 app.pages.getNavbar('week').setTitle(dates.date);
             });
@@ -953,11 +994,7 @@ define('io.ox/calendar/main', [
                         lastPerspective = 'week:workweek';
                     }
 
-                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true })
-                        .then(undefined, function applyFallback() {
-                            lastPerspective = 'week:workweek';
-                            return ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                        }).done(function () { app.props.set('layout', lastPerspective); });
+                    app.pages.changePage(lastPerspective, { disableAnimations: true });
                 });
         }
     });

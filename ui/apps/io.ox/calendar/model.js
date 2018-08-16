@@ -478,7 +478,7 @@ define('io.ox/calendar/model', [
                 params: params,
                 data: { folders: this.folders }
             }, this.folders ? 'PUT' : 'GET').then(function success(data) {
-                var method = opt.paginate === true ? 'add' : 'set';
+                var method = opt.paginate === true ? 'add' : 'reset';
                 data = _(data)
                     .chain()
                     .map(function (data) {

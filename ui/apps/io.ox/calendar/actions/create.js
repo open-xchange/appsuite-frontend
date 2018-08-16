@@ -96,10 +96,10 @@ define('io.ox/calendar/actions/create', [
             _.extend(params, obj);
         } else {
             var refDate = moment().startOf('hour').add(1, 'hours'),
-                perspective = baton.app.getWindow().getPerspective(),
+                perspective = baton.app.perspective,
                 now = _.now(), range;
 
-            switch (perspective.name) {
+            switch (perspective.getName()) {
                 case 'week':
                     range = calendarUtil.getCurrentRangeOptions();
                     break;

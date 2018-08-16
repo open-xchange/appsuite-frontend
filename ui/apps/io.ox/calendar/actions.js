@@ -314,8 +314,7 @@ define('io.ox/calendar/actions', [
             return false;
         },
         action: function (baton) {
-            var win = baton.app.getWindow(),
-                pers = win.getPerspective();
+            var pers = baton.app.perspective;
             if (pers.print) {
                 pers.print();
             }
@@ -360,16 +359,14 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/today', {
         requires: function (baton) {
-            var p = baton.baton.app.getWindow().getPerspective();
-
-            return !!p && (p.name === 'month' || p.name === 'week');
+            var p = baton.baton.app.perspective;
+            return !!p && (p.getName() === 'month' || p.getName() === 'week');
         },
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
 
-            if (p.view && p.view.setStartDate) {
-                p.view.setStartDate();
-                p.view.trigger('onRefresh');
+            if (p.setStartDate) {
+                p.setStartDate();
             } else if (p.gotoMonth) {
                 p.gotoMonth('today');
             }
@@ -446,10 +443,9 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/dayview/showToday', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.view.setStartDate();
-            p.view.trigger('onRefresh');
+            p.setStartDate();
         }
     });
 
