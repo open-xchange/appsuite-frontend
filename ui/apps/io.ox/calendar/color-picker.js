@@ -53,40 +53,55 @@ define('io.ox/calendar/color-picker', [
         },
 
         renderOption: function (color) {
-            var id = _.uniqueId('color-label-');
-            return $('<label>').append(
-                // radio button
-                $('<input type="radio" name="color">')
-                    .attr('id', id)
-                    .val(color.value)
-                    .prop('checked', this.getValue() === color.value)
-                    .on('change', this.onChangeColor),
-                // colored box
-                $('<div class="box color-label">')
-                    .attr('title', color.label)
-                    .css({
-                        'background-color': color.value,
-                        color: util.getForegroundColor(color.value)
-                    })
-            );
+            var id = _.uniqueId('color-label-'),
+                $href = $('<a href="#" class="color-box-link" draggable="false">').append(
+                    $('<i class="fa fa-fw box color-label" aria-hidden="true">')
+                        .addClass(this.getValue() === color.value ? 'fa-check' : 'fa-none')
+                        .css({
+                            'background-color': color.value,
+                            color: util.getForegroundColor(color.value)
+                        }),
+                    // radio button
+                    // $('<input type="radio" name="color">')
+                    // .attr('id', id)
+                    // .val(color.value)
+                    // .prop('checked', this.getValue() === color.value)
+                    // .on('change', this.onChangeColor),
+                    // // colored box
+                    // $('<div class="box color-label" aria-hidden="true">')
+                    // .css({
+                    //     'background-color': color.value,
+                    //     color: util.getForegroundColor(color.value)
+                    // })
+                    // .attr('title', color.label),
+                    $('<span class="sr-only">').text(color.label)
+                ).attr({
+                    'id': id,
+                    'role': 'menuitemradio',
+                    'aria-checked': this.getValue() === color.value,
+                    'data-name': this.opt.attribute,
+                    'data-value': color.value,
+                    'title': color.label
+                });
+            return $href;
         },
 
         render: function () {
-            var self = this,
-                rowLength = Math.floor(util.colors.length / this.opt.rows);
+            var self = this;
+
             if (this.opt.noColorOption) {
                 this.$el.append(
                     this.renderOption({ label: gt('no color') })
                         .addClass('no-color')
                 );
             }
-            util.colors.forEach(function (color, index) {
+            util.colors.forEach(function (color) {
                 self.$el.append(self.renderOption(color));
-                if (index % rowLength === rowLength - 1) self.$el.append($('<br>'));
             });
             if (this.opt.additionalColor) {
                 this.$el.append(this.renderOption(this.opt.additionalColor));
             }
+
             return this;
         }
 

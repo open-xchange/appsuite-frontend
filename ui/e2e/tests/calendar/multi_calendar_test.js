@@ -56,7 +56,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
@@ -80,7 +80,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
@@ -133,7 +133,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
 
@@ -149,7 +149,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
@@ -203,7 +203,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
 
@@ -218,7 +218,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
@@ -272,7 +272,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
 
@@ -288,7 +288,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
     I.click('.io-ox-calendar-edit-window .time-field');
     I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');

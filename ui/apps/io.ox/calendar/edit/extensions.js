@@ -209,108 +209,6 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    var CalendarSelectionView = mini.AbstractView.extend({
-        tagName: 'div',
-        className: 'header-right',
-        events: {
-            'click a': 'onSelect'
-        },
-        setup: function () {
-            this.listenTo(this.model, 'change:folder', this.render);
-        },
-        onSelect: function () {
-            var self = this;
-
-            picker({
-                async: true,
-                button: gt('Select'),
-                flat: true,
-                indent: false,
-                module: 'calendar',
-                persistent: 'folderpopup',
-                root: '1',
-                settings: settings,
-                title: gt('Select calendar'),
-                createFolderText: gt('Create new calendar'),
-                folder: this.model.get('folder'),
-
-                done: function (id, dialog) {
-
-                    dialog.close();
-                    var model = folderAPI.pool.getModel(id),
-                        prevOrg = self.model.get('organizer').entity,
-                        previousModel = folderAPI.pool.getModel(self.model.get('folder'));
-
-                    self.model.set('folder', id);
-                    // check if we need to make changes to the appointment
-                    // needed when switch from shared to private or private to shared happens
-                    if (model.is('shared') || previousModel.is('shared')) {
-                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
-                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
-                            self.model.getAttendees().trigger('reset');
-                            // same organizer? No message needed (switched between shared calendars of the same user)
-                            if (prevOrg === self.model.get('organizer').entity) return;
-
-                            require(['io.ox/core/yell'], function (yell) {
-                                if (model.is('shared')) {
-                                    yell('info', gt('You are using a shared calendar. The calendar owner was added as organizer.'));
-                                } else {
-                                    yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
-                                }
-                            });
-                        });
-                    }
-                },
-
-                disable: function (data, options) {
-                    var create = folderAPI.can('create', data),
-                        // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
-                        allowed = !self.model.get('id') || folderAPI.is('public', data) || data.created_by === self.model.get('organizer').entity;
-
-                    return !create || !allowed || (options && /^virtual/.test(options.folder));
-                }
-            });
-        },
-        render: function () {
-            var link = $('<a href="#">'),
-                folderId = this.model.get('folder');
-
-            folderAPI.get(folderId).done(function (folder) {
-                link.text(folder.display_title || folder.title);
-            });
-
-            this.$el.empty().append(
-                $('<span>').text(gt('Calendar:')),
-                link
-            );
-
-            return this;
-        }
-    });
-
-    if (_.device('smartphone')) {
-        point.extend({
-            id: 'folder-selection',
-            index: 725,
-            className: 'col-xs-12',
-            render: function () {
-                this.$el.append(
-                    new CalendarSelectionView({ model: this.model }).render().$el
-                );
-            }
-        });
-    } else {
-        ext.point('io.ox/calendar/edit/section/buttons').extend({
-            index: 1000,
-            id: 'folder-selection',
-            draw: function (baton) {
-                this.append(
-                    new CalendarSelectionView({ model: baton.model }).render().$el
-                );
-            }
-        });
-    }
-
     // title
     point.extend({
         id: 'title',
@@ -533,6 +431,134 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
+    var CalendarDropdownView = mini.AbstractView.extend({
+
+        tagName: 'fieldset',
+        dropDown: {},
+        $toggle: $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">'),
+
+        getColor: function (folder) {
+            var props = folder['com.openexchange.calendar.extendedProperties'],
+                color = settings.get('defaultFolderColor', '#CFE6FF');
+
+            if (props && props.color && props.color.value) color = props.color.value;
+            var label = _(calendarUtil.colors).findWhere({ value: color }) || {};
+            return { value: color, label: label.label || gt('User defined color') };
+        },
+
+        setup: function () {
+            var self = this;
+
+            this.listenTo(this.model, 'change:folder', function (model, folder) {
+                var getNewModel = folderAPI.get(folder),
+                    getPreviousModel = folderAPI.get(self.model.previous('folder'));
+
+                $.when(getNewModel, getPreviousModel).done(function (newModel, previousModel) {
+                    var prevOrg = self.model.previousAttributes().organizer.entity;
+                    // check if we need to make changes to the appointment
+                    // needed when switch from shared to private or private to shared happens
+                    if (folderAPI.is('shared', newModel) || folderAPI.is('shared', previousModel)) {
+                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
+                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
+                            self.model.getAttendees().trigger('reset');
+                            // same organizer? No message needed (switched between shared calendars of the same user)
+                            if (prevOrg === self.model.get('organizer').entity) return;
+
+                            require(['io.ox/core/yell'], function (yell) {
+                                if (folderAPI.is('shared', newModel)) {
+                                    yell('info', gt('You are using a shared calendar. The calendar owner was added as organizer.'));
+                                } else {
+                                    yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
+                                }
+                            });
+                        });
+                    }
+                });
+
+                self.update();
+            });
+        },
+
+        update: function () {
+            var self = this;
+
+            folderAPI.get(self.model.get('folder')).done(function (folder) {
+                var folderLabel = folder.display_title || folder.title;
+                self.$toggle.text(folderLabel);
+            });
+
+            self.dropDown.update();
+        },
+
+        render: function () {
+            var self = this,
+                folderDef = folderAPI.get(self.model.get('folder')),
+                folderSectionsDef = folderAPI.flat({ module: 'calendar' });
+
+            self.dropDown = new Dropdown({ caret: false, model: self.model, $toggle: self.$toggle });
+
+            $.when(folderDef, folderSectionsDef).done(function (folder, folderSections) {
+
+                //var color = self.getColor(folder),
+                var folderLabel = folder.display_title || folder.title,
+                    folderNames = {
+                        'private':  gt('My calendars'),
+                        'public':   gt('Public calendars'),
+                        'shared':   gt('Shared calendars'),
+                        'hidden':   gt('Hidden calendars')
+                    },
+                    i = 0;
+
+                function addSection(text, sectionName) {
+                    var folderSection = folderSections[sectionName];
+                    if (!folderSection || folderSection.length === 0) return;
+
+                    folderSection = _(folderSection).filter(function (folder) {
+                        var create = folderAPI.can('create', folder),
+                            // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
+                            allowed = !self.model.get('id') || folderAPI.is('public', folder) || folder.created_by === self.model.get('organizer').entity;
+
+                        return (create && allowed && !/^virtual/.test(folder.id));
+                    });
+
+                    if (folderSection.length === 0) return;
+
+                    if (i !== 0) self.dropDown.divider();
+                    self.dropDown.header(text);
+
+
+                    _(folderSection).forEach(function (folder) {
+                        var checkboxColor = self.getColor(folder);
+                        self.dropDown.option(
+                            'folder',
+                            folder.id,
+                            function () {
+                                return [
+                                    folder.display_title || folder.title,
+                                    $('<span class="sr-only">').text(', ' + gt('Color') + ': ' + checkboxColor.label)
+                                ];
+                            },
+                            { radio: true, color: checkboxColor.value }
+                        );
+                    });
+                    i++;
+                }
+
+                self.$toggle.text(folderLabel);
+
+                _(folderNames).each(addSection);
+
+                self.$el.append(
+                    $('<legend>').addClass('simple').text(gt('Calendar')),
+                    self.dropDown.render().$el
+                );
+            });
+
+            return this;
+        }
+    });
+
+
     // separator or toggle
     point.basicExtend({
         id: 'noteSeparator',
@@ -561,7 +587,7 @@ define('io.ox/calendar/edit/extensions', [
     point.basicExtend({
         id: 'participants_list',
         index: 800,
-        rowClass: 'collapsed form-spacer',
+        rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getAttendees(),
@@ -597,6 +623,18 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
+    point.extend({
+        id: 'folder-selection',
+        index: 950,
+        className: 'col-xs-12 folder-selection',
+        render: function () {
+            var view = new CalendarDropdownView({ model: this.model }).render().$el;
+            this.$el.append(view).addClass('col-xs-12');
+        }
+    }, {
+        rowClass: 'collapsed form-spacer'
+    });
+
     // alarms
     point.extend({
         id: 'alarms',
@@ -611,8 +649,6 @@ define('io.ox/calendar/edit/extensions', [
                 )
             );
         }
-    }, {
-        rowClass: 'collapsed form-spacer'
     });
 
     // private checkbox
@@ -681,28 +717,27 @@ define('io.ox/calendar/edit/extensions', [
                 }),
                 toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Appointment color')),
                 menu = $('<ul class="dropdown-menu">'),
+                pickedColor = $('<span class="picked-color" aria-hidden="true">'),
+                pickedColorLabel = $('<span class="sr-only">'),
                 dropdown = new Dropdown({
-                    smart: false,
-                    className: 'color-picker-dropdown dropup',
-                    $toggle: toggle,
+                    smart: true,
+                    className: 'color-picker-dropdown dropdown',
+                    $toggle: toggle.append(pickedColor, pickedColorLabel),
                     $ul: menu,
                     margin: 24,
                     model: this.model,
                     carret: true,
                     allowUndefined: true
-                }),
-                pickedColor = $('<span class="picked-color">');
+                });
             //#. showed inside a color picker. Used if an appointment should not have a custom color
-            dropdown.option('color', undefined, gt('Use calendar color'));
-            dropdown.divider();
-            menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append(picker.render().$el));
+            dropdown.option('color', undefined, gt('Use calendar color'), { radio: true });
+            dropdown.$ul.find('[data-name="color"]').addClass('folder-default-color');
+            menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append($('<div class="color-picker-scroll">').append(picker.render().$el)));
 
-            this.$el.append(
-                dropdown.render().$el,
-                pickedColor
-            );
+            this.$el.append(dropdown.render().$el);
 
             function onChangeColor() {
+                var colorLabel = gt('none');
                 if (!self.model.get('color')) {
                     // try to get the folder color
                     var model = folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model(),
@@ -710,11 +745,14 @@ define('io.ox/calendar/edit/extensions', [
                         color = '#fff';
 
                     if (props.color && props.color.value) color = props.color.value;
-
                     pickedColor.css({ 'background-color': color });
+                    if (_(calendarUtil.colors).findWhere({ value: color })) colorLabel = _(calendarUtil.colors).findWhere({ value: color }).label;
+                    pickedColorLabel.text(colorLabel);
                     picker.$el.find(':checked').prop('checked', false);
                     return;
                 }
+                if (_(calendarUtil.colors).findWhere({ value: self.model.get('color') })) colorLabel = _(calendarUtil.colors).findWhere({ value: self.model.get('color') }).label;
+                pickedColorLabel.text(colorLabel);
                 pickedColor.css('background-color', self.model.get('color'));
             }
 
