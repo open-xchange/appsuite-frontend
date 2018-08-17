@@ -933,7 +933,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // remove the deleted file(s) from Viewer collection
             this.collection.remove(removedFileModel);
             // unload removed slide
-            self.slideViews[removedFileModelIndex].unload().dispose();
+            this.slideViews[removedFileModelIndex].unload().dispose();
             // remove slide from the swiper plugin
             this.swiper.removeSlide(removedFileModelIndex);
             // render the duplicate slides

@@ -308,7 +308,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var endPageNumber = _.last(pagesToRender);
 
                 // fail safety: do nothing if called while view is hidden (e.g. scroll handlers)
-                if (this.isVisible()) {
+                if (this.isVisible() || this.isDuplicate()) {
                     // abort old requests not yet running
                     this.pageLoader.abortQueuedRequests();
                     this.cancelMorePagesTimer();
@@ -906,6 +906,13 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
+         * Returns true if the slide is a Swiper duplicate.
+         */
+        isDuplicate: function () {
+            return (this.$el.hasClass('swiper-slide-duplicate'));
+        },
+
+        /**
          * Unloads the document slide by destroying the pdf view and model instances
          *
          * @param {Boolean} dispose
@@ -914,7 +921,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         unload: function (dispose) {
 
             // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') || dispose) {
+            if (!this.isDuplicate() || dispose) {
                 if (this.pageLoader) {
                     this.pageLoader.abortQueuedRequests();
                     this.cancelMorePagesTimer();
