@@ -7555,16 +7555,14 @@ msgstr ""
 msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 
-#. tooltip for getting auto-play mode ready for running.
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: module:io.ox/core
-msgid "Run auto-play mode"
-msgstr ""
-
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: module:io.ox/core
 msgid "Pause auto-play mode"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: module:io.ox/core
+msgid "Run auto-play mode"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/displayerview.js
@@ -7583,11 +7581,6 @@ msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
 msgstr[0] ""
 msgstr[1] ""
-
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr ""
 
 #. information about the currently displayed file version in viewer
 #. %1$d - version date
@@ -7807,6 +7800,11 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
 msgid "Fit to screen size"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
+msgid "Run auto-play "
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js

@@ -1887,10 +1887,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Kan inte skriva ut objektet"
 msgstr[1] "Kan inte skriva ut objekten"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Kan inte kräva en visningstyp för %1$s"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacitet"
@@ -7080,7 +7076,6 @@ msgstr "Lösenordets styrka: Svagt"
 msgid "Password strength: Wrong length"
 msgstr "Lösenordets styrka: Fel längd"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Pausa autouppspelningsläge"
@@ -8473,7 +8468,12 @@ msgstr "Kungsblått"
 msgid "Rule name"
 msgstr "Regelns namn"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Kör autouppspelningsläge"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Kör autouppspelningsläge"
@@ -13711,6 +13711,9 @@ msgstr "din plattform"
 
 #~ msgid "Cannot remove object %s from cache."
 #~ msgstr "Kan inte ta bort objekt %s från cache."
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Kan inte kräva en visningstyp för %1$s"
 
 #~ msgid "Cannot resolve mailadmin for context %d."
 #~ msgstr "Kan inte hitta e-post-administratör för kontext %d."

@@ -1911,10 +1911,6 @@ msgstr[0] "Šo vienību nevar izdrukāt"
 msgstr[1] "Šīs vienības nevar izdrukāt"
 msgstr[2] "Šīs vienības nevar izdrukāt"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Skata tipu priekš %1$s nevar pieprasīt"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacitāte"
@@ -7140,7 +7136,6 @@ msgstr "Paroles drošums: Vājš"
 msgid "Password strength: Wrong length"
 msgstr "Paroles drošums: Nepareizs garums"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Pauze auto-atskaņošanas režīmā"
@@ -8536,7 +8531,12 @@ msgstr "Koši zils"
 msgid "Rule name"
 msgstr "Noteikuma vārds"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Palaist aut-atskaņošanas režīmu"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Palaist aut-atskaņošanas režīmu"
@@ -13656,6 +13656,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Sistēmas mapi nevar pārvietot."
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Skata tipu priekš %1$s nevar pieprasīt"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Kaboverde"

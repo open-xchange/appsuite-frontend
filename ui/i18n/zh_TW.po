@@ -1856,10 +1856,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "無法列印此項目"
 msgstr[1] "無法列印這些項目"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "無法要求 %1$s 的檢視類型"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "容量"
@@ -7001,7 +6997,6 @@ msgstr "密碼強度: 弱"
 msgid "Password strength: Wrong length"
 msgstr "密碼強度: 長度錯誤"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "暫停自動播放模式"
@@ -8372,7 +8367,12 @@ msgstr "皇室藍"
 msgid "Rule name"
 msgstr "規則名稱"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "執行自動播放模式"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "執行自動播放模式"
@@ -13280,6 +13280,9 @@ msgstr "您的平台"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "無法移動系統資料夾。"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "無法要求 %1$s 的檢視類型"
 
 #~ msgid "Cape Verde"
 #~ msgstr "維德角"

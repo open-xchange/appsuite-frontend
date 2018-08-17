@@ -1878,10 +1878,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Tätä kohdetta ei voida tulostaa"
 msgstr[1] "Näitä kohteita ei voida tulostaa"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Tila"
@@ -7072,7 +7068,6 @@ msgstr "Salasanan vahvuus: Heikko"
 msgid "Password strength: Wrong length"
 msgstr "Salasanan vahvuus: Väärä pituus"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Keskeytä automaattinen esitystila"
@@ -8466,7 +8461,12 @@ msgstr "Sininen"
 msgid "Rule name"
 msgstr "Säännön nimi"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Suorita automaattinen esitystila"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Suorita automaattinen esitystila"
@@ -12884,6 +12884,9 @@ msgstr "alustasi"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Työviikkonäkymä"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV -sisäänkirjautuminen"

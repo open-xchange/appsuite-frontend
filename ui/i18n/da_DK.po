@@ -1888,10 +1888,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Dette element kan ikke udskrives"
 msgstr[1] "Disse elementer kan ikke udskrives"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Kan ikke kræve en visningstype for %1$s"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacitet"
@@ -7087,7 +7083,6 @@ msgstr "Styrke af adgangskode: Svag"
 msgid "Password strength: Wrong length"
 msgstr "Styrke af adgangskode: Forkert længde"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Pause auto-spil-modus"
@@ -8482,7 +8477,12 @@ msgstr "Kongeblå"
 msgid "Rule name"
 msgstr "Navn på regel"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Kør auto-spil-modus"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Kør auto-spil-modus"
@@ -12962,6 +12962,9 @@ msgstr "din platform"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Arbejdsugevisning af kalender"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Kan ikke kræve en visningstype for %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV-brugernavn"

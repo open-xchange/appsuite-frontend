@@ -1906,10 +1906,6 @@ msgstr[0] "Tuto položku nelze vytisknout"
 msgstr[1] "Tyto položky nelze vytisknout"
 msgstr[2] "Tyto položky nelze vytisknout"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Pro %1$s nelze vyžadovat způsob prohlížení"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacita"
@@ -7116,7 +7112,6 @@ msgstr "Síla hesla: slabé"
 msgid "Password strength: Wrong length"
 msgstr "Síla hesla: chybná délka"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Pozastavit režim automatického přehrávání"
@@ -8511,7 +8506,12 @@ msgstr "královská modř"
 msgid "Rule name"
 msgstr "Název pravidla"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Pustit režim automatického přehrávání"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Pustit režim automatického přehrávání"
@@ -15155,6 +15155,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Systémovou složku nelze přesunout."
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Pro %1$s nelze vyžadovat způsob prohlížení"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Kapverdy"

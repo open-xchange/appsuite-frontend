@@ -1892,10 +1892,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Ez az elem nem nyomtatható"
 msgstr[1] "Ezek az elemek nem nyomtathatók"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Nincs szükség nézettípusra ehhez: %1$s"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacitás"
@@ -7106,7 +7102,6 @@ msgstr "Jelszó erőssége: gyenge"
 msgid "Password strength: Wrong length"
 msgstr "Jelszó erőssége: nem megfelelő hosszúságú"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Automatikus lejátszás leállítása"
@@ -8506,7 +8501,12 @@ msgstr "Királykék"
 msgid "Rule name"
 msgstr "Szabály neve"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Automatikus lejátszás indítása"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Automatikus lejátszás indítása"
@@ -12814,6 +12814,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Naptár munkahét nézet"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Nincs szükség nézettípusra ehhez: %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV bejelentkezés"
