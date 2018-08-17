@@ -895,6 +895,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 ));
                 this.blendNavigation();             // - directly access this view's navigation blend method.
 
+                updateVisibilityOfAutoplayControl(this, this.swiper.realIndex);
+
             } else if (IS_LOOP_ONCE_ONLY && this.autoplayStopAtIndex === this.swiper.realIndex) {
                 this.toggleFullscreen();
             }
