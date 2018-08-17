@@ -529,7 +529,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Number} offset
          *  The number of neighboring slides to add to the range (Note: prefetchDirection='both' creates a duplicate slide amount).
          *
-         * @param {String} [prefetchDirection = 'right']
+         * @param {String} [prefetchDirection]
          *  Direction of the pre-fetch: 'left', 'right' or 'both' are supported.
          *
          * @returns {Array} slideRange
@@ -585,7 +585,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Number} slideToLoad
          *  The index of the current active slide to be loaded.
          *
-         * @param {String} [prefetchDirection = 'right']
+         * @param {String} [prefetchDirection]
          *  Direction of the prefetch: 'left', 'right' or 'both' are supported.
          *  Example: if slideToLoad is 7 with a preloadOffset of 3, the range to load would be for
          *      'left': [4,5,6,7]
@@ -594,8 +594,6 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         loadSlide: function (slideToLoad, prefetchDirection) {
             var self = this;
-            var activeModel = this.collection.at(slideToLoad);
-            var previousModel = this.collection.at(this.swiper.previousIndex - 1) || null;
             var loadRange;
 
             slideToLoad = slideToLoad || 0;
@@ -616,12 +614,6 @@ define('io.ox/core/viewer/views/displayerview', [
             registerAutoplayEventHandlingForUpdatedCarouselView(self);
 
             hideViewerControlsInCaseOfRunningAutoplayHasBeenTriggered(self);
-
-            // remove listener from previous and attach to current model
-            if (previousModel) {
-                this.stopListening(previousModel, 'change:version', this.onModelChangeVersion);
-            }
-            this.listenTo(activeModel, 'change:version', this.onModelChangeVersion.bind(this));
         },
 
         /**
