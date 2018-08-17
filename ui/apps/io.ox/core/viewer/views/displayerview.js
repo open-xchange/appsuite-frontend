@@ -411,8 +411,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 // always load duplicate slides of the swiper plugin.
                 self.handleDuplicatesSlides();
-
-                self.swiper.slideTo(startIndex + 1);
+                // appendSlide made Swiper switch to last slide, setting back to startIndex
+                self.swiper.slideTo(startIndex + 1, 0, false);
 
                 self.swiper.autoplay.stop();
 
@@ -933,7 +933,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // remove the deleted file(s) from Viewer collection
             this.collection.remove(removedFileModel);
             // unload removed slide
-            this.slideViews[removedFileModelIndex].unload().dispose();
+            self.slideViews[removedFileModelIndex].unload().dispose();
             // remove slide from the swiper plugin
             this.swiper.removeSlide(removedFileModelIndex);
             // render the duplicate slides
@@ -996,7 +996,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     // load the swiper duplicates
                     self.handleDuplicatesSlides();
 
-                    self.swiper.slideTo(activeIndex + 1);
+                    self.swiper.slideTo(activeIndex + 1, 0, false);
 
                     if (IS_LOOP_ONCE_ONLY) {
                         self.autoplayStopAtIndex = self.normalizeSlideIndex(self.swiper.realIndex - 1);
@@ -1051,7 +1051,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     // load the swiper duplicates
                     self.handleDuplicatesSlides();
 
-                    self.swiper.slideTo(activeIndex + 1);
+                    self.swiper.slideTo(activeIndex + 1, 0, false);
 
                     self.autoplayStarted = false;
                 });
