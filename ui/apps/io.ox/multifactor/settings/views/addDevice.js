@@ -155,7 +155,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
 
     // Find and open the correct view for this provider
     function openView(provider, resp) {
-        if (resp && resp.value === 'REGISTRATION_STARTED') {
+        if (resp && (resp.value === 'REGISTRATION_STARTED' || resp.value === 'REGISTRATION_SUCCESSFULL')) {
             var view;
             switch (provider) {
                 case 'SMS':
@@ -187,7 +187,15 @@ define('io.ox/multifactor/settings/views/addDevice', [
                     regView.open(provider, resp, def);
                 });
             }
+        } else {
+            showError(gt('Bad response from backend.  Please try again later.'));
         }
+    }
+
+    function showError(msg) {
+        require(['io.ox/core/notifications'], function (notify) {
+            notify.yell('error', msg);
+        });
     }
 
     function startRegistration(provider, name, backup, model) {

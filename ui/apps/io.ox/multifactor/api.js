@@ -40,9 +40,9 @@ define('io.ox/multifactor/api', [
                     params: { action: 'get' },
                     force: true
                 }).then(function (data) {
-                    if (data && data.providers) {
+                    if (data) {
                         var list = [];
-                        data.providers.forEach(function (prov) {
+                        data.forEach(function (prov) {
                             if (backup && prov.backupProvider) {
                                 list.push(prov);
                             }
