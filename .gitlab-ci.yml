@@ -117,9 +117,13 @@ build help:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: help
+    PACKAGE_NAME: open-xchange-appsuite-help
   only:
     changes:
       - help/**/*
+      - open-xchange-appsuite-help/**/*
+      - gitlab_ci/*
+      - .gitlab-ci.yml
 
 build guidedtours:
   extends: .build ui plugin

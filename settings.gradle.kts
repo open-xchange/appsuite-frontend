@@ -11,7 +11,8 @@ pluginManagement {
 include(
     "open-xchange-appsuite",
     "open-xchange-appsuite-manifest",
-    "open-xchange-appsuite-l10n"
+    "open-xchange-appsuite-l10n",
+    "open-xchange-appsuite-help"
 
     //open-xchange-guidedtours
     //open-xchange-dynamic-theme
