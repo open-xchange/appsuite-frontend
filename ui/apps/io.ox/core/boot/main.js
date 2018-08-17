@@ -223,7 +223,7 @@ define.async('io.ox/core/boot/main', [
                 if (data) session.set(data);
                 ox.trigger('change:document:title');
                 // load UI
-                if (data.requires_multifactor) {
+                if (data && data.requires_multifactor) {
                     exports.multifactorLoad();
                 } else {
                     exports.loadUI(data);
