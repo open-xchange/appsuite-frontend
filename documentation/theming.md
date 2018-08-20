@@ -73,18 +73,13 @@ Old themes must be updated if they change an image from the default theme: All s
 
 ## Replacing the logo
 
-One of the most common theme changes which requires editing `style.css` is changing the logo in the top right corner. The logo is displayed as the background image for an element with the ID _io-ox-top-logo-small_. A theme can therefore change the size and URL of the image:
+The logo in the top left corner is a `<img>` as only child of a wrapping `<div>` with the id _io-ox-top-logo_. The relative path to the image file consists of the follwing parts:
 
 ```
-#io-ox-top-logo-small {
-    width: 60px;
-    height: 22px;
-    margin: 8px 13px 0 13px;
-    background-image: url(path/to/mylogo.png);
-}
+ox.base + '/apps/themes/' + ox.theme + '/logo.png'
 ```
 
-The file `mylogo.png` is expected to be in the same directory as style.css. Reference the entire path to the file, relative to the folder containing your ui, but without the leading slash. For example, the Core reference would be `apps/themes/default/logo-small.png`. If you want to place the image somewhere else, then use a relative path in url().
+In case you want to apply more general changes please replace extension `logo` of extension point `io.ox/core/appcontrol`.
 
 ### Mobile and retina screens
 
