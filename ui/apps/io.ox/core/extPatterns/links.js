@@ -534,7 +534,6 @@ define('io.ox/core/extPatterns/links', [
     };
 
     var drawDropDown = function (options, baton) {
-
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
