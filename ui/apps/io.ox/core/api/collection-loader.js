@@ -161,13 +161,16 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         };
 
         this.reload = function (params, tail) {
-
             var collection = this.collection;
             if (this.loading) return collection;
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
             if (this.isBad(params.folder)) return collection;
-            params.limit = '0,' + Math.max(collection.length + (tail || 0), this.PRIMARY_PAGE_SIZE);
+            // see Bug #59875
+            // calculate maxLimit correctly (times paginate was done * secondary_page_size + initial page size)
+            var maxLimit = Math.ceil((collection.length - this.PRIMARY_PAGE_SIZE) / this.SECONDARY_PAGE_SIZE) * this.SECONDARY_PAGE_SIZE + this.PRIMARY_PAGE_SIZE;
+            params.limit = '0,' + Math.max(collection.length + (tail || 0), maxLimit);
+
             this.loading = true;
 
             _.defer(process.bind(this), params, 'reload');
@@ -238,7 +241,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         },
 
         fetch: function (params) {
-
             var module = this.module,
                 key = module + '/' + _.cacheKey(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
