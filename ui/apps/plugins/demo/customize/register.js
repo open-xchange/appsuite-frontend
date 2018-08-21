@@ -199,8 +199,8 @@ define('plugins/demo/customize/register', [
 
     function applytopbarSize() {
         var value = 39 + (model.get('topbarSize') || 0) * 8;
-        $('#io-ox-screens').css('top', value);
         $('#io-ox-appcontrol').css('height', value);
+        $('#io-ox-screens').css('top', value + $('#io-ox-appcontrol').offset().top);
         // maybe we need to toggle the header logo
         updateLogo();
     }
