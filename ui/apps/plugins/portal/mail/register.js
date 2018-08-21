@@ -344,14 +344,10 @@ define('plugins/portal/mail/register', [
         preview: function (baton) {
             var data = baton.data,
                 received = moment(data.received_date).format('l'),
-                content = '',
-                source = _(data.attachments).reduce(function (memo, a) {
+                content = _(data.attachments).reduce(function (memo, a) {
                     return memo + (a.content_type === 'text/plain' ? a.content : '');
                 }, '');
-            // escape html
-            $('<div>').html(source).contents().each(function () {
-                content += $(this).text() + ' ';
-            });
+
             this.append(
                 $('<div class="content">').append(
                     $('<div class="item">')
