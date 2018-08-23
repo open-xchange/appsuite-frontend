@@ -718,11 +718,15 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return;
         }
         if ((/^MFA-0015/i).test(response.code)) { // This action requires MF auth.  Get and add to parameters
+            that.disconnect(deferred, o);
             require(['io.ox/multifactor/auth'], function (auth) {
                 auth.getAuthentication().then(function (data) {
-                    o.params = _.extend(o.params, { secret_code: data.response, authProviderName: data.provider, authDeviceId: data.id });
+                    o.params = _.extend(o.params,
+                        _.extend({ secret_code: data.response, authProviderName: data.provider, authDeviceId: data.id }, data.parameters));
                     ajax(o, o.type).then(deferred.resolve, deferred.reject);
+                    that.reConnect();
                 }, function () {
+                    that.reConnect();
                     deferred.reject();
                 });
             });
