@@ -60,9 +60,12 @@ define('io.ox/find/main', [
             },
             'props-mandatory': function (app) {
                 // a concrete facet is mandatory for the follwing apps/modules
-                app.props.set('mandatory',
-                    settings.get('search/mandatory', {}) || {}
-                );
+                var data = settings.get('search/mandatory', {});
+                // see bug Bug 58913
+                data.account = (data.account || []);
+                data.account.push('drive');
+
+                app.props.set('mandatory', data);
             },
             'props-default': function (app) {
                 app.props.set('default',
