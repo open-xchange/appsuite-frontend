@@ -61,15 +61,26 @@ define('io.ox/multifactor/settings/views/u2fRegistrationView', [
                 var label = $('<label>').append('Please touch/activate your device')
                 .append('<br>');
                 var data = baton.model.get('challenge');
-                var RegistrationData = {
+                var registrationData = {
                     'challenge': data.registerRequests[0].challenge,
                     'appId': data.registerRequests[0].appId,
                     'version': data.registerRequests[0].version
                 };
-
-                window.u2f.register(data.registerRequests[0].appId, [RegistrationData], [],
+                data.registeredKeys.forEach(function (reg) {
+                    reg.appId = window.location.origin;
+                });
+                window.u2f.register(data.registerRequests[0].appId, [registrationData], data.registeredKeys,
                     function (data) {
                         if (data.errorCode) {
+                            require(['io.ox/core/notifications'], function (notify) {
+                                if (data.errorCode === 4) {
+                                    notify.yell('error', gt('Device is already registered'));
+                                } else {
+                                    notify.yell('error', gt('Problem registering device'));
+                                }
+                            });
+                            dialog.close();
+                            def.reject();
                             return;
                         }
                         finishRegistration(baton.model.get('device'), data);
