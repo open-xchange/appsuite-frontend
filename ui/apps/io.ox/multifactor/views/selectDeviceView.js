@@ -30,6 +30,11 @@ define('io.ox/multifactor/views/selectDeviceView', [
     var def;
 
     function open(device, _def, error) {
+        // Some devices don't need to be individually selected, like U2f
+        device = groupDevices(device);
+        if (device.length === 1) { // If only one after grouping, proceed to auth
+            return deviceAuthenticator.getAuth(device[0].provider.name, device[0], _def);
+        }
         dialog = openModalDialog(device, error);
         def = _def;
         return dialog;
@@ -95,6 +100,24 @@ define('io.ox/multifactor/views/selectDeviceView', [
         }
 
     );
+
+    var groupItems = ['U2F', 'WEB-AUTH'];
+    var grouped = {};
+
+    function groupDevices(devices) {
+        var newList = [];
+        devices.forEach(function (device) {
+            if (device && device.provider && groupItems.includes(device.provider.name)) {
+                if (!grouped[device.provider.name]) {
+                    newList.push(device);
+                    grouped[device.provider.name] = true;
+                }
+            } else {
+                newList.push(device);
+            }
+        });
+        return newList;
+    }
 
     return {
         open: open

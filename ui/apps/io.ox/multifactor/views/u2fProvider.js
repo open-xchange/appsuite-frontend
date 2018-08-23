@@ -106,6 +106,28 @@ define('io.ox/multifactor/views/u2fProvider', [
         window.u2f.sign(appId, challenge, data.challengeResponse.signRequests,
             function (response) {
                 if (response.errorCode) {
+                    var error;
+                    switch (response.errorCode) {
+                        case 2:
+                            error = gt('Bad parameters for signing.  Possibly wrong URL domain for this key.');
+                            break;
+                        case 3:
+                            error = gt('Configuration not supported');
+                            break;
+                        case 4:
+                            error = gt('This device is not eligible for this request.  Wrong hardware key?');
+                            break;
+                        case 5:
+                            error = gt('Timeout');
+                            break;
+                        default:
+                            error = gt('Error authenticating.  Please reload browser and try again.');
+                            break;
+                    }
+                    require(['io.ox/core/notifications'], function (notify) {
+                        notify.yell('error', error);
+                    });
+                    doAuthentication(provider, device, data);
                     return;
                 }
                 var resp = {
