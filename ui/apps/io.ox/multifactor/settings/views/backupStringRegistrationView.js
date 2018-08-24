@@ -30,7 +30,7 @@ define('io.ox/multifactor/settings/views/backupStringRegistrationView', [
     var def;
 
     function open(provider, resp, _def) {
-        if (resp && resp.value === 'REGISTRATION_SUCCESSFULL') {
+        if (resp && resp.value === 'REGISTRATION_SUCCESSFUL') {
             dialog = openModalDialog(provider, resp.resultParameters);
             def = _def;
             return dialog;

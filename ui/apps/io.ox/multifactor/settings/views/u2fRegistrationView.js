@@ -101,7 +101,7 @@ define('io.ox/multifactor/settings/views/u2fRegistrationView', [
             clientData: reg.clientData
         };
         api.finishRegistration('U2F', device.id, '', params).then(function (data) {
-            if (data.value === 'REGISTRATION_SUCCESSFULL') {
+            if (data.value === 'REGISTRATION_SUCCESSFUL') {
                 dialog.close();
                 def.resolve();
                 return;

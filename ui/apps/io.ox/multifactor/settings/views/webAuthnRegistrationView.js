@@ -106,7 +106,7 @@ define('io.ox/multifactor/settings/views/webAuthnRegistrationView', [
             clientDataJSON: base64.toBase64(attestation.response.clientDataJSON)
         };
         api.finishRegistration('WEB-AUTH', device.id, '', publicKeyCredential).then(function (data) {
-            if (data.value === 'REGISTRATION_SUCCESSFULL') {
+            if (data.value === 'REGISTRATION_SUCCESSFUL') {
                 dialog.close();
                 def.resolve();
                 return;
