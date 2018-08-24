@@ -106,28 +106,40 @@ define('io.ox/multifactor/views/u2fProvider', [
         window.u2f.sign(appId, challenge, data.challengeResponse.signRequests,
             function (response) {
                 if (response.errorCode) {
-                    var error;
+                    var error, recoverable;
                     switch (response.errorCode) {
                         case 2:
                             error = gt('Bad parameters for signing.  Possibly wrong URL domain for this key.');
+                            recoverable = false;
                             break;
                         case 3:
                             error = gt('Configuration not supported');
+                            recoverable = false;
                             break;
                         case 4:
                             error = gt('This device is not eligible for this request.  Wrong hardware key?');
+                            recoverable = true;
                             break;
                         case 5:
                             error = gt('Timeout');
+                            recoverable = false;
                             break;
                         default:
                             error = gt('Error authenticating.  Please reload browser and try again.');
+                            recoverable = false;
                             break;
                     }
                     require(['io.ox/core/notifications'], function (notify) {
                         notify.yell('error', error);
                     });
-                    doAuthentication(provider, device, data);
+                    if (recoverable) {
+                        doAuthentication(provider, device, data);
+                    } else {
+                        window.setTimeout(function () {
+                            dialog.close();
+                            def.reject();
+                        }, 5000);
+                    }
                     return;
                 }
                 var resp = {
