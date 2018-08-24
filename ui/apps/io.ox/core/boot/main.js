@@ -136,8 +136,10 @@ define.async('io.ox/core/boot/main', [
                                 if (data) session.set(data);
                                 exports.loadUI();
                             });
-                            // Reload all rampup
-                            // call loadUI
+                        }, function () {
+                            session.logout().always(function () {
+                                window.location.reload(true);
+                            });
                         });
                     });
                 });
