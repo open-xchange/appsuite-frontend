@@ -17,7 +17,7 @@ define('io.ox/multifactor/settings', [
 
     ext.point('io.ox/settings/pane/general/security').extend({
         id: 'io.ox/multifactor',
-        title: gt('Multifactor'),
+        title: gt('Second Factor'),
         index: 700,
         loadSettingPane: true
     });

@@ -60,12 +60,14 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
         {
             index: INDEX += 100,
             id: 'backupHelp',
-            render: function () {
-                var label = $('<label class="backupDescr">').append(gt('In the event you lose or are unable to use your authentication device, your account will be locked out unless you set up a backup device.  We strongly recommend that you do so now.'))
-                .append('<br>');
-                this.$body.append(
-                    label
-                );
+            render: function (baton) {
+                if (baton.model.get('backup')) {
+                    var label = $('<p class="backupDescr">').append(gt('In the event you lose or are unable to use your authentication device, your account will be locked out unless you set up a backup device.  We strongly recommend that you do so now.'))
+                    .append('<br>');
+                    this.$body.append(
+                        label
+                    );
+                }
             }
         },
         {

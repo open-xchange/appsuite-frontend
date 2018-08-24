@@ -75,9 +75,10 @@ define('io.ox/multifactor/views/selectDeviceView', [
             id: 'selection',
             render: function (baton) {
                 var selection = $('<div class="multifactorSelector">')
-                .append(renderer.renderSelectable(baton.model.get('devices')));
+                .append(renderer.renderList(baton.model.get('devices')));
                 selection.find('.multifactordevice')
-                .on('click', function () {
+                .on('click', function (e) {
+                    e.preventDefault();
                     var device = {
                         id: $(this).attr('data-deviceid')
                     };
@@ -116,6 +117,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
                 newList.push(device);
             }
         });
+        grouped = {}; // reset
         return newList;
     }
 

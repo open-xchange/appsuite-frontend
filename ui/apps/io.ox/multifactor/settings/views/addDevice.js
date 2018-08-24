@@ -40,15 +40,12 @@ define('io.ox/multifactor/settings/views/addDevice', [
         var extension;
         // Set extension point
         switch (provider) {
-            case 'BACKUP_STRING':
-                startRegistration(provider, '', backup);
-                return;
             case 'SMS':
                 extension = POINT + 'SMS';
                 break;
             default:
-                extension = POINT + 'common';
-                break;
+                startRegistration(provider, '', backup);
+                return;
         }
 
         return new ModalView({
@@ -79,30 +76,6 @@ define('io.ox/multifactor/settings/views/addDevice', [
         })
         .open();
     }
-
-    ext.point(POINT + 'common').extend(
-        {
-            index: INDEX += 100,
-            id: 'header',
-            render: function () {
-                var label = $('<label for="deviceName">').append(gt('Please choose a name for this device.  It can be anything you like, but should be specific to the device you are adding, and something you will easily recognize.'))
-                .append('<br>');
-                this.$body.append(
-                    label
-                );
-            }
-        },
-        {
-            index: INDEX += 100,
-            id: 'nameInput',
-            render: function () {
-                var input = $('<input type="text" id="deviceName">');
-                var selection = $('<div class="deviceName">')
-                .append(input);
-                this.$body.append(selection);
-            }
-        }
-    );
 
     ext.point(POINT + 'SMS').extend(
         {
@@ -155,7 +128,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
 
     // Find and open the correct view for this provider
     function openView(provider, resp) {
-        if (resp && (resp.value === 'REGISTRATION_STARTED' || resp.value === 'REGISTRATION_SUCCESSFULL')) {
+        if (resp && (resp.value === 'REGISTRATION_STARTED' || resp.value === 'REGISTRATION_SUCCESSFUL')) {
             var view;
             switch (provider) {
                 case 'SMS':

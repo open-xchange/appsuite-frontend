@@ -16,19 +16,12 @@ define('io.ox/multifactor/factorRenderer', [
     'use strict';
 
     // Create table entry for the device
-    function createTable(icon, type, device, selectable) {
+    function createTable(icon, type, device, deletable) {
         var div = $('<div class="multifactordevice">')
         .attr('data-deviceId', device.id)
         .attr('data-deviceName', device.name)
-        .attr('data-provider', device.provider.name)
-        .on('click', function (e) {
-            e.preventDefault();
-            if (!selectable) {
-                $('.multifactordevice').removeClass('selected');
-                div.addClass('selected');
-            }
-        });
-        if (!selectable) div.addClass('multifactordeviceSelectable');
+        .attr('data-provider', device.provider.name);
+        if (!deletable) div.addClass('multifactordeviceSelectable');
         var link = $('<a href="#" class="multifactorDivLink" aria-label="' + device.name + '">');
         var table = $('<table class="multifactorDeviceTable">');
         var row = $('<tr>');
@@ -38,9 +31,10 @@ define('io.ox/multifactor/factorRenderer', [
         if (device.name && device.name.length > 1) {
             detailCol.append(device.name);
         }
+        var deleteCol = deletable ? $('<td class="multifactorDelete">').append('<icon class="fa fa-trash">') : '';
         return div.append(
             link.append(table.append(
-                row.append(iconCol).append(textCol).append(detailCol))));
+                row.append(iconCol).append(textCol).append(detailCol).append(deleteCol))));
 
     }
 
@@ -66,20 +60,20 @@ define('io.ox/multifactor/factorRenderer', [
         }
     }
 
-    function doRender(devices, selectable) {
+    function doRender(devices, deletable) {
         var div = $('<div>').addClass('MultifactorDiv');
         devices.forEach(function (device) {
-            div.append(getDeviceTable(device, selectable));
+            div.append(getDeviceTable(device, deletable));
         });
         return div;
     }
 
     var renderer = {
-        renderSelectable: function (devices) {
-            return doRender(devices, false);
+        renderDeletable: function (devices) {
+            return doRender(devices, true);
         },
         renderList: function (devices) {
-            return doRender(devices, true);
+            return doRender(devices, false);
         }
     };
 

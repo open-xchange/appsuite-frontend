@@ -75,7 +75,7 @@ define('io.ox/multifactor/views/u2fProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function (baton) {
-                var label = $('<label for="verification">').append(
+                var label = $('<p>').append(
                     baton.model.get('device').name ? gt('Please activate your authentication device named %s', baton.model.get('device').name) :
                         gt('Please activate your authentication device'))
                 .append('<br>');

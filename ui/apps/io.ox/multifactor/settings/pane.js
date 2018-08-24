@@ -35,6 +35,7 @@ define('io.ox/multifactor/settings/pane', [
     });
 
     var INDEX = 0;
+    var statusDiv, backupDiv, hasBackup;
 
     ext.point('io.ox/multifactor/settings/detail/view').extend(
         //
@@ -45,7 +46,7 @@ define('io.ox/multifactor/settings/pane', [
             index: INDEX += 100,
             render: function () {
                 this.$el.addClass('io-ox-multifactor-settings').append(
-                    util.header(gt.pgettext('app', 'Multifactor'))
+                    util.header(gt.pgettext('app', 'Second Factor'))
                 );
             }
         },
@@ -53,112 +54,80 @@ define('io.ox/multifactor/settings/pane', [
             id: 'status',
             index: INDEX += 100,
             render: function () {
-                var statusDiv = $('<div id="multifactorStatus" class="multifactorStatusDiv">');
+                statusDiv = $('<div id="multifactorStatus" class="multifactorStatusDiv">');
                 this.$el.append(util.fieldset(
                     gt('Devices'),
-                    statusDiv
+                    statusDiv,
+                    addButton()
                 ));
-                refresh(statusDiv);
             }
         },
         {
-            id: 'recovery',
+            id: 'recoveryDevices',
             index: INDEX += 100,
             render: function () {
-                var recoverySection = $('<div class="multifactorRecoverySection">');
-                var recoveryDiv = $('<div id="multifactorRecovery" class="multifactorRecoveryDiv">');
-                this.$el.append(recoverySection.append(util.fieldset(
-                    gt('Recovery'),
-                    addRecovery(recoveryDiv)
-                )));
+                backupDiv = $('<div id="multifactorStatus" class="multifactorBackupDiv">');
+                var fieldset = util.fieldset(
+                    gt('Recovery Devices'),
+                    backupDiv,
+                    addButton(true)
+                ).addClass('multifactorBackupField');
+                this.$el.append(fieldset);
+                refresh(statusDiv, backupDiv);
             }
         }
     );
 
     // Refresh the status div and update buttons
-    function refresh(statusDiv) {
+    function refresh(statusDiv, backupDiv) {
         if (!statusDiv) {
             statusDiv = $('.multifactorStatusDiv');
+            backupDiv = $('.multifactorBackupDiv');
         }
         statusDiv.empty();
+        backupDiv.empty();
         api.getDevices().then(function (status) {
             drawStatus(statusDiv, status);
+        });
+        api.getDevices(true).then(function (status) {
+            drawStatus(backupDiv, status, true);
+            if (status.length > 0) {
+                $('.addBackupDevice').hide();
+            } else {
+                $('.addBackupDevice').show();
+            }
         });
     }
 
     // Draw the status div, including proper buttons
-    function drawStatus(node, devices) {
+    function drawStatus(node, devices, isBackup) {
         if (devices) {
             if (devices && devices.length > 0) {
-                node.append(factorRenderer.renderSelectable(devices));
-                addButtons(node, addButton, removeButton);
+                node.append(factorRenderer.renderDeletable(devices));
                 $('.multifactorRecoverySection').show();
+                addDeleteAction(node);
+                $('.multifactorBackupField').show();
+                if (isBackup) hasBackup = true;
                 return;
             }
         }
-        node.append(gt('No multifactor devices registered yet.'));
-        addButtons(node, addButton);
-        $('.multifactorRecoverySection').hide();
-    }
-
-    // Buttons
-
-    // Add buttons to the proper Div
-    function addButtons(node) {
-        var div = $('<div class="multifactorButtons">');
-        if (arguments.length > 1) {
-            for (var i = 1; i < arguments.length; i++) {
-                div.append(arguments[i]);
-            }
+        if (isBackup) {
+            hasBackup = false;
+        } else {
+            node.append($('<div class="emptyMultifactor">').append(gt('No multifactor devices registered yet.')));
+            $('.multifactorBackupField').hide();
         }
-        node.append(div);
     }
 
-    function addRecovery(node) {
-        var div = $('<div class="multifactorRecovery">');
-        var button = $('<button type="button" class="btn btn-default multifactorButton" data-action="recovery-multifactor">')
-            .append($.txt(gt('Manage Account Recovery')))
-            .on('click', function (e) {
-                e.preventDefault();
-                manageRecover(true);
-            });
-        return node.append(div.append(button));
+    function addDeleteAction(node) {
+        node.find('.multifactorDelete').click(function (e) {
+            e.preventDefault();
+            removeMultifactor($(e.target).closest('.multifactordevice'));
+        });
     }
-
-    // Creates the add Button
-    function addButton() {
-        return $('<button type="button" class="btn btn-default multifactorButton" data-action="remove-multifactor">')
-            .append(
-                $.txt(gt('Add'))
-            )
-            .on('click', addMultifactor);
-    }
-
-    // Creates the remove button
-    function removeButton() {
-        return $('<button type="button" class="btn btn-default multifactorButton" data-action="remove-multifactor">')
-            .append(
-                $.txt(gt('Remove'))
-            )
-            .on('click', removeMultifactor);
-    }
-
     // Button actions
 
-    function removeMultifactor() {
-        var devices = $('.multifactordevice');
-        var selected = $('.multifactordevice.selected');
-        var toDelete;
-        // Confirm additional authentication ????
-        if (devices.length === 1) {
-            toDelete = devices[0];
-        } else {
-            if (selected.length === 0) {
-                alert('select at least one');
-                return;
-            }
-            toDelete = selected[0];
-        }
+    function removeMultifactor(toDelete) {
         ox.load(['io.ox/multifactor/settings/views/deleteMultifactorView']).done(function (view) {
             view.open(toDelete).then(function () {
                 refresh();
@@ -166,13 +135,25 @@ define('io.ox/multifactor/settings/pane', [
         });
     }
 
-    function addMultifactor() {
-        api.getProviders().then(function (data) {
+    function addButton(backup) {
+        var add = $('<button id="addDevice" class="btn btn-primary">').append(
+            backup ? gt('Add Recovery Device') : gt('Add device'));
+        add.click(function () {
+            addMultifactor(backup);
+        });
+        if (backup) add.addClass('addBackupDevice');
+        return add;
+    }
+
+    function addMultifactor(backup) {
+        api.getProviders(backup).then(function (data) {
             if (data && data.providers) {
                 ox.load(['io.ox/multifactor/settings/views/addMultifactorView']).done(function (view) {
-                    view.open(data.providers).then(function () {
+                    view.open(data.providers, backup).then(function () {
                         refresh();
-                        manageRecover();
+                        if (!backup && !hasBackup) {  // If we don't have any backup providers, try adding now.
+                            addMultifactor(true);
+                        }
                     });
                 });
             } else {
@@ -182,24 +163,5 @@ define('io.ox/multifactor/settings/pane', [
         });
     }
 
-    function manageRecover(showExisting) {
-        api.getDevices(true).then(function (devices) {
-            if (devices && devices.length > 0) {
-                if (showExisting) {
-                    ox.load(['io.ox/multifactor/views/recoveryDeviceView']).done(function (view) {
-                        view.open(devices);
-                    });
-                }
-            } else {
-                api.getProviders(true).then(function (data) {
-                    ox.load(['io.ox/multifactor/settings/views/addMultifactorView']).done(function (view) {
-                        view.open(data.providers, true).then(function () {
-                            refresh();
-                        });
-                    });
-                });
-            }
-        });
-    }
 
 });
