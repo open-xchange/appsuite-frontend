@@ -73,15 +73,19 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
             if (folder.module !== 'infostore') return {};
 
             return http.PUT({
-                module: 'infostore',
-                params: { action: 'quotacheck' },
+                module: 'folders',
+                params: {
+                    action: 'checklimits',
+                    id: folder.id,
+                    type: folder.module
+                },
                 data: {
-                    folder: folder.id,
-                    type: folder.module,
                     files: files.map(function (file) {
-                        return { file_size: file.size, file_name: file.name, file_type: file.type };
+                        return { size: file.size, name: file.name, mimetype: file.type };
                     })
                 }
+            }).then(function (res) {
+                return [].concat.apply(res && res.errors || []);
             });
         },
 

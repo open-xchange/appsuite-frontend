@@ -404,7 +404,15 @@ define('io.ox/core/tk/upload', [
 
                 // no quota
                 return $.when({});
-            }).catch(function (err) {
+            }).then(function (errors) {
+                if (errors.length === 0) return newFiles;
+
+                return require([
+                    'io.ox/core/tk/upload-problems'
+                ]).then(function (Problems) {
+                    return Problems.report(newFiles, errors);
+                });
+            }, function (err) {
                 notifications.yell(err);
                 throw err;
             });
