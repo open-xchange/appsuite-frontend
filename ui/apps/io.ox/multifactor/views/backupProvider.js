@@ -206,8 +206,8 @@ define('io.ox/multifactor/views/backupProvider', [
             id: 'error',
             render: function (baton) {
                 var error = baton.model.get('error');
-                if (error) {
-                    var label = $('<label class="multifactorError">').append(error);
+                if (error && error.text) {
+                    var label = $('<label class="multifactorError">').append(error.text);
                     this.$body.append(label);
                     if (lastResponse) {
                         console.log(lastResponse);

@@ -90,8 +90,8 @@ define('io.ox/multifactor/views/u2fProvider', [
             id: 'error',
             render: function (baton) {
                 var error = baton.model.get('error');
-                if (error) {
-                    var label = $('<label class="multifactorError">').append(error);
+                if (error && error.text) {
+                    var label = $('<label class="multifactorError">').append(error.text);
                     this.$body.append(label);
                 }
             }

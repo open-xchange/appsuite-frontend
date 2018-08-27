@@ -44,6 +44,7 @@ define('io.ox/multifactor/lost', [
             deviceAuthenticator.getAuth(device.provider.name, device, authDef, error);
             authDef.then(function (data) {
                 if (data) {
+                    data.backup = true;  // mark this as a backup / lost action
                     def.resolve(data);
                 }
                 failBackup(def, gt('Authentication failure.  Please reload browser and try again.'));

@@ -31,6 +31,12 @@ define('io.ox/multifactor/auth', [
             }
             authenticating = true;
             var def = $.Deferred();
+            if (error && error.backup) {
+                require(['io.ox/multifactor/lost'], function (lost) {
+                    lost(def, error);
+                });
+                return def;
+            }
             api.getDevices().then(function (list) {
                 if (list && list.length > 0) {
                     if (list && list.length > 1) {
@@ -67,11 +73,14 @@ define('io.ox/multifactor/auth', [
                 api.doAuth(data.provider, data.id, data.response, data.parameters).then(function (data) {
                     def.resolve(data);
                 }, function (rejection) {
+                    error = {
+                        backup: data.backup === true
+                    };
                     if (rejection && rejection.value === 'AUTHENTICATION_DENIED') {
                         if (rejection.lockoutResult) {
-                            error = gt('Authentication was denied.  Attempt %i of %i allowed attempts', rejection.lockoutResult.count, rejection.lockoutResult.maxAllowed);
+                            error.text = gt('Authentication was denied.  Attempt %i of %i allowed attempts', rejection.lockoutResult.count, rejection.lockoutResult.maxAllowed);
                         } else {
-                            error = gt('Authentication was denied.');
+                            error.text = gt('Authentication was denied.');
                         }
                     } else {
                         if (rejection) notifyFailure(rejection.error);
