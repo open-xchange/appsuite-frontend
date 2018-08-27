@@ -189,7 +189,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                                     new DatePickerView({ attribute: id, model: baton.model, id: 'vacation_notice_' + id, clearButton: true })
                                         .render().$el
                                         .prop('disabled', !baton.model.get('activateTimeFrame')) :
-                                    new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
+                                    new mini.DateView({ name: id, timezone: 'UTC', model: baton.model, id: 'vacation_notice_' + id })
                                         .render().$el
                                         .prop('disabled', !baton.model.get('activateTimeFrame'))
                             );

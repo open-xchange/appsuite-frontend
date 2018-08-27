@@ -13,7 +13,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter', 'gettext!io.ox/mail'], function (api, gt) {
+define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter', 'gettext!io.ox/mail', 'settings!io.ox/core'], function (api, gt, coreSettings) {
 
     'use strict';
 
@@ -115,12 +115,17 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             // time
             var testForTimeframe = { id: 'allof', tests: [] };
 
+            function returnTzOffset(timeValue) {
+                return moment.tz(timeValue, coreSettings.get('timezone')).format('Z').replace(':', '');
+            }
+
             if (attr.dateFrom) {
                 testForTimeframe.tests.push({
                     id: 'currentdate',
                     comparison: 'ge',
                     datepart: 'date',
-                    datevalue: [attr.dateFrom]
+                    datevalue: [attr.dateFrom],
+                    zone: returnTzOffset(attr.dateFrom)
                 });
             }
 
@@ -129,7 +134,8 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
                     id: 'currentdate',
                     comparison: 'le',
                     datepart: 'date',
-                    datevalue: [attr.dateUntil]
+                    datevalue: [attr.dateUntil],
+                    zone: returnTzOffset(attr.dateFrom)
                 });
             }
 

@@ -394,8 +394,12 @@ define('io.ox/backbone/mini-views/common', [
         }) :
         InputView.extend({
             format: 'l',
+            initialize: function (opt) {
+                opt.timezone = opt.timezone || moment().tz();
+                InputView.prototype.initialize.call(this, opt);
+            },
             onChange: function () {
-                var t = moment(this.$el.val(), this.format).valueOf();
+                var t = +moment(this.$el.val(), this.format).utc(true);
                 this.model.set(this.name, t);
             },
             update: function () {
@@ -403,7 +407,7 @@ define('io.ox/backbone/mini-views/common', [
                 this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
             },
             getFormattedDate: function (date) {
-                return moment(date).format(this.format);
+                return moment(date).utc().format(this.format);
             },
             render: function () {
                 InputView.prototype.render.call(this);
@@ -411,7 +415,7 @@ define('io.ox/backbone/mini-views/common', [
                 require(['io.ox/backbone/views/datepicker'], function (DatePicker) {
                     // need to be async here otherwise parent is undefined
                     setTimeout(function () {
-                        new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
+                        new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory, timezone: view.options.timezone })
                             .attachTo(view.$el)
                             .on('select', function (date) {
                                 view.model.set(view.name, date.valueOf());
