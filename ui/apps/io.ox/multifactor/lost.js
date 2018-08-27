@@ -20,7 +20,7 @@ define('io.ox/multifactor/lost', [
     'use strict';
 
     function failBackup(def, message) {
-        notifyFailure(message);
+        notifyFailure((message instanceof String) ? message : message.value);
         window.setTimeout(function () {
             def.reject();
         }, 10000);
@@ -33,7 +33,7 @@ define('io.ox/multifactor/lost', [
         });
     }
 
-    function handleLost(def) {
+    function handleLost(def, error) {
         api.getDevices(true).then(function (devices) {
             if (devices.length === 0) {
                 failBackup(def, gt('There are no backup devices available for this account.  Please notify support for help.'));
@@ -41,15 +41,10 @@ define('io.ox/multifactor/lost', [
             }
             var device = devices[0];
             var authDef = $.Deferred();
-            deviceAuthenticator.getAuth(device.provider.name, device, authDef);
+            deviceAuthenticator.getAuth(device.provider.name, device, authDef, error);
             authDef.then(function (data) {
                 if (data) {
-                    api.doAuth(data.provider, data.id, data.response).then(function (data) {
-                        def.resolve(data);
-                    }, function (fail) {
-                        failBackup(def, fail);
-                    });
-                    return;
+                    def.resolve(data);
                 }
                 failBackup(def, gt('Authentication failure.  Please reload browser and try again.'));
             }, function (fail) {

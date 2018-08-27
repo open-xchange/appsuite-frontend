@@ -26,10 +26,14 @@ define('io.ox/multifactor/views/backupProvider', [
 
     var dialog;
     var def;
+    var lastResponse;
 
     function open(provider, device, challenge, _def, error) {
         dialog = openModalDialog(provider, device, challenge, error);
         def = _def;
+        if (lastResponse) {
+            insertData(lastResponse);
+        }
         return dialog;
     }
 
@@ -50,6 +54,10 @@ define('io.ox/multifactor/views/backupProvider', [
         .build(function () {
         })
         .addButton({ label: gt('OK'), action: 'OK' })
+        .addCancelButton()
+        .on('cancel', function () {
+            def.reject();
+        })
         .addAlternativeButton({ label: gt('Upload Recovery File'), action: 'Upload' })
         .on('OK', function () {
             var response = getVal();
@@ -85,10 +93,14 @@ define('io.ox/multifactor/views/backupProvider', [
     // Multiple boxes of length 4.  Advance to next once the input has 4 characters
     function inputChanged(e) {
         var input = $(e.currentTarget);
+        if (input.val().length > 4) {  // Rare, rapid entry
+            input.val(input.val().substring(0, 4));
+        }
         if (input.val().length === 4) {
             var inputs = $('.recoveryInput');
             var current = inputs.index(input);
             var next = inputs.eq(current + 1).length ? inputs.eq(current + 1) : inputs.eq(0);
+            inputs.eq(current).val(inputs.eq(current).val().toUpperCase());
             next.focus();
         }
 
@@ -101,7 +113,40 @@ define('io.ox/multifactor/views/backupProvider', [
         inputs.each(function () {
             resp += $(arguments[1]).val();
         });
+        lastResponse = resp;  // Save last response in case of failure
         return resp;
+    }
+
+    //  Handle user pasting data into input fields
+    function pasting(e) {
+        try {
+            var data = e.originalEvent.clipboardData.getData('text');
+            if (data.length > 4) {  // If pasting more than just the characters for current box
+                e.preventDefault();
+                insertData(data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Insert data across all input fields.  Used to either restore failed data, or during paste
+    function insertData(data) {
+        var inputs = $('.recoveryInput');
+        var index, count = 0;
+        for (index = 0; index < inputs.length; index++) {
+            inputs.eq(index).val('');  // Clean first
+        }
+        index = 0;
+        Array.from(data).forEach(function (c) {
+            if (c !== ' ') {
+                inputs.eq(index).val(inputs.eq(index).val() + c);
+                if (++count === 4) {
+                    count = 0;
+                    index++;
+                }
+            }
+        });
     }
 
     // Get recovery string from file
@@ -143,13 +188,14 @@ define('io.ox/multifactor/views/backupProvider', [
             id: 'selection',
             render: function (baton) {
                 var chal = baton.model.get('challenge');
-                var length = parseInt(chal.challengeResponse, 10);
+                var length = parseInt(chal.backupStringLength, 10);
                 var count = length / 4;
                 // Create a bunch of input boxes, length 4 characters, depending on length of challenge request
                 var div = $('<div class="recoveryDiv">');
                 for (var i = 0; i < count; i++) {
-                    var input = $('<input type="text" id="code-' + i + '" class="recoveryInput">')
-                    .keyup(inputChanged);
+                    var input = $('<input type="text" id="code-' + i + '" class="recoveryInput" aria-label="' + gt('Next 4 characters of the backup string') + '">')
+                    .keyup(inputChanged)
+                    .on('paste', pasting);
                     div.append(input);
                 }
                 this.$body.append(div);
@@ -163,6 +209,9 @@ define('io.ox/multifactor/views/backupProvider', [
                 if (error) {
                     var label = $('<label class="multifactorError">').append(error);
                     this.$body.append(label);
+                    if (lastResponse) {
+                        console.log(lastResponse);
+                    }
                 }
             }
         }
