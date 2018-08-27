@@ -63,6 +63,7 @@ define('io.ox/multifactor/views/u2fProvider', [
         })
         .on('lost', function () {
             dialog.close();
+            dialog = null;
             require(['io.ox/multifactor/lost'], function (lost) {
                 lost(def);
             });
@@ -129,17 +130,20 @@ define('io.ox/multifactor/views/u2fProvider', [
                             recoverable = false;
                             break;
                     }
-                    require(['io.ox/core/notifications'], function (notify) {
-                        notify.yell('error', error);
-                    });
-                    if (recoverable) {
-                        doAuthentication(provider, device, data);
-                    } else {
-                        window.setTimeout(function () {
-                            dialog.close();
-                            def.reject();
-                        }, 5000);
+                    if (dialog) {
+                        require(['io.ox/core/notifications'], function (notify) {
+                            notify.yell('error', error);
+                        });
+                        if (recoverable) {
+                            doAuthentication(provider, device, data);
+                        } else {
+                            window.setTimeout(function () {
+                                dialog.close();
+                                def.reject();
+                            }, 5000);
+                        }
                     }
+
                     return;
                 }
                 var resp = {
