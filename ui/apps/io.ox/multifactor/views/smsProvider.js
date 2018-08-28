@@ -104,11 +104,17 @@ define('io.ox/multifactor/views/smsProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function (baton) {
+                var newCode = baton.model.get('error') && !baton.model.get('error').repeat;
+                var newDiv = '';
+                if (newCode) {
+                    newDiv = $('<dev class="newSMS">').append(gt('New code sent.') + ' ');
+                }
                 var label = $('<label for="verification">').append(
-                    baton.model.get('error') ? gt('A new code was sent to your SMS device.  Please enter the code.') :
+                    newCode ? gt('A new code was sent to your SMS device.  Please enter the code.') :
                         gt('Please enter the code that was sent to your SMS device'))
                 .append('<br>');
                 this.$body.append(
+                    newDiv,
                     label
                 );
             }

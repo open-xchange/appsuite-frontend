@@ -14,6 +14,8 @@ define('io.ox/multifactor/deviceAuthenticator', [
 ], function (api) {
     'use strict';
 
+    var lastDev, count, lastData;
+
     function doDeviceAuth(providerName, device, challengeData, def, error) {
         switch (providerName) {
             case 'EXAMPLE-MFA':
@@ -51,10 +53,36 @@ define('io.ox/multifactor/deviceAuthenticator', [
         }
     }
 
+    // Determine if a new code should be sent.
+    function checkNew(error, providerName, device) {
+        if (providerName !== 'SMS') {  // At this time, only applies to SMS
+            return true;
+        }
+        if (!error) {
+            lastDev = device;
+            count = 0;
+            return true;
+        }
+        if (device.id === lastDev.id) {
+            count++;
+            if (count < 3) return false;  // Give them a couple attempts, then start anew
+        }
+        lastDev = device;
+        count = 0;
+        return true;
+    }
+
     function getAuth(providerName, device, def, error) {
-        api.beginAuth(providerName, device.id).then(function (data) {
-            doDeviceAuth(providerName, device, data, def, error);
-        }, def.reject);
+        if (checkNew(error, providerName, device)) {  // Check if new code should be sent
+            api.beginAuth(providerName, device.id).then(function (data) {
+                lastData = data;
+                doDeviceAuth(providerName, device, data, def, error);
+            }, def.reject);
+        } else {
+            error.repeat = true;
+            doDeviceAuth(providerName, device, lastData, def, error);
+        }
+
     }
 
     return {
