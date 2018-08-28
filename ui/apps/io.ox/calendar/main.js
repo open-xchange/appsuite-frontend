@@ -632,7 +632,6 @@ define('io.ox/calendar/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                //ox.ui.Perspective.show(app, value, { disableAnimations: true });
                 app.pages.changePage(value, { disableAnimations: true });
             });
         },

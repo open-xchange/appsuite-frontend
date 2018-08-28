@@ -17,19 +17,11 @@
     .flex-direction(column);
 
     .header {
-        padding-top: 9px;
-        .info {
-            max-width: none;
-            padding: 0;
-            border: 0;
-            vertical-align: baseline;
-            margin-right: 16px;
-            margin-left: 2px;
-        }
-        .info[disabled] {
-            opacity: 1;
-            cursor: default;
-            .fa-caret-down { display: none; }
+
+        .cw {
+            font-size: 14px;
+            color: @hc-gray;
+            .fontWeight(normal);
         }
 
         .merge-split {
@@ -130,6 +122,10 @@
 
         .day { border: none; }
 
+        .appointment .appointment-content {
+            padding: 0 4px;
+            line-height: 20px;
+        }
         .appointment:focus {
             //increase z-index so box shadow is shown fully
             z-index: 1;
@@ -361,7 +357,8 @@
         .appointment-content {
             height: 100%;
             font-size: 12px;
-            padding: 0 4px;
+            line-height: 16px;
+            padding: 4px;
             border-left: 2px solid;
             border-color: inherit;
             .ellipsis();

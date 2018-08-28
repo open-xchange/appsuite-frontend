@@ -24,6 +24,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/capabilities',
     'io.ox/core/print',
+    'io.ox/calendar/extensions',
     'io.ox/calendar/week/extensions',
     'less!io.ox/calendar/week/style'
 ], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print) {
@@ -313,11 +314,11 @@ define('io.ox/calendar/week/view', [
                 .attr({
                     'data-cid': model.cid,
                     'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
-                    'data-extension-point': 'io.ox/calendar/week/view/appointment',
+                    'data-extension-point': 'io.ox/calendar/appointment',
                     'data-composite-id': model.cid
                 });
 
-            ext.point('io.ox/calendar/week/view/appointment')
+            ext.point('io.ox/calendar/appointment')
                 .invoke('draw', node, ext.Baton(_.extend({}, this.opt, { model: model, folders: this.opt.app.folders.list() })));
             return node;
         },
@@ -591,14 +592,13 @@ define('io.ox/calendar/week/view', [
         onDrag: function (e) {
             var node, model, startDate, endDate, offset, slotWidth, numColumns;
             if (this.model.get('mergeView')) return;
+            if ($(e.target).is('.resizable-handle')) return;
 
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.appointment-panel',
                 start: function (e) {
-                    var target = $(e.target);
-                    if (target.is('.resizable-handle')) return;
-                    node = target.closest('.appointment');
+                    node = $(e.target).closest('.appointment');
                     model = this.opt.view.collection.get(node.attr('data-cid'));
                     this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('current hover');
 
@@ -715,7 +715,8 @@ define('io.ox/calendar/week/view', [
         className: 'appointment-container',
 
         options: {
-            overlap: 0.35 // visual overlap of appointments [0.0 - 1.0]
+            overlap: 0.35, // visual overlap of appointments [0.0 - 1.0]
+            minCellHeight:  24
         },
 
         events: function () {
@@ -746,7 +747,6 @@ define('io.ox/calendar/week/view', [
             AppointmentContainer.prototype.initialize.call(this, opt);
 
             this.listenTo(this.model, 'change:additionalTimezones', this.updateTimezones);
-            this.listenTo(this.model, 'change:gridSize change:cellHeight', this.render);
 
             this.$hiddenIndicators = $('<div class="hidden-appointment-indicator-container">');
             this.initCurrentTimeIndicator();
@@ -819,6 +819,7 @@ define('io.ox/calendar/week/view', [
         },
 
         render: function () {
+            this.updateCellHeight();
             var pane = this.$('.scrollpane'),
                 scrollRatio = pane.scrollTop() / pane.height(),
                 range = this.model.get('mergeView') ? this.opt.app.folders.list() : _.range(this.model.get('numColumns')),
@@ -850,6 +851,14 @@ define('io.ox/calendar/week/view', [
 
         getNumTimeslots: function () {
             return this.opt.slots * this.model.get('gridSize');
+        },
+
+        updateCellHeight: function () {
+            var cells = Math.min(Math.max(4, (this.model.get('workEnd') - this.model.get('workStart') + 1)), 18),
+                cellHeight = Math.floor(
+                    Math.max(this.$el.height() / (cells * this.model.get('gridSize')), this.options.minCellHeight)
+                );
+            this.model.set('cellHeight', cellHeight);
         },
 
         getContainerHeight: function () {
@@ -945,8 +954,7 @@ define('io.ox/calendar/week/view', [
                 endLocal = model.getMoment('endDate').local(),
                 start = moment(startLocal).startOf('day').valueOf(),
                 end = moment(endLocal).startOf('day').valueOf(),
-                maxCount = 0,
-                className = '';
+                maxCount = 0;
 
             // draw across multiple days
             while (maxCount <= this.model.get('numColumns')) {
@@ -954,9 +962,6 @@ define('io.ox/calendar/week/view', [
 
                 if (start !== end) {
                     endLocal = moment(startLocal).endOf('day');
-                    if (model.get('endDate').valueOf() - endLocal.valueOf() > 1) {
-                        className += 'rmsouth';
-                    }
                 } else {
                     endLocal = model.getMoment('endDate').local();
                 }
@@ -967,7 +972,7 @@ define('io.ox/calendar/week/view', [
                 }
 
                 node
-                    .addClass(className)
+                    .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
                     .css({
                         top: startLocal.diff(moment(start), 'minutes') / 24 / 60 * 100 + '%',
                         height: 'calc( ' + endLocal.diff(startLocal, 'minutes') / 24 / 60 * 100 + '% - 2px)',
@@ -978,11 +983,11 @@ define('io.ox/calendar/week/view', [
                 if (this.model.get('mergeView')) index = this.opt.app.folders.list().indexOf(model.get('folder'));
                 // append at the right place
                 this.$('.day').eq(index).append(node);
+                ext.point('io.ox/calendar/week/view/appointment').invoke('draw', node, ext.Baton({ model: model, date: start, view: this }));
 
                 // do incrementation
                 if (start !== end) {
                     start = startLocal.add(1, 'day').startOf('day').valueOf();
-                    className = 'rmnorth ';
                     maxCount++;
                 } else {
                     break;
@@ -1351,7 +1356,6 @@ define('io.ox/calendar/week/view', [
 
         options: {
             showFulltime: true,
-            minCellHeight:  24,
             slots: 24,
             limit: 1000
         },
@@ -1370,7 +1374,6 @@ define('io.ox/calendar/week/view', [
                 mode: this.mode
             });
             this.updateNumColumns();
-            this.updateCellHeight();
             this.initializeSubviews();
 
             this.$el.addClass(this.mode);
@@ -1405,14 +1408,6 @@ define('io.ox/calendar/week/view', [
                 this.fulltimeView.$el,
                 this.appointmentView.$el
             );
-        },
-
-        updateCellHeight: function () {
-            var cells = Math.min(Math.max(4, (this.model.get('workEnd') - this.model.get('workStart') + 1)), 18),
-                cellHeight = Math.floor(
-                    Math.max(this.$el.height() / (cells * this.model.get('gridSize')), this.options.minCellHeight)
-                );
-            this.model.set('cellHeight', cellHeight, { silent: true });
         },
 
         getTimezoneLabels: function () {
@@ -1576,8 +1571,7 @@ define('io.ox/calendar/week/view', [
                 workStart: settings.get('startTime', 8) * 1,
                 workEnd: settings.get('endTime', 18) * 1
             });
-            this.updateCellHeight();
-            this.model.trigger('change:cellHeight');
+            this.model.trigger('change:worktime');
         },
 
         onChangeAppointment: function (model) {

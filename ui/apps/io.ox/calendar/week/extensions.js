@@ -13,125 +13,54 @@
 
 define('io.ox/calendar/week/extensions', [
     'io.ox/core/extensions',
-    'io.ox/calendar/util',
-    'io.ox/core/folder/api',
-    'gettext!io.ox/calendar'
-], function (ext, util, folderAPI, gt) {
+    'io.ox/calendar/util'
+], function (ext, util) {
 
     'use strict';
 
     ext.point('io.ox/calendar/week/view/appointment').extend({
-        id: 'default',
-        index: 100,
-        draw: function (baton) {
-            var self = this,
-                a = baton.model,
-                folder = folderAPI.pool.getModel(a.get('folder')).toJSON(),
-                conf = 1,
-                confString = '%1$s',
-                classes = '';
-
-            function addColors(f) {
-                var color = util.getAppointmentColor(f, a),
-                    foregroundColor = util.getForegroundColor(color);
-                if (!color) return;
-                self.css({
-                    'background-color': color,
-                    'color': foregroundColor,
-                    'border-left-color': foregroundColor === 'white' ? '' : foregroundColor
-                }).data('background-color', color);
-                self.addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
-                if (util.canAppointmentChangeColor(f, a)) {
-                    self.attr('data-folder', f.id);
-                }
-            }
-
-            var folderId = a.get('folder');
-            if (String(folder.id) === String(folderId)) {
-                addColors(folder);
-            } else if (folderId !== undefined) {
-                folderAPI.get(folderId).done(addColors);
-            }
-
-            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
-                classes = 'private disabled';
-            } else {
-                conf = util.getConfirmationStatus(a);
-                classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
-                    ' ' + util.getConfirmationClass(conf);
-                // if (conf === 'TENTATIVE') {
-                //     confString =
-                //         //#. add confirmation status behind appointment title
-                //         //#. %1$s = apppintment title
-                //         //#, c-format
-                //         gt('%1$s (Tentative)');
-                // }
-            }
-
-            this
-                .attr('tabindex', 0)
-                .addClass(classes)
-                .append(
-                    $('<div class="appointment-content">').append(
-                        $('<div>').append(
-                            util.returnIconsByType(a).type,
-                            a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : ''
-                        ),
-                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : '',
-                        $('<div class="flags">').append(util.returnIconsByType(a).property)
-                    )
-                )
-                .attr({
-                    'data-extension': 'default'
-                });
-
-            this.on('calendar:weekview:rendered', function () {
-
-                var contentHeight = $(this).find('.appointment-content').height(),
-                    titleHeight = $(this).find('.title').height(),
-                    noWrap = $(this).hasClass('no-wrap'),
-                    locationHeight = $(this).find('.location').length < 1 || noWrap ? 0 : $(this).find('.location').height(),
-                    flagsHeight = $(this).find('.flags').height();
-
-                if (!flagsHeight) return;
-                if (titleHeight + locationHeight < contentHeight - flagsHeight) {
-                    $(this).find('.flags').addClass('bottom-right');
-                } else {
-                    $(this).find('.flags').hide();
-                }
-            });
-        }
-    });
-
-    ext.point('io.ox/calendar/week/view/appointment').extend({
         id: 'resize-fulltime',
-        index: 200,
+        index: 100,
         draw: function (baton) {
             var model = baton.model;
             if (!util.isAllday(model)) return;
-            var folder = folderAPI.pool.getModel(model.get('folder')).toJSON(),
-                canModifiy = folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model, { synced: true, folderData: folder });
-            if (!canModifiy) return;
-            this.addClass('modify');
+            if (!this.hasClass('modify')) return;
             var startDate = baton.view.model.get('startDate'),
                 endDate = startDate.clone().add(baton.view.numColumns, 'days');
             if (!model.getMoment('startDate').isSame(startDate, 'day')) this.append($('<div class="resizable-handle resizable-w">'));
-            if (!model.getMoment('endDate').isSame(endDate)) this.append($('<div class="resizable-handle resizable-e">'));
+            if (!model.getMoment('endDate').isSame(endDate, 'day')) this.append($('<div class="resizable-handle resizable-e">'));
         }
     });
 
     ext.point('io.ox/calendar/week/view/appointment').extend({
         id: 'resize',
+        index: 200,
+        draw: function (baton) {
+            var model = baton.model;
+            if (util.isAllday(model)) return;
+            if (!this.hasClass('modify')) return;
+            if (!model.getMoment('startDate').isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-n">'));
+            if (!model.getMoment('endDate').isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-s">'));
+        }
+    });
+
+    ext.point('io.ox/calendar/week/view/appointment').extend({
+        id: 'flags',
         index: 300,
         draw: function (baton) {
             var model = baton.model;
             if (util.isAllday(model)) return;
-            var folder = folderAPI.pool.getModel(model.get('folder')).toJSON(),
-                canModifiy = folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model, { synced: true, folderData: folder });
-            if (!canModifiy) return;
-            this.addClass('modify');
-            if (!this.hasClass('rmnorth')) this.append($('<div class="resizable-handle resizable-n">'));
-            if (!this.hasClass('rmsouth')) this.append($('<div class="resizable-handle resizable-s">'));
+            var contentContainer = $(this).find('.appointment-content'),
+                contentHeight = contentContainer.height(),
+                titleHeight = $(this).find('.title').height(),
+                noWrap = $(this).hasClass('no-wrap'),
+                locationHeight = $(this).find('.location').length < 1 || noWrap ? 0 : $(this).find('.location').height(),
+                flags = util.returnIconsByType(model).property,
+                flagsHeight = 12;
+            if (flags.length === 0) return;
+            if (titleHeight + locationHeight < contentHeight - flagsHeight) {
+                contentContainer.append($('<div class="flags bottom-right">').append(flags));
+            }
         }
     });
 
