@@ -14,7 +14,7 @@ define('io.ox/multifactor/settings/defaults', [], function () {
     'use strict';
 
     var settingsDefaults = {
-
+        allowMultiple: true
     };
 
     return settingsDefaults;

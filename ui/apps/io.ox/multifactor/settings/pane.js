@@ -107,7 +107,12 @@ define('io.ox/multifactor/settings/pane', [
                 $('.multifactorRecoverySection').show();
                 addDeleteAction(node);
                 $('.multifactorBackupField').show();
-                if (isBackup) hasBackup = true;
+                if (isBackup) {
+                    hasBackup = true;
+                }
+                if (!settings.get('allowMultiple')) {
+                    $('#addDevice').hide();
+                }
                 return;
             }
         }
@@ -116,6 +121,7 @@ define('io.ox/multifactor/settings/pane', [
         } else {
             node.append($('<div class="emptyMultifactor">').append(gt('No multifactor devices registered yet.')));
             $('.multifactorBackupField').hide();
+            $('#addDevice').show();
         }
     }
 
@@ -136,8 +142,10 @@ define('io.ox/multifactor/settings/pane', [
     }
 
     function addButton(backup) {
-        var add = $('<button id="addDevice" class="btn btn-primary">').append(
-            backup ? gt('Add Recovery Device') : gt('Add device'));
+        var add = $('<button id="' +
+                (backup ? 'addBackupDevice' : 'addDevice') +
+                '" class="btn btn-primary">')
+            .append(backup ? gt('Add Recovery Device') : gt('Add device'));
         add.click(function () {
             addMultifactor(backup);
         });
