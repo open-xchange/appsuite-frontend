@@ -75,7 +75,12 @@ define('io.ox/core/settings/pane', [
                     },
 
                     getRegionOptions: function () {
-                        return [{ label: gt('Based on language'), value: '' }].concat(locale.getLocaleOptions());
+                        var options = [{ label: gt('Based on language'), value: '' }];
+                        if (locale.isCustomized()) {
+                            //#. %1$s is region/locale name, e.g. "Germany (customized)"
+                            options.push({ label: gt('%1$s (customized)', locale.getLocaleName()), value: locale.getLocale() + '-custom' });
+                        }
+                        return options.concat(locale.getLocaleOptions());
                     },
 
                     getThemeOptions: function () {
@@ -327,16 +332,23 @@ define('io.ox/core/settings/pane', [
 
                 if (!settings.isConfigurable('region')) return;
 
-                baton.$el.append(
-                    util.compactSelect('region', gt('Region'), this.model, this.getRegionOptions())
-                    .find('.col-md-6').append(
-                        $('<div class="help-block text-right">').append(
-                            $('<a href="#" role="button" data-action="reload">')
-                            .text(gt('Customize regional settings')).on('click', editLocale)
-                        )
+                var getRegionOptions = this.getRegionOptions.bind(this),
+                    select = util.compactSelect('region', gt('Region'), this.model, getRegionOptions());
+
+                select.find('.col-md-6').append(
+                    $('<div class="help-block text-right">').append(
+                        $('<a href="#" role="button" data-action="reload">')
+                        .text(gt('Customize regional settings')).on('click', editLocale)
                     )
-                    .end()
                 );
+
+                var view = select.find('select').data('view');
+                view.listenTo(this.model, 'change:locale', function () {
+                    console.log('Sooooooooo', getRegionOptions());
+                    this.$el.empty().append(this.renderOptions(getRegionOptions()));
+                });
+
+                baton.$el.append(select);
 
                 function editLocale(e) {
                     e.preventDefault();

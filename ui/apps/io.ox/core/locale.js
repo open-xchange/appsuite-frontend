@@ -87,19 +87,24 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
     };
 
     function getSettings() {
+        var data = moment.localeData();
         return _.extend({
-            time: 'default',
-            date: 'default',
-            number: 'default',
-            firstDayOfWeek: 'default',
-            firstDayOfYear: 'default'
+            time: data.longDateFormat('LT'),
+            date: data.longDateFormat('L'),
+            number: getDefaultNumberFormat(),
+            firstDayOfWeek: data.firstDayOfWeek(),
+            firstDayOfYear: data.firstDayOfYear()
         }, settings.get('locale'));
     }
 
     function getLocale() {
-        var id = settings.get('region');
+        var id = String(settings.get('region') || '').replace(/-custom$/, '');
         if (supportedLocales[id]) return id;
         return deriveLocale(settings.get('language', 'en_US'));
+    }
+
+    function getLocaleName() {
+        return supportedLocales[getLocale()] || '';
     }
 
     function deriveLocale(language) {
@@ -126,19 +131,12 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
     }
 
     function updateMomentLocale(id) {
-
         if (definedLocales.indexOf(id) === -1) return;
-
-        var longDateFormat = {};
-        // time format
-        if (time !== 'default') longDateFormat.LT = time;
-        // date format
-        if (date !== 'default') longDateFormat.L = date;
-        var week = {};
-        // first day of week (Sunday or Monday)
-        if (firstDayOfWeek !== 'default') week.dow = firstDayOfWeek;
-        // first day of year. this has an impact how calendar week is calculated
-        if (firstDayOfYear !== 'default') week.doy = firstDayOfWeek;
+        // time and date format
+        var longDateFormat = { LT: time, L: date };
+        // dow = first day of week (Sunday or Monday)
+        // doy = first day of year. this has an impact how calendar week is calculated
+        var week = { dow: firstDayOfWeek, doy: firstDayOfYear };
         // drop custom locale
         moment.locale(id + '-custom', null);
         // define custom locale
@@ -147,7 +145,12 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         moment.locale(id + '-custom');
     }
 
-    function onSettingsChange() {
+    function onChangeRegion(value) {
+        // reset custom settings when changing to any preset
+        if (!/-custom$/.test(value)) settings.set('locale', undefined).save(); else onChangeLocale();
+    }
+
+    function onChangeLocale() {
         var localeSettings = getSettings();
         time = localeSettings.time;
         date = localeSettings.date;
@@ -156,13 +159,6 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         firstDayOfYear = localeSettings.firstDayOfYear;
         updateMomentLocale(locale);
     }
-
-    // get current locale
-    locale = getLocale();
-    //backupLocale('en');
-    setMomentLocale(locale);
-    settings.on('change:locale', onSettingsChange);
-    onSettingsChange();
 
     // Number formatting
     // we just need a proper match for custom formats
@@ -173,15 +169,22 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         return Number(n).toLocaleString(numberFormats[number] || locale, options);
     }
 
-    var dateFormats = ['MM/DD/YYYY', 'M/D/YYYY', 'MM/DD/YY', 'M/D/YY', 'DD.MM.YYYY', 'D.M.YYYY', 'DD.MM.YY', 'D.M.YY', 'YYYY-MM-DD'];
+    function getDefaultNumberFormat() {
+        var n = api.number(1234.56);
+        return numberFormats[n] || '1,234.56';
+    }
 
-    return {
+    var dateFormats = ['MM/DD/YYYY', 'M/D/YYYY', 'MM/DD/YY', 'M/D/YY', 'DD.MM.YYYY', 'D.M.YYYY', 'DD.MM.YY', 'D.M.YY', 'DD/MM/YYYY', 'DD/MM/YY', 'D/M/YY', 'YYYY-MM-DD'];
+
+    var api = {
 
         // getter/setter
 
         getLocale: function () {
             return locale;
         },
+
+        getLocaleName: getLocaleName,
 
         setLocale: function (id) {
             locale = id;
@@ -206,6 +209,10 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
         getSettings: getSettings,
 
+        isCustomized: function () {
+            return settings.get('region') && !_.isEmpty(settings.get('locale'));
+        },
+
         getLocaleOptions: function () {
             return _(supportedLocales)
                 .pairs()
@@ -223,4 +230,17 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
             return dateFormats.slice();
         }
     };
+
+    // get current locale
+    locale = getLocale();
+    //backupLocale('en');
+    setMomentLocale(locale);
+    settings.on('change:region', onChangeRegion);
+    settings.on('change:locale', onChangeLocale);
+    onChangeLocale();
+
+    // debug
+    window.locale = api;
+
+    return api;
 });

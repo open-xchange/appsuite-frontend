@@ -34,45 +34,37 @@ define('io.ox/core/settings/editLocale', [
             focus: '#settings-time',
             model: new Backbone.Model(),
             point: POINT,
-            title: gt('Regional settings'),
+            title: gt('Customize regional settings'),
             width: 480
         })
         .inject({
             getTimeOptions: function () {
                 return [
-                    //#. default in terms of standard value
-                    { label: gt('Default'), value: 'default' },
-                    { label: gt('12 hours'), value: 'h:mm A' },
-                    { label: gt('24 hours'), value: 'H:mm' }
+                    { label: gt('9:00 AM (12 hours)'), value: 'h:mm A' },
+                    { label: gt('09:00 AM (12 hours)'), value: 'hh:mm A' },
+                    { label: gt('9:00 (24 hours)'), value: 'H:mm' },
+                    { label: gt('09:00 (24 hours)'), value: 'HH:mm' }
                 ];
             },
             getDateOptions: function () {
                 var m = moment().month(0).date(29);
-                return [{ label: gt('Default'), value: 'default' }].concat(
-                    locale.getDateFormats().map(function (format) {
-                        return { label: m.format(format), value: format };
-                    })
-                );
+                return locale.getDateFormats().map(function (format) {
+                    return { label: m.format(format), value: format };
+                });
             },
             getNumberOptions: function () {
-                return [{ label: gt('Default'), value: 'default' }].concat(
-                    locale.getNumberFormats().map(function (format) {
-                        return { label: format, value: format };
-                    })
-                );
+                return locale.getNumberFormats().map(function (format) {
+                    return { label: format, value: format };
+                });
             },
             getFirstDayOfWeekOptions: function () {
                 return [
-                    //#. default in terms of standard value
-                    { label: gt('Default'), value: 'default' },
                     { label: gt('Sunday'), value: 0 },
                     { label: gt('Monday'), value: 1 }
                 ];
             },
             getFirstDayOfYearOptions: function () {
                 return [
-                    //#. default in terms of standard value
-                    { label: gt('Default'), value: 'default' },
                     { label: gt('Week that contains January 1st'), value: 1 },
                     { label: gt('Week that contains the first Thursday'), value: 4 }
                 ];
@@ -86,7 +78,12 @@ define('io.ox/core/settings/editLocale', [
             this.model.set(locale.getSettings());
         })
         .on('save', function () {
-            settings.set('locale', this.model.toJSON());
+            // reset locale first to get proper change event everywhere
+            settings
+                .set('locale', undefined, { silent: true })
+                .set('locale', this.model.toJSON())
+                .set('region', locale.getLocale() + '-custom')
+                .save();
         })
         .open();
     }
