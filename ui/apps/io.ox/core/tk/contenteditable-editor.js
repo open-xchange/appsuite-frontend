@@ -22,8 +22,9 @@ define('io.ox/core/tk/contenteditable-editor', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
+    'less!io.ox/core/tk/contenteditable-editor-content',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
+], function (capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt, contentCss) {
 
     'use strict';
 
@@ -314,6 +315,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             statusbar: false,
 
             skin: opt.skin,
+
+            body_class: 'ox-mce',
+            content_style: contentCss,
 
             toolbar1: opt.toolbar1,
             toolbar2: opt.toolbar2,
