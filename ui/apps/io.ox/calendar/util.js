@@ -630,7 +630,7 @@ define('io.ox/calendar/util', [
         getRecurrenceEnd: function (data) {
             var str;
             if (data.until) {
-                str = gt('The series ends on %1$s.', moment(data.until).format('l'));
+                str = gt('The series ends on %1$s.', moment(data.until).utc().format('l'));
             } else if (data.occurrences) {
                 var n = data.occurrences;
                 str = gt.format(gt.ngettext('The series ends after one occurrence.', 'The series ends after %1$d occurences.', n), n);
