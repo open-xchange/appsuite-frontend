@@ -56,7 +56,7 @@ define('io.ox/multifactor/views/smsProvider', [
         .addButton({ label: constants.OKButton, action: 'OK' })
         .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('OK', function () {
-            var response = $('#verification').val();
+            var response = $('#verification').val().replace(/\s/g, '');
             if (response && response !== '') {
                 var resp = {
                     response: response,
@@ -85,6 +85,12 @@ define('io.ox/multifactor/views/smsProvider', [
         })
         .open();
     }
+
+    // Input should only be 0-9
+    function inputChanged(e) {
+        $(e.target).toggleClass('mfInputError', e.target.value.match(/[0-9\s]*/)[0] !== e.target.value);
+    }
+
 
     ext.point(POINT).extend(
         {
@@ -123,7 +129,8 @@ define('io.ox/multifactor/views/smsProvider', [
             index: INDEX += 100,
             id: 'selection',
             render: function () {
-                var input = $('<input type="text" id="verification">');
+                var input = $('<input type="text" id="verification">')
+                .keyup(inputChanged);
                 var selection = $('<div class="multifactorAuthDiv">')
                 .append(input);
                 this.$body.append(selection);

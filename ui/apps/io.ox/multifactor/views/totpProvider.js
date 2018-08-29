@@ -54,7 +54,7 @@ define('io.ox/multifactor/views/totpProvider', [
         .addButton({ label: constants.OKButton, action: 'OK' })
         .addAlternativeButton({ label: constants.LostButton, action: 'lost', className: device.backupDevice ? 'hidden' : 'btn-default' })
         .on('OK', function () {
-            var response = $('#authentication').val();
+            var response = $('#authentication').val().replace(/\s/g, '');
             if (response && response !== '') {
                 var resp = {
                     response: response,
@@ -84,6 +84,12 @@ define('io.ox/multifactor/views/totpProvider', [
         .open();
     }
 
+    // Input should only be 0-9
+    function inputChanged(e) {
+        $(e.target).toggleClass('mfInputError', e.target.value.match(/[0-9\s]*/)[0] !== e.target.value);
+    }
+
+
     ext.point(POINT).extend(
         {
             index: INDEX += 100,
@@ -112,7 +118,8 @@ define('io.ox/multifactor/views/totpProvider', [
             index: INDEX += 100,
             id: 'selection',
             render: function () {
-                var input = $('<input type="text" id="authentication">');
+                var input = $('<input type="text" id="authentication">')
+                .keyup(inputChanged);
                 var selection = $('<div class="multifactorAuthDiv">')
                 .append(input);
                 this.$body.append(selection);

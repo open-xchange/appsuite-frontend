@@ -49,7 +49,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
         .addCancelButton()
         .addButton({ label: gt('OK'), action: 'OK' })
         .on('OK', function () {
-            var response = $('#verification').val();
+            var response = $('#verification').val().replace(/\s/g, '');
             if (response && response !== '') {
                 finalize(provider, device, response);
             } else {
@@ -79,7 +79,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
             id: 'selection',
             render: function () {
                 var input = $('<input type="text" id="verification">')
-                    .keydown(inputChanged);
+                    .keyup(inputChanged);
                 var selection = $('<div class="multifactorSelector">')
                 .append(input);
                 this.$body.append(selection);
@@ -90,15 +90,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
 
     // Input should only be 0-9
     function inputChanged(e) {
-        if (!/[0-9]/.test(e.key)) {
-            if (e.which === 13 || e.which === 8 || e.which === 37 || e.which === 39 || e.which === 46) {  // OK Enter, backspace, arrows, del
-                return true;
-            }
-            e.preventDefault();
-            console.log('Prevented key input: ' + e.key);
-            return false;
-        }
-        return true;
+        $(e.target).toggleClass('mfInputError', e.target.value.match(/[0-9\s]*/)[0] !== e.target.value);
     }
 
     // Display error message
