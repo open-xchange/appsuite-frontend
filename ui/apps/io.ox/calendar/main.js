@@ -152,11 +152,16 @@ define('io.ox/calendar/main', [
 
             app.pages = new PageController({ appname: app.options.name });
 
-            // create 3 pages with toolbars and navbars
+            // create empty startup page
             app.pages.addPage({
-                name: 'month',
+                name: 'start',
                 container: c,
                 startPage: true
+            });
+
+            app.pages.addPage({
+                name: 'month',
+                container: c
             });
 
             app.pages.addPage({

@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.weekview-container, .month-view, .year-view {
+.weekview-container, .monthview-container, .year-view {
 
     .header {
         /* Mobile */
@@ -43,15 +43,20 @@
             text-decoration: none;
             line-height: 34px;
             height: 30px;
+            max-width: none;
+            padding: 0;
+            border: 0;
+            vertical-align: baseline;
+            margin-right: 16px;
+            margin-left: 2px;
 
             .ellipsis();
             .fontWeight(bold);
-
-            .cw {
-                font-size: 14px;
-                color: @hc-gray;
-                .fontWeight(normal);
-            }
+        }
+        .info[disabled] {
+            opacity: 1;
+            cursor: default;
+            .fa-caret-down { display: none; }
         }
     }
 

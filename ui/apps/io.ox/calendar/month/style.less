@@ -11,43 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.month-view {
+.monthview-container {
 
-    * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+    height: 100%;
+    .flex-display(flex);
+    .flex-direction(column);
 
-    // overwrite display:block from page controller
-    &.io-ox-pagecontroller.page.current {
-        .flex-display();
-        .flex-direction(column);
-    }
-
-    .month-toolbar {
-        .flex(0 0 auto);
-
-        .controls-container {
-            padding: 17px 0 0 8px;
-            height: 56px;
-            width: auto;
-        }
-
-        .month-info {
-            margin-left: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            padding-top: 8px;
-            user-select: none;
-        }
+    .header {
+        height: 56px;
+        flex: 0 0 auto;
     }
 
     .month-container {
         .flex(1);
         overflow: hidden;
         outline: none;
-
-        .weekend { display: none; }
-        &.weekends .weekend { display: table-cell; }
-        .cw { display: none; }
-        &.cw .cw { display: table-cell; }
     }
 
     .month {
@@ -55,6 +33,11 @@
         height: 100%;
         width: 100%;
         table-layout: fixed;
+
+        .weekend { display: none; }
+        &.weekends .weekend { display: table-cell; }
+        .cw { display: none; }
+        &.cw .cw { display: table-cell; }
 
         thead {
             display: none;
@@ -123,13 +106,8 @@
                     }
                 }
 
-                &.out:not(.today) {
+                &.out {
                     background-color: rgba(238, 238, 238, 0.5);
-
-                    .number {
-                        color: #717171;
-                        font-weight: normal;
-                    }
 
                     .appointment {
                         background-color: transparent!important;
@@ -138,6 +116,13 @@
 
                         &.hover {
                             background-color: #ccc!important;
+                        }
+                    }
+
+                    &:not(.today) {
+                        .number {
+                            color: #717171;
+                            font-weight: normal;
                         }
                     }
                 }
@@ -175,7 +160,9 @@
 
         .appointment-content > * {
             margin-right: 4px;
+            display: inline;
         }
+
         .start {
             min-width: 32px;
             display: inline-block;
@@ -187,82 +174,4 @@
         }
     }
 
-    // Mobile
-    @media (max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
-
-        .month-toolbar {
-            text-align: center;
-            font-size: 24px;
-            padding: 8px;
-        }
-
-        .month {
-            -webkit-user-select: none;
-            top: 33px;
-
-            thead {
-                display: table-header-group;
-            }
-
-            .week {
-                min-height: 40px;
-                border-bottom: 1px solid #ccc;
-                padding-left: 0;
-
-                &.no-border { border: 0; }
-
-                .day {
-                    width: 100/7%;
-                    vertical-align: baseline;
-                    border-width: 0;
-                    -webkit-user-select: auto;
-
-                    &:active {
-                        .transition(none);
-                        background-color: #ccc;
-                    }
-
-                    .number {
-                        top: 8px;
-                        bottom: auto;
-                        left: 0;
-                        text-align: center;
-                        color: rgba(1,1,1,.6);
-                        font-size: 18px;
-                        font-weight: 400;
-                        background-color: transparent;
-
-                        .day-label {
-                            display: none;
-                        }
-                    }
-
-                    &.out .number {
-                        font-weight: 100;
-                    }
-
-                    &.today, &.today .number {
-                        font-weight: bold;
-                        color: @calendar-today;
-                        background-color: transparent;
-                    }
-
-                    .list {
-                        top: 50%;
-                        font-size: 12px;
-                        text-align: center;
-                        color: #767676;
-                        .transition(color 0.2s linear);
-                    }
-                }
-            }
-
-            .month-name {
-                margin-left: 0;
-                border: 0;
-                font-size: 26px;
-                font-weight: 300;
-            }
-        }
-    }
 }

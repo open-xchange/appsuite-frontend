@@ -19,8 +19,9 @@ define('io.ox/calendar/perspective', [
     'io.ox/calendar/view-detail',
     'io.ox/core/tk/dialogs',
     'io.ox/core/yell',
-    'gettext!io.ox/calendar'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/capabilities'
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities) {
 
     'use strict';
 
@@ -149,14 +150,17 @@ define('io.ox/calendar/perspective', [
                     this.clicks = 0;
                     this.clickTimer = null;
                     api.get(obj).done(function (model) {
-                        // TODO this somehow needs to be refactored
-                        self.trigger('openEditAppointment', e, model.attributes);
+                        if (self.dialog) self.dialog.close();
+                        ext.point('io.ox/calendar/detail/actions/edit')
+                            .invoke('action', self, { data: model.toJSON() });
                     });
                 }
             }
         },
 
         createAppointment: function (data) {
+            if (capabilities.has('guest')) return;
+
             ext.point('io.ox/calendar/detail/actions/create')
             .invoke('action', this, { app: this.app }, data);
         },
@@ -249,6 +253,21 @@ define('io.ox/calendar/perspective', [
                             return;
                     }
                 });
+        },
+
+        // /*
+        //  * Returns a function which will execute the requested function of the view
+        //  * as soon as the view is visible
+        //  */
+        getCallback: function (name) {
+            return function () {
+                var func = this[name], args = _(arguments).toArray();
+                this.off('show');
+                if (this.$el.is(':visible')) return func.apply(this, args);
+                this.once('show', function () {
+                    func.apply(this, args);
+                });
+            }.bind(this);
         }
 
     });

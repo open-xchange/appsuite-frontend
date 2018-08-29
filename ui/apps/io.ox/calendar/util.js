@@ -1179,7 +1179,7 @@ define('io.ox/calendar/util', [
                 case 'week':
                     var model = perspective.model;
                     rangeStart = moment(model.get('startDate')).utc();
-                    rangeEnd = moment(model.get('startDate')).utc().add(perspective.numColumns, 'days');
+                    rangeEnd = moment(model.get('startDate')).utc().add(model.get('numColumns'), 'days');
                     break;
                 case 'month':
                     rangeStart = moment(perspective.firstMonth).startOf('week').utc();

@@ -1524,21 +1524,6 @@ define('io.ox/calendar/week/view', [
             });
         },
 
-        /*
-         * Returns a function which will execute the requested function of the view
-         * as soon as the view is visible
-         */
-        getCallback: function (name) {
-            return function () {
-                var func = this[name], args = _(arguments).toArray();
-                this.off('show');
-                if (this.$el.is(':visible')) return func.apply(this, args);
-                this.once('show', function () {
-                    func.apply(this, args);
-                });
-            }.bind(this);
-        },
-
         onPrevious: function () {
             this.weekViewHeader.$('.prev').trigger('click');
         },

@@ -61,7 +61,7 @@ define('io.ox/calendar/extensions', [
                     .attr('tabindex', 0)
                     .append(
                         $('<div class="appointment-content">').append(
-                            $('<div>').append(
+                            $('<div class="title-container">').append(
                                 util.returnIconsByType(model).type,
                                 model.get('summary') ? $('<div class="title">').text(gt.format('%1$s', model.get('summary') || '\u00A0')) : ''
                             ),
