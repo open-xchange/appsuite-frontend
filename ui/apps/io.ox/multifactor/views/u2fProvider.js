@@ -76,10 +76,15 @@ define('io.ox/multifactor/views/u2fProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function (baton) {
-                var label = $('<p>').append(
-                    baton.model.get('device').name ? gt('Please activate your authentication device named %s', baton.model.get('device').name) :
-                        gt('Please activate your authentication device'))
-                .append('<br>');
+                var label;
+                if (window.u2f) {
+                    label = $('<p>').append(
+                        baton.model.get('device').name ? gt('Please activate your authentication device named %s', baton.model.get('device').name) :
+                            gt('Please activate your authentication device'))
+                        .append('<br>');
+                } else {
+                    label = $('<p>').append(gt('This browser is not compatible with your configured authentication device.  Please use Chrome browser, or Firefox with U2F enabled.'));
+                }
                 this.$body.append(
                     label
                 );

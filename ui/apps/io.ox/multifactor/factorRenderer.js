@@ -48,6 +48,7 @@ define('io.ox/multifactor/factorRenderer', [
             case 'WEB-AUTH':
                 return createTable('fa-microchip', gt('Web auth'), device, selectable);
             case 'U2F':
+                if (!window.u2f && !selectable) return;  //  If browser not compatible, and being used for auth, then don't display
                 return createTable('fa-microchip', gt('U2F'), device, selectable);
             case 'YUBIKEY':
                 return createTable('fa-id-badge', gt('Yubikey'), device, selectable);

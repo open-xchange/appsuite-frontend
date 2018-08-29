@@ -117,6 +117,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 icon = 'fa-microchip';
                 break;
             case 'U2F':
+                if (!window.u2f) return;
                 text = gt('Use a U2F device');
                 icon = 'fa-microchip';
                 break;
