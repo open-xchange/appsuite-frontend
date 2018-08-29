@@ -20,7 +20,7 @@ define('io.ox/multifactor/lost', [
     'use strict';
 
     function failBackup(def, message) {
-        notifyFailure((message instanceof String) ? message : message.value);
+        notifyFailure(message.value ? message.value : message);
         window.setTimeout(function () {
             def.reject();
         }, 10000);
