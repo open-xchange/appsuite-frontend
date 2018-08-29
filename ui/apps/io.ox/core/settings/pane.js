@@ -344,7 +344,6 @@ define('io.ox/core/settings/pane', [
 
                 var view = select.find('select').data('view');
                 view.listenTo(this.model, 'change:locale', function () {
-                    console.log('Sooooooooo', getRegionOptions());
                     this.$el.empty().append(this.renderOptions(getRegionOptions()));
                 });
 

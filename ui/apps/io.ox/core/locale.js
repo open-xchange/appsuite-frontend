@@ -162,10 +162,20 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
     // Number formatting
     // we just need a proper match for custom formats
-    var numberFormats = { '1,234.56': 'en-us', '1.234,56': 'de-de', '1’234.56': 'de-ch', '1 234,56': 'de-at' };
+    var numberFormats = {
+        '1,234.56': 'en-us',
+        '1.234,56': 'de-de',
+        '1’234.56': 'de-ch',
+        '1 234,56': 'de-at',
+        '1234.56': 'en-us',
+        '1234,56': 'de-de'
+    };
+
+    var grouping = { '1234.56': false, '1234,56': false };
 
     function getNumber(n, options) {
         if (isNaN(n)) return n;
+        if (grouping[number] === false) options.useGrouping = false;
         return Number(n).toLocaleString(numberFormats[number] || locale, options);
     }
 
@@ -228,6 +238,10 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
         getDateFormats: function () {
             return dateFormats.slice();
+        },
+
+        getSupportedLocales: function () {
+            return supportedLocales;
         }
     };
 
