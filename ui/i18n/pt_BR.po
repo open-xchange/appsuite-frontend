@@ -1896,10 +1896,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Não é possível imprimir este item"
 msgstr[1] "Não é possível imprimir estes itens"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Não é possível exigir um tipo de visualização para %1$s"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacidade"
@@ -7110,7 +7106,6 @@ msgstr "Força da senha: fraca"
 msgid "Password strength: Wrong length"
 msgstr "Força da senha: comprimento errado"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Pausar modo de reprodução automática"
@@ -8509,7 +8504,12 @@ msgstr "Azul real"
 msgid "Rule name"
 msgstr "Nome da regra"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Executar modo de reprodução automática"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Executar modo de reprodução automática"
@@ -13457,6 +13457,9 @@ msgstr "sua plataforma"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "Dólar canadense"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Não é possível exigir um tipo de visualização para %1$s"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Cabo Verde"

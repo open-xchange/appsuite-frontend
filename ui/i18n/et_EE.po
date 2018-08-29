@@ -1898,10 +1898,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Seda üksust ei saa printida"
 msgstr[1] "Neid üksusi ei saa printida"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Ei saa taotleda vaate tüüpi %1$s jaoks"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Maht"
@@ -7112,7 +7108,6 @@ msgstr "Parooli tugevus: nõrk"
 msgid "Password strength: Wrong length"
 msgstr "Parooli tugevus: vale pikkus"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Peata automaatse esitluse režiim"
@@ -8504,7 +8499,12 @@ msgstr "Kuninglik sinine"
 msgid "Rule name"
 msgstr "Reegli nimi"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Käivita automaatse esitluse režiim"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Käivita automaatse esitluse režiim"
@@ -12693,6 +12693,9 @@ msgstr "teie platvorm"
 
 #~ msgid "Cannot add participant/member with an invalid mail address: %1$s"
 #~ msgstr "Osalejat/liiget ei saa lisada, kehtetu e-posti aadress: %1$s"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Ei saa taotleda vaate tüüpi %1$s jaoks"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV sisselogimine"

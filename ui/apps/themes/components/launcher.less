@@ -376,6 +376,10 @@
         .icon {
             width: @svg-wrap-size;
             height: 100%;
+            // no icons on smartphone as it is a dropdown there
+            .smartphone & {
+                display: none;
+            }
         }
 
         svg, i {
@@ -481,10 +485,6 @@
 }
 
 .smartphone {
-
-    .icon {
-        display: none;
-    }
 
     #io-ox-launchgrid, #io-ox-launchgrid-overlay { top: @appcontrol-height-smartphone; }
     #io-ox-quicklaunch { display: none; }

@@ -1919,10 +1919,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr ""
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr ""
@@ -7178,7 +7174,6 @@ msgstr ""
 msgid "Password strength: Wrong length"
 msgstr ""
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr ""
@@ -8559,7 +8554,10 @@ msgstr "Светло син"
 msgid "Rule name"
 msgstr ""
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Run auto-play "
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr ""

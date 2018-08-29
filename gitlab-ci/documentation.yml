@@ -1,0 +1,41 @@
+---
+
+build documentation:
+  image: gitlab.open-xchange.com:4567/engineering/documentation:latest
+  stage: build
+  script:
+    - export VERSION=`grep '"version":' ui/package.json | cut -d\" -f4 | cut -d- -f1`
+    - ln -s $CI_PROJECT_DIR/documentation /documentation/jekyll/_ui
+    - cd /documentation
+    - bundle exec jekyll b --baseurl /$VERSION --config _config.yml
+    - cd $CI_PROJECT_DIR
+    - mkdir -p doku/$VERSION
+    - cp -r /documentation/dist/* doku/$VERSION
+  dependencies: []
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - doku/
+    expire_in: 2 hours
+
+deploy documentation:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - export VERSION=`ls doku --sort=time | cut -f1 | head -n1`
+    - rsync -aHAX --delete doku/$VERSION/ui/ /var/www/documentation/$VERSION/ui
+    - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
+    - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
+  dependencies:
+    - build documentation
+  tags:
+    - shell
+    - documentation
+  allow_failure: true
+  only:
+    - develop
+    - master
+    - /^master-.*$/
+    - /^release-.*$/

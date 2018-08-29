@@ -1914,10 +1914,6 @@ msgstr[0] "Nu se poate imprima acest element"
 msgstr[1] "Nu se pot imprima aceste elemente"
 msgstr[2] "Nu se pot imprima aceste elemente"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Nu se poate cere un tip de vizualizare pentru %1$s"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacitate"
@@ -7147,7 +7143,6 @@ msgstr "Puterea parolei: slabă"
 msgid "Password strength: Wrong length"
 msgstr "Puterea parolei: lungime eronată"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Pauză mod redare automată"
@@ -8547,7 +8542,12 @@ msgstr "Albastru regal"
 msgid "Rule name"
 msgstr "Nume regulă"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Mod redare automată"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Mod redare automată"
@@ -13705,6 +13705,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Dosarele sistem nu pot fi mutate."
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Nu se poate cere un tip de vizualizare pentru %1$s"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Republica Capului Verde"

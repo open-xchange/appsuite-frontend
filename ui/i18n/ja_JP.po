@@ -1849,10 +1849,6 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "このアイテムは印刷できません。"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "%1$s のビュータイプを要求できませんでした"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "容量"
@@ -7026,7 +7022,6 @@ msgstr "パスワードの強度: 脆弱"
 msgid "Password strength: Wrong length"
 msgstr "パスワードの強度: 文字数が適正ではありません"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "自動再生モードを一時停止"
@@ -8407,7 +8402,12 @@ msgstr "ロイヤルブルー"
 msgid "Rule name"
 msgstr "ルール名"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "自動再生モードを実行"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "自動再生モードを実行"
@@ -14041,6 +14041,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "システム フォルダを移動できません。"
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "%1$s のビュータイプを要求できませんでした"
 
 #~ msgid "Cape Verde"
 #~ msgstr "カボヴェルデ"

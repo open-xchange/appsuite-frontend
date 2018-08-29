@@ -1903,10 +1903,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Impossible d'imprimer cet élément"
 msgstr[1] "Impossible d'imprimer ces éléments"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Cannot require a view type for %1$s"
-msgstr "Impossible de choisir un type de vue pour %1$s"
-
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacité"
@@ -7158,7 +7154,6 @@ msgstr "Robustesse du mot de passe : faible"
 msgid "Password strength: Wrong length"
 msgstr "Robustesse du mot de passe : mauvaise longueur"
 
-#. tooltip for getting auto-play mode ready for pausing.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Pause auto-play mode"
 msgstr "Mettre le mode lecture automatique en pause"
@@ -8568,7 +8563,12 @@ msgstr "Bleu royal"
 msgid "Rule name"
 msgstr "Nom de la règle"
 
-#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Mode lecture automatique"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
 msgstr "Mode lecture automatique"
@@ -13252,6 +13252,9 @@ msgstr "votre plate-forme"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Impossible de déplacer un dossier système."
+
+#~ msgid "Cannot require a view type for %1$s"
+#~ msgstr "Impossible de choisir un type de vue pour %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "Authentification CardDAV"
