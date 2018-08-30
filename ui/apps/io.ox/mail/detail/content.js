@@ -20,9 +20,10 @@ define('io.ox/mail/detail/content', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/mail/detail/links',
+    'io.ox/mail/sanitizer',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, coreUtil, ext, capabilities, links, settings, gt) {
+], function (api, util, coreUtil, ext, capabilities, links, sanitizer, settings, gt) {
 
     'use strict';
 
@@ -438,7 +439,7 @@ define('io.ox/mail/detail/content', [
         {
             id: 'text-to-html',
             process: function (baton) {
-                baton.data = this.text2html(baton.data, { blockquotes: true, images: true, links: true });
+                baton.data = sanitizer.simpleSanitize(this.text2html(baton.data, { blockquotes: true, images: true, links: true }));
             }
         },
         {
