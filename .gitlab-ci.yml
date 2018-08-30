@@ -92,11 +92,6 @@ build_guidedtours:
     PROJECT_PATH: guidedtours
   <<: *build_ui_plugin
 
-build_saml:
-  variables:
-    PROJECT_PATH: open-xchange-appsuite-saml
-  <<: *build_ui_plugin
-
 build_spamexperts:
   variables:
     PROJECT_PATH: open-xchange-appsuite-spamexperts

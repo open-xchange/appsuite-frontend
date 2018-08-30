@@ -6,5 +6,8 @@
     "path": "io.ox/core/boot/login/openid"
 }, {
     "namespace": "login",
+    "path": "io.ox/core/boot/login/saml"
+}, {
+    "namespace": "login",
     "path": "io.ox/core/boot/login/token"
 }]
