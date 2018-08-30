@@ -131,7 +131,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 break;
             case 'BACKUP_STRING':
                 text = gt('Long recovery code that you print or save to unlock your account');
-                icon = 'fa-file-text';
+                icon = 'fa-file-text-o';
                 break;
             default:
                 text = gt('Unknown system');

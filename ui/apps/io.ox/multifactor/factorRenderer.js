@@ -31,7 +31,7 @@ define('io.ox/multifactor/factorRenderer', [
         if (device.name && device.name.length > 1) {
             detailCol.append(device.name);
         }
-        var deleteCol = deletable ? $('<td class="multifactorDelete">').append('<icon class="fa fa-trash">') : '';
+        var deleteCol = deletable ? $('<td class="multifactorDelete">').append('<icon class="fa fa-trash-o">') : '';
         return div.append(
             link.append(table.append(
                 row.append(iconCol).append(textCol).append(detailCol).append(deleteCol))));
@@ -55,7 +55,7 @@ define('io.ox/multifactor/factorRenderer', [
             case 'TOTP':
                 return createTable('fa-google', gt('Google Authenticator'), device, selectable);
             case 'BACKUP_STRING':
-                return createTable('fa-file-text', gt('Recovery code'), device, selectable);
+                return createTable('fa-file-text-o', gt('Recovery code'), device, selectable);
             default:
                 return $('<span>').append(gt('UNKNOWN'));
         }
