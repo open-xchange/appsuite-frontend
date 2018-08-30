@@ -11,7 +11,8 @@
  */
 define('io.ox/multifactor/factorRenderer', [
     'gettext!io.ox/core/boot',
-    'less!io.ox/multifactor/style'
+    'less!io.ox/multifactor/style',
+    'io.ox/multifactor/lib/u2f-api'
 ], function (gt) {
     'use strict';
 
@@ -49,7 +50,10 @@ define('io.ox/multifactor/factorRenderer', [
             case 'WEB-AUTH':
                 return createTable('fa-microchip', gt('Web auth'), device, selectable);
             case 'U2F':
-                if (!window.u2f && !selectable) return;  //  If browser not compatible, and being used for auth, then don't display
+                if (!window.u2f && !selectable) {
+                    console.log('U2F not compatible with this browser');
+                    return;  //  If browser not compatible, and being used for auth, then don't display
+                }
                 return createTable('fa-microchip', gt('U2F'), device, selectable);
             case 'YUBIKEY':
                 return createTable('fa-id-badge', gt('Yubikey'), device, selectable);
