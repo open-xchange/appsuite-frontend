@@ -127,18 +127,20 @@ define.async('io.ox/core/boot/main', [
                 return;
             })
             .done(function () {
-                require(['io.ox/multifactor/auth', 'themes', 'settings!io.ox/core'], function (auth, themes, coreSettings) {
+                require(['themes', 'settings!io.ox/core'], function (themes, coreSettings) {
                     var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
                         loadTheme = themes.set(theme);
                     $.when(loadTheme).then(function () {
-                        auth.doAuthentication().then(function () {
-                            session.rampup().then(function (data) {
-                                if (data) session.set(data);
-                                exports.loadUI();
-                            });
-                        }, function () {
-                            session.logout().always(function () {
-                                window.location.reload(true);
+                        require(['io.ox/multifactor/auth'], function (auth) {  // Couldn't be loaded until themes loaded
+                            auth.doAuthentication().then(function () {
+                                session.rampup().then(function (data) {
+                                    if (data) session.set(data);
+                                    exports.loadUI();
+                                });
+                            }, function () {
+                                session.logout().always(function () {
+                                    window.location.reload(true);
+                                });
                             });
                         });
                     });
