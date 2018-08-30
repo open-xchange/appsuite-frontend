@@ -22,24 +22,24 @@ define('io.ox/core/tk/upload-problems', [
 
     api.report = function (files, errors) {
         var def = $.Deferred();
-        new ModalDialog({ title: gt.ngettext('Unable to upload file', 'Unable to upload files', files.length) })
+        new ModalDialog({ title: gt.ngettext('Unable to upload file', 'Unable to upload files', files.length), width: '600px' })
             .build(function () {
                 this.$body.append(
-                    gt.ngettext(
-                        'The following problem has been identified with this upload task:',
-                        'The following problems have been identified with this upload task:',
+                    $('<strong>').append(gt.ngettext(
+                        'We encountered an issue for your upload',
+                        'We encountered some issues for your upload',
                         errors.length
-                    ),
-                    $('<ol>').append(
-                        errors.map(function (obj) {
-                            return $('<li>').text(obj.error);
-                        })
-                    ),
-                    gt('Please try again.')
+                    )),
+                    $('<table style="margin-top: 8px;" class="table table-striped">')
+                        .append($('<tbody>').append(
+                            errors.map(function (obj) {
+                                return $('<tr>').append($('<td>').text(obj.error));
+                            }))
+                        )
                 );
             })
-            .addCancelButton()
-            .on('cancel', function () { def.reject(errors); })
+            .addButton()
+            .on('close', function () { def.reject(errors); })
             .open();
 
         return def;
