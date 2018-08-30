@@ -89,6 +89,20 @@ define('io.ox/multifactor/api', [
             }, def.reject);
             return def;
         },
+        editDevice: function (deviceToEditProvider, deviceToEdit, newName) {
+            var def = $.Deferred();
+            // Do query to server for multifactor status
+            http.PUT({
+                module: 'multifactor',
+                params: { action: 'rename', deviceToRename: deviceToEdit, deviceToRenameProvider: deviceToEditProvider, name: newName }
+            }).then(function (data) {
+                if (data && data.error) {
+                    def.reject(checkError(data));
+                }
+                def.resolve(data);
+            }, def.reject);
+            return def;
+        },
         beginAuth: function (provider, id) {
             return $.when(
                 http.GET({

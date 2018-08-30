@@ -105,7 +105,8 @@ define('io.ox/multifactor/settings/pane', [
             if (devices && devices.length > 0) {
                 node.append(factorRenderer.renderDeletable(devices));
                 $('.multifactorRecoverySection').show();
-                addDeleteAction(node);
+                addDeleteAction(node);  // Add button actions
+                addEditAction(node);
                 $('.multifactorBackupField').show();
                 if (isBackup) {
                     hasBackup = true;
@@ -131,11 +132,26 @@ define('io.ox/multifactor/settings/pane', [
             removeMultifactor($(e.target).closest('.multifactordevice'));
         });
     }
+
+    function addEditAction(node) {
+        node.find('.multifactorEdit').click(function (e) {
+            e.preventDefault();
+            editMultifactor($(e.target).closest('.multifactordevice'));
+        });
+    }
     // Button actions
 
     function removeMultifactor(toDelete) {
         ox.load(['io.ox/multifactor/settings/views/deleteMultifactorView']).done(function (view) {
             view.open(toDelete).then(function () {
+                refresh();
+            });
+        });
+    }
+
+    function editMultifactor(toEdit) {
+        ox.load(['io.ox/multifactor/settings/views/editMultifactorView']).done(function (view) {
+            view.open(toEdit).then(function () {
                 refresh();
             });
         });

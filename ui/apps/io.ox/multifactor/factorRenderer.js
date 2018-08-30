@@ -31,10 +31,11 @@ define('io.ox/multifactor/factorRenderer', [
         if (device.name && device.name.length > 1) {
             detailCol.append(device.name);
         }
+        var editCol = deletable ? $('<td class="multifactorEdit">').append('<icon class="fa fa-pencil">') : '';
         var deleteCol = deletable ? $('<td class="multifactorDelete">').append('<icon class="fa fa-trash-o">') : '';
         return div.append(
             link.append(table.append(
-                row.append(iconCol).append(textCol).append(detailCol).append(deleteCol))));
+                row.append(iconCol).append(textCol).append(detailCol).append(editCol).append(deleteCol))));
 
     }
 
