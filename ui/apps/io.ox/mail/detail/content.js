@@ -439,7 +439,7 @@ define('io.ox/mail/detail/content', [
         {
             id: 'text-to-html',
             process: function (baton) {
-                baton.data = sanitizer.simpleSanitize(this.text2html(baton.data, { blockquotes: true, images: true, links: true }));
+                baton.data = this.text2html(baton.data, { blockquotes: true, images: true, links: true });
             }
         },
         {
@@ -653,7 +653,7 @@ define('io.ox/mail/detail/content', [
         beautifyPlainText: function (str) {
             var baton = ext.Baton({ data: str });
             ext.point('io.ox/mail/detail/beautify').invoke('process', this, baton);
-            return baton.data;
+            return sanitizer.simpleSanitize(baton.data);
         },
 
         transformForHTMLEditor: function (str) {
