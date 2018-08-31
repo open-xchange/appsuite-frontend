@@ -31,7 +31,7 @@ define('io.ox/calendar/actions/delete', [
                 guid,
                 model = new Backbone.Model({ comment: '' }),
                 commentView = [
-                    $('<label>').text(gt('Leave a message for the other participants. The message will be sent via email only.')).attr({ for: guid = _.uniqueId('containerlabel-') }),
+                    $('<label>').text(gt('Add a message to the notification email for the other participants.')).attr({ for: guid = _.uniqueId('containerlabel-') }),
                     new mini.InputView({ name: 'comment', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                 ];
             commentView[1].find('input').attr('id', guid);
