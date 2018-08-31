@@ -146,7 +146,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
         var table = $('<table class="multifactorDeviceTable">');
         var tr = $('<tr>');
         var iconCol = $('<td class="multifactorIcon">').append('<icon class="fa ' + icon + '">');
-        var textCol = $('<td class="multifactorText">').append(text);
+        var textCol = $('<td class="multifactorText" style="width:90%">').append(text);
         return (div.append(link.append(table.append(tr.append(iconCol).append(textCol)))));
 
     }
