@@ -41,9 +41,7 @@ define('io.ox/backbone/views/datepicker', [
 
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
-            this.options = _.extend(options, {
-                timezone: moment().tz()
-            });
+            this.options = options || {};
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
             this.date = this.getInitialDate();
@@ -97,7 +95,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         getToday: function () {
-            return moment.utc().startOf('day');
+            return moment().startOf('day');
         },
 
         //
@@ -432,7 +430,7 @@ define('io.ox/backbone/views/datepicker', [
 
         onSelectDate: function (e) {
             var target = $(e.currentTarget),
-                date = moment.tz(target.data('date'), this.options.timezone);
+                date = moment(target.data('date'));
             if (target.hasClass('cw')) return;
             this.trigger('select', date);
         },
