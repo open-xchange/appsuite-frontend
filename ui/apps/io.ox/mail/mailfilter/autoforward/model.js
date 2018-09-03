@@ -27,6 +27,7 @@ define('io.ox/mail/mailfilter/autoforward/model', [
             // early return is required for model.save()
             // server does not return usable data
             if (!_.isObject(data)) return {};
+            this.availableActions = data.availableActions;
 
             var attr = {
                 active: false,
@@ -55,6 +56,9 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                     case 'stop':
                         attr.processSub = false;
                         break;
+                    case 'keep':
+                        attr.copy = true;
+                        break;
                     // no default
                 }
             });
@@ -75,7 +79,9 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                 test: { id: 'true' }
             };
 
-            if (attr.copy) json.actioncmds[0].copy = true;
+            if (attr.copy) {
+                if (this.availableActions.copy) { json.actioncmds[0].copy = true; } else { json.actioncmds.push({ id: 'keep' }); }
+            }
             if (!attr.processSub) json.actioncmds.push({ id: 'stop' });
             // first rule gets 0 so we check for isNumber
             if (_.isNumber(attr.id)) json.id = attr.id;
@@ -96,10 +102,18 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                     return $.when(
                         api.getRules('autoforward'),
                         api.getRules('vacation'),
-                        userAPI.get()
+                        userAPI.get(),
+                        api.getConfig()
                     )
-                    .then(function (forward, vacation, user) {
-                        return { forward: forward[0], vacation: vacation[0], user: user };
+                    .then(function (forward, vacation, user, config) {
+                        var getIdList = function () {
+                            var list = {};
+                            _.each(config.actioncmds, function (val) {
+                                list[val.id] = val;
+                            });
+                            return list;
+                        };
+                        return { forward: forward[0], vacation: vacation[0], user: user, availableActions: getIdList() };
                     })
                     .done(options.success)
                     .fail(options.error);
