@@ -21,7 +21,7 @@ define('io.ox/mail/autoforward/settings/model', [
 
     'use strict';
 
-    function providePreparedData(attributes) {
+    function providePreparedData(attributes, availableActions) {
         if (!attributes.forwardmail) {
             return {};
         }
@@ -41,8 +41,7 @@ define('io.ox/mail/autoforward/settings/model', [
             'active': !!attributes.active
         };
         if (attributes.keep) {
-
-            preparedData.actioncmds[0].copy = true;
+            if (availableActions.copy) { preparedData.actioncmds[0].copy = true; } else { preparedData.actioncmds.push({ 'id': 'keep' }); }
         }
 
         if (!attributes.processSub) {
@@ -74,7 +73,7 @@ define('io.ox/mail/autoforward/settings/model', [
                     );
                 }
                 return settingsUtil.yellOnReject(
-                    api.update(providePreparedData(model.attributes))
+                    api.update(providePreparedData(model.attributes, model.availableActions))
                 );
             },
             create: function (model) {
@@ -82,7 +81,7 @@ define('io.ox/mail/autoforward/settings/model', [
                 $(document.activeElement).blur();
 
                 return settingsUtil.yellOnReject(
-                    api.create(providePreparedData(model.attributes))
+                    api.create(providePreparedData(model.attributes, model.availableActions))
                 );
             }
 

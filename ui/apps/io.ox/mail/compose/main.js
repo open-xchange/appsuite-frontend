@@ -123,6 +123,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                             notifications.yell(e);
                             // makes no sense to show discard changes popup here
                             app.model.dirty(false);
+                            app.view.removeLogoutPoint();
                             app.quit();
                             def.reject();
                         });

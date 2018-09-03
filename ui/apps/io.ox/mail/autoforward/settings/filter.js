@@ -26,7 +26,16 @@ define('io.ox/mail/autoforward/settings/filter', [
         editAutoForward: function ($node, userMainEmail) {
             var deferred = $.Deferred();
 
-            api.getRules('autoforward').done(function (data) {
+            $.when(api.getRules('autoforward'), api.getConfig()).done(function (data, config) {
+                data = data[0];
+
+                var getIdList = function () {
+                    var list = {};
+                    _.each(config.actioncmds, function (val) {
+                        list[val.id] = val;
+                    });
+                    return list;
+                };
 
                 var autoForwardData = { userMainEmail: userMainEmail, processSub: true },
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward'),
@@ -35,6 +44,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                 if (_.isEmpty(data)) {
 
                     autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
+                    autoForward.model.availableActions = getIdList();
 
                     $node
                         .append(autoForward.render().$el)
@@ -63,14 +73,18 @@ define('io.ox/mail/autoforward/settings/filter', [
                     _.extend(autoForwardData, {
                         id: data[0].id,
                         active: data[0].active,
-                        keep: data[0].actioncmds[0].copy,
                         processSub: true
                     });
+
+                    if (getIdList().copy && data[0].actioncmds[0].copy) autoForwardData.keep = true;
 
                     _(data[0].actioncmds).each(function (value) {
                         switch (value.id) {
                             case 'redirect':
                                 autoForwardData.forwardmail = value.to;
+                                break;
+                            case 'keep':
+                                autoForwardData.keep = getIdList().copy ? data[0].actioncmds[0].copy : true;
                                 break;
                             case 'stop':
                                 autoForwardData.processSub = false;
@@ -81,6 +95,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                     });
 
                     autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
+                    autoForward.model.availableActions = getIdList();
 
                     $node
                         .append(autoForward.render().$el)
