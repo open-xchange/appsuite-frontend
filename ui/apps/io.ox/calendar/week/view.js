@@ -286,8 +286,8 @@ define('io.ox/calendar/week/view', [
             else startDate.add(index, 'days');
 
             this.opt.view.createAppointment({
-                startDate: { value: startDate.utc(true).format('YYYYMMDD') },
-                endDate: { value: startDate.utc(true).format('YYYYMMDD') },
+                startDate: { value: startDate.format('YYYYMMDD') },
+                endDate: { value: startDate.format('YYYYMMDD') },
                 folder: folder
             });
         }
@@ -529,8 +529,8 @@ define('io.ox/calendar/week/view', [
             else startDate.add(index, 'days');
 
             this.opt.view.createAppointment({
-                startDate: { value: startDate.utc(true).format('YYYYMMDD') },
-                endDate: { value: startDate.utc(true).format('YYYYMMDD') },
+                startDate: { value: startDate.format('YYYYMMDD') },
+                endDate: { value: startDate.format('YYYYMMDD') },
                 folder: folder
             });
         },
@@ -582,8 +582,8 @@ define('io.ox/calendar/week/view', [
                     if (node) node.removeClass('resizing');
                     this.$el.removeClass('no-select');
                     this.opt.view.updateAppointment(model, {
-                        startDate: { value: startDate.utc(true).format('YYYYMMDD') },
-                        endDate: { value: endDate.utc(true).format('YYYYMMDD') }
+                        startDate: { value: startDate.format('YYYYMMDD') },
+                        endDate: { value: endDate.format('YYYYMMDD') }
                     });
                 }
             });
@@ -634,8 +634,8 @@ define('io.ox/calendar/week/view', [
                     if (node) node.removeClass('resizing');
                     this.$el.removeClass('no-select');
                     this.opt.view.updateAppointment(model, {
-                        startDate: { value: startDate.utc(true).format('YYYYMMDD') },
-                        endDate: { value: endDate.utc(true).format('YYYYMMDD') }
+                        startDate: { value: startDate.format('YYYYMMDD') },
+                        endDate: { value: endDate.format('YYYYMMDD') }
                     });
                 }
             });
@@ -950,24 +950,24 @@ define('io.ox/calendar/week/view', [
             if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
 
             var appointmentStartDate = model.getMoment('startDate'),
-                startLocal = moment(Math.max(appointmentStartDate.valueOf(), this.model.get('startDate').valueOf())),
+                startLocal = moment.max(appointmentStartDate, this.model.get('startDate')).local().clone(),
                 endLocal = model.getMoment('endDate').local(),
-                start = moment(startLocal).startOf('day').valueOf(),
-                end = moment(endLocal).startOf('day').valueOf(),
+                start = moment(startLocal).startOf('day'),
+                end = moment(endLocal).startOf('day'),
                 maxCount = 0;
 
             // draw across multiple days
             while (maxCount <= this.model.get('numColumns')) {
                 var node = this.renderAppointment(model).addClass('border');
 
-                if (start !== end) {
-                    endLocal = moment(startLocal).endOf('day');
+                if (!start.isSame(end, 'day')) {
+                    endLocal = moment(startLocal).endOf('day').local();
                 } else {
                     endLocal = model.getMoment('endDate').local();
                 }
 
                 // kill overlap appointments with length null
-                if (startLocal.valueOf() === endLocal.valueOf() && maxCount > 1) {
+                if (startLocal.isSame(endLocal) && maxCount > 1) {
                     break;
                 }
 
@@ -986,8 +986,8 @@ define('io.ox/calendar/week/view', [
                 ext.point('io.ox/calendar/week/view/appointment').invoke('draw', node, ext.Baton({ model: model, date: start, view: this }));
 
                 // do incrementation
-                if (start !== end) {
-                    start = startLocal.add(1, 'day').startOf('day').valueOf();
+                if (!start.isSame(end, 'day')) {
+                    start = startLocal.add(1, 'day').startOf('day').clone();
                     maxCount++;
                 } else {
                     break;
@@ -1183,7 +1183,7 @@ define('io.ox/calendar/week/view', [
             }
 
             function getPivot(model, name) {
-                var date = model.getMoment(name),
+                var date = model.getMoment(name).local(),
                     startOfDay = date.clone().startOf('day'),
                     day = date.diff(this.model.get('startDate'), 'days'),
                     minutes = date.diff(startOfDay, 'minutes');
@@ -1277,9 +1277,9 @@ define('io.ox/calendar/week/view', [
                     days = this.$('.day');
                     cellHeight = this.model.get('cellHeight');
                     mousedownOrigin = { x: e.pageX, y: e.pageY };
-                    sameDay = model.getMoment('startDate').isSame(model.getMoment('endDate'), 'day');
+                    sameDay = model.getMoment('startDate').local().isSame(model.getMoment('endDate').local(), 'day');
                     // offset in minutes in relation to the current grid size
-                    startOffset = model.getMoment('startDate').minutes() % (60 / this.model.get('gridSize'));
+                    startOffset = model.getMoment('startDate').local().minutes() % (60 / this.model.get('gridSize'));
                     numTimeslots = this.getNumTimeslots();
                     offsetSlots = Math.floor((e.pageY - $(e.currentTarget).offset().top) / cellHeight);
                     var index = days.index($(e.currentTarget).parent()),
@@ -1309,12 +1309,12 @@ define('io.ox/calendar/week/view', [
                     if (sameDay) {
                         var top = target.index() - offsetSlots,
                             minutes = top / numTimeslots * 24 * 60 + startOffset,
-                            startMinutes = model.getMoment('startDate').diff(model.getMoment('startDate').startOf('day'), 'minutes');
+                            startMinutes = model.getMoment('startDate').diff(model.getMoment('startDate').local().startOf('day'), 'minutes');
                         diffMinutes = minutes - startMinutes;
                     }
 
-                    startDate = model.getMoment('startDate').add(diffDays, 'days').add(diffMinutes, 'minutes');
-                    endDate = model.getMoment('endDate').add(diffDays, 'days').add(diffMinutes, 'minutes');
+                    startDate = model.getMoment('startDate').local().add(diffDays, 'days').add(diffMinutes, 'minutes');
+                    endDate = model.getMoment('endDate').local().add(diffDays, 'days').add(diffMinutes, 'minutes');
 
                     startIndex = Math.max(0, startDate.diff(this.model.get('startDate'), 'days'));
                     var endIndex = Math.min(this.model.get('numColumns'), endDate.diff(this.model.get('startDate'), 'days'));

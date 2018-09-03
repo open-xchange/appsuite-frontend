@@ -39,8 +39,8 @@ define('io.ox/calendar/week/extensions', [
             var model = baton.model;
             if (util.isAllday(model)) return;
             if (!this.hasClass('modify')) return;
-            if (!model.getMoment('startDate').isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-n">'));
-            if (!model.getMoment('endDate').isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-s">'));
+            if (model.getMoment('startDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-n">'));
+            if (model.getMoment('endDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-s">'));
         }
     });
 
