@@ -12,7 +12,9 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox.saml/login/register', ['io.ox/core/extensions'], function (ext) {
+define('io.ox.saml/login/register', [
+    'io.ox/core/extensions'
+], function (ext) {
     'use strict';
 
     if (!ox.serverConfig.samlLogin) return;
@@ -24,31 +26,31 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions'], function (ext) {
             id: 'saml_redirect',
             handle: function (baton) {
                 var uri = baton.data.redirect_uri;
-                if (uri) {
-                    baton.handled = $.Deferred();
-                    if ((/^http/i).test(uri)) {
-                        window.location = uri;
-                        _.defer(function () {
-                            if (window.location.href !== uri) return;
-                            window.location.reload();
-                        });
-                    } else {
-                        var path = '';
-                        if (uri.indexOf('/') === 0) {
-                            path = uri;
-                        } else {
-                            path = '/' + uri;
-                        }
+                if (!uri) return;
 
-                        var proto = window.location.protocol,
-                            host = window.location.host;
-                        uri = proto + '//' + host + path;
-                        window.location = uri;
-                        _.defer(function () {
-                            if (window.location.href !== uri) return;
-                            window.location.reload();
-                        });
+                baton.handled = $.Deferred();
+                if ((/^http/i).test(uri)) {
+                    window.location = uri;
+                    _.defer(function () {
+                        if (window.location.href !== uri) return;
+                        window.location.reload();
+                    });
+                } else {
+                    var path = '';
+                    if (uri.indexOf('/') === 0) {
+                        path = uri;
+                    } else {
+                        path = '/' + uri;
                     }
+
+                    var proto = window.location.protocol,
+                        host = window.location.host;
+                    uri = proto + '//' + host + path;
+                    window.location = uri;
+                    _.defer(function () {
+                        if (window.location.href !== uri) return;
+                        window.location.reload();
+                    });
                 }
             }
         });
