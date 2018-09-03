@@ -232,6 +232,10 @@ define('plugins/notifications/calendar/register', [
                     api: calAPI,
                     useListRequest: true,
                     useApiCid: true,
+                    apiEvents: {
+                        // triggered when something went wrong when getting event data in the list request -> event was probably deleted. In any case, clear the alarm
+                        remove: 'failureToFetchEvent'
+                    },
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {

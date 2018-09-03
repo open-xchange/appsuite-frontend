@@ -224,17 +224,17 @@ define('io.ox/calendar/api', [
                 }
                 return function (list, useCache) {
 
-                    list = _(list).map(function (obj) {
-                        // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
-                        if (obj.eventId) {
-                            return { id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId };
-                        }
-                        return obj;
-                    });
-
-                    var def, reqList = list, deletedEvents = false;
+                    var def,
+                        reqList = _(list).map(function (obj) {
+                            // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
+                            if (obj.eventId) {
+                                return { id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId };
+                            }
+                            return obj;
+                        }),
+                        deletedEvents = false;
                     if (useCache !== false) {
-                        reqList = list.filter(function (obj) {
+                        reqList = reqList.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
                             return !model || (!model.has('attendees') && !model.has('calendarUser'));
                         });
@@ -247,7 +247,7 @@ define('io.ox/calendar/api', [
                         if (data) {
                             data.forEach(function (obj, index) {
                                 if (obj === null) {
-                                    deletedEvents = true;
+                                    api.trigger('failureToFetchEvent', list[index]);
                                     // null means the event was deleted, clean up the caches
                                     processResponse({
                                         deleted: [reqList[index]]
@@ -259,7 +259,7 @@ define('io.ox/calendar/api', [
                             });
                         }
 
-                        return list.map(function (obj, index) {
+                        return reqList.map(function (obj, index) {
                             // if we have full data use the full data, in list data recurrence ids might be missing
                             // you can request exceptions without recurrence id because they have own ids, but in the reponse they still have a recurrence id, which is needed for the correct cid
                             if (data && data[index]) {
