@@ -195,7 +195,22 @@
             top: 18px;
             left: 33px;
         }
-        .title { display: none; }
+
+        .title {
+            // yes visibility hidden not display none. Otherwise the upsell icon is not displayed
+            visibility: hidden;
+            height: 0;
+        }
+
+        .upsell i {
+            visibility: visible;
+            position: absolute;
+            z-index: 1;
+            top: 32px;
+            left: 30px;
+            color: #ffc107;
+            font-size: 14px;
+        }
     }
 
     #io-ox-topsearch {
