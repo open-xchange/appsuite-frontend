@@ -84,7 +84,9 @@ define('io.ox/multifactor/auth', [
                         }
                     } else {
                         if (rejection) notifyFailure(rejection.error);
-                        def.reject();
+                        window.setTimeout(function () {
+                            def.reject();
+                        }, 3000);
                         return;
                     }
                     authenticate(error).then(def.resolve, def.reject);

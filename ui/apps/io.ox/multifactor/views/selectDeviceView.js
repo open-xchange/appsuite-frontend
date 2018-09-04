@@ -93,8 +93,8 @@ define('io.ox/multifactor/views/selectDeviceView', [
             id: 'error',
             render: function (baton) {
                 var error = baton.model.get('error');
-                if (error) {
-                    var div = $('<div class="multifactorError">').append(error);
+                if (error && error.text) {
+                    var div = $('<div class="multifactorError">').append(error.text);
                     this.$body.append(div);
                 }
             }
