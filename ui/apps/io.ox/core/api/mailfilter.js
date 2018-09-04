@@ -12,9 +12,8 @@
  */
 define('io.ox/core/api/mailfilter', [
     'io.ox/core/http',
-    'io.ox/core/event',
-    'io.ox/core/capabilities'
-], function (http, Events, capabilities) {
+    'io.ox/core/event'
+], function (http, Events) {
 
     'use strict';
 
@@ -114,25 +113,6 @@ define('io.ox/core/api/mailfilter', [
         };
 
     Events.extend(api);
-
-    // global refresh
-    api.refresh = function () {
-        api.getRules().done(function () {
-            // trigger local refresh
-            api.trigger('refresh.all');
-        });
-    };
-
-    /**
-     * bind to global refresh; clears caches and trigger refresh.all
-     * @fires  api#refresh.all
-     * @return { promise }
-     */
-    if (capabilities.has('mailfilter_v2')) {
-        ox.on('refresh^', function () {
-            api.refresh();
-        });
-    }
 
     return api;
 });
