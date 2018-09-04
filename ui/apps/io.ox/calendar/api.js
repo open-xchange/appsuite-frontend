@@ -231,8 +231,7 @@ define('io.ox/calendar/api', [
                                 return { id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId };
                             }
                             return obj;
-                        }),
-                        deletedEvents = false;
+                        });
                     if (useCache !== false) {
                         reqList = reqList.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
@@ -275,11 +274,6 @@ define('io.ox/calendar/api', [
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
                         });
-                    })
-                    .then(function (data) {
-                        // get fresh alarms if there were some deleted events
-                        if (deletedEvents) api.getAlarms();
-                        return data;
                     });
                 };
             }()),
