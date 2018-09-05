@@ -702,32 +702,22 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     };
 
     function handleMultifactorError(response, o, deferred) {
-        if ((/^MFA-0001/i).test(response.code)) {  // Session error, pause all pending and authenticate
+        if ((/(MFA-0001|MFA-0015)/i).test(response.code)) {  // Session error, pause all pending and authenticate
             that.disconnect(deferred, o);
             require(['io.ox/multifactor/auth'], function (auth) {
                 auth.doAuthentication().then(function () {
                     that.reConnect();
                 }, function () {
-                    console.error('MF login failed, reload required');
-                    ox.session = '';
-                    that.resetDisconnect(response);
-                    ox.relogin();
-                    location.reload();
-                });
-            });
-            return;
-        }
-        if ((/^MFA-0015/i).test(response.code)) { // This action requires MF auth.  Get and add to parameters
-            that.disconnect(deferred, o);
-            require(['io.ox/multifactor/auth'], function (auth) {
-                auth.getAuthentication().then(function (data) {
-                    o.params = _.extend(o.params,
-                        _.extend({ secret_code: data.response, authProviderName: data.provider, authDeviceId: data.id }, data.parameters));
-                    ajax(o, o.type).then(deferred.resolve, deferred.reject);
-                    that.reConnect();
-                }, function () {
-                    that.reConnect();
-                    deferred.reject();
+                    if ((/^MFA-0001/i).test(response.code)) {
+                        console.error('MF login failed, reload required');
+                        ox.session = '';
+                        that.resetDisconnect(response);
+                        ox.relogin();
+                        location.reload();
+                    } else {
+                        deferred.reject(); // reject this call
+                        that.reConnect();
+                    }
                 });
             });
             return;
@@ -1350,6 +1340,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             // Loop through each pending request
             for (var i = 0; i < pending.length; i++) {
                 var req = pending[i];
+                req.options.consolidate = false;
                 ajax(req.options, req.options.type).then(req.deferred.resolve, req.deferred.reject)
                 .always(checkDone);
             }
