@@ -114,6 +114,81 @@ define('io.ox/core/tk/contenteditable-editor', [
         }())
     });
 
+    ext.point(POINT + '/options').extend({
+        id: 'mention',
+        index: INDEX += 100,
+        config: function (context) {
+
+            var enabled = settings.get('mentions/enabled', true);
+            debugger;
+            if (!enabled) return;
+
+            this.plugins = this.plugins + ' advlink paste oxmention';
+
+            var model = context.view.model,
+                cachedResponse;
+
+            var template = _.template('<li class="list-item selectable" aria-selected="false" role="option" tabindex="-1" data-cid="<%- item.cid %>">' +
+                '  <div class="list-item-content">' +
+                '    <% if (item.list) { %>' +
+                '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify" aria-hidden="true"></i></div>' +
+                '    <% } else if (item.label) { %>' +
+                '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users" aria-hidden="true"></i></div>' +
+                '    <% } else if (item.image) { %>' +
+                '      <div class="contact-picture image" data-original="<%= item.image %>" style="background-image: url(<%= item.image %>)" aria-hidden="true"></div>' +
+                '    <% } else { %>' +
+                '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
+                '    <% } %>' +
+                '    <div class="name">' +
+                '       <%= item.full_name_html || item.email || "\u00A0" %>' +
+                '       <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
+                '    </div>' +
+                '    <div class="email gray"><%- item.caption || "\u00A0" %></div>' +
+                '  </div>' +
+                '</li>');
+
+            //https://github.com/StevenDevooght/tinyMCE-mention#configuration
+            this.mentions = {
+
+                items: settings.get('mentions/limit', 5),
+
+                source: function (query, process) {
+                    require(['io.ox/contacts/addressbook/popup', 'less!io.ox/contacts/addressbook/style'], function (addressbook) {
+                        $.when().then(function () {
+                            return cachedResponse || addressbook.getAllMailAddresses({ useGABOnly: false, lists: false });
+                        }).then(function (response) {
+                            cachedResponse = response;
+                            process(addressbook.search(query, response.index, response.hash));
+                        });
+                    });
+                },
+                renderDropdown: function () {
+                    // classes 'focus-indicator has-focus visible-selection' used to apply listview styles
+                    return '<ul class="mentions-autocomplete dropdown-menu focus-indicator has-focus visible-selection" style="display:none"></ul>';
+                },
+                render: function (item) {
+                    return template({ item: item });
+                },
+                insert: function (item) {
+                    var list = model.get('to') || [],
+                        name = item.mail_full_name, mail = item.mail || item.email;
+                    model.set('to', list.concat([[name || null, mail || null]]));
+                    return '<span>' + item.mail_full_name + '&nbsp;</span>';
+                },
+
+                // matching/sorting done withing addressbook component
+                matcher: _.constant(true),
+                sorter: _.identity
+            };
+
+            require(['io.ox/contacts/api'], function (api) {
+                api.on('create update delete', function () {
+                    cachedResponse = null;
+                });
+            });
+        }
+    });
+
     function splitContent_W3C(ed) {
         // get current range
         var range = ed.selection.getRng();
