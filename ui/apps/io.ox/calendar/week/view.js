@@ -187,6 +187,7 @@ define('io.ox/calendar/week/view', [
             this.$el.css('margin-right', coreUtil.getScrollBarWidth());
             this.listenTo(this.model, 'change:startDate', this.render);
             this.listenTo(this.model, 'change:additionalTimezones', this.updateTimezones);
+            this.listenTo(folderAPI, 'before:update', this.beforeUpdateFolder);
             if (this.model.get('mode') === 'day') {
                 this.listenTo(this.model, 'change:mergeView', this.updateMergeview);
                 this.listenTo(opt.app, 'folders:change', this.onFoldersChange);
@@ -275,7 +276,16 @@ define('io.ox/calendar/week/view', [
             if (this.model.get('mergeView')) this.render();
         },
 
+        beforeUpdateFolder: function (id, model) {
+            var color = color = util.getFolderColor(model.attributes);
+            this.$('[data-folder="' + model.get('id') + '"]').css({
+                'border-color': color
+            });
+        },
+
         onCreateAppointment: function (e) {
+            if ($(e.target).closest('.appointment').length > 0) return;
+
             e.preventDefault();
 
             var index = this.$('.weekday').index($(e.currentTarget)),
@@ -518,6 +528,7 @@ define('io.ox/calendar/week/view', [
         },
 
         onCreateAppointment: function (e) {
+            if ($(e.target).closest('.appointment').length > 0) return;
             var numColumns = this.model.get('mergeView') ? this.opt.app.folders.list().length : this.model.get('numColumns'),
                 slotWidth = this.$('.appointment-panel').width() / numColumns,
                 left = e.pageX - $(e.target).offset().left,
@@ -1379,17 +1390,14 @@ define('io.ox/calendar/week/view', [
             this.$el.addClass(this.mode);
             this.setStartDate(this.model.get('date'), { silent: true });
 
-            this.listenTo(this.model, 'change:date', this.onChangeDate);
-            this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
-            this.listenTo(this.app, 'folders:change', this.refresh);
-            this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
-            this.app.getWindow().on('show', this.onWindowShow.bind(this));
             this.listenTo(settings, 'change:renderTimezones change:favoriteTimezones', this.onChangeTimezones);
             this.listenTo(settings, 'change:startTime change:endTime', this.getCallback('onChangeWorktime'));
             this.listenTo(settings, 'change:interval', this.getCallback('onChangeInterval'));
-            this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
+
             if (this.model.get('mode') === 'day') this.listenTo(settings, 'change:mergeview', this.onChangeMergeView);
             if (this.model.get('mode') === 'workweek') this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', this.getCallback('onChangeWorkweek'));
+
+            PerspectiveView.prototype.initialize.call(this, opt);
         },
 
         initializeSubviews: function () {
@@ -1519,7 +1527,7 @@ define('io.ox/calendar/week/view', [
 
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
-                self.folders = folders;
+                self.model.set('folders', folders);
                 collection.sync();
             });
         },
@@ -1594,11 +1602,14 @@ define('io.ox/calendar/week/view', [
         },
 
         print: function () {
+            var folders = this.model.get('folders'),
+                title = gt('Appointments');
+            if (_(folders).keys().length === 1) title = folders[_(folders).keys()[0]].display_title || folders[_(folders).keys()[0]].title;
             print.request('io.ox/calendar/week/print', {
                 start: this.model.get('startDate').valueOf(),
                 end: this.model.get('startDate').clone().add(this.model.get('numColumns'), 'days').valueOf(),
-                folders: this.folders,
-                title: _(this.folders).keys().length === 1 ? this.folders[_(this.folders).keys()[0]].display_title || this.folders[_(this.folders).keys()[0]].title : gt('Appointments')
+                folders: folders,
+                title:  title
             });
         }
 

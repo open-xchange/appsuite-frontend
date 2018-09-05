@@ -20,8 +20,10 @@ define('io.ox/calendar/perspective', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/yell',
     'gettext!io.ox/calendar',
-    'io.ox/core/capabilities'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/calendar',
+    'io.ox/core/folder/api'
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI) {
 
     'use strict';
 
@@ -41,6 +43,16 @@ define('io.ox/calendar/perspective', [
                 });
             }
             return events;
+        },
+
+        initialize: function () {
+            this.listenTo(this.model, 'change:date', this.onChangeDate);
+            this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
+            this.listenTo(this.app, 'folders:change', this.refresh);
+            this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
+            this.app.getWindow().on('show', this.onWindowShow.bind(this));
+            this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
+            this.listenTo(folderAPI, 'before:update', this.beforeUpdateFolder);
         },
 
         // needs to be implemented by the according view
@@ -268,6 +280,23 @@ define('io.ox/calendar/perspective', [
                     func.apply(this, args);
                 });
             }.bind(this);
+        },
+
+        beforeUpdateFolder: function (id, model) {
+            if (model.get('module') !== 'calendar') return;
+            if (!model.changed['com.openexchange.calendar.extendedProperties']) return;
+
+            var color = util.getFolderColor(model.attributes),
+                appointments = this.$('.appointment[data-folder="' + model.get('id') + '"]');
+
+            appointments
+                .css({
+                    'background-color': color,
+                    'color': util.getForegroundColor(color)
+                })
+                .data('background-color', color)
+                .removeClass('black white')
+                .addClass(util.getForegroundColor(color) === 'white' ? 'white' : 'black');
         }
 
     });

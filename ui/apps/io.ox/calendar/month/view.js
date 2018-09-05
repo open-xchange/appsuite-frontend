@@ -18,10 +18,11 @@ define('io.ox/calendar/month/view', [
     'io.ox/calendar/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
+    'io.ox/core/print',
     'less!io.ox/calendar/month/style',
     'io.ox/calendar/extensions',
     'io.ox/calendar/month/extensions'
-], function (ext, PerspectiveView, util, api, gt, settings) {
+], function (ext, PerspectiveView, util, api, gt, settings, print) {
 
     'use strict';
 
@@ -30,6 +31,24 @@ define('io.ox/calendar/month/view', [
         constructor: function (opt) {
             this.opt = _.extend({}, this.options || {}, opt);
             Backbone.View.prototype.constructor.call(this, opt);
+        },
+
+        mouseDragHelper: function (opt) {
+            var self = this,
+                e = opt.event,
+                context = _.uniqueId('.drag-');
+            if (e.which !== 1) return;
+            opt.start.call(this, opt.event);
+
+            this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
+                if (e.which !== 1) return;
+                opt.update.call(self, e);
+            }, 100));
+            $(document).on('mouseup' + context, function (e) {
+                self.undelegate('mousemove' + context);
+                $(document).off('mouseup' + context);
+                opt.end.call(self, e);
+            });
         }
 
     });
@@ -132,7 +151,8 @@ define('io.ox/calendar/month/view', [
             if (_.device('desktop')) {
                 _.extend(events, {
                     'mouseenter .appointment': 'onHover',
-                    'mouseleave .appointment': 'onHover'
+                    'mouseleave .appointment': 'onHover',
+                    'mousedown .appointment.modify': 'onDrag'
                 });
             }
             return events;
@@ -222,8 +242,16 @@ define('io.ox/calendar/month/view', [
                 });
             }
 
+            if (_.device('ie && ie <= 11')) this.calculateHeights();
+
             return this;
         },
+
+        // IE 11 needs a fixed height or appointments are not displayed
+        calculateHeights: _.debounce(function () {
+            var height = Math.floor(this.$el.height() / this.$el.find('tr').length - 26) + 'px';
+            this.$('.list').css('height', height);
+        }, 100),
 
         renderAppointment: function (model) {
             var node = $('<div class="appointment">')
@@ -247,6 +275,8 @@ define('io.ox/calendar/month/view', [
         },
 
         onCreateAppointment: function (e) {
+            if ($(e.target).closest('.appointment').length > 0) return;
+
             // fix for strange safari-specific bug
             // apparently, the double click changes the selection and then Safari runs into
             // EXC_BAD_ACCESS (SIGSEGV). See bug 42111
@@ -285,30 +315,73 @@ define('io.ox/calendar/month/view', [
             }
         },
 
-        onAddAppointment: (function () {
-            function comparator(a, b) {
-                return $(a).data('startDate') - $(b).data('startDate');
-            }
-            return function (model) {
-                if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
+        onDrag: function (e) {
+            var node, model, startDate, diff, first = true;
+            this.mouseDragHelper({
+                event: e,
+                updateContext: '.day',
+                start: function (e) {
+                    node = $(e.target).closest('.appointment');
+                    model = this.opt.view.collection.get(node.attr('data-cid'));
+                    startDate = moment(node.closest('.day').data('date'));
+                },
+                update: function (e) {
+                    if (first) {
+                        this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('current hover');
+                        this.$el.addClass('no-select');
+                        first = false;
+                    }
 
-                var startMoment = moment.max(model.getMoment('startDate'), this.model.get('startDate')).clone(),
-                    endMoment = moment.min(model.getMoment('endDate'), this.model.get('endDate')).clone();
-
-                // fix full-time values
-                if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
-
-                if (_.device('smartphone')) return this.renderAppointmentIndicator($('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty());
-
-                // draw across multiple days
-                while (startMoment.isSameOrBefore(endMoment)) {
-                    var cell = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el);
-                    cell.append(this.renderAppointment(model));
-                    if (!this.onReset) cell.append(cell.children().sort(comparator));
-                    startMoment.add(1, 'day').startOf('day');
+                    var target = $(e.currentTarget), cell, targetDate;
+                    diff = moment(target.data('date')).diff(startDate, 'days');
+                    targetDate = model.getMoment('startDate').add(diff, 'days');
+                    cell = this.$('#' + targetDate.format('YYYY-M-D') + ' .list');
+                    if (node.parent().is(cell)) return;
+                    node.data('startDate', targetDate.valueOf());
+                    cell.append(node);
+                    cell.append(cell.children().sort(this.nodeComparator));
+                    node.get(0).scrollIntoView();
+                },
+                end: function () {
+                    node.removeClass('resizing');
+                    this.$el.removeClass('no-select');
+                    var newStartDate = model.getMoment('startDate').add(diff, 'days'),
+                        newEndDate = model.getMoment('endDate').add(diff, 'days');
+                    if (newStartDate.isSame(model.getMoment('startDate'))) return;
+                    var newStart = { value: newStartDate.format('YYYYMMDD[T]HHmmss'), tzid: newStartDate.tz() },
+                        newEnd = { value: newEndDate.format('YYYYMMDD[T]HHmmss'), tzid: newEndDate.tz() };
+                    if (util.isAllday(model)) {
+                        newStart = { value: newStartDate.format('YYYYMMDD') };
+                        newEnd = { value: newEndDate.format('YYYYMMDD') };
+                    }
+                    this.opt.view.updateAppointment(model, { startDate: newStart, endDate: newEnd });
                 }
-            };
-        }()),
+            });
+        },
+
+        nodeComparator: function comparator(a, b) {
+            return $(a).data('startDate') - $(b).data('startDate');
+        },
+
+        onAddAppointment: function (model) {
+            if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
+
+            var startMoment = moment.max(model.getMoment('startDate'), this.model.get('startDate')).clone(),
+                endMoment = moment.min(model.getMoment('endDate'), this.model.get('endDate')).clone();
+
+            // fix full-time values
+            if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
+
+            if (_.device('smartphone')) return this.renderAppointmentIndicator($('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty());
+
+            // draw across multiple days
+            while (startMoment.isSameOrBefore(endMoment)) {
+                var cell = this.$('#' + startMoment.format('YYYY-M-D') + ' .list');
+                cell.append(this.renderAppointment(model));
+                if (!this.onReset) cell.append(cell.children().sort(this.nodeComparator));
+                startMoment.add(1, 'day').startOf('day');
+            }
+        },
 
         onChangeAppointment: function (model) {
             this.onRemoveAppointment(model);
@@ -348,12 +421,7 @@ define('io.ox/calendar/month/view', [
 
             this.setStartDate(this.model.get('date'), { silent: true });
 
-            this.listenTo(this.model, 'change:date', this.onChangeDate);
-            this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
-            this.listenTo(this.app, 'folders:change', this.refresh);
-            this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
-            this.app.getWindow().on('show', this.onWindowShow.bind(this));
-            this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
+            PerspectiveView.prototype.initialize.call(this, opt);
         },
 
         initializeSubviews: function () {
@@ -431,7 +499,7 @@ define('io.ox/calendar/month/view', [
 
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
-                self.folders = folders;
+                self.model.set('folders', folders);
                 collection.sync();
             });
         },
@@ -454,8 +522,30 @@ define('io.ox/calendar/month/view', [
             this.monthView.trigger('collection:after:reset');
         },
 
+        onPrevious: function () {
+            this.toolbarView.$('.prev').trigger('click');
+        },
+
+        onNext: function () {
+            this.toolbarView.$('.next').trigger('click');
+        },
+
         getName: function () {
             return 'month';
+        },
+
+        print: function () {
+            var folders = this.model.get('folders'),
+                title = gt('Appointments');
+            if (_(folders).keys().length === 1) title = folders[_(folders).keys()[0]].display_title || folders[_(folders).keys()[0]].title;
+
+            print.request('io.ox/calendar/month/print', {
+                current: this.model.get('startOfMonth').valueOf(),
+                start: this.model.get('startDate').valueOf(),
+                end: this.model.get('endDate').valueOf(),
+                folders: folders,
+                title: title
+            });
         }
 
     });
