@@ -20,11 +20,12 @@ define('io.ox/mail/sanitizer', [
     if (_.isEmpty(whitelist)) console.warn('No sanitizing whitelist defined. Falling back to strict sanitizing');
 
     // TODO: Backend seems to leave out a few necessary attributes
-    whitelist.allowedAttributes = ['id', 'class', 'style'].concat(whitelist.allowedAttributes || []);
+    whitelist.allowedAttributes = ['desktop', 'mobile', 'tablet', 'id', 'class', 'style'].concat(whitelist.allowedAttributes || []);
 
     // See: https://github.com/cure53/DOMPurify for all available options
     var defaultOptions = {
         SAFE_FOR_JQUERY: true,
+        FORCE_BODY: true,
         ALLOWED_ATTR: whitelist.allowedAttributes,
         // keep HTML and style tags to display mails correctly in iframes
         WHOLE_DOCUMENT: true
@@ -32,6 +33,21 @@ define('io.ox/mail/sanitizer', [
 
     // strange handling of options by DOMPurify: breaks on undefined or empty array
     if (whitelist.allowedTags && whitelist.allowedTags.length) defaultOptions.ALLOWED_TAGS = whitelist.allowedTags;
+
+    // add hook before sanitizing, to catch some issues
+    DOMPurify.addHook('beforeSanitizeElements', function (currentNode) {
+        // dompurify removes the title tag but keeps the text in it, creating strange artefacts
+        if (currentNode.tagName === 'TITLE') currentNode.innerHTML = '';
+        // add a class namespace to style nodes so that they overrule our stylesheets without !important
+        if (currentNode.tagName === 'STYLE') {
+            var rules = '';
+            _(currentNode.sheet.cssRules).each(function (rule) {
+                rules = rules + '.mail-detail-content ' + rule.cssText + ' ';
+            });
+            currentNode.innerHTML = rules;
+        }
+        return currentNode;
+    });
 
     function isEnabled() {
         // this is not optional any more
