@@ -266,8 +266,8 @@ define('io.ox/mail/api', [
     }
 
     function allowImages(obj) {
-        if (util.isWhiteListed(obj)) return true;
         if (util.authenticity('block', obj)) return false;
+        if (util.isWhiteListed(obj)) return true;
         if (!settings.get('allowHtmlImages', false)) return false;
         if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
         return true;

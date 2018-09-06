@@ -743,7 +743,6 @@ define('io.ox/mail/common-extensions', [
             }
 
             return function (baton) {
-                if (util.isWhiteListed(baton.data)) return;
                 // malicious mails are filtered by middlewarea already
                 if (!util.authenticity('block', baton.data) || util.isMalicious(baton.data)) return;
                 draw.call(this, baton.model);
