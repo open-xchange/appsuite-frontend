@@ -558,11 +558,15 @@ define('io.ox/mail/util', [
         }),
 
         isWhiteListed: function (data, list) {
-            var whitelist = that.asList(settings.get('feature/trusted', list || '')),
+            var whitelist = [].concat(
+                    that.asList(settings.get('feature/trusted/user', list || '')),
+                    that.asList(settings.get('feature/trusted/admin', ''))
+                ),
                 address = _.isObject(data) ?
                     data.from && data.from.length && String(data.from[0][1] || '') :
                     data || '';
             // normalize
+            whitelist = _.compact(whitelist);
             address = (address || '').trim().toLowerCase();
             return _.some(whitelist, function (whitelisted) {
                 return address.endsWith(whitelisted.trim());
