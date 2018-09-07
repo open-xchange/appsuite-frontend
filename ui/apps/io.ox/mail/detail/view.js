@@ -379,8 +379,48 @@ define('io.ox/mail/detail/view', [
         index: 1000,
         draw: function (baton) {
 
+<<<<<<< HEAD
             var data = content.get(baton.data),
                 node = data.content;
+=======
+            baton.content = content.get(baton.data, {}, baton.flow).content;
+            var $content = $(baton.content), resizing = 0,
+                self = this;
+
+            // inject content and listen to resize event
+            this.on('load', function () {
+                // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
+                _.defer(function () {
+
+                    // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
+                    var html = $(this.contentDocument).find('html');
+                    if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
+                    // trigger click on iframe node when theres a click in the iframe -> to close dropdowns correctly etc
+                    html.on('keydown', onKeyDown)
+                        .on('click', onClick);
+
+                    if (_.device('ios && smartphone')) html.attr('class', 'ios smartphone');
+
+                    $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+
+                    if ($content.filter('body').length) {
+                        $(this.contentDocument).find('body').replaceWith($content.filter('body'));
+                    } else {
+                        $(this.contentDocument).find('body').append($content);
+                    }
+                    $(this.contentWindow)
+                        .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
+                        .on('resize', { iframe: $(this) }, onWindowResize)
+                        .trigger('resize');
+                }.bind(this));
+            });
+
+            var onKeyDown = function (e) {
+                if (e.which !== 27) return;
+                // Sets focus on escape to the list view
+                this.closest('.window-container').find('.folder-tree .folder.selected, .list-item.selectable.selected').last().focus();
+            }.bind(this);
+>>>>>>> ff15cc2cbe... Additional commit Fixed Bug 60140 - [L3] mail content not displayed, Bug 60184 - HTML Mail not displayed correctly
 
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.innerHTML, function (html, lib) {
