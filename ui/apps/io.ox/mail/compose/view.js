@@ -282,7 +282,10 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    // $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu">')
+                        .addClass(_.device('smartphone') ? 'col-xs-9' : 'col-xs-7')
+                        .append(node)
                 );
             }
         }

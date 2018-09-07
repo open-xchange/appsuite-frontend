@@ -349,7 +349,10 @@ define('io.ox/core/tk/contenteditable-editor', [
             hidden_input: false,
 
             theme: opt.theme,
-            // mobile: { theme: 'mobile' },
+            mobile: {
+                theme: 'modern',
+                toolbar: false
+            },
 
             init_instance_callback: function (editor) {
                 window.ed = ed = editor;
@@ -418,26 +421,32 @@ define('io.ox/core/tk/contenteditable-editor', [
             buttons.filter(':hidden').attr({ role: 'presentation', 'aria-hidden': true });
             buttons.filter(':visible').removeAttr('aria-hidden').attr('role', 'button');
 
-            var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
-            var containerHeight = el.closest('.floating-body').height() - 64;
-            el.find('iframe').css('min-height', containerHeight - composeFieldsHeight - 72);
+            var h = 0,
+                top = 0,
+                iframe = el.find('iframe'),
+                iframeContents = iframe.contents().height(),
+                container = el.closest('.window-container'),
+                header = container.find('.window-header:visible').outerHeight() || 0,
+                footer = container.find('.window-footer:visible').outerHeight() || 0,
+                padding = 0;
 
-            if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
-                editor.css('min-height', containerHeight - composeFieldsHeight - 32);
-                return;
-            } else if (_.device('smartphone')) {
-
-                editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
-                return;
+            if (_.device('smartphone')) {
+                h = $(window).height();
+                top = el.offset().top;
+            } else {
+                h = el.closest('.window-content').height();
+                top = el.parent().find('.mail-compose-fields').outerHeight();
+                padding = 8;
             }
 
-            var h = $(window).height(),
-                top = editor.offset().top,
-                container = el.closest('.io-ox-mail-compose-window, .floating-window-content, .modal-content'),
-                bottomMargin = container.hasClass('header-top') ? 39 : 80,
-                bottomOffset = h - container.height() - container.offset().top;
+            var availableHeight = h - top - header - footer - padding;
 
-            editor.css('min-height', h - top - bottomMargin - bottomOffset + 'px');
+            if (_.device('smartphone') && (iframeContents > availableHeight)) {
+                availableHeight = iframeContents;
+            }
+
+            editor.css('min-height', availableHeight + 'px');
+            iframe.css('min-height', availableHeight + 'px');
             if (opt.css) editor.css(opt.css);
         }
 
