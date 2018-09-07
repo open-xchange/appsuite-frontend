@@ -615,10 +615,11 @@ define('io.ox/mail/detail/content', [
 
                 if (baton.isHTML) {
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
-                    content = document.createElement('DIV');
-                    content.className = 'mail-detail-content noI18n';
-                    // replace possible body nodes with div nodes, this way we don't loose possible inline styles of body nodes (body nodes are removed because they cannot be children of div nodes)
-                    content.innerHTML = baton.source.replace('<body', '<div').replace('</body', '</div');
+                    content = document.createElement('HTML');
+                    content.innerHTML = baton.source;
+                    // we only need the body
+                    content = content.getElementsByTagName('body')[0];
+                    content.className = content.className + ' mail-detail-content noI18n';
                     // last line of defense
                     each(content, 'script, base, meta', function (node) {
                         node.parentNode.removeChild(node);

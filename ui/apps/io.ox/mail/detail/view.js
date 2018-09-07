@@ -412,9 +412,13 @@ define('io.ox/mail/detail/view', [
                         $('body').trigger('click');
                     });
 
-                    $(this.contentDocument)
-                        .find('head').append('<style>' + contentStyle + '</style>').end()
-                        .find('body').append($content);
+                    $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+
+                    if ($content.filter('body').length) {
+                        $(this.contentDocument).find('body').replaceWith($content.filter('body'));
+                    } else {
+                        $(this.contentDocument).find('body').append($content);
+                    }
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
