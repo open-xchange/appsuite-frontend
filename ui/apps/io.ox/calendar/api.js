@@ -251,7 +251,8 @@ define('io.ox/calendar/api', [
                                 if (obj === null) {
                                     var alarm = { eventId: reqList[index].id, folder: reqList[index].folder };
                                     if (reqList[index].recurrenceId) alarm.recurrenceId = reqList[index].recurrenceId;
-                                    api.trigger('failureToFetchEvent', _(alarms).findWhere(alarm));
+                                    api.trigger('failedToFetchEvent', _(alarms).findWhere(alarm));
+                                    api.trigger('delete:appointment', reqList[index]);
                                     // null means the event was deleted, clean up the caches
                                     processResponse({
                                         deleted: [reqList[index]]
