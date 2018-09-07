@@ -771,6 +771,16 @@ define('io.ox/calendar/api', [
         api.refresh();
     });
 
+    // sync caches if backend sends push update notice
+    ox.on('socket:calendar:updates', function (data) {
+        _(data.folders).each(function (folder) {
+            _(api.pool.getByFolder(folder)).each(function (collection) {
+                collection.expired = true;
+                collection.sync();
+            });
+        });
+    });
+
     api.pool = Pool.create('chronos', {
         Collection: models.Collection
     });
