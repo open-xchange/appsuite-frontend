@@ -434,6 +434,13 @@ define('plugins/notifications/calendar/register', [
                 },
                 subview = new Subview(options);
 
+            ox.on('socket:calendar:updates', function (data) {
+                _(data.needsAction).each(function (obj) {
+                    obj.folder = obj.folderId;
+                });
+                if (data.needsAction) subview.addNotifications(data.needsAction);
+            });
+
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
                 subview.model.set('autoOpen', value);
