@@ -355,7 +355,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             },
 
             init_instance_callback: function (editor) {
-                window.ed = ed = editor;
+                ed = editor;
                 initialized.resolve();
             },
 
@@ -377,7 +377,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             setup: function (ed) {
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
-                ed.on('postRender', function () {
+                ed.on('init', function () {
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
                     // adjust toolbar
@@ -417,7 +417,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             if (el === null) return;
 
             // This is needed for keyboard to work in small windows with buttons that are hidden
-            var buttons = toolbar.find('.mce-btn').filter('[data-hidden="xs"]');
+            var buttons = el.find('.mce-btn').filter('[data-hidden="xs"]');
             buttons.filter(':hidden').attr({ role: 'presentation', 'aria-hidden': true });
             buttons.filter(':visible').removeAttr('aria-hidden').attr('role', 'button');
 
@@ -708,14 +708,12 @@ define('io.ox/core/tk/contenteditable-editor', [
             // set display to empty sting because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
-            $(window).on('resize.tinymce xorientationchange.tinymce', resizeEditorDebounced);
-            $(window).on('changefloatingstyle.tinymce', resizeEditor);
-            resizeEditorDebounced();
+            $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
         };
 
         this.hide = function () {
             el.hide();
-            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce');
+            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
         };
 
         (function () {

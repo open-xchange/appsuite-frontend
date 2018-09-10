@@ -264,7 +264,6 @@ define('io.ox/backbone/views/window', [
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
-            console.log($(e.currentTarget));
             if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input')) return;
             this.onQuit();
         },
