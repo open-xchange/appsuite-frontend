@@ -18,8 +18,9 @@ define('io.ox/multifactor/views/selectDeviceView', [
     'io.ox/backbone/views/modal',
     'io.ox/multifactor/factorRenderer',
     'io.ox/multifactor/deviceAuthenticator',
-    'gettext!io.ox/core/boot'
-], function (views, ext, mini, ModalView, renderer, deviceAuthenticator, gt) {
+    'gettext!io.ox/core/boot',
+    'io.ox/multifactor/views/constants'
+], function (views, ext, mini, ModalView, renderer, deviceAuthenticator, gt, constants) {
 
     'use strict';
 
@@ -47,6 +48,7 @@ define('io.ox/multifactor/views/selectDeviceView', [
             point: POINT,
             title: gt('Additional Authentication Required'),
             width: 640,
+            className: constants.AuthDialogClass,
             model: new Backbone.Model({ 'devices': devices, error: error })
         })
         .build(function () {

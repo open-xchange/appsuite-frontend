@@ -21,7 +21,8 @@ define('io.ox/multifactor/views/constants', [
         LostButton: gt('I lost my device'),
         OKButton: gt('Proceed'),
         CancelButton: gt('Cancel'),
-        AuthenticationTitle: gt('Second Factor Authentication')
+        AuthenticationTitle: gt('Second Factor Authentication'),
+        AuthDialogClass: _.device('small') ? 'multifactorAuthMobile' : 'multifactorAuth'
     };
 
     return constants;

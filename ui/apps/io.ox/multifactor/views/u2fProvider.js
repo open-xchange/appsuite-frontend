@@ -44,6 +44,7 @@ define('io.ox/multifactor/views/u2fProvider', [
             title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
+            className: constants.AuthDialogClass,
             model: new Backbone.Model({ provider: provider,
                 deviceId: device.id,
                 challenge: challenge,
@@ -75,12 +76,11 @@ define('io.ox/multifactor/views/u2fProvider', [
         {
             index: INDEX += 100,
             id: 'header',
-            render: function (baton) {
+            render: function () {
                 var label;
                 if (window.u2f) {
                     label = $('<p>').append(
-                        baton.model.get('device').name ? gt('Please activate your authentication device named %s', baton.model.get('device').name) :
-                            gt('Please activate your authentication device'))
+                        gt('Please activate your authentication device'))
                         .append('<br>');
                 } else {
                     label = $('<p>').append(gt('This browser is not compatible with your configured authentication device.  Please use Chrome browser, or Firefox with U2F enabled.'));
@@ -128,7 +128,7 @@ define('io.ox/multifactor/views/u2fProvider', [
                             break;
                         case 5:
                             error = gt('Timeout');
-                            recoverable = false;
+                            recoverable = true;
                             break;
                         default:
                             error = gt('Error authenticating.  Please reload browser and try again.');

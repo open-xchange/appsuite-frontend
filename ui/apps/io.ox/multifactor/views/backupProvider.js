@@ -16,8 +16,9 @@ define('io.ox/multifactor/views/backupProvider', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/core/boot'
-], function (views, ext, mini, ModalView, gt) {
+    'gettext!io.ox/core/boot',
+    'io.ox/multifactor/views/constants'
+], function (views, ext, mini, ModalView, gt, constants) {
 
     'use strict';
 
@@ -42,9 +43,10 @@ define('io.ox/multifactor/views/backupProvider', [
         return new ModalView({
             async: true,
             point: POINT,
-            title: gt('Authenticate'),
+            title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
+            className: constants.AuthDialogClass,
             model: new Backbone.Model({ provider: provider,
                 deviceId: device.id,
                 challenge: challenge,
@@ -53,7 +55,7 @@ define('io.ox/multifactor/views/backupProvider', [
         })
         .build(function () {
         })
-        .addButton({ label: gt('OK'), action: 'OK' })
+        .addButton({ label: constants.OKButton, action: 'OK' })
         .addCancelButton()
         .on('cancel', function () {
             def.reject();

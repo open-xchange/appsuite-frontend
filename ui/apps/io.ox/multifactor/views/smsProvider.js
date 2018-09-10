@@ -44,6 +44,7 @@ define('io.ox/multifactor/views/smsProvider', [
             title: constants.AuthenticationTitle,
             width: 640,
             enter: 'OK',
+            className: constants.AuthDialogClass,
             model: new Backbone.Model({ provider: provider,
                 deviceId: device.id,
                 challenge: challenge,
