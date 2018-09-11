@@ -183,7 +183,6 @@ define('io.ox/core/boot/load', [
 
             if (capabilities.has('calendar')) {
                 socket.on('ox:calendar:updates', function (data) {
-                    console.log('calendar updates', data);
                     // simple event forwarding
                     // don't log sensitive data here (data object)
                     try {

@@ -435,7 +435,7 @@ define('plugins/notifications/calendar/register', [
                 subview = new Subview(options);
 
             ox.on('socket:calendar:updates', function (data) {
-                // remove once backend changes the name
+                // TODO remove once backend changes the name
                 _(data.needsAction).each(function (obj) {
                     obj.folder = obj.folderId;
                 });

@@ -792,6 +792,7 @@ define('io.ox/calendar/api', [
     });
 
     // sync caches if backend sends push update notice
+    // also get fresh alarms
     ox.on('socket:calendar:updates', function (data) {
         _(data.folders).each(function (folder) {
             _(api.pool.getByFolder(folder)).each(function (collection) {
@@ -799,6 +800,7 @@ define('io.ox/calendar/api', [
                 collection.sync();
             });
         });
+        api.getAlarms();
     });
 
     api.pool = Pool.create('chronos', {
