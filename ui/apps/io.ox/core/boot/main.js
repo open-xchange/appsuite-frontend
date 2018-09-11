@@ -131,8 +131,10 @@ define.async('io.ox/core/boot/main', [
                     var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
                         loadTheme = themes.set(theme);
                     $.when(loadTheme).then(function () {
-                        require(['io.ox/multifactor/auth'], function (auth) {  // Couldn't be loaded until themes loaded
+                        require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
+                            loginScreen.create();
                             auth.doAuthentication().then(function () {
+                                loginScreen.destroy();
                                 session.rampup().then(function (data) {
                                     if (data) session.set(data);
                                     exports.loadUI();
