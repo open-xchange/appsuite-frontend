@@ -704,15 +704,16 @@ define('io.ox/core/tk/contenteditable-editor', [
         this.tinymce = function () { return editor.tinymce ? editor.tinymce() : {}; };
 
         this.show = function () {
-            el.show();
+            $el.show();
             // set display to empty sting because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
             $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
+            $(window).trigger('resize');
         };
 
         this.hide = function () {
-            el.hide();
+            $el.hide();
             $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
         };
 
