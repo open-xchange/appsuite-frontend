@@ -350,7 +350,7 @@ define('io.ox/calendar/api', [
                         action: 'update',
                         folder: obj.folder,
                         id: obj.id,
-                        timestamp: obj.timestamp,
+                        timestamp: _.then(),
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
@@ -411,7 +411,7 @@ define('io.ox/calendar/api', [
 
                 var params = {
                     action: 'delete',
-                    timestamp: _.now(),
+                    timestamp: _.then(),
                     fields: api.defaultFields
                 };
 
@@ -456,7 +456,7 @@ define('io.ox/calendar/api', [
                         id: obj.id,
                         folder: obj.folder,
                         checkConflicts: options.checkConflicts,
-                        timestamp: _.now(),
+                        timestamp: _.then(),
                         fields: api.defaultFields
                     },
                     data = {
@@ -552,7 +552,7 @@ define('io.ox/calendar/api', [
                         folder: model.get('folder'),
                         targetFolder: targetFolderId,
                         recurrenceId: model.get('recurrenceId'),
-                        timestamp: model.get('timestamp'),
+                        timestamp: _.then(),
                         fields: api.defaultFields
                     };
                     if (options.expand) {
