@@ -398,7 +398,8 @@ define('io.ox/mail/detail/view', [
 
             baton.content = content.get(baton.data, {}, baton.flow).content;
             var $content = $(baton.content), resizing = 0,
-                self = this;
+                self = this,
+                isHtml = !$content.hasClass('plain-text');
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -416,8 +417,8 @@ define('io.ox/mail/detail/view', [
 
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
 
-                    if ($content.filter('body').length) {
-                        $(this.contentDocument).find('body').replaceWith($content.filter('body'));
+                    if (isHtml) {
+                        $(this.contentDocument).find('body').replaceWith($content);
                     } else {
                         $(this.contentDocument).find('body').append($content);
                     }
