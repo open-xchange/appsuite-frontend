@@ -54,6 +54,7 @@ define('io.ox/multifactor/factorRenderer', [
                     console.log('U2F not compatible with this browser');
                     return;  //  If browser not compatible, and being used for auth, then don't display
                 }
+                if (!selectable) device.name = '';  //  U2F devices grouped together.  We don't want to specify device names unless deleting/etc
                 return createTable('fa-microchip', gt('U2F'), device, selectable);
             case 'YUBIKEY':
                 return createTable('fa-id-badge', gt('Yubikey'), device, selectable);
