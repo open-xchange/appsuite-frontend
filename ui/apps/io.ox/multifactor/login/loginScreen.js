@@ -11,20 +11,45 @@
  * @author Greg Hill <greg.hill@open-xchange.com>
  */
 
-define('io.ox/multifactor/login/loginScreen', ['io.ox/core/extensions',
+define('io.ox/multifactor/login/loginScreen', ['io.ox/core/extensions', 'io.ox/core/main/addLauncher', 'gettext!io.ox/core', 'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/main/appcontrol', 'io.ox/core/main/icons', 'io.ox/core/api/apps'
-], function (ext) {
+], function (ext, addLauncher, gt, Dropdown) {
 
     'use strict';
+
+    // Function that adds icon placeholders.  These are non functional, and need to be redrawn once complete login done.
+    function addPlaceholderIcons(node) {
+        node.append(
+            addLauncher(
+                'right',
+                $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                function () {
+                    return $.when();
+                },
+                gt('Refresh')
+            ).attr('id', 'io-ox-refresh-icon'));
+        var a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
+            dropdown = new Dropdown({
+                tagName: 'li',
+                id: 'io-ox-topbar-dropdown-icon',
+                className: 'launcher dropdown',
+                $toggle: a
+            });
+        var tempPic = $('<div class="contact-picture">').append('...');
+        a.append(tempPic);
+        node.append(dropdown.render().$el);
+    }
 
     var login = {
         create: function () {
             var topbar = $('#io-ox-appcontrol');
-            ext.point('io.ox/core/appcontrol').invoke('draw', topbar);
-            $('#io-ox-core').show();
+            ext.point('io.ox/core/appcontrol').invoke('draw', topbar);  // Draw the top bar
+            $('#io-ox-core').show();  // We need to show the core if hidden
+            addPlaceholderIcons(topbar.find('.taskbar'));  // Add temporary icons
+            require(['io.ox/core/main/designs']);  // Load the users selected colors for the top bar
         },
         destroy: function () {
-            $('#io-ox-appcontrol').empty();
+            $('#io-ox-appcontrol').empty();   // Wipe the temporary bar
         }
     };
 
