@@ -23,6 +23,46 @@ define('io.ox/mail/compose/sharing', [
     'static/3rd.party/jquery-ui.min.js'
 ], function (ExtensibleView, mini, Dropdown, ext, yell, gt, mailSettings, coreSettings) {
 
+    var getTimeOption = function (seed) {
+        var count = seed.slice(0, seed.length - 1),
+            unit = seed.slice(seed.length - 1, seed.length),
+            // _.now will be added to the value on send to have correct timestamps
+            value,
+            text = '';
+
+        switch (unit) {
+            case 'm':
+                text = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', count), count);
+                value = count * 60000;
+                break;
+            case 'h':
+                text = gt.format(gt.ngettext('%1$d hour', '%1$d hours', count), count);
+                value = count * 3600000;
+                break;
+            case 'd':
+                text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
+                value = count * 86400000;
+                break;
+            case 'w':
+                text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
+                value = count * 604800000;
+                break;
+            case 'M':
+                text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
+                // we just assume 30 days here
+                value = count * 2592000000;
+                break;
+            case 'y':
+                text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
+                // 365 days
+                value = count * 31536000000;
+                break;
+            default:
+                break;
+        }
+        return { label: text, value: value };
+    };
+
     ext.point('io.ox/mail/compose/sharing').extend({
         id: 'expire',
         index: 100,
@@ -31,45 +71,10 @@ define('io.ox/mail/compose/sharing', [
 
             // option: timespan
             _(mailSettings.get('compose/shareAttachments/expiryDates', [])).each(function (seed) {
-                var count = seed.slice(0, seed.length - 1),
-                    unit = seed.slice(seed.length - 1, seed.length),
-                    // _.now will be added to the value on send to have correct timestamps
-                    value,
-                    text = '';
+                var option = getTimeOption(seed);
+                options.push(option);
 
-                switch (unit) {
-                    case 'm':
-                        text = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', count), count);
-                        value = count * 60000;
-                        break;
-                    case 'h':
-                        text = gt.format(gt.ngettext('%1$d hour', '%1$d hours', count), count);
-                        value = count * 3600000;
-                        break;
-                    case 'd':
-                        text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
-                        value = count * 86400000;
-                        break;
-                    case 'w':
-                        text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
-                        value = count * 604800000;
-                        break;
-                    case 'M':
-                        text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
-                        // we just assume 30 days here
-                        value = count * 2592000000;
-                        break;
-                    case 'y':
-                        text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
-                        // 365 days
-                        value = count * 31536000000;
-                        break;
-                    default:
-                        break;
-                }
-                options.push({ label: text, value: value });
-
-                if (!this.sharingModel.get('expiry_date') && seed === mailSettings.get('compose/shareAttachments/defaultExpiryDate', '')) this.sharingModel.set('expiry_date', value);
+                if (!this.sharingModel.get('expiry_date') && seed === mailSettings.get('compose/shareAttachments/defaultExpiryDate', '')) this.sharingModel.set('expiry_date', option.value);
             }.bind(this));
 
 
@@ -188,11 +193,16 @@ define('io.ox/mail/compose/sharing', [
         point: 'io.ox/mail/compose/sharing',
 
         initialize: function () {
-            this.sharingModel = new Backbone.Model({
+            var data = {
                 'instruction_language': coreSettings.get('language'),
                 'enable': false,
                 'autodelete': mailSettings.get('compose/shareAttachments/forceAutoDelete', false)
-            });
+            };
+
+            // make sure default expiry date is set if it is mandatory
+            if (mailSettings.get('compose/shareAttachments/requiredExpiration')) data.expiry_date = getTimeOption(mailSettings.get('compose/shareAttachments/defaultExpiryDate', '1w')).value;
+
+            this.sharingModel = new Backbone.Model(data);
             this.listenTo(this.model.get('attachments'), 'add remove reset', this.updateVisibility);
             this.listenTo(this.sharingModel, 'change:enable', this.updateVisibility);
             this.listenTo(this.sharingModel, 'change:enable', this.syncToMailModel);
