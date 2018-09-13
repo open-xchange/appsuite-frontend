@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="index.html" title="Benutzeranleitung">
-<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Kapitel 13. Fragen und Antworten">
+<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Kapitel 12. Fragen und Antworten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -331,15 +331,13 @@
 </dt>
 <dt>freigeben, siehe Freigaben, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Freigaben</a>
 </dt>
-<dt>importieren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.ical.html">Termine und Aufgaben im iCal-Format importieren</a>
+<dt>importieren, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">Aufgaben importieren</a>
 </dt>
 <dt>löschen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Aufgaben löschen</a>
 </dt>
 <dt>mit Anderen zusammenarbeiten, <a class="indexterm" href="ox.appsuite.user.sect.tasks.teamwork.tasks.html">Aufgaben teilen</a>
 </dt>
 <dt>neu anlegen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Aufgaben anlegen</a>, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.create.html">Neue Aufgabe anlegen</a>
-</dt>
-<dt>Ordner exportieren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Alle Daten eines Ordners exportieren</a>
 </dt>
 <dt>Serienaufgabe anlegen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.serial.html">Serienaufgabe anlegen</a>
 </dt>
@@ -365,7 +363,9 @@
 </dt>
 <dt>Aufgabeneinladung beantworten, <a class="indexterm" href="ox.appsuite.user.sect.tasks.invitation.html">Aufgabeneinladung beantworten</a>
 </dt>
-<dt>Authentizität von E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.emailauthentication.html">Authentizität von E-Mails anzeigen</a>
+<dt>Authentizität von E-Mails anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.emailauthentication.html">Authentizität von E-Mails anzeigen</a>
+</dt>
+<dt>automatisch abmelden, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.autologout.html">Automatisch abmelden</a>
 </dt>
 </dl>
 </div>
@@ -515,8 +515,12 @@
 <dd><dl><dt>siehe Speicherkonto hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Speicherkonten hinzufügen</a>
 </dt></dl></dd>
 <dt>CSV</dt>
-<dd><dl><dt>exportieren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kontakte exportieren</a>
-</dt></dl></dd>
+<dd><dl>
+<dt>exportieren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kontakte exportieren</a>
+</dt>
+<dt>importieren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
+</dt>
+</dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -583,18 +587,6 @@
 </dl></dd>
 <dt>Dateien verschlüsseln, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.html">Dateien verschlüsseln</a>, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.encrypt.html">Dateien verschlüsseln</a>
 </dt>
-<dt>Daten importieren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.html">Daten importieren</a>
-</dt>
-<dt>Datenaustausch, <a class="indexterm" href="ox.appsuite.user.chap.datainterchange.html">Datenaustausch</a>
-</dt>
-<dd><dl>
-<dt>Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Aufgaben mit anderen Anwendungen austauschen</a>
-</dt>
-<dt>Kontakte, <a class="indexterm" href="ox.appsuite.user.sect.contacts.datainterchange.html">Kontakte mit anderen Anwendungen austauschen</a>
-</dt>
-<dt>Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.datainterchange.html">Termine mit anderen Anwendungen austauschen</a>
-</dt>
-</dl></dd>
 <dt>Datenorganisation, Freigaben, Sicherheit, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Datenorganisation, Freigaben, Sicherheit</a>
 </dt>
 <dt>Datumswähler, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">Der Datumswähler</a>
@@ -807,6 +799,8 @@
 </dt>
 <dt>weiterleiten, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-Mails weiterleiten</a>
 </dt>
+<dt>Whitelist verwenden, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.whitelist.html">Whitelist verwenden</a>
+</dt>
 </dl></dd>
 <dt>E-Mail-Einstellungen</dt>
 <dd><dl>
@@ -948,19 +942,15 @@
 </dt>
 <dt>Exportieren</dt>
 <dd><dl>
-<dt>Adressbuch, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Alle Daten eines Ordners exportieren</a>
-</dt>
 <dt>Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">Aufgaben exportieren</a>
-</dt>
-<dt>Aufgabenordner, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Alle Daten eines Ordners exportieren</a>
-</dt>
-<dt>Kalender, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Alle Daten eines Ordners exportieren</a>
 </dt>
 <dt>Kontakte, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kontakte exportieren</a>
 </dt>
 <dt>Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.export.html">Termine exportieren</a>
 </dt>
 </dl></dd>
+<dt>Extern verlinkte Bilder in E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.emaillinkedimages.html">Extern verlinkte Bilder in E-Mails</a>
+</dt>
 <dt>Externer Teilnehmer</dt>
 <dd><dl><dt>Begriffserklärung, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
 </dt></dl></dd>
@@ -1242,22 +1232,30 @@
 <div class="indexdiv">
 <h3>I</h3>
 <dl>
-<dt>iCalendar</dt>
-<dd><dl><dt>exportieren, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.export.html">Termine exportieren</a>
-</dt></dl></dd>
+<dt>iCal</dt>
+<dd><dl>
+<dt>exportieren, Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">Aufgaben exportieren</a>
+</dt>
+<dt>exportieren, Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.export.html">Termine exportieren</a>
+</dt>
+<dt>importieren, Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">Aufgaben importieren</a>
+</dt>
+<dt>importieren, Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Termine importieren</a>
+</dt>
+</dl></dd>
 <dt>importieren</dt>
 <dd><dl>
-<dt>Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.ical.html">Termine und Aufgaben im iCal-Format importieren</a>
+<dt>Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">Aufgaben importieren</a>
 </dt>
 <dt>E-Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.import.html">E-Mails importieren</a>
 </dt>
 <dt>Kalender, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.import.html">Kalender aus Datei importieren</a>
 </dt>
-<dt>Kontakte im CSV-Format, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.contacts.html">Kontakte importieren</a>
+<dt>Kontakte im CSV-Format, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
 </dt>
-<dt>Kontakte im vCard-Format, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.contacts.html">Kontakte importieren</a>
+<dt>Kontakte im vCard-Format, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
 </dt>
-<dt>Termine, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.ical.html">Termine und Aufgaben im iCal-Format importieren</a>
+<dt>Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Termine importieren</a>
 </dt>
 </dl></dd>
 <dt>Infobereich, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.getnotifications.html">Benachrichtigungen erhalten</a>
@@ -1357,8 +1355,6 @@
 </dl></dd>
 <dt>Kontakte</dt>
 <dd><dl>
-<dt>Adressbuch exportieren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Alle Daten eines Ordners exportieren</a>
-</dt>
 <dt>Adressbuch hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.html">Adressbuch hinzufügen</a>
 </dt>
 <dt>als vCard senden, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">Kontakte als vCard senden</a>
@@ -1395,9 +1391,9 @@
 </dt>
 <dt>hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.html">Kontakte hinzufügen</a>
 </dt>
-<dt>importieren im CSV-Format, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.contacts.html">Kontakte importieren</a>
+<dt>importieren im CSV-Format, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
 </dt>
-<dt>importieren im vCard-Format, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.contacts.html">Kontakte importieren</a>
+<dt>importieren im vCard-Format, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
 </dt>
 <dt>Kontaktfoto anlegen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.create.html">Neuen Kontakt anlegen</a>
 </dt>
@@ -1718,6 +1714,8 @@
 <dt>Session</dt>
 <dd><dl><dt>Begriffserklärung, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
 </dt></dl></dd>
+<dt>Sessions anzeigen oder schließen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.sessions.html">Sessions anzeigen oder schließen</a>
+</dt>
 <dt>Sicherheit</dt>
 <dd><dl>
 <dt>Authentizität von E-Mails anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.emailauthentication.html">Authentizität von E-Mails anzeigen</a>
@@ -1848,13 +1846,11 @@
 </dt>
 <dt>Folgetermin anlegen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.followup.html">Folgetermin anlegen</a>
 </dt>
-<dt>importieren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.ical.html">Termine und Aufgaben im iCal-Format importieren</a>
+<dt>importieren, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Termine importieren</a>
 </dt>
 <dt>in Kalenderansicht anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Termine in einer Kalenderansicht anzeigen</a>
 </dt>
 <dt>in Listenansicht anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Termine in der Listenansicht anzeigen</a>
-</dt>
-<dt>Kalender exportieren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Alle Daten eines Ordners exportieren</a>
 </dt>
 <dt>Kalenderfarben verwenden, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.colors.html">Kalenderfarben verwenden</a>
 </dt>
@@ -1925,12 +1921,11 @@
 <div class="indexdiv">
 <h3>V</h3>
 <dl>
-<dt>vCalendar</dt>
-<dd><dl><dt>exportieren, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">Aufgaben exportieren</a>
-</dt></dl></dd>
 <dt>vCard</dt>
 <dd><dl>
 <dt>exportieren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kontakte exportieren</a>
+</dt>
+<dt>importieren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
 </dt>
 <dt>senden, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">Kontakte als vCard senden</a>
 </dt>
@@ -2028,6 +2023,8 @@
 </dt>
 </dl></dd>
 <dt>Weiterleiten von E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-Mails weiterleiten</a>
+</dt>
+<dt>Whitelist verwenden, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.security.whitelist.html">Whitelist verwenden</a>
 </dt>
 </dl>
 </div>
