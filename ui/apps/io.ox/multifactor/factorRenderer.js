@@ -17,26 +17,31 @@ define('io.ox/multifactor/factorRenderer', [
     'use strict';
 
     // Create table entry for the device
-    function createTable(icon, type, device, deletable) {
+    function createTable(iconType, type, device, deletable) {
         var div = $('<div class="multifactordevice">')
         .attr('data-deviceId', device.id)
         .attr('data-deviceName', device.name)
         .attr('data-provider', device.provider.name);
+        var named = device.name && device.name !== '';
         if (!deletable) div.addClass('multifactordeviceSelectable');
-        var link = $('<a href="#" class="multifactorDivLink" aria-label="' + device.name + '">');
-        var table = $('<table class="multifactorDeviceTable">');
+        var table = $('<table class="multifactorDeviceTable">')
+            .attr('summary', gt('Multifactor Device of type %s. ', type) + (named ? gt('Device name %s', device.name) : ''));
+            //.append($('<caption style="left:-300px; position:absolute">').append((named ? device.name : type)));
         var row = $('<tr>');
-        var iconCol = $('<td class="multifactorIcon">').append('<icon class="fa ' + icon + '">');
+        var icon = $('<icon class="fa ' + iconType + '">').attr('aria-label', type);
+        var iconCol = $('<td class="multifactorIcon">').append(icon);
         var textCol = $('<td class="multifactorText">').append(type);
         var detailCol = $('<td class="multifactorDetail">');
         if (device.name && device.name.length > 1) {
             detailCol.append(device.name);
         }
-        var editCol = deletable ? $('<td class="multifactorEdit">').append('<icon class="fa fa-pencil">') : '';
-        var deleteCol = deletable ? $('<td class="multifactorDelete">').append('<icon class="fa fa-trash-o">') : '';
+        var editCol = deletable ? $('<td class="multifactorEdit">').append(
+            $('<a href="#">').attr('aria-label', gt('Edit Name')).append('<icon class="fa fa-pencil">')) : '';
+        var deleteCol = deletable ? $('<td class="multifactorDelete">').append(
+            $('<a href="#">').attr('aria-label', gt('Delete')).append('<icon class="fa fa-trash-o">')) : '';
         return div.append(
-            link.append(table.append(
-                row.append(iconCol).append(textCol).append(detailCol).append(editCol).append(deleteCol))));
+            table.append(
+                row.append(iconCol).append(textCol).append(detailCol).append(editCol).append(deleteCol)));
 
     }
 
