@@ -205,7 +205,7 @@ define('io.ox/contacts/main', [
                     this.addClass('contact').append(
                         private_flag = $('<i class="fa fa-lock private_flag" aria-hidden="true">').hide(),
                         name = $('<div class="fullname">').attr('aria-hidden', true),
-                        description = $('<div class="bright-text">').attr('aria-hidden', true)
+                        description = $('<div class="gray">').attr('aria-hidden', true)
                     );
                     return { name: name, private_flag: private_flag, description: description };
                 },
@@ -237,10 +237,10 @@ define('io.ox/contacts/main', [
                         fields.description.text(description);
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
-                            fields.name.addClass('bright-text').text(gt('Empty name and description found.'));
+                            fields.name.addClass('gray').text(gt('Empty name and description found.'));
                             fields.description.text(gt('Edit to set a name.'));
                         } else {
-                            fields.name.removeClass('bright-text');
+                            fields.name.removeClass('gray');
                         }
                     }
                     this.attr('aria-label', name);

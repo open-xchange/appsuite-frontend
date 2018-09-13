@@ -287,6 +287,19 @@ html:not(.internet-explorer) {
     }
 }
 
+// shared css
+.list-view, .vgrid {
+    .gray { color: #767676; }
+    .selected:not(:focus) .gray {
+        color: #333333;
+    }
+    .vgrid-cell, .list-item {
+        &:hover .gray {
+            color: #555;
+        }
+    }
+}
+
 .focusable:focus, .list-item.focusable:focus {
     outline: 2px solid @link-color;
 }
@@ -323,10 +336,6 @@ html:not(.internet-explorer) {
 
 .abs-r { right: 0; }
 .abs-l { left: 0; }
-
-.bright-text {
-    color: #767676;
-}
 
 .ellipsis { .ellipsis(); }
 
