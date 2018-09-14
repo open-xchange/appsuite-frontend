@@ -349,7 +349,8 @@ define('io.ox/contacts/main', [
             app.left.prepend(
                 // thumb index
                 app.thumbs = $('<ul class="atb contact-grid-index listbox" tabindex="0" role="listbox">')
-                    .attr('aria-label', 'Thumb index')
+                    //#. index used in contacts list to jump to names with a specific starting letter
+                    .attr('aria-label', gt('Starting letter index'))
                     .on('click', '.thumb-index', thumbClick)
                     .on('touchmove', thumbMove)
             );
@@ -1001,7 +1002,8 @@ define('io.ox/contacts/main', [
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,
             hideTopbar: _.device('smartphone'),
-            hideToolbar: _.device('smartphone')
+            hideToolbar: _.device('smartphone'),
+            containerLabel: gt('Contact list. Select a contact to view details.')
             //swipeRightHandler: swipeRightHandler,
         });
 
