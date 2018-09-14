@@ -16,6 +16,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/backbone/views/modal',
+    'io.ox/core/notifications',
     'io.ox/settings/util',
     'io.ox/mail/mailfilter/settings/filter/view-form',
     'gettext!io.ox/mail',
@@ -24,10 +25,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/backbone/views/disposable',
     'settings!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
+    'io.ox/core/folder/picker',
+    'io.ox/mail/api',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-
-], function (ext, api, mailfilterModel, ModalDialog, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS) {
+], function (ext, api, mailfilterModel, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS, picker, mailAPI) {
 
     'use strict';
 
@@ -136,6 +138,13 @@ define('io.ox/mail/mailfilter/settings/filter', [
             myView.render().el
         );
 
+        if (data.id === undefined) {
+            myView.dialog.addButton({
+                label: gt('Save and apply...'),
+                action: 'apply'
+            });
+        }
+
         myView.dialog.addButton({
             label: gt('Save'),
             action: 'save'
@@ -156,6 +165,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         myView.dialog.on('save', function () {
             myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('save');
+        });
+
+        myView.dialog.on('apply', function () {
+            myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('apply');
         });
 
         myView.dialog.on('cancel', function () {
@@ -180,10 +193,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
         draw: function (model) {
             var flag = (model.get('flags') || [])[0];
             var title = model.get('rulename'),
+                applytoggle = gt('Apply...'),
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
                 actioncmds = model.get('actioncmds'),
                 faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
-                actionValue;
+                actionValue,
+                applyToggle = flag === 'vacation' || flag === 'autoforward' ? [] : listUtils.applyToggle(applytoggle);
 
             if (flag === 'vacation') {
                 actionValue = 'edit-vacation';
@@ -194,6 +209,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             }
 
             $(this).append(
+                applyToggle,
                 listUtils.controlsEdit({
                     'aria-label': gt('Edit %1$s', title),
                     'data-action': actionValue
@@ -378,6 +394,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     events: {
                         'click [data-action="toggle"]': 'onToggle',
+                        'click [data-action="apply"]': 'onApply',
                         'click [data-action="delete"]': 'onDelete',
                         'click [data-action="edit"]': 'onEdit',
                         'click [data-action="toggle-process-subsequent"]': 'onToggleProcessSub',
@@ -417,6 +434,34 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                             })
                         );
+                    },
+
+                    onApply: function (e) {
+                        e.preventDefault();
+                        var scriptId = this.model.id,
+                            self = this;
+                        picker({
+                            async: true,
+                            context: 'filter',
+                            title: gt('Select the folder to apply the rule to'),
+                            done: function (id, dialog) {
+                                dialog.close();
+                                var rule = self.$el.find('a[data-action="apply"]');
+                                rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
+                                api.apply({ username: ox.user, folderId: id, scriptId: scriptId })
+                                    .done(function () {
+                                        rule.empty().text(gt('Apply...'));
+                                        mailAPI.expunge(id);
+                                    })
+                                    .fail(function (response) {
+                                        notifications.yell('error', response.error);
+                                    });
+                            },
+                            module: 'mail',
+                            root: '1',
+                            settings: settings,
+                            persistent: 'folderpopup'
+                        });
                     },
 
                     onToggleProcessSub: function (e) {

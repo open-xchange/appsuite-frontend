@@ -17,8 +17,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
-    'settings!io.ox/core'
-], function (notifications, gt, ext, mini, Dropdown, coreSettings) {
+    'settings!io.ox/core',
+    'io.ox/core/folder/picker',
+    'io.ox/core/api/mailfilter',
+    'settings!io.ox/mail',
+    'io.ox/mail/api'
+], function (notifications, gt, ext, mini, Dropdown, coreSettings, picker, api, mailSettings, mailAPI) {
 
     'use strict';
 
@@ -127,6 +131,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
             events: {
                 'save': 'onSave',
+                'apply': 'onApply',
                 'click [data-action=change-dropdown-value]': 'onChangeDropdownValue',
                 'click [data-action="change-color"]': 'onChangeColor',
                 'click [data-action="remove-test"]': 'onRemoveTest',
@@ -137,8 +142,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             onToggleSaveButton: function () {
                 if (this.$el.find('.has-error, .alert-danger').length === 0) {
                     this.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', false);
+                    this.dialog.$el.find('.modal-footer [data-action="apply"]').prop('disabled', false);
                 } else {
                     this.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', true);
+                    this.dialog.$el.find('.modal-footer [data-action="apply"]').prop('disabled', true);
                 }
             },
 
@@ -197,7 +204,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             },
 
-            onSave: function () {
+            prepareModel: function () {
                 var self = this,
                     testsPart = this.model.get('test'),
                     actionArray = this.model.get('actioncmds'),
@@ -307,6 +314,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     actionArray.push({ id: 'stop' });
                     this.model.set('actioncmds', actionArray);
                 }
+            },
+
+            onSave: function () {
+
+                this.prepareModel();
+                var self = this;
 
                 this.model.save().then(function (id) {
                     //first rule gets 0
@@ -319,6 +332,53 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     }
                     self.dialog.close();
                 }, self.dialog.idle);
+            },
+
+            onApply: function () {
+
+                this.prepareModel();
+                var self = this,
+                    scriptId;
+
+                this.model.save().then(function (id) {
+                    scriptId = id;
+                    //first rule gets 0
+                    if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
+                        self.model.set('id', id);
+                        self.listView.collection.add(self.model);
+                    } else if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.collection)) {
+                        self.model.set('id', id);
+                        self.collection.add(self.model);
+                    }
+                    self.dialog.close();
+                }, self.dialog.idle);
+
+                picker({
+                    async: true,
+                    context: 'filter',
+                    title: gt('Select the folder to apply the rule to'),
+                    done: function (id, dialog) {
+
+                        var rule = self.listView.$el.find('li[data-id="' + scriptId + '"] a[data-action="apply"]');
+                        rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
+
+                        dialog.close();
+                        api.apply({ username: ox.user, folderId: id, scriptId: scriptId })
+                            .done(function () {
+                                mailAPI.expunge(id);
+                                rule.empty().text(gt('Apply...'));
+                            }).fail(function (response) {
+                                notifications.yell('error', response.error);
+                            });
+                    },
+                    cancel: function () {
+                        self.dialog.idle();
+                    },
+                    module: 'mail',
+                    root: '1',
+                    settings: mailSettings,
+                    persistent: 'folderpopup'
+                });
             },
 
             onChangeDropdownValue: function (e) {
