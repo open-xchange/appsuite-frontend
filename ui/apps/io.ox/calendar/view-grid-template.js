@@ -84,7 +84,7 @@ define('io.ox/calendar/view-grid-template', [
                 a11yLabel.push(util.getTimeIntervalA11y(data));
                 a11yLabel.push(util.getDateIntervalA11y(data));
 
-                this.attr('aria-label', _.escape(a11yLabel.join(', ') + '.'));
+                this.find('button').attr('aria-label', _.escape(a11yLabel.join(', ') + '.'));
             }
         },
 
