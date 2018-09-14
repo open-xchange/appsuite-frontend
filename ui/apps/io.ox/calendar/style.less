@@ -304,6 +304,18 @@
     padding-left: 0;
     .calendar-grid-cell {
         position: inherit;
+        button {
+            width: 100%;
+            text-align: left;
+            padding: 0;
+            background-color: transparent;
+            border: none;
+        }
+        // looks funny but works. This way we can show the focus styles without changing the width
+        padding-left: 4px;
+        margin-left: -4px;
+        padding-right: 4px;
+        margin-right: -4px;
     }
 }
 
