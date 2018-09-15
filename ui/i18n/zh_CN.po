@@ -2271,6 +2271,10 @@ msgstr "联系人已复制"
 msgid "Contact has been moved"
 msgstr "联系人已移动"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
 msgstr "联系人图像"
@@ -9264,6 +9268,13 @@ msgstr "开始视频"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "开始日期时区"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter

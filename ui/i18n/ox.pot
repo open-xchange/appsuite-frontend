@@ -4107,6 +4107,12 @@ msgstr ""
 msgid "Edit to set a name."
 msgstr ""
 
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+msgid "Starting letter index"
+msgstr ""
+
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Couldn't load contact data."
@@ -4115,6 +4121,11 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Contacts"
+msgstr ""
+
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js

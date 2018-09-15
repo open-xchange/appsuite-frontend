@@ -2351,6 +2351,10 @@ msgstr "Kontakty boli skopírované"
 msgid "Contact has been moved"
 msgstr "Kontakty boli presunuté"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
 msgstr "Obrázky kontaktov"
@@ -9484,6 +9488,13 @@ msgstr "Spustiť video"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Časové pásmo dátumu začiatku"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
