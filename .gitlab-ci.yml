@@ -65,7 +65,7 @@ test_ui:
     - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
   artifacts:
     reports:
-      junit: ui/build/reports/unit/*/report.xml
+      junit: ui/build/reports/unit/*/result.xml
 
 run e2e tests:
   <<: *default_cache
