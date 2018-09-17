@@ -511,7 +511,7 @@ define('io.ox/contacts/addressbook/popup', [
                                 this.options.useGABOnly ? $() : $('<option value="all">').text(gt('All folders')),
                                 this.options.useGABOnly || useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
-                            )
+                            ).attr('aria-label', gt('Apply filter'))
                         )
                     )
                 );
