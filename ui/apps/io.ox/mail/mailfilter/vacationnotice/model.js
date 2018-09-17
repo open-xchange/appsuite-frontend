@@ -13,7 +13,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter', 'gettext!io.ox/mail', 'settings!io.ox/core'], function (api, gt, coreSettings) {
+define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter', 'gettext!io.ox/mail'], function (api, gt) {
 
     'use strict';
 
@@ -80,7 +80,13 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             }
 
             function parseTest(test) {
-                attr[test.comparison === 'ge' ? 'dateFrom' : 'dateUntil'] = test.datevalue[0];
+                // we start with timestamp t and stay in UTC, therefore moment.utc(t)
+                // now we set the timezone offset while keeping the same time (true)
+                // finally we switch into local time without keeping the time (false).
+                // we could just say moment(t) but this case ignores users who change timezone. yep, edge-case.
+                var value = moment.utc(test.datevalue[0]).utcOffset(test.zone, true).local(false).valueOf();
+                console.log('parseTest', test.id, moment(value).format());
+                attr[test.comparison === 'ge' ? 'dateFrom' : 'dateUntil'] = value;
             }
         },
 
@@ -115,29 +121,24 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             // time
             var testForTimeframe = { id: 'allof', tests: [] };
 
-            function returnTzOffset(timeValue) {
-                return moment.tz(timeValue, coreSettings.get('timezone')).format('Z').replace(':', '');
+            function utcOffset(t) {
+                return moment(t).format('Z').replace(':', '');
             }
 
-            if (attr.dateFrom) {
+            // date range
+            [['dateFrom', 'ge'], ['dateUntil', 'le']].forEach(function (test) {
+                var value = attr[test[0]], cmp = test[1];
+                if (!value) return;
                 testForTimeframe.tests.push({
                     id: 'currentdate',
-                    comparison: 'ge',
+                    comparison: cmp,
                     datepart: 'date',
-                    datevalue: [attr.dateFrom],
-                    zone: returnTzOffset(attr.dateFrom)
+                    // server expects UTC timestamp
+                    datevalue: [moment(value).utc().startOf('day').valueOf()],
+                    // zone readds offset
+                    zone: utcOffset(value)
                 });
-            }
-
-            if (attr.dateUntil) {
-                testForTimeframe.tests.push({
-                    id: 'currentdate',
-                    comparison: 'le',
-                    datepart: 'date',
-                    datevalue: [attr.dateUntil],
-                    zone: returnTzOffset(attr.dateFrom)
-                });
-            }
+            });
 
             if (testForTimeframe.tests.length === 1 && attr.activateTimeFrame) {
                 testForTimeframe = testForTimeframe.tests[0];
