@@ -31,14 +31,14 @@ define('io.ox/calendar/view-grid-template', [
                 var summary, location, time, date, transp, isPrivate;
 
                 this.addClass('calendar calendar-grid-cell').append(
-                    $('<button type="button">').append(
-                        time = $('<div class="time">'),
-                        date = $('<div class="date">'),
+                    $('<button type="button" class="btn-unstyled">').append(
+                        time = $('<div class="time" aria-hidden="true">'),
+                        date = $('<div class="date" aria-hidden="true">'),
                         isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
-                        summary = $('<div class="title">'),
+                        summary = $('<div class="title" aria-hidden="true">'),
                         $('<div class="location-row">').append(
-                            transp = $('<span class="shown_as label label-info">&nbsp;</span>'),
-                            location = $('<span class="location">')
+                            transp = $('<span class="shown_as label label-info" aria-hidden="true">&nbsp;</span>'),
+                            location = $('<span class="location" aria-hidden="true">')
                         )
                     )
                 );

@@ -631,7 +631,9 @@ define('io.ox/core/tk/dialogs', [
     });
 
     $(document).on('keydown', function (e) {
-        if (e.which === 27) $('.io-ox-sidepopup:not(.preserve-on-appchange), .preserve-on-appchange:visible').trigger('close');
+        if (e.which === 27) {
+            $('.io-ox-sidepopup:not(.preserve-on-appchange), .preserve-on-appchange:visible').last().trigger('close');
+        }
     });
 
     var SidePopup = function (options) {
