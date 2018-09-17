@@ -63,6 +63,9 @@ test_ui:
   dependencies:
     - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
     - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+  artifacts:
+    reports:
+      junit: ui/build/reports/unit/*/report.xml
 
 run e2e tests:
   <<: *default_cache

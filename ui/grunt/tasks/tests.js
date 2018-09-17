@@ -8,6 +8,6 @@ module.exports = function (grunt) {
             dest: 'build/'
         }]
     });
-    grunt.config.set('karma.continuous.reporters', ['spec']);
+    grunt.config.set('karma.continuous.reporters', ['spec', 'junit']);
     grunt.config.set('karma.continuous.browsers', (process.env.BROWSERS || 'ChromeHeadless').split(' '));
 };
