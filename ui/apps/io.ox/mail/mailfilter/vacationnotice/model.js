@@ -85,7 +85,6 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
                 // finally we switch into local time without keeping the time (false).
                 // we could just say moment(t) but this case ignores users who change timezone. yep, edge-case.
                 var value = moment.utc(test.datevalue[0]).utcOffset(test.zone, true).local(false).valueOf();
-                console.log('parseTest', test.id, moment(value).format());
                 attr[test.comparison === 'ge' ? 'dateFrom' : 'dateUntil'] = value;
             }
         },
