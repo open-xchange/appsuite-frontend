@@ -321,8 +321,8 @@ define('io.ox/backbone/views/recurrence-view', [
                 input.listenTo(this.model, 'change:recurrence_type change:every-weekday', update);
 
                 this.$body.append(
-                    formGroup = $('<div class="form-group hidden">').append(
-                        $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Weekday')),
+                    formGroup = $('<fieldset class="form-group hidden">').append(
+                        $('<legend class="control-label col-sm-4">').attr('for', guid).text(gt('Weekday')),
                         $('<div class="col-sm-8">').append(
                             input.render().$el,
                             new mini.ErrorView({
