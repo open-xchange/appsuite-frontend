@@ -652,7 +652,11 @@ define('io.ox/calendar/api', [
                         alarmId: obj.alarmId
                     }
                 })
-                .then(processResponse);
+                .then(function (data) {
+                    api.trigger('acknowledgedAlarm', obj);
+                    processResponse(data);
+                    return data;
+                });
             },
 
             remindMeAgain: function (obj) {
