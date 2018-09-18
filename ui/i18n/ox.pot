@@ -3893,6 +3893,11 @@ msgstr ""
 msgid "All groups"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "Apply filter"
+msgstr ""
+
 #. empty message for list view
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts

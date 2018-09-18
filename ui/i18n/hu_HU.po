@@ -1268,6 +1268,12 @@ msgstr "Alkalmazás"
 msgid "Apply changes"
 msgstr "Változások elfogadása"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Szerep alkalmazása"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Szerep alkalmazása"

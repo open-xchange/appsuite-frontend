@@ -1320,6 +1320,12 @@ msgstr "Aplica rol"
 msgid "Apply changes"
 msgstr "Accepta els canvis"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Aplica rol"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplica rol"

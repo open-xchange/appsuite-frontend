@@ -1283,6 +1283,12 @@ msgstr "Применить"
 msgid "Apply changes"
 msgstr "Применить изменения"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Назначить роль"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Назначить роль"

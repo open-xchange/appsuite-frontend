@@ -1288,6 +1288,12 @@ msgstr "Aplikovať rolu"
 msgid "Apply changes"
 msgstr "Použiť zmeny"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Aplikovať rolu"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplikovať rolu"

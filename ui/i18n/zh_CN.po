@@ -1224,6 +1224,12 @@ msgstr "套用"
 msgid "Apply changes"
 msgstr "套用更改"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "套用角色"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "套用角色"

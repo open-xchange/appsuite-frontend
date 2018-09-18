@@ -1290,6 +1290,11 @@ msgstr ""
 msgid "Apply changes"
 msgstr "Приеми промените"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+msgid "Apply filter"
+msgstr "Добави файлове"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr ""

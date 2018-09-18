@@ -1236,6 +1236,12 @@ msgstr "適用"
 msgid "Apply changes"
 msgstr "変更を適用"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "ロールを割り当てる"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "ロールを割り当てる"
