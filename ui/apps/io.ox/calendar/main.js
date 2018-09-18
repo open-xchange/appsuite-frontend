@@ -721,6 +721,7 @@ define('io.ox/calendar/main', [
          * Add support for virtual folder "All my public appointments"
          */
         'virtual-folders': function (app) {
+            if (capabilities.has('guest')) return;
             app.folderView.tree.selection.addSelectableVirtualFolder('cal://0/allPublic');
         },
 
