@@ -189,23 +189,16 @@ define('plugins/notifications/calendar/register', [
                 reminderUtil.draw(node, baton.model, options);
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
-                    calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
-                    baton.view.collection.remove(baton.requestedModel.attributes);
-                });
-                node.find('[data-action="selector"]').on('click change', function (e) {
-                    //if we do this on smartphones the dropdown does not close correctly
-                    if (!_.device('smartphone')) {
-                        e.stopPropagation();
-                    }
-
-                    var min = $(e.target).val();
-                    //0 means 'pick a time here' was selected. Do nothing.
+                    var min = node.find('[data-action="selector"]').val();
+                    // 0 means 'don't remind me again was selected.
                     if (min !== '0') {
                         calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {
                             calAPI.getAlarms();
                         });
-                        baton.view.collection.remove(baton.requestedModel.attributes);
+                    } else {
+                        calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     }
+                    baton.view.collection.remove(baton.requestedModel.attributes);
                 });
             });
         }

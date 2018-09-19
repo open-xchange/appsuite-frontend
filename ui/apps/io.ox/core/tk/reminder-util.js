@@ -20,10 +20,11 @@ define('io.ox/core/tk/reminder-util', [
     'use strict';
 
     function buildActions(node, values, model) {
+        var guid = _.uniqueId('reminder-label-');
         node.append(
-            $('<div>').text(gt('Remind me again')),
-            $('<select class="dateselect" data-action="selector">').append(function () {
-                var ret = '<option value="0">' + gt('Pick a time here') + '</option>';
+            $('<label>').text(gt('Remind me again')).attr('for', guid),
+            $('<select class="dateselect" data-action="selector">').attr('id', guid).append(function () {
+                var ret = '<option value="0">' + gt("Don't remind me again") + '</option>';
                 for (var i = 0; i < values.length; i++) {
                     ret += '<option value="' + values[i][0] + '">' + values[i][1] + '</option>';
                 }
