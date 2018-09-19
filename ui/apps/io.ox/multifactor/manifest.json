@@ -2,6 +2,7 @@
     {
         "title": "Multifactor",
         "path": "io.ox/multifactor/settings",
-        "namespace": "io.ox/settings/main"
+        "namespace": "io.ox/settings/main",
+        "requires": "multifactor && multifactor_service"
     }
 ]
