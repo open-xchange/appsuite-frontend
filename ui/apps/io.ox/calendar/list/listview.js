@@ -135,9 +135,7 @@ define('io.ox/calendar/list/listview', [
         index: 400,
         draw: function (baton) {
             this.append(
-                $('<div class="location-row">').append(
-                    $('<span class="location">').text(baton.model.get('location') || '\u00A0')
-                )
+                $('<span class="gray location">').text(baton.model.get('location') || '\u00A0')
             );
         }
     });
