@@ -60,7 +60,7 @@ define('io.ox/core/notifications/subview', [
                         desktopNotifications.show(specific(model));
                     });
                 }
-                var node = $('<li class="item" tabindex="0">');
+                var node = $('<li class="item" tabindex="0" role="menuitem">');
                 if (view.model.get('showHideSingleButton')) {
                     node.append(
                         $('<div class="notification-item-actions">').append(
