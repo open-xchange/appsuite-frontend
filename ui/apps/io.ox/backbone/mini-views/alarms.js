@@ -150,12 +150,16 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         updateModel: function () {
             if (!this.model) return;
+            this.changedByUser = true;
             this.model.set(this.attribute, this.getAlarmsArray());
+            this.changedByUser = false;
             // trigger event, so we know the user changed the alarm
             // used by edit view, to determine, if the default alarms should be applied on allday change
             this.model.trigger('userChangedAlarms');
         },
         updateView: function () {
+            // user induced changes don't need a redraw, the view is already in the correct state (redraw would also cause a focus loss)
+            if (this.changedByUser) return;
             var self = this;
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
