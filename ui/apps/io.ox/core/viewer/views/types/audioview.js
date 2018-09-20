@@ -162,8 +162,6 @@ define('io.ox/core/viewer/views/types/audioview', [
          *  the AudioView instance.
          */
         unload: function () {
-            // never unload slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) return this;
             this.disposeElement();
             this.isPrefetched = false;
             return this;

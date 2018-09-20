@@ -363,33 +363,29 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
          * @returns {SpreadsheetView}
          *  the SpreadsheetView instance.
          */
-        unload: function (dispose) {
+        unload: function () {
 
             var self = this;
 
-            // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') || dispose) {
-
-                // reset launch delay timer
-                if (this.appLaunchDelayId) {
-                    window.clearTimeout(this.appLaunchDelayId);
-                    this.appLaunchDelayId = null;
-                }
-
-                // quit app if running
-                if (this.spreadsheetApp && _.isFunction(this.spreadsheetApp.isInQuit) && !this.spreadsheetApp.isInQuit()) {
-
-                    this.spreadsheetApp.quit().then(function () {
-                        self.spreadsheetApp = null;
-                    });
-
-                }
-
-                // delete temp file if one has been created
-                this.deleteTempFile();
-
-                this.isPrefetched = false;
+            // reset launch delay timer
+            if (this.appLaunchDelayId) {
+                window.clearTimeout(this.appLaunchDelayId);
+                this.appLaunchDelayId = null;
             }
+
+            // quit app if running
+            if (this.spreadsheetApp && _.isFunction(this.spreadsheetApp.isInQuit) && !this.spreadsheetApp.isInQuit()) {
+
+                this.spreadsheetApp.quit().then(function () {
+                    self.spreadsheetApp = null;
+                });
+
+            }
+
+            // delete temp file if one has been created
+            this.deleteTempFile();
+
+            this.isPrefetched = false;
 
             return this;
         },

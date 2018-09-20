@@ -308,7 +308,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var endPageNumber = _.last(pagesToRender);
 
                 // fail safety: do nothing if called while view is hidden (e.g. scroll handlers)
-                if (this.isVisible() || this.isDuplicate()) {
+                if (this.isVisible()) {
                     // abort old requests not yet running
                     this.pageLoader.abortQueuedRequests();
                     this.cancelMorePagesTimer();
@@ -906,42 +906,27 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Returns true if the slide is a Swiper duplicate.
-         */
-        isDuplicate: function () {
-            return (this.$el.hasClass('swiper-slide-duplicate'));
-        },
-
-        /**
          * Unloads the document slide by destroying the pdf view and model instances
-         *
-         * @param {Boolean} dispose
-         *  If true also Swiper slide duplicates will be unloaded.
          */
-        unload: function (dispose) {
+        unload: function () {
 
-            // never unload slide duplicates
-            if (!this.isDuplicate() || dispose) {
-                if (this.pageLoader) {
-                    this.pageLoader.abortQueuedRequests();
-                    this.cancelMorePagesTimer();
-                    this.pageLoader.destroy();
-                    this.pageLoader = null;
-                }
-                if (this.pdfView) {
-                    this.pdfView.destroy();
-                    this.pdfView = null;
-                }
-                if (this.pdfDocument) {
-                    this.pdfDocument.destroy();
-                    this.pdfDocument = null;
-                }
-                // clear document container content
-                this.$el.find('div.document-container').empty();
-                // save disposed status
-                this.disposed = dispose;
-                this.isPrefetched = false;
+            if (this.pageLoader) {
+                this.pageLoader.abortQueuedRequests();
+                this.cancelMorePagesTimer();
+                this.pageLoader.destroy();
+                this.pageLoader = null;
             }
+            if (this.pdfView) {
+                this.pdfView.destroy();
+                this.pdfView = null;
+            }
+            if (this.pdfDocument) {
+                this.pdfDocument.destroy();
+                this.pdfDocument = null;
+            }
+            // clear document container content
+            this.$el.find('div.document-container').empty();
+            this.isPrefetched = false;
 
             return this;
         },
@@ -970,6 +955,8 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         disposeView: function () {
             this.unload(true);
+            // save disposed status
+            this.disposed = true;
             this.$el.off();
             if (this.thumbnailsView) {
                 this.thumbnailsView.disposeView();
