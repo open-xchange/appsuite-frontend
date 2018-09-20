@@ -157,7 +157,7 @@ define('io.ox/calendar/util', [
         },
 
         getEvenSmarterDate: function (model) {
-            var m = model.getMoment('startDate'),
+            var m = model.getMoment('startDate').local(),
                 startOfDay = moment().startOf('day');
             // past?
             if (m.isBefore(startOfDay)) {
