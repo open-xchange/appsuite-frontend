@@ -3356,6 +3356,12 @@ msgstr "Neexistuje"
 msgid "Domain"
 msgstr "Doména"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Připomeň mi znovu"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7225,10 +7231,6 @@ msgstr "Seznam telefonů"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Telefonní čísla"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Zde vyberte čas"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -18985,6 +18987,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefon:"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Zde vyberte čas"
 
 #~ msgid "Pitcairn"
 #~ msgstr "Pitcairnovy ostrovy"

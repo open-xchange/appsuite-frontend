@@ -3355,6 +3355,12 @@ msgstr "Nem létezik"
 msgid "Domain"
 msgstr "Tartomány"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Emlékeztessen újra"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7215,10 +7221,6 @@ msgstr "Telefonlista"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Telefonszámok"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Válasszon itt időpontot"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -13627,6 +13629,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Pause the presentation"
 #~ msgstr "Bemutató megállítása"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Válasszon itt időpontot"
 
 #~ msgid "Play audio files"
 #~ msgstr "Hangfájlok lejátszása"

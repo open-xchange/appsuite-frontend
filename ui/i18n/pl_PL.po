@@ -3380,6 +3380,12 @@ msgstr "Nie istnieje"
 msgid "Domain"
 msgstr "Domena"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Przypomnij mi później"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7258,10 +7264,6 @@ msgstr "Lista telefonów"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Numery telefonów"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Wybierz godzinę"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -14587,6 +14589,9 @@ msgstr "Twoja platforma"
 
 #~ msgid "Phone alt"
 #~ msgstr "Drugi numer telefonu"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Wybierz godzinę"
 
 #~ msgid "Play audio files"
 #~ msgstr "Odtwórz pliki audio"

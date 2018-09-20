@@ -3259,6 +3259,12 @@ msgstr "不存在"
 msgid "Domain"
 msgstr "域"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "再次提醒我"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7071,10 +7077,6 @@ msgstr "电话列表"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "电话号码"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "在此选择一个时间"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -15614,6 +15616,9 @@ msgstr "您的平台"
 
 #~ msgid "Phone alt"
 #~ msgstr "电话（替代）"
+
+#~ msgid "Pick a time here"
+#~ msgstr "在此选择一个时间"
 
 #~ msgid "Play audio files"
 #~ msgstr "播放音效档"

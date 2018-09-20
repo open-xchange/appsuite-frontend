@@ -3349,6 +3349,12 @@ msgstr ""
 msgid "Domain"
 msgstr "Domeen"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Meenutage hiljem"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7223,10 +7229,6 @@ msgstr "Telefoniloend"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Telefoninumbrid"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Valige aeg siin"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -13213,6 +13215,9 @@ msgstr "teie platvorm"
 
 #~ msgid "Permissions for \"%1$s\""
 #~ msgstr "Õigused \"%1$s\" korral"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Valige aeg siin"
 
 #~ msgid "Play audio files"
 #~ msgstr "Esita helifaile"

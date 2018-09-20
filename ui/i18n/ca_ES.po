@@ -3468,6 +3468,12 @@ msgstr ""
 msgid "Domain"
 msgstr ""
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Recorda-m'ho de nou"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7492,10 +7498,6 @@ msgstr "Llista de telèfons"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Números de telèfon"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Triau una hora aquí"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -13821,6 +13823,9 @@ msgstr "la vostra plataforma"
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Tasca endarrerida. %1$s %2$s. Premeu [Intro] per a obrir-la"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Triau una hora aquí"
 
 #~ msgid "Play audio files"
 #~ msgstr "Reprodueix fitxers d'àudio"

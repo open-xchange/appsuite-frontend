@@ -3268,6 +3268,10 @@ msgstr ""
 msgid "Domain"
 msgstr ""
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+msgid "Don't remind me again"
+msgstr ""
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7071,10 +7075,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
-msgstr ""
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core

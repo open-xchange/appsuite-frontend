@@ -3372,6 +3372,12 @@ msgstr "Nu există"
 msgid "Domain"
 msgstr "Domeniu"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Amintește-mi din nou"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7256,10 +7262,6 @@ msgstr "Listă numere de telefon"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Numere de telefon"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Alege o oră aici"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -17001,6 +17003,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefon:"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Alege o oră aici"
 
 #~ msgid "Pitcairn"
 #~ msgstr "Pitcairn"

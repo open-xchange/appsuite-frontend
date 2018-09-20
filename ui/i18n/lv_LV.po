@@ -3362,6 +3362,12 @@ msgstr "Neeksistē"
 msgid "Domain"
 msgstr "Domēns"
 
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Atgādināt atkal"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core
@@ -7250,10 +7256,6 @@ msgstr "Telefonu saraksts"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Telefonu numuri"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Izvēlieties laiku šeit"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -16918,6 +16920,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefons:"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Izvēlieties laiku šeit"
 
 #~ msgid "Pitcairn"
 #~ msgstr "Pitkērna"
