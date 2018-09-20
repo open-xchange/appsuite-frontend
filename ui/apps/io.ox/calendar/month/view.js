@@ -46,6 +46,7 @@ define('io.ox/calendar/month/view', [
 
             if (_.device('touch')) {
                 _.extend(events, {
+                    'taphold .day': 'onCreateAppointment',
                     'swipeleft': 'onSwipe',
                     'swiperight': 'onSwipe'
                 });
@@ -138,7 +139,8 @@ define('io.ox/calendar/month/view', [
             // fix for strange safari-specific bug
             // apparently, the double click changes the selection and then Safari runs into
             // EXC_BAD_ACCESS (SIGSEGV). See bug 42111
-            if (_.device('safari')) document.getSelection().collapse(true);
+            // if (_.device('safari')) document.getSelection().collapse(true);
+            // Commented out (20.09.2018) today, this code causes a runtime error due to invalid parameter of collapse
 
             if (!$(e.target).hasClass('list')) return;
 
