@@ -201,7 +201,7 @@ define('io.ox/backbone/views/datepicker', [
             this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': 0 }).append(
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
-                    $('<span role="header" aria-live="assertive" aria-atomic="true">').attr('id', headerId),
+                    $('<span role="heading" aria-live="assertive" aria-atomic="true" aria-level="2">').attr('id', headerId),
                     $('<button type="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 ),
                 this.$grid = $('<table class="grid" role="grid" tabindex="0">')
@@ -218,7 +218,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         renderHeader: function () {
-            this.$('[role="header"]').empty().append(_(arguments).toArray());
+            this.$('[role="heading"]').empty().append(_(arguments).toArray());
         },
 
         renderGrid: function () {
