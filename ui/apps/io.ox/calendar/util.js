@@ -20,8 +20,9 @@ define('io.ox/calendar/util', [
     'io.ox/core/tk/dialogs',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
-    'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/a11y'
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt, a11y) {
 
     'use strict';
 
@@ -397,14 +398,8 @@ define('io.ox/calendar/util', [
             return parent;
         },
 
-        addTimezonePopover: function (parent, data, opt) {
-
-            opt = _.extend({
-                placement: 'left',
-                trigger: 'hover focus'
-            }, opt);
-
-            function getContent() {
+        addTimezonePopover: (function () {
+            function getContent(data) {
                 // hard coded for demo purposes
                 var div = $('<ul class="list-unstyled">'),
                     list = settings.get('favoriteTimezones');
@@ -434,45 +429,100 @@ define('io.ox/calendar/util', [
                 return div;
             }
 
-            function getTitle() {
+            function getTitle(data) {
                 return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
             }
 
-            parent.popover({
-                container: opt.container || '#io-ox-core',
-                viewport: {
-                    selector: '#io-ox-core',
-                    padding: 10
-                },
-                content: getContent,
-                html: true,
-                placement: function (tip) {
-                    // add missing outer class
-                    $(tip).addClass('timezones');
-                    // get placement
-                    return opt.placement;
-                },
-                title: getTitle,
-                trigger: opt.trigger
-            }).on('blur dispose', function () {
-                $(this).popover('hide');
-                // set correct state or toggle doesn't work on next click
-                $(this).data('bs.popover').inState.click = false;
-            });
+            function addA11ySupport(parent) {
+                // a11y preparations such that the popover will be able to receive focus
+                var preventClose = false;
+                parent.on('focusout blur', function (e) {
+                    if (!preventClose) return;
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                }).on('show.bs.popover', function () {
+                    parent.on('keydown.a11y', function (e) {
+                        if (e.which !== 9) return;
+                        if (e.shiftKey) return;
 
-            if (opt.closeOnScroll) {
-                // add listener on popup shown. Otherwise we will not get the correct scrollparent at this point (if the popover container is not yet added to the dom)
-                parent.on('shown.bs.popover', function () {
-                    parent.scrollParent().one('scroll', function () {
-                        parent.popover('hide');
-                        // set correct state or toggle doesn't work on next click
-                        parent.data('bs.popover').inState.click = false;
+                        var popoverid = parent.attr('aria-describedby'),
+                            popover = $('#' + popoverid);
+                        if (popover.length === 0) return;
+
+                        // prevent default only if a popup is open
+                        e.preventDefault();
+                        preventClose = true;
+                        popover.attr('tabindex', -1).focus();
+                        _.defer(function () { preventClose = false; });
+
+                        popover.on('keydown.a11y', function tabOut(e) {
+                            if (e.which !== 9) return;
+                            e.preventDefault();
+                            popover.off('keydown.a11y');
+                            if (e.shiftKey) {
+                                preventClose = true;
+                                parent.focus();
+                                _.defer(function () { preventClose = false; });
+                            } else {
+                                a11y.getNextTabbable(parent).focus();
+                                parent.popover('hide');
+                            }
+                        }).on('blur', function () {
+                            if (preventClose) return;
+                            parent.popover('hide');
+                        });
                     });
+                }).on('hide.bs.popover', function (e) {
+                    $(e.target).off('keydown.a11y');
+                    preventClose = false;
                 });
             }
 
-            return parent;
-        },
+            return function (parent, data, opt) {
+
+                opt = _.extend({
+                    placement: 'left',
+                    trigger: 'hover focus'
+                }, opt);
+
+                addA11ySupport(parent);
+
+                parent.popover({
+                    container: opt.container || '#io-ox-core',
+                    viewport: {
+                        selector: '#io-ox-core',
+                        padding: 10
+                    },
+                    content: getContent.bind(null, data),
+                    html: true,
+                    placement: function (tip) {
+                        // add missing outer class
+                        $(tip).addClass('timezones');
+                        // get placement
+                        return opt.placement;
+                    },
+                    title: getTitle.bind(null, data),
+                    trigger: opt.trigger
+                }).on('blur dispose', function () {
+                    $(this).popover('hide');
+                    // set correct state or toggle doesn't work on next click
+                    $(this).data('bs.popover').inState.click = false;
+                });
+
+                if (opt.closeOnScroll) {
+                    // add listener on popup shown. Otherwise we will not get the correct scrollparent at this point (if the popover container is not yet added to the dom)
+                    parent.on('shown.bs.popover', function () {
+                        parent.scrollParent().one('scroll', function () {
+                            parent.popover('hide');
+                            // set correct state or toggle doesn't work on next click
+                            parent.data('bs.popover').inState.click = false;
+                        });
+                    });
+                }
+
+                return parent;
+            };
+        }()),
 
         getShownAsClass: function (data) {
             if (that.hasFlag(data, 'transparent')) return 'free';
