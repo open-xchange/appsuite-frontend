@@ -13,7 +13,8 @@
 
 define('io.ox/core/tk/upload-problems', [
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'less!io.ox/core/tk/upload.less'
 ], function (ModalDialog, gt) {
 
     'use strict';
@@ -24,17 +25,18 @@ define('io.ox/core/tk/upload-problems', [
         var def = $.Deferred();
         new ModalDialog({ title: gt.ngettext('Unable to upload file', 'Unable to upload files', files.length), width: '600px' })
             .build(function () {
+                this.$el.addClass('upload-problems');
                 this.$body.append(
                     $('<strong>').append(gt.ngettext(
                         'We encountered an issue for your upload',
                         'We encountered some issues for your upload',
                         errors.length
                     )),
-                    $('<table style="margin-top: 8px;" class="table table-striped">')
-                        .append($('<tbody>').append(
+                    $('<ul style="margin-top: 8px;" class="list-unstyled list-group">')
+                        .append(
                             errors.map(function (obj) {
-                                return $('<tr>').append($('<td>').text(obj.error));
-                            }))
+                                return $('<li class="list-group-item">').text(obj.error);
+                            })
                         )
                 );
             })
