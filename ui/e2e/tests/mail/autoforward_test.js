@@ -22,7 +22,7 @@ After(async function (users) {
 
 Scenario('adds and removes a autoforward rule', function (I) {
     I.login('app=io.ox/settings');
-    I.waitForVisible('.io-ox-settings-main');
+    I.waitForVisible('.io-ox-settings-main .rightside h1');
     I.see('Basic settings', '.rightside h1');
 
     I.waitForVisible('li[data-id="virtual/settings/io.ox/mail"]');

@@ -63,7 +63,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('Settings', '#topbar-settings-dropdown');
 
-    I.waitForVisible('.io-ox-settings-window');
+    I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
 
     I.click({ css: '.io-ox-settings-window .leftside [title="Calendar"]' });
     I.waitForVisible('.io-ox-settings-window .leftside [title="Favorite timezones"]');

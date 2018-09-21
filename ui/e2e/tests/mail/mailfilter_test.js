@@ -169,6 +169,8 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     // save the form
     I.click('Save');
 
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+
     // open the saved rule
     I.click('Edit', '.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
 
