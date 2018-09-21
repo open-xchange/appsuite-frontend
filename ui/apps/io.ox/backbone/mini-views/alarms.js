@@ -133,8 +133,10 @@ define('io.ox/backbone/mini-views/alarms', [
                         } else {
                             duration = '-PT15M';
                         }
-
-                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: duration, related: 'START' } }));
+                        var node = self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: duration, related: 'START' } });
+                        self.list.append(node);
+                        // focus newly added alarm, to offer feedback for screenreaders etc
+                        node.find('.alarm-action').focus();
                         self.updateModel();
                     })
             );
