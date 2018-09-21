@@ -639,13 +639,17 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // prefetch data of the slides within the preload offset range
             _.each(loadRange, function (slideIndex) {
+                var prefetchParam;
+
                 if (!self.isSlideLoaded(slideIndex)) {
+                    prefetchParam = { priority: self.getPrefetchPriority(slideIndex) };
+
                     // prefetch original slide
-                    self.slideViews[slideIndex].prefetch();
+                    self.slideViews[slideIndex].prefetch(prefetchParam);
 
                     // prefetch duplicate slide
                     if (self.slideDuplicateViews[slideIndex]) {
-                        self.slideDuplicateViews[slideIndex].prefetch();
+                        self.slideDuplicateViews[slideIndex].prefetch(prefetchParam);
                     }
 
                     self.loadedSlides.push(slideIndex);
@@ -662,6 +666,21 @@ define('io.ox/core/viewer/views/displayerview', [
             registerAutoplayEventHandlingForUpdatedCarouselView(self);
 
             hideViewerControlsInCaseOfRunningAutoplayHasBeenTriggered(self);
+        },
+
+        /**
+         * Returns the priority for the given slide index according to the active slide index.
+         * The active slide and it's direct neighbours get priority 1,
+         * the more distant neighbours get priority 2, 3, 4, ...
+         *
+         * @param {Number} index
+         *  The slide index to get the prefetch priority for.
+         */
+        getPrefetchPriority: function (index) {
+            var size = this.collection.length;
+            var diff = Math.abs(this.swiper.realIndex - index);
+
+            return Math.max(1, diff < size / 2 ? diff : size - diff);
         },
 
         /**
