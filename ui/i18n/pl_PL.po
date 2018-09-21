@@ -1922,6 +1922,10 @@ msgstr[0] "Nie można wydrukować tego elementu"
 msgstr[1] "Nie można wydrukować tych elementów"
 msgstr[2] "Nie można wydrukować tych elementów"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Nie można wymagać typu widoku dla %1$s."
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Pojemność"
@@ -13111,9 +13115,6 @@ msgstr "Twoja platforma"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Widok tygodnia roboczego w kalendarzu"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Nie można wymagać typu widoku dla %1$s."
 
 #~ msgid "CardDAV Login"
 #~ msgstr "Login CardDAV"

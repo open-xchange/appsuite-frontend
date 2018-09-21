@@ -1909,6 +1909,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Impossible d'imprimer cet élément"
 msgstr[1] "Impossible d'imprimer ces éléments"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Impossible de choisir un type de vue pour %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacité"
@@ -13271,9 +13275,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Impossible de déplacer un dossier système."
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Impossible de choisir un type de vue pour %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "Authentification CardDAV"

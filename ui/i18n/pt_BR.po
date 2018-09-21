@@ -1902,6 +1902,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Não é possível imprimir este item"
 msgstr[1] "Não é possível imprimir estes itens"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Não é possível exigir um tipo de visualização para %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacidade"
@@ -13476,9 +13480,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "Dólar canadense"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Não é possível exigir um tipo de visualização para %1$s"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Cabo Verde"

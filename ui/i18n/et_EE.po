@@ -1904,6 +1904,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Seda üksust ei saa printida"
 msgstr[1] "Neid üksusi ei saa printida"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Ei saa taotleda vaate tüüpi %1$s jaoks"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Maht"
@@ -12712,9 +12716,6 @@ msgstr "teie platvorm"
 
 #~ msgid "Cannot add participant/member with an invalid mail address: %1$s"
 #~ msgstr "Osalejat/liiget ei saa lisada, kehtetu e-posti aadress: %1$s"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Ei saa taotleda vaate tüüpi %1$s jaoks"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV sisselogimine"

@@ -1884,6 +1884,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Tätä kohdetta ei voida tulostaa"
 msgstr[1] "Näitä kohteita ei voida tulostaa"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Tila"
@@ -12903,9 +12907,6 @@ msgstr "alustasi"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Työviikkonäkymä"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV -sisäänkirjautuminen"

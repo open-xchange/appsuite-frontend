@@ -1914,6 +1914,10 @@ msgstr[0] "Не удалось вывести на печать этот объ�
 msgstr[1] "Не удалось вывести на печать эти объекты"
 msgstr[2] "Не удалось вывести на печать эти объекты"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Невозможно задать режим просмотра для %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Объем"
@@ -13055,9 +13059,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Рабочая неделя"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Невозможно задать режим просмотра для %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "Логин CardDAV"

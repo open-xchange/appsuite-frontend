@@ -1904,6 +1904,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Objekt kann nicht gedruckt werden"
 msgstr[1] "Objekte können nicht gedruckt werden"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Ein Ansichtstyp für %1$s kann nicht angefordert werden"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapazität"
@@ -13602,9 +13606,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Systemordner kann nicht verschoben werden"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Ein Ansichtstyp für %1$s kann nicht angefordert werden"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV-Login"

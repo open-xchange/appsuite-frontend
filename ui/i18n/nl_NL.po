@@ -1906,6 +1906,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Dit item kan niet afgedrukt worden"
 msgstr[1] "Deze items kunnen niet afgedrukt worden"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Kan geen overzichtstype vragen voor %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Ruimte"
@@ -13048,9 +13052,6 @@ msgstr "uw platform"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Agendawerkweekoverzicht"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Kan geen overzichtstype vragen voor %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV Aanmeldnaam"

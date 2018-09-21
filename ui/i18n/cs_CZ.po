@@ -1912,6 +1912,10 @@ msgstr[0] "Tuto položku nelze vytisknout"
 msgstr[1] "Tyto položky nelze vytisknout"
 msgstr[2] "Tyto položky nelze vytisknout"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Pro %1$s nelze vyžadovat způsob prohlížení"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacita"
@@ -15174,9 +15178,6 @@ msgstr "vaše platforma"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Systémovou složku nelze přesunout."
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Pro %1$s nelze vyžadovat způsob prohlížení"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Kapverdy"

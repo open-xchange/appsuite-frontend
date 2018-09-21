@@ -1894,6 +1894,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Dette element kan ikke udskrives"
 msgstr[1] "Disse elementer kan ikke udskrives"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Kan ikke kræve en visningstype for %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacitet"
@@ -12981,9 +12985,6 @@ msgstr "din platform"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Arbejdsugevisning af kalender"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Kan ikke kræve en visningstype for %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV-brugernavn"

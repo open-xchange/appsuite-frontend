@@ -1905,6 +1905,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Impossibile stampare questo elemento"
 msgstr[1] "Impossibile stampare questi elementi"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Impossibile richiedere un tipo di vista per %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacità"
@@ -13664,9 +13668,6 @@ msgstr "la tua piattaforma"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Impossibile spostare una cartella di sistema."
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Impossibile richiedere un tipo di vista per %1$s"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Capo Verde"

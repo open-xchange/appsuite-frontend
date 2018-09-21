@@ -1969,6 +1969,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "No s'ha pogut imprimir aquest element"
 msgstr[1] "No s'han pogut imprimir aquests elements"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr ""
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacitat"

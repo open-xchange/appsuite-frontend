@@ -1931,6 +1931,10 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "Bu öge(ler) yazdırılamıyor"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr ""
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapasite"

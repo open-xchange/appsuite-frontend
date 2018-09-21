@@ -1898,6 +1898,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Ez az elem nem nyomtatható"
 msgstr[1] "Ezek az elemek nem nyomtathatók"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Nincs szükség nézettípusra ehhez: %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacitás"
@@ -12833,9 +12837,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Naptár munkahét nézet"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Nincs szükség nézettípusra ehhez: %1$s"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV bejelentkezés"

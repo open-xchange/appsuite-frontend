@@ -1839,6 +1839,10 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "无法打印此项目"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "不能为 %1$s 要求一个视图类型"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "容量"
@@ -13237,9 +13241,6 @@ msgstr "您的平台"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "不能移动系统文件夹。"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "不能为 %1$s 要求一个视图类型"
 
 #~ msgid "Cape Verde"
 #~ msgstr "佛得角"
