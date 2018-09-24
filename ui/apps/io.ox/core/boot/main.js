@@ -17,13 +17,11 @@ define.async('io.ox/core/boot/main', [
     'gettext',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
-    'io.ox/core/manifests',
-    'io.ox/core/session',
     'io.ox/core/boot/util',
     'io.ox/core/boot/form',
     'io.ox/core/boot/config'
 
-], function (themes, gettext, ext, Stage, manifests, session, util, form, config) {
+], function (themes, gettext, ext, Stage, util, form, config) {
 
     'use strict';
     var synonyms = {
@@ -102,38 +100,6 @@ define.async('io.ox/core/boot/main', [
 
         useCookie: function () {
             return require('io.ox/core/boot/login/auto')();
-        },
-
-        loadUI: function () {
-
-            util.debug('Load UI ... load core plugins and current language', ox.language);
-
-            // signin phase is over (important for gettext)
-            ox.signin = false;
-
-            // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
-            _.device.cache = {};
-            // make sure we have loaded precore.js now
-            $.when(
-                require(['io.ox/core/boot/load', ox.base + '/precore.js']),
-                gettext.setLanguage(ox.language),
-                manifests.manager.loadPluginsFor('i18n')
-            )
-            .then(function (response) {
-                util.debug('Load UI > current language and core plugins DONE.');
-                gettext.enable();
-                return response[0];
-            })
-            .then(function (response) {
-                require(['io.ox/core/boot/warning'], function () {
-                    ext.point('io.ox/core/boot/warning').invoke('draw');
-                });
-                return response;
-            })
-            .done(function (load) {
-                util.restore();
-                load();
-            });
         }
     };
 
@@ -183,13 +149,20 @@ define.async('io.ox/core/boot/main', [
                 $('#io-ox-login-screen').hide().empty();
             });
 
-            // load user config
-            config.user().done(function () {
-                // apply session data (again) & page title
-                if (data) session.set(data);
-                ox.trigger('change:document:title');
-                // load UI
-                exports.loadUI();
+            var baton;
+
+            require(['io.ox/core/boot/rampup']).then(function () {
+                baton = ext.Baton({ sessionData: data });
+                util.debug('loaded rampup namespace > running rampup phase');
+                return Stage.run('io.ox/core/boot/rampup', baton, { methodName: 'fetch' });
+            }).then(function () {
+                util.debug('finished rampup phase > getting boot/load namespace', ox.rampup);
+                return require(['io.ox/core/boot/load']);
+            }).then(function () {
+                // create new baton, but share collected data
+                baton = ext.Baton(_.extend({}, baton, ox.rampup));
+                util.debug('running boot/load phase');
+                return Stage.run('io.ox/core/boot/load', baton);
             });
         },
 
