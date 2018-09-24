@@ -104,7 +104,7 @@ define.async('io.ox/core/boot/main', [
             return require('io.ox/core/boot/login/auto')();
         },
 
-        loadUI: function () {
+        loadUI: function (sessionData) {
 
             util.debug('Load UI ... load core plugins and current language', ox.language);
 
@@ -115,24 +115,19 @@ define.async('io.ox/core/boot/main', [
             _.device.cache = {};
             // make sure we have loaded precore.js now
             $.when(
-                require(['io.ox/core/boot/load', ox.base + '/precore.js']),
+                require([ox.base + '/precore.js']),
                 gettext.setLanguage(ox.language),
                 manifests.manager.loadPluginsFor('i18n')
             )
-            .then(function (response) {
+            .then(function () {
                 util.debug('Load UI > current language and core plugins DONE.');
                 gettext.enable();
-                return response[0];
+                return require(['io.ox/core/boot/load', 'io.ox/core/boot/warning']);
             })
-            .then(function (response) {
-                require(['io.ox/core/boot/warning'], function () {
-                    ext.point('io.ox/core/boot/warning').invoke('draw');
-                });
-                return response;
-            })
-            .done(function (load) {
+            .then(function (load) {
+                ext.point('io.ox/core/boot/warning').invoke('draw');
                 util.restore();
-                load();
+                load(sessionData);
             });
         }
     };
@@ -189,7 +184,7 @@ define.async('io.ox/core/boot/main', [
                 if (data) session.set(data);
                 ox.trigger('change:document:title');
                 // load UI
-                exports.loadUI();
+                exports.loadUI(data);
             });
         },
 

@@ -16,12 +16,11 @@ define('io.ox/core/boot/load', [
     'io.ox/core/boot/util',
     'io.ox/core/http',
     'settings!io.ox/core',
-    'settings!io.ox/mail',
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
     'io.ox/core/sockets',
     'io.ox/core/moment'
-], function (themes, util, http, coreSettings, mailSettings, capabilities, manifests, socket) {
+], function (themes, util, http, coreSettings, capabilities, manifests, socket) {
 
     'use strict';
 
@@ -29,11 +28,17 @@ define('io.ox/core/boot/load', [
 
         // remove unnecessary stuff
         util.cleanUp();
-
-        prefetch();
+        require(['settings!io.ox/mail']).then(prefetch);
         setupSockets();
-        loadUserTheme();
-
+        //"core" namespace has now a very similar timing to "io.ox/core/main" namespace
+        //the only difference is, "core" plugins are loaded completely before
+        //"io.ox/core/main" plugins
+        var loadCore = manifests.manager.loadPluginsFor('core').then(function () {
+            return require(['io.ox/core/main']);
+        });
+        $.when(loadUserTheme(), loadCore).then(
+            launch.bind(null, loadCore)
+        );
         ox.once('boot:done', function () {
             // clear password (now); if cleared or set to "******" too early,
             // Chrome won't store anything or use that dummay value (see bug 36950)
@@ -47,23 +52,16 @@ define('io.ox/core/boot/load', [
         // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
         _.device.cache = {};
         var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
-            loadTheme = themes.set(theme),
-            //"core" namespace has now a very similar timing to "io.ox/core/main" namespace
-            //the only difference is, "core" plugins are loaded completely before
-            //"io.ox/core/main" plugins
-            loadCore = manifests.manager.loadPluginsFor('core').then(function () {
-                return require(['io.ox/core/main']);
-            });
+            loadTheme = themes.set(theme);
 
         util.debug('Load UI > require [core/main] and set theme', theme);
 
-        $.when(loadCore, loadTheme).then(
-            launch.bind(null, loadCore),
-            loadDefaultTheme.bind(null, theme, loadCore, loadTheme)
+        return loadTheme.catch(
+            loadDefaultTheme.bind(null, theme)
         );
     }
 
-    function loadDefaultTheme(theme, loadCore, loadTheme) {
+    function loadDefaultTheme(theme) {
 
         function fail() {
             console.error('Could not load default theme');
@@ -73,13 +71,11 @@ define('io.ox/core/boot/load', [
         util.debug('Loading theme failed', theme);
 
         // failed to load theme?
-        if (loadTheme.state() === 'rejected') {
-            // give up if it was the default theme
-            if (theme === 'default') return fail();
-            // otherwise try to load default theme now
-            console.error('Could not load custom theme', theme);
-            themes.set('default').then(launch.bind(null, loadCore), fail);
-        }
+        // give up if it was the default theme
+        if (theme === 'default') return fail();
+        // otherwise try to load default theme now
+        console.error('Could not load custom theme', theme);
+        return themes.set('default').catch(fail);
     }
 
     function launch(loadCore) {
@@ -100,7 +96,7 @@ define('io.ox/core/boot/load', [
 
     // greedy prefetch for mail app
     // we need to get the default all/threadedAll request out as soon as possible
-    function prefetch() {
+    function prefetch(mailSettings) {
 
         if (!capabilities.has('webmail')) return;
 
