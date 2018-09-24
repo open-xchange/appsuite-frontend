@@ -15,9 +15,10 @@ define('io.ox/multifactor/auth', [
     'io.ox/multifactor/api',
     'io.ox/multifactor/views/selectDeviceView',
     'io.ox/multifactor/deviceAuthenticator',
+    'io.ox/core/session',
     'gettext!io.ox/core/boot',
     'io.ox/multifactor/bundle'
-], function (api, selectDeviceView, deviceAuthenticator, gt) {
+], function (api, selectDeviceView, deviceAuthenticator, session, gt) {
 
     'use strict';
 
@@ -53,7 +54,18 @@ define('io.ox/multifactor/auth', [
             return def;
         },
 
-        doAuthentication: authenticate
+        doAuthentication: authenticate,
+
+        updateSession: function () {
+            return session.rampup().then(function (data) {
+                if (data) session.set(data);
+            });
+        },
+        forceLogout: function () {
+            return session.logout().always(function () {
+                window.location.reload(true);
+            });
+        }
 
     };
 

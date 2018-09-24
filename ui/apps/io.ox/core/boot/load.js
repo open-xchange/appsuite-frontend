@@ -24,8 +24,8 @@ define('io.ox/core/boot/load', [
 
     'use strict';
 
-    return function load() {
-
+    return function load(sessionData) {
+        if (sessionData && sessionData.requires_multifactor) return multifactor().then(load);
         // remove unnecessary stuff
         util.cleanUp();
         require(['settings!io.ox/mail']).then(prefetch);
@@ -47,6 +47,17 @@ define('io.ox/core/boot/load', [
             require('io.ox/core/main').launch();
         });
     };
+
+    function multifactor() {
+        return loadUserTheme().then(function () {
+            return require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen']);
+        }).then(function (auth, loginScreen) {
+            loginScreen.create();
+            return auth.doAuthentication()
+                .then(auth.updateSession, auth.forceLogout)
+                .always(loginScreen.destroy);
+        });
+    }
 
     function loadUserTheme() {
         // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)

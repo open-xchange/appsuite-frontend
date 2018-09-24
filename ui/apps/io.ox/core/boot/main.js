@@ -104,52 +104,6 @@ define.async('io.ox/core/boot/main', [
             return require('io.ox/core/boot/login/auto')();
         },
 
-        multifactorLoad: function () {
-            util.debug('Load MF UI ... load core plugins and current language', ox.language);
-
-            // signin phase is over (important for gettext)
-            ox.signin = false;
-
-            // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
-            _.device.cache = {};
-            $.when(
-                gettext.setLanguage(ox.language),
-                manifests.manager.loadPluginsFor('i18n')
-            )
-            .then(function () {
-                util.debug('Load UI > current language and core plugins DONE.');
-                gettext.enable();
-            })
-            .then(function () {
-                require(['io.ox/core/boot/warning'], function () {
-                    ext.point('io.ox/core/boot/warning').invoke('draw');
-                });
-                return;
-            })
-            .done(function () {
-                require(['themes', 'settings!io.ox/core'], function (themes, coreSettings) {
-                    var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
-                        loadTheme = themes.set(theme);
-                    $.when(loadTheme).then(function () {
-                        require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
-                            loginScreen.create();
-                            auth.doAuthentication().then(function () {
-                                loginScreen.destroy();
-                                session.rampup().then(function (data) {
-                                    if (data) session.set(data);
-                                    exports.loadUI();
-                                });
-                            }, function () {
-                                session.logout().always(function () {
-                                    window.location.reload(true);
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        },
-
         loadUI: function (sessionData) {
 
             util.debug('Load UI ... load core plugins and current language', ox.language);
