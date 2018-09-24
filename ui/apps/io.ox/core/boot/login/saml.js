@@ -108,7 +108,8 @@ define('io.ox/core/boot/login/saml', [
         }
     });
 
-    var def = ox.once('boot:done', def.resolve);
+    var def = $.Deferred();
+    ox.once('boot:done', def.resolve);
     def.then(function () {
         return require(['io.ox/core/capabilities']);
     }).then(function (caps) {
