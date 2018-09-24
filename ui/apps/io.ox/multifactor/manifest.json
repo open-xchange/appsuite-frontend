@@ -1,8 +1,10 @@
-[
-    {
-        "title": "Multifactor",
-        "path": "io.ox/multifactor/settings",
-        "namespace": "io.ox/settings/main",
-        "requires": "multifactor && multifactor_service"
-    }
-]
+[{
+    "title": "Multifactor",
+    "path": "io.ox/multifactor/settings",
+    "namespace": "io.ox/settings/main",
+    "requires": "multifactor && multifactor_service"
+}, {
+    "path": "io.ox/multifactor/error_handler",
+    "namespace": "core",
+    "requires": "multifactor"
+}]
