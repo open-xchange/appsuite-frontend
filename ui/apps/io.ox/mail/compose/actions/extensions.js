@@ -48,18 +48,20 @@ define('io.ox/mail/compose/actions/extensions', [
     };
 
     api.attachmentMissingCheck = function (baton) {
+
         if (baton.mail.files || baton.mail.infostore_ids || (baton.mail.attachments && baton.mail.attachments.length > 1)) return;
-        var wordList = _(_([
-            // Native language via gt
-            //#. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
-            //#. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
-            //#. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
-            gt("see attached|see attachment|see included|is attached|attached is|are attached|attached are|attached to this email|attached to this message|I'm attaching|I am attaching|I've attached|I have attached|I attach|I attached|find attached|find the attached|find included|find the included|attached file|see the attached|see attachments|attached files|see the attachment"),
+
+        // Native language via gt
+        //#. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
+        //#. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
+        //#. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
+        var translated = gt('see attached|see attachment|see included|is attached|attached is|are attached|attached are|attached to this email|attached to this message|I\'m attaching|I am attaching|I\'ve attached|I have attached|I attach|I attached|find attached|find the attached|find included|find the included|attached file|see the attached|see attachments|attached files|see the attachment'),
             // English
-            "see attached|see attachment|see included|is attached|attached is|are attached|attached are|attached to this email|attached to this message|I'm attaching|I am attaching|I've attached|I have attached|I attach|I attached|find attached|find the attached|find included|find the included|attached file|see the attached|see attachments|attached files|see the attachment",
+            en_US = '|see attached|see attachment|see included|is attached|attached is|are attached|attached are|attached to this email|attached to this message|I\'m attaching|I am attaching|I\'ve attached|I have attached|I attach|I attached|find attached|find the attached|find included|find the included|attached file|see the attached|see attachments|attached files|see the attachment',
             // German
-            'siehe Anhang|angehängt|anbei|hinzugefügt|ist angehängt|angehängt ist|sind angehängt|angehängt sind|an diese E-Mail angehängt|an diese Nachricht angehängt|Anhang hinzufügen|Anhang anbei|Anhang hinzugefügt|anbei finden|anbei|im Anhang|mit dieser E-Mail sende ich|angehängte Datei|siehe angehängte Datei|siehe Anhänge|angehängte Dateien|siehe Anlage|siehe Anlagen'
-        ]).uniq().join('|').split('|')).uniq().join('|');
+            de_DE = '|siehe Anhang|angehängt|anbei|hinzugefügt|ist angehängt|angehängt ist|sind angehängt|angehängt sind|an diese E-Mail angehängt|an diese Nachricht angehängt|Anhang hinzufügen|Anhang anbei|Anhang hinzugefügt|anbei finden|anbei|im Anhang|mit dieser E-Mail sende ich|angehängte Datei|siehe angehängte Datei|siehe Anhänge|angehängte Dateien|siehe Anlage|siehe Anlagen';
+
+        var words = _((translated + en_US + de_DE).split('|')).chain().compact().uniq().value().join('|');
 
         var mailContent = (baton.model.get('subject') || '') + '|';
         if (baton.view.editor.getMode() === 'html') {
@@ -68,7 +70,7 @@ define('io.ox/mail/compose/actions/extensions', [
             mailContent += baton.view.editor.getContent().replace(/^>.*\n/gm, '');
         }
 
-        var detectedString = new RegExp('(' + wordList + ')', 'i').exec(mailContent);
+        var detectedString = new RegExp('(' + words + ')', 'i').exec(mailContent);
         if (!detectedString) return;
 
         var def = $.Deferred();
