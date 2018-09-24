@@ -12,7 +12,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox.saml/login/register', [
+define('io.ox/core/boot/login/saml', [
     'io.ox/core/extensions'
 ], function (ext) {
     'use strict';
