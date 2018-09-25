@@ -1288,6 +1288,12 @@ msgstr "Aplikovať rolu"
 msgid "Apply changes"
 msgstr "Použiť zmeny"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Aplikovať rolu"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplikovať rolu"
@@ -1912,6 +1918,10 @@ msgstr[0] "Nie je možné vytlačiť túto položku"
 msgstr[1] "Nie je možné vytlačiť tieto položky"
 msgstr[2] "Nie je možné vytlačiť tieto položky"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Nemožno vyžadovať typ zobrazenia %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapacita"
@@ -2350,6 +2360,10 @@ msgstr "Kontakty boli skopírované"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Kontakty boli presunuté"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3357,6 +3371,12 @@ msgstr "Neexistuje"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "doména"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Znova pripomenúť"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7238,10 +7258,6 @@ msgstr "Telefónny zoznam"
 msgid "Phone numbers"
 msgstr "Telefónne čísla"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Tu vyberte čas"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9484,6 +9500,13 @@ msgstr "Spustiť video"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Časové pásmo dátumu začiatku"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13654,9 +13677,6 @@ msgstr "vaša platforma"
 #~ msgid "Cannot move system folder."
 #~ msgstr "Nie je možné presunúť systémový priečinok."
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Nemožno vyžadovať typ zobrazenia %1$s"
-
 #~ msgid "Cape Verde"
 #~ msgstr "Kapverdy"
 
@@ -16898,6 +16918,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefón:"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Tu vyberte čas"
 
 #~ msgid "Pitcairn"
 #~ msgstr "Pitcairnove ostrovy"

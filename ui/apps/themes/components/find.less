@@ -33,7 +33,6 @@
 
         // adjust tokenfield (8 = outer padding, 1 = border)
         @placeholder-padding: @default-padding - 8 - 1;
-        @placeholder-color: #aaa;
         @action-color: #767676;
 
         padding: 4px 8px;
@@ -60,8 +59,6 @@
             }
 
             .tokenfield {
-                // use same placeholder color
-                .placeholder(@placeholder-color);
                 // adjust tokenfield (3 = placeholder padding)
                 padding-left: @placeholder-padding - 3;
                 padding-right: 9px;
@@ -70,12 +67,12 @@
 
                     .token-type,
                     .token-detail,
-                    .fa-caret-down { color: rgba(0, 0, 0, 0.7); }
+                    .fa-caret-down { color: rgba(0, 0, 0, 0.75); }
 
                     .close {
-                        opacity: 0.5;
+                        color: rgba(0, 0, 0, 0.55);
                         &:hover {
-                            opacity: 0.7;
+                            color: rgba(0, 0, 0, 0.75);
                         }
                     }
 

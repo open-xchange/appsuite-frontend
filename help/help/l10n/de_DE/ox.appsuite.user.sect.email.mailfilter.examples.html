@@ -38,12 +38,13 @@
 <h2 class="sr-only">E-Mail-Filter verwenden</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
 <div class="titlepage"><div><div><h3 class="title">5.7.4. Anwendungsbeispiele für E-Mail-Filter</h3></div></div></div>
-<a class="indexterm" name="id-1.6.14.9.2"></a><a class="indexterm" name="id-1.6.14.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">Sie erstellen eine Bedingung, indem Sie 
+<a class="indexterm" name="id-1.6.14.9.2"></a><a class="indexterm" name="id-1.6.14.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">Um eine Bedingung zu erstellen, führen Sie
+        die folgenden Schritte aus: 
         </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">einen E-Mail-Bestandteil auswählen, z. B. "Betreff";</p></li>
-<li class="listitem"><p role="presentation">ein Kriterium wählen, z. B. "stimmt exakt überein mit";</p></li>
-<li class="listitem"><p role="presentation">ein Argument eingeben, z. B. "Protokoll".</p></li>
+<li class="listitem"><p role="presentation">Einen E-Mail-Bestandteil auswählen, z. B. "Betreff"</p></li>
+<li class="listitem"><p role="presentation">Ein Kriterium wählen, z. B. "stimmt exakt überein mit"</p></li>
+<li class="listitem"><p role="presentation">Ein Argument eingeben, z. B. "Protokoll"</p></li>
 </ul>
 <p> 
         In diesem Fall würde geprüft, ob der Betreff einer E-Mail den Zeichen des Arguments "Protokoll" exakt
@@ -56,9 +57,9 @@
 <p role="presentation">Kriterium: "enthält" Die Bedingung ist erfüllt, wenn der Betreff die Zeichen des Arguments
               enthält. Beispiel: Das Argument lautet "Protokoll". 
               </p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Protokoll" ist die Bedingung erfüllt.</p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Meeting-Protokoll" ist die Bedingung ebenfalls erfüllt.</p></li>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Für den Betreff "Protokoll" ist die Bedingung erfüllt.</p></li>
+<li class="listitem"><p role="presentation">Für den Betreff "Meeting-Protokoll" ist die Bedingung ebenfalls erfüllt.</p></li>
 </ul>
 <p role="presentation">
             </p>
@@ -67,18 +68,18 @@
 <p role="presentation">Kriterium: "stimmt exakt überein mit" Die Bedingung ist erfüllt, wenn der Betreff den Zeichen
               des Arguments exakt entspricht. Beispiel: Das Argument lautet "Protokoll". 
               </p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Protokoll" ist die Bedingung erfüllt.</p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Meeting-Protokoll" ist die Bedingung nicht erfüllt.</p></li>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Für den Betreff "Protokoll" ist die Bedingung erfüllt.</p></li>
+<li class="listitem"><p role="presentation">Für den Betreff "Meeting-Protokoll" ist die Bedingung nicht erfüllt.</p></li>
 </ul>
 </li>
 <li class="listitem">
 <p role="presentation">Kriterium: "stimmt überein mit" Die Bedingung ist erfüllt, wenn der Betreff den Zeichen des
               Arguments exakt entspricht. Die Zeichenkette kann Platzhalter enthalten. Beispiel: Das Argument
               lautet "Protokoll*". Das Zeichen "*" ist Platzhalter für beliebige Zeichen. </p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Protokoll von Gestern" ist die Bedingung erfüllt.</p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Meeting-Protokoll" ist die Bedingung nicht erfüllt.</p></li>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Für den Betreff "Protokoll von Gestern" ist die Bedingung erfüllt.</p></li>
+<li class="listitem"><p role="presentation">Für den Betreff "Meeting-Protokoll" ist die Bedingung nicht erfüllt.</p></li>
 </ul>
 </li>
 <li class="listitem">
@@ -87,10 +88,10 @@
               Informationen dazu finden Sie auf den einschlägigen Seiten im Internet. Einen Einblick soll der folgende, sehr
               einfache reguläre Ausdruck bieten. Beispiel: Das Argument lautet "proto(c|k)ol". Der Ausdruck
               "(c|k)" steht für das Zeichen "c" oder "k". </p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Protokoll von Gestern" ist die Bedingung erfüllt.</p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Meeting protocol yesterday" ist die Bedingung ebenfalls erfüllt.</p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation">Für den Betreff "Prototyp" ist die Bedingung nicht erfüllt.</p></li>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Für den Betreff "Protokoll von Gestern" ist die Bedingung erfüllt.</p></li>
+<li class="listitem"><p role="presentation">Für den Betreff "Meeting protocol yesterday" ist die Bedingung ebenfalls erfüllt.</p></li>
+<li class="listitem"><p role="presentation">Für den Betreff "Prototyp" ist die Bedingung nicht erfüllt.</p></li>
 </ul>
 <p role="presentation">
             </p>
@@ -98,13 +99,13 @@
 </ul>
 <p>
       </p>
-<p class="title">Siehe auch</p>
-<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p class="title">Siehe auch:</p>
+<ul class="itemizedlist" id="ox.appsuite.user.related.email.mailfilter.examples" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Neue Regel erstellen</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Neue Regel erstellen beim Verschieben</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">Eine Regel ändern</a></p>
 </li></ul>
-<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">Übergeordnetes Thema:
+<p id="ox.appsuite.user.parent.email.mailfilter.examples">Übergeordnetes Thema:
         <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">E-Mail-Filter verwenden</a>
       </p>
 </div>

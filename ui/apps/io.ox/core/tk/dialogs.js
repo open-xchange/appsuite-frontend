@@ -631,7 +631,9 @@ define('io.ox/core/tk/dialogs', [
     });
 
     $(document).on('keydown', function (e) {
-        if (e.which === 27) $('.io-ox-sidepopup:not(.preserve-on-appchange), .preserve-on-appchange:visible').trigger('close');
+        if (e.which === 27) {
+            $('.io-ox-sidepopup:not(.preserve-on-appchange), .preserve-on-appchange:visible').last().trigger('close');
+        }
     });
 
     var SidePopup = function (options) {
@@ -919,6 +921,8 @@ define('io.ox/core/tk/dialogs', [
             $(node).on('keypress.sidepopup', selector, function (e) {
                 if (e.which === 13 && (e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
+                    // needed or the click handler is also triggered, which causes the popup to close again immediately
+                    e.preventDefault();
                 }
             });
 

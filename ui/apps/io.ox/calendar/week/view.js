@@ -1556,13 +1556,17 @@ define('io.ox/calendar/week/view', [
                 var el = $('[data-cid="' + a.id + '"]', this.$el),
                     newAppointment = this.renderAppointment(a),
                     color = newAppointment.css('color'),
-                    backgroundColor = newAppointment.data('background-color') || '';
+                    backgroundColor = newAppointment.data('background-color') || '',
+                    // preserve classes
+                    preservedClasses = _(['ui-resizable', 'ui-draggable', 'ui-draggable-handle']).filter(function (classname) {
+                        return el.attr('class').indexOf(classname) > -1;
+                    }).join(' ');
                 el
-                    .attr({ class: newAppointment.attr('class') })
+                    .attr({ class: newAppointment.attr('class') + ' ' + preservedClasses })
                     .css({ color: color, 'background-color': backgroundColor })
                     .data('background-color', backgroundColor)
-                    .empty()
-                    .append(newAppointment.children());
+                    // no empty, append or we loose the resize handles
+                    .find('.appointment-content').replaceWith(newAppointment.children());
                 $('.appointment').trigger('calendar:weekview:rendered');
             }
         },

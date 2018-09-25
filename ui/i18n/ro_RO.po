@@ -1291,6 +1291,12 @@ msgstr "Aplică"
 msgid "Apply changes"
 msgstr "Aplică modificările"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Aplică rolul"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplică rolul"
@@ -1914,6 +1920,10 @@ msgstr[0] "Nu se poate imprima acest element"
 msgstr[1] "Nu se pot imprima aceste elemente"
 msgstr[2] "Nu se pot imprima aceste elemente"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Nu se poate cere un tip de vizualizare pentru %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacitate"
@@ -2355,6 +2365,10 @@ msgstr "Contactul a fost copiat"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Contactul a fost mutat"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3361,6 +3375,12 @@ msgstr "Nu există"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domeniu"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Amintește-mi din nou"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7247,10 +7267,6 @@ msgstr "Listă numere de telefon"
 msgid "Phone numbers"
 msgstr "Numere de telefon"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Alege o oră aici"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9498,6 +9514,13 @@ msgstr "Pornește înregistrarea video"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Fusul orar al datei de început"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13706,9 +13729,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Cannot move system folder."
 #~ msgstr "Dosarele sistem nu pot fi mutate."
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Nu se poate cere un tip de vizualizare pentru %1$s"
-
 #~ msgid "Cape Verde"
 #~ msgstr "Republica Capului Verde"
 
@@ -16984,6 +17004,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefon:"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Alege o oră aici"
 
 #~ msgid "Pitcairn"
 #~ msgstr "Pitcairn"

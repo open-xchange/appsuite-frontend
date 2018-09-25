@@ -243,6 +243,26 @@ define('io.ox/core/a11y', [], function () {
             .filter(':visible');
     }
 
+    function getPreviousTabbable(el) {
+        var parent = arguments[1] || el.parent(),
+            tabbable = getTabbable(parent),
+            index = tabbable.index(el);
+        if (index > 0) return tabbable.eq(index - 1);
+        if (parent.is('body')) return tabbable.eq(tabbable.length - 1);
+        parent = parent.parent();
+        return getPreviousTabbable(el, parent);
+    }
+
+    function getNextTabbable(el) {
+        var parent = arguments[1] || el.parent(),
+            tabbable = getTabbable(parent),
+            index = tabbable.index(el);
+        if (index < tabbable.length - 1) return tabbable.eq(index + 1);
+        if (parent.is('body')) return tabbable.eq(0);
+        parent = parent.parent();
+        return getNextTabbable(el, parent);
+    }
+
     function trapFocus(el, e) {
         var items = getTabbable(el);
         if (!items.length) return;
@@ -366,6 +386,8 @@ define('io.ox/core/a11y', [], function () {
         dropdownTrapFocus: dropdownTrapFocus,
         focusListSelection: focusListSelection,
         getTabbable: getTabbable,
+        getPreviousTabbable: getPreviousTabbable,
+        getNextTabbable: getNextTabbable,
         menubarKeydown: menubarKeydown,
         trapFocus: trapFocus
     };

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-01-30 13:00+0100\n"
+"PO-Revision-Date: 2018-09-18 09:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -687,13 +687,9 @@ msgstr ""
 "von Teilnehmer ein. Sie können der Aufgabe Dokumente als Anlagen hinzufügen."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Um eine App zu starten, klicken Sie links in der Menüleiste auf einen "
-"Eintrag."
+"Um eine App zu starten, klicken Sie auf einen Eintrag im App-Startmenü."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -731,12 +727,6 @@ msgstr ""
 "Klicken Sie auf der linken Seite auf E-Mail."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the help, click the System menu icon on the upper right side of "
-#| "the menu bar. Select Help. The help for the currently selected app is "
-#| "displayed. To browse the complete help, click on Start Page or Table Of "
-#| "Contents at the upper part of the window."
 msgid ""
 "To open the help, click the user image on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
@@ -744,21 +734,17 @@ msgid ""
 "upper part of the window."
 msgstr ""
 "Um die Hilfe zu öffnen, klicken Sie in der Menüleiste rechts oben auf das "
-"Symbol Systemmenü. Wählen Sie Hilfe. Die Hilfe zur aktuellen App wird "
-"angezeigt. Um die vollständige Hilfe zu durchblättern, klicken Sie oben auf "
+"Anwenderbild. Wählen Sie Hilfe. Die Hilfe zur aktuellen App wird angezeigt. "
+"Um die vollständige Hilfe zu durchblättern, klicken Sie oben im Fenster auf "
 "Startseite oder auf Inhaltsverzeichnis."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
 "Um die Einstellungen zu öffnen, klicken Sie in der Menüleiste rechts oben "
-"auf das Symbol Systemmenü. Wählen Sie Einstellungen."
+"auf das Anwenderbild. Wählen Sie Einstellungen."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
@@ -807,15 +793,11 @@ msgstr ""
 "Systemmenü. Wählen Sie Abmelden."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To sign out, click the System menu icon on the upper right side of the "
-#| "menu bar. Select Sign out."
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
 "Zm Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
-"Systemmenü. Wählen Sie Abmelden."
+"Abmelden."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."

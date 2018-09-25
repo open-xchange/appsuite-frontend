@@ -3893,6 +3893,11 @@ msgstr ""
 msgid "All groups"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "Apply filter"
+msgstr ""
+
 #. empty message for list view
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -4107,6 +4112,12 @@ msgstr ""
 msgid "Edit to set a name."
 msgstr ""
 
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+msgid "Starting letter index"
+msgstr ""
+
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Couldn't load contact data."
@@ -4115,6 +4126,11 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Contacts"
+msgstr ""
+
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js
@@ -7332,7 +7348,7 @@ msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js
 #: module:io.ox/core
-msgid "Pick a time here"
+msgid "Don't remind me again"
 msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js
@@ -7581,6 +7597,11 @@ msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr ""
 
 #. information about the currently displayed file version in viewer
 #. %1$d - version date

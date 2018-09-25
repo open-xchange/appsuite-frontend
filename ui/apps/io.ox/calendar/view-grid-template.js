@@ -31,13 +31,15 @@ define('io.ox/calendar/view-grid-template', [
                 var summary, location, time, date, transp, isPrivate;
 
                 this.addClass('calendar calendar-grid-cell').append(
-                    time = $('<div class="time">'),
-                    date = $('<div class="date">'),
-                    isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
-                    summary = $('<div class="title">'),
-                    $('<div class="location-row">').append(
-                        transp = $('<span class="shown_as label label-info">&nbsp;</span>'),
-                        location = $('<span class="location">')
+                    $('<button type="button" class="btn-unstyled">').append(
+                        time = $('<div class="time" aria-hidden="true">'),
+                        date = $('<div class="date" aria-hidden="true">'),
+                        isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
+                        summary = $('<div class="title" aria-hidden="true">'),
+                        $('<div class="location-row">').append(
+                            transp = $('<span class="shown_as label label-info" aria-hidden="true">&nbsp;</span>'),
+                            location = $('<span class="location" aria-hidden="true">')
+                        )
                     )
                 );
 
@@ -82,7 +84,7 @@ define('io.ox/calendar/view-grid-template', [
                 a11yLabel.push(util.getTimeIntervalA11y(data));
                 a11yLabel.push(util.getDateIntervalA11y(data));
 
-                this.attr('aria-label', _.escape(a11yLabel.join(', ') + '.'));
+                this.find('button').attr('aria-label', _.escape(a11yLabel.join(', ') + '.'));
             }
         },
 

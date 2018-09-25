@@ -462,7 +462,7 @@ define('io.ox/core/folder/api', [
         });
     }
 
-    if (capabilities.has('edit_public_folders')) {
+    if (!capabilities.has('guest') && capabilities.has('edit_public_folders')) {
         pool.addModel({
             folder_id: '1',
             id: 'cal://0/allPublic',

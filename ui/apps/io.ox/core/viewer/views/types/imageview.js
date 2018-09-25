@@ -168,15 +168,13 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         unload: function () {
-            var imageToUnLoad;
-            // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate')) {
-                imageToUnLoad = this.$el.find('img.viewer-displayer-image');
-                if (imageToUnLoad.length > 0) {
-                    imageToUnLoad.attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
-                }
-                this.isPrefetched = false;
+            var imageToUnLoad = this.$el.find('img.viewer-displayer-image');
+
+            if (imageToUnLoad.length > 0) {
+                imageToUnLoad.attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
             }
+
+            this.isPrefetched = false;
             return this;
         }
 

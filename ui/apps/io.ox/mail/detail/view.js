@@ -398,7 +398,8 @@ define('io.ox/mail/detail/view', [
 
             baton.content = content.get(baton.data, {}, baton.flow).content;
             var $content = $(baton.content), resizing = 0,
-                self = this;
+                self = this,
+                isHtml = !$content.hasClass('plain-text');
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -414,9 +415,13 @@ define('io.ox/mail/detail/view', [
 
                     if (_.device('ios && smartphone')) html.attr('class', 'ios smartphone');
 
-                    $(this.contentDocument)
-                        .find('head').append('<style>' + contentStyle + '</style>').end()
-                        .find('body').append($content);
+                    $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+
+                    if (isHtml) {
+                        $(this.contentDocument).find('body').replaceWith($content);
+                    } else {
+                        $(this.contentDocument).find('body').append($content);
+                    }
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)

@@ -1285,6 +1285,12 @@ msgstr "Kuralı uygula"
 msgid "Apply changes"
 msgstr "Değişiklikleri kabul et"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Kuralı uygula"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Kuralı uygula"
@@ -1925,6 +1931,10 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "Bu öge(ler) yazdırılamıyor"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr ""
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapasite"
@@ -2383,6 +2393,10 @@ msgstr "İletişim bilgisi kopyalandı"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "İletişim bilgisi taşındı"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3425,6 +3439,12 @@ msgstr ""
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr ""
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Tekrar hatırlat"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7423,10 +7443,6 @@ msgstr "Telefon listesi"
 msgid "Phone numbers"
 msgstr "Telefon numaraları"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Buradan bir zaman seçin"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9756,6 +9772,13 @@ msgstr "Başlangıç tarihi"
 #, fuzzy
 msgid "StartTLS"
 msgstr "Başla"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Başlangıç tarihi zaman dilimi"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13635,6 +13658,9 @@ msgstr "Platformunuz"
 #, fuzzy
 #~ msgid "Pause the presentation"
 #~ msgstr "Sunumlar"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Buradan bir zaman seçin"
 
 #~ msgid "Play audio files"
 #~ msgstr "Ses dosyalarını çal"

@@ -59,7 +59,7 @@ define('io.ox/calendar/week/perspective', [
                     self.setNewStart = false;
                     if (self.view) {
                         //view is rendered already
-                        self.view.setStartDate(util.getMoment(model.get('startDate')));
+                        self.view.setStartDate(util.getMoment(model.get('startDate')).valueOf());
                     }
                 }
             }

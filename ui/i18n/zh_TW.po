@@ -1245,6 +1245,12 @@ msgstr "套用"
 msgid "Apply changes"
 msgstr "套用變更"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "套用腳色"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "套用腳色"
@@ -1856,6 +1862,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "無法列印此項目"
 msgstr[1] "無法列印這些項目"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "無法要求 %1$s 的檢視類型"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "容量"
@@ -2293,6 +2303,10 @@ msgstr "已複製聯絡人"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "已移動聯絡人"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3275,6 +3289,12 @@ msgstr "不存在"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "網域"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "再次提醒我"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7100,10 +7120,6 @@ msgstr "電話清單"
 msgid "Phone numbers"
 msgstr "電話號碼"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "請在此選擇一個時間"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9308,6 +9324,13 @@ msgstr "開始播放"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "起始日期時區"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13281,9 +13304,6 @@ msgstr "您的平台"
 #~ msgid "Cannot move system folder."
 #~ msgstr "無法移動系統資料夾。"
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "無法要求 %1$s 的檢視類型"
-
 #~ msgid "Cape Verde"
 #~ msgstr "維德角"
 
@@ -15558,6 +15578,9 @@ msgstr "您的平台"
 
 #~ msgid "Phone alt"
 #~ msgstr "替代電話"
+
+#~ msgid "Pick a time here"
+#~ msgstr "請在此選擇一個時間"
 
 #~ msgid "Play audio files"
 #~ msgstr "撥放聲音檔案"

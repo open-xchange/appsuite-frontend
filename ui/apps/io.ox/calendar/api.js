@@ -224,15 +224,17 @@ define('io.ox/calendar/api', [
                 }
                 return function (list, useCache) {
 
+                    var alarms = [];
                     list = _(list).map(function (obj) {
                         // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                         if (obj.eventId) {
+                            alarms.push(obj);
                             return { id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId };
                         }
                         return obj;
                     });
 
-                    var def, reqList = list, deletedEvents = false;
+                    var def, reqList = list;
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
@@ -247,7 +249,9 @@ define('io.ox/calendar/api', [
                         if (data) {
                             data.forEach(function (obj, index) {
                                 if (obj === null) {
-                                    deletedEvents = true;
+                                    var alarm = { eventId: reqList[index].id, folder: reqList[index].folder };
+                                    if (reqList[index].recurrenceId) alarm.recurrenceId = reqList[index].recurrenceId;
+                                    api.trigger('failureToFetchEvent', _(alarms).findWhere(alarm));
                                     // null means the event was deleted, clean up the caches
                                     processResponse({
                                         deleted: [reqList[index]]
@@ -275,11 +279,6 @@ define('io.ox/calendar/api', [
                             var cid = util.cid(obj);
                             return api.pool.getModel(cid);
                         });
-                    })
-                    .then(function (data) {
-                        // get fresh alarms if there were some deleted events
-                        if (deletedEvents) api.getAlarms();
-                        return data;
                     });
                 };
             }()),
@@ -351,7 +350,7 @@ define('io.ox/calendar/api', [
                         action: 'update',
                         folder: obj.folder,
                         id: obj.id,
-                        timestamp: obj.timestamp,
+                        timestamp: _.then(),
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
                         sendInternalNotifications: !!options.sendInternalNotifications,
@@ -412,7 +411,7 @@ define('io.ox/calendar/api', [
 
                 var params = {
                     action: 'delete',
-                    timestamp: _.now(),
+                    timestamp: _.then(),
                     fields: api.defaultFields
                 };
 
@@ -452,12 +451,16 @@ define('io.ox/calendar/api', [
                 // if comment schould be deleted, send null. Just like in settings
                 if (obj.attendee.comment === '') delete obj.attendee.comment;
 
+                // make sure alarms are explicitely set to null when declining, otherwise the user is reminded of declined appointments, we don't want that
+                // do this in api to catch all cases (shortcut buttons, full dialogs, mail invitations etc)
+                if (obj.attendee.partStat === 'DECLINED') obj.alarms = null;
+
                 var params = {
                         action: 'updateAttendee',
                         id: obj.id,
                         folder: obj.folder,
                         checkConflicts: options.checkConflicts,
-                        timestamp: _.now(),
+                        timestamp: _.then(),
                         fields: api.defaultFields
                     },
                     data = {
@@ -467,7 +470,8 @@ define('io.ox/calendar/api', [
                 if (obj.recurrenceId) {
                     params.recurrenceId = obj.recurrenceId;
                 }
-                if (obj.alarms) {
+                // null means remove alarms
+                if (obj.alarms || obj.alarms === null) {
                     data.alarms = obj.alarms;
                 }
                 if (options.expand) {
@@ -553,7 +557,7 @@ define('io.ox/calendar/api', [
                         folder: model.get('folder'),
                         targetFolder: targetFolderId,
                         recurrenceId: model.get('recurrenceId'),
-                        timestamp: model.get('timestamp'),
+                        timestamp: _.then(),
                         fields: api.defaultFields
                     };
                     if (options.expand) {
@@ -648,7 +652,11 @@ define('io.ox/calendar/api', [
                         alarmId: obj.alarmId
                     }
                 })
-                .then(processResponse);
+                .then(function (data) {
+                    api.trigger('acknowledgedAlarm', obj);
+                    processResponse(data);
+                    return data;
+                });
             },
 
             remindMeAgain: function (obj) {

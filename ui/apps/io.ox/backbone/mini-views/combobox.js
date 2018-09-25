@@ -202,6 +202,9 @@ define('io.ox/backbone/mini-views/combobox', [
 
         onKeydown: function (e) {
             switch (e.keyCode) {
+                case 9: // tab
+                    this.onBlur();
+                    break;
                 case 13: // enter
                     e.preventDefault();
                     this.select();

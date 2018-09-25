@@ -1274,6 +1274,12 @@ msgstr "Appliquer"
 msgid "Apply changes"
 msgstr "Appliquer les modifications"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Appliquer le rôle"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Appliquer le rôle"
@@ -1903,6 +1909,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Impossible d'imprimer cet élément"
 msgstr[1] "Impossible d'imprimer ces éléments"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Impossible de choisir un type de vue pour %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacité"
@@ -2343,6 +2353,10 @@ msgstr "Le contact a été copié"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Le contact a été déplacé"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3362,6 +3376,12 @@ msgstr "N'existe pas"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domaine"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Me le rappeler à nouveau"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7259,10 +7279,6 @@ msgstr "Répertoire téléphonique"
 msgid "Phone numbers"
 msgstr "Numéros de téléphone"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Choisissez une heure ici"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9515,6 +9531,13 @@ msgstr "Démarrer la vidéo"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Fuseau horaire pour la date de début"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13253,9 +13276,6 @@ msgstr "votre plate-forme"
 #~ msgid "Cannot move system folder."
 #~ msgstr "Impossible de déplacer un dossier système."
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Impossible de choisir un type de vue pour %1$s"
-
 #~ msgid "CardDAV Login"
 #~ msgstr "Authentification CardDAV"
 
@@ -14920,6 +14940,9 @@ msgstr "votre plate-forme"
 
 #~ msgid "Phone alt"
 #~ msgstr "Téléphone 2"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Choisissez une heure ici"
 
 #~ msgid "Play audio files"
 #~ msgstr "Jouer les fichiers audio"

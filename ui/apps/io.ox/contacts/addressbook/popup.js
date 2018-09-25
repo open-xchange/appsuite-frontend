@@ -504,13 +504,14 @@ define('io.ox/contacts/addressbook/popup', [
                         $('<div class="col-xs-6">').append(
                             $('<input type="text" class="form-control search-field">')
                             .attr('placeholder', gt('Search'))
+                            .attr('aria-label', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
                                 this.options.useGABOnly ? $() : $('<option value="all">').text(gt('All folders')),
                                 this.options.useGABOnly || useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
-                            )
+                            ).attr('aria-label', gt('Apply filter'))
                         )
                     )
                 );

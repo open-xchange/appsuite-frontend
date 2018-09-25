@@ -189,23 +189,16 @@ define('plugins/notifications/calendar/register', [
                 reminderUtil.draw(node, baton.model, options);
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
-                    calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
-                    baton.view.collection.remove(baton.requestedModel.attributes);
-                });
-                node.find('[data-action="selector"]').on('click change', function (e) {
-                    //if we do this on smartphones the dropdown does not close correctly
-                    if (!_.device('smartphone')) {
-                        e.stopPropagation();
-                    }
-
-                    var min = $(e.target).val();
-                    //0 means 'pick a time here' was selected. Do nothing.
+                    var min = node.find('[data-action="selector"]').val();
+                    // 0 means 'don't remind me again was selected.
                     if (min !== '0') {
                         calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {
                             calAPI.getAlarms();
                         });
-                        baton.view.collection.remove(baton.requestedModel.attributes);
+                    } else {
+                        calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     }
+                    baton.view.collection.remove(baton.requestedModel.attributes);
                 });
             });
         }
@@ -232,6 +225,10 @@ define('plugins/notifications/calendar/register', [
                     api: calAPI,
                     useListRequest: true,
                     useApiCid: true,
+                    apiEvents: {
+                        // triggered when something went wrong when getting event data in the list request -> event was probably deleted. In any case, clear the alarm
+                        remove: 'failureToFetchEvent acknowledgedAlarm'
+                    },
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
@@ -293,12 +290,25 @@ define('plugins/notifications/calendar/register', [
             calAPI.on('resetChronosAlarms', function (alarms) {
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
+                    getIds = function () {
+                        var ids = [];
+                        subview.collection.forEach(function (model) {
+                            ids.push(util.cid({ folder: model.get('folder'), id: model.get('eventId'), recurrenceId: model.get('recurrenceId') }));
+                        });
+                        return ids;
+                    },
                     timerFunction = function () {
+                        var ids = getIds();
                         if (nextAlarm.action === 'AUDIO') {
                             playAlarm(nextAlarm);
+                        } else if (_(ids).indexOf(util.cid({ folder: nextAlarm.folder, id: nextAlarm.eventId, recurrenceId: nextAlarm.recurrenceId })) > -1) {
+                            // acknowledge duplicates (only one alarm per event)
+                            calAPI.acknowledgeAlarm(nextAlarm);
                         } else {
                             subview.addNotifications(nextAlarm);
+                            ids = getIds();
                         }
+
                         nextAlarm = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
@@ -306,8 +316,12 @@ define('plugins/notifications/calendar/register', [
                             if (alarm.time <= now) {
                                 if (alarm.action === 'AUDIO') {
                                     playAlarm(alarm);
+                                } else if (_(ids).indexOf(util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId })) > -1) {
+                                    // acknowledge duplicates (only one alarm per event)
+                                    calAPI.acknowledgeAlarm(alarm);
                                 } else {
                                     subview.addNotifications(alarm);
+                                    ids = getIds();
                                 }
                             } else if (!nextAlarm || nextAlarm.time > alarm.time) {
                                 if (nextAlarm) {
@@ -350,6 +364,18 @@ define('plugins/notifications/calendar/register', [
                 if (nextAlarm) {
                     nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).valueOf() - new moment(now).valueOf());
                 }
+                var ids = getIds();
+                alarmsToAdd = _(alarmsToAdd).uniq(function (alarm) {
+                    return util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId });
+                });
+                alarmsToAdd = alarmsToAdd.filter(function (alarm) {
+                    if (_(ids).indexOf(util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId })) > -1 && !subview.collection.get(alarm.id)) {
+                        // acknowledge duplicates (only one alarm per event)
+                        calAPI.acknowledgeAlarm(alarm);
+                        return false;
+                    }
+                    return true;
+                });
                 subview.resetNotifications(alarmsToAdd);
             });
             //react to changes in settings

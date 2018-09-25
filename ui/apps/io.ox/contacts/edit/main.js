@@ -220,7 +220,7 @@ define('io.ox/contacts/edit/main', [
 
                     // create model & view
                     if (data.id) {
-                        app.userMode = data.id === data.user_id;
+                        app.userMode = data.id === data.user_id || (data.folder === '6' && data.id === String(ox.user_id));
                         var factory = app.userMode ? model.protectedMethods.buildFactory('io.ox/core/user/model', userApi) : model.factory;
 
                         factory.realm('edit').retain().get({
@@ -258,6 +258,7 @@ define('io.ox/contacts/edit/main', [
             };
 
             if (data) {
+                if (data.folder && !data.folder_id) data.folder_id = data.folder;
                 // hash support
                 app.setState(data.id
                     ? { folder: data.folder_id, id: data.id }

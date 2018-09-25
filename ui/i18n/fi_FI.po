@@ -1259,6 +1259,12 @@ msgstr "Käytä"
 msgid "Apply changes"
 msgstr "Käytä muutoksia"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Sovella rooli"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Sovella rooli"
@@ -1878,6 +1884,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Tätä kohdetta ei voida tulostaa"
 msgstr[1] "Näitä kohteita ei voida tulostaa"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Tila"
@@ -2316,6 +2326,10 @@ msgstr "Yhteystiedot kopioitu"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Yhteystieto siirretty"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3315,6 +3329,12 @@ msgstr "Ei ole olemassa"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domain"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Muistuta minua uudestaan"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7173,10 +7193,6 @@ msgstr "Puhelinluettelo"
 msgid "Phone numbers"
 msgstr "Puhelinnumerot"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Valitse aika tästä"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9407,6 +9423,13 @@ msgstr "Aloita video"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Aloituspäivämäärän aikavyöhyke"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -12885,9 +12908,6 @@ msgstr "alustasi"
 #~ msgid "Calendar workweek view"
 #~ msgstr "Työviikkonäkymä"
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
-
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV -sisäänkirjautuminen"
 
@@ -14155,6 +14175,9 @@ msgstr "alustasi"
 
 #~ msgid "Phone alt"
 #~ msgstr "Puhelin vaihtoehtoinen"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Valitse aika tästä"
 
 #~ msgid "Play audio files"
 #~ msgstr "Soita äänitiedostoja"

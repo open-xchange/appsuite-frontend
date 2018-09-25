@@ -1263,6 +1263,12 @@ msgstr "Apply"
 msgid "Apply changes"
 msgstr "Apply changes"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Apply role"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Apply role"
@@ -1885,6 +1891,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Cannot print this item"
 msgstr[1] "Cannot print these items"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Cannot require a view type for %1$s"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacity"
@@ -2322,6 +2332,10 @@ msgstr "Contact has been copied"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Contact has been moved"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3330,6 +3344,12 @@ msgstr "Does not exist"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domain"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Remind me again"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7192,10 +7212,6 @@ msgstr "Phone list"
 msgid "Phone numbers"
 msgstr "Phone numbers"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Pick a time here"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9429,6 +9445,13 @@ msgstr "Start video"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Start date timezone"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -12959,9 +12982,6 @@ msgstr "your platform"
 #~ msgid "Calendar workweek view"
 #~ msgstr "Calendar workweek view"
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Cannot require a view type for %1$s"
-
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV Login"
 
@@ -14429,6 +14449,9 @@ msgstr "your platform"
 
 #~ msgid "Phone alt"
 #~ msgstr "Phone alt"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Pick a time here"
 
 #~ msgid "Play audio files"
 #~ msgstr "Play audio files"

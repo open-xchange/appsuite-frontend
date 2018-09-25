@@ -600,9 +600,10 @@ define('io.ox/core/tk/tokenfield', [
                 this.input.on('keydown', function (e) {
                     var enter = e.which === 13,
                         validquery = !!self.input.val() && self.input.val().length >= o.minLength,
-                        runningrequest = self.model.get('query') !== self.input.val();
+                        runningrequest = self.model.get('query') !== self.input.val(),
+                        automated = e.which === 38 || e.which === 40;
                     // clear dropdown when query changes
-                    if (runningrequest && !enter) {
+                    if (runningrequest && !enter && !automated) {
                         self.hiddenapi.dropdown.empty();
                         self.hiddenapi.dropdown.close();
                     }

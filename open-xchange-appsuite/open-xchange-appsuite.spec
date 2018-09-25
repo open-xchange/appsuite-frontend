@@ -17,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 10
+%define         ox_release 0
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -52,6 +52,8 @@ Summary:        Manifest and apps included in the OX App Suite HTML5 client
 Requires:       open-xchange-core
 Requires(post): open-xchange-halo
 Requires:       open-xchange-appsuite-l10n-en-us
+Provides:       open-xchange-appsuite-saml = %{version}
+Obsoletes:      open-xchange-appsuite-saml < %{version}
 
 %description    manifest
 OX App Suite HTML5 client
@@ -607,6 +609,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Mon Sep 10 2018 Markus Wagner <markus.wagner@open-xchange.com>
+prepare for 7.10.1
 * Fri Jun 29 2018 Markus Wagner <markus.wagner@open-xchange.com>
 Fourth candidate for 7.10.0 release
 * Wed Jun 27 2018 Markus Wagner <markus.wagner@open-xchange.com>

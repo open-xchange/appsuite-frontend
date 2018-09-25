@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-08-09 14:35+0200\n"
+"PO-Revision-Date: 2018-09-14 10:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1271,6 +1271,12 @@ msgstr "Anwenden"
 msgid "Apply changes"
 msgstr "Änderungen übernehmen"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Rolle anwenden"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Rolle anwenden"
@@ -1898,6 +1904,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Objekt kann nicht gedruckt werden"
 msgstr[1] "Objekte können nicht gedruckt werden"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Ein Ansichtstyp für %1$s kann nicht angefordert werden"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Kapazität"
@@ -2339,6 +2349,10 @@ msgstr "Kontakt wurde kopiert"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Kontakt wurde verschoben"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3350,6 +3364,12 @@ msgstr "Existiert nicht"
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domain"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Erneut erinnern"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -6709,9 +6729,8 @@ msgid "Now active"
 msgstr "jetzt aktiv"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
 msgid "Numbers"
-msgstr "Mitglieder"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -7227,10 +7246,6 @@ msgstr "Telefonliste"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Telefonnummern"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Wählen Sie eine Zeit"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -8525,10 +8540,8 @@ msgid "Rule name"
 msgstr "Regel-Name"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-#| msgid "Run auto-play mode"
 msgid "Run auto-play "
-msgstr "Automatischen Wiedergabemodus starten"
+msgstr "Automatische Wiedergabe starten"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Run auto-play mode"
@@ -9475,6 +9488,13 @@ msgstr "Video starten"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Zeitzone für Startdatum"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11186,9 +11206,8 @@ msgid "Visibility"
 msgstr "Sichtbarkeit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Visibility Help"
-msgstr "Hilfe zur Sichtbarkeit"
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -11263,12 +11282,10 @@ msgid "Week start"
 msgstr "Wochenstart"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
 msgid "Week that contains January 1st"
-msgstr "Woche, die den ersten Januar enthält"
+msgstr "Woche, die den 1. Januar enthält"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
 msgid "Week that contains the first Thursday"
 msgstr "Woche, die den ersten Donnerstag enthält"
 
@@ -12811,6 +12828,9 @@ msgstr "Ihre Plattform"
 #~ msgid "11:00"
 #~ msgstr "11:00"
 
+#~ msgid "12 hour"
+#~ msgstr "12 Stunden"
+
 #~ msgid "12:00"
 #~ msgstr "12:00"
 
@@ -12891,6 +12911,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "4 days"
 #~ msgstr "4 Tage"
+
+#~ msgid "4 hour"
+#~ msgstr "4 Stunden"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 Wochen"
@@ -13091,6 +13114,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
+
+#~ msgid "Additional settings"
+#~ msgstr "Zusätzliche Einstellungen"
 
 #~ msgid "Addressbook chapter"
 #~ msgstr "Kapitel 'Adressbuch'"
@@ -13580,9 +13606,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Systemordner kann nicht verschoben werden"
-
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Ein Ansichtstyp für %1$s kann nicht angefordert werden"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV-Login"
@@ -16081,6 +16104,9 @@ msgstr "Ihre Plattform"
 #~ msgid "Phone alt"
 #~ msgstr "Telefonnummer alternativ"
 
+#~ msgid "Pick a time here"
+#~ msgstr "Wählen Sie eine Zeit"
+
 #~ msgid "Play audio files"
 #~ msgstr "Audiodateien abspielen"
 
@@ -18576,6 +18602,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "date range"
 #~ msgstr "Zeitraum"
+
+#~ msgid "day of the week"
+#~ msgstr "Tag der Woche"
 
 #~ msgid "day of the weekend"
 #~ msgstr "Tag des Wochenendes"

@@ -205,7 +205,7 @@ define('io.ox/contacts/main', [
                     this.addClass('contact').append(
                         private_flag = $('<i class="fa fa-lock private_flag" aria-hidden="true">').hide(),
                         name = $('<div class="fullname">').attr('aria-hidden', true),
-                        description = $('<div class="bright-text">').attr('aria-hidden', true)
+                        description = $('<div class="gray">').attr('aria-hidden', true)
                     );
                     return { name: name, private_flag: private_flag, description: description };
                 },
@@ -237,10 +237,10 @@ define('io.ox/contacts/main', [
                         fields.description.text(description);
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
-                            fields.name.addClass('bright-text').text(gt('Empty name and description found.'));
+                            fields.name.addClass('gray').text(gt('Empty name and description found.'));
                             fields.description.text(gt('Edit to set a name.'));
                         } else {
-                            fields.name.removeClass('bright-text');
+                            fields.name.removeClass('gray');
                         }
                     }
                     this.attr('aria-label', name);
@@ -349,7 +349,8 @@ define('io.ox/contacts/main', [
             app.left.prepend(
                 // thumb index
                 app.thumbs = $('<ul class="atb contact-grid-index listbox" tabindex="0" role="listbox">')
-                    .attr('aria-label', 'Thumb index')
+                    //#. index used in contacts list to jump to names with a specific starting letter
+                    .attr('aria-label', gt('Starting letter index'))
                     .on('click', '.thumb-index', thumbClick)
                     .on('touchmove', thumbMove)
             );
@@ -1001,7 +1002,8 @@ define('io.ox/contacts/main', [
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,
             hideTopbar: _.device('smartphone'),
-            hideToolbar: _.device('smartphone')
+            hideToolbar: _.device('smartphone'),
+            containerLabel: gt('Contact list. Select a contact to view details.')
             //swipeRightHandler: swipeRightHandler,
         });
 

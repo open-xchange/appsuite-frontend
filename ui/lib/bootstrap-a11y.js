@@ -58,7 +58,7 @@
         showPopover.apply(this, arguments);
         var $tip = this.tip(),
             tooltipID = $tip.attr('id') || _.uniqueId('ui-tooltip');
-        $tip.attr({ role: 'alert', id: tooltipID });
+        $tip.attr({ role: 'tooltip', id: tooltipID });
         this.$element.attr('aria-describedby', tooltipID);
     };
 

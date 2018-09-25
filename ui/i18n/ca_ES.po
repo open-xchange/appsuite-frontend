@@ -1320,6 +1320,12 @@ msgstr "Aplica rol"
 msgid "Apply changes"
 msgstr "Accepta els canvis"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Aplica rol"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplica rol"
@@ -1963,6 +1969,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "No s'ha pogut imprimir aquest element"
 msgstr[1] "No s'han pogut imprimir aquests elements"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr ""
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Capacitat"
@@ -2423,6 +2433,10 @@ msgstr "El contacte s'ha copiat"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "El contacte s'ha mogut"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3457,6 +3471,12 @@ msgstr ""
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr ""
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Recorda-m'ho de nou"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7483,10 +7503,6 @@ msgstr "Llista de telèfons"
 msgid "Phone numbers"
 msgstr "Números de telèfon"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Triau una hora aquí"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9791,6 +9807,12 @@ msgstr "Data d'inici"
 #, fuzzy
 msgid "StartTLS"
 msgstr "Inici"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+msgid "Starting letter index"
+msgstr "Data d'inici"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13805,6 +13827,9 @@ msgstr "la vostra plataforma"
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Tasca endarrerida. %1$s %2$s. Premeu [Intro] per a obrir-la"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Triau una hora aquí"
 
 #~ msgid "Play audio files"
 #~ msgstr "Reprodueix fitxers d'àudio"

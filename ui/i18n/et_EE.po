@@ -1270,6 +1270,12 @@ msgstr "Rakenda"
 msgid "Apply changes"
 msgstr "Rakenda muudatused"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply filter"
+msgstr "Rakenda roll"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Rakenda roll"
@@ -1898,6 +1904,10 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Seda üksust ei saa printida"
 msgstr[1] "Neid üksusi ei saa printida"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Cannot require a view type for %1$s"
+msgstr "Ei saa taotleda vaate tüüpi %1$s jaoks"
+
 #: apps/io.ox/files/guidance/statistics.js module:io.ox/files
 msgid "Capacity"
 msgstr "Maht"
@@ -2340,6 +2350,10 @@ msgstr "Kontakt on kopeeritud"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Kontakt on teisaldatud"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -3338,6 +3352,12 @@ msgstr ""
 #: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domeen"
+
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, fuzzy
+#| msgid "Remind me again"
+msgid "Don't remind me again"
+msgstr "Meenutage hiljem"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -7214,10 +7234,6 @@ msgstr "Telefoniloend"
 msgid "Phone numbers"
 msgstr "Telefoninumbrid"
 
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Valige aeg siin"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -9457,6 +9473,13 @@ msgstr "Esita video"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
+
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Start date timezone"
+msgid "Starting letter index"
+msgstr "Alguskuupäeva ajavöönd"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -12694,9 +12717,6 @@ msgstr "teie platvorm"
 #~ msgid "Cannot add participant/member with an invalid mail address: %1$s"
 #~ msgstr "Osalejat/liiget ei saa lisada, kehtetu e-posti aadress: %1$s"
 
-#~ msgid "Cannot require a view type for %1$s"
-#~ msgstr "Ei saa taotleda vaate tüüpi %1$s jaoks"
-
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV sisselogimine"
 
@@ -13196,6 +13216,9 @@ msgstr "teie platvorm"
 
 #~ msgid "Permissions for \"%1$s\""
 #~ msgstr "Õigused \"%1$s\" korral"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Valige aeg siin"
 
 #~ msgid "Play audio files"
 #~ msgstr "Esita helifaile"

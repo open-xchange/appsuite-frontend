@@ -126,9 +126,25 @@
         node.scrollIntoView(/^(top|top:partial)$/.test(scrolledOut));
     };
 
+    //
+    // Unified and simplified solution
+    // should cover all cases, i.e. $.fn.intoViewport AND (newer) $.fn.intoView
+    //
+    $.fn.scrollIntoViewIfNeeded = function () {
+        var node = this[0], pane = $(node).closest('.scrollable-pane, .scrollpane')[0];
+        if (!node || !pane) return;
+        var outer = pane.getBoundingClientRect(), inner;
+        // first: bottom up
+        inner = node.getBoundingClientRect();
+        if (inner.bottom > outer.bottom) pane.scrollTop += inner.bottom - outer.bottom;
+        // second: top down
+        inner = node.getBoundingClientRect();
+        if (inner.top < outer.top) pane.scrollTop -= outer.top - inner.top;
+    };
+
     $.fn.intoViewport = function (node) {
 
-        if (!node) node = this.closest('.scrollable-pane');
+        if (!node) node = this.closest('.scrollable-pane,.scrollpane');
 
         if (node.length === 0 || this.length === 0) return this;
 
