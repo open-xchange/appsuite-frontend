@@ -42,6 +42,7 @@ define('io.ox/backbone/views/datepicker', [
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             this.options = options || {};
+            this.datepickerId = _.uniqueId('dp_');
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
             this.date = this.getInitialDate();
@@ -241,7 +242,8 @@ define('io.ox/backbone/views/datepicker', [
         renderMonth: function () {
 
             var current = this.getDate().clone().startOf('day'),
-                m = current.clone();
+                m = current.clone(),
+                datepickerId = this.datepickerId;
 
             this.renderHeader(
                 $('<button type="button" class="switch-mode">')
@@ -287,7 +289,7 @@ define('io.ox/backbone/views/datepicker', [
                                         try {
                                             return $('<td role="gridcell" class="date">')
                                                 .attr({
-                                                    'id': 'date_' + m.format('l'),
+                                                    'id': datepickerId + '_' + m.format('l'),
                                                     //#. CW is calender week and %1$d is the week number
                                                     'aria-label': m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
                                                     'aria-selected': isSame(m, current),

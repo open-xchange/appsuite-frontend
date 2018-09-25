@@ -59,27 +59,27 @@ define('io.ox/backbone/mini-views/datepicker', [
 
         render: function () {
             var self = this,
-                def = $.Deferred();
+                def = $.Deferred(),
+                guid = _.uniqueId('form-control-label-');
 
             this.$el.addClass('dateinput').toggleClass('mobile-mode', self.mobileMode).append(
-                $('<legend>').addClass('simple control-label').text(this.options.label),
+                $('<label class="simple control-label">').attr('for', guid).text(this.options.label),
                 $('<div class="input-group form-inline">').append(
                     function () {
                         // render date input
-                        var guid = _.uniqueId('form-control-label-'),
-                            ariaID = guid + '-aria',
-                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')'),
+                        var ariaID = guid + '-aria',
+                            dayFieldLabel = gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')',
                             timezoneContainer;
 
                         self.nodes.dayField = $('<input type="text" class="form-control datepicker-day-field">').attr({
                             id: guid,
+                            'aria-label': dayFieldLabel,
                             'aria-describedby': ariaID
                         });
 
                         if (self.mobileMode) {
                             // render date input only on mobile devices
                             return [
-                                dayFieldLabel,
                                 self.nodes.dayField
                             ];
                         }
@@ -124,7 +124,6 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                         return [
                             self.nodes.dayField,
-                            dayFieldLabel,
                             self.nodes.a11yDate,
                             self.nodes.timeField,
                             $('<label class="sr-only">').attr('for', self.nodes.timeField.attr('id')).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
