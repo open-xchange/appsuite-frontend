@@ -142,7 +142,7 @@ define('io.ox/mail/accounts/settings', [
             var $el = this;
             require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
                 var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
-                        return _(service.get('availableScopes')).contains('mail') &&
+                        return service.canAdd({ scopes: ['mail'] }) &&
                             oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
                                 return account.id;
                             })
