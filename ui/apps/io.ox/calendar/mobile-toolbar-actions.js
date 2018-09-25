@@ -187,7 +187,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
         // draw toolbar
         var baton = ext.Baton({ data: list, app: this });
         this.pages.getToolbar('month').setBaton(baton);
-        this.pages.getToolbar('week').setBaton(baton);
+        this.pages.getToolbar('week:day').setBaton(baton);
         this.pages.getToolbar('list').setBaton(baton);
         this.pages.getSecondaryToolbar('list').setBaton(baton);
 

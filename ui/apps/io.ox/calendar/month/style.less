@@ -13,6 +13,8 @@
 
 .monthview-container {
 
+    * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+
     height: 100%;
     .flex-display(flex);
     .flex-direction(column);
@@ -20,6 +22,12 @@
     .header {
         height: 56px;
         flex: 0 0 auto;
+        display: flex;
+
+        .smartphone & {
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 
     .month-container {
@@ -180,189 +188,6 @@
         }
     }
 
-}
-
-.no-select .appointment {
-    pointer-events: none;
-    user-select: none;
-}
-
-.month-view-old {
-
-    * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
-
-    // overwrite display:block from page controller
-    &.io-ox-pagecontroller.page.current {
-        .flex-display();
-        .flex-direction(column);
-    }
-
-    .month-toolbar {
-        .flex(0 0 auto);
-
-        .controls-container {
-            padding: 17px 0 0 8px;
-            height: 56px;
-            width: auto;
-        }
-
-        .month-info {
-            margin-left: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            padding-top: 8px;
-            user-select: none;
-        }
-    }
-
-    .month-container {
-        .flex(1);
-        overflow: hidden;
-        outline: none;
-
-        .weekend { display: none; }
-        &.weekends .weekend { display: table-cell; }
-        .cw { display: none; }
-        &.cw .cw { display: table-cell; }
-    }
-
-    .month {
-
-        height: 100%;
-        width: 100%;
-        table-layout: fixed;
-
-        thead {
-            display: none;
-
-            tr {
-                height: 32px;
-                border-bottom: 1px solid #ccc;
-            }
-
-            th {
-                text-align: center;
-                color: #767676;
-                font-size: 14px;
-                font-weight: normal;
-            }
-        }
-
-        .week {
-
-            .day {
-                border-top: 1px solid @monthview-border;
-                border-right: 1px solid @monthview-border;
-                background-color: transparent;
-                position: relative;
-
-                &.cw {
-                    width: 80px;
-
-                    .number {
-                        font-weight: normal;
-                        color: #757575;
-                    }
-                }
-
-                .number {
-                    position: absolute;
-                    color: #333;
-                    font-weight: bold;
-                    text-align: center;
-                    right: 1px;
-                    top: 1px;
-                    padding: 3px 8px;
-                    z-index: 1;
-                    font-size: 12px;
-                    line-height: 16px;
-                    background-color: transparent;
-                    .user-select(none);
-                    cursor: default;
-
-                    .day-label {
-                        font-weight: normal;
-                        color: #717171;
-                        margin-right: 4px;
-                    }
-                }
-
-                &.weekend .number { color: #a00; }
-
-                &.today .number {
-                    color: #fff;
-                    font-weight: bold;
-                    background-color: @calendar-today;
-
-                    .day-label {
-                        color: white;
-                    }
-                }
-
-                &.out:not(.today) {
-                    background-color: rgba(238, 238, 238, 0.5);
-
-                    .number {
-                        color: #717171;
-                        font-weight: normal;
-                    }
-
-                    .appointment {
-                        background-color: transparent!important;
-                        color: #333!important;
-                        background-image: none;
-
-                        &.hover {
-                            background-color: #ccc!important;
-                        }
-                    }
-                }
-
-                .list {
-                    top: 24px;
-                    bottom: 1px;
-                    margin: 0 1px;
-                    .overflow-y(auto);
-                    z-index: 0;
-                }
-            }
-        }
-
-    }
-
-    // Appointment
-    .appointment {
-        line-height: 23px;
-        border-bottom: 0;
-        margin-bottom: 1px;
-        white-space: nowrap;
-        cursor: pointer;
-        background-color: @appointment-reserved;
-        .transition(opacity 0.2s);
-        .backface-visibility(hidden);
-
-        .appointment-content {
-            height: 100%;
-            width: 100%;
-            font-size: 12px;
-            padding: 0 4px;
-            .ellipsis();
-        }
-
-        .appointment-content > * {
-            margin-right: 4px;
-        }
-        .start {
-            min-width: 32px;
-            display: inline-block;
-            text-align: right;
-        }
-
-        .private-flag {
-            font-size: 14px;
-        }
-    }
-
     // Mobile
     @media (max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
@@ -440,5 +265,10 @@
                 font-weight: 300;
             }
         }
+    }
+
+    .no-select .appointment {
+        pointer-events: none;
+        user-select: none;
     }
 }

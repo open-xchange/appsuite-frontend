@@ -78,15 +78,25 @@ define('io.ox/calendar/week/view', [
         },
 
         update: function () {
+            var startDate = this.model.get('startDate');
             this.monthText.text(
                 this.model.get('numColumns') > 1
-                    ? this.model.get('startDate').format('MMMM YYYY')
-                    : this.model.get('startDate').format('ddd, l')
+                    ? startDate.format('MMMM YYYY')
+                    : startDate.format('ddd, l')
             );
             this.cw.text(
                 //#. %1$d = Calendar week
-                gt('CW %1$d', moment(this.model.get('startDate')).format('w'))
+                gt('CW %1$d', startDate.format('w'))
             );
+            if (_.device('smartphone')) {
+                // change navbar title
+                var app = this.opt.app;
+                app.pages.getNavbar('week:day').setTitle(
+                    this.model.get('numColumns') > 1
+                        ? startDate.formatInterval(moment(startDate).add(this.model.get('numColumns'), 'days'))
+                        : startDate.format('ddd, l')
+                );
+            }
         },
 
         render: function () {
@@ -489,18 +499,20 @@ define('io.ox/calendar/week/view', [
         }()),
 
         render: function () {
-            var dropdown = this.drawDropdown();
+            if (!_.device('smartphone')) {
+                var dropdown = this.drawDropdown();
+                this.$el.empty().append(
+                    $('<div class="time-label-bar">').append(
+                        $('<div class="timezone">'),
+                        dropdown.render().$el
+                    )
+                );
 
-            this.$el.empty().append(
-                $('<div class="time-label-bar">').append(
-                    $('<div class="timezone">'),
-                    dropdown.render().$el
-                ),
-                this.$appointmentContainer
-            );
+                $('.dropdown-label', dropdown.$el).append($('<i class="fa fa-caret-down" aria-hidden="true">'));
+                this.updateTimezones();
+            }
 
-            $('.dropdown-label', dropdown.$el).append($('<i class="fa fa-caret-down" aria-hidden="true">'));
-            this.updateTimezones();
+            this.$el.append(this.$appointmentContainer);
             // render appointments
             this.onReset = true;
             this.opt.view.collection.filter(util.isAllday.bind(util)).forEach(this.onAddAppointment.bind(this));

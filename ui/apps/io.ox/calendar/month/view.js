@@ -79,29 +79,31 @@ define('io.ox/calendar/month/view', [
 
             this.monthInfo = _.device('smartphone') ? $('<div class="info">') : $('<button class="info btn btn-link" tabindex="-1">');
 
-            this.$el.empty().append(
-                $('<button href="#" class="control prev">').attr({
-                    title: gt('Previous Month'), // TODO: Aria title vs. aria-label
-                    'aria-label': gt('Previous Month')
-                })
-                .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
-                $('<button href="#" class="control next" tabindex="-1">').attr({
-                    title: gt('Next Month'), // TODO: Aria title vs. aria-label
-                    'aria-label': gt('Next Month')
-                })
-                .append($('<i class="fa fa-chevron-right" aria-hidden="true">')),
-                this.monthInfo
-                    .attr({
-                        'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
+            this.$el.empty();
+            if (!_.device('smartphone')) {
+                this.$el.append(
+                    $('<button href="#" class="control prev">').attr({
+                        title: gt('Previous Month'), // TODO: Aria title vs. aria-label
+                        'aria-label': gt('Previous Month')
                     })
-                    .append(
-                        this.monthText = $('<span>'),
-                        $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
-                    )
-            );
+                    .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
+                    $('<button href="#" class="control next" tabindex="-1">').attr({
+                        title: gt('Next Month'), // TODO: Aria title vs. aria-label
+                        'aria-label': gt('Next Month')
+                    })
+                    .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
+                );
+            }
+
+            this.$el.append(this.monthInfo.append(this.monthText = $('<span>')));
             this.update();
 
             if (!_.device('smartphone')) {
+                this.monthInfo.attr({
+                    'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
+                }).append(
+                    $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
+                );
                 require(['io.ox/backbone/views/datepicker'], function (Picker) {
                     new Picker({ date: self.model.get('date').clone() })
                         .attachTo(self.monthInfo)
@@ -143,6 +145,11 @@ define('io.ox/calendar/month/view', [
             _.extend(events, {
                 'dblclick .day': 'onCreateAppointment'
             });
+            if (_.device('smartphone')) {
+                _.extend(events, {
+                    'tap .day': 'onTapAppointment'
+                });
+            }
             if (_.device('touch')) {
                 _.extend(events, {
                     'taphold .day': 'onCreateAppointment'
@@ -234,17 +241,17 @@ define('io.ox/calendar/month/view', [
 
             if (_.device('smartphone')) {
                 this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
-                // on mobile we switch to the day view after a tap
-                // on a day-cell was performed
-                this.$el.on('tap', '.day', function () {
-                    // TODO look at it :)
-                    self.changeToSelectedDay($(this).data('date'));
-                });
             }
 
             if (_.device('ie && ie <= 11')) this.calculateHeights();
 
             return this;
+        },
+
+        onTapAppointment: function (e) {
+            var app = this.opt.app;
+            app.setDate($(e.currentTarget).data('date'));
+            app.pages.changePage('week:day', { animation: 'slideleft' });
         },
 
         // IE 11 needs a fixed height or appointments are not displayed
@@ -383,6 +390,11 @@ define('io.ox/calendar/month/view', [
             }
         },
 
+        renderAppointmentIndicator: function (node) {
+            ext.point('io.ox/calendar/month/view/appointment/mobile')
+                .invoke('draw', node);
+        },
+
         onChangeAppointment: function (model) {
             this.onRemoveAppointment(model);
             this.onAddAppointment(model);
@@ -401,6 +413,14 @@ define('io.ox/calendar/month/view', [
             this.onReset = false;
         }
 
+    });
+
+    ext.point('io.ox/calendar/month/view/appointment/mobile').extend({
+        id: 'default',
+        index: 100,
+        draw: function () {
+            this.append('<i class="fa fa-circle" aria-hidden="true">');
+        }
     });
 
     return PerspectiveView.extend({

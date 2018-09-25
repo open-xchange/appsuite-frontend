@@ -45,6 +45,7 @@ define('io.ox/calendar/main', [
         }), win;
 
     app.mediator({
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own
@@ -67,6 +68,13 @@ define('io.ox/calendar/main', [
 
             win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
+            // create empty startup page
+            // such that the first change:page will always trigger a real page change with view initialization
+            app.pages.addPage({
+                name: 'start',
+                startPage: true
+            });
+
             app.pages.addPage({
                 name: 'folderTree',
                 navbar: new Bars.NavbarView({
@@ -86,12 +94,11 @@ define('io.ox/calendar/main', [
                     baton: baton,
                     page: 'month',
                     extension: 'io.ox/calendar/mobile/toolbar'
-                }),
-                startPage: true
+                })
             });
 
             app.pages.addPage({
-                name: 'week',
+                name: 'week:day',
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
@@ -139,7 +146,7 @@ define('io.ox/calendar/main', [
             // tell page controller about special navigation rules
             app.pages.setBackbuttonRules({
                 'month': 'folderTree',
-                'week': 'month',
+                'week:day': 'month',
                 'list': 'folderTree'
             });
         },
@@ -153,6 +160,7 @@ define('io.ox/calendar/main', [
             app.pages = new PageController({ appname: app.options.name });
 
             // create empty startup page
+            // such that the first change:page will always trigger a real page change with view initialization
             app.pages.addPage({
                 name: 'start',
                 container: c,
@@ -232,9 +240,9 @@ define('io.ox/calendar/main', [
                 })
                 .setLeft(gt('Folders'));
 
-            app.pages.getNavbar('week')
+            app.pages.getNavbar('week:day')
                 .on('leftAction', function () {
-                    ox.ui.Perspective.show(app, 'month', { animation: 'slideright' });
+                    app.pages.changePage('month', { animation: 'slideright' });
                 })
                 .setLeft(gt('Back'));
 
@@ -442,8 +450,9 @@ define('io.ox/calendar/main', [
         },
 
         'views': function (app) {
-            var list = ['week:day', 'week:workweek', 'week:week', 'month', 'year'],
+            var list = ['week:day', 'month'],
                 views = {};
+            if (_.device('!smartphone')) list.push('week:workweek', 'week:week', 'year');
             list.forEach(function (item) {
                 var node = app.pages.getPage(item);
                 node.one('pagebeforeshow', function () {
@@ -728,23 +737,12 @@ define('io.ox/calendar/main', [
 
         /*
          * mobile only
-         * change current date label in navbar
-         */
-        'change:navbar:date-mobile': function (app) {
-            if (_.device('!smartphone')) return;
-            // TODO move this code into the header view
-            app.pages.getPage('week').on('change:navbar:date', function (e, dates) {
-                app.pages.getNavbar('week').setTitle(dates.date);
-            });
-        },
-        /*
-         * mobile only
          *
          */
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            app.pages.getPage('week').on('pageshow', function () {
-                app.pages.getNavbar('week').setLeft(app.getDate().format('MMMM'));
+            app.pages.getPage('week:day').on('pageshow', function () {
+                app.pages.getNavbar('week:day').setLeft(app.getDate().format('MMMM'));
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
         },

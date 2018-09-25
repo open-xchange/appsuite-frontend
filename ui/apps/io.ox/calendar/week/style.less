@@ -11,7 +11,12 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
+@weekview-time-widthSmall: @weekview-time-width - 13;
+
 .weekview-container {
+
+    * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+
     height: 100%;
     .flex-display(flex);
     .flex-direction(column);
@@ -451,6 +456,30 @@
         .appointment-container .hidden-appointment-indicator-container { left: @adjusted-width; }
         .appointment-container .scrollpane > .current-time-indicator { left: @adjusted-width; }
     }
+
+    // Mobile
+    .smartphone & {
+
+        .info { cursor: auto; }
+
+        .weekview-toolbar { display: none; }
+
+        .fulltime-container { margin: 0; margin-left: @weekview-time-widthSmall; min-height: auto; }
+        .appointment-container { margin-top: 0; }
+        .more-appointments-container { left: @weekview-time-widthSmall; }
+
+        .scrollpane {
+
+            .week-container-label {
+                width: @weekview-time-widthSmall;
+
+                .time { margin-left: 0.3em; }
+            }
+        }
+
+        .dayview:not(.merge-view) .week-view-container { top: 0; }
+    }
+
 }
 
 .timezone-label-dropdown {
