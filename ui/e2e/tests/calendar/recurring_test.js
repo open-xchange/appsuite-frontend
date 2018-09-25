@@ -45,7 +45,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     const { start } = await I.executeAsyncScript(function (done) {
         done({
-            start: `.date-picker[data-attribute="startDate"] .date[id="date_${moment().startOf('week').add('8', 'day').format('l')}"]`
+            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`
         });
     });
 

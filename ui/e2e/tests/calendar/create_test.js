@@ -105,8 +105,8 @@ Scenario('fullday appointments', async function (I) {
     I.click({ css: '[data-attribute="startDate"] input' });
     const { start, end } = await I.executeAsyncScript(function (done) {
         done({
-            start: `.date-picker[data-attribute="startDate"] .date[id="date_${moment().startOf('week').add('1', 'day').format('l')}"]`,
-            end: `.date-picker[data-attribute="endDate"] .date[id="date_${moment().endOf('week').subtract('1', 'day').format('l')}"]`
+            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('1', 'day').format('l')}"]`,
+            end: `.date-picker[data-attribute="endDate"] .date[id$="_${moment().endOf('week').subtract('1', 'day').format('l')}"]`
         });
     });
     I.click(start);
