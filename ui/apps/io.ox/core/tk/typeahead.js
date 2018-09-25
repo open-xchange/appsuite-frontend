@@ -195,10 +195,40 @@ define('io.ox/core/tk/typeahead', [
                     o.click.call(this, e, item);
                     self.$el.trigger('select', item);
                     self.$el.typeahead('val', '');
-                },
-                'typeahead:cursorchanged': function () {
-                    // useful for debugging
                 }
+            });
+
+            // a11y support
+            this.$el.on({
+                'typeahead:cursorchanged': function () {
+                    var id = self.$el.closest('.twitter-typeahead').find('.tt-cursor').attr('id');
+                    self.$el.attr('aria-activedescendant', id);
+                }
+            });
+
+            this.model.on('change:dropdown', function (model, status) {
+                if (status === 'closed') return self.$el.removeAttr('aria-activedescendant');
+
+                // fix markup
+                var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
+                    suggestions = $('<div class="tt-suggestions" role="listbox">');
+
+                dropdown.find('.tt-suggestion').each(function (count, el) {
+                    var image = $(el).find('.participant-image'),
+                        id =  _.uniqueId('option_');
+
+                    suggestions.append(
+                        $('<div class="tt-suggestion" role="option" id="' + id + '"">')
+                            .html(this.innerHTML)
+                            .data($(this).data())
+                    );
+                    var wrapper = suggestions.find('[id="' + id + '"] .participant-wrapper');
+
+                    wrapper.find('.participant-image').remove();
+                    wrapper.prepend(image);
+                });
+
+                dropdown.find('.tt-suggestions').replaceWith(suggestions);
             });
 
             if (this.options.init) {
