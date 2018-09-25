@@ -33,7 +33,12 @@
             }
 
             .fullname {
-                &>span {display: flex};
+                &>span {
+                    display: flex;
+                    &>*:not(:first-child) {
+                        margin-left: 0.3em;
+                    }
+                };
                 font-weight: normal;
                 .last_name { font-weight: bold; }
             }
