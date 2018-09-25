@@ -1039,7 +1039,7 @@ define('io.ox/contacts/addressbook/popup', [
             this.$el.append(
                 // toolbar
                 $('<div class="toolbar">').append(
-                    $('<span role="header" aria-live="polite" class="count pull-left">').text(selectionLabel),
+                    $('<span role="heading" aria-level="2" aria-live="polite" class="count pull-left">').text(selectionLabel),
                     $('<a href="#" class="pull-right clear" role="button">').text(gt('Clear selection'))
                 ),
                 // list
