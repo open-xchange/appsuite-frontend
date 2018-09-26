@@ -547,8 +547,13 @@ define('io.ox/calendar/invitations/register', [
                         self.$el.idle();
                         self.render();
                     }
-                }, function fail() {
+                }, function fail(error) {
                     self.$el.idle().hide();
+                    // unsupported char in comment
+                    if (error && error.code === 'CAL-5071') {
+                        notifications.yell(error);
+                        return;
+                    }
                     notifications.yell('error', gt('Failed to update confirmation status; most probably the appointment has been deleted.'));
                 });
             }
