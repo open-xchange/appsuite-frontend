@@ -61,9 +61,19 @@ define('io.ox/contacts/util', [
         if (htmlOutput === true) {
             copy = {};
             _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                if (!$.trim(obj[id])) return;
+                var text = $.trim(obj[id]);
+                if (!text) {
+                    // yomi as fallback
+                    if (id === 'last_name' && $.trim(obj.yomiLastName)) {
+                        text = $.trim(obj.yomiLastName);
+                    } else if (id === 'first_name' && $.trim(obj.yomiFirstName)) {
+                        text = $.trim(obj.yomiFirstName);
+                    } else {
+                        return;
+                    }
+                }
                 var tagName = id === 'last_name' ? 'strong' : 'span';
-                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
+                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(text) + '</' + tagName + '>';
             });
         }
         return isMail ? that.getMailFullNameFormat(obj) : that.getFullNameFormat(copy);
