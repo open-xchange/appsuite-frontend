@@ -125,8 +125,6 @@ define('io.ox/core/session', [
                         params: {
                             action: 'autologin',
                             client: that.client(),
-                            rampup: true,
-                            rampUpFor: CLIENT,
                             version: that.version()
                         }
                     })
@@ -152,9 +150,7 @@ define('io.ox/core/session', [
                             client: that.client(),
                             version: that.version(),
                             serverToken: _.url.hash('serverToken'),
-                            clientToken: _.url.hash('clientToken'),
-                            rampup: true,
-                            rampUpFor: CLIENT
+                            clientToken: _.url.hash('clientToken')
                         }
                     })
                     .then(function (response) {
@@ -214,9 +210,7 @@ define('io.ox/core/session', [
                         language: 'en_US',
                         client: that.client(),
                         version: that.version(),
-                        timeout: TIMEOUTS.LOGIN,
-                        rampup: true,
-                        rampUpFor: 'open-xchange-appsuite'
+                        timeout: TIMEOUTS.LOGIN
                     },
                     _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target')
                 );

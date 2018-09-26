@@ -12,9 +12,92 @@
  */
 
 define('io.ox/core/boot/rampup', [
-], function () {
+    'io.ox/core/http',
+    'io.ox/core/extensions',
+    'io.ox/core/boot/config'
+], function (http, ext, config) {
     'use strict';
 
-    // placeholder to define extensions for rampup phase
-    // does nothing for now, since we still fetch rampup from MW during login
+    ox.rampup = ox.rampup || {};
+
+    function storeIn(origData, path) {
+        return function (data) {
+            path.split('//').reduce(function (obj, key, index, arr) {
+                obj[key] = obj[key] || {};
+                if (index === arr.length - 1) {
+                    obj[key] = data;
+                }
+                return obj[key];
+            }, origData);
+        };
+    }
+
+    ext.point('io.ox/core/boot/rampup').extend([{
+        id: 'http_pause',
+        fetch: function () {
+            http.pause();
+        }
+    }, {
+        id: 'jslobs',
+        fetch: function (baton) {
+            baton.data.jslobs = {};
+            require(['settings!io.ox/caldav']).then(storeIn(baton.data, 'jslobs//io.ox/caldav'));
+            require(['settings!io.ox/calendar']).then(storeIn(baton.data, 'jslobs//io.ox/calendar'));
+            require(['settings!io.ox/contacts']).then(storeIn(baton.data, 'jslobs//io.ox/contacts'));
+            require(['settings!io.ox/core']).then(storeIn(baton.data, 'jslobs//io.ox/core'));
+            require(['settings!io.ox/core/updates']).then(storeIn(baton.data, 'jslobs//io.ox/core/updates'));
+            require(['settings!io.ox/files']).then(storeIn(baton.data, 'jslobs//io.ox/files'));
+            require(['settings!io.ox/mail']).then(storeIn(baton.data, 'jslobs//io.ox/mail'));
+            require(['settings!io.ox/tasks']).then(storeIn(baton.data, 'jslobs//io.ox/tasks'));
+        }
+    }, {
+        id: 'user config',
+        fetch: function () {
+            config.user();
+        }
+    }, {
+        id: 'oauth',
+        fetch: function (baton) {
+
+            http.GET({
+                module: 'oauth/accounts',
+                params: { action: 'all' }
+            }).then(storeIn(baton.data, 'oauth//accounts'));
+            http.GET({
+                module: 'oauth/services',
+                params: { action: 'all' }
+            }).then(storeIn(baton.data, 'oauth//services'));
+            // secretCheck (?)
+        }
+    }, {
+        id: 'onboardingDevices',
+        fetch: function (baton) {
+            http.GET({
+                module: 'onboarding',
+                params: { action: 'config' }
+            }).then(storeIn(baton.data, 'onboardingDevices'));
+        }
+    }, {
+        id: 'user',
+        fetch: function (baton) {
+            http.GET({
+                module: 'user',
+                params: { action: 'get', id: baton.sessionData.user_id }
+            }).then(storeIn(baton.data, 'user'));
+        }
+    }, {
+        id: 'accounts',
+        fetch: function (baton) {
+            http.GET({
+                module: 'account',
+                params: { action: 'all' }
+            }).then(storeIn(baton.data, 'accounts'));
+        }
+    }, {
+        id: 'http_resume',
+        fetch: function () {
+            return http.resume();
+        }
+    }]);
+
 });
