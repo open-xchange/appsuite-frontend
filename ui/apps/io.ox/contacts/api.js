@@ -103,7 +103,7 @@ define('io.ox/contacts/api', [
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -111,7 +111,7 @@ define('io.ox/contacts/api', [
             },
             search: {
                 action: 'search',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
                 // magic sort field: ignores asc/desc
                 sort: '609',
@@ -191,7 +191,7 @@ define('io.ox/contacts/api', [
             },
             advancedsearch: {
                 action: 'advancedSearch',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617',
                 extendColumns: 'io.ox/contacts/api/list',
                 // magic sort field: ignores asc/desc
                 sort: '607',
