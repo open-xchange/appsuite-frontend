@@ -134,6 +134,12 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
+            // see Bug #60440
+            id: 'remove-attachment-previews',
+            index: 850,
+            perform: extensions.removeAttachmentPreviews
+        },
+        {
             id: 'wait-for-pending-images',
             index: 900,
             // important: replaces mail.attachments[0].content

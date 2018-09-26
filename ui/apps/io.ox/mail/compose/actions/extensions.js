@@ -97,5 +97,16 @@ define('io.ox/mail/compose/actions/extensions', [
         return def;
     };
 
+    // remove base64 image previews from attachments collection
+    // to keep POST request clean and avoid sending unneeded data
+    api.removeAttachmentPreviews = function (baton) {
+        var collection = baton.model.get('attachments');
+        if (collection.lenth <= 1) return;
+        collection.map(function (attachment) {
+            return _.omit(attachment, 'meta');
+        });
+        baton.model.set('attachments', collection);
+    };
+
     return api;
 });
