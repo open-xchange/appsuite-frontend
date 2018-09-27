@@ -378,8 +378,10 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     //
     function getData() {
         var model = new Model();
+        return $.when(userAPI.get(), api.getConfig(), accountAPI.getPrimaryAddress(), api.getRules(), model.fetch()).then(function (user, config, primary, currentRules) {
+            // vacation notice becomes first rule upon creation
+            if (!_.isEmpty(currentRules) && model.get('position') === undefined) model.set('position', 0);
 
-        return $.when(userAPI.get(), api.getConfig(), accountAPI.getPrimaryAddress(), model.fetch()).then(function (user, config, primary) {
             return { model: model, aliases: user.aliases, config: config, user: user, primary: primary[1] };
         });
     }

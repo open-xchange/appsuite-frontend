@@ -60,6 +60,9 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             // active
             attr.active = !!data.active;
 
+            // position
+            attr.position = data.position;
+
             this.parseTime(attr, data.test);
 
             return attr;
@@ -109,9 +112,6 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
 
             cmd.addresses = _.uniq(cmd.addresses);
 
-            // position
-            if (attr.position !== undefined) cmd.position = attr.position;
-
             // time
             var testForTimeframe = { id: 'allof', tests: [] };
 
@@ -145,8 +145,11 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
                 actioncmds: [cmd],
                 test: testForTimeframe,
                 flags: ['vacation'],
-                rulename: 'vacation notice'
+                rulename: gt('vacation notice')
             };
+
+            // position
+            if (attr.position !== undefined) json.position = attr.position;
 
             if (attr.id !== undefined) json.id = attr.id;
 
