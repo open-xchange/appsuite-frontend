@@ -77,7 +77,7 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
                 params: {
                     action: 'checklimits',
                     id: folder.id,
-                    type: folder.module
+                    type: 'filestorage'
                 },
                 data: {
                     files: files.map(function (file) {
