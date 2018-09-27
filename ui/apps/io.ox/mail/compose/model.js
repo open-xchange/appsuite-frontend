@@ -266,6 +266,7 @@ define('io.ox/mail/compose/model', [
             this.trigger('needsync');
             var result,
                 attachmentCollection = this.get('attachments'),
+                mailAttachments = attachmentCollection.mailAttachments(),
                 content = attachmentCollection.at(0).get('content');
 
             // fix inline images
@@ -292,8 +293,21 @@ define('io.ox/mail/compose/model', [
                 'share_attachments',
                 'security'
             );
+
+            // do some cleanup on attachments
+            // remove meta from local files
+            // remove drive attachments from collection
+            var attachments = _.chain(mailAttachments)
+                .map(function (a) {
+                    return _.omit(a, 'meta');
+                })
+                .reject(function (a) {
+                    return a.source === 'drive';
+                })
+                .value();
+
             result = _.extend(result, {
-                attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
+                attachments:    attachments,
                 contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids
                 infostore_ids:  attachmentCollection.driveFiles(),       // get ids only for infostore_ids
                 files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
