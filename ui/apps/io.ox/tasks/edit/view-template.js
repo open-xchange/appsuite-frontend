@@ -796,7 +796,8 @@ define('io.ox/tasks/edit/view-template', [
             _(files).each(function (fileData) {
                 view.baton.attachmentList.addFile(fileData);
             });
-
+            // ensure file representatives are visible
+            app.view.$('.expand-link').trigger('click');
         }
     });
 });
