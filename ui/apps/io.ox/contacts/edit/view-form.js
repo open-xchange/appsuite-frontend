@@ -453,9 +453,9 @@ define('io.ox/contacts/edit/view-form', [
             id: 'attachment',
             index: 100,
             label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
-            multiple: function (files, view) {
+            multiple: function (files, app) {
                 // get attachmentList view
-                var attachmentList = view.baton.parentView.$el.find('.attachment-list').data('view');
+                var attachmentList = app.view.$el.find('.attachment-list').data('view');
                 _(files).each(function (fileData) {
                     attachmentList.addFile(fileData);
                 });

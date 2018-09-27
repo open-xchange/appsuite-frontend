@@ -218,7 +218,10 @@
         }
 
         // always reserve space for scroll bar
-        .window-content { overflow-y: scroll !important; }
+        .window-content {
+            overflow-y: scroll !important;
+            &.scrollable-disabled { overflow: hidden !important; }
+        }
     }
 
     &.header-bottom {
@@ -258,7 +261,10 @@
         }
 
         // always reserve space for scroll bar
-        .window-content { overflow-y: scroll !important; }
+        .window-content {
+            overflow-y: scroll !important;
+            &.scrollable-disabled { overflow: hidden !important; }
+        }
     }
 
     &.classic {
@@ -538,6 +544,7 @@
 
     .container {
         width: 100% !important;
+        position: relative;
         min-width: auto;
     }
 
