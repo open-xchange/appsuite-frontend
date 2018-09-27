@@ -1836,6 +1836,16 @@ define('io.ox/core/desktop', [
         return def;
     };
 
+    // retrigger jquery events to allow listenTo event registration
+    ox.dom = _.extend({
+        retrigger: function (e) { ox.dom.trigger(e.type, e); }
+    }, ox.dom, Backbone.Events);
+    $(document).on('dragover', ox.dom.retrigger);
+    $(document).on('mouseout', ox.dom.retrigger);
+    $(document).on('dragleave', ox.dom.retrigger);
+    $(document).on('drop', ox.dom.retrigger);
+    $(window).on('resize', ox.dom.retrigger);
+
     apps.on('resume', function (app) {
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
