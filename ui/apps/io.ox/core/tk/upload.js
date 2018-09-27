@@ -144,14 +144,15 @@ define('io.ox/core/tk/upload', [
                     return false;
                 },
                 dragover: function (e) {
-                    var origEvt = e.originalEvent,
-                        effectAllowed;
-                    try {
-                        effectAllowed = origEvt.dataTransfer.effectAllowed;
-                    } catch (e) {
-                        if (ox.debug) console.error(e);
-                    }
-                    origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
+                    // should be fixed meanwhile https://bugs.chromium.org/p/chromium/issues/detail?id=234931
+                    // var origEvt = e.originalEvent,
+                    //     effectAllowed;
+                    // try {
+                    //     effectAllowed = origEvt.dataTransfer.effectAllowed;
+                    // } catch (e) {
+                    //     if (ox.debug) console.error(e);
+                    // }
+                    // origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
 
                     clearTimeout(dragLeaveTimer);
                     e.preventDefault();
