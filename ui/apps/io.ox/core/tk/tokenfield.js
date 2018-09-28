@@ -624,6 +624,7 @@ define('io.ox/core/tk/tokenfield', [
                     cancel: 'a.close',
                     placeholder: 'token placeholder',
                     revert: 0,
+                    tolerance: 'pointer',
                     forcePlaceholderSize: true,
                     // update: _.bind(this.resort, this),
                     stop: function (e, ui) {
