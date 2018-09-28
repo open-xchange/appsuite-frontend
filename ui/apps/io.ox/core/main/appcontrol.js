@@ -360,6 +360,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    // deactivated since 7.10.0
     ext.point('io.ox/core/appcontrol').extend({
         id: 'search',
         index: 500,
