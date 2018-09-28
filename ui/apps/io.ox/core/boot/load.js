@@ -180,6 +180,25 @@ define('io.ox/core/boot/load', [
                     ox.trigger('socket:mail:new', data);
                 });
             }
+
+            if (capabilities.has('calendar')) {
+                socket.on('ox:calendar:updates', function (data) {
+                    // simple event forwarding
+                    // don't log sensitive data here (data object)
+                    try {
+                        ox.websocketlog.push({
+                            timestamp: _.now(),
+                            date: moment().format('D.M.Y HH:mm:ss'),
+                            event: 'ox:calendar:updates',
+                            data: { folders: data.folders, invitations: data.needsAction }
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    ox.trigger('socket:calendar:updates', data);
+                });
+            }
+
         });
     }
 });

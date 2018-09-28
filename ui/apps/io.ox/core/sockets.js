@@ -21,6 +21,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
         isConnected = false,
         supported = Modernizr.websockets && cap.has('websocket'),
         debug = true, //_.url.hash('socket-debug') || ox.debug,
+        connectionId = getId(),
         options = {
             path: PATH,
             transports: ['websocket'],      // do not change, middleware only support sockets not http polling
@@ -31,6 +32,13 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
         };
 
     ox.websocketlog = [];
+
+    function getId() {
+        // ie 11 has the ms prefix
+        var cryptoObj = window.crypto || window.msCrypto;
+        // better random numbers than Math.random
+        return String(_.now()) + cryptoObj.getRandomValues(new window.Uint32Array(1))[0];
+    }
 
     function log(event) {
         try {
@@ -45,10 +53,11 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
     }
 
     function connectSocket() {
+        ox.socketConnectionId = connectionId;
         var def = $.Deferred();
         // connect Websocket
         if (debug) log('Websocket trying to connect...');
-        socket = io.connect(URI + '/?session=' + ox.session, options);
+        socket = io.connect(URI + '/?session=' + ox.session + '&connection=' + connectionId, options);
         // expose global variable for debugging
         if (debug) window.socket = socket;
         socket.on('connect', function () {
@@ -96,8 +105,9 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
             if (socket.disconnected) {
                 if (debug) log('Websocket reconnecting with new session');
                 if (socket.disconnected) {
+                    connectionId = getId();
                     // recreate URI to pass new session
-                    socket.io.uri = URI + '/?session=' + ox.session;
+                    socket.io.uri = URI + '/?session=' + ox.session + '&connection=' + connectionId;
                     socket.connect();
                 }
             }

@@ -434,6 +434,28 @@ define('plugins/notifications/calendar/register', [
                 },
                 subview = new Subview(options);
 
+            ox.on('socket:calendar:updates', function (data) {
+                // TODO remove once backend changes the name
+                _(data.needsAction).each(function (obj) {
+                    obj.folder = obj.folderId;
+                });
+                // order is important here, first look for deleted invitations, then put in the new ones (otherwise we will always fetch the new invites in the list request which isn't needed)
+
+                // if there was an update, check if the events we have invitations for are still there
+                if (data.folders) {
+                    var requestData = _(subview.collection.models).chain().filter(function (model) {
+                        return data.folders.indexOf(model.get('folder')) > -1;
+                    }).map(function (model) {
+                        return model.pick('folder', 'id', 'recurrenceId');
+                    }).valueOf();
+                    // list request will trigger a delete event for missing events, thus removing them from the collection
+                    if (requestData.length) calAPI.getList(requestData, false);
+                }
+
+                // add new invitations
+                if (data.needsAction) subview.addNotifications(data.needsAction);
+            });
+
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
                 subview.model.set('autoOpen', value);
