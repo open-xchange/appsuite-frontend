@@ -15,12 +15,19 @@ define('io.ox/backbone/mini-views/alarms', [
     'io.ox/calendar/util',
     'io.ox/backbone/views/disposable',
     'gettext!io.ox/calendar',
+    'settings!io.ox/calendar',
     'less!io.ox/backbone/mini-views/alarms'
-], function (util, DisposableView, gt) {
+], function (util, DisposableView, gt, settings) {
 
     'use strict';
 
     var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL'],
+        supportedTypes = settings.get('availableAlarmTypes', standardTypes),
+        typeTranslations = {
+            DISPLAY: gt('Notification'),
+            AUDIO: gt('Audio'),
+            EMAIL: gt('Mail')
+        },
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
             'START-': gt('before start'),
@@ -195,16 +202,16 @@ define('io.ox/backbone/mini-views/alarms', [
                 //#. %1$d: is the number of the reminder
                 $('<legend class="sr-only">').text(gt('Reminder %1$d', index)),
                 row = $('<div class="item">'));
-            if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="alarm-action" tabindex="0">').text(alarm.action).val(alarm.action));
+            if (_(supportedTypes).indexOf(alarm.action) === -1) {
+                row.append($('<div class="alarm-action" tabindex="0">').text(typeTranslations[alarm.action] || alarm.action).val(alarm.action));
             } else {
                 row.append(
                     //#. screenreader label for the reminder type (audio, notification, etc)
                     $('<label class="sr-only">').attr('for', 'action-' + uid).text(gt('type')),
                     $('<select class="form-control alarm-action">').attr('id', 'action-' + uid).append(
-                        $('<option>').text(gt('Notification')).val('DISPLAY'),
-                        $('<option>').text(gt('Audio')).val('AUDIO'),
-                        $('<option>').text(gt('Mail')).val('EMAIL')
+                        _(supportedTypes).map(function (type) {
+                            return $('<option>').text(typeTranslations[type]).val(type);
+                        })
                     ).val(alarm.action)
                 );
             }
