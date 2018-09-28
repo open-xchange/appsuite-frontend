@@ -150,7 +150,54 @@ msgid "Play sound at end."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail %1$s before start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail %1$s after start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail %1$s before end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail %1$s after end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail at %1$s."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail at start."
+msgstr ""
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Send mail at end."
+msgstr ""
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
@@ -158,7 +205,7 @@ msgid "%1$s %2$s before start."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
@@ -166,7 +213,7 @@ msgid "%1$s %2$s after start."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
@@ -174,7 +221,7 @@ msgid "%1$s %2$s before end."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
@@ -182,7 +229,7 @@ msgid "%1$s %2$s after end."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
@@ -190,14 +237,14 @@ msgid "%1$s at %2$s."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "%1$s at start."
 msgstr ""
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "%1$s at end."
@@ -228,6 +275,14 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "Audio"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/compose/model.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
+msgid "Mail"
 msgstr ""
 
 #. screenreader label for the reminder timeframe (15 minutes, etc)
@@ -903,6 +958,8 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/edit-picture.js
 #: module:io.ox/contacts
+#: apps/io.ox/calendar/actions/change-alarms.js
+#: module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js
@@ -955,6 +1012,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/create.js
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js
@@ -1328,6 +1386,11 @@ msgstr ""
 msgid "Change status"
 msgstr ""
 
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Change reminder"
+msgstr ""
+
 #. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
@@ -1401,6 +1464,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js
@@ -1459,6 +1523,11 @@ msgstr ""
 msgid "Tentative"
 msgstr ""
 
+#: apps/io.ox/calendar/actions/change-alarms.js
+#: module:io.ox/calendar
+msgid "Change reminders"
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js
 #: module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1486,6 +1555,27 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/delete.js
 #: module:io.ox/calendar
+msgid "Add a message to the notification email for the other participants."
+msgstr ""
+
+#: apps/io.ox/calendar/actions/delete.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
+#: apps/io.ox/core/relogin.js
+#: module:io.ox/core
+#: apps/io.ox/files/share/wizard.js
+#: module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "Password"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/delete.js
+#: module:io.ox/calendar
 msgid "Do you want to delete the whole series or just this appointment within the series?"
 msgstr ""
 
@@ -1504,6 +1594,12 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
 msgid "All future appointments"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/delete.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+msgid "Delete appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/delete.js
@@ -1539,21 +1635,6 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
 msgid "Login"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/subscribe-ical.js
-#: module:io.ox/calendar
-#: apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot
-#: apps/io.ox/core/relogin.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/wizard.js
-#: module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings
-#: apps/io.ox/mail/compose/sharing.js
-#: module:io.ox/mail
-msgid "Password"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js
@@ -1619,8 +1700,9 @@ msgstr ""
 
 #: apps/io.ox/calendar/common-extensions.js
 #: module:io.ox/calendar
-#: apps/io.ox/participants/chronos-views.js
+#: apps/io.ox/participants/chronos-detail.js
 #: module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js
 #: apps/io.ox/participants/views.js
 msgid "Organizer"
 msgstr ""
@@ -2953,11 +3035,6 @@ msgstr ""
 #: apps/io.ox/tasks/main.js
 #: module:io.ox/tasks
 msgid "Status"
-msgstr ""
-
-#: apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
-msgid "Delete appointment"
 msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
@@ -10257,12 +10334,6 @@ msgstr ""
 msgid "Compose"
 msgstr ""
 
-#: apps/io.ox/mail/compose/model.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-msgid "Mail"
-msgstr ""
-
 #: apps/io.ox/mail/compose/names.js
 #: module:io.ox/mail
 msgid "Use custom name"
@@ -11315,6 +11386,11 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: module:io.ox/mail
 msgid "Your vacation notice is active"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js
+#: module:io.ox/mail
+msgid "vacation notice"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js
@@ -12876,6 +12952,16 @@ msgstr ""
 #: apps/io.ox/settings/security/settings/pane.js
 #: module:io.ox/mail
 msgid "All emails"
+msgstr ""
+
+#: apps/io.ox/settings/security/settings/pane.js
+#: module:io.ox/mail
+msgid "Always trust mails from the following senders"
+msgstr ""
+
+#: apps/io.ox/settings/security/settings/pane.js
+#: module:io.ox/mail
+msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
 msgstr ""
 
 #: apps/io.ox/tasks/actions.js
