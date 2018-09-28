@@ -228,8 +228,8 @@ define([
             it('should identify whitelisted mail addresses', function () {
                 var whitelist = 'alice@example.com, example.de, bob@example.org';
                 // empty
-                expect(util.isWhiteListed('bob@example.com')).is.true;
-                expect(util.isWhiteListed('bob@example.com', '')).is.true;
+                expect(util.isWhiteListed('bob@example.com')).is.false;
+                expect(util.isWhiteListed('bob@example.com', '')).is.false;
                 // strings
                 expect(util.isWhiteListed('alice@example.com', whitelist)).is.true;
                 expect(util.isWhiteListed('bob@example.de', whitelist)).is.true;
