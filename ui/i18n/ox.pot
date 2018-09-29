@@ -31,6 +31,24 @@ msgstr ""
 msgid "Select contacts"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Notification"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+msgid "Audio"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/alarms.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/compose/model.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
+msgid "Mail"
+msgstr ""
+
 #. Used in a selectbox when the reminder for an appointment is before the start time
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
@@ -265,24 +283,6 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js
 #: module:io.ox/calendar
 msgid "type"
-msgstr ""
-
-#: apps/io.ox/backbone/mini-views/alarms.js
-#: module:io.ox/calendar
-msgid "Notification"
-msgstr ""
-
-#: apps/io.ox/backbone/mini-views/alarms.js
-#: module:io.ox/calendar
-msgid "Audio"
-msgstr ""
-
-#: apps/io.ox/backbone/mini-views/alarms.js
-#: module:io.ox/calendar
-#: apps/io.ox/mail/compose/model.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-msgid "Mail"
 msgstr ""
 
 #. screenreader label for the reminder timeframe (15 minutes, etc)
