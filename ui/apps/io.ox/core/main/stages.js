@@ -75,7 +75,7 @@ define('io.ox/core/main/stages', [
         id: 'app_register',
         index: 105,
         run: function () {
-            return require(['io.ox/core/main/apps']);
+            return require(['io.ox/core/main/apps', 'io.ox/core/main/warning']);
         }
     }, {
         id: 'appcheck',
