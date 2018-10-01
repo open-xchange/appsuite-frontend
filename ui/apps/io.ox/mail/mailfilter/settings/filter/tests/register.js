@@ -85,7 +85,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                                     toggle: 'dropdown',
                                     classes: 'add-condition',
                                     // multi options?
-                                    skip: 'nested'
+                                    skip: 'nested',
+                                    sort: baton.view.defaults.conditionsOrder
                                 })
                             ),
                             util.drawDeleteButton('test')
