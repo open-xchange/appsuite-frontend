@@ -269,8 +269,6 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('Start time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:startDate', function (model) {
-                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -305,8 +303,6 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('End time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:endDate', function (model) {
-                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
