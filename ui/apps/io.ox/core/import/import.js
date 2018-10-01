@@ -31,7 +31,7 @@ define('io.ox/core/import/import', [
         render: function (baton) {
             baton.module = this.model.get('module');
 
-            var list = [],
+            var list = baton.list = [],
                 guid = _.uniqueId('select-');
 
             ext.point('io.ox/core/import/format').invoke('customize', list, baton);
@@ -56,7 +56,7 @@ define('io.ox/core/import/import', [
         index: 100,
         customize: function (baton) {
             if (!/^(calendar|tasks)$/.test(baton.module)) return;
-            this.push({ value: 'ICAL', label: gt('Calendar') });
+            this.push({ value: 'ICAL', label: gt('Calendar'), accept: '.ics,.ical' });
         }
     });
 
@@ -66,7 +66,7 @@ define('io.ox/core/import/import', [
         index: 200,
         customize: function (baton) {
             if (!/^(contacts)$/.test(baton.module)) return;
-            this.push({ value: 'VCARD', label: gt('vCard') });
+            this.push({ value: 'VCARD', label: gt('vCard'), accept: '.vcard,.vcf' });
         }
     });
 
@@ -75,7 +75,7 @@ define('io.ox/core/import/import', [
         index: 300,
         customize: function (baton) {
             if (!/^(contacts)$/.test(baton.module)) return;
-            this.push({ value: 'CSV', label: gt('CSV') });
+            this.push({ value: 'CSV', label: gt('CSV'), accept: '.csv' });
         }
     });
 
@@ -92,7 +92,7 @@ define('io.ox/core/import/import', [
                 }).append(label).addClass('form-group')
             );
             var $input = this.$fileUploadInput = fileUpload.find('input[type="file"]');
-            if (baton.module === 'calendar') $input.attr('accept', '.ics,.ical');
+
             $input.on('change', function (e) {
                 e.preventDefault();
                 var buttonText = '';
@@ -101,6 +101,16 @@ define('io.ox/core/import/import', [
                 }
                 label.text(buttonText);
             });
+
+            // ux: restrict upload to specific file extension(s)
+            baton.model.on('change:format', update);
+            update(baton.model, baton.model.get('format'));
+
+            function update(model, value) {
+                var format = _.find(baton.list, { value: value });
+                if (format && format.accept) return $input.attr('accept', format.accept);
+                return $input.removeAttr('accept');
+            }
         }
     });
 
