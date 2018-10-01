@@ -25,8 +25,8 @@ define('io.ox/calendar/actions/delete', [
 
     return function (list) {
         api.getList(list).done(function (list) {
-            var displayComment = settings.get('notifyNewModifiedDeleted', true) && _(list).some(function (event) {
-                    return event.get('attendees').length > 1;
+            var displayComment = settings.get('notifyNewModifiedDeleted', true) && _(list).every(function (event) {
+                    return event.hasFlag('organizer') && event.get('attendees').length > 1;
                 }),
                 guid,
                 model = new Backbone.Model({ comment: '' }),
