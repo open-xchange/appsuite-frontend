@@ -3600,7 +3600,7 @@ jquery@3.2.1:
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
   integrity sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c=
 
-jquery@>=1.7, jquery@>=1.7.1:
+jquery@>=1.7.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
   integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
@@ -4287,12 +4287,6 @@ mkdirp@~0.3.5:
   version "0.3.5"
   resolved "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz#de3e5f8961c88c787ee1368df849ac4413eca8d7"
   integrity sha1-3j5fiWHIjHh+4TaN+EmsRBPsqNc=
-
-"mobiscroll@git://github.com/acidb/mobiscroll.git#v2.17.3":
-  version "2.17.3"
-  resolved "git://github.com/acidb/mobiscroll.git#f926d66f184761c0c68a9b3ec5b04b4cee771ec4"
-  dependencies:
-    jquery ">=1.7"
 
 mocha@^3.2.0:
   version "3.5.3"

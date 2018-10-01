@@ -39,7 +39,8 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.attribute = this.options.attribute;
             this.nodes = {};
             this.mobileSettings = {};
-            this.mobileMode = _.device('touch');
+            // this.mobileMode = _.device('touch');
+            this.mobileMode = true;
             this.chronos = options.chronos;
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
@@ -137,22 +138,8 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.updateView();
 
             if (this.mobileMode) {
-                require(['io.ox/core/tk/mobiscroll'], function (mobileSettings) {
-
-                    //don't overwrite default settings (see Bug 38847)
-                    self.mobileSettings = _.copy(mobileSettings);
-
-                    if (self.options.clearButton) {
-                        self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
-                    }
-                    if (!self.isFullTime()) {
-                        self.mobileSettings.preset = 'datetime';
-                    }
-
-                    // initialize mobiscroll plugin
-                    self.nodes.dayField.mobiscroll(self.mobileSettings);
-                    def.resolve();
-                });
+                self.nodes.dayField.attr('type', self.isFullTime() ? 'date' : 'datetime-local');
+                def.resolve();
             } else {
                 require(['io.ox/backbone/views/datepicker', 'io.ox/backbone/mini-views/combobox', 'io.ox/core/tk/datepicker'], function (Picker, Combobox) {
 
@@ -302,10 +289,7 @@ define('io.ox/backbone/mini-views/datepicker', [
         // toggle time input fields
         toggleTimeInput: function (show) {
             if (this.mobileMode) {
-                // mobiscroll may not be initialized yet, due to async loading.
-                if (this.nodes.dayField.mobiscroll) {
-                    this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
-                }
+                self.nodes.dayField.attr('type', show ? 'datetime-local' : 'date');
             } else {
                 this.$el.toggleClass('dateonly', !show);
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');
