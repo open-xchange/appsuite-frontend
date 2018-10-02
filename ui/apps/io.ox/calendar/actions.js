@@ -149,7 +149,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
-            return e.collection.has('delete') && ((util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'attendee')));
+            return e.collection.has('delete') && ((util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'organizer_on_behalf') || util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'attendee_on_behalf')));
         },
         multiple: function (list) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
@@ -173,7 +173,7 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
             function cont(model, folderData) {
                 // folder must support alarms. We don't show the action if the attendee flag is present (change status is shown instead). We only offer this for the birthday calendar for now
-                return e.collection.has('one') && !util.hasFlag(model, 'attendee') && folderData['com.openexchange.calendar.provider'] === 'birthdays' && folderData.supported_capabilities.indexOf('alarms') !== -1;
+                return e.collection.has('one') && !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'attendee_on_behalf')) && folderData['com.openexchange.calendar.provider'] === 'birthdays' && folderData.supported_capabilities.indexOf('alarms') !== -1;
             }
 
             var model = e.baton.model,
@@ -202,11 +202,11 @@ define('io.ox/calendar/actions', [
             function cont(model) {
 
                 // in shared calendars the attendee means the calendar owner is attendee, we have to look if we have modify permission
-                if (util.hasFlag(model, 'on_behalf')) {
-                    return e.collection.has('one', 'modify') && util.hasFlag(model, 'attendee');
+                if (util.hasFlag(model, 'attendee_on_behalf') || util.hasFlag(model, 'organizer_on_behalf') && !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'organizer'))) {
+                    return e.collection.has('one', 'modify');
                 }
 
-                return e.collection.has('one') && util.hasFlag(model, 'attendee');
+                return e.collection.has('one') && (util.hasFlag(model, 'attendee') || util.hasFlag(model, 'organizer'));
             }
 
             var model = e.baton.model,
@@ -532,9 +532,11 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted'))) return false;
+            if (!util.hasFlag(e.baton.data, 'accepted')) return false;
             // in shared folders we also have to check if we have the permissin to modify
-            if (util.hasFlag(e.baton.data, 'on_behalf') && !e.collection.has('modify')) return false;
+            if ((util.hasFlag(e.baton.data, 'attendee_on_behalf') || util.hasFlag(e.baton.data, 'organizer_on_behalf')) &&
+                !(util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'organizer')) &&
+                !e.collection.has('modify')) return false;
             return true;
         },
         action: _.partial(acceptDecline, _, true)
@@ -543,9 +545,11 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined'))) return false;
+            if (!util.hasFlag(e.baton.data, 'declined')) return false;
             // in shared folders we also have to check if we have the permissin to modify
-            if (util.hasFlag(e.baton.data, 'on_behalf') && !e.collection.has('modify')) return false;
+            if ((util.hasFlag(e.baton.data, 'attendee_on_behalf') || util.hasFlag(e.baton.data, 'organizer_on_behalf')) &&
+                !(util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'organizer')) &&
+                !e.collection.has('modify')) return false;
             return true;
         },
         action: acceptDecline
