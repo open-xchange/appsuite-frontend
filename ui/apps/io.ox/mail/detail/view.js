@@ -397,7 +397,8 @@ define('io.ox/mail/detail/view', [
         draw: function (baton) {
 
             baton.content = content.get(baton.data, {}, baton.flow).content;
-            var $content = $(baton.content), resizing = 0;
+            var $content = $(baton.content), resizing = 0,
+                isHtml = !$content.hasClass('plain-text');
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -412,9 +413,13 @@ define('io.ox/mail/detail/view', [
                         $('body').trigger('click');
                     });
 
-                    $(this.contentDocument)
-                        .find('head').append('<style>' + contentStyle + '</style>').end()
-                        .find('body').append($content);
+                    $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+
+                    if (isHtml) {
+                        $(this.contentDocument).find('body').replaceWith($content);
+                    } else {
+                        $(this.contentDocument).find('body').append($content);
+                    }
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
