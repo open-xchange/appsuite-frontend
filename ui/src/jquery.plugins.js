@@ -128,7 +128,7 @@
 
     $.fn.intoViewport = function (node) {
 
-        if (!node) node = this.closest('.scrollable-pane');
+        if (!node) node = this.closest('.scrollable-pane,.scrollpane');
 
         if (node.length === 0 || this.length === 0) return this;
 

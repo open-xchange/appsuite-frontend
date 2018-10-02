@@ -1211,10 +1211,13 @@ define('io.ox/mail/main', [
             app.listView.on('first-reset', function () {
                 // defer to have a visible window
                 _.defer(function () {
-                    app.listView.collection.find(function (model) {
+                    app.listView.collection.find(function (model, index) {
                         if (!util.isUnseen(model.get('flags'))) {
                             app.autoSelect = true;
-                            app.listView.selection.set([model.cid], false);
+                            // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
+                            app.listView.selection.select(index, false, false);
+                            // scroll node into view
+                            app.listView.selection.getItems().eq(index).attr('tabindex', '0').intoViewport();
                             return true;
                         }
                     });
