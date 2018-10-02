@@ -209,26 +209,16 @@ define('io.ox/core/tk/typeahead', [
             this.model.on('change:dropdown', function (model, status) {
                 if (status === 'closed') return self.$el.removeAttr('aria-activedescendant');
 
-                // fix markup
                 var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
-                    suggestions = $('<div class="tt-suggestions" role="listbox">');
-
-                dropdown.find('.tt-suggestion').each(function (count, el) {
-                    var image = $(el).find('.participant-image'),
-                        id =  _.uniqueId('option_');
-
-                    suggestions.append(
-                        $('<div class="tt-suggestion" role="option" id="' + id + '"">')
-                            .html(this.innerHTML)
-                            .data($(this).data())
-                    );
-                    var wrapper = suggestions.find('[id="' + id + '"] .participant-wrapper');
-
-                    wrapper.find('.participant-image').remove();
-                    wrapper.prepend(image);
-                });
-
-                dropdown.find('.tt-suggestions').replaceWith(suggestions);
+                    container = $('<div class="tt-suggestions" role="listbox">'),
+                    suggestions = dropdown.find('.tt-suggestions').children();
+                // use container with proper nodetype (div) and add role/id
+                container.append(
+                    suggestions.each(function () {
+                        $(this).attr({ id: _.uniqueId('option_'), role: 'option' });
+                    })
+                );
+                dropdown.find('.tt-suggestions').replaceWith(container);
             });
 
             if (this.options.init) {
