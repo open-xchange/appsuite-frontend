@@ -37,7 +37,8 @@ define('io.ox/mail/common-extensions', [
 
     // little helper
     function isSearchResult(baton) {
-        return !!baton.app && !!baton.app.props.get('find-result');
+        if (!baton.app || !baton.app.listView || !baton.app.listView.loader) return;
+        return baton.app.listView.loader.mode === 'search';
     }
 
     function pictureHalo(node, data, baton) {
