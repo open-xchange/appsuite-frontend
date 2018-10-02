@@ -259,7 +259,7 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
-                className: 'col-xs-6',
+                className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'startDate',
                 label: gt('Starts on'),
@@ -293,7 +293,7 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
-                className: 'col-xs-6',
+                className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'endDate',
                 label: gt('Ends on'),
