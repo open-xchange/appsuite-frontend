@@ -39,8 +39,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.attribute = this.options.attribute;
             this.nodes = {};
             this.mobileSettings = {};
-            // this.mobileMode = _.device('touch');
-            this.mobileMode = true;
+            this.mobileMode = _.device('touch');
             this.chronos = options.chronos;
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
@@ -139,6 +138,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             if (this.mobileMode) {
                 self.nodes.dayField.attr('type', self.isFullTime() ? 'date' : 'datetime-local');
+                if (self.chronos) self.nodes.dayField.attr('required', true);
                 def.resolve();
             } else {
                 require(['io.ox/backbone/views/datepicker', 'io.ox/backbone/mini-views/combobox', 'io.ox/core/tk/datepicker'], function (Picker, Combobox) {
