@@ -20,7 +20,7 @@ define('plugins/portal/oxdriveclients/settings/defaults', function () {
             'Android': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla',
             'iOS': 'https://itunes.apple.com/us/app/ox-drive/id798570177?l=de&ls=1&mt=8',
             'Mac OS': 'https://itunes.apple.com/us/app/ox-drive/id818195014?l=de&ls=1&mt=12',
-            'Windows': '/updater/installer/oxupdater-install.exe'
+            'Windows': '' // drive is not delivered via updater anymore, location is maintained by the onboarding wizard config
         },
         // list all languages for which are localized shop images available. All other will fall back to EN
         // images are located under apps/plugins/portal/oxdriveclients/img
