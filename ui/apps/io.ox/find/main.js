@@ -315,7 +315,7 @@ define('io.ox/find/main', [
                             // wrap setCollection
                             parent.listView.setCollection = function (collection) {
                                 view.stopListening();
-                                view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
+                                view.listenTo(collection, 'add reset remove', app.trigger.bind(app, 'find:query:result', collection));
                                 return setCollection.apply(this, arguments);
                             };
                         };

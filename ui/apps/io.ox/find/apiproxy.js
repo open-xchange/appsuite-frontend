@@ -154,9 +154,7 @@ define('io.ox/find/apiproxy', [
                     }
 
                     function drawResults(result) {
-                        if (result) {
-                            app.trigger('find:query:result', result);
-                        }
+                        if (result) app.trigger('find:query:result', result);
                         app.trigger('find:query:stop');
                         return result;
                     }
