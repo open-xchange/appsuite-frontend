@@ -237,7 +237,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             if (this.mobileMode) {
                 if (this.isFullTime()) return val.format('YYYY-MM-DD');
-                return val.format('YYYY-MM-DDThh:mm');
+                return val.format('YYYY-MM-DDTHH:mm');
             }
             return val.format('l');
         },
@@ -251,7 +251,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             if (this.mobileMode) {
                 if (this.isFullTime()) formatStr = 'YYYY-MM-DD';
-                formatStr = 'YYYY-MM-DDThh:mm';
+                formatStr = 'YYYY-MM-DDTHH:mm';
             } else if (!this.isFullTime()) {
                 // change format string for datetime if timefield is present
                 formatStr += ' ' + 'LT';
