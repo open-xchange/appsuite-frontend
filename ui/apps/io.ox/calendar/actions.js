@@ -172,7 +172,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/changeAlarms', {
         requires: function (e) {
             function cont(model, folderData) {
-                // folder must be support alarms. We don'T show the action if the attendee flag is present (change status is shown instead). We only offer this for the birthday calendar for now
+                // folder must support alarms. We don't show the action if the attendee flag is present (change status is shown instead). We only offer this for the birthday calendar for now
                 return e.collection.has('one') && !util.hasFlag(model, 'attendee') && folderData['com.openexchange.calendar.provider'] === 'birthdays' && folderData.supported_capabilities.indexOf('alarms') !== -1;
             }
 
@@ -199,10 +199,10 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/changestatus', {
         requires: function (e) {
-            function cont(model, folderData) {
+            function cont(model) {
 
                 // in shared calendars the attendee means the calendar owner is attendee, we have to look if we have modify permission
-                if (folderAPI.is('shared', folderData)) {
+                if (util.hasFlag(model, 'on_behalf')) {
                     return e.collection.has('one', 'modify') && util.hasFlag(model, 'attendee');
                 }
 
@@ -533,19 +533,9 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
             if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted'))) return false;
-
-            var def = $.Deferred();
-            folderAPI.get(e.baton.data.folder).then(function (folderData) {
-                // in shared folders we also have to check if we have the permissin to modify
-                if (folderAPI.is('shared', folderData)) {
-                    def.resolve(e.collection.has('modify'));
-                }
-                def.resolve(true);
-            }, function () {
-                def.resolve(true);
-            });
-
-            return def;
+            // in shared folders we also have to check if we have the permissin to modify
+            if (util.hasFlag(e.baton.data, 'on_behalf') && !e.collection.has('modify')) return false;
+            return true;
         },
         action: _.partial(acceptDecline, _, true)
     });
@@ -554,19 +544,9 @@ define('io.ox/calendar/actions', [
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
             if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined'))) return false;
-
-            var def = $.Deferred();
-            folderAPI.get(e.baton.data.folder).then(function (folderData) {
-                // in shared folders we also have to check if we have the permissin to modify
-                if (folderAPI.is('shared', folderData)) {
-                    def.resolve(e.collection.has('modify'));
-                }
-                def.resolve(true);
-            }, function () {
-                def.resolve(true);
-            });
-
-            return def;
+            // in shared folders we also have to check if we have the permissin to modify
+            if (util.hasFlag(e.baton.data, 'on_behalf') && !e.collection.has('modify')) return false;
+            return true;
         },
         action: acceptDecline
     });
