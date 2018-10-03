@@ -3318,8 +3318,7 @@ msgstr "下载"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "下载"
 
@@ -7423,6 +7422,10 @@ msgstr "请再登录继续"
 msgid "Please update your browser."
 msgstr "请更新您的浏览器。"
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "请等待前一个操作结束"
@@ -10705,10 +10708,6 @@ msgstr "不信任"
 msgid "Untrust certificate %1$s"
 msgstr "不信任证书 %1$s"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "更新程序"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "需要更新"
@@ -11130,16 +11129,6 @@ msgstr "最新内容"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "%1$s 7.10.0 最新内容"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"在执行已下载的文件时，将会启动安装向导。请按照指示后安装更新器和最新版本的 "
-"Windows® 客户端软件。更新器会自动通知新的更新，您可以从更新器里下载更新。"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -17126,6 +17115,9 @@ msgstr "您的平台"
 #~ msgid "Unread only"
 #~ msgstr "只有未读"
 
+#~ msgid "Updater"
+#~ msgstr "更新程序"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "更新户口数据，可能需时片刻。"
 
@@ -17274,6 +17266,17 @@ msgstr "您的平台"
 #~| msgid "Do you want to save your configuration?"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "您是否想保存您的配置？"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "在执行已下载的文件时，将会启动安装向导。请按照指示后安装更新器和最新版本"
+#~ "的 Windows® 客户端软件。更新器会自动通知新的更新，您可以从更新器里下载更"
+#~ "新。"
 
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "

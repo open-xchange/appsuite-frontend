@@ -3439,8 +3439,7 @@ msgstr "Pobierz"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Pobierz"
 
@@ -7620,6 +7619,10 @@ msgstr "Aby kontynuować, podpisz ponownie"
 msgid "Please update your browser."
 msgstr "Zaktualizuj przeglądarkę."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Poczekaj na ukończenie poprzedniej operacji"
@@ -11041,10 +11044,6 @@ msgstr "Wycofaj zaufanie"
 msgid "Untrust certificate %1$s"
 msgstr "Wycofaj zaufanie dla certyfikatu %1$s"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Updater"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Wymagane uaktualnienie"
@@ -11470,19 +11469,6 @@ msgstr "Co nowego"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Co nowego %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Podczas wykonywania pobranego pliku zostanie uruchomiony kreator instalacji. "
-"Postępuj zgodnie z jego instrukcjami i zainstaluj program Updater. Zostanie "
-"wówczas zainstalowana najnowsza wersja oprogramowania klienckiego dla "
-"systemu Windows®. Updater automatycznie informuje o nowych aktualizacjach i "
-"pozwala na ich pobieranie."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -16075,6 +16061,9 @@ msgstr "Twoja platforma"
 #~ msgid "Unread only"
 #~ msgstr "Tylko nieprzeczytane"
 
+#~ msgid "Updater"
+#~ msgstr "Updater"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Aktualizacja danych konta. Może to zająć kilka sekund."
 
@@ -16198,6 +16187,19 @@ msgstr "Twoja platforma"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Czy na pewno chcesz odrzucić zmiany?"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Podczas wykonywania pobranego pliku zostanie uruchomiony kreator "
+#~ "instalacji. Postępuj zgodnie z jego instrukcjami i zainstaluj program "
+#~ "Updater. Zostanie wówczas zainstalowana najnowsza wersja oprogramowania "
+#~ "klienckiego dla systemu Windows®. Updater automatycznie informuje o "
+#~ "nowych aktualizacjach i pozwala na ich pobieranie."
 
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "

@@ -3527,8 +3527,7 @@ msgstr ""
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Descarrega"
 
@@ -7866,6 +7865,10 @@ msgstr "Per favor, iniciau de nou la sessió per a continuar"
 msgid "Please update your browser."
 msgstr "Per favor, actualitzau el vostre navegador."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr ""
@@ -11296,10 +11299,6 @@ msgstr ""
 msgid "Untrust certificate %1$s"
 msgstr ""
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Actualitzador"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Actualització requerida"
@@ -11741,20 +11740,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr ""
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Quan executareu l'arxiu descarregat, s'executarà un assistent "
-"d'instal·lació. Seguiu les instruccions i instal·lau el programa "
-"d'actualització. Instal·lau les darreres versions del programari de client "
-"de Windows®. El programa d'actualització informa automàticament sobre les "
-"noves actualitzacions. Podeu descarregar les actualitzacions des del "
-"programa d'actualització."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -14436,6 +14421,9 @@ msgstr "la vostra plataforma"
 #~ msgid "Unnamed"
 #~ msgstr "Nom d'usuari"
 
+#~ msgid "Updater"
+#~ msgstr "Actualitzador"
+
 #~ msgid ""
 #~ "Updating subscribed data takes time. Importing 100 contacts for example, "
 #~ "may take up to 5 minutes. Please have some patience."
@@ -14509,6 +14497,20 @@ msgstr "la vostra plataforma"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Benvingut. Per favor, feu un comentari sobre aquest producte"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Quan executareu l'arxiu descarregat, s'executarà un assistent "
+#~ "d'instal·lació. Seguiu les instruccions i instal·lau el programa "
+#~ "d'actualització. Instal·lau les darreres versions del programari de "
+#~ "client de Windows®. El programa d'actualització informa automàticament "
+#~ "sobre les noves actualitzacions. Podeu descarregar les actualitzacions "
+#~ "des del programa d'actualització."
 
 #~ msgid "Yearly on %1$s %2$d"
 #~ msgstr "Anualment el %2$d de/d' %1$s"

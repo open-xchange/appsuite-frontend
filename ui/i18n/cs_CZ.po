@@ -3415,8 +3415,7 @@ msgstr "Stáhnout %1%s"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Stáhnout"
 
@@ -7591,6 +7590,10 @@ msgstr "Chcete-li pokračovat, přihlaste se, prosím, znovu"
 msgid "Please update your browser."
 msgstr "Aktualizujte, prosím, svůj prohlížeč."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Vyčkejte, prosím, až skončí předchozí operace"
@@ -10983,10 +10986,6 @@ msgstr "Přestat důvěřovat"
 msgid "Untrust certificate %1$s"
 msgstr "Přestat důvěřovat certifikátu %1$s"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Aktualizační nástroj"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Nutný upgrade"
@@ -11411,19 +11410,6 @@ msgstr "Co je nového"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Co je nového v %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Po spuštění staženého souboru se otevře instalační průvodce. Pro instalaci "
-"aktualizačního nástroje postupujte podle pokynů. Aktualizační nástroj "
-"nainstaluje nejnovější verze klientského softwaru pro Windows® a automaticky "
-"upozorní na případné aktualizace. Aktualizace lze stáhnout z prostředí "
-"aktualizačního nástroje."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -22133,6 +22119,9 @@ msgstr "vaše platforma"
 #~ msgid "Update successful"
 #~ msgstr "Úspěšná aktualizace"
 
+#~ msgid "Updater"
+#~ msgstr "Aktualizační nástroj"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Aktualizuji údaje o účtu. To může několik sekund trvat."
 
@@ -22399,6 +22388,19 @@ msgstr "vaše platforma"
 
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr "Po aktivaci této volby bude spuštěn instalační průvodce."
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Po spuštění staženého souboru se otevře instalační průvodce. Pro "
+#~ "instalaci aktualizačního nástroje postupujte podle pokynů. Aktualizační "
+#~ "nástroj nainstaluje nejnovější verze klientského softwaru pro Windows® a "
+#~ "automaticky upozorní na případné aktualizace. Aktualizace lze stáhnout z "
+#~ "prostředí aktualizačního nástroje."
 
 #~ msgid "When switching to another view"
 #~ msgstr "Při přepínání na jiné zobrazení"

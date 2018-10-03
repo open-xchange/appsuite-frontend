@@ -3411,8 +3411,7 @@ msgstr ""
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Last ned"
 
@@ -7598,6 +7597,10 @@ msgstr "Logg deg på igjen for å fortsette"
 msgid "Please update your browser."
 msgstr "Vennligst oppdater nettleseren din."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Vennligst vent på at den forrige operasjonen skal fullføres"
@@ -10972,10 +10975,6 @@ msgstr ""
 msgid "Untrust certificate %1$s"
 msgstr ""
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Oppdateringsklient"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Oppgradering nødvendig"
@@ -11400,22 +11399,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr ""
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Om du benytter deg av lokalt installert programvare som f.eks. Outlook "
-"Connector eller Drive-klienten, anbefaler vi at du også installerer Updater-"
-"programmet for å sørge for at programvaren alltid er oppdatert til siste "
-"versjon. Oppdateringer kan inneholde både feilrettinger og andre "
-"forbedringer. \n"
-"\n"
-"Når du kjører den nedlastede filen, vil en installasjonsveiviser bli kjørt. "
-"Følg instruksjonene og installer oppdateringsprogrammet. "
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -14236,6 +14219,9 @@ msgstr "plattformen din"
 #~ msgid "Unnamed"
 #~ msgstr "Uten navn"
 
+#~ msgid "Updater"
+#~ msgstr "Oppdateringsklient"
+
 #~ msgid ""
 #~ "Updating subscribed data takes time. Importing 100 contacts for example, "
 #~ "may take up to 5 minutes. Please have some patience."
@@ -14350,6 +14336,22 @@ msgstr "plattformen din"
 
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "Hva ønsker du å bruke på din smarttelefon?"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Om du benytter deg av lokalt installert programvare som f.eks. Outlook "
+#~ "Connector eller Drive-klienten, anbefaler vi at du også installerer "
+#~ "Updater-programmet for å sørge for at programvaren alltid er oppdatert "
+#~ "til siste versjon. Oppdateringer kan inneholde både feilrettinger og "
+#~ "andre forbedringer. \n"
+#~ "\n"
+#~ "Når du kjører den nedlastede filen, vil en installasjonsveiviser bli "
+#~ "kjørt. Følg instruksjonene og installer oppdateringsprogrammet. "
 
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "Which app do you want to use on your device?"

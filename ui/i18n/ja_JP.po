@@ -3344,8 +3344,7 @@ msgstr "ダウンロード"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -7495,6 +7494,10 @@ msgstr "続行するにはもう一度ログインしてください"
 msgid "Please update your browser."
 msgstr "ご利用のブラウザを更新してください。"
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "以前の操作が完了するまでお待ちください"
@@ -10844,10 +10847,6 @@ msgstr "信頼しない"
 msgid "Untrust certificate %1$s"
 msgstr "証明書%1$sを信頼しない"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "アップデータ"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "アップグレードが必要です"
@@ -11270,19 +11269,6 @@ msgstr "最新情報"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "%1$s 7.10.0の最新情報"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"ダウンロードしたファイルを実行するとインストールウィザードが起動します。イン"
-"ストールウィザードの指示に従ってアップデータをインストールしてください。"
-"Window クライアントソフトウェアの最新バージョンがインストールされます。アップ"
-"データはソフトウェアの更新情報をお知らせします。これらのソフトウェア更新はは"
-"アップデータを使ってダウンロードできます。"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -20282,6 +20268,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Update successful"
 #~ msgstr "正しく更新されました。"
 
+#~ msgid "Updater"
+#~ msgstr "アップデータ"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "アカウント データを更新しています。数秒かかる場合があります。"
 
@@ -20575,6 +20564,19 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr "このオプションを有効にすると、インストール ウィザードが起動します。"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "ダウンロードしたファイルを実行するとインストールウィザードが起動します。イ"
+#~ "ンストールウィザードの指示に従ってアップデータをインストールしてください。"
+#~ "Window クライアントソフトウェアの最新バージョンがインストールされます。"
+#~ "アップデータはソフトウェアの更新情報をお知らせします。これらのソフトウェア"
+#~ "更新ははアップデータを使ってダウンロードできます。"
 
 #~ msgid "When switching to another view"
 #~ msgstr "他のビューに切り替える場合"

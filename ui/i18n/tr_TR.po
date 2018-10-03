@@ -3381,8 +3381,7 @@ msgstr "İndir"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "İndir"
 
@@ -7532,6 +7531,10 @@ msgstr "Devam etmek için lütfen yeniden giriş yapın"
 msgid "Please update your browser."
 msgstr "Lütfen tarayıcınızı güncelleyin."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Lütfen önceki işlemin bitmesini bekleyin"
@@ -10897,10 +10900,6 @@ msgstr "Güvenme"
 msgid "Untrust certificate %1$s"
 msgstr "%1$s sertifikasına güvenme"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Güncelleyici"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Güncelleme gerekli"
@@ -11321,19 +11320,6 @@ msgstr "Yeni neler var?"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "%1$s 7.10.0 sürümünde yeni neler var?"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"İndirdiğiniz dosyayı çalıştırınca kurulum sihirbazı açılacaktır. Yönergeleri "
-"izleyerek güncelleyiciyi kurun. Böylece Windows® istemci yazılımının son "
-"sürümü yüklenecektir. Güncelleyici, yeni güncellemeler çıktığında sizi "
-"otomatik olarak bilgilendirir. Güncelleyiciyi kullanarak güncellemeleri "
-"indirebilirsiniz."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12502,3 +12488,19 @@ msgstr "platformunuz"
 
 #~ msgid "Pick a time here"
 #~ msgstr "Bir zaman seçin"
+
+#~ msgid "Updater"
+#~ msgstr "Güncelleyici"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "İndirdiğiniz dosyayı çalıştırınca kurulum sihirbazı açılacaktır. "
+#~ "Yönergeleri izleyerek güncelleyiciyi kurun. Böylece Windows® istemci "
+#~ "yazılımının son sürümü yüklenecektir. Güncelleyici, yeni güncellemeler "
+#~ "çıktığında sizi otomatik olarak bilgilendirir. Güncelleyiciyi kullanarak "
+#~ "güncellemeleri indirebilirsiniz."

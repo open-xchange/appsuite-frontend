@@ -3393,8 +3393,7 @@ msgstr "Hent"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Hent"
 
@@ -7562,6 +7561,10 @@ msgstr "Log venligst ind igen for at fortsætte"
 msgid "Please update your browser."
 msgstr "Opdater venligst din browser."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Vent venligst på at den foregående operation afsluttes"
@@ -10939,10 +10942,6 @@ msgstr "Stop med at stole på"
 msgid "Untrust certificate %1$s"
 msgstr "Hold op med at stole på certifikatet %1$s"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Opdatere"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Opgradering påkrævet"
@@ -11367,18 +11366,6 @@ msgstr "Hvad er nyt"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Hvad er nyt i %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Når du kører den hentede fil, vil den starte en installationsguide. Følg "
-"instruktionerne og installér opdatereren.  Installerer de seneste udgaver af "
-"Windows®-klientsoftware.  Opdatereren vil automatisk informere om nye "
-"opdateringer.  Du kan henter opdateringerne inde fra opdatereren."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -15831,6 +15818,9 @@ msgstr "din platform"
 #~ msgid "Unread only"
 #~ msgstr "Kun ulæste"
 
+#~ msgid "Updater"
+#~ msgstr "Opdatere"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Opdatere kontoens data. Dette kan tage nogle sekunder."
 
@@ -15954,6 +15944,18 @@ msgstr "din platform"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Vil du virkelig kassere dine ændringer?"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Når du kører den hentede fil, vil den starte en installationsguide. Følg "
+#~ "instruktionerne og installér opdatereren.  Installerer de seneste udgaver "
+#~ "af Windows®-klientsoftware.  Opdatereren vil automatisk informere om nye "
+#~ "opdateringer.  Du kan henter opdateringerne inde fra opdatereren."
 
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "

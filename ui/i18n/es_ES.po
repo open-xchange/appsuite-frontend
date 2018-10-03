@@ -3407,8 +3407,7 @@ msgstr "Descargar"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Descargar"
 
@@ -7599,6 +7598,10 @@ msgstr "Por favor, inicie de nuevo la sesión para continuar"
 msgid "Please update your browser."
 msgstr "Por favor, actualice su navegador."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Por favor, espere a que termine la operación anterior"
@@ -11013,10 +11016,6 @@ msgstr "Desconfiar"
 msgid "Untrust certificate %1$s"
 msgstr "Desconfiar del certificado %1$s"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Actualizador"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Se precisa actualización"
@@ -11444,19 +11443,6 @@ msgstr "Qué hay de nuevo"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Qué hay de nuevo en %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Al ejecutar el archivo descargado, se lanzará un asistente de instalación. "
-"Siga las instrucciones e instale el programa de actualización. Instale las "
-"últimas versiones del software de cliente de Windows®. El programa de "
-"actualización informa automáticamente sobre las nuevas actualizaciones. "
-"Puede descargar las actualizaciones desde el programa de actualización."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -22218,6 +22204,9 @@ msgstr "su plataforma"
 #~ msgid "Update successful"
 #~ msgstr "Actualización realizada con éxito"
 
+#~ msgid "Updater"
+#~ msgstr "Actualizador"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr ""
 #~ "Actualizando los datos de la cuenta. Esto puede tardar unos segundos."
@@ -22487,6 +22476,20 @@ msgstr "su plataforma"
 
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr "Cuando se active esta opción se lanzará un asistente."
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Al ejecutar el archivo descargado, se lanzará un asistente de "
+#~ "instalación. Siga las instrucciones e instale el programa de "
+#~ "actualización. Instale las últimas versiones del software de cliente de "
+#~ "Windows®. El programa de actualización informa automáticamente sobre las "
+#~ "nuevas actualizaciones. Puede descargar las actualizaciones desde el "
+#~ "programa de actualización."
 
 #~ msgid "When switching to another view"
 #~ msgstr "Al cambiar a otra vista"

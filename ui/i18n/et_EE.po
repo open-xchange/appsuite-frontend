@@ -3406,8 +3406,7 @@ msgstr ""
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Lae alla"
 
@@ -7587,6 +7586,10 @@ msgstr "Palun logige jätkamiseks uuesti sisse"
 msgid "Please update your browser."
 msgstr "Palun värskendage oma veebilehitsejat."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Palun oodake, kuni eelmine tegevus lõpeb"
@@ -10957,10 +10960,6 @@ msgstr ""
 msgid "Untrust certificate %1$s"
 msgstr ""
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Värskendaja"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Ülendusvajadus"
@@ -11386,18 +11385,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr ""
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Allalaetud faili täitmisel käivitatakse paigaldusnõustaja. Järgige juhiseid "
-"ja paigaldage värskendaja. Paigaldab Windows®-i klienditarkvara uusimad "
-"versioonid. Värskendaja annab automaatselt teada uutest värskendustest. "
-"Värskendusi saab alla laadida värskendaja seest."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -13705,6 +13692,9 @@ msgstr "teie platvorm"
 #~ msgid "Unkown client"
 #~ msgstr "Tundmatu saatja"
 
+#~ msgid "Updater"
+#~ msgstr "Värskendaja"
+
 #~ msgid ""
 #~ "Updating subscribed data takes time. Importing 100 contacts for example, "
 #~ "may take up to 5 minutes. Please have some patience."
@@ -13739,6 +13729,18 @@ msgstr "teie platvorm"
 
 #~ msgid "Weekly on %1$s"
 #~ msgstr "Iga nädala %1$s"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Allalaetud faili täitmisel käivitatakse paigaldusnõustaja. Järgige "
+#~ "juhiseid ja paigaldage värskendaja. Paigaldab Windows®-i klienditarkvara "
+#~ "uusimad versioonid. Värskendaja annab automaatselt teada uutest "
+#~ "värskendustest. Värskendusi saab alla laadida värskendaja seest."
 
 #~ msgid "Yearly on %1$s %2$d"
 #~ msgstr "Iga aasta %1$s %2$d"

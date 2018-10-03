@@ -3416,8 +3416,7 @@ msgstr "Downloaden"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Downloaden"
 
@@ -7619,6 +7618,10 @@ msgstr "Meld opnieuw aan om door te gaan"
 msgid "Please update your browser."
 msgstr "Download alstublieft de laatste versie van uw browser."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Ogenblik geduld alstublieft tot de vorige operatie is voltooid"
@@ -11037,10 +11040,6 @@ msgstr "Opschorten"
 msgid "Untrust certificate %1$s"
 msgstr "Certificaat %1$s opschorten"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Updater"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Upgrade is noodzakelijk"
@@ -11468,19 +11467,6 @@ msgstr "Wat is nieuw"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Wat is nieuw in %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Wanneer u het gedownloade bestand opstart, zal een installatie-wizard "
-"gestart worden. Volg de instructies en installeer de Updater. Deze "
-"installeert de laatste versie van de Windows® client. De Updater informeert "
-"u automatisch over nieuwe updates. U kunt deze updates downloaden vanuit de "
-"Updater."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -15762,6 +15748,9 @@ msgstr "uw platform"
 #~ msgid "Unread only"
 #~ msgstr "Alleen ongelezen"
 
+#~ msgid "Updater"
+#~ msgstr "Updater"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Accountgegevens bijwerken. Dit kan enkele seconden duren."
 
@@ -15880,6 +15869,19 @@ msgstr "uw platform"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Welkom. Geef alstublieft feedback over dit product"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Wanneer u het gedownloade bestand opstart, zal een installatie-wizard "
+#~ "gestart worden. Volg de instructies en installeer de Updater. Deze "
+#~ "installeert de laatste versie van de Windows® client. De Updater "
+#~ "informeert u automatisch over nieuwe updates. U kunt deze updates "
+#~ "downloaden vanuit de Updater."
 
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "

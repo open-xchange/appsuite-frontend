@@ -3421,8 +3421,7 @@ msgstr "Lejupielāde"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Lejupielāde"
 
@@ -7614,6 +7613,10 @@ msgstr "Lai turpinātu lūdzu pieslēdzieties no jauna"
 msgid "Please update your browser."
 msgstr "Lūdzu jauniniet savu pārlūkprogrammu."
 
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
 msgstr "Pagaidiet līdz tiek pabeigta iepriekšējā operācija"
@@ -11018,10 +11021,6 @@ msgstr "Neuzticēties"
 msgid "Untrust certificate %1$s"
 msgstr "Neuzticēties sertifikātam %1$s"
 
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Jauninātājs"
-
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
 msgstr "Nepieciešama jaunināšana"
@@ -11447,19 +11446,6 @@ msgstr "Jaunumi"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "%1$s 7.10.0 jaunumi"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Pie lejupielādētā faila palaišanas tiks aktivizēts uzstādīšanas vednis. "
-"Sekojiet instrukcijām jauninātāja uzstādīšanai. Tiks uzstādīta jaunākā "
-"Windows® klienta programmatūras versija. Jauninātājs automātiski paziņos "
-"jums par pieejamajiem jauninājumiem. Jaunās versijas jūs varēsiet "
-"lejupielādēt un uzstādīt  izmantojot jauninātāju."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -19431,6 +19417,9 @@ msgstr "jūsu platforma"
 #~ msgid "Update"
 #~ msgstr "Jaunināt"
 
+#~ msgid "Updater"
+#~ msgstr "Jauninātājs"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Konta datu jaunināšana. Tas var prasīt vairākas sekundes."
 
@@ -19688,6 +19677,19 @@ msgstr "jūsu platforma"
 
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr "Pie šīs opcijas aktivizēšanas tiks uzsākts uzstādīšanas vednis."
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Pie lejupielādētā faila palaišanas tiks aktivizēts uzstādīšanas vednis. "
+#~ "Sekojiet instrukcijām jauninātāja uzstādīšanai. Tiks uzstādīta jaunākā "
+#~ "Windows® klienta programmatūras versija. Jauninātājs automātiski paziņos "
+#~ "jums par pieejamajiem jauninājumiem. Jaunās versijas jūs varēsiet "
+#~ "lejupielādēt un uzstādīt  izmantojot jauninātāju."
 
 #~ msgid "When switching to another view"
 #~ msgstr "Kad pārslēdzas uz citu skatu"
