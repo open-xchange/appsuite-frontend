@@ -694,10 +694,10 @@ define('io.ox/mail/detail/content', [
 
                 if (baton.isHTML) {
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
-                    content = document.createElement('HTML');
+                    content = document.createElement('DIV');
                     content.innerHTML = baton.source;
-                    // we only need the body
-                    content = content.getElementsByTagName('body')[0];
+                    // remove wrapping div
+                    content = content.content.firstElementChild;
                     content.className = content.className + ' mail-detail-content noI18n';
                     // last line of defense
                     each(content, 'script, base, meta', function (node) {
