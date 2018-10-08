@@ -115,6 +115,9 @@ define('io.ox/backbone/views/edit-picture', [
                             this.close();
                         }.bind(this));
                 },
+                onCancel: function () {
+                    this.model.unset('pictureFile');
+                },
                 onUserMedia: function () {
                     caputure.getDialog().open().on('ready', function (dataURL) {
                         this.model.set('pictureFile', dataURL);
@@ -212,10 +215,13 @@ define('io.ox/backbone/views/edit-picture', [
             .addCancelButton()
             .addButton({ label: gt('Ok'), action: 'apply' })
             .on('cancel', function () {
-                this.model.unset('pictureFile');
+                this.onCancel();
             })
             .on('apply', function () {
-                this.onApply();
+                if (!this.$el.hasClass('blank')) return this.onApply();
+                // simply cancel when no image was provided
+                this.onCancel();
+                return this.close();
             });
         }
     };
