@@ -200,6 +200,9 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/changestatus', {
         requires: function (e) {
             function cont(model) {
+                //no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+                if (!util.hasFlag(model, 'accepted') && !util.hasFlag(model, 'declined') &&
+                    !util.hasFlag(model, 'tentative') && !util.hasFlag(model, 'needs_action')) return false;
 
                 // in shared calendars the attendee means the calendar owner is attendee, we have to look if we have modify permission
                 if (util.hasFlag(model, 'attendee_on_behalf') || util.hasFlag(model, 'organizer_on_behalf') && !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'organizer'))) {
@@ -532,7 +535,10 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            if (!util.hasFlag(e.baton.data, 'accepted')) return false;
+            if (util.hasFlag(e.baton.data, 'accepted')) return false;
+            //no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+            if (!util.hasFlag(e.baton.data, 'accepted') && !util.hasFlag(e.baton.data, 'declined') &&
+                !util.hasFlag(e.baton.data, 'tentative') && !util.hasFlag(e.baton.data, 'needs_action')) return false;
             // in shared folders we also have to check if we have the permissin to modify
             if ((util.hasFlag(e.baton.data, 'attendee_on_behalf') || util.hasFlag(e.baton.data, 'organizer_on_behalf')) &&
                 !(util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'organizer')) &&
@@ -545,7 +551,10 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            if (!util.hasFlag(e.baton.data, 'declined')) return false;
+            if (util.hasFlag(e.baton.data, 'declined')) return false;
+            //no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+            if (!util.hasFlag(e.baton.data, 'accepted') && !util.hasFlag(e.baton.data, 'declined') &&
+                !util.hasFlag(e.baton.data, 'tentative') && !util.hasFlag(e.baton.data, 'needs_action')) return false;
             // in shared folders we also have to check if we have the permissin to modify
             if ((util.hasFlag(e.baton.data, 'attendee_on_behalf') || util.hasFlag(e.baton.data, 'organizer_on_behalf')) &&
                 !(util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'organizer')) &&
