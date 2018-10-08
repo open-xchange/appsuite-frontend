@@ -394,74 +394,34 @@ define('io.ox/core/tk/upload', [
         };
 
         this.validateFiles = function (newFiles, options) {
-            if (!options.folder || delegate.type === 'importEML') return $.when(newFiles);
+            if (!options.folder || delegate.type === 'importEML') return $.when({});
             return folderAPI.get(options.folder).then(function (folder) {
-                var deferred = $.when({});
-                if (folderAPI.is('infostore', folder) && filestorageAPI.isExternal(folder)) {
-                    // if it is an external infostore folder, get quota via the new quota api
-                    deferred = require(['io.ox/core/api/quota']).then(function (quotaAPI) {
-                        return quotaAPI.getAccountQuota(folder.account_id, 'filestorage').then(function (model) {
-                            return model.toJSON();
-                        });
+                if (folderAPI.is('infostore', folder)) {
+                    return require(['io.ox/core/api/quota']).then(function (quotaAPI) {
+                        return quotaAPI.checkQuota(folder, newFiles);
                     });
-                } else if (folderAPI.is('infostore', folder)) {
-                    // internal infostore folders need to calculate quota based on the settings
-                    deferred = require(['settings!io.ox/core']).then(function (settings) {
-                        var properties = settings.get('properties') || {};
-                        return {
-                            use: properties.infostoreUsage,
-                            quota: properties.infostoreQuota,
-                            maxSize: properties.infostoreMaxUploadSize
-                        };
-                    });
-                } else {
-                    // no quota
-                    deferred = $.when({});
                 }
 
-                return deferred.then(function success(data) {
-                    var maxSize = data.maxSize || Number.MAX_VALUE;
+                // no quota
+                return $.when({});
+            }).then(function (errors) {
+                if (errors.length === 0) return newFiles;
 
-                    var validFiles = _(newFiles).filter(function (f) {
-                        return !(maxSize > 0 && f.size > maxSize);
-                    });
-
-                    // Bug-54765: Frontend no longer makes a quota check
-
-                    if (validFiles.length < newFiles.length) {
-                        require(['io.ox/core/strings'], function (strings) {
-                            if (newFiles.length - validFiles.length === 1) {
-                                var f = _.without.apply(_, [newFiles].concat(validFiles))[0];
-                                notifications.yell('error',
-                                    //#. %1$s the filename
-                                    //#. %2$s the maximum file size
-                                    gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', f.name, strings.fileSize(maxSize))
-                                );
-                            } else if (validFiles.length === 0) {
-                                notifications.yell('error',
-                                    //#. %1$s the maximum file size
-                                    gt('The files cannot be uploaded because each file exceeds the maximum file size of %1$s', strings.fileSize(maxSize))
-                                );
-                            } else {
-                                notifications.yell('warning',
-                                    //#. %1$s the maximum file size
-                                    gt('Some files cannot be uploaded because they exceed the maximum file size of %1$s', strings.fileSize(maxSize))
-                                );
-                            }
-                        });
-                    }
-
-                    return validFiles;
-                }, function fail() {
-                    throw newFiles;
+                return require([
+                    'io.ox/core/tk/upload-problems'
+                ]).then(function (Problems) {
+                    return Problems.report(newFiles, errors);
                 });
+            }, function (err) {
+                notifications.yell(err);
+                throw err;
             });
         };
 
         this.offer = function (file, options) {
             var self = this,
                 newFiles = [].concat(file);
-            this.validateFiles(newFiles, options).always(function (validFiles) {
+            this.validateFiles(newFiles, options).then(function (validFiles) {
                 validFiles = validFiles || newFiles;
                 if (validFiles.length === 0) return;
                 _(validFiles).each(function (file) {
