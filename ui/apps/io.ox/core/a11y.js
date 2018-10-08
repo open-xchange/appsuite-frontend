@@ -112,7 +112,7 @@ define('io.ox/core/a11y', [], function () {
 
             if (!next.length) next = wrap;
 
-            next.addClass('focussed').attr('aria-selected', true).trigger('click').siblings().removeClass('focussed').removeAttr('aria-selected');
+            next.addClass('focussed').attr('aria-selected', true).trigger('click', { inputdevice: 'keyboard' }).siblings().removeClass('focussed').removeAttr('aria-selected');
             return $list.attr('aria-activedescendant', next.attr('id'));
         }
     });
