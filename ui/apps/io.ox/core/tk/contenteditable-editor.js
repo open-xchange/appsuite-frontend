@@ -119,8 +119,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         config: function (context) {
 
-            var enabled = settings.get('mentions/enabled', true);
-            debugger;
+            var enabled = settings.get('mentions/enabled', false);
             if (!enabled) return;
 
             this.plugins = this.plugins + ' advlink paste oxmention';
@@ -173,7 +172,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                     var list = model.get('to') || [],
                         name = item.mail_full_name, mail = item.mail || item.email;
                     model.set('to', list.concat([[name || null, mail || null]]));
-                    return '<span>' + item.mail_full_name + '&nbsp;</span>';
+                    return '<span>@' + item.mail_full_name + '&nbsp;</span>';
                 },
 
                 // matching/sorting done withing addressbook component
