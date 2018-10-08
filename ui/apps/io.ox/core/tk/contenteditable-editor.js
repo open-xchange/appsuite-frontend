@@ -119,7 +119,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         config: function (context) {
 
-            var enabled = settings.get('mentions/enabled', false);
+            var enabled = settings.get('features/mentions', false);
+
             if (!enabled) return;
 
             this.plugins = this.plugins + ' advlink paste oxmention';
