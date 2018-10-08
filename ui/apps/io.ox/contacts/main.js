@@ -328,9 +328,11 @@ define('io.ox/contacts/main', [
                 return this.text in baton.labels;
             };
 
-            function thumbClick() {
-                var text = $(this).data('text');
-                if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('smartphone'));
+            function thumbClick(e, params) {
+                params = _.extend({ inputdevice: 'mouse' }, params);
+                var text = $(this).data('text'),
+                    silent = _.device('smartphone') || params.inputdevice !== 'keyboard';
+                if (text) app.grid.scrollToLabelText(text, silent);
             }
 
             function thumbMove(e) {
