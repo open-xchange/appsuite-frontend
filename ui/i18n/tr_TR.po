@@ -9329,14 +9329,6 @@ msgstr "Geçerli e-posta alanları olmadığı için bazı kişiler eklenemedi."
 msgid "Some fields contain invalid data"
 msgstr "Bazı alanlar geçersiz veri içeriyor"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Bazı dosyalar %1$s olan maksimum dosya boyutunu geçtiği için yüklenemiyorlar"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -9970,9 +9962,6 @@ msgstr ""
 "\"%1$s\" dosyası, %2$s maksimum infostore kota sınırını aştığı için "
 "yüklenemiyor"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -9985,14 +9974,6 @@ msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment "
 "size limit of %2$s"
 msgstr "\"%1$s\" dosyası, %2$s maksimum ek boyutunu aştığı için yüklenemiyor"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Tüm dosyalar %1$s olan maksimum dosya boyutunu geçtiği için yüklenemiyorlar"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10787,6 +10768,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "Tatil bildiriminiz yüklenemedi. Lütfen daha sonra yeniden deneyin."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Dosya yükle"
+msgstr[1] "Dosya yükle"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11204,6 +11193,12 @@ msgstr "Bu e-postanın %1$s adresinden geldiğini doğrulayamadık."
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "Bu e-postanın %1$s adresinden geldiğini doğruladık."
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -12488,6 +12483,20 @@ msgstr "platformunuz"
 
 #~ msgid "Pick a time here"
 #~ msgstr "Bir zaman seçin"
+
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Bazı dosyalar %1$s olan maksimum dosya boyutunu geçtiği için "
+#~ "yüklenemiyorlar"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Tüm dosyalar %1$s olan maksimum dosya boyutunu geçtiği için "
+#~ "yüklenemiyorlar"
 
 #~ msgid "Updater"
 #~ msgstr "Güncelleyici"

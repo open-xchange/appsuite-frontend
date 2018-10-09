@@ -9390,14 +9390,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Néhány mező hibás adatokat tartalmaz"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Néhány fájl nem tölthető fel, mert meghaladja a maximális %1$s fájlméretet"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10041,9 +10033,6 @@ msgstr ""
 "A fájl („%1$s”) nem tölthető fel, mert meghaladja az infostore kvótakorlátot "
 "(%2$s)"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10059,14 +10048,6 @@ msgid ""
 msgstr ""
 "A fájl („%1$s”) nem tölthető fel, mert a melléklet meghaladja a "
 "kvótakorlátot (%2$s)"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"A fájlok nem tölthetők fel, mert meghaladják a maximális %1$s fájlméretet"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10873,6 +10854,14 @@ msgstr ""
 "Nem sikerült betölteni a szabadságértesítőt. Kérjük, próbálkozzon újra "
 "később."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Fájl feltöltése"
+msgstr[1] "Fájl feltöltése"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11295,6 +11284,12 @@ msgstr "Nem tudtuk ellenőrizni, hogy ezt az e-mailt valóban %1$s küldte."
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "Ezt az e-mailt valóban %1$s küldte."
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -14007,6 +14002,12 @@ msgstr "az Ön rendszere"
 #~ msgid "Smartphone"
 #~ msgstr "Okostelefon beállításai:"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Néhány fájl nem tölthető fel, mert meghaladja a maximális %1$s fájlméretet"
+
 #~ msgid "Something went wrong reauthorizing the account."
 #~ msgstr "Hiba történt a fiók újra felhatalmazásakor."
 
@@ -14169,6 +14170,12 @@ msgstr "az Ön rendszere"
 #~ msgstr[0] "A fájl nem tölthető fel, mert meghaladja a kvótakorlátot (%1$s)"
 #~ msgstr[1] ""
 #~ "A fájlok nem tölthető fel, mert meghaladják a kvótakorlátot (%1$s)"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "A fájlok nem tölthetők fel, mert meghaladják a maximális %1$s fájlméretet"
 
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""

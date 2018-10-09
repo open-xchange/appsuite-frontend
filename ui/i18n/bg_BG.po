@@ -9445,13 +9445,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr ""
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10072,9 +10065,6 @@ msgid ""
 "limit of %2$s"
 msgstr ""
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10085,13 +10075,6 @@ msgstr ""
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment "
 "size limit of %2$s"
-msgstr ""
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
 msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
@@ -10846,6 +10829,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr ""
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Качи файл"
+msgstr[1] "Качи файл"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11265,6 +11256,12 @@ msgstr ""
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr ""
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB

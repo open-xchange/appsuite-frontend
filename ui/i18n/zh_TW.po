@@ -9253,13 +9253,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "某些欄位包含無效資料"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr "因為超過了檔案大小限制 %1$s，無法上傳檔案"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -9881,9 +9874,6 @@ msgid ""
 "limit of %2$s"
 msgstr "因為超過了資訊儲存空間配額大小限制 %2$s，無法上傳檔案「%1$s」"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -9895,13 +9885,6 @@ msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment "
 "size limit of %2$s"
 msgstr "因為超過了總附件大小限制 %2$s，無法上傳檔案「%1$s」"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr "因為超過了檔案大小限制 %1$s，無法上傳"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10658,6 +10641,14 @@ msgstr "無法載入您的自動轉寄設定，請稍候再試。"
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "無法載入您的假期通知，請稍候再試。"
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "上傳檔案"
+msgstr[1] "上傳檔案"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11073,6 +11064,12 @@ msgstr "我們無法確認這封信是否真的來自 %1$s。"
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "我們可以確認這封信的確來自 %1$s。"
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -16210,6 +16207,11 @@ msgstr "您的平台"
 #~ msgid "Solomon Islands"
 #~ msgstr "庫克群島"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr "因為超過了檔案大小限制 %1$s，無法上傳檔案"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "某人與您分享了檔案"
 
@@ -16550,6 +16552,11 @@ msgstr "您的平台"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "此檔案於 %1$s 可用"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr "因為超過了檔案大小限制 %1$s，無法上傳"
 
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "資料夾於 %1$s 可用"

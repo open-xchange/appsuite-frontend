@@ -9362,15 +9362,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Några fält innehåller ogiltig information"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Vissa filer kan inte laddas upp eftersom deras storlek överskrider den "
-"maximala filstorleken %1$s"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10004,9 +9995,6 @@ msgstr ""
 "Filen \"%1$s\" kan inte laddas upp eftersom den överskrider infostore-kvoten "
 "på %2$s"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10022,15 +10010,6 @@ msgid ""
 msgstr ""
 "Filen \"%1$s\" kan inte laddas upp eftersom den överskrider totala "
 "storleksgränsen för bilagor på %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Filerna kan inte laddas upp eftersom deras storlek överskrider den maximala "
-"filstorleken %1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10834,6 +10813,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "Kunde inte läsa in din semesternotis. Försök igen senare."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Unable to load reminder"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Oförmögen att ladda påminnelse"
+msgstr[1] "Oförmögen att ladda påminnelse"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11256,6 +11243,12 @@ msgstr "Vi kunde inte verifiera att detta meddelande är från %1$s."
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "Vi kunde verifiera att detta meddelande är från %1$s."
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -17344,6 +17337,13 @@ msgstr "din plattform"
 #~ msgid "Some fields have values, that are too long"
 #~ msgstr "Några fält har värden som är för långa."
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Vissa filer kan inte laddas upp eftersom deras storlek överskrider den "
+#~ "maximala filstorleken %1$s"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Någon delade en fil med dig"
 
@@ -17787,6 +17787,13 @@ msgstr "din plattform"
 
 #~ msgid "The file you selected does not exist."
 #~ msgstr "Dokumentet du sökte finns inte."
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Filerna kan inte laddas upp eftersom deras storlek överskrider den "
+#~ "maximala filstorleken %1$s"
 
 #~ msgid "The folder %d is not an Infostore folder"
 #~ msgstr "Mappen %d är inte en Infolagrings-mapp"
@@ -19043,9 +19050,6 @@ msgstr "din plattform"
 
 #~ msgid "Unable to load objects. Context %1$d User %2$d"
 #~ msgstr "Oförmögen att ladda objekt. Kontext %1$d Användare %2$d"
-
-#~ msgid "Unable to load reminder"
-#~ msgstr "Oförmögen att ladda påminnelse"
 
 #~ msgid "Unable to load this LDAP addressbook: %1$s"
 #~ msgstr "Oförmögen att ladda denna LDAP-adressbok: %1$s"

@@ -7542,6 +7542,20 @@ msgstr ""
 msgid "Removed %1$s."
 msgstr ""
 
+#: apps/io.ox/core/tk/upload-problems.js
+#: module:io.ox/core
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/core/tk/upload-problems.js
+#: module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/tk/upload.js
 #: module:io.ox/core
 msgid "Uploading folders is not supported."
@@ -7552,27 +7566,6 @@ msgstr ""
 #: apps/io.ox/mail/import.js
 #: module:io.ox/mail
 msgid "Mail was not imported. Only .eml files are supported."
-msgstr ""
-
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js
-#: module:io.ox/core
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
-msgstr ""
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js
-#: module:io.ox/core
-msgid "The files cannot be uploaded because each file exceeds the maximum file size of %1$s"
-msgstr ""
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js
-#: module:io.ox/core
-msgid "Some files cannot be uploaded because they exceed the maximum file size of %1$s"
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js
@@ -9802,6 +9795,11 @@ msgstr ""
 #: apps/io.ox/mail/actions/attachmentQuota.js
 #: module:io.ox/mail
 msgid "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment size limit of %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
 msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js

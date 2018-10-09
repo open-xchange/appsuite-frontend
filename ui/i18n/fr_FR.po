@@ -9453,15 +9453,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Certains champs contiennent des données invalides"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Certains fichiers ne peuvent pas être téléchargés car leur taille excède la "
-"taille maximale d'un fichier %1$s"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10107,9 +10098,6 @@ msgstr ""
 "Le fichier « %1$s » ne peut pas être téléchargé car il excède le quota de "
 "%2$s du dépôt de données"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10125,15 +10113,6 @@ msgid ""
 msgstr ""
 "Le fichier « %1$s » ne peut pas être téléchargé car il dépasse la taille "
 "limite totale autorisée pour les pièces jointes, %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Les fichiers ne peuvent pas être téléchargés car la taille de chaque fichier "
-"dépasse la taille maximale d'un fichier %1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10963,6 +10942,14 @@ msgid "Unable to load your vacation notice. Please retry later."
 msgstr ""
 "Impossible de charger votre message d'absence. Veuillez réessayer plus tard."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Télécharger un fichier"
+msgstr[1] "Télécharger un fichier"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11392,6 +11379,12 @@ msgstr ""
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "Nous avons pu vérifier que ce courriel provient réellement de %1$s."
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -15544,6 +15537,13 @@ msgstr "votre plate-forme"
 #~ "Les comptes sociaux ne sont utilisés que pour télécharger des données de "
 #~ "contact ou d'agenda depuis le serveur."
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Certains fichiers ne peuvent pas être téléchargés car leur taille excède "
+#~ "la taille maximale d'un fichier %1$s"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Quelqu'un a partagé un fichier avec vous"
 
@@ -15901,6 +15901,13 @@ msgstr "votre plate-forme"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Le fichier est disponible à l'adresse %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Les fichiers ne peuvent pas être téléchargés car la taille de chaque "
+#~ "fichier dépasse la taille maximale d'un fichier %1$s"
 
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Le dossier est disponible à l'adresse %1$s"

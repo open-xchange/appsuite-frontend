@@ -9399,15 +9399,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Поля содержат недопустимые данные"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Некоторые файлы не были добавлены, так как их размер превышает максимально "
-"допустимый размер (%1$s)"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10046,9 +10037,6 @@ msgid ""
 "limit of %2$s"
 msgstr "Размер файла «%1$s» превышает квоту Infostore (%2$s)."
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10062,15 +10050,6 @@ msgid ""
 msgstr ""
 "Файл «%1$s» не может быть загружен, так как его размер превышает "
 "максимальный размер вложений, которые составляет %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Файлы не могут быть добавлены, так как размер каждого из них превышает "
-"максимально допустимый размер (%1$s)"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10869,6 +10848,15 @@ msgid "Unable to load your vacation notice. Please retry later."
 msgstr ""
 "Не удалось загрузить ваше сообщение автоответчика. Повторите попытку позже."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Добавить файл"
+msgstr[1] "Добавить файл"
+msgstr[2] "Добавить файл"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11290,6 +11278,13 @@ msgstr "Мы не смогли подтвердить, что это письм�
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "Мы убедились, что это письмо действительно от %1$s."
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -15102,6 +15097,13 @@ msgstr "вашей платформы"
 #~ "Учетные записи социальных сетей могут использоваться только для загрузки "
 #~ "контактов и календаря"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Некоторые файлы не были добавлены, так как их размер превышает "
+#~ "максимально допустимый размер (%1$s)"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Вам предоставлен общий доступ к файлу"
 
@@ -15398,6 +15400,13 @@ msgstr "вашей платформы"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Файл доступен в %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Файлы не могут быть добавлены, так как размер каждого из них превышает "
+#~ "максимально допустимый размер (%1$s)"
 
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Папка доступна в %1$s"

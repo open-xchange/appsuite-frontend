@@ -9387,15 +9387,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Mõned väljad sisaldavad kehtetuid andmeid"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Mõningaid faile ei saa üles laadida, sest need ületavad maksimaalse "
-"failisuuruse piirangut %1$s"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10029,9 +10020,6 @@ msgid ""
 msgstr ""
 "Faili \"%1$s\" ei saa üles laadida, sest see ületab Infostore'i kvooti %2$s"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10047,15 +10035,6 @@ msgid ""
 msgstr ""
 "Faili \"%1$s\" ei saa üles laadida, sest see ületab manuse maksimaalse "
 "failisuuruse %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Faile ei saa üles laadida, sest iga fail ületab maksimaalse failisuuruse "
-"piirangut %1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10848,6 +10827,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "Puhkuseteate laadimine ebaõnnestus."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Lae fail üles"
+msgstr[1] "Lae fail üles"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11270,6 +11257,12 @@ msgstr ""
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr ""
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -13427,6 +13420,13 @@ msgstr "teie platvorm"
 #~ msgid "Size (bytes)"
 #~ msgstr "Suurus (baitides)"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Mõningaid faile ei saa üles laadida, sest need ületavad maksimaalse "
+#~ "failisuuruse piirangut %1$s"
+
 #~ msgid "Something went wrong saving your changes."
 #~ msgstr "Midagi läks muudatuste salvestamisel viltu."
 
@@ -13559,6 +13559,13 @@ msgstr "teie platvorm"
 #~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
 #~ msgstr[0] "Faili ei saa üles laadida, sest kvoot %1$s on ületatud"
 #~ msgstr[1] "Faile ei saa üles laadida, sest kvoot %1$s on ületatud"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Faile ei saa üles laadida, sest iga fail ületab maksimaalse failisuuruse "
+#~ "piirangut %1$s"
 
 #~ msgid ""
 #~ "The following applications can be restored. Just remove the restore point "

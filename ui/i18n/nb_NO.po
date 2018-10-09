@@ -9397,15 +9397,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Noen felter inneholder ugyldige data"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Noen filer kunne ikke lastes opp fordi de overskrider den maksimalt tillatte "
-"filstørrelsen på %1$s"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10037,9 +10028,6 @@ msgstr ""
 "Filen \"%1$s\" kan ikke lastes opp fordi den overskrider Infostore-"
 "kvotegrense på %2$s"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10055,15 +10043,6 @@ msgid ""
 msgstr ""
 "Filen \"%1$s\" kan ikke lastes opp fordi den overskrider maksimal "
 "vedleggsstørrelse på %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Filene kan ikke lastes opp fordi de overskrider den maksimale filstørrelsen "
-"på %1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10863,6 +10842,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "Kunne ikke laste inn ditt ferievarsel."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Last opp fil"
+msgstr[1] "Last opp fil"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11284,6 +11271,12 @@ msgstr ""
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr ""
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -13875,6 +13868,13 @@ msgstr "plattformen din"
 #~ msgstr ""
 #~ "Sosiale medier er kun brukt til å laste ned kontakt og/eller kalenderdata"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Noen filer kunne ikke lastes opp fordi de overskrider den maksimalt "
+#~ "tillatte filstørrelsen på %1$s"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Noen delte en fil med deg"
 
@@ -14039,6 +14039,13 @@ msgstr "plattformen din"
 #~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
 #~ msgstr[0] "Filen kan ikke lastes opp fordi den overskrider kvoten på %1$s"
 #~ msgstr[1] "Filene kan ikke lastes opp fordi de overskrider kvoten på %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Filene kan ikke lastes opp fordi de overskrider den maksimale "
+#~ "filstørrelsen på %1$s"
 
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""

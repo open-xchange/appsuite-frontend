@@ -9408,15 +9408,6 @@ msgstr ""
 msgid "Some fields contain invalid data"
 msgstr "Alcuni campi contengono dati non validi"
 
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Alcuni file non possono essere caricati poiché superano la dimensione "
-"massima di %1$s"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
@@ -10060,9 +10051,6 @@ msgstr ""
 "Il file \"%1$s\" non può essere caricato poiché supera il limite di quota "
 "del deposito informazioni di %2$s"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10078,15 +10066,6 @@ msgid ""
 msgstr ""
 "Il file \"%1$s\" non può essere caricato poiché supera il limite totale di "
 "dimensione degli allegati di %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"I file non possono essere caricati perché ogni file supera la dimensione "
-"massima di %1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10905,6 +10884,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "Impossibile caricare il tuo avviso di assenza. Riprova più tardi."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Carica un file"
+msgstr[1] "Carica un file"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -11329,6 +11316,12 @@ msgstr "Impossibile verificare che questo messaggio provenga da %1$s."
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "We could verify that this email is from %1$s."
 msgstr "Possiamo verificare che questo messaggio provenga da %1$s."
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -16710,6 +16703,13 @@ msgstr "la tua piattaforma"
 #~ msgid "Solomon Islands"
 #~ msgstr "Isole Cook"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Alcuni file non possono essere caricati poiché superano la dimensione "
+#~ "massima di %1$s"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Qualcuno ha condiviso un file con te"
 
@@ -17079,6 +17079,13 @@ msgstr "la tua piattaforma"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Il file è disponibile in %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "I file non possono essere caricati perché ogni file supera la dimensione "
+#~ "massima di %1$s"
 
 #~ msgid "The folder has been emptied."
 #~ msgstr "La cartella è stata svuotata."
