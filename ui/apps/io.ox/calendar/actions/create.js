@@ -63,7 +63,7 @@ define('io.ox/calendar/actions/create', [
     }
 
     function showDialogPublic(params) {
-
+        var folderTitle = api.pool.getModel(params.folder).get('title');
         // standard 500px is too small in some languages (e.g. german)
         new dialogs.ModalDialog({ width: '550' })
         .header(
@@ -71,8 +71,8 @@ define('io.ox/calendar/actions/create', [
         )
         .build(function () {
             this.getContentNode().append(
-                $('<p>').text(gt('You\'re about to create this appointment in a public calendar.')),
-                $('<p>').text(gt('Would you like to do that?'))
+                // .# Variable will be replaced with the name of the public calendar
+                $('<p>').text(gt('The selected calendar "%1$s" is public. Dou you really want to create an appointment in this calendar?', folderTitle))
             );
         })
         .addPrimaryButton('create', gt('Create in public calendar'))
