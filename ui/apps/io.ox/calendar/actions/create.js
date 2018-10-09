@@ -62,6 +62,27 @@ define('io.ox/calendar/actions/create', [
         });
     }
 
+    function showDialogPublic(params) {
+
+        // standard 500px is too small in some languages (e.g. german)
+        new dialogs.ModalDialog({ width: '550' })
+        .header(
+            $('<h4>').text(gt('Appointments in public calendars'))
+        )
+        .build(function () {
+            this.getContentNode().append(
+                $('<p>').text(gt('You\'re about to create this appointment in a public calendar.')),
+                $('<p>').text(gt('Would you like to do that?'))
+            );
+        })
+        .addPrimaryButton('create', gt('Create in public calendar'))
+        .addAlternativeButton('cancel', gt('Cancel'))
+        .on('create', function () {
+            openEditDialog(params);
+        })
+        .show();
+    }
+
     return function (baton, obj) {
 
         obj = obj || {};
@@ -113,7 +134,9 @@ define('io.ox/calendar/actions/create', [
             return api.get(params.folder);
         }).done(function (folder) {
             if (!api.can('create', folder)) return;
-            if (api.is('shared', folder)) showDialog(params, folder); else openEditDialog(params);
+            if (api.is('shared', folder)) showDialog(params, folder);
+            else if (api.is('public', folder)) showDialogPublic(params, folder);
+            else openEditDialog(params);
         });
     };
 });
