@@ -18,6 +18,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/contacts/util',
     'io.ox/mail/util',
     'io.ox/core/util',
+    'io.ox/core/tk/upload',
     'io.ox/backbone/views',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
@@ -35,11 +36,24 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/calendar/color-picker',
     'io.ox/backbone/mini-views/dropdown',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker, Dropdown) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, upload, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker, Dropdown) {
 
     'use strict';
 
     var point = views.point('io.ox/calendar/edit/section');
+
+    point.basicExtend({
+        index: 100,
+        id: 'dnd',
+        draw: function (baton) {
+            baton.app.view.$el.append(
+                new upload.dnd.FloatingDropzone({
+                    app: baton.app,
+                    point: 'io.ox/calendar/edit/dnd/actions'
+                }).render().$el
+            );
+        }
+    });
 
     point.basicExtend({
         id: 'header',

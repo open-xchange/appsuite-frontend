@@ -267,6 +267,7 @@ define('io.ox/mail/api', [
 
     function allowImages(obj) {
         if (util.authenticity('block', obj)) return false;
+        if (util.isWhiteListed(obj)) return true;
         if (!settings.get('allowHtmlImages', false)) return false;
         if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
@@ -284,6 +285,7 @@ define('io.ox/mail/api', [
             cache = options && (options.cache !== undefined) ? options.cache : true;
 
         if (model && util.authenticity('box', model.toJSON()) === 'trusted') obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
+        if (model && util.isWhiteListed(model.toJSON())) obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
 
         // TODO: make this smarter
         if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());

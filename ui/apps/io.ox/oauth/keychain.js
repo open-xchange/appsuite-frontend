@@ -44,6 +44,16 @@ define.async('io.ox/oauth/keychain', [
                 point.extend(keychainAPI);
 
                 this.keychainAPI = keychainAPI;
+            },
+            canAdd: function (options) {
+                if (_.isFunction(this.keychainAPI.canAdd)) {
+                    return this.keychainAPI.canAdd(options);
+                }
+                var service = this,
+                    scopes = [].concat(options.scopes || []);
+                return scopes.reduce(function hasAvailableScope(acc, scope) {
+                    return acc && _(service.get('availableScopes')).contains(scope);
+                }, true);
             }
         }),
         ServiceCollection = Backbone.Collection.extend({
@@ -213,15 +223,6 @@ define.async('io.ox/oauth/keychain', [
                 throw e;
             });
         };
-        if (_.contains(['xing', 'twitter', 'linkedin', 'boxcom', 'dropbox', 'google', 'msliveconnect', 'yahoo'], this.id)) {
-            this.canAdd = function (options) {
-                options = _.extend({}, options);
-                if (_.isString(options.scopes)) options.scopes = [options.scopes];
-                return (options.scopes || []).reduce(function hasAvailableScope(acc, scope) {
-                    return acc && _(service.availableScopes).contains(scope);
-                }, true) && self.getAll().length === 0;
-            };
-        }
     }
 
     function getAllServices() {

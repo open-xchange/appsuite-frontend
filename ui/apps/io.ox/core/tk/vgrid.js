@@ -487,7 +487,7 @@ define('io.ox/core/tk/vgrid', [
         hScrollToLabel = function (e) {
             var index = $(this).data('label-index') || 0,
                 inc = e.type === 'dblclick' ? 1 : 0;
-            scrollToLabel(index + inc);
+            scrollToLabel(index + inc, true);
         };
 
         paintLabels = function () {

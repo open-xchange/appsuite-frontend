@@ -251,7 +251,8 @@ define('io.ox/calendar/api', [
                                 if (obj === null) {
                                     var alarm = { eventId: reqList[index].id, folder: reqList[index].folder };
                                     if (reqList[index].recurrenceId) alarm.recurrenceId = reqList[index].recurrenceId;
-                                    api.trigger('failureToFetchEvent', _(alarms).findWhere(alarm));
+                                    api.trigger('failedToFetchEvent', _(alarms).findWhere(alarm));
+                                    api.trigger('delete:appointment', reqList[index]);
                                     // null means the event was deleted, clean up the caches
                                     processResponse({
                                         deleted: [reqList[index]]
@@ -297,6 +298,8 @@ define('io.ox/calendar/api', [
                         fields: api.defaultFields
                     },
                     def;
+
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
 
                 if (options.expand) {
                     params.expand = true;
@@ -358,6 +361,8 @@ define('io.ox/calendar/api', [
                         fields: api.defaultFields
                     };
 
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
 
                 if (options.expand) {
@@ -366,10 +371,16 @@ define('io.ox/calendar/api', [
                     params.rangeEnd = options.rangeEnd;
                 }
 
+                var data = {
+                    event: obj
+                };
+
+                if (options.comment) data.comment = options.comment;
+
                 if (options.attachments && options.attachments.length) {
                     var formData = new FormData();
 
-                    formData.append('json_0', JSON.stringify(obj));
+                    formData.append('json_0', JSON.stringify(data));
                     for (var i = 0; i < options.attachments.length; i++) {
                         // the attachment data is given via the options parameter
                         formData.append('file_' + options.attachments[i].cid, options.attachments[i].file);
@@ -384,7 +395,7 @@ define('io.ox/calendar/api', [
                     def = http.PUT({
                         module: 'chronos',
                         params: params,
-                        data: obj
+                        data: data
                     });
                 }
                 return def.then(processResponse)
@@ -410,10 +421,24 @@ define('io.ox/calendar/api', [
                 list = _.isArray(list) ? list : [list];
 
                 var params = {
-                    action: 'delete',
-                    timestamp: _.then(),
-                    fields: api.defaultFields
-                };
+                        action: 'delete',
+                        timestamp: _.then(),
+                        fields: api.defaultFields
+                    },
+                    data = {
+                        events: _(list).map(function (obj) {
+                            obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                            var params = {
+                                id: obj.id,
+                                folder: obj.folder
+                            };
+                            if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+                            if (obj.recurrenceRange) params.recurrenceRange = obj.recurrenceRange;
+                            return params;
+                        })
+                    };
+
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
 
                 if (options.expand) {
                     params.expand = true;
@@ -421,19 +446,12 @@ define('io.ox/calendar/api', [
                     params.rangeEnd = options.rangeEnd;
                 }
 
+                if (options.comment) data.comment = options.comment;
+
                 return http.PUT({
                     module: 'chronos',
                     params: params,
-                    data: _(list).map(function (obj) {
-                        obj = obj instanceof Backbone.Model ? obj.attributes : obj;
-                        var params = {
-                            id: obj.id,
-                            folder: obj.folder
-                        };
-                        if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
-                        if (obj.recurrenceRange) params.recurrenceRange = obj.recurrenceRange;
-                        return params;
-                    })
+                    data: data
                 })
                 .then(function (data) {
                     data.forEach(processResponse);
@@ -467,6 +485,8 @@ define('io.ox/calendar/api', [
                         attendee: obj.attendee
                     };
 
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
                 if (obj.recurrenceId) {
                     params.recurrenceId = obj.recurrenceId;
                 }
@@ -499,6 +519,40 @@ define('io.ox/calendar/api', [
                     }
 
                     return response;
+                });
+            },
+
+            updateAlarms: function (obj, options) {
+
+                var params = {
+                    action: 'updateAlarms',
+                    id: obj.id,
+                    folder: obj.folder,
+                    timestamp: _.now(),
+                    fields: api.defaultFields + ',alarms,rrule'
+                };
+
+                if (obj.recurrenceId) {
+                    params.recurrenceId = obj.recurrenceId;
+                }
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
+                return http.PUT({
+                    module: 'chronos/alarm',
+                    params: params,
+                    data: obj.alarms
+                })
+                .then(function (data) {
+                    // somehow the backend misses the alarms property when alarms are set to 0
+                    if (obj.alarms.length === 0 && !obj.recurrenceId) {
+                        data.updated[0].alarms = [];
+                    }
+                    processResponse(data);
                 });
             },
 
@@ -560,6 +614,9 @@ define('io.ox/calendar/api', [
                         timestamp: _.then(),
                         fields: api.defaultFields
                     };
+
+                    if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
                     if (options.expand) {
                         params.expand = true;
                         params.rangeStart = options.rangeStart;
@@ -643,14 +700,18 @@ define('io.ox/calendar/api', [
                     });
                     return http.resume();
                 }
+                var params = {
+                    action: 'ack',
+                    folder: obj.folder,
+                    id: obj.eventId,
+                    alarmId: obj.alarmId
+                };
+
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
                 return http.PUT({
                     module: 'chronos/alarm',
-                    params: {
-                        action: 'ack',
-                        folder: obj.folder,
-                        id: obj.eventId,
-                        alarmId: obj.alarmId
-                    }
+                    params: params
                 })
                 .then(function (data) {
                     api.trigger('acknowledgedAlarm', obj);
@@ -662,15 +723,19 @@ define('io.ox/calendar/api', [
             remindMeAgain: function (obj) {
                 if (!obj) return $.Deferred().reject();
 
+                var params = {
+                    action: 'snooze',
+                    folder: obj.folder,
+                    id: obj.eventId,
+                    alarmId: obj.alarmId,
+                    snoozeTime: obj.time || 300000
+                };
+
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
                 return http.PUT({
                     module: 'chronos/alarm',
-                    params: {
-                        action: 'snooze',
-                        folder: obj.folder,
-                        id: obj.eventId,
-                        alarmId: obj.alarmId,
-                        snoozeTime: obj.time || 300000
-                    }
+                    params: params
                 })
                 .then(processResponse);
             },
@@ -724,6 +789,18 @@ define('io.ox/calendar/api', [
 
     ox.on('refresh^', function () {
         api.refresh();
+    });
+
+    // sync caches if backend sends push update notice
+    // also get fresh alarms
+    ox.on('socket:calendar:updates', function (data) {
+        _(data.folders).each(function (folder) {
+            _(api.pool.getByFolder(folder)).each(function (collection) {
+                collection.expired = true;
+                collection.sync();
+            });
+        });
+        api.getAlarms();
     });
 
     api.pool = Pool.create('chronos', {

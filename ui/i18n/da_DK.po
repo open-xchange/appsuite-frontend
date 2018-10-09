@@ -234,28 +234,28 @@ msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s efter afslutning."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s efter start."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s før afslutning."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
@@ -284,20 +284,20 @@ msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at %2$s."
 msgstr "%1$s %2$s."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at end."
 msgstr "%1$s ved afslutning."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at start."
 msgstr "%1$s ved start."
@@ -730,6 +730,12 @@ msgstr "Tilføj IMAP-stikord"
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Tilføj en beskrivelse"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Email notification for task participant?"
+msgid "Add a message to the notification email for the other participants."
+msgstr "E-mailunderretning for deltager af opgave?"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1174,6 +1180,10 @@ msgstr "Tillad forhåndsindlæsning af eksternt linkede billeder"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Tilføj altid den følgende modtager under skjult kopi (BCC)"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Always trust mails from the following senders"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Amber"
@@ -1800,6 +1810,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1972,6 +1983,18 @@ msgstr "Ændr adgangskode"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Ændr adgangskode og log ud"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change reminder"
+msgstr "Opret påmindelse"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change reminders"
+msgstr "Opret påmindelse"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -2153,6 +2176,10 @@ msgstr "Farvelæg %1$s"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Farv citerede linjer"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+msgstr ""
 
 #. is in the same window as "You are about to change your confirmation status. Please leave a comment for other participants". So "comment" should be translated the same in both cases to not confuse users
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -2866,7 +2893,8 @@ msgstr "Slet alle beskeder"
 msgid "Delete all objects"
 msgstr "Slet alle objekter"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Delete appointment"
 msgstr "Slet aftale"
 
@@ -3365,8 +3393,7 @@ msgstr "Hent"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Hent"
 
@@ -5609,6 +5636,7 @@ msgstr "Mac App Store"
 msgid "Magenta"
 msgstr "Magenta"
 
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Mail"
@@ -6724,6 +6752,7 @@ msgid "Offline mode"
 msgstr "Offline mode"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6956,8 +6985,8 @@ msgid "Order"
 msgstr "Rækkefølge"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Organizer"
 msgstr "Organisér"
 
@@ -7046,9 +7075,9 @@ msgstr "Deltagere"
 msgid "Participants (%1$d)"
 msgstr "Deltagere (%1$d)"
 
-#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -7531,6 +7560,10 @@ msgstr "Log venligst ind igen for at fortsætte"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Opdater venligst din browser."
+
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
@@ -8130,6 +8163,7 @@ msgid "Remind me again"
 msgstr "Påmind mig igen"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -8789,6 +8823,60 @@ msgstr "Send URL"
 msgid "Send mail"
 msgstr "Send e-mail"
 
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s after end."
+msgid "Send mail %1$s after end."
+msgstr "Påmind %1$s efter afslutning."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s after start."
+msgid "Send mail %1$s after start."
+msgstr "Påmind %1$s efter start."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s before end."
+msgid "Send mail %1$s before end."
+msgstr "Påmind %1$s før afslutning."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s before start."
+msgid "Send mail %1$s before start."
+msgstr "Påmind %1$s før start."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Keep mails to %1$s"
+msgid "Send mail at %1$s."
+msgstr "Behold e-mails fra %1$s"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send mail at end."
+msgstr "Send e-mail"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Saved mail attachment"
+msgid "Send mail at start."
+msgstr "Gemt e-mail-vedhæftning"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Send e-mail til alle deltagere"
@@ -9276,14 +9364,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Nogle felter indeholder ugyldige data"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Nogle filer kan ikke overføres, da deres størrelser er over loftet på %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -9919,9 +9999,6 @@ msgstr ""
 "Filen \"%1$s\" kan ikke overføres, da den overskrider infostore'ens kvoten "
 "på %2$s"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -9936,14 +10013,6 @@ msgid ""
 msgstr ""
 "Filen »%1$s« kan ikke overføres, da dens størrelse overstiger den maksimale "
 "størrelse for vedhæftninger, %2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Filerne kan ikke overføres, da de allesammen er større end loftet på %1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10742,6 +10811,14 @@ msgstr ""
 msgid "Unable to load your vacation notice. Please retry later."
 msgstr "Kunne ikke indlæse dit feriesvar.  Prøv venligst igen senere."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Overfør fil"
+msgstr[1] "Overfør fil"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -10853,10 +10930,6 @@ msgstr "Stop med at stole på"
 #: module:io.ox/settings/certificates
 msgid "Untrust certificate %1$s"
 msgstr "Hold op med at stole på certifikatet %1$s"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Opdatere"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11167,6 +11240,12 @@ msgstr "Vi kunne ikke verificere at beskeden virkelig er fra %1$s."
 msgid "We could verify that this email is from %1$s."
 msgstr "Vi kunne verificere at beskeden er fra %1$s."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 天気・季節
@@ -11282,18 +11361,6 @@ msgstr "Hvad er nyt"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Hvad er nyt i %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Når du kører den hentede fil, vil den starte en installationsguide. Følg "
-"instruktionerne og installér opdatereren.  Installerer de seneste udgaver af "
-"Windows®-klientsoftware.  Opdatereren vil automatisk informere om nye "
-"opdateringer.  Du kan henter opdateringerne inde fra opdatereren."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12433,6 +12500,12 @@ msgstr "ubegrænset"
 msgid "vCard"
 msgstr "vCard"
 
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Vacation notice"
+msgid "vacation notice"
+msgstr "Feriesvar"
+
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "view the folder"
@@ -13482,9 +13555,6 @@ msgstr "din platform"
 
 #~ msgid "Email notification for task creator?"
 #~ msgstr "E-mailunderretning for opgavens opretter?"
-
-#~ msgid "Email notification for task participant?"
-#~ msgstr "E-mailunderretning for deltager af opgave?"
 
 #~ msgid "Empty table cell"
 #~ msgstr "Tomt tabelfelt"
@@ -14912,6 +14982,12 @@ msgstr "din platform"
 #~ msgstr ""
 #~ "Sociale konti bruges kun til at hente kontakt- og/eller kalenderdata"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Nogle filer kan ikke overføres, da deres størrelser er over loftet på %1$s"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Der var en der delte en fil med dig"
 
@@ -15203,6 +15279,12 @@ msgstr "din platform"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Denne fil er tilgængelig på %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Filerne kan ikke overføres, da de allesammen er større end loftet på %1$s"
 
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Denne mappe er tilgængelig på %1$s"
@@ -15743,6 +15825,9 @@ msgstr "din platform"
 #~ msgid "Unread only"
 #~ msgstr "Kun ulæste"
 
+#~ msgid "Updater"
+#~ msgstr "Opdatere"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Opdatere kontoens data. Dette kan tage nogle sekunder."
 
@@ -15866,6 +15951,18 @@ msgstr "din platform"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Vil du virkelig kassere dine ændringer?"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Når du kører den hentede fil, vil den starte en installationsguide. Følg "
+#~ "instruktionerne og installér opdatereren.  Installerer de seneste udgaver "
+#~ "af Windows®-klientsoftware.  Opdatereren vil automatisk informere om nye "
+#~ "opdateringer.  Du kan henter opdateringerne inde fra opdatereren."
 
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "

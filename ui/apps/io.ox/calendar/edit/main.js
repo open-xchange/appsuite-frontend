@@ -127,7 +127,7 @@ define('io.ox/calendar/edit/main', [
                         self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
-                            if (app.dropZone) app.dropZone.include();
+                            if (app.dropZone && app.dropZone.include) app.dropZone.include();
                             //set url parameters
                             self.setState({ folder: self.model.attributes.folder, id: self.model.get('id') ? self.model.attributes.id : null });
                         });
@@ -388,13 +388,6 @@ define('io.ox/calendar/edit/main', [
             getContextualHelp: function () {
                 return 'ox.appsuite.user.sect.calendar.gui.create.html';
             }
-        });
-
-        app.setLauncher(function () {
-            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
-            this.dropZone = new dnd.UploadZone({
-                ref: 'io.ox/calendar/edit/dnd/actions'
-            }, this);
         });
 
         app.setQuit(function () {

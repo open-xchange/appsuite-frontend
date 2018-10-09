@@ -47,6 +47,10 @@ define('l10n/ja_JP/io.ox/register', [
 
                 var value = $.trim(baton.data[yomiField]);
 
+                // no need to add yomi if they are the same as the actual name
+                if ((yomiField === 'yomiLastName' || yomiField === 'yomiFirstName' ) && self.find(selector).text() === value)  {
+                    return;
+                }
                 if (yomiField === 'yomiCompany') {
                     // don't do anything if company is empty
                     if (value === '') return;

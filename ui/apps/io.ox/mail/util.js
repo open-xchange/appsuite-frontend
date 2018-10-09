@@ -288,7 +288,7 @@ define('io.ox/mail/util', [
                 obj = { css: {}, string: '', node: $() };
             // styles
             if (styles.size && styles.size !== 'browser-default') obj.css['font-size'] = styles.size;
-            if (styles.family && styles.family !== 'browser-default') obj.css['font-family'] = styles.family;
+            if (styles.family) obj.css['font-family'] = (styles.family !== 'browser-default') ? styles.family : 'System';
             if (styles.color && styles.color !== 'transparent') obj.css.color = styles.color;
             // styles as string
             obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
@@ -542,6 +542,35 @@ define('io.ox/mail/util', [
         isEmbedded: function (data) {
             if (!_.isObject(data)) return false;
             return data.folder_id === undefined && data.filename !== undefined;
+        },
+
+        asList: _.memoize(function (str) {
+            // comma-seperated, stringbased list
+            return (str || '')
+                // linebreak, whitespace
+                .replace(/[\s\n]+/g, ',')
+                // duplicate commas
+                .replace(/(,+),/g, ',')
+                // trailing commas
+                .replace(/^,|,$/g, '')
+                .toLowerCase()
+                .split(',');
+        }),
+
+        isWhiteListed: function (data, list) {
+            var whitelist = [].concat(
+                    that.asList(settings.get('feature/trusted/user', list || '')),
+                    that.asList(settings.get('feature/trusted/admin', ''))
+                ),
+                address = _.isObject(data) ?
+                    data.from && data.from.length && String(data.from[0][1] || '') :
+                    data || '';
+            // normalize
+            whitelist = _.compact(whitelist);
+            address = (address || '').trim().toLowerCase();
+            return _.some(whitelist, function (whitelisted) {
+                return address.endsWith(whitelisted.trim());
+            });
         },
 
         authenticity: (function () {

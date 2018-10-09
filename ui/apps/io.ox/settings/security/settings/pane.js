@@ -140,4 +140,16 @@ define('io.ox/settings/security/settings/pane', [
             );
         }
     });
+
+    ext.point('io.ox/settings/security/settings/detail/mail').extend({
+        id: 'trusted',
+        index: 300,
+        render: function () {
+            if (!this.model.isConfigurable('feature/trusted/user')) return;
+
+            this.$('fieldset.mail').append(
+                util.textarea('feature/trusted/user', gt('Always trust mails from the following senders'), this.model, gt('Comma-separated list e.g. "example.org, alice@example.com"'))
+            );
+        }
+    });
 });

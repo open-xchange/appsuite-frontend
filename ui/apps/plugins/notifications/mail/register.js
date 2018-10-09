@@ -93,8 +93,10 @@ define('plugins/notifications/mail/register', [
         app.set('hasBadge', count > 0);
 
         if (count > 0) {
-            //#. %1$d number of notifications
+            //#. %1$d number of unread mails
             app.set('tooltip', gt.format('%1$d unread', count));
+        } else {
+            app.unset('tooltip');
         }
 
     }, 100);

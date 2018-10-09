@@ -124,6 +124,8 @@
 
     .group { border: none; }
 
+    .flex-wrapper { display: flex; }
+
     fieldset{
         margin: 0;
     }
@@ -150,6 +152,11 @@
             color: @participant-tentative;
             i { opacity: 0.50; }
         }
+    }
+
+    .organizer-container {
+        margin-left: 4px;
+        color: @hc-gray;
     }
 
     .io-ox-inline-links.embedded {
@@ -223,7 +230,7 @@
             .comment {
                 color: @hc-gray;
                 white-space: normal;
-                padding-left: 1em;
+                padding-left: 16px;
                 line-height: 16px;
                 padding-top: 5px;
                 margin-bottom: 3px;

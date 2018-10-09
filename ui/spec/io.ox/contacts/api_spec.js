@@ -29,32 +29,32 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
         });
 
         it('should return proper image path for internal users', function () {
-            var url = api.pictureHalo($(), { internal_userid: 1, folder_id: 6, id: 1337 }, { urlOnly: true });
-            expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?internal_userid=1');
+            var url = api.pictureHalo($(), { folder_id: 6, id: 1337, internal_userid: 1 }, { urlOnly: true });
+            expect(url).to.contain(ox.apiRoot + '/contacts/picture?action=get&user_id=1');
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for contacts', function () {
             var url = api.pictureHalo($(), { folder_id: 6, id: 1337 }, { urlOnly: true });
-            expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
+            expect(url).to.contain(ox.apiRoot + '/contacts/picture?action=get&contact_id=1337&folder_id=6');
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for contacts while ignoring internal_userid = 0', function () {
             var url = api.pictureHalo($(), { folder_id: 6, id: 1337, internal_userid: 0 }, { urlOnly: true });
-            expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
+            expect(url).to.contain(ox.apiRoot + '/contacts/picture?action=get&contact_id=1337&folder_id=6');
             expect(url).to.contain('uniq=');
         });
-
+        ///contacts/picture?action=get
         it('should consider width, height, and scaleType', function () {
             var url = api.pictureHalo($(), { folder_id: 6, id: 1337, width: 48, height: 48, scaleType: 'cover' }, { urlOnly: true });
-            expect(url).to.match(/\/halo\/contact\/picture\?folder=6&id=1337&width=\d+&height=\d+&scaleType=cover/);
+            expect(url).to.match(/\/contacts\/picture\?action=get&contact_id=1337&folder_id=6&width=\d+&height=\d+&scaleType=cover/);
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for recipients', function () {
             var url = api.pictureHalo($(), { email: 'test@open-xchange.com' }, { urlOnly: true });
-            expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?email=test%40open-xchange.com');
+            expect(url).to.contain(ox.apiRoot + '/contacts/picture?action=get&email=test%40open-xchange.com');
             expect(url).to.contain('uniq=');
         });
 

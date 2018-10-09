@@ -20,16 +20,12 @@ define('io.ox/core/tk/text-editor', [
     // save jQuery val() - since tinyMCE is a bit too aggressive
     var val = $.original.val;
 
-    function Editor(textarea, opt) {
+    function Editor(el, opt) {
 
-        opt = _.extend({
-            useFixedWithFont: false
-        }, opt);
+        opt = _.extend({ useFixedWithFont: false }, opt);
+        var textarea = $('<textarea class="plain-text">').toggleClass('monospace', opt.useFixedWidthFont);
 
-        $(textarea).append(
-            textarea = $('<textarea class="plain-text">')
-        );
-        textarea.toggleClass('monospace', opt.useFixedWidthFont);
+        $(el).append(textarea);
 
         if (_.device('tablet && iOS >= 6')) {
             textarea.on('click', function () {
@@ -209,21 +205,21 @@ define('io.ox/core/tk/text-editor', [
             return false;
         };
 
+        function resizeEditor() {
+            if (el === null) return;
+            var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
+            textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - toolbarHeight)));
+        }
+
         this.show = function () {
-            function resizeEditor() {
-                var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
-                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - toolbarHeight)));
-            }
             textarea.prop('disabled', false).show();
-
-            _.defer(function () { resizeEditor(); });
-
             $(window).on('resize.text-editor', resizeEditor);
+            resizeEditor();
         };
 
         this.hide = function () {
             textarea.prop('disabled', true).hide();
-            $(window).off('resize.text-editor');
+            $(window).off('resize.text-editor', resizeEditor);
         };
 
         this.getContainer = function () {

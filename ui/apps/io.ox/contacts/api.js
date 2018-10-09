@@ -103,7 +103,7 @@ define('io.ox/contacts/api', [
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -111,7 +111,7 @@ define('io.ox/contacts/api', [
             },
             search: {
                 action: 'search',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
                 // magic sort field: ignores asc/desc
                 sort: '609',
@@ -191,7 +191,7 @@ define('io.ox/contacts/api', [
             },
             advancedsearch: {
                 action: 'advancedSearch',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617',
                 extendColumns: 'io.ox/contacts/api/list',
                 // magic sort field: ignores asc/desc
                 sort: '607',
@@ -708,13 +708,55 @@ define('io.ox/contacts/api', [
             uniq = _.now();
         });
 
+        function getType(data, opt) {
+            // duck checks
+            if (api.looksLikeResource(data)) return 'resource';
+            if (api.looksLikeGroup(data) || api.looksLikeDistributionList(data)) return 'group';
+            if (_.isString(data.image1_url) && data.image1_url !== '') return 'image_url';
+            if (data.user_id || data.userid || data.userId || data.internal_userid) return 'user';
+            if ((data.contact_id || data.id) && (data.folder_id || data.folder)) return 'contact';
+            if (data.mail || data.email || data.email1) return 'email';
+            if (opt.fallback) return 'fallback';
+        }
+
+        function getParams(data, opt, type) {
+            var params = {};
+
+            switch (type) {
+                case 'user':
+                    params.user_id = data.user_id || data.userid || data.userId || data.internal_userid;
+                    break;
+                case 'contact':
+                    params.contact_id = data.contact_id || data.id;
+                    params.folder_id = data.folder_id || data.folder;
+                    break;
+                case 'email':
+                    params.email = data.email && String(data.email).toLowerCase() || data.mail && String(data.mail).toLowerCase() || data.email1 && String(data.email1).toLowerCase();
+                    break;
+                default:
+            }
+
+            return _.extend(params, {
+                width: _.device('retina') ? opt.width * 2 : opt.width,
+                height: _.device('retina') ? opt.height * 2 : opt.height,
+                scaleType: opt.scaleType,
+                // allow multiple public-session cookies per browser (see bug 44812)
+                user: ox.user_id,
+                context: ox.context_id,
+                // ui only caching trick
+                sequence: data.last_modified || 1,
+                uniq: uniq
+            });
+        }
+
         function load(node, url, opt) {
             _.defer(function () {
                 // use lazyload?
-                opt.container = opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
-                if (opt.lazyload || opt.container) {
+                var enableLazyload = opt.lazyload || opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
+
+                if (enableLazyload) {
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');
-                    node.attr('data-original', url)
+                    return node.attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
                             if (image.width === 1 || e.type === 'error') {
                                 url = opt.fallback ? fallback : null;
@@ -728,125 +770,63 @@ define('io.ox/contacts/api', [
                             $(this).off('.lazyload');
                         })
                         .lazyload();
-                } else {
-                    $(new Image()).on('load error', function (e) {
-                        var fail = this.width === 1 || e.type === 'error';
-                        if (!fail) cachedURLs[url] = url;
-                        if (!fail || opt.fallback) node.text('').css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                        node = null;
-                        $(this).off();
-                    })
-                    .attr('src', url);
                 }
+
+                $(new Image()).on('load error', function (e) {
+                    var fail = this.width === 1 || e.type === 'error';
+                    if (!fail) cachedURLs[url] = url;
+                    if (!fail || opt.fallback) node.text('').css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                    node = null;
+                    $(this).off();
+                })
+                .attr('src', url);
             });
             return node;
         }
 
         return function (node, data, options) {
-
-            var params,
-                url,
-                opt = _.extend({
+            var opt = _.extend({
                     width: 48,
                     height: 48,
                     scaleType: 'cover',
                     // lazy load block
                     lazyload: false,
                     effect: 'show',
+                    // operational
                     urlOnly: false,
                     fallback: true
-                }, options);
-            delete opt.api;
-            // use copy of data object because of delete-statements
-            data = _.clone(data);
+                }, options),
+                type = getType(data, _.pick(opt, 'fallback')),
+                params = getParams(data, opt, type),
+                url;
 
-            // duck check: special handling for search tokens
-            if (data.facet) {
-                if (!(data.facet.hasPersons() && data.data.item)) return;
-                data.image1_url = data.data.item.image_url;
-            }
+            // special handling for search tokens
+            if (data.facet && data.facet.hasPersons() && data.data.item) data.image1_url = data.data.item.image_url;
 
-            // use double size in combination retina
-            if (_.device('retina')) {
-                opt.width *= 2;
-                opt.height *= 2;
-            }
-
-            // duck checks
-            if (api.looksLikeResource(data)) {
-
-                url = api.getFallbackImage('resource');
-
-            } else if (api.looksLikeGroup(data) || api.looksLikeDistributionList(data)) {
-
-                url = api.getFallbackImage('group');
-
-            } else if (_.isString(data.image1_url) && data.image1_url !== '') {
-
-                params = $.extend({}, {
-                    // scale
-                    width: opt.width,
-                    height: opt.height,
-                    scaleType: opt.scaleType,
-                    user: ox.user_id,
-                    context: ox.context_id,
-                    sequence: data.last_modified
-                });
-                url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
-                url = coreUtil.getShardingRoot(url);
-
-            } else if (opt.fallback && !data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
-                url = fallback;
+            switch (type) {
+                case 'resource':
+                    url = api.getFallbackImage('resource');
+                    break;
+                case 'group':
+                    url = api.getFallbackImage('group');
+                    break;
+                case 'image_url':
+                    url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
+                    url = coreUtil.getShardingRoot(url);
+                    break;
+                case 'fallback':
+                    url = fallback;
+                    break;
+                default:
             }
 
             // already done?
-            if (url) {
-                return opt.urlOnly ? url : load(node, url, opt);
-            }
+            if (url) return opt.urlOnly ? url : load(node, url, _.pick(opt, 'container', 'lazyload', 'fallback'));
 
-            // preference; internal_userid must not be undefined, null, or zero
-            if (data.internal_userid || data.userid || data.user_id) {
-                delete data.contact_id;
-                delete data.folder_id;
-                delete data.folder;
-                delete data.id;
-            } else {
-                delete data.internal_userid;
-                delete data.userid;
-                delete data.user_id;
-            }
-
-            // empty extend trick to restrict to non-undefined values
-            params = $.extend({}, {
-                // identifier
-                email: data.email && String(data.email).toLowerCase() || data.mail && String(data.mail).toLowerCase() || data.email1 && String(data.email1).toLowerCase(),
-                folder: data.folder_id || data.folder,
-                id: data.contact_id || data.id,
-                internal_userid: data.internal_userid || data.userid || data.user_id,
-                // scale
-                width: opt.width,
-                height: opt.height,
-                scaleType: opt.scaleType,
-                uniq: uniq,
-                user: ox.user_id,
-                context: ox.context_id,
-                // mails don't have a last modified attribute, just use 1
-                sequence: data.last_modified || 1
-            });
-
-            // remove empty values
-            for (var k in params) {
-                if (params.hasOwnProperty(k) && !params[k]) {
-                    delete params[k];
-                }
-            }
-
-            url = coreUtil.getShardingRoot('/halo/contact/picture?' + $.param(params));
+            url = coreUtil.getShardingRoot('/contacts/picture?action=get&' + $.param(params));
 
             // cached?
-            if (cachedURLs[url]) {
-                return opt.urlOnly ? cachedURLs[url] : node.text('').css('background-image', 'url(' + cachedURLs[url] + ')');
-            }
+            if (cachedURLs[url]) return opt.urlOnly ? cachedURLs[url] : node.text('').css('background-image', 'url(' + cachedURLs[url] + ')');
 
             try {
                 return opt.urlOnly ? url : load(node, url, opt);
@@ -854,7 +834,6 @@ define('io.ox/contacts/api', [
                 data = node = opt = params = null;
             }
         };
-
     }());
 
     /**
@@ -1026,7 +1005,7 @@ define('io.ox/contacts/api', [
     };
 
     /**
-     * is ressource (duck check)
+     * is resource (duck check)
      * @param  {object} obj (contact) or calendar event attendee
      * @return {boolean}
      */
@@ -1035,7 +1014,7 @@ define('io.ox/contacts/api', [
     };
 
     /**
-     * is ressource (duck check)
+     * is resource (duck check)
      * @param  {object} obj (contact)
      * @return {boolean}
      */

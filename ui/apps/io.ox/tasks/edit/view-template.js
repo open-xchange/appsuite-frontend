@@ -14,6 +14,7 @@
 define('io.ox/tasks/edit/view-template', [
     'gettext!io.ox/tasks/edit',
     'io.ox/backbone/views',
+    'io.ox/core/tk/upload',
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
@@ -27,11 +28,24 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/tasks/util',
     'io.ox/core/folder/api',
     'settings!io.ox/tasks'
-], function (gt, views, yell, mini, DatePicker, util, RecurrenceView, AddParticipantView, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
+], function (gt, views, upload, yell, mini, DatePicker, util, RecurrenceView, AddParticipantView, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
 
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
+
+    point.basicExtend({
+        index: 100,
+        id: 'dnd',
+        draw: function (baton) {
+            this.append(
+                new upload.dnd.FloatingDropzone({
+                    app: baton.app,
+                    point: 'io.ox/tasks/edit/dnd/actions'
+                }).render().$el
+            );
+        }
+    });
 
     //headline
     point.basicExtend({
@@ -792,11 +806,12 @@ define('io.ox/tasks/edit/view-template', [
         id: 'attachment',
         index: 100,
         label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
-        multiple: function (files, view) {
+        multiple: function (files, app) {
             _(files).each(function (fileData) {
-                view.baton.attachmentList.addFile(fileData);
+                app.view.baton.attachmentList.baton.attachmentList.addFile(fileData);
             });
-
+            // ensure file representatives are visible
+            app.view.$('.expand-link').trigger('click');
         }
     });
 });

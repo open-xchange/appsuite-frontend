@@ -39,7 +39,7 @@ define('io.ox/core/extPatterns/dnd', [
         function initDropZone() {
             var actions = [];
 
-            if (included) dropZone.remove();
+            if (included && dropZone) dropZone.remove();
 
             if (dropZone) {
                 dropZone.off('drop', handleDrop);
@@ -61,13 +61,13 @@ define('io.ox/core/extPatterns/dnd', [
                 actions: actions
             });
 
-            if (_.isFunction(dropZone.on)) {
+            if (dropZone && _.isFunction(dropZone.on)) {
                 // temp. fix: avoids strange opera runtime error
                 dropZone.on('drop', handleDrop);
                 dropZone.on('drop-multiple', handleMultiDrop);
             }
 
-            if (included) dropZone.include();
+            if (included && dropZone.include) dropZone.include();
         }
 
         initDropZone();

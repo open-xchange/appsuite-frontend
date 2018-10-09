@@ -234,28 +234,28 @@ msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s befejezés után."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s kezdés után."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s befejezés előtt."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
@@ -284,20 +284,20 @@ msgid "%1$s at %2$s"
 msgstr "%1$s itt: %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at %2$s."
 msgstr "%1$s ekkor: %2$s."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at end."
 msgstr "%1$s befejezéskor."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at start."
 msgstr "%1$s kezdéskor."
@@ -733,6 +733,12 @@ msgstr "IMAP kulcsszó hozzáadása"
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Leírás hozzáadása"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Email notification for task participant?"
+msgid "Add a message to the notification email for the other participants."
+msgstr "E-mail értesítés a feladat résztvevőinek?"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1174,6 +1180,10 @@ msgstr "A külső hivatkozásokon található képek előtöltésének engedély
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "A következő címzett hozzáadása mindig titkosított másolatként (BCC)"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Always trust mails from the following senders"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Amber"
@@ -1803,6 +1813,7 @@ msgstr "%1$s kamera"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1976,6 +1987,18 @@ msgstr "Jelszó megváltoztatása"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Jelszó megváltoztatása és kilépés"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change reminder"
+msgstr "Emlékeztető létrehozása"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change reminders"
+msgstr "Emlékeztető létrehozása"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -2160,6 +2183,10 @@ msgstr "%1$s szinezése"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Idézett sorok színezése"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+msgstr ""
 
 #. is in the same window as "You are about to change your confirmation status. Please leave a comment for other participants". So "comment" should be translated the same in both cases to not confuse users
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -2873,7 +2900,8 @@ msgstr "Összes üzenet törlése"
 msgid "Delete all objects"
 msgstr "Minden elem törlése"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Delete appointment"
 msgstr "Találkozó törlése"
 
@@ -3386,8 +3414,7 @@ msgstr "Letöltés"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Letöltés"
 
@@ -5629,6 +5656,7 @@ msgstr "Mac App Store"
 msgid "Magenta"
 msgstr "Bíborvörös"
 
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Mail"
@@ -6744,6 +6772,7 @@ msgid "Offline mode"
 msgstr "Kapcsolat nélküli mód"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6975,8 +7004,8 @@ msgid "Order"
 msgstr "Sorrend"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Organizer"
 msgstr "Szervező"
 
@@ -7065,9 +7094,9 @@ msgstr "Résztvevők"
 msgid "Participants (%1$d)"
 msgstr "Résztvevők (%1$d)"
 
-#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -7552,6 +7581,10 @@ msgstr "Jelentkezzen be újra a folytatáshoz"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Frissítse böngészőjét."
+
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
@@ -8152,6 +8185,7 @@ msgid "Remind me again"
 msgstr "Emlékeztessen újra"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -8814,6 +8848,60 @@ msgstr "Hivatkozás küldése"
 msgid "Send mail"
 msgstr "Levél küldése"
 
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s after end."
+msgid "Send mail %1$s after end."
+msgstr "%1$s értesítése befejezés után."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s after start."
+msgid "Send mail %1$s after start."
+msgstr "%1$s értesítése kezdés után."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s before end."
+msgid "Send mail %1$s before end."
+msgstr "%1$s értesítése befejezés előtt."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s before start."
+msgid "Send mail %1$s before start."
+msgstr "%1$s értesítése kezdés előtt."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Keep mails to %1$s"
+msgid "Send mail at %1$s."
+msgstr "%1$s címzettnek küldött levelek megtartása"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send mail at end."
+msgstr "Levél küldése"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Saved mail attachment"
+msgid "Send mail at start."
+msgstr "Mentett levélmelléklet"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Levél küldése minden résztvevőnek"
@@ -9301,14 +9389,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Néhány mező hibás adatokat tartalmaz"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Néhány fájl nem tölthető fel, mert meghaladja a maximális %1$s fájlméretet"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -9953,9 +10033,6 @@ msgstr ""
 "A fájl („%1$s”) nem tölthető fel, mert meghaladja az infostore kvótakorlátot "
 "(%2$s)"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -9971,14 +10048,6 @@ msgid ""
 msgstr ""
 "A fájl („%1$s”) nem tölthető fel, mert a melléklet meghaladja a "
 "kvótakorlátot (%2$s)"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"A fájlok nem tölthetők fel, mert meghaladják a maximális %1$s fájlméretet"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10785,6 +10854,14 @@ msgstr ""
 "Nem sikerült betölteni a szabadságértesítőt. Kérjük, próbálkozzon újra "
 "később."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Fájl feltöltése"
+msgstr[1] "Fájl feltöltése"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -10896,10 +10973,6 @@ msgstr "Nem megbízható"
 #: module:io.ox/settings/certificates
 msgid "Untrust certificate %1$s"
 msgstr "Nem megbízható tanúsítvány: %1$s"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Frissítő"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11212,6 +11285,12 @@ msgstr "Nem tudtuk ellenőrizni, hogy ezt az e-mailt valóban %1$s küldte."
 msgid "We could verify that this email is from %1$s."
 msgstr "Ezt az e-mailt valóban %1$s küldte."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 天気・季節
@@ -11328,18 +11407,6 @@ msgstr "Újdonságok"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Újdonságok a(z) %1$s 7.10.0 verzióban"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"A letöltött fájl futtatásakor a telepítővarázsló indul el. Kövesse az "
-"utasításokat és telepítse a frissítést. Telepítse a Windows® kliensprogram "
-"legfrissebb változatát. A frissítések ezután az Updater programból "
-"telepíthetők."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12481,6 +12548,12 @@ msgstr "korlátlan"
 msgid "vCard"
 msgstr "vCard"
 
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Vacation notice"
+msgid "vacation notice"
+msgstr "Szabadságértesítő"
+
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "view the folder"
@@ -13133,9 +13206,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Email notification for task creator?"
 #~ msgstr "E-mail értesítés a feladat létrehozójának?"
-
-#~ msgid "Email notification for task participant?"
-#~ msgstr "E-mail értesítés a feladat résztvevőinek?"
 
 #~ msgid "Empty table cell"
 #~ msgstr "Üres cella"
@@ -13932,6 +14002,12 @@ msgstr "az Ön rendszere"
 #~ msgid "Smartphone"
 #~ msgstr "Okostelefon beállításai:"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Néhány fájl nem tölthető fel, mert meghaladja a maximális %1$s fájlméretet"
+
 #~ msgid "Something went wrong reauthorizing the account."
 #~ msgstr "Hiba történt a fiók újra felhatalmazásakor."
 
@@ -14094,6 +14170,12 @@ msgstr "az Ön rendszere"
 #~ msgstr[0] "A fájl nem tölthető fel, mert meghaladja a kvótakorlátot (%1$s)"
 #~ msgstr[1] ""
 #~ "A fájlok nem tölthető fel, mert meghaladják a kvótakorlátot (%1$s)"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "A fájlok nem tölthetők fel, mert meghaladják a maximális %1$s fájlméretet"
 
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""
@@ -14300,6 +14382,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Unnamed"
 #~ msgstr "Névtelen"
 
+#~ msgid "Updater"
+#~ msgstr "Frissítő"
+
 #~ msgid ""
 #~ "Updating subscribed data takes time. Importing 100 contacts for example, "
 #~ "may take up to 5 minutes. Please have some patience."
@@ -14385,6 +14470,18 @@ msgstr "az Ön rendszere"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Eldobja ezeket a módosításokat?"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "A letöltött fájl futtatásakor a telepítővarázsló indul el. Kövesse az "
+#~ "utasításokat és telepítse a frissítést. Telepítse a Windows® "
+#~ "kliensprogram legfrissebb változatát. A frissítések ezután az Updater "
+#~ "programból telepíthetők."
 
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"

@@ -22,8 +22,9 @@ define('io.ox/core/tk/contenteditable-editor', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
+    'less!io.ox/core/tk/contenteditable-editor-content',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
+], function (capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt, contentCss) {
 
     'use strict';
 
@@ -111,6 +112,81 @@ define('io.ox/core/tk/contenteditable-editor', [
                 });
             };
         }())
+    });
+
+    ext.point(POINT + '/options').extend({
+        id: 'mention',
+        index: INDEX += 100,
+        config: function (context) {
+
+            var enabled = settings.get('features/mentions', false);
+
+            if (!enabled) return;
+
+            this.plugins = this.plugins + ' advlink paste oxmention';
+
+            var model = context.view.model,
+                cachedResponse;
+
+            var template = _.template('<li class="list-item selectable" aria-selected="false" role="option" tabindex="-1" data-cid="<%- item.cid %>">' +
+                '  <div class="list-item-content">' +
+                '    <% if (item.list) { %>' +
+                '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify" aria-hidden="true"></i></div>' +
+                '    <% } else if (item.label) { %>' +
+                '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users" aria-hidden="true"></i></div>' +
+                '    <% } else if (item.image) { %>' +
+                '      <div class="contact-picture image" data-original="<%= item.image %>" style="background-image: url(<%= item.image %>)" aria-hidden="true"></div>' +
+                '    <% } else { %>' +
+                '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
+                '    <% } %>' +
+                '    <div class="name">' +
+                '       <%= item.full_name_html || item.email || "\u00A0" %>' +
+                '       <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
+                '    </div>' +
+                '    <div class="email gray"><%- item.caption || "\u00A0" %></div>' +
+                '  </div>' +
+                '</li>');
+
+            //https://github.com/StevenDevooght/tinyMCE-mention#configuration
+            this.mentions = {
+
+                items: settings.get('mentions/limit', 5),
+
+                source: function (query, process) {
+                    require(['io.ox/contacts/addressbook/popup', 'less!io.ox/contacts/addressbook/style'], function (addressbook) {
+                        $.when().then(function () {
+                            return cachedResponse || addressbook.getAllMailAddresses({ useGABOnly: false, lists: false });
+                        }).then(function (response) {
+                            cachedResponse = response;
+                            process(addressbook.search(query, response.index, response.hash));
+                        });
+                    });
+                },
+                renderDropdown: function () {
+                    // classes 'focus-indicator has-focus visible-selection' used to apply listview styles
+                    return '<ul class="mentions-autocomplete dropdown-menu focus-indicator has-focus visible-selection" style="display:none"></ul>';
+                },
+                render: function (item) {
+                    return template({ item: item });
+                },
+                insert: function (item) {
+                    var list = model.get('to') || [],
+                        name = item.mail_full_name, mail = item.mail || item.email;
+                    model.set('to', list.concat([[name || null, mail || null]]));
+                    return '<span>@' + item.mail_full_name + '&nbsp;</span>';
+                },
+
+                // matching/sorting done withing addressbook component
+                matcher: _.constant(true),
+                sorter: _.identity
+            };
+
+            require(['io.ox/contacts/api'], function (api) {
+                api.on('create update delete', function () {
+                    cachedResponse = null;
+                });
+            });
+        }
     });
 
     function splitContent_W3C(ed) {
@@ -256,17 +332,12 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function Editor(el, opt) {
 
-        var rendered = $.Deferred(), initialized = $.Deferred(), ed;
-        var toolbar, editor, editorId = el.data('editorId');
+        var $el, initialized = $.Deferred(), ed;
+        var editor, editorId = el.data('editorId');
         var defaultStyle = mailUtil.getDefaultStyle();
 
         el.append(
-            el = $('<div class="contenteditable-editor">').attr({
-                'data-editor-id': editorId
-            })
-            .append(
-                toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId)
-                    .on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }),
+            $el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }).append(
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
                     //.css('margin-bottom', '32px')
@@ -279,9 +350,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
-            theme: 'unobtanium',
-            skin: 'lightgray'
+            plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
+            theme: 'modern',
+            height: null
         }, opt);
 
         editor.addClass(opt.class);
@@ -305,16 +376,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
         opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
-        var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
-
-        // remove all toolbars in mobileapp
-        if (window.cordova) {
-            opt.toolbar = 'false';
-            opt.toolbar1 = 'false';
-            opt.toolbar2 = 'false';
-            opt.toolbar3 = 'false';
-            opt.plugins = 'autolink paste';
-        }
+        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-top-part';
 
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
@@ -322,14 +384,15 @@ define('io.ox/core/tk/contenteditable-editor', [
             extended_valid_elements: 'blockquote[type]',
             invalid_elements: 'object,iframe,script',
 
-            inline: true,
-
-            fixed_toolbar_container: fixed_toolbar,
-
+            height: opt.height,
+            autoresize_bottom_margin: 0,
             menubar: false,
             statusbar: false,
 
             skin: opt.skin,
+
+            body_class: 'ox-mce',
+            content_style: contentCss,
 
             toolbar1: opt.toolbar1,
             toolbar2: opt.toolbar2,
@@ -361,6 +424,10 @@ define('io.ox/core/tk/contenteditable-editor', [
             hidden_input: false,
 
             theme: opt.theme,
+            mobile: {
+                theme: 'modern',
+                toolbar: false
+            },
 
             init_instance_callback: function (editor) {
                 ed = editor;
@@ -385,25 +452,21 @@ define('io.ox/core/tk/contenteditable-editor', [
             setup: function (ed) {
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
-                ed.on('BeforeRenderUI', function () {
-                    rendered.resolve();
-                    // toolbar is rendered immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
-                    _.defer(function () {
-                        // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
-                        toolbar.find('span.mce-txt').attr('tabindex', -1);
-                        // adjust toolbar
-                        var widgets = toolbar.find('.mce-widget');
-                        originalToolbarConfig.split(' ').forEach(function (id, index) {
-                            widgets.eq(index).attr('data-name', id);
-                            if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
-                        });
-                        // find empty groups
-                        toolbar.find('.mce-btn-group').each(function () {
-                            $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
-                        });
+                ed.on('init', function () {
+                    // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
+                    $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
+                    // adjust toolbar
+                    var widgets = $(fixed_toolbar).find('.mce-widget');
+                    originalToolbarConfig.split(' ').forEach(function (id, index) {
+                        widgets.eq(index).attr('data-name', id);
+                        if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
                     });
-                });
+                    // find empty groups
+                    $(fixed_toolbar).find('.mce-btn-group').each(function () {
+                        $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
+                    });
 
+                });
             }
         };
 
@@ -429,36 +492,37 @@ define('io.ox/core/tk/contenteditable-editor', [
             if (el === null) return;
 
             // This is needed for keyboard to work in small windows with buttons that are hidden
-            var buttons = toolbar.find('.mce-btn').filter('[data-hidden="xs"]');
+            var buttons = el.find('.mce-btn').filter('[data-hidden="xs"]');
             buttons.filter(':hidden').attr({ role: 'presentation', 'aria-hidden': true });
             buttons.filter(':visible').removeAttr('aria-hidden').attr('role', 'button');
 
-            var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
+            var h = 0,
+                top = 0,
+                iframe = el.find('iframe'),
+                iframeContents = iframe.contents().height(),
+                container = el.closest('.window-container'),
+                header = container.find('.window-header:visible').outerHeight() || 0,
+                footer = container.find('.window-footer:visible').outerHeight() || 0,
+                padding = 0;
 
-            if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
-                var containerHeight = el.parent().parent().height();
-                editor.css('min-height', containerHeight - composeFieldsHeight - 32);
-                return;
-            } else if (_.device('smartphone')) {
-
-                editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
-                return;
+            if (_.device('smartphone')) {
+                h = $(window).height();
+                top = el.offset().top;
+            } else {
+                h = el.closest('.window-content').height();
+                top = el.parent().find('.mail-compose-fields').outerHeight();
+                padding = 8;
             }
 
-            var h = $(window).height(),
-                top = editor.offset().top,
-                container = el.closest('.io-ox-mail-compose-window, .floating-window-content, .modal-content'),
-                bottomMargin = container.hasClass('header-top') ? 39 : 80,
-                bottomOffset = h - container.height() - container.offset().top;
+            var availableHeight = h - top - header - footer - padding;
 
-            editor.css('min-height', h - top - bottomMargin - bottomOffset + 'px');
+            if (_.device('smartphone') && (iframeContents > availableHeight)) {
+                availableHeight = iframeContents;
+            }
+
+            editor.css('min-height', availableHeight + 'px');
+            iframe.css('min-height', availableHeight + 'px');
             if (opt.css) editor.css(opt.css);
-
-            var t = $(fixed_toolbar + ' > div'),
-                w = $(fixed_toolbar).next().outerWidth();
-
-            if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
-            if (w) $(fixed_toolbar).css('width', w);
         }
 
         var resizeEditorDebounced = _.debounce(resizeEditor, 30),
@@ -519,11 +583,10 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         // publish internal 'done'
         this.done = function (fn) {
-            var self = this;
-            return $.when(initialized, rendered).then(function () {
-                fn(self);
-                return self;
-            });
+            return $.when(initialized).then(function () {
+                fn(this);
+                return this;
+            }.bind(this));
         };
 
         this.focus = function () {
@@ -710,28 +773,23 @@ define('io.ox/core/tk/contenteditable-editor', [
             return found;
         };
 
-        this.getMode = function () {
-            return 'html';
-        };
+        this.getMode = function () { return 'html'; };
 
         // convenience access
-        this.tinymce = function () {
-            return editor.tinymce ? editor.tinymce() : {};
-        };
+        this.tinymce = function () { return editor.tinymce ? editor.tinymce() : {}; };
 
         this.show = function () {
-            el.show();
+            $el.show();
             // set display to empty sting because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
-            $(window).on('resize.tinymce xorientationchange.tinymce', resizeEditorDebounced);
-            $(window).on('changefloatingstyle.tinymce', resizeEditor);
-            resizeEditorDebounced();
+            $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
+            $(window).trigger('resize');
         };
 
         this.hide = function () {
-            el.hide();
-            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce');
+            $el.hide();
+            $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
         };
 
         (function () {
@@ -744,7 +802,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
                 opt.app.get('window').floating.on('move', function () {
                     if (fixed) {
-                        toolbar.css('top', opt.view.$el.parent().offset().top);
+                        $(fixed_toolbar).css('top', opt.view.$el.parent().offset().top);
                     }
                 });
             }
@@ -754,15 +812,18 @@ define('io.ox/core/tk/contenteditable-editor', [
                     // toolbar leaves viewport
                     if (!fixed) {
                         fixed = true;
-                        toolbar.addClass('fixed').css('top', opt.view.$el.parent().offset().top);
+                        $(fixed_toolbar).css('top', opt.view.$el.parent().offset().top);
+                        $el.find('.mce-edit-area').css('margin-top', 40);
                         $(window).trigger('resize.tinymce');
                     }
-                    editor.css('margin-top', toolbar.height());
+                    //editor.css('margin-top', $(fixed_toolbar).height());
                 } else if (fixed) {
                     fixed = false;
-                    toolbar.removeClass('fixed').css('top', 0);
-                    editor.css('margin-top', 0);
+                    $(fixed_toolbar).css('top', 0);
+                    //editor.css('margin-top', 0);
+                    $el.find('.mce-edit-area').css('margin-top', 0);
                 }
+                $el.toggleClass('toolbar-fixed', fixed);
             });
             scrollPane.on('scroll', _.debounce(function () { $('body').click(); }, 1000, true));
         }());

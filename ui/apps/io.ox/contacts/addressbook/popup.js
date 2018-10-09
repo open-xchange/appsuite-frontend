@@ -157,7 +157,7 @@ define('io.ox/contacts/addressbook/popup', [
             )
             .then(function (contacts, labels) {
                 var result = [], hash = {};
-                processAddresses(contacts[0], result, hash, options);
+                processAddresses(contacts, result, hash, options);
                 if (useLabels) processLabels(labels[0], result, hash);
                 return { items: result, hash: hash, index: buildIndex(result) };
             });
@@ -169,7 +169,8 @@ define('io.ox/contacts/addressbook/popup', [
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
                 exclude: useGlobalAddressBook ? [] : ['6'],
-                limit: LIMITS.fetch
+                limit: LIMITS.fetch,
+                lists: true
             }, options);
 
             var data = {
@@ -190,6 +191,11 @@ define('io.ox/contacts/addressbook/popup', [
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
                 data: data
+            }).then(function (list) {
+                if (options.lists) return list;
+                return _.filter(list, function (item) {
+                    return !item.distribution_list;
+                });
             });
         }
 
@@ -1039,7 +1045,7 @@ define('io.ox/contacts/addressbook/popup', [
             this.$el.append(
                 // toolbar
                 $('<div class="toolbar">').append(
-                    $('<span role="header" aria-live="polite" class="count pull-left">').text(selectionLabel),
+                    $('<span role="heading" aria-level="2" aria-live="polite" class="count pull-left">').text(selectionLabel),
                     $('<a href="#" class="pull-right clear" role="button">').text(gt('Clear selection'))
                 ),
                 // list

@@ -282,7 +282,10 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    // $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu">')
+                        .addClass(_.device('smartphone') ? 'col-xs-9' : 'col-xs-7')
+                        .append(node)
                 );
             }
         }
@@ -884,9 +887,9 @@ define('io.ox/mail/compose/view', [
                 //We don't want to close it automatically! Bug: 35730
                 this.model.set(type, []);
                 input.addClass('hidden');
-                $(window).trigger('resize.tinymce');
                 button.removeClass('active').attr('aria-checked', false);
             }
+            $(window).trigger('resize');
             return input;
         },
 
@@ -903,7 +906,6 @@ define('io.ox/mail/compose/view', [
             options.view = this;
             options.model = this.model;
             options.oxContext = { view: this };
-
             ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);
@@ -951,7 +953,6 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editorContainer.busy();
-
             return this.loadEditor(content).then(function () {
                 this.editorContainer.idle();
                 // update the content type of the mail

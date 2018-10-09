@@ -254,28 +254,28 @@ msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s po ukončení."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s po začiatku."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s pred koncom."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
@@ -304,20 +304,20 @@ msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at %2$s."
 msgstr "%1$s %2$s."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at end."
 msgstr "%1$s na konci."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at start."
 msgstr "%1$s na začiatku."
@@ -752,6 +752,12 @@ msgstr "Pridať kľúčové slovo IMAP"
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Pridať popis"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Email notification for task participant?"
+msgid "Add a message to the notification email for the other participants."
+msgstr "Upozornenie účastníka úlohy emailom?"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1195,6 +1201,10 @@ msgstr "Povoliť automatické načítanie externých obrázkov"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Vždy pridávať nasledovného príjemcu do skrytej kópie (BCC)"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Always trust mails from the following senders"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Amber"
@@ -1820,6 +1830,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1996,6 +2007,18 @@ msgstr "Zmeniť heslo"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Zmeniť heslo a odhlásiť sa"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change reminder"
+msgstr "Vytvoriť pripomienku"
+
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change reminders"
+msgstr "Vytvoriť pripomienku"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -2178,6 +2201,10 @@ msgstr "Farba %1$s"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Zafarbiť citované riadky"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+msgstr ""
 
 #. is in the same window as "You are about to change your confirmation status. Please leave a comment for other participants". So "comment" should be translated the same in both cases to not confuse users
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -2893,7 +2920,8 @@ msgstr "Zmazať všetky správy"
 msgid "Delete all objects"
 msgstr "Mazať všetky objekty"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Delete appointment"
 msgstr "Zmazať schôdzku"
 
@@ -3399,8 +3427,7 @@ msgstr "Stiahnuť"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Stiahnuť"
 
@@ -5654,6 +5681,7 @@ msgstr "Mac App Store"
 msgid "Magenta"
 msgstr "Purpurová"
 
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js
 msgid "Mail"
@@ -6773,6 +6801,7 @@ msgid "Offline mode"
 msgstr "Režime offline"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -7007,8 +7036,8 @@ msgid "Order"
 msgstr "Poradie"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Organizer"
 msgstr "Organizátor"
 
@@ -7097,9 +7126,9 @@ msgstr "Účastníci"
 msgid "Participants (%1$d)"
 msgstr "Účastníci (%1$d)"
 
-#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -7582,6 +7611,10 @@ msgstr "Prosím, znova sa prihláste, aby ste mohli pokračovať"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Prosím aktualizujte svoj prehliadač."
+
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
@@ -8183,6 +8216,7 @@ msgid "Remind me again"
 msgstr "Znova pripomenúť"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -8843,6 +8877,60 @@ msgstr "Poslať odkaz"
 msgid "Send mail"
 msgstr "Poslať email"
 
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s after end."
+msgid "Send mail %1$s after end."
+msgstr "Pripomenúť %1$s po ukončení."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s after start."
+msgid "Send mail %1$s after start."
+msgstr "Pripomenúť %1$s po začiatku."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s before end."
+msgid "Send mail %1$s before end."
+msgstr "Pripomenúť %1$s pred koncom."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Notify %1$s before start."
+msgid "Send mail %1$s before start."
+msgstr "Pripomenúť %1$s pred začiatkom."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Keep mails to %1$s"
+msgid "Send mail at %1$s."
+msgstr "Zachovať emaily s adresátom %1$s"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send mail at end."
+msgstr "Poslať email"
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Saved mail attachment"
+msgid "Send mail at start."
+msgstr "Uložená príloha pošty"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Poslať email všetkým účastníkom"
@@ -9335,15 +9423,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Niektoré polia obsahujú neplatné údaje"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Niektoré súbory nie je možné nahrať, pretože prekračujú maximálnu veľkosť "
-"súboru %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -9987,9 +10066,6 @@ msgid ""
 msgstr ""
 "Súbor „%1$s“ nie je možné nahrať, pretože prekračuje kvótu infoúložiska %2$s"
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -10005,15 +10081,6 @@ msgid ""
 msgstr ""
 "Súbor „%1$s“ nie je možné nahrať, pretože prekračuje celkovú veľkosť príloh "
 "%2$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Súbory nie je možné nahrať, pretože každý súbor prekračuje obmedzenie kvóty "
-"%1$s"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "The first 90 days are free."
@@ -10825,6 +10892,15 @@ msgstr ""
 "Nepodarilo sa načítať vaše oznámenie o dovolenke. Prosím, skúste to znova "
 "neskôr."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Nahrať nový súbor"
+msgstr[1] "Nahrať nový súbor"
+msgstr[2] "Nahrať nový súbor"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
@@ -10937,10 +11013,6 @@ msgstr "Odvolať dôveru"
 #: module:io.ox/settings/certificates
 msgid "Untrust certificate %1$s"
 msgstr "Odvolať dôveru certifikátu %1$s"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Aktualizácia"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11252,6 +11324,13 @@ msgstr "Nedokázali sme overiť, či tento e-mail skutočne pochádza od %1$s."
 msgid "We could verify that this email is from %1$s."
 msgstr "Dokázali sme overiť, že tento e-mail skutočne pochádza od %1$s."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 天気・季節
@@ -11367,19 +11446,6 @@ msgstr "Novinky"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What‘s New in %1$s 7.10.0"
 msgstr "Novinky v %1$s 7.10.0"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Po spustení stiahnutého súboru sa spustí sprievodcu inštaláciou. Postupujte "
-"podľa pokynov a nainštalujte Aktualizátor. Ten inštaluje najnovšie verzie "
-"klientského softvéru pre Windows®. Aktualizátor automaticky informuje o "
-"dostupnosti nových aktualizácií. Aktualizácie si môžete stiahnuť priamo z "
-"Aktualizátora."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12529,6 +12595,12 @@ msgstr "neobmedzené"
 #: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Vacation notice"
+msgid "vacation notice"
+msgstr "Oznámenie o dovolenke"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -14742,9 +14814,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Email notification for task creator?"
 #~ msgstr "Upozornenie tvorcu úlohy emailom?"
-
-#~ msgid "Email notification for task participant?"
-#~ msgstr "Upozornenie účastníka úlohy emailom?"
 
 #~ msgid "Employee ID:"
 #~ msgstr "ID zamestnanca:"
@@ -17909,6 +17978,13 @@ msgstr "vaša platforma"
 #~ msgid "Somalia"
 #~ msgstr "Somálsko"
 
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Niektoré súbory nie je možné nahrať, pretože prekračujú maximálnu veľkosť "
+#~ "súboru %1$s"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Niekto s vami zazdieľal súbor"
 
@@ -18510,6 +18586,13 @@ msgstr "vaša platforma"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Súbor je k dispozícii na %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Súbory nie je možné nahrať, pretože každý súbor prekračuje obmedzenie "
+#~ "kvóty %1$s"
 
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Priečinok je k dispozícii na %1$s"
@@ -19307,6 +19390,9 @@ msgstr "vaša platforma"
 #~ msgid "Update"
 #~ msgstr "Aktualizovať"
 
+#~ msgid "Updater"
+#~ msgstr "Aktualizácia"
+
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Aktualizujú sa údaje priečinka. To môže niekoľko sekúnd trvať."
 
@@ -19563,6 +19649,19 @@ msgstr "vaša platforma"
 
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr "Pri aktivácii tejto možnosti sa spustí sprievodca inštaláciou."
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Po spustení stiahnutého súboru sa spustí sprievodcu inštaláciou. "
+#~ "Postupujte podľa pokynov a nainštalujte Aktualizátor. Ten inštaluje "
+#~ "najnovšie verzie klientského softvéru pre Windows®. Aktualizátor "
+#~ "automaticky informuje o dostupnosti nových aktualizácií. Aktualizácie si "
+#~ "môžete stiahnuť priamo z Aktualizátora."
 
 #~ msgid "When switching to another view"
 #~ msgstr "Pri prepnutí do iného zobrazenia"

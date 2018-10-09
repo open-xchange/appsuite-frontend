@@ -303,7 +303,7 @@ define('io.ox/find/main', [
                         // disable cache also for modules with collection loader
                         parent.listView.on('collection:load', function () {
                             if (this.loader.mode !== 'search') return;
-                            this.collection.expire();
+                            if (this.collection.expire) this.collection.expire();
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
@@ -315,7 +315,7 @@ define('io.ox/find/main', [
                             // wrap setCollection
                             parent.listView.setCollection = function (collection) {
                                 view.stopListening();
-                                view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
+                                view.listenTo(collection, 'add reset remove', app.trigger.bind(app, 'find:query:result', collection));
                                 return setCollection.apply(this, arguments);
                             };
                         };
