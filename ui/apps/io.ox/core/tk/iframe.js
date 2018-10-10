@@ -21,7 +21,7 @@ define('io.ox/core/tk/iframe', [
 
     function createIframeApp(o) {
 
-        var app = ox.ui.createApp({ name: o.name, title: o.title });
+        var app = ox.ui.createApp(o);
 
         app.setLauncher(function () {
 
