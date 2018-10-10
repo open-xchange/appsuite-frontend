@@ -169,7 +169,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // see Bug #59875
             // calculate maxLimit correctly (times paginate was done * secondary_page_size + initial page size)
             var maxLimit = Math.ceil((collection.length - this.PRIMARY_PAGE_SIZE) / this.SECONDARY_PAGE_SIZE) * this.SECONDARY_PAGE_SIZE + this.PRIMARY_PAGE_SIZE;
-            params.limit = '0,' + Math.max(collection.length + (tail || 0), maxLimit);
+            // in case we have an empty folder (drive), rightHand will be 0. See Bug #60086
+            var rightHand = Math.max(collection.length + (tail || 0), maxLimit);
+            params.limit = '0,' + (rightHand === 0 ? this.PRIMARY_PAGE_SIZE : rightHand);
 
             this.loading = true;
 
