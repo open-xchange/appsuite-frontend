@@ -438,6 +438,7 @@ define('plugins/notifications/calendar/register', [
                 subview = new Subview(options);
 
             ox.on('socket:calendar:updates', function (data) {
+                var checkForDeleted = false;
                 // TODO remove once backend changes the name
                 _(data.needsAction).each(function (obj) {
                     obj.folder = obj.folderId;
@@ -451,12 +452,14 @@ define('plugins/notifications/calendar/register', [
                     }).map(function (model) {
                         return model.pick('folder', 'id', 'recurrenceId');
                     }).valueOf();
-                    // list request will trigger a delete event for missing events, thus removing them from the collection
-                    if (requestData.length) calAPI.getList(requestData, false);
+                    if (requestData.length) {
+                        checkForDeleted = true;
+                        calAPI.getInvites();
+                    }
                 }
 
                 // add new invitations
-                if (data.needsAction) subview.addNotifications(data.needsAction);
+                if (data.needsAction && !checkForDeleted) subview.addNotifications(data.needsAction);
             });
 
             //react to changes in settings
