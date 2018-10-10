@@ -68,7 +68,7 @@ define('io.ox/mail/actions/create', [
         var refDate = moment().startOf('hour').add(1, 'hours'),
             data = {
                 attendees: attendees,
-                title: title,
+                summary: title,
                 folder_id: calendarSettings.get('chronos/defaultFolderId'),
                 startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
                 endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
@@ -113,6 +113,7 @@ define('io.ox/mail/actions/create', [
                     participants.push(calendarUtil.createAttendee(contact));
 
                 });
+                console.log(baton.data.subject);
                 launchCalendar(participants, baton.data.subject);
             });
 
