@@ -206,8 +206,7 @@ define('io.ox/calendar/api', [
                     return http.PUT({
                         module: 'chronos',
                         params: {
-                            action: 'list',
-                            extendedEntities: true
+                            action: 'list'
                         },
                         data: list
                     }).catch(function (err) {
@@ -654,15 +653,16 @@ define('io.ox/calendar/api', [
             },
 
             getInvites: function () {
-                return api.request({
+                return http.GET({
                     module: 'chronos',
                     params: {
                         action: 'needsAction',
                         folder: folderApi.getDefaultFolder('calendar'),
                         rangeStart: moment().subtract(2, 'hours').utc().format(util.ZULU_FORMAT),
-                        rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT)
+                        rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT),
+                        fields: 'folder,id,recurrenceId,organizer,endDate,startDate,summary,location,rrule'
                     }
-                }, 'GET').then(function (data) {
+                }).then(function (data) {
                     // even if empty array is given it needs to be triggered to remove
                     // notifications that does not exist anymore (already handled in ox6 etc)
                     // no filtering needed because of new needsAction request

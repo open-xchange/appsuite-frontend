@@ -57,37 +57,40 @@ define('plugins/notifications/calendar/register', [
                     // stopPropagation could be prevented by another markup structure
                     e.stopPropagation();
                     require(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
-                        acceptdeny(model.attributes, { noFolderCheck: true });
+                        calAPI.get(calAPI.reduce(model.attributes)).then(function (data) {
+                            acceptdeny(data.attributes, { noFolderCheck: true });
+                        });
                     });
                 },
                 onClickAccept = function (e) {
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (calendarSettings, util) {
-                        o.data = {
-                            // default reminder
-                            alarms: util.getDefaultAlarms(appointmentData),
-                            attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
-                            id: appointmentData.id,
-                            folder: appointmentData.folder
-                        };
-                        o.data.attendee.partStat = 'ACCEPTED';
+                    require(['settings!io.ox/calendar', 'io.ox/calendar/util', 'io.ox/core/api/user'], function (calendarSettings, util, userAPI) {
+                        userAPI.get().then(function (user) {
+                            o.data = {
+                                // default reminder
+                                alarms: util.getDefaultAlarms(appointmentData),
+                                attendee: util.createAttendee(user, { partStat: 'ACCEPTED' }),
+                                id: appointmentData.id,
+                                folder: appointmentData.folder
+                            };
 
-                        var expand = util.getCurrentRangeOptions();
-                        calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
-                            if (result && result.conflicts) {
-                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    conflictView.dialog(result.conflicts)
-                                        .on('ignore', function () {
-                                            calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
-                                        });
-                                });
-                                return;
-                            }
-                        })
-                        .fail(function (error) {
-                            yell(error);
+                            var expand = util.getCurrentRangeOptions();
+                            calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
+                                if (result && result.conflicts) {
+                                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                        conflictView.dialog(result.conflicts)
+                                            .on('ignore', function () {
+                                                calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
+                                            });
+                                    });
+                                    return;
+                                }
+                            })
+                            .fail(function (error) {
+                                yell(error);
+                            });
                         });
                     });
                 };
@@ -401,7 +404,7 @@ define('plugins/notifications/calendar/register', [
                         reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
                     },
-                    useListRequest: true,
+                    fullModel: true,
                     //#. Invitations (notifications) about appointments
                     title: gt('Appointment invitations'),
                     extensionPoints: {
