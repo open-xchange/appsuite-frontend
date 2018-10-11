@@ -25,6 +25,7 @@ deploy documentation:
     GIT_STRATEGY: none
   script:
     - export VERSION=`ls doku --sort=time | cut -f1 | head -n1`
+    - mkdir -p /var/www/documentation/$VERSION/ui
     - rsync -aHAX --delete doku/$VERSION/ui/ /var/www/documentation/$VERSION/ui
     - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
     - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
