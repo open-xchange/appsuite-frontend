@@ -697,7 +697,7 @@ define('io.ox/mail/detail/content', [
                     content = document.createElement('DIV');
                     content.innerHTML = baton.source;
                     // remove wrapping div
-                    content = content.content.firstElementChild;
+                    content = content.firstElementChild;
                     content.className = content.className + ' mail-detail-content noI18n';
                     // last line of defense
                     each(content, 'script, base, meta', function (node) {
