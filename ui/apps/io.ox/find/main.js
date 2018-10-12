@@ -307,14 +307,8 @@ define('io.ox/find/main', [
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
-                            // remember original setCollection
-                            var setCollection = parent.listView.setCollection;
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
-                            // wrap setCollection
-                            parent.listView.setCollection = function () {
-                                return setCollection.apply(this, arguments);
-                            };
                         };
 
                         // events
