@@ -172,7 +172,7 @@ define('io.ox/files/share/listview', [
             data = list.length === 1 ? list[0] : list;
 
             _.defer(function () {
-                var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, insideTrash: false });
+                var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
                 view.contextMenu.showContextMenu(e, baton);
             });
         },
