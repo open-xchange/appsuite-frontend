@@ -595,10 +595,10 @@ bl@~1.1.2:
   dependencies:
     readable-stream "~2.0.5"
 
-blankshield@0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/blankshield/-/blankshield-0.6.2.tgz#1b60f3fc3e3fae939a4d1596c37406dd0024ee3e"
-  integrity sha512-DkiddqBxAvEb4uc0+6QP97cFZmwSAPzCAgKt9qHEAvFBbBWxdQXbA/hiugEUdiohB40mVeS12bps6hoGssZtQw==
+blankshield@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/blankshield/-/blankshield-0.6.3.tgz#c8439df4e87f3aad087faa399d9e5cb105f58057"
+  integrity sha512-YVoP3q2yOUl4+JvkHAp/dsgYLOIhrll2X1pWwNu9hzIGjfGYR6sDpYIyZmWIfYm+MBKTR42d2bPWmC4Uzj0UZA==
 
 blob@0.0.4:
   version "0.0.4"
