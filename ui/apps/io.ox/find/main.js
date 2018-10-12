@@ -307,15 +307,12 @@ define('io.ox/find/main', [
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
-                            var view = app.view.model,
-                                // remember original setCollection
-                                setCollection = parent.listView.setCollection;
+                            // remember original setCollection
+                            var setCollection = parent.listView.setCollection;
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
                             // wrap setCollection
-                            parent.listView.setCollection = function (collection) {
-                                view.stopListening();
-                                view.listenTo(collection, 'add reset remove', app.trigger.bind(app, 'find:query:result', collection));
+                            parent.listView.setCollection = function () {
                                 return setCollection.apply(this, arguments);
                             };
                         };
