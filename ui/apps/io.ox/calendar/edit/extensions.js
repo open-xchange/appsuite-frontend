@@ -109,9 +109,7 @@ define('io.ox/calendar/edit/extensions', [
                     if (calendarUtil.isAllday(baton.model)) {
                         // save unchanged dates, so they can be restored on error or when handling conflicts
                         baton.parentView.tempEndDate = baton.model.get('endDate');
-                        baton.parentView.tempStartDate = baton.model.get('startDate');
                         baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
-                        baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
 
 
@@ -159,12 +157,13 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.attachmentsFormData = attachments;
                     if (baton.mode === 'edit') {
                         var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
-                            recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                            attachments: attachments,
-                            checkConflicts: true,
-                            sendInternalNotifications: sendNotifications
-                        });
-                        api.update(baton.model, options).then(save, fail);
+                                recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                attachments: attachments,
+                                checkConflicts: true,
+                                sendInternalNotifications: sendNotifications
+                            }),
+                            delta = baton.app.getDelta();
+                        api.update(delta, options).then(save, fail);
                         return;
                     }
 
@@ -411,9 +410,33 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12',
         index: 650,
         render: function () {
-            this.$el.append(new RecurrenceView({
-                model: this.model
-            }).render().$el);
+            var helpNode = $('<div class="alert">'),
+                errorText = gt('Your recurrence rule does not fit to your start date.'),
+                helpText = gt('Your recurrence rule was changed automatically.'),
+                self = this,
+                recurrenceView = new RecurrenceView({
+                    model: this.model
+                });
+            this.$el.append(
+                recurrenceView.render().$el,
+                helpNode.hide()
+            );
+
+            this.model.on('change:rrule', function () {
+                if (!self.model.get('rrule')) {
+                    helpNode.hide();
+                    return;
+                }
+                // just return, no hide here (autochange hint might be there)
+                if (self.model.checkRecurrenceRule()) return;
+                helpNode.removeClass('alert-info').addClass('alert-warning').text(errorText).show();
+            });
+            this.model.getRruleMapModel().on('autochanged', function () {
+                helpNode.removeClass('alert-warning').addClass('alert-info').text(helpText).show();
+            });
+            recurrenceView.on('openeddialog', function () {
+                helpNode.hide();
+            });
         }
     });
 

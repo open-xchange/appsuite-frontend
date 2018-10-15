@@ -103,7 +103,11 @@ define('io.ox/calendar/month/perspective', [
         updateAppointment: function (model) {
             function apiUpdate(model, options) {
                 clean(model);
-                api.update(model, options).then(function success(data) {
+
+                // reduce the sent data. No need to sent the whole model
+                var obj = _(model.toJSON()).pick('id', 'folder', 'recurrenceId', 'seriesId', 'startDate', 'endDate', 'timestamp');
+
+                api.update(obj, options).then(function success(data) {
                     if (!data || !data.conflicts) return;
 
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
@@ -136,12 +140,8 @@ define('io.ox/calendar/month/perspective', [
                 .done(function (action) {
                     switch (action) {
                         case 'series':
-                        case 'thisandfuture':
-                            var master;
-                            if (action === 'series') master = api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false);
-                            else master = api.get({ id: model.get('seriesId'), folder: model.get('folder'), recurrenceId: model.get('recurrenceId') }, false);
                             // get recurrence master object
-                            master.done(function (masterModel) {
+                            api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
                                 // calculate new dates if old dates are available
                                 var oldStartDate = masterModel.getMoment('startDate'),
                                     startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
@@ -155,6 +155,24 @@ define('io.ox/calendar/month/perspective', [
                                 apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
                                     checkConflicts: true,
                                     recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                }));
+                            });
+                            break;
+                        case 'thisandfuture':
+                            // get recurrence master object
+                            api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
+                                // calculate new dates if old dates are available use temporary new model to store data before the series split
+                                var updateModel = new chronosModel.Model(util.createUpdateData(masterModel, model)),
+                                    oldStartDate = masterModel.getMoment('startDate');
+
+                                updateModel.set({
+                                    startDate: model.get('startDate'),
+                                    endDate: model.get('endDate')
+                                });
+                                util.updateRecurrenceDate(model, oldStartDate);
+                                apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
+                                    checkConflicts: true,
+                                    recurrenceRange: 'THISANDFUTURE'
                                 }));
                             });
                             break;

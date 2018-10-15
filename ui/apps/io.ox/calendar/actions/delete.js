@@ -41,7 +41,8 @@ define('io.ox/calendar/actions/delete', [
                 list = _(list).chain().map(function (obj) {
                     obj = obj instanceof Backbone.Model ? obj.attributes : obj;
                     var options = {
-                        id: obj.id,
+                        // prefer the seriesId over the id to make it work for exeptions
+                        id:  action === 'thisandfuture' ? obj.seriesId || obj.id : obj.id,
                         folder: obj.folder,
                         recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
                     };
@@ -64,9 +65,10 @@ define('io.ox/calendar/actions/delete', [
 
             var hasSeries = _(list).some(function (event) {
                     if (event.hasFlag('last_occurrence')) return false;
-                    return event.has('recurrenceId') && event.get('id') === event.get('seriesId');
+                    return event.has('recurrenceId');
                 }),
                 text, dialog;
+
             if (hasSeries) {
                 var hasFirstOccurence = _(list).some(function (event) {
                     return event.hasFlag('first_occurrence') || !event.hasFlag('organizer');

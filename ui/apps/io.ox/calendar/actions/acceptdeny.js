@@ -44,6 +44,10 @@ define('io.ox/calendar/actions/acceptdeny', [
             if (!options.taskmode && !series && o.recurrenceId) {
                 apiData.recurrenceId = o.recurrenceId;
             }
+            // make this work with exceptions
+            if (!options.taskmode && series && apiData.id !== o.seriesId) {
+                apiData.id = o.seriesId;
+            }
 
             $.when(api.get(apiData), options.noFolderCheck ? $.when() : folderAPI.get(apiData.folder)).always(function (data, folderData) {
                 // work on a copy for appointments (so we don't accidentally change the pool data)
@@ -196,7 +200,7 @@ define('io.ox/calendar/actions/acceptdeny', [
         }
 
         // series?
-        if (!options.taskmode && o.recurrenceId && o.id === o.seriesId) {
+        if (!options.taskmode && o.recurrenceId && o.seriesId) {
             return new ModalDialog({ title: gt('Do you want to confirm the whole series or just one appointment within the series?') })
                 .build(function () {
                     // no need for a dialog body

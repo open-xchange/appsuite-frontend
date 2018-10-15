@@ -745,7 +745,10 @@ define('io.ox/calendar/util', [
 
             // change until
             if (rruleMapModel.get('until') && moment(rruleMapModel.get('until')).isBefore(date)) {
-                rruleMapModel.set('until', date.add(1, ['d', 'w', 'M', 'y'][rruleMapModel.get('recurrence_type') - 1]).valueOf());
+                rruleMapModel.set({
+                    'until': undefined,
+                    'occurrences': undefined
+                });
             }
             rruleMapModel.serialize();
             return event;
@@ -1128,8 +1131,8 @@ define('io.ox/calendar/util', [
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
                 var dialog = new dialogs.ModalDialog();
-                // first occurence or exception (we need to load the series master as the exception data doesn't work for changing the series )
-                if (model.hasFlag('first_occurrence') || model.get('id') !== model.get('seriesId')) {
+                // first occurence
+                if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else if (model.hasFlag('last_occurrence')) {
@@ -1356,6 +1359,26 @@ define('io.ox/calendar/util', [
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;
+        },
+
+        // creates data for the edit dialog when an exception should be used to update the series
+        createUpdateData: function (master, exception) {
+            // consolidate data
+            master = master instanceof Backbone.Model ? master.attributes : master;
+            exception = exception instanceof Backbone.Model ? exception.attributes : exception;
+
+            // deep copy
+            var result = JSON.parse(JSON.stringify(master)),
+                dateFormat = this.isAllday(master) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+
+            result.recurrenceId = exception.recurrenceId;
+
+            // recreate dates
+            result.startDate.value = moment(exception.recurrenceId).tz(master.startDate.tzid).format(dateFormat);
+            // calculate duration and add it to startDate, then format
+            result.endDate.value = moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format(dateFormat);
+
+            return result;
         }
     };
 

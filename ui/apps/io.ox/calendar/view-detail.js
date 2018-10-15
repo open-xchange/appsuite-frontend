@@ -98,7 +98,7 @@ define('io.ox/calendar/view-detail', [
             if (!(baton.data.recurrenceId && baton.data.id !== baton.data.seriesId)) return;
 
             // use exact check for isCreateEvent === false here or the recurrence warning is drawn on initial drawing too
-            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).toggle(baton.isCreateEvent === false));
+            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the exception does not affect the series.')).toggle(baton.isCreateEvent === false));
         }
     });
 
@@ -245,9 +245,6 @@ define('io.ox/calendar/view-detail', [
     }));
 
     function redraw(e, baton) {
-        // new calendar api returns models. Make sure that data and model is not mixed
-        baton.model = baton.data;
-        delete baton.data;
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
