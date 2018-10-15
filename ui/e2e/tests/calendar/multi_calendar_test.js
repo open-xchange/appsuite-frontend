@@ -10,8 +10,6 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-const expect = require('chai').expect;
-
 Feature('Calendar: Create appointment');
 
 Before(async function (users) {
@@ -23,8 +21,6 @@ After(async function (users) {
 });
 
 Scenario('Create appointments in multiple calendars', function (I, users) {
-    let [user] = users;
-
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//showCheckboxes', true);
@@ -48,7 +44,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // select new calendar
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
 
     // create in Workweek view
     I.clickToolbar('New');
@@ -143,7 +139,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // create second appointment in different calendar
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -195,7 +191,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // create in Month view
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
     I.clickToolbar('View');
     I.click('Month');
     I.clickToolbar('New');
@@ -282,7 +278,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // create second appointment in different calendar
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 

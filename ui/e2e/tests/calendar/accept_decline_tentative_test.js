@@ -10,8 +10,6 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-const expect = require('chai').expect;
-
 Feature('Calendar: Create appointment');
 
 Before(async function (users) {
@@ -26,8 +24,6 @@ After(async function (users) {
 });
 
 Scenario('Create appointments with participants who will accept/decline/accept tentative', function (I, users) {
-    let [user] = users;
-
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//showCheckboxes', true);
@@ -60,10 +56,10 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.fillField('input.add-participant.tt-input', users[3].userdata.primaryEmail);
     I.pressKey('Enter');
 
-    I.see(users[0].userdata.primaryEmail , '.participant-wrapper');
-    I.see(users[1].userdata.primaryEmail , '.participant-wrapper.removable');
-    I.see(users[2].userdata.primaryEmail , '.participant-wrapper.removable');
-    I.see(users[3].userdata.primaryEmail , '.participant-wrapper.removable');
+    I.see(users[0].userdata.primaryEmail, '.participant-wrapper');
+    I.see(users[1].userdata.primaryEmail, '.participant-wrapper.removable');
+    I.see(users[2].userdata.primaryEmail, '.participant-wrapper.removable');
+    I.see(users[3].userdata.primaryEmail, '.participant-wrapper.removable');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');

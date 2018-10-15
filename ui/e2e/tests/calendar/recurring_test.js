@@ -10,8 +10,6 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-const expect = require('chai').expect;
-
 Feature('Calendar: Create appointment');
 
 Before(async function (users) {
@@ -24,8 +22,6 @@ After(async function (users) {
 });
 
 Scenario('Create recurring appointments with one participant', async function (I, users) {
-    let [user] = users;
-
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//showCheckboxes', true);
