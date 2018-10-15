@@ -82,10 +82,7 @@ define('io.ox/calendar/perspective', [
 
         getName: $.noop,
 
-        showAppointment: function (e, obj) {
-            // open appointment details
-            var self = this, dialog = this.getDialog();
-
+        showAppointment: (function () {
             function failHandler(e) {
                 // CAL-4040: Appointment not found
                 if (e && e.code === 'CAL-4040') {
@@ -93,29 +90,53 @@ define('io.ox/calendar/perspective', [
                 } else {
                     yell('error', gt('An error occurred. Please try again.'));
                 }
-                dialog.close();
+                this.dialog.close();
                 this.$('.appointment').removeClass('opac current');
-                self.trigger('show:appointment:fail');
+                this.trigger('show:appointment:fail');
+                if (_.device('smartphone')) {
+                    this.app.pages.getPage('detailView').idle();
+                    this.app.pages.goBack();
+                }
             }
 
-            this.trigger('before:show:appointment');
-            self.detailCID = api.cid(obj);
-            dialog.show(e, function (popup) {
-                popup
-                .busy()
-                .attr({
-                    'role': 'complementary',
-                    'aria-label': gt('Appointment Details')
-                });
+            return function (e, obj) {
+                // open appointment details
+                var self = this, dialog = this.getDialog();
 
-                api.get(obj).then(function (model) {
-                    if (model.cid !== self.detailCID) return;
-                    popup.idle().append(detailView.draw(new ext.Baton({ model: model })));
-                    self.trigger('show:appointment:success');
-                    // TODO apply date to view in case of deep links
-                }, failHandler);
-            });
-        },
+                if (_.device('smartphone')) {
+                    self.app.pages.changePage('detailView');
+                    self.app.pages.getPage('detailView').busy();
+                }
+
+                self.detailCID = api.cid(obj);
+
+                if (_.device('smartphone')) {
+                    var p = self.app.pages.getPage('detailView');
+                    api.get(obj).then(function (model) {
+                        var b = new ext.Baton({ data: model.toJSON(), model: model });
+                        p.idle().empty().append(detailView.draw(b));
+                        self.app.pages.getToolbar('detailView').setBaton(b);
+
+                        // TODO apply date to view in case of deep links
+                    }, failHandler.bind(self));
+                } else {
+                    dialog.show(e, function (popup) {
+                        popup
+                        .busy()
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('Appointment Details')
+                        });
+
+                        api.get(obj).then(function (model) {
+                            if (model.cid !== self.detailCID) return;
+                            popup.idle().append(detailView.draw(new ext.Baton({ model: model })));
+                            // TODO apply date to view in case of deep links
+                        }, failHandler.bind(self));
+                    });
+                }
+            };
+        }()),
 
         closeAppointment: function () {
             this.$('.appointment').removeClass('opac current');
