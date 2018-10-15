@@ -1391,7 +1391,7 @@ define('io.ox/calendar/week/view', [
                 workEnd: settings.get('endTime', 18) * 1,
                 gridSize: 60 / settings.get('interval', 30),
                 mergeView: _.device('!smartphone') && this.mode === 'day' && this.app.folders.list().length > 1 && settings.get('mergeview'),
-                date: opt.startDate || moment(this.app.props.get('date')),
+                date: opt.startDate || moment(this.app.getDate()),
                 mode: this.mode
             });
             this.updateNumColumns();

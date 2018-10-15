@@ -57,6 +57,8 @@ define('io.ox/calendar/perspective', [
 
         // needs to be implemented by the according view
         render: $.noop,
+        refresh: $.noop,
+        onWindowShow: $.noop,
 
         setCollection: function (collection) {
             if (this.collection === collection) return;
@@ -272,11 +274,13 @@ define('io.ox/calendar/perspective', [
         //  * as soon as the view is visible
         //  */
         getCallback: function (name) {
+            var last;
             return function () {
                 var func = this[name], args = _(arguments).toArray();
-                this.off('show');
+                if (last) this.off('show', last);
+                last = undefined;
                 if (this.$el.is(':visible')) return func.apply(this, args);
-                this.once('show', function () {
+                this.once('show', last = function () {
                     func.apply(this, args);
                 });
             }.bind(this);
