@@ -178,15 +178,11 @@ define('io.ox/calendar/model', [
             else this.model.set('rrule', null);
         },
 
-        deserialize: function () {
-            var changes = {};
-            changes.start_date = this.model.getTimestamp('startDate');
-            if (!this.model.get('rrule')) return this.set(changes);
-            var self = this,
-                str = this.model.get('rrule'),
+        splitRule: function () {
+            var str = this.model.get('rrule'),
                 attributes = str.split(';'),
-                rrule = {},
-                date = this.model.getMoment('startDate');
+                rrule = {};
+
             _(attributes).each(function (attr) {
                 attr = attr.split('=');
                 var name = attr[0],
@@ -195,6 +191,17 @@ define('io.ox/calendar/model', [
                 rrule[name] = value;
                 rrule[name.toLowerCase()] = _.isArray(value) ? attr[1].toLowerCase().split(',') : value.toLowerCase();
             });
+            return rrule;
+        },
+
+        deserialize: function () {
+            var changes = {};
+            changes.start_date = this.model.getTimestamp('startDate');
+            if (!this.model.get('rrule')) return this.set(changes);
+            var self = this,
+                rrule = this.splitRule(),
+                date = this.model.getMoment('startDate');
+
             switch (rrule.freq) {
                 case 'daily':
                     changes.recurrence_type = 1;
@@ -363,10 +370,26 @@ define('io.ox/calendar/model', [
             return res;
         },
         getRruleMapModel: function () {
-            return new RRuleMapModel({ model: this });
+            if (this.rruleModel) return this.rruleModel;
+            this.rruleModel = new RRuleMapModel({ model: this });
+            return this.rruleModel;
         },
         hasFlag: function (flag) {
             return !!this.flags[flag];
+        },
+        // compares startDate with recurrence rule to check if the rule is correct (startDate wednesday, rrule says repeats on mondays)
+        checkRecurrenceRule: function () {
+            if (!this.get('rrule')) return true;
+            // Monday is 1 Sunday is 7, we subtract 1 so we can use it as an index
+            var startDateIndex = this.getMoment('startDate').isoWeekday() - 1,
+                days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
+                rrule = this.getRruleMapModel().splitRule();
+
+            if (_.isEmpty(rrule.byday)) return true;
+
+            var usedDays = _([].concat(rrule.byday)).map(function (val) { return days.indexOf(val); });
+
+            return usedDays.indexOf(startDateIndex) !== -1;
         }
     });
 

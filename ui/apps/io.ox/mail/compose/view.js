@@ -298,6 +298,7 @@ define('io.ox/mail/compose/view', [
             var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
             extensions.attachmentSharing.call(node, baton);
+            extensions.imageResizeOption.call(node, baton);
             node.appendTo(this);
         }
     });
@@ -329,6 +330,7 @@ define('io.ox/mail/compose/view', [
                 //handle errors/warnings in reject case
                 if (result && result.error) baton.error = result.error;
                 if (result && result.warnings) baton.warning = result.warnings;
+                baton.rejected = true;
                 return $.when();
             }).then(function () {
                 if (baton.isPropagationStopped()) return;
@@ -852,8 +854,8 @@ define('io.ox/mail/compose/view', [
 
             win.busy();
             return extensionCascade(point, baton).then(function () {
-                //app is re-opened; we want to be asked before any unsaved data is discarded
-                if (baton.error) baton.model.set('autoDismiss', false);
+                // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
+                if (baton.rejected || baton.error) baton.model.set('autoDismiss', false);
             }).always(win.idle.bind(win));
         },
 

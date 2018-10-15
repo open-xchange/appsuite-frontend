@@ -1349,12 +1349,6 @@ msgid "Appointments"
 msgstr "Tapaamiset"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Tapaamiset jaetuissa kalentereissa"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Tapaamiset jaetuissa kalentereissa"
 
@@ -2575,12 +2569,6 @@ msgstr "Luo suodatinsääntö"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Luo kansio"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create new calendar"
-msgid "Create in public calendar"
-msgstr "Luo uusi kalenteri"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
@@ -10071,12 +10059,6 @@ msgstr "Sovellus ei ole tällä hetkellä saatavilla."
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
 msgstr "Valitut osoitteet. Poista painamalla Backspace- tai Delete-näppäintä."
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
-msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""

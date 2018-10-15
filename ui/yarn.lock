@@ -595,10 +595,10 @@ bl@~1.1.2:
   dependencies:
     readable-stream "~2.0.5"
 
-blankshield@0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/blankshield/-/blankshield-0.6.2.tgz#1b60f3fc3e3fae939a4d1596c37406dd0024ee3e"
-  integrity sha512-DkiddqBxAvEb4uc0+6QP97cFZmwSAPzCAgKt9qHEAvFBbBWxdQXbA/hiugEUdiohB40mVeS12bps6hoGssZtQw==
+blankshield@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/blankshield/-/blankshield-0.6.3.tgz#c8439df4e87f3aad087faa399d9e5cb105f58057"
+  integrity sha512-YVoP3q2yOUl4+JvkHAp/dsgYLOIhrll2X1pWwNu9hzIGjfGYR6sDpYIyZmWIfYm+MBKTR42d2bPWmC4Uzj0UZA==
 
 blob@0.0.4:
   version "0.0.4"
@@ -1713,10 +1713,10 @@ domhandler@2.3:
   dependencies:
     domelementtype "1"
 
-dompurify@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-1.0.7.tgz#33e5c4a5fc84df93b58ca162d1d3f28537aa3ec2"
-  integrity sha512-1xK0JEda/jvIm3SgqHXKvRCh3AbEKCyBbUAGpNCMVIljBD145cPvBR66JSj3O4SdscFUx5NXsDkJpz6vDT8KLg==
+dompurify@1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-1.0.8.tgz#3fa0d91fde3827d6509d83b43444da56a2796795"
+  integrity sha512-vetRFbN1SXSPfP3ClIiYnxTrXquSqakBEOoB5JESn0SVcSYzpu6ougjakpKnskGctYdlNpwf+riUHSkG7d4XUw==
 
 domutils@1.5:
   version "1.5.1"
@@ -6413,12 +6413,7 @@ tiny-lr@^1.1.1:
     object-assign "^4.1.0"
     qs "^6.4.0"
 
-tinymce@4.8.0:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.8.0.tgz#3c4c88701d0526374efb45bafbb820c7715e2356"
-  integrity sha512-Rj5MiQxSpwDIaaXo3WsfZqLfLBUi6jLZRrIpg1cbRurhSLwaNcTgAGqxHFjNELlm7zR2xSGzzlq5B/mGlsiJSg==
-
-tinymce@^4.8.0:
+tinymce@4.8.3, tinymce@^4.8.0:
   version "4.8.3"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.8.3.tgz#fdfe92121a5431fc6e2f295346f781cd200db3b9"
   integrity sha512-kNEsKTqUYZRG+GTZ7tcVAktUlDeApz6d3IqnNaZXNX0CP0BsK8NPC02FCJ0EVYxdNnq6fvvknWkItmbreXD9aA==

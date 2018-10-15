@@ -1322,10 +1322,6 @@ msgid "Appointments"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid "Appointments in public calendars"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr ""
 
@@ -2528,10 +2524,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid "Create in public calendar"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -9848,12 +9840,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar

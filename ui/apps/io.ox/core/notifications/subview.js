@@ -439,7 +439,6 @@ define('io.ox/core/notifications/subview', [
 
             var cid = e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
-                fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.sidepopupNode,
                 getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
                 self = this;
@@ -450,7 +449,7 @@ define('io.ox/core/notifications/subview', [
             } else {
                 notifications.closeSidepopup();
                 var data;
-                if (api && !fullModel) {
+                if (api) {
                     data = api.get(_.extend({}, getCid(cid), { unseen: true }));
                 } else {
                     data = this.collection.get(getCid(cid)).attributes;

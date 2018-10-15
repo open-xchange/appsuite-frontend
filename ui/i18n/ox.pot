@@ -1553,21 +1553,6 @@ msgstr ""
 msgid "Invite owner"
 msgstr ""
 
-#: apps/io.ox/calendar/actions/create.js
-#: module:io.ox/calendar
-msgid "Appointments in public calendars"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js
-#: module:io.ox/calendar
-msgid "The selected calendar \"%1$s\" is public. Dou you really want to create an appointment in this calendar?"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js
-#: module:io.ox/calendar
-msgid "Create in public calendar"
-msgstr ""
-
 #: apps/io.ox/calendar/actions/delete.js
 #: module:io.ox/calendar
 msgid "Add a message to the notification email for the other participants."

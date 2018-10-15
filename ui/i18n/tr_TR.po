@@ -1335,12 +1335,6 @@ msgid "Appointments"
 msgstr "Randevular"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Paylaşımlı takvimlerdeki randevular"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Paylaşımlı takvimlerdeki randevular"
 
@@ -2563,12 +2557,6 @@ msgstr "Filtre kuralı oluştur"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Klasör oluştur"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create new calendar"
-msgid "Create in public calendar"
-msgstr "Yeni takvim oluştur"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
@@ -10044,12 +10032,6 @@ msgstr "İstenen uygulama şu anda kullanılamıyor."
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
 msgstr "Seçilen adresleri kaldırmak için Backspace veya Delete tuşuna basın."
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
-msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""

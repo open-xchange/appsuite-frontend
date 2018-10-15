@@ -1352,6 +1352,7 @@ define('io.ox/mail/main', [
 
             // fixes scrolling issue on mobiles during delete
             if (_.device('smartphone')) return;
+            if (!settings.get('features/selectBeforeDelete', true)) return;
 
             function isSingleThreadMessage(ids, selection) {
                 if (ids.length !== 1) return false;

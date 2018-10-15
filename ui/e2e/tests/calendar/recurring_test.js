@@ -161,7 +161,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.click('[data-action="edit"]');
     I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Series', '.io-ox-dialog-popup');
+    I.click('All future appointments', '.io-ox-dialog-popup');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -216,7 +216,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('[data-action="delete"]');
 
     I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.click('This appointment', '.io-ox-dialog-popup');
 
     I.waitForDetached('.io-ox-dialog-popup');
 

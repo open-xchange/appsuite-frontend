@@ -334,8 +334,7 @@ define('io.ox/mail/common-extensions', [
 
             function makeAccessible(data, index, node) {
                 var label = util.isFlagged(data) ? gt('Flagged') : gt('Not flagged');
-                $(node).attr({ 'aria-label': label, 'aria-pressed': util.isFlagged(data) })
-                       .find('.fa').attr('title', label);
+                $(node).attr('aria-label', label).find('.fa').attr('title', label);
             }
 
             function toggle(e) {
@@ -680,8 +679,8 @@ define('io.ox/mail/common-extensions', [
         unreadToggle: (function () {
 
             function makeAccessible(data, index, node) {
-                var label = util.isUnseen(data) ? gt('Unread') : gt('Read');
-                $(node).attr({ 'aria-label': label, 'aria-pressed': util.isUnseen(data) })
+                var label = util.isUnseen(data) ? gt('Mark as read') : gt('Mark as unread');
+                $(node).attr({ 'aria-label': label })
                        .find('.fa').attr('title', label);
             }
 

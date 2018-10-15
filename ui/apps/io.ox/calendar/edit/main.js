@@ -211,6 +211,35 @@ define('io.ox/calendar/edit/main', [
                 return !_.isEqual(this.model.toJSON(), this.initialModelData);
             },
 
+            // gets the delta for an update request. That way we don't need to send the whole model
+            getDelta: function () {
+
+                if (this.view.options.mode !== 'edit') return this.model.toJSON();
+                var self = this,
+                    data = this.model.toJSON(),
+                    delta = {
+                        id: this.initialModelData.id,
+                        folder: this.initialModelData.folder,
+                        timestamp: this.initialModelData.timestamp
+                    },
+                    keys = _(data).keys();
+
+                _(keys).each(function (key) {
+                    // endDate needs some special attention since it's one day off for allday appointments (for user convenience)
+                    if ((key === 'endDate' && util.isAllday(data) ? (self.view.tempEndDate && !_.isEqual(self.view.tempEndDate, self.initialModelData[key])) : (!_.isEqual(self.initialModelData[key], data[key])))
+                        && (self.initialModelData[key] || data[key])) {
+                        delta[key] = data[key];
+                    }
+                });
+
+                if (this.initialModelData.recurrenceId) {
+                    delta.recurrenceId = this.initialModelData.recurrenceId;
+                    delta.seriesId = this.initialModelData.seriesId;
+                }
+
+                return delta;
+            },
+
             // clean up model so no empty values are saved and dirty check has no false positives
             cleanUpModel: function () {
                 var data = this.model.toJSON(),
@@ -284,10 +313,9 @@ define('io.ox/calendar/edit/main', [
                                 self.getWindow().idle();
 
                                 // restore times (we add a day before saving allday appointments)
-                                if (self.view.tempEndDate && self.view.tempStartDate) {
+                                if (self.view.tempEndDate) {
                                     self.model.set('endDate', self.view.tempEndDate, { silent: true });
-                                    self.model.set('startDate', self.view.tempStartDate, { silent: true });
-                                    self.view.tempEndDate = self.view.tempStartDate = null;
+                                    self.view.tempEndDate = null;
                                 }
                             })
                             .on('ignore', function () {
@@ -299,7 +327,7 @@ define('io.ox/calendar/edit/main', [
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
-                                        self.model,
+                                        self.getDelta(),
                                         _.extend(util.getCurrentRangeOptions(), {
                                             attachments: self.attachmentsFormData || [],
                                             sendInternalNotifications: sendNotifications,

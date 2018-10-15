@@ -864,6 +864,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             var items = this.getItems(),
                 first = items.filter('[tabindex="0"]:first'),
                 index = items.index(first);
+            // if no item has tabindex '0' index would be -1 which will translate to the last element of the selection in this.focus(index, items)
+            index = index < 0 ? 0 : index;
             this.focus(index, items);
         },
 

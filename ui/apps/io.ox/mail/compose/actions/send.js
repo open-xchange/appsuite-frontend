@@ -93,6 +93,24 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
+            id: 'image-resize',
+            index: 450,
+            perform: function (baton) {
+                var def = $.Deferred(),
+                    win = baton.app.getWindow();
+                if (!settings.get('features/imageResize/enabled', true)) return def.resolve();
+                if (baton.mail.files === undefined || baton.mail.files.length === 0) return def.resolve();
+                require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
+                    win.busy();
+                    resizeUtils.mergeResizedFiles(baton.mail.files, baton.model.get('resizedImages'), baton.model.get('imageResizeOption')).done(function () {
+                        win.idle();
+                        def.resolve();
+                    });
+                });
+                return def;
+            }
+        },
+        {
             id: 'check:attachment-empty',
             index: 500,
             perform: extensions.emptyAttachmentCheck

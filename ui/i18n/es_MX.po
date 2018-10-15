@@ -1360,12 +1360,6 @@ msgid "Appointments"
 msgstr "Citas"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Citas de calendarios compartidos"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Citas de calendarios compartidos"
 
@@ -2594,12 +2588,6 @@ msgstr "Crear regla de filtrado"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Crear carpeta"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create new calendar"
-msgid "Create in public calendar"
-msgstr "Crear nuevo calendario"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
@@ -10143,12 +10131,6 @@ msgstr "La aplicación solicitada no está disponible en este momento."
 msgid "The selected addresses. Press Backspace or Delete to remove."
 msgstr ""
 "Las direcciones seleccionadas. Presione Retroceso o Suprimir para eliminar."
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
-msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""

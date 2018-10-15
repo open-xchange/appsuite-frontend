@@ -8,7 +8,7 @@ Hello and welcome to the world of OX App Suite development.
 This document is designed to get you started with developing your first app for OX App Suite as quickly and simply as possible.
 However, along the way we will also tempt you to learn more by linking to some more in-depth documentation about the various topics we cover.
 
-![](first-app.png)
+![General development workflow](first-app.png)
 
 # Installing the Development Tools
 
@@ -63,7 +63,7 @@ define('com.example/register', function () {
 
 and apps/com.example/manifest.json for the manifest which tells the UI that your app exists and what to do with it:
 
-```
+```JSON
 { "namespace": "core" }
 ```
 

@@ -185,9 +185,9 @@ define('io.ox/calendar/actions', [
 
             // incomplete
             if (data && !model) {
-                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont);
+                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont, function () { return false; });
             }
-            return $.when(model, folderAPI.get(data.folder)).then(cont);
+            return $.when(model, folderAPI.get(data.folder)).then(cont, function () { return false; });
         },
         action: function (baton) {
             // load & call
@@ -221,9 +221,9 @@ define('io.ox/calendar/actions', [
 
             // incomplete
             if (data && !model) {
-                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont);
+                return $.when(api.get(data)).then(cont, function () { return false; });
             }
-            return $.when(model, folderAPI.get(data.folder)).then(cont);
+            return $.when(model).then(cont, function () { return false; });
         },
         action: function (baton) {
             // load & call
@@ -480,11 +480,11 @@ define('io.ox/calendar/actions', [
         var appointment = api.reduce(baton.data),
             def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder);
 
-        def.done(function (folder) {
+        def.always(function (folder) {
 
             appointment.attendee = {
                 // act as folder owner in shared folder
-                entity: !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                entity: !folder.error && !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
                 partStat: accept ? 'ACCEPTED' : 'DECLINED'
             };
 

@@ -1358,12 +1358,6 @@ msgid "Appointments"
 msgstr "Találkozók"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Találkozók a megosztott naptárakban"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Találkozók a megosztott naptárakban"
 
@@ -2591,12 +2585,6 @@ msgstr "Szűrőszabály létrehozása"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Mappa létrehozása"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create new calendar"
-msgid "Create in public calendar"
-msgstr "Új naptár létrehozása"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
@@ -10120,12 +10108,6 @@ msgid "The selected addresses. Press Backspace or Delete to remove."
 msgstr ""
 "A kiválasztott címek. A törléshez nyomja meg a Backspace vagy a Delete "
 "gombot."
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
-msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""

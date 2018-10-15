@@ -1381,12 +1381,6 @@ msgid "Appointments"
 msgstr "Среща"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Срещи в споделени календари"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Срещи в споделени календари"
 
@@ -2623,12 +2617,6 @@ msgstr ""
 #, fuzzy
 msgid "Create folder"
 msgstr "Създай напомняне"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Public calendars"
-msgid "Create in public calendar"
-msgstr "Публични календари"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
@@ -10143,12 +10131,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "The selected addresses. Press Backspace or Delete to remove."
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar

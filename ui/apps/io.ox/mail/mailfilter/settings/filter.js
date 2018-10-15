@@ -274,6 +274,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     saveTimeout: 0,
 
+                    initialize: function () {
+                        if (_.indexOf(this.model.get('flags'), 'vacation') !== -1) this.listenTo(ox, 'mail:change:vacation-notice', this.handleToogleState);
+                        if (_.indexOf(this.model.get('flags'), 'autoforward') !== -1) this.listenTo(ox, 'mail:change:auto-forward', this.handleToogleState);
+                    },
+
+                    handleToogleState: function (model) {
+                        this.model.set('active', model.get('active'));
+                    },
+
                     render: function () {
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,

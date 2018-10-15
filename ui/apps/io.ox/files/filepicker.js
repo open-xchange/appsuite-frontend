@@ -459,7 +459,7 @@ define('io.ox/files/filepicker', [
             toggleOkButton(false);
 
             filesPane.empty();
-            filesAPI.getAll(id, { cache: false }).done(function (files) {
+            filesAPI.getAll(id, { cache: false, params: { sort: 702 } }).done(function (files) {
                 updateFileList(id, files);
             });
         }
