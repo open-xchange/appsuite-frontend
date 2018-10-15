@@ -450,7 +450,8 @@ define('io.ox/calendar/main', [
         },
 
         'views': function (app) {
-            var list = ['week:day', 'month'],
+            var list = ['week:day', 'month', 'list'],
+                defaultPage = _.device('smartphone') ? 'week:day' : 'week:workweek',
                 views = {};
             if (_.device('!smartphone')) list.push('week:workweek', 'week:week', 'year');
             list.forEach(function (item) {
@@ -458,7 +459,7 @@ define('io.ox/calendar/main', [
                 node.one('pagebeforeshow', function () {
                     var split = item.split(':'),
                         view = split[0] || 'week',
-                        mode = split[1] || 'workweek';
+                        mode = split[1] || (_.device('smartphone') ? 'day' : 'workweek');
 
                     require(['io.ox/calendar/' + view + '/view']).then(function success(View) {
                         var view = new View({ mode: mode, app: app });
@@ -467,7 +468,7 @@ define('io.ox/calendar/main', [
                         app.getWindow().trigger('change:perspective');
                         app.perspective = views[item] = view;
                     }, function fail() {
-                        if (item !== 'week:workweek') return app.pages.changePage('week:workweek');
+                        if (item !== defaultPage) return app.pages.changePage(defaultPage);
                     });
                 });
                 node.on('pagebeforeshow', function () {
