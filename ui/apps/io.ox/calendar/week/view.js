@@ -169,10 +169,8 @@ define('io.ox/calendar/week/view', [
         },
 
         onClickControl: function (e) {
-            var target = $(e.currentTarget),
-                date = this.model.get('date').clone();
-            date[target.hasClass('next') ? 'add' : 'subtract'](1, this.model.get('mode') === 'day' ? 'day' : 'week');
-            this.model.set('date', date);
+            var target = $(e.currentTarget);
+            this.opt.view.setStartDate(target.hasClass('next') ? 'next' : 'prev');
         },
 
         onMergeSplit: function () {
@@ -1480,6 +1478,12 @@ define('io.ox/calendar/week/view', [
          *        propagate (boolean): propagate change
          */
         setStartDate: function (value, options) {
+            if (_.isString(value)) {
+                var mode = value === 'next' ? 'add' : 'subtract',
+                    type = this.model.get('mode') === 'day' ? 'day' : 'week';
+                value = this.model.get('startDate').clone()[mode](1, type);
+            }
+
             var previous = moment(this.model.get('startDate')),
                 opt = _.extend({ propagate: true, silent: false }, options),
                 date = moment(value);

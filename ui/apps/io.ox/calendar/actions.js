@@ -402,59 +402,30 @@ define('io.ox/calendar/actions', [
     });
 
     // Actions mobile
-    new Action('io.ox/calendar/actions/monthview/showNext', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.gotoMonth('next');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/monthview/showPrevious', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.gotoMonth('prev');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showNext', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.view.setStartDate('next');
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showPrevious', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.view.setStartDate('prev');
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showToday', {
+    new Action('io.ox/calendar/actions/showNext', {
         requires: true,
         action: function (baton) {
             var p = baton.app.perspective;
             if (!p) return;
-            p.setStartDate();
+            p.setStartDate('next');
         }
     });
 
-    new Action('io.ox/calendar/actions/month/showToday', {
+    new Action('io.ox/calendar/actions/showPrevious', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.gotoMonth('today');
+            p.setStartDate('prev');
+        }
+    });
+
+    new Action('io.ox/calendar/actions/showToday', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.perspective;
+            if (!p) return;
+            p.setStartDate(moment());
         }
     });
 

@@ -471,6 +471,11 @@ define('io.ox/calendar/month/view', [
         },
 
         setStartDate: function (value, options) {
+            if (_.isString(value)) {
+                var mode = value === 'next' ? 'add' : 'subtract';
+                value = this.model.get('startOfMonth').clone()[mode](1, 'month');
+            }
+
             var previous = moment(this.model.get('startDate')),
                 opt = _.extend({ propagate: true, silent: false }, options),
                 date = moment(value);
