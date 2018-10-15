@@ -149,6 +149,7 @@ define('io.ox/core/viewer/views/mainview', [
                 } else {
                     swiper.slidePrev();
                 }
+                swiper.updateClickedSlide({ target: null });
                 self.displayerView.focusActiveSlide();
             }, 200);
 
@@ -228,8 +229,7 @@ define('io.ox/core/viewer/views/mainview', [
             var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0;
             var displayerEl = this.displayerView.$el;
             var activeSlide = this.displayerView.getActiveSlideNode();
-            // var activeSlideIndex = activeSlide.index();
-            var swiper = this.displayerView.swiper;
+            var swiper      = this.displayerView.swiper;
 
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
@@ -237,9 +237,6 @@ define('io.ox/core/viewer/views/mainview', [
             if (swiper) {
                 swiper.update();
                 this.viewerEvents.trigger('viewer:resize');
-                // workaround for a possible bug from swiper plugin that happens sporadically:
-                // After an on resize call, the plugin 'resets' the active slide to the beginning.
-                // swiper.slideTo(activeSlideIndex);
             }
         },
 
