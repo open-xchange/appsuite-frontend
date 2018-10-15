@@ -96,6 +96,10 @@ define('io.ox/mail/compose/resizeUtils', [
             label: '',
             caret: true
         });
+        if (_.device('smartphone')) {
+            dropDown.header('Image size');
+            dropDown.divider();
+        }
         //.# Small (number px) is used as an option for resizing images and refers to a small sized image
         dropDown.option('imageResizeOption', settingSmall, gt('Small (%1$s px)', settingSmall), { radio: true });
         //.# Medium (number px) is used as an option for resizing images and refers to a medium sized image
@@ -182,8 +186,10 @@ define('io.ox/mail/compose/resizeUtils', [
         return gt('Mail size:') + ' ' + strings.fileSize(mailSize, 1);
     }
 
-    function getResizedSizeString(originalFiles, resizedFiles) {
-        var filteredResizedFiles = _(resizedFiles).filter(function (file) {
+    function getResizedSizeString(model, resizedFiles) {
+        var originalFiles = model.get('attachments').localFiles(),
+            contentSize = model.getContent().length,
+            filteredResizedFiles = _(resizedFiles).filter(function (file) {
                 var size = file ? file.size : undefined;
                 return typeof size !== 'undefined';
             }),
@@ -196,7 +202,7 @@ define('io.ox/mail/compose/resizeUtils', [
                 return defined && notResized;
             }),
             oringinalFilesSize = _(filteredOriginalFiles).reduce(function (agg, file) { return agg + file.size; }, 0),
-            mailSize = oringinalFilesSize + resizedFilesSize;
+            mailSize = oringinalFilesSize + resizedFilesSize + contentSize;
         return gt('Mail size:') + ' ' + strings.fileSize(mailSize, 1);
     }
 
