@@ -20,10 +20,10 @@ define('io.ox/calendar/actions', [
     'io.ox/core/print',
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
-    'io.ox/calendar/actions/change-confirmation',
     'io.ox/core/folder/api',
-    'io.ox/core/yell'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, yell) {
+    'io.ox/core/yell',
+    'settings!io.ox/calendar'
+], function (ext, links, api, util, actions, print, gt, capabilities, folderAPI, yell, settings) {
 
     'use strict';
 
@@ -305,14 +305,6 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'calendar-printing',
-        requires: function (e) {
-            var win = e.baton.window;
-            if (_.device('!smartphone') && win && win.getPerspective) {
-                var pers = win.getPerspective();
-                return pers && pers.print;
-            }
-            return false;
-        },
         action: function (baton) {
             var pers = baton.app.perspective;
             if (pers.print) {
@@ -381,15 +373,15 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             require(['io.ox/calendar/freetime/main', 'io.ox/core/api/user'], function (freetime, userAPI) {
                 userAPI.get().done(function (user) {
-                    var perspective = baton.app.getWindow().getPerspective(),
+                    var perspective = baton.app.perspective,
                         now = _.now(),
-                        startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                        startDate = perspective && perspective.model && perspective.model.get('date') ? perspective.model.get('date').valueOf() : now,
                         layout = perspective ? perspective.app.props.get('layout') : '';
 
                     // see if the current day is in the displayed week.
                     if (startDate < now && layout.indexOf('week:') === 0) {
                         // calculate end of week/workweek
-                        var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                        var max = startDate + 86400000 * (layout === 'week:workweek' ? settings.get('numDaysWorkweek') : 7);
                         if (now < max) {
                             startDate = now;
                         }
