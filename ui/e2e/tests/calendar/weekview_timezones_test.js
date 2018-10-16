@@ -10,8 +10,6 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-const expect = require('chai').expect;
-
 Feature('Calendar: Switch timezones');
 
 Before(async function (users) {
@@ -56,8 +54,8 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // check in view
-    I.waitForVisible('.workweekview .title');
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweekview")]//div[@class="title" and text()="test timezones"]', 1);
+    I.waitForVisible('.workweek .title');
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]', 1);
 
     // switch to settings
     I.click('#io-ox-topbar-dropdown-icon');
@@ -84,13 +82,13 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.openApp('Calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    I.click('.week-view .time-label-bar');
+    I.click('.workweek .time-label-bar');
     I.waitForVisible('.timezone-label-dropdown');
     I.click('.timezone-label-dropdown [data-name="Asia/Tokyo"]');
     I.pressKey('Escape');
-    I.waitForVisible('.week-view .timezone');
-    I.seeNumberOfElements('.week-view .week-container-label', 2);
-    I.see('JST', '.week-view .timezone');
+    I.waitForVisible('.workweek .timezone');
+    I.seeNumberOfElements('.workweek .week-container-label', 2);
+    I.see('JST', '.workweek .timezone');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border .number');
     I.see('2 PM', '.week-container-label.secondary-timezone .working-time-border .number');
 
@@ -113,8 +111,8 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.openApp('Calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    I.seeNumberOfElements('.week-view .week-container-label', 1);
-    I.dontSee('JST', '.week-view');
+    I.seeNumberOfElements('.workweek .week-container-label', 1);
+    I.dontSee('JST', '.workweek');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border .number');
 
     // switch to settings
@@ -129,7 +127,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     // I.selectOption('Start of working time', '6:00 AM');
     // I.selectOption('End of working time', '4:00 PM');
 
-    I.waitForText('Workweek view',5 ,'.rightside');
+    I.waitForText('Workweek view', 5, '.rightside');
     I.selectOption('Week start', 'Tuesday');
     I.selectOption('Workweek length', '3 days');
 
@@ -137,8 +135,8 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.openApp('Calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweekview")]//a[@class="weekday"]', 3);
-    I.see('Tue', '.workweekview .weekday[date="0"]');
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//button[@class="weekday"]', 3);
+    I.see('Tue', '.workweek .weekday[date="0"]');
 
     I.logout();
 

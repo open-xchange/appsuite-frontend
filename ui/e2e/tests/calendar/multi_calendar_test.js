@@ -68,9 +68,9 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
-    I.see('test appointment one', '.week-view .appointment .title');
+    I.see('test appointment one', '.workweek .appointment .title');
 
-    I.seeNumberOfElements('.week-view .appointment .title', 1);
+    I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // create second appointment in different calendar
     I.selectFolder('New calendar');
@@ -92,19 +92,19 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
-    I.see('test appointment one', '.week-view .appointment .title');
-    I.see('test appointment two', '.week-view .appointment .title');
-    I.seeNumberOfElements('.week-view .appointment .title', 2);
+    I.see('test appointment one', '.workweek .appointment .title');
+    I.see('test appointment two', '.workweek .appointment .title');
+    I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment two', '.week-view .appointment .title');
-    I.seeNumberOfElements('.week-view .appointment .title', 1);
+    I.dontSee('test appointment two', '.workweek .appointment .title');
+    I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // switch on again
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.see('test appointment two', '.week-view .appointment .title');
-    I.seeNumberOfElements('.week-view .appointment .title', 2);
+    I.see('test appointment two', '.workweek .appointment .title');
+    I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     // remove appointments
     I.click('//div[@class="title" and text()="test appointment one"]');
@@ -162,19 +162,19 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.clickToolbar('View');
     I.click('Week');
 
-    I.see('test appointment one', '.weekview .appointment .title');
-    I.see('test appointment two', '.weekview .appointment .title');
-    I.seeNumberOfElements('.weekview .appointment .title', 2);
+    I.see('test appointment one', '.weekview-container.week .appointment .title');
+    I.see('test appointment two', '.weekview-container.week .appointment .title');
+    I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment one', '.week-view .appointment .title');
-    I.seeNumberOfElements('.weekview .appointment .appointment-content .title', 1);
+    I.dontSee('test appointment one', '.week .appointment .title');
+    I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 1);
 
     // switch on again
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.see('test appointment one', '.week-view .appointment .title');
-    I.seeNumberOfElements('.weekview .appointment .appointment-content .title', 2);
+    I.see('test appointment one', '.week .appointment .title');
+    I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 2);
 
     // remove
     I.click('(//div[@class="title" and text()="test appointment one"])[2]');
@@ -247,7 +247,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 2);
 
     // remove
-    I.click('//span[@class="title" and text()="test appointment one"]');
+    I.click('//div[@class="title" and text()="test appointment one"]');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
     I.click('.io-ox-sidepopup [data-action="delete"]');
@@ -255,7 +255,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
 
-    I.click('//span[@class="title" and text()="test appointment two"]');
+    I.click('//div[@class="title" and text()="test appointment two"]');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
     I.click('.io-ox-sidepopup [data-action="delete"]');
@@ -301,22 +301,22 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.clickToolbar('View');
     I.click('Day');
 
-    I.see('test appointment one', '.dayview .appointment .title');
-    I.see('test appointment two', '.dayview .appointment .title');
-    I.seeNumberOfElements('.dayview .appointment .title', 2);
+    I.see('test appointment one', '.weekview-container.day .appointment .title');
+    I.see('test appointment two', '.weekview-container.day .appointment .title');
+    I.seeNumberOfElements('.weekview-container.day .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment one', '.dayview .appointment .title');
-    I.seeNumberOfElements('.dayview .appointment .title', 1);
+    I.dontSee('test appointment one', '.weekview-container.day .appointment .title');
+    I.seeNumberOfElements('.weekview-container.day .appointment .title', 1);
 
     // switch on again
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.see('test appointment one', '.dayview .appointment .title');
-    I.seeNumberOfElements('.dayview .appointment .title', 2);
+    I.see('test appointment one', '.weekview-container.day .appointment .title');
+    I.seeNumberOfElements('.weekview-container.day .appointment .title', 2);
 
     // remove
-    I.click('(//div[@class="title" and text()="test appointment one"])[3]');
+    I.click('(//div[@class="title" and text()="test appointment one"])[2]');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
     I.click('.io-ox-sidepopup [data-action="delete"]');
@@ -324,7 +324,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
 
-    I.click('(//div[@class="title" and text()="test appointment two"])[3]');
+    I.click('(//div[@class="title" and text()="test appointment two"])[2]');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
     I.click('.io-ox-sidepopup [data-action="delete"]');

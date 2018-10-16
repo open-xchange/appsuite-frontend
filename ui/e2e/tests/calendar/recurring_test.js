@@ -226,19 +226,19 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.clickToolbar('View');
     I.click('Month');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "month-view")]//span[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "monthview-container")]//div[@class="title" and text()="test recurring edit"]', 4);
 
     // check in Week view
     I.clickToolbar('View');
     I.click('Week');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "week-view")]//div[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "weekview-container week")]//div[@class="title" and text()="test recurring edit"]', 4);
 
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweekview")]//div[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test recurring edit"]', 4);
 
     I.logout();
 
