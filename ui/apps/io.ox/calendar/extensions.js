@@ -24,8 +24,9 @@ define('io.ox/calendar/extensions', [
         id: 'default',
         index: 100,
         draw: (function () {
-            function addColors(node, folder, model) {
-                var color = util.getAppointmentColor(folder, model),
+            function addColors(node, model) {
+                var folder = folderAPI.pool.getModel(model.get('folder')).toJSON(),
+                    color = util.getAppointmentColor(folder, model),
                     foregroundColor = util.getForegroundColor(color);
                 if (!color) return;
                 node.css({
@@ -44,8 +45,10 @@ define('io.ox/calendar/extensions', [
                     folder = folderAPI.pool.getModel(model.get('folder')).toJSON();
 
                 var folderId = model.get('folder');
-                if (String(folder.id) === String(folderId)) addColors(this, folder, model);
-                else if (folderId !== undefined) folderAPI.get(folderId).done(addColors.bind(this, this, folder, model));
+                if (String(folder.id) === String(folderId)) addColors(this, model);
+                else if (folderId !== undefined) folderAPI.get(folderId).done(addColors.bind(this, this, model));
+
+                if (!folder.module) folderAPI.once('after:flat:event', addColors.bind(this, this, model));
 
                 if (util.isPrivate(model) && ox.user_id !== model.get('createdBy').entity && !folderAPI.is('private', folder)) {
                     this.addClass('private disabled');

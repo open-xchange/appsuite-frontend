@@ -379,7 +379,10 @@ define('io.ox/calendar/month/view', [
             // fix full-time values
             if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
 
-            if (_.device('smartphone')) return this.renderAppointmentIndicator($('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty());
+            if (_.device('smartphone')) {
+                var node = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty();
+                return this.renderAppointmentIndicator(node);
+            }
 
             // draw across multiple days
             while (startMoment.isSameOrBefore(endMoment)) {
@@ -439,6 +442,8 @@ define('io.ox/calendar/month/view', [
             });
             this.initializeSubviews();
 
+            this.listenTo(api, 'process:create update delete', this.onUpdateCache);
+
             this.setStartDate(this.model.get('date'), { silent: true });
 
             PerspectiveView.prototype.initialize.call(this, opt);
@@ -470,13 +475,22 @@ define('io.ox/calendar/month/view', [
             if (this.$el.is(':visible')) this.trigger('show');
         },
 
+        onUpdateCache: function () {
+            var collection = this.collection;
+            // set all other collections to expired to trigger a fresh load on the next opening
+            api.pool.grep('view=month').forEach(function (c) {
+                if (c !== collection) c.expired = true;
+            });
+            collection.sync();
+        },
+
         setStartDate: function (value, options) {
             if (_.isString(value)) {
                 var mode = value === 'next' ? 'add' : 'subtract';
                 value = this.model.get('startOfMonth').clone()[mode](1, 'month');
             }
 
-            var previous = moment(this.model.get('startDate')),
+            var previous = moment(this.model.get('startOfMonth')),
                 opt = _.extend({ propagate: true, silent: false }, options),
                 date = moment(value);
 

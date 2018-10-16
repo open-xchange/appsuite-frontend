@@ -857,7 +857,6 @@ define('io.ox/core/folder/api', [
     }
 
     function flat(options) {
-
         options = _.extend({ module: undefined, cache: true }, options);
         if (options.module === 'calendar') options.module = 'event';
 
@@ -880,6 +879,8 @@ define('io.ox/core/folder/api', [
             });
             return $.when(cached);
         }
+
+        api.trigger('before:flat:' + options.module);
 
         return http.GET({
             module: 'folders',
@@ -954,6 +955,8 @@ define('io.ox/core/folder/api', [
             collectionId = getFlatCollectionId(module, 'sharing');
             sharing = processListResponse(collectionId, sharing);
             pool.addCollection(collectionId, sections.sharing = sharing, { reset: true });
+
+            api.trigger('after:flat:' + options.module);
             // done
             return sections;
         });

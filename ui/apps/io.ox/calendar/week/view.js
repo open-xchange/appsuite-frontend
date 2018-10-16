@@ -75,6 +75,9 @@ define('io.ox/calendar/week/view', [
             this.listenTo(this.model, 'change:startDate', this.update);
             if (!_.device('smartphone')) this.listenTo(this.opt.app.props, 'change:showMiniCalendar change:folderview', this.onToggleDatepicker);
             if (this.model.get('mode') === 'day') this.listenTo(this.model, 'change:mergeView', this.updateMergeview);
+
+            this.monthText = $('<span>');
+            this.cw = $('<span class="cw">');
         },
 
         update: function () {
@@ -122,9 +125,9 @@ define('io.ox/calendar/week/view', [
                         'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
                     })
                     .append(
-                        this.monthText = $('<span>'),
+                        this.monthText,
                         $.txt(' '),
-                        this.cw = $('<span class="cw">'),
+                        this.cw,
                         $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
                     )
             );
@@ -743,7 +746,6 @@ define('io.ox/calendar/week/view', [
         events: function () {
             var events = {};
             if (_.device('touch')) {
-                // TODO according functions are missing
                 _.extend(events, {
                     'taphold .timeslot': 'onCreateAppointment'
                 });
@@ -1400,6 +1402,8 @@ define('io.ox/calendar/week/view', [
             this.$el.addClass(this.mode);
             this.setStartDate(this.model.get('date'), { silent: true });
 
+            this.listenTo(api, 'process:create update delete', this.onUpdateCache);
+
             this.listenTo(settings, 'change:renderTimezones change:favoriteTimezones', this.onChangeTimezones);
             this.listenTo(settings, 'change:startTime change:endTime', this.getCallback('onChangeWorktime'));
             this.listenTo(settings, 'change:interval', this.getCallback('onChangeInterval'));
@@ -1546,6 +1550,15 @@ define('io.ox/calendar/week/view', [
                 self.model.set('folders', folders);
                 collection.sync();
             });
+        },
+
+        onUpdateCache: function () {
+            var collection = this.collection;
+            // set all other collections to expired to trigger a fresh load on the next opening
+            api.pool.grep('view=week').forEach(function (c) {
+                if (c !== collection) c.expired = true;
+            });
+            collection.sync();
         },
 
         onPrevious: function () {

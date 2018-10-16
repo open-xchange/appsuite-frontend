@@ -1204,16 +1204,15 @@ define('io.ox/calendar/util', [
             var perspective = app.perspective;
             if (!perspective) return;
 
-            var rangeStart, rangeEnd;
+            var rangeStart, rangeEnd, model = perspective.model;
             switch (perspective.getName()) {
                 case 'week':
-                    var model = perspective.model;
                     rangeStart = moment(model.get('startDate')).utc();
                     rangeEnd = moment(model.get('startDate')).utc().add(model.get('numColumns'), 'days');
                     break;
                 case 'month':
-                    rangeStart = moment(perspective.firstMonth).startOf('week').utc();
-                    rangeEnd = moment(perspective.lastMonth).endOf('month').endOf('week').utc();
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('endDate')).utc();
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();

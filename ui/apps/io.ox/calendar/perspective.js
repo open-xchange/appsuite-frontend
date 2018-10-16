@@ -48,6 +48,7 @@ define('io.ox/calendar/perspective', [
         initialize: function () {
             this.listenTo(this.model, 'change:date', this.onChangeDate);
             this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
+            this.listenTo(api, 'create update', this.onCreateUpdateAppointment);
             this.listenTo(this.app, 'folders:change', this.refresh);
             this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
             this.app.getWindow().on('show', this.onWindowShow.bind(this));
@@ -61,6 +62,7 @@ define('io.ox/calendar/perspective', [
         render: $.noop,
         refresh: $.noop,
         onWindowShow: $.noop,
+        onChangeDate: $.noop,
 
         setCollection: function (collection) {
             if (this.collection === collection) return;
@@ -118,8 +120,6 @@ define('io.ox/calendar/perspective', [
                         var b = new ext.Baton({ data: model.toJSON(), model: model });
                         p.idle().empty().append(detailView.draw(b));
                         self.app.pages.getToolbar('detailView').setBaton(b);
-
-                        // TODO apply date to view in case of deep links
                     }, failHandler.bind(self));
                 } else {
                     dialog.show(e, function (popup) {
@@ -133,7 +133,6 @@ define('io.ox/calendar/perspective', [
                         api.get(obj).then(function (model) {
                             if (model.cid !== self.detailCID) return;
                             popup.idle().append(detailView.draw(new ext.Baton({ model: model })));
-                            // TODO apply date to view in case of deep links
                         }, failHandler.bind(self));
                     });
                 }
@@ -155,8 +154,6 @@ define('io.ox/calendar/perspective', [
 
         onClickAppointment: function (e) {
             var target = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
-            // TODO review that
-            //if (target.attr('data-cid') !== this.clicktarget) return;
             if (target.hasClass('appointment') && !this.model.get('lasso') && !target.hasClass('disabled')) {
                 var self = this,
                     obj = util.cid(String(target.data('cid')));
@@ -350,6 +347,15 @@ define('io.ox/calendar/perspective', [
                     }
                 });
             }
+        },
+
+        onCreateUpdateAppointment: function (obj) {
+            var current = ox.ui.App.getCurrentApp().getName();
+            if (!/^io.ox\/calendar/.test(current)) return;
+            if (obj.seriesId && obj.seriesId === obj.id) return;
+            if (!this.selectAppointment) return;
+
+            this.selectAppointment(new calendarModel.Model(obj));
         }
 
     });
