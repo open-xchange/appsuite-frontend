@@ -251,6 +251,9 @@ define('io.ox/calendar/view-detail', [
     return {
 
         draw: function (baton, options) {
+            // make sure that you can enter a model directly
+            if (baton instanceof Backbone.Model) baton = new ext.Baton({ model: baton });
+
             // make sure we have a baton
             baton = ext.Baton.ensure(baton);
 
