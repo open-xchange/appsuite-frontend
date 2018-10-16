@@ -393,8 +393,10 @@ define('io.ox/core/tk/upload', [
             });
         };
 
+        // returns list of error messages
+        // TODO: unit test
         this.validateFiles = function (newFiles, options) {
-            if (!options.folder || delegate.type === 'importEML') return $.when({});
+            if (!options.folder || delegate.type === 'importEML') return $.when([]);
             return folderAPI.get(options.folder).then(function (folder) {
                 if (folderAPI.is('infostore', folder)) {
                     return require(['io.ox/core/api/quota']).then(function (quotaAPI) {
@@ -421,10 +423,9 @@ define('io.ox/core/tk/upload', [
         this.offer = function (file, options) {
             var self = this,
                 newFiles = [].concat(file);
-            this.validateFiles(newFiles, options).then(function (validFiles) {
-                validFiles = validFiles || newFiles;
-                if (validFiles.length === 0) return;
-                _(validFiles).each(function (file) {
+            this.validateFiles(newFiles, options).then(function (errors) {
+                if (errors.length) return;
+                _(newFiles).each(function (file) {
                     files.push({ file: file, options: options });
                 });
                 self.queueChanged();
