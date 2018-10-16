@@ -1119,6 +1119,36 @@ define('io.ox/calendar/util', [
             ].join('');
         },
 
+        openDeeplink: function (model, opt) {
+            opt = _({}).extend(opt);
+            model = new (require('io.ox/calendar/model').Model)(model.toJSON());
+
+            ox.launch('io.ox/calendar/main', { folder: model.get('folder') }).done(function () {
+                var app = this,
+                    perspective = opt.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                function cont(perspective) {
+                    if (perspective.selectAppointment) perspective.selectAppointment(model);
+                    if (opt.showDetails) {
+                        var e = $.Event('click', { target: app.perspective.$el });
+                        perspective.showAppointment(e, model.toJSON(), { arrow: false });
+                    }
+                }
+
+                app.folders.add(model.get('folder'));
+
+                // open in current perspective
+                if (app.perspective && settings.get('viewView') === perspective) cont(app.perspective, model);
+
+                app.pages.changePage(perspective, { disableAnimations: _.device('smartphone') });
+
+                // wait for perspective change
+                app.getWindow().one('change:perspective', function (e, perspective) {
+                    cont(perspective, model);
+                });
+            });
+        },
+
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just this appointment within the series?'))

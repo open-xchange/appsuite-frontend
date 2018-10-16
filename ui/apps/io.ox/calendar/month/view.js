@@ -571,6 +571,11 @@ define('io.ox/calendar/month/view', [
                 folders: folders,
                 title: title
             });
+        },
+
+        // called when an appointment detail-view opens the according appointment
+        selectAppointment: function (model) {
+            this.setStartDate(model.getMoment('startDate'));
         }
 
     });

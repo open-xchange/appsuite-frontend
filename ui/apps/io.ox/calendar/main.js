@@ -465,7 +465,7 @@ define('io.ox/calendar/main', [
                         var view = new View({ mode: mode, app: app });
                         node.append(view.$el);
                         view.render();
-                        app.getWindow().trigger('change:perspective');
+                        app.getWindow().trigger('change:perspective', view);
                         app.perspective = views[item] = view;
                     }, function fail() {
                         if (item !== defaultPage) return app.pages.changePage(defaultPage);
@@ -476,6 +476,7 @@ define('io.ox/calendar/main', [
                     if (!views[item]) return;
                     views[item].trigger('show');
                     app.perspective = views[item];
+                    settings.set('viewView', item);
                 });
             });
         },

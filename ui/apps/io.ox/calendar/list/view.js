@@ -38,6 +38,12 @@ define('io.ox/calendar/list/view', [
             var self = this, app = opt.app;
             this.app = app;
 
+            // select ids from url before registering selection listeners
+            var cids = [].concat((_.url.hash('id') || '').split(','));
+            app.listView.once('first-reset', function () {
+                app.listView.selection.set(cids);
+            });
+
             this.listenTo(app.listView, {
                 'selection:empty': function () {
                     self.drawMessageRight(gt('No appointment selected'));
@@ -91,12 +97,6 @@ define('io.ox/calendar/list/view', [
 
             app.listView.load();
 
-            // select ids from url
-            var cids = [].concat((_.url.hash('id') || '').split(','));
-            app.listView.once('first-reset', function () {
-                app.listView.selection.set(cids);
-            });
-
             PerspectiveView.prototype.initialize.call(this, opt);
         },
 
@@ -128,7 +128,9 @@ define('io.ox/calendar/list/view', [
             return this;
         },
 
-        showAppointment: function (obj) {
+        showAppointment: function (e, obj) {
+            if (!obj) obj = e;
+
             if (_.device('smartphone') && this.app.props.get('checkboxes') === true) return;
             if (obj instanceof Backbone.Model) obj = obj.attributes;
             // be busy

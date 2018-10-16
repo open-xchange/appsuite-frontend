@@ -115,42 +115,9 @@ define('plugins/notifications/calendar/register', [
                     $('<button type="button" class="btn btn-link open-in-calendar">').text(gt('Open in calendar')).on('click', function (e) {
                         if (e.type !== 'click' && e.which !== 13) return;
 
-                        var options = {
-                            folder: model.get('folder'),
-                            id: model.get('id'),
-                            perspective: getLayout(model)
-                        };
-
                         if (_.device('smartphone')) notifications.dropdown.close();
 
-                        ox.launch('io.ox/calendar/main', options).done(function () {
-                            if (this.folders) this.folders.add(options.folder);
-                            // no need for a redraw, just select the folder
-                            if (this.folderView) this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
-                            var currentPage = this.pages ? this.pages.getCurrentPage() : false;
-                            // resume calendar app
-                            if (this.folders && this.folderView && currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
-                                // workaround: set layout
-                                ox.ui.Perspective.show(this, options.perspective, { disableAnimations: true }).then(function () {
-                                    var e = $.Event('click', { target: currentPage.perspective.main });
-                                    currentPage.perspective.setNewStart = true;
-                                    currentPage.perspective.showAppointment(e, options, { arrow: false });
-                                });
-                            } else {
-                                // perspective is not initialized yet on newly launched calendar app
-                                this.once('aftershow:done', function (perspective) {
-                                    this.folders.add(options.folder);
-                                    // no need for a redraw, just select the folder
-                                    this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
-                                    // workaround: use defer to handle tricky page controller loading smartphone
-                                    _.defer(function () {
-                                        var e = $.Event('click', { target: perspective.main });
-                                        perspective.setNewStart = true;
-                                        perspective.showAppointment(e, options, { arrow: false });
-                                    });
-                                });
-                            }
-                        });
+                        util.openDeeplink(model, { perspective: getLayout(model), showDetails: true });
                     }),
                     $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),

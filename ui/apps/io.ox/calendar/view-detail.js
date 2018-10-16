@@ -185,25 +185,8 @@ define('io.ox/calendar/view-detail', [
     function openDeeplink(e) {
         e.preventDefault();
 
-        var baton = e.data.baton,
-            folder = String(baton.data.folder);
-
-        ox.launch('io.ox/calendar/main', { folder: folder }).done(function () {
-            var app = this,
-                perspective = app.props.get('layout') || 'week:week';
-
-            ox.ui.Perspective.show(app, perspective).done(function (p) {
-                function cont() {
-                    if (p.selectAppointment) p.selectAppointment(baton.model);
-                }
-
-                if (app.folder.get() === folder) {
-                    cont();
-                } else {
-                    app.folder.set(folder).done(cont);
-                }
-            });
-        });
+        var baton = e.data.baton;
+        util.openDeeplink(baton.model);
     }
 
     // created on/by

@@ -1617,6 +1617,11 @@ define('io.ox/calendar/week/view', [
             return 'week';
         },
 
+        // called when an appointment detail-view opens the according appointment
+        selectAppointment: function (model) {
+            this.setStartDate(model.getMoment('startDate'));
+        },
+
         print: function () {
             var folders = this.model.get('folders'),
                 title = gt('Appointments');
