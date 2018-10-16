@@ -93,7 +93,7 @@ define('io.ox/files/guidance/main', [
                         [gt.pgettext('help', 'Creating Files'), 'ox.appsuite.user.sect.files.add.html'],
                         [gt.pgettext('help', 'Managing Files'), 'ox.appsuite.user.sect.files.manage.html'],
                         [gt.pgettext('help', 'Accessing Files with WebDAV'), 'ox.appsuite.user.sect.files.webdav.html'],
-                        [gt.pgettext('help', 'Drive Settings'), 'ox.appsuite.user.sect.files.settings.html']
+                        [gt.pgettext('help', 'Drive Settings'), 'ox.appsuite.user.sect.drive.settings.html']
                     ];
 
                 this.append(

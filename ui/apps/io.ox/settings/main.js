@@ -66,7 +66,7 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
                 'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.manage.timezones.html',
                 'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
-                'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.files.settings.html',
+                'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.drive.settings.html',
                 'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
                 'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
                 'virtual/settings/io.ox/office': 'ox.documents.user.sect.text.settings.html',
