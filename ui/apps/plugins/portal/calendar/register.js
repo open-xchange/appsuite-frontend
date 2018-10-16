@@ -92,6 +92,17 @@ define('plugins/portal/calendar/register', [
 
         initialize: function (baton) {
             baton.collection = api.getCollection(getRequestParams());
+            api.on('create', function () {
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
         },
 
         load: function (baton) {
