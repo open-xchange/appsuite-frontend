@@ -19,7 +19,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
         URI = /*_.url.hash('socket-uri') ? _.url.hash('socket-uri') :*/ ox.abs,
         PATH = '/socket.io/appsuite',
         isConnected = false,
-        supported = Modernizr.websockets && cap.has('websocket'),
+        supported,
         debug = true, //_.url.hash('socket-debug') || ox.debug,
         connectionId = getId(),
         options = {
@@ -127,6 +127,8 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
      * @return {[type]} Deferred object resolving with the socket.io object
      */
     function getSocket() {
+        // check for support here, if done on file load capabilities might not be loaded fully yet.
+        if (supported === undefined) supported = Modernizr.websockets && cap.has('websocket');
         if (socket === undefined && supported) {
             return connectSocket();
         } else if (socket) {
