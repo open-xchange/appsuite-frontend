@@ -209,41 +209,34 @@ define('io.ox/core/boot/load', [
             }
 
             if (capabilities.has('calendar')) {
-                require(['settings!io.ox/calendar'], function (calendarSettings) {
-                    // only call update by push max every 10s, to reduce load
-                    var throttleCache = [],
-                        sendUpdateEvent = _.throttle(function () {
-                            // check here, setting might have changed in the meantime
-                            if (!calendarSettings.get('enablePushUpdates', false)) {
-                                throttleCache = [];
-                                return;
-                            }
-                            var data = {
-                                folders: _(throttleCache).chain().pluck('folders').flatten().compact().unique().value(),
-                                invitations: _(throttleCache).chain().pluck('needsAction').flatten().compact().unique(function (event) {
-                                    return event.id + '.' + event.folder + '.' + event.recurrenceId;
-                                }).value()
-                            };
-                            ox.trigger('socket:calendar:updates', data);
-                            throttleCache = [];
-                        }, 10000);
+                // only call update by push max every 10s, to reduce load
+                var throttleCache = [],
+                    sendUpdateEvent = _.throttle(function () {
+                        var data = {
+                            folders: _(throttleCache).chain().pluck('folders').flatten().compact().unique().value(),
+                            invitations: _(throttleCache).chain().pluck('needsAction').flatten().compact().unique(function (event) {
+                                return event.id + '.' + event.folder + '.' + event.recurrenceId;
+                            }).value()
+                        };
+                        ox.trigger('socket:calendar:updates', data);
+                        throttleCache = [];
+                    }, 10000);
 
-                    socket.on('ox:calendar:updates', function (data) {
-                        // simple event forwarding
-                        // don't log sensitive data here (data object)
-                        try {
-                            ox.websocketlog.push({
-                                timestamp: _.now(),
-                                date: moment().format('D.M.Y HH:mm:ss'),
-                                event: 'ox:calendar:updates',
-                                data: { folders: data.folders, invitations: data.needsAction }
-                            });
-                        } catch (e) {
-                            console.log(e);
-                        }
-                        throttleCache.push(data);
-                        sendUpdateEvent();
-                    });
+                socket.on('ox:calendar:updates', function (data) {
+                    // simple event forwarding
+                    // don't log sensitive data here (data object)
+                    try {
+                        ox.websocketlog.push({
+                            timestamp: _.now(),
+                            date: moment().format('D.M.Y HH:mm:ss'),
+                            event: 'ox:calendar:updates',
+                            data: { folders: data.folders, invitations: data.needsAction }
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    throttleCache.push(data);
+                    sendUpdateEvent();
                 });
             }
 
