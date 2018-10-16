@@ -127,11 +127,12 @@ define('io.ox/core/api/reminder', [
                 params: {
                     action: 'range',
                     timezone: 'UTC',
+                    modules: 'tasks',
                     // if no range given, get the reminders an our ahead(to be independent of global refresh)
                     end: range || moment().add(1, 'hour').valueOf()
                 }
             }).then(function (list) {
-                // remove appointment reminders, those are requested via chronos api
+                // remove appointment reminders, those are requested via chronos api, remove code once backend supports modules parameter
                 list = _(list).filter(function (reminder) {
                     return reminder.module === 4;
                 });
