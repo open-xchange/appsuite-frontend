@@ -22,7 +22,6 @@ define('io.ox/calendar/color-picker', [
     return Backbone.View.extend({
 
         className: 'io-ox-calendar-color-picker',
-
         initialize: function (opt) {
             this.opt = _.extend({
                 noColorOption: false,
@@ -48,8 +47,8 @@ define('io.ox/calendar/color-picker', [
             this.model.set(this.opt.attribute, value);
         },
 
-        onChangeColor: function () {
-            this.setValue(this.$(':checked').val());
+        onChangeColor: function (e) {
+            this.setValue($(e.currentTarget).data('value'));
         },
 
         renderOption: function (color) {
@@ -61,21 +60,9 @@ define('io.ox/calendar/color-picker', [
                             'background-color': color.value,
                             color: util.getForegroundColor(color.value)
                         }),
-                    // radio button
-                    // $('<input type="radio" name="color">')
-                    // .attr('id', id)
-                    // .val(color.value)
-                    // .prop('checked', this.getValue() === color.value)
-                    // .on('change', this.onChangeColor),
-                    // // colored box
-                    // $('<div class="box color-label" aria-hidden="true">')
-                    // .css({
-                    //     'background-color': color.value,
-                    //     color: util.getForegroundColor(color.value)
-                    // })
-                    // .attr('title', color.label),
                     $('<span class="sr-only">').text(color.label)
-                ).attr({
+                ).on('click', this.onChangeColor)
+                .attr({
                     'id': id,
                     'role': 'menuitemradio',
                     'aria-checked': this.getValue() === color.value,
