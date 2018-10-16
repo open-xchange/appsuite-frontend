@@ -160,7 +160,6 @@ msgstr[2] "%1$d paziņojumi."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
-#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -1376,6 +1375,12 @@ msgid "Appointments"
 msgstr "Mītiņi"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments in shared calendars"
+msgid "Appointments in public calendars"
+msgstr "Mītiņi koplietojuma kalendāros"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Mītiņi koplietojuma kalendāros"
 
@@ -1767,6 +1772,7 @@ msgstr "CalDav/CardDav"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1803,6 +1809,12 @@ msgstr "Kalendāra konta kļūda"
 msgid "Calendar name"
 msgstr "Kalendāra vārds"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar name"
+msgid "Calendar updates"
+msgstr "Kalendāra vārds"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Kalendāra skats"
@@ -1811,10 +1823,6 @@ msgstr "Kalendāra skats"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Calendar/Addressbook"
 msgstr "Kalendārs/Adrešu grāmata"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "Kalendārs:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -2187,6 +2195,7 @@ msgstr "Aizvērt skatītāju"
 msgid "Collapse form"
 msgstr "Sakļaut formu"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2604,6 +2613,12 @@ msgstr "Izveidot filtra nosacījumu"
 msgid "Create folder"
 msgstr "Izveidot mapi"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create new calendar"
+msgid "Create in public calendar"
+msgstr "Izveidot jaunu kalendāru"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Izveidot"
@@ -2612,10 +2627,6 @@ msgstr "Izveidot"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Izveidot jaunu %1$s kontu"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "Izveidot jaunu kalendāru"
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -3858,6 +3869,13 @@ msgstr "Iespējot %1$s"
 msgid "Enable Links"
 msgstr "Iespējot saites"
 
+#. used in settings panel to enable calendar push updates
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Enable calendar hovers"
+msgid "Enable live updates"
+msgstr "Iespējot kalendāra apskatlogus"
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
 msgstr "Iespējot vai atspējot automātisko pārsūtīšanu"
@@ -4877,6 +4895,7 @@ msgstr "Palīgs"
 msgid "Hidden address books"
 msgstr "Apslēptās adrešu grāmatas"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Apslēptie kalendāri"
@@ -5092,6 +5111,18 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "Attēls 1"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size"
+msgstr "Attēli"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size:"
+msgstr "Attēli"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5435,6 +5466,18 @@ msgstr "Specifiskie valodas noklusējumi"
 msgid "Languages"
 msgstr "Valodas"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Target"
+msgid "Large"
+msgstr "Mērķis"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Progress %1$s %"
+msgid "Large (%1$s px)"
+msgstr "Progress %1$s %"
+
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
 msgstr "Pēdējās 30 dienas"
@@ -5769,6 +5812,12 @@ msgstr "Vēstules atgādinājums"
 msgid "Mail reminder for"
 msgstr "Atgādinājuma saņēmējs"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail source"
+msgid "Mail size:"
+msgstr "Pasta avots"
+
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "Pasta avots"
@@ -5864,8 +5913,9 @@ msgstr "Iezīmēt kā izplatīšanas sarakstu"
 msgid "Mark as done"
 msgstr "Iezīmēt kā paveiktu"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Iezīmēt kā izlasītu"
 
@@ -5879,8 +5929,9 @@ msgstr "Iestatīt kā mēstuli"
 msgid "Mark as undone"
 msgstr "Iezīmēt kā nepabeiktu"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Iezīmēt kā nelasītu"
 
@@ -5944,6 +5995,7 @@ msgstr "Neatbilst"
 msgid "Maximize"
 msgstr "Maksimizēt"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Vidējs"
@@ -5952,6 +6004,12 @@ msgstr "Vidējs"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Vidēja"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Members (%1$d)"
+msgid "Medium (%1$s px)"
+msgstr "Dalībnieki (%1$d)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6220,6 +6278,7 @@ msgstr "Mans Google kalendārs"
 msgid "My address books"
 msgstr "Manas adrešu grāmatas"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Mani kalendāri"
@@ -7043,6 +7102,12 @@ msgstr "Secība"
 msgid "Organizer"
 msgstr "Organizators"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Original mail"
+msgid "Original"
+msgstr "Sākotnējais e-pasts"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Sākotnējais e-pasts"
@@ -7184,10 +7249,6 @@ msgstr "Paroles drošums: Vājš"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Paroles drošums: Nepareizs garums"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "Pauze auto-atskaņošanas režīmā"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7865,6 +7926,7 @@ msgstr "Īpašibas"
 msgid "Public address books"
 msgstr "Publiskās adrešu grāmatas"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Publiskie kalendāri"
@@ -7938,10 +8000,6 @@ msgstr "RSS avots"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS avoti"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "Izlasīts"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8587,10 +8645,6 @@ msgstr "Noteikuma vārds"
 msgid "Run auto-play "
 msgstr "Palaist aut-atskaņošanas režīmu"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "Palaist aut-atskaņošanas režīmu"
-
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
 msgstr "SMTP"
@@ -8765,7 +8819,6 @@ msgstr "Apslēpts"
 msgid "Security"
 msgstr "Piekļuve"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8802,10 +8855,6 @@ msgstr "Izvēlēties visu"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Select all messages"
 msgstr "Izvēlēties visus ziņojumus"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "Kalendāra izvēle"
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -9124,6 +9173,7 @@ msgstr "Koplietojuma adrešu grāmatas"
 msgid "Shared by other users"
 msgstr "Cirtu lietotāju meklējumi"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Koplietojuma kalendāri"
@@ -9401,6 +9451,10 @@ msgstr "Izmērs"
 msgid "Sky blue"
 msgstr "Debeszils"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Slideshow"
+msgstr "Slaidrāde"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Slaidrāde / Auto-atskaņošanas režīms"
@@ -9408,6 +9462,14 @@ msgstr "Slaidrāde / Auto-atskaņošanas režīms"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Rādīt pieprasījumus"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -10145,6 +10207,12 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
+"The selected calendar \"%1$s\" is public. Dou you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10345,9 +10413,13 @@ msgid "This appointment"
 msgstr "Šis mītiņš"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "This appointment is an exception. Changing the series does not affect "
+#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr "Šis mītiņš ir izņēmums. Sērijas datu izmaiņa neietekmē izņēmumus."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -11161,6 +11233,12 @@ msgstr "Lietotāja vārds"
 msgid "User data"
 msgstr "Lietotāja dati"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "User defined color"
+msgstr "Jauns kalendārs"
+
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
 msgstr "Lietotāja definēts"
@@ -11892,6 +11970,14 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Jūsu platforma netiek atbalstīta!"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr ""
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -12401,6 +12487,10 @@ msgstr "nav rediģēšanas tiesību"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "no read permissions"
 msgstr "nav lasīšanas tiesību"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr "neviens"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13734,6 +13824,9 @@ msgstr "jūsu platforma"
 #~ msgid "Calendar workweek view"
 #~ msgstr "Kalendāra darba nedēļas skats"
 
+#~ msgid "Calendar:"
+#~ msgstr "Kalendārs:"
+
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
 
@@ -14852,9 +14945,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Enable auto completion of E-Mail addresses?"
 #~ msgstr "Iespējot e-pasta adrešu ievada auto-pabeigšanu?"
-
-#~ msgid "Enable calendar hovers"
-#~ msgstr "Iespējot kalendāra apskatlogus"
 
 #, fuzzy
 #~| msgid "Available Categories:"
@@ -16927,6 +17017,9 @@ msgstr "jūsu platforma"
 #~ msgid "Pause Presentation"
 #~ msgstr "Saņēmējs"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pauze auto-atskaņošanas režīmā"
+
 #~ msgid "Pause presentation"
 #~ msgstr "Apturēt prezentāciju"
 
@@ -17292,6 +17385,9 @@ msgstr "jūsu platforma"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Lapa %1$d no %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Izlasīts"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "Tikai lasīšanai"
 
@@ -17457,6 +17553,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Rules"
 #~ msgstr "Noteikumi"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Palaist aut-atskaņošanas režīmu"
 
 #~ msgid "Running applications"
 #~ msgstr "Darbojošās aplikācijas"
@@ -17642,6 +17741,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Select appointment display type"
 #~ msgstr "Izvēlieties tikšanās uzrādes tipu"
+
+#~ msgid "Select calendar"
+#~ msgstr "Kalendāra izvēle"
 
 #~ msgid "Select from the list and add selected as members"
 #~ msgstr "Izvēlieties sarakstā un pievienojiet izvēlētos kā locekļus"
@@ -17954,9 +18056,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Skip this step"
 #~ msgstr "Izlaist šo soli"
-
-#~ msgid "Slideshow"
-#~ msgstr "Slaidrāde"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Slaidrādes / Auto-atskaņošanas režīms"
@@ -18338,9 +18437,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Tanzania"
 #~ msgstr "Tanzānija"
-
-#~ msgid "Target"
-#~ msgstr "Mērķis"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr ""
@@ -20333,9 +20429,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "no expiry date"
 #~ msgstr "bez beigu datuma"
-
-#~ msgid "none"
-#~ msgstr "neviens"
 
 #~ msgid "not sent"
 #~ msgstr "nenosūtīts"

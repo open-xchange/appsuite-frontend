@@ -150,7 +150,6 @@ msgstr[1] "%1$d kennisgevingen."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
-#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -1367,6 +1366,12 @@ msgid "Appointments"
 msgstr "Afspraken"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments in shared calendars"
+msgid "Appointments in public calendars"
+msgstr "Afspraken in gedeelde agenda's"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Afspraken in gedeelde agenda's"
 
@@ -1757,6 +1762,7 @@ msgstr "CalDAV/CardDav"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1793,6 +1799,12 @@ msgstr "Agenda-account fout"
 msgid "Calendar name"
 msgstr "Agendanaam"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar name"
+msgid "Calendar updates"
+msgstr "Agendanaam"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Agendaoverzicht"
@@ -1801,10 +1813,6 @@ msgstr "Agendaoverzicht"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Calendar/Addressbook"
 msgstr "Agenda/Adresboek"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "Agenda:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -2177,6 +2185,7 @@ msgstr "Sluit lezer"
 msgid "Collapse form"
 msgstr "Formulier inklappen"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2596,6 +2605,12 @@ msgstr "Filterregel aanmaken"
 msgid "Create folder"
 msgstr "Map aanmaken"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create new calendar"
+msgid "Create in public calendar"
+msgstr "Maak een nieuwe agenda"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Lijst aanmaken"
@@ -2604,10 +2619,6 @@ msgstr "Lijst aanmaken"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Nieuw %1$s aanmaken"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "Maak een nieuwe agenda"
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -3855,6 +3866,13 @@ msgstr "%1$s inschakelen"
 msgid "Enable Links"
 msgstr "Links Inschakelen"
 
+#. used in settings panel to enable calendar push updates
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Mail address"
+msgid "Enable live updates"
+msgstr "E-mailadres"
+
 # (Reinout) Portal = portaal, niet portable
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
@@ -4874,6 +4892,7 @@ msgstr "Help"
 msgid "Hidden address books"
 msgstr "Verborgen adresboeken"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Verborgen agenda's"
@@ -5087,6 +5106,18 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "Afbeelding 1"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size"
+msgstr "Afbeeldingen"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size:"
+msgstr "Afbeeldingen"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5430,6 +5461,16 @@ msgstr "Taalspecifieke standaardinstelling"
 msgid "Languages"
 msgstr "Talen"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Progress %1$s %"
+msgid "Large (%1$s px)"
+msgstr "Voortgang %1$s %"
+
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
 msgstr "Laatste 30 dagen"
@@ -5766,6 +5807,12 @@ msgstr "E-mailherinnering"
 msgid "Mail reminder for"
 msgstr "E-mailherinnering voor"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail source"
+msgid "Mail size:"
+msgstr "E-mailbron"
+
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "E-mailbron"
@@ -5862,8 +5909,9 @@ msgstr "Markeer als distributielijst"
 msgid "Mark as done"
 msgstr "Markeer als voltooid"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Markeer als gelezen"
 
@@ -5877,8 +5925,9 @@ msgstr "Markeer als ongewenst"
 msgid "Mark as undone"
 msgstr "Markeer als onvoltooid"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Markeer als ongelezen"
 
@@ -5942,6 +5991,7 @@ msgstr "Komt niet overeen"
 msgid "Maximize"
 msgstr "Maximaliseren"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Gemiddeld"
@@ -5950,6 +6000,12 @@ msgstr "Gemiddeld"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Gemiddeld"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Members (%1$d)"
+msgid "Medium (%1$s px)"
+msgstr "Deelnemers (%1$d)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6217,6 +6273,7 @@ msgstr "Mijn Google Agenda"
 msgid "My address books"
 msgstr "Mijn adresboeken"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Mijn agenda's"
@@ -7040,6 +7097,12 @@ msgstr "Volgorde"
 msgid "Organizer"
 msgstr "Organisator"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Original mail"
+msgid "Original"
+msgstr "Oorspronkelijke e-mail"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Oorspronkelijke e-mail"
@@ -7181,10 +7244,6 @@ msgstr "Wachtwoordkwaliteit: Zwak"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Wachtwoordkwaliteit: Verkeerde lengte"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "Pauzeer autoplay modus"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7873,6 +7932,7 @@ msgstr "Eigenschappen"
 msgid "Public address books"
 msgstr "Publieke adresboeken"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Publieke agenda's"
@@ -7946,10 +8006,6 @@ msgstr "RSS Feed"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Feeds"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "Lezen"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8596,10 +8652,6 @@ msgstr "Regelnaam"
 msgid "Run auto-play "
 msgstr "Start autoplay modus"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "Start autoplay modus"
-
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
 msgstr "SMTP"
@@ -8773,7 +8825,6 @@ msgstr "Geheim"
 msgid "Security"
 msgstr "Beveiliging"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8810,10 +8861,6 @@ msgstr "Selecteer alles"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Select all messages"
 msgstr "Alle berichten selecteren"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "Selecteer agenda"
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -9129,6 +9176,7 @@ msgstr "Gedeelde adresboeken"
 msgid "Shared by other users"
 msgstr "Gedeeld door andere gebruikers"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Gedeelde agenda's"
@@ -9405,6 +9453,10 @@ msgstr "Grootte"
 msgid "Sky blue"
 msgstr "Hemelblauw"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Slideshow"
+msgstr "Diashow"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Diapresentatie / Autoplay modus voor afbeeldingen"
@@ -9412,6 +9464,14 @@ msgstr "Diapresentatie / Autoplay modus voor afbeeldingen"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Langzame verzoeken"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -10146,6 +10206,12 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
+"The selected calendar \"%1$s\" is public. Dou you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10351,9 +10417,13 @@ msgid "This appointment"
 msgstr "Deze afspraak"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "This appointment is an exception. Changing the series does not affect "
+#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr ""
 "Deze afspraak is een uitzondering. Bij het aanpassen van de serie veranderd "
 "de uitzondering niet mee."
@@ -11181,6 +11251,12 @@ msgstr "Gebruikersnaam"
 msgid "User data"
 msgstr "Gebruikersgegevens"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "User defined color"
+msgstr "Nieuwe agenda"
+
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
 msgstr "Gebruikersvelden"
@@ -11912,6 +11988,14 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Uw systeem wordt niet ondersteund!"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr ""
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -12420,6 +12504,10 @@ msgstr "geen bewerkrechten"
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "no read permissions"
 msgstr "geen leesrechten"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr "geen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -13123,6 +13211,9 @@ msgstr "uw platform"
 #~ msgid "Calendar workweek view"
 #~ msgstr "Agendawerkweekoverzicht"
 
+#~ msgid "Calendar:"
+#~ msgstr "Agenda:"
+
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV Aanmeldnaam"
 
@@ -13599,11 +13690,6 @@ msgstr "uw platform"
 #~| msgid "Disable"
 #~ msgid "Enable / Disable"
 #~ msgstr "Uitschakelen"
-
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Enable categories"
-#~ msgstr "E-mailadres"
 
 # (Reinout) Portal = portaal, niet portable
 #~ msgid "Enable for the following addresses"
@@ -14420,6 +14506,9 @@ msgstr "uw platform"
 #~ msgid "Pause Presentation"
 #~ msgstr "Taak uitnodigingen"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pauzeer autoplay modus"
+
 #~ msgid "Pause presentation"
 #~ msgstr "Presentatie pauzeren"
 
@@ -14588,6 +14677,9 @@ msgstr "uw platform"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Pagina %1$d van %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Lezen"
+
 #~ msgid "Reading the details"
 #~ msgstr "Details lezen"
 
@@ -14660,6 +14752,9 @@ msgstr "uw platform"
 #~ msgid "Rule applies until"
 #~ msgstr "Regel toepassen tot"
 
+#~ msgid "Run auto-play mode"
+#~ msgstr "Start autoplay modus"
+
 #~ msgid "Running applications"
 #~ msgstr "Applicaties starten"
 
@@ -14720,6 +14815,9 @@ msgstr "uw platform"
 
 #~ msgid "Select Folder"
 #~ msgstr "Selecteer Map"
+
+#~ msgid "Select calendar"
+#~ msgstr "Selecteer agenda"
 
 #~ msgid "Select none"
 #~ msgstr "Selecteer niets"
@@ -14885,9 +14983,6 @@ msgstr "uw platform"
 
 #~ msgid "Size (bytes)"
 #~ msgstr "Grootte (bytes)"
-
-#~ msgid "Slideshow"
-#~ msgstr "Diashow"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Diapresentatie / Autoplay modus"
@@ -16211,9 +16306,6 @@ msgstr "uw platform"
 
 #~ msgid "no expiry date"
 #~ msgstr "Geen verloopdatum"
-
-#~ msgid "none"
-#~ msgstr "geen"
 
 #~ msgid "open"
 #~ msgstr "openen"

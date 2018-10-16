@@ -145,7 +145,6 @@ msgstr[1] "%1$d bildirim."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
-#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -1335,6 +1334,12 @@ msgid "Appointments"
 msgstr "Randevular"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments in shared calendars"
+msgid "Appointments in public calendars"
+msgstr "Paylaşımlı takvimlerdeki randevular"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Paylaşımlı takvimlerdeki randevular"
 
@@ -1722,6 +1727,7 @@ msgstr "CalDav/CardDav"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1758,6 +1764,12 @@ msgstr "Takvim hesabı hatası"
 msgid "Calendar name"
 msgstr "Takvim adı"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar name"
+msgid "Calendar updates"
+msgstr "Takvim adı"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Takvim görünümü"
@@ -1766,10 +1778,6 @@ msgstr "Takvim görünümü"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Calendar/Addressbook"
 msgstr "Takvim/adres defteri"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "Takvim:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -2139,6 +2147,7 @@ msgstr "Görüntüleyiciyi kapat"
 msgid "Collapse form"
 msgstr "Formu daralt"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2558,6 +2567,12 @@ msgstr "Filtre kuralı oluştur"
 msgid "Create folder"
 msgstr "Klasör oluştur"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create new calendar"
+msgid "Create in public calendar"
+msgstr "Yeni takvim oluştur"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Liste oluştur"
@@ -2566,10 +2581,6 @@ msgstr "Liste oluştur"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Yeni %1$s hesabı oluştur"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "Yeni takvim oluştur"
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -3817,6 +3828,11 @@ msgstr "%1$s bileşenini aç"
 msgid "Enable Links"
 msgstr "Bağlantıları etkinleştir"
 
+#. used in settings panel to enable calendar push updates
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Enable live updates"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
 msgstr "Otomatik iletmeyi aç veya kapat"
@@ -4822,6 +4838,7 @@ msgstr "Yardım"
 msgid "Hidden address books"
 msgstr "Gizli adres defterleri"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Gizli takvimler"
@@ -5033,6 +5050,18 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "Resim 1"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size"
+msgstr "Resimler"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size:"
+msgstr "Resimler"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5374,6 +5403,16 @@ msgstr "Dile özel varsayılan"
 msgid "Languages"
 msgstr "Diller"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Progress %1$s %"
+msgid "Large (%1$s px)"
+msgstr "İlerleme %%1$s"
+
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
 msgstr "Son 30 gün"
@@ -5707,6 +5746,12 @@ msgstr "E-posta anımsatıcısı"
 msgid "Mail reminder for"
 msgstr "Anımsatıcı"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail source"
+msgid "Mail size:"
+msgstr "E-posta kaynağı"
+
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "E-posta kaynağı"
@@ -5802,8 +5847,9 @@ msgstr "Dağıtım listesi olarak işaretle"
 msgid "Mark as done"
 msgstr "Bitmiş olarak işaretle"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Okundu olarak işaretle"
 
@@ -5817,8 +5863,9 @@ msgstr "Spam olarak işaretle"
 msgid "Mark as undone"
 msgstr "Bitmemiş olarak işaretle"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Okunmadı olarak işaretle"
 
@@ -5882,6 +5929,7 @@ msgstr "Şununla eşleşmeyen"
 msgid "Maximize"
 msgstr "Büyüt"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Orta"
@@ -5890,6 +5938,12 @@ msgstr "Orta"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Orta"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Members (%1$d)"
+msgid "Medium (%1$s px)"
+msgstr "Üyeler (%1$d)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6152,6 +6206,7 @@ msgstr "Google Takvimim"
 msgid "My address books"
 msgstr "Adres defterlerim"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Takvimlerim"
@@ -6964,6 +7019,12 @@ msgstr "Sıra"
 msgid "Organizer"
 msgstr "Organizatör"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Original mail"
+msgid "Original"
+msgstr "Orijinal e-posta"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Orijinal e-posta"
@@ -7105,10 +7166,6 @@ msgstr "Parola kalitesi: zayıf"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Parola kalitesi: yanlış uzunlukta"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "Otomatik oynatma modunu duraklat"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7783,6 +7840,7 @@ msgstr "Özellikler"
 msgid "Public address books"
 msgstr "Açık adres defterleri"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Açık takvimler"
@@ -7856,10 +7914,6 @@ msgstr "RSS Akışı"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Akışları"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "Okunmuş"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8499,10 +8553,6 @@ msgstr "Kural adı"
 msgid "Run auto-play "
 msgstr "Otomatik oynatma modunu çalıştır"
 
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "Otomatik oynatma modunu çalıştır"
-
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
 msgstr "SMTP"
@@ -8676,7 +8726,6 @@ msgstr "Gizli"
 msgid "Security"
 msgstr "Güvenlik"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8712,10 +8761,6 @@ msgstr "Tümünü seç"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Select all messages"
 msgstr "Tüm mesajları seç"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "Takvim seç"
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -9031,6 +9076,7 @@ msgstr "Paylaşılan adres defterleri"
 msgid "Shared by other users"
 msgstr "Diğer kullanıcılar tarafından paylaşılanlar"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Paylaşılan takvimler"
@@ -9304,6 +9350,12 @@ msgstr "Boyut"
 msgid "Sky blue"
 msgstr "Gök mavisi"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Repeat slideshow"
+msgid "Slideshow"
+msgstr "Slayt gösterisini tekrarla"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Resimler için slayt gösterisi / otomatik oynatma modu"
@@ -9311,6 +9363,14 @@ msgstr "Resimler için slayt gösterisi / otomatik oynatma modu"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "İstekleri göster"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -10035,6 +10095,12 @@ msgstr "Seçilen adresleri kaldırmak için Backspace veya Delete tuşuna basın
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
+"The selected calendar \"%1$s\" is public. Dou you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10228,9 +10294,13 @@ msgid "This appointment"
 msgstr "Bu randevuyu"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "This appointment is an exception. Changing the series does not affect "
+#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr "Bu randevu bir istisnadır. Diziyi değiştirmeniz istisnaları etkilemez."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -11038,6 +11108,12 @@ msgstr "Kullanıcı adı"
 msgid "User data"
 msgstr "Kullanıcı verileri"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Use calendar color"
+msgid "User defined color"
+msgstr "Takvim rengini kullan"
+
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
 msgstr "Kullanıcı alanları"
@@ -11765,6 +11841,14 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Platformunuz desklenmiyor!"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr ""
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -12264,6 +12348,10 @@ msgstr "düzenleme izni yok"
 msgid "no read permissions"
 msgstr "okuma izni yok"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
@@ -12481,8 +12569,23 @@ msgstr "sarı"
 msgid "your platform"
 msgstr "platformunuz"
 
+#~ msgid "Calendar:"
+#~ msgstr "Takvim:"
+
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Otomatik oynatma modunu duraklat"
+
 #~ msgid "Pick a time here"
 #~ msgstr "Bir zaman seçin"
+
+#~ msgid "Read"
+#~ msgstr "Okunmuş"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Otomatik oynatma modunu çalıştır"
+
+#~ msgid "Select calendar"
+#~ msgstr "Takvim seç"
 
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
