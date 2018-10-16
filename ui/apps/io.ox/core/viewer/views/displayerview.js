@@ -128,9 +128,6 @@ define('io.ox/core/viewer/views/displayerview', [
             // blend in navigation by user activity
             this.$el.on('mousemove click', this.displayerviewMousemoveClickHandler);
 
-            // Swiper zoom
-            this.$el.on('dblclick', '.viewer-displayer-item-container', this.onToggleZoom.bind(this));
-
             // listen to full screen mode changes
             BigScreen.onchange = this.onChangeFullScreen.bind(this);
         },
@@ -199,6 +196,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     slideChangeTransitionStart: this.onSlideChangeStart.bind(this),
                     slideNextTransitionEnd: this.onSlideNextChangeEnd.bind(this),
                     slidePrevTransitionEnd: this.onSlidePrevChangeEnd.bind(this),
+                    doubleTap: this.onToggleZoom.bind(this),
                     touchEnd: this.hideCaption.bind(this)
                 }
             };
