@@ -723,20 +723,24 @@ define('io.ox/core/viewer/views/displayerview', [
                 }
                 var duration = 3000;
                 var navigationArrows = this.$el.find('.swiper-button-control');
+                var fullscreenButton = this.$el.find('.fullscreen-button');
+
                 window.clearTimeout(this.navigationTimeoutId);
                 navigationArrows.show();
+                fullscreenButton.toggle(this.fullscreen);
+
                 this.navigationTimeoutId = window.setTimeout(function () {
-                    // navigationArrows.fadeOut();
-                    _.each(navigationArrows, function (arrow) {
-                        var $arrow = $(arrow);
-                        if ($arrow.is(':not(:hover)')) {
-                            $arrow.fadeOut();
+                    var buttonsToHide = navigationArrows.add(fullscreenButton);
+                    _.each(buttonsToHide, function (button) {
+                        var $button = $(button);
+                        if ($button.is(':not(:hover)')) {
+                            $button.fadeOut();
                         }
                     });
+
                 }, duration);
             };
         })(),
-
 
         /**
          * Returns true if the active slide node is a Swiper duplicate node.
