@@ -105,7 +105,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
             if (socket.disconnected) {
                 if (debug) log('Websocket reconnecting with new session');
                 if (socket.disconnected) {
-                    connectionId = getId();
+                    ox.socketConnectionId = connectionId = getId();
                     // recreate URI to pass new session
                     socket.io.uri = URI + '/?session=' + ox.session + '&connection=' + connectionId;
                     socket.connect();
