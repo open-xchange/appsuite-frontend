@@ -993,7 +993,16 @@ define('io.ox/core/folder/api', [
                     return list(model.get('folder_id'), { cache: false })
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();
-                                if ('title' in changes) api.trigger('after:rename', id, model.toJSON());
+
+                                if ('title' in changes) {
+
+                                    // it's possible that external storage adapter rename a folder again after a user-rename (e.g. #56749), depending on the result update drive icon/list view
+                                    var renamedByResponse = _.propertyOf(changes)('title') !== model.get('title');
+                                    if (renamedByResponse) api.trigger('rename', id, model.toJSON());
+
+                                    api.trigger('after:rename', id, model.toJSON());
+                                }
+
                                 return newId;
                             });
                 }
