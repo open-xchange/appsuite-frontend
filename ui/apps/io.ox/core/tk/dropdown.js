@@ -257,5 +257,6 @@
     .on('keydown.bs.dropdown.data-api', '.dropdown-menu', keydownMenu)
     .on('keydown.bs.dropdown.data-api', '[role=menu]', onClickListItem)
     .on('focusout.dropdown.data-api', '.dropdown-menu', onFocusOut);
+    $(window).on('resize', _.throttle(clearMenus, 200));
 
 })(jQuery);
