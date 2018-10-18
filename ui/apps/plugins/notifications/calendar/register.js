@@ -231,7 +231,7 @@ define('plugins/notifications/calendar/register', [
                     smartRemove: true,
                     apiEvents: {
                         // triggered when something went wrong when getting event data in the list request -> event was probably deleted. In any case, clear the alarm
-                        remove: 'failureToFetchEvent acknowledgedAlarm'
+                        remove: 'failedToFetchEvent acknowledgedAlarm'
                     },
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
