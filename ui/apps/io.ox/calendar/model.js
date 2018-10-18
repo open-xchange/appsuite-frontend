@@ -25,6 +25,15 @@ define('io.ox/calendar/model', [
 
     'use strict';
 
+    // list of error codes where a folder should be removed from the selection
+    var removeList = [
+        'FLD-1004', // folder storage service no longer available
+        'FLD-0008', // folder not found
+        'FLD-0003', // permission denied
+        'CAL-4060', // folder is not supported
+        'CAL-4030' // permission denied
+    ];
+
     var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)
         AttendeeCollection = Backbone.Collection.extend({
             // if an email is present distinguisch the attendees by email address (provides support for attendee with multiple mail addresses).
@@ -476,6 +485,7 @@ define('io.ox/calendar/model', [
                         // no folders defaults to all folder
                         if (!self.folders) return data;
                         if (data.events) return data.events;
+                        if (!_(removeList).contains(data.error.code)) return;
                         api.trigger('all:fail', data.folder);
                     })
                     .compact()
