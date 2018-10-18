@@ -220,7 +220,7 @@ define('l10n/ja_JP/io.ox/collation', function () {
         return result === 0 ? prefer || 0 : result;
     };
 
-    // use when mail addresses should be used whily sorting. Add them as mail attribute to a and b
+    // use when mail addresses should be used while sorting. Add them as mail attribute to a and b
     // sorts names first like the standard sorter, checks mail addresses if names are different
     sorterWithMail = function (a, b) {
         if (a && a.email && b && b.email && a.sort_name_without_mail && b.sort_name_without_mail) {

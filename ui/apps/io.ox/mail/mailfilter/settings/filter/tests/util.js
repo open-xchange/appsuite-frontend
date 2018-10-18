@@ -215,8 +215,18 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         if (options.caret) {
             active = active + '<b class="caret">';
         }
-        var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
-            $ul = $('<ul class="dropdown-menu" role="menu">').append(
+
+
+        function getOptions() {
+            return options.sort ?
+                _(options.sort).map(function (value) {
+                    if (value === options.skip) return;
+                    return $('<li>').append(
+                        $('<a href="#" data-action="change-dropdown-value" role="menuitemradio">').attr('data-value', value).data(options).append(
+                            $.txt(values[value])
+                        )
+                    );
+                }) :
                 _(values).map(function (name, value) {
                     if (value === options.skip) return;
                     return $('<li>').append(
@@ -224,7 +234,12 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                             $.txt(name)
                         )
                     );
-                })
+                });
+        }
+
+        var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
+            $ul = $('<ul class="dropdown-menu" role="menu">').append(
+                getOptions()
             );
 
         return new Dropdown({

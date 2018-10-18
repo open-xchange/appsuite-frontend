@@ -713,6 +713,7 @@ define('io.ox/contacts/addressbook/popup', [
             }
         })
         .build(function () {
+            var self = this;
 
             this.$el.on('appear', onAppear);
 
@@ -767,7 +768,15 @@ define('io.ox/contacts/addressbook/popup', [
                 return resolveItems(this.store.getHash(), ids);
             };
 
-            this.flattenItems = function (ids) {
+            this.flattenItems = function (ids, options) {
+                options = options || {};
+                if (options.yellOmitted) {
+                    self.omittedContacts = [];
+                    var items = flatten(this.resolveItems(ids));
+                    util.validateDistributionList(self.omittedContacts);
+                    delete self.omittedContacts;
+                    return items;
+                }
                 return flatten(this.resolveItems(ids));
             };
 
@@ -775,6 +784,7 @@ define('io.ox/contacts/addressbook/popup', [
                 return _(list)
                     .chain()
                     .filter(function (item) {
+                        if (self.omittedContacts !== undefined && !item.list && !(item.mail || item.email)) self.omittedContacts.push(item);
                         // only distribution lists and items with a mail address
                         return (item.list || item.label) || (item.mail || item.email);
                     })
@@ -787,7 +797,9 @@ define('io.ox/contacts/addressbook/popup', [
                             id: item.id,
                             folder_id: item.folder_id,
                             email: mail,
-                            field: item.field
+                            // mail_field is used in distribution lists
+                            field: item.mail_field ? 'email' + item.mail_field : item.field,
+                            user_id: item.user_id
                         };
                     }, this)
                     .flatten()
@@ -805,7 +817,7 @@ define('io.ox/contacts/addressbook/popup', [
             'select': function () {
                 var ids = this.store.getIds();
                 if (ox.debug) console.log('select', ids, this.flattenItems(ids));
-                if (_.isFunction(callback)) callback(this.flattenItems(ids));
+                if (_.isFunction(callback)) callback(this.flattenItems(ids, { yellOmitted: true }));
             }
         })
         .addCancelButton()

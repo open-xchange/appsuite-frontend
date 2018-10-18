@@ -195,7 +195,7 @@ define('io.ox/participants/add', [
             if (!_.isEmpty(distlists)) {
                 _.each(distlists, function (item) {
                     self.collection.resolveDistList(item.attributes.distribution_list).done(function (list) {
-                        _.each(list, function (item) {
+                        _.each(contactsUtil.validateDistributionList(list), function (item) {
                             // hint: async custom wrapper
                             self.collection.add(calendarUtil.createAttendee(item));
                         });
