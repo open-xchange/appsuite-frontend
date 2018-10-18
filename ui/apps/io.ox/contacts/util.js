@@ -61,9 +61,19 @@ define('io.ox/contacts/util', [
         if (htmlOutput === true) {
             copy = {};
             _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                if (!$.trim(obj[id])) return;
+                var text = $.trim(obj[id]);
+                if (!text) {
+                    // yomi as fallback
+                    if (id === 'last_name' && $.trim(obj.yomiLastName)) {
+                        text = $.trim(obj.yomiLastName);
+                    } else if (id === 'first_name' && $.trim(obj.yomiFirstName)) {
+                        text = $.trim(obj.yomiFirstName);
+                    } else {
+                        return;
+                    }
+                }
                 var tagName = id === 'last_name' ? 'strong' : 'span';
-                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
+                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(text) + '</' + tagName + '>';
             });
         }
         return isMail ? that.getMailFullNameFormat(obj) : that.getFullNameFormat(copy);
@@ -371,7 +381,33 @@ define('io.ox/contacts/util', [
                 if (!initials) return 'gray';
                 return colors[initials[0].charCodeAt() % modulo];
             };
-        }())
+        }()),
+
+        // checks if every member of the distributionlist has a valid mail address and triggers a yell if that's not the case
+        validateDistributionList: function (dist) {
+            // array of objects
+            // array of contact models
+            if (!dist || !_.isArray(dist) || !dist.length) return;
+            var omittedContacts = [];
+
+            dist = _(dist).filter(function (member) {
+                member = member.attributes || member;
+                var mail = member.mail || member[member.field];
+                if (!mail) omittedContacts.push(member);
+                return !!member.mail;
+            });
+            if (omittedContacts.length) {
+                require(['io.ox/core/yell'], function (yell) {
+                    if (omittedContacts.length === 1) {
+                        //#. '%1$s contact's display name
+                        yell('warning', gt('%1$s could not be added as the contact has no valid email field.', omittedContacts[0].display_name));
+                        return;
+                    }
+                    yell('warning', gt('Some contacts could not be added as they have no valid email field.'));
+                });
+            }
+            return dist;
+        }
     };
 
     return that;

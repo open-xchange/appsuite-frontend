@@ -411,7 +411,6 @@ define('io.ox/mail/util', [
                 subject = subject.replace(/\[[^\[]*\]\s*/g, '');
             }
 
-            console.log('getSubject', keepPrefix, subject);
             return keepPrefix ? subject : subject.replace(/^((re|ref|aw|fwd|wg|rv|tr):\s?)+/i, '');
         },
 

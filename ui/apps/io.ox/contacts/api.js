@@ -76,7 +76,7 @@ define('io.ox/contacts/api', [
             all: {
                 action: 'all',
                 folder: '6',
-                columns: '20,1,101,607',
+                columns:  ox.language === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
                 sort: '607',
@@ -87,7 +87,7 @@ define('io.ox/contacts/api', [
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -95,7 +95,7 @@ define('io.ox/contacts/api', [
             },
             search: {
                 action: 'search',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
                 // magic sort field: ignores asc/desc
                 sort: '609',
@@ -175,7 +175,7 @@ define('io.ox/contacts/api', [
             },
             advancedsearch: {
                 action: 'advancedSearch',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617',
                 extendColumns: 'io.ox/contacts/api/list',
                 // magic sort field: ignores asc/desc
                 sort: '607',
@@ -231,7 +231,20 @@ define('io.ox/contacts/api', [
             all: function (response) {
                 // japanese sorting
                 if (ox.language === 'ja_JP') {
-                    response.sort(collation.sorter);
+
+                    // add som additional info for sorting
+                    _(response).each(function (obj) {
+                        obj.email = obj.email1 || obj.email2 || obj.email3 || '';
+                        obj.sort_name_without_mail = obj.sort_name;
+                    });
+
+                    response.sort(collation.sorterWithMail);
+
+                    // remove info
+                    _(response).each(function (obj) {
+                        _(obj).omit('email', 'sort_name_without_mail');
+                    });
+
                     //console.debug('Japanese order', _(response).pluck('sort_name'));
                     return response;
                 }

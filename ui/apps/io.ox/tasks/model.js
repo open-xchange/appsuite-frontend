@@ -50,7 +50,7 @@ define('io.ox/tasks/model', [
                     var self = this,
                         resetListUpdate = false,
                         changeParticipantsUpdate = false;
-                    this._participants = new pModel.Participants(this.get('participants'), { silent: false });
+                    this._participants = new pModel.Participants(this.get('participants'), { silent: false, needsMail: true });
 
                     this._participants.on('add remove reset', function () {
                         if (changeParticipantsUpdate) {

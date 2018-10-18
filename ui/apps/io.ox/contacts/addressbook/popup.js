@@ -204,7 +204,7 @@ define('io.ox/contacts/addressbook/popup', [
 
         function processAddresses(list, result, hash, opt) {
 
-            list.forEach(function (item) {
+            list.forEach(function (item, rank) {
                 // remove quotes from display name (common in collected addresses)
                 item.display_name = getDisplayName(item.display_name);
                 // get sort name
@@ -226,7 +226,7 @@ define('io.ox/contacts/addressbook/popup', [
                         .join(', ');
                     // overwrite last name to get a nicer full name
                     item.last_name = item.display_name;
-                    var obj = process(item, sort_name, address, 0);
+                    var obj = process(item, sort_name, address, 0, rank);
                     if (obj) {
                         obj.full_name_html += ' <span class="gray">' + gt('Distribution list') + '</span>';
                         result.push((hash[obj.cid] = obj));
@@ -234,8 +234,8 @@ define('io.ox/contacts/addressbook/popup', [
                 } else {
                     if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
-                    addresses.forEach(function (address, i) {
-                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
+                    addresses.forEach(function (field, i) {
+                        var obj = process(item, sort_name, (item[field] || '').toLowerCase(), rank, i, field);
                         if (obj) result.push((hash[obj.cid] = obj));
                     });
                 }
@@ -243,7 +243,7 @@ define('io.ox/contacts/addressbook/popup', [
             return { items: result, hash: hash, index: buildIndex(result) };
         }
 
-        function process(item, sort_name, address, i) {
+        function process(item, sort_name, address, rank, i, field) {
             // skip if empty
             address = $.trim(address);
             if (!address) return;
@@ -263,6 +263,7 @@ define('io.ox/contacts/addressbook/popup', [
                 department: department,
                 display_name: item.display_name,
                 email: address,
+                field: field,
                 first_name: item.first_name,
                 folder_id: folder_id,
                 full_name: full_name,
@@ -701,6 +702,7 @@ define('io.ox/contacts/addressbook/popup', [
             }
         })
         .build(function () {
+            var self = this;
 
             // use a template for maximum performance
             // yep, no extensions here; too slow for find-as-you-type
@@ -812,7 +814,15 @@ define('io.ox/contacts/addressbook/popup', [
                     .value();
             };
 
-            this.flattenItems = function (ids) {
+            this.flattenItems = function (ids, options) {
+                options = options || {};
+                if (options.yellOmitted) {
+                    self.omittedContacts = [];
+                    var items = flatten(this.resolveItems(ids));
+                    util.validateDistributionList(self.omittedContacts);
+                    delete self.omittedContacts;
+                    return items;
+                }
                 return flatten(this.resolveItems(ids));
             };
 
@@ -820,6 +830,7 @@ define('io.ox/contacts/addressbook/popup', [
                 return _(list)
                     .chain()
                     .filter(function (item) {
+                        if (self.omittedContacts !== undefined && !item.list && !(item.mail || item.email)) self.omittedContacts.push(item);
                         // only distribution lists and items with a mail address
                         return (item.list || item.label) || (item.mail || item.email);
                     })
@@ -831,7 +842,8 @@ define('io.ox/contacts/addressbook/popup', [
                             display_name: name,
                             id: item.id,
                             folder_id: item.folder_id,
-                            email: mail
+                            email: mail,
+                            field: item.field
                         };
                     }, this)
                     .flatten()
@@ -849,7 +861,7 @@ define('io.ox/contacts/addressbook/popup', [
             'select': function () {
                 var ids = this.store.getIds();
                 if (ox.debug) console.log('select', ids, this.flattenItems(ids));
-                if (_.isFunction(callback)) callback(this.flattenItems(ids));
+                if (_.isFunction(callback)) callback(this.flattenItems(ids, { yellOmitted: true }));
             }
         })
         .addCancelButton()
