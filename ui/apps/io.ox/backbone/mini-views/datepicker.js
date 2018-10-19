@@ -138,7 +138,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             if (this.mobileMode) {
                 self.nodes.dayField.attr('type', self.isFullTime() ? 'date' : 'datetime-local');
-                if (self.chronos) self.nodes.dayField.attr('required', true);
+                if (self.chronos) self.nodes.dayField.attr({ required: 'required', defaultValue: '' });
                 def.resolve();
             } else {
                 require(['io.ox/backbone/views/datepicker', 'io.ox/backbone/mini-views/combobox', 'io.ox/core/tk/datepicker'], function (Picker, Combobox) {
@@ -176,7 +176,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             def.then(function () {
                 // insert initial values
                 self.updateView();
-                self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+                self.nodes.dayField.on('input', _.bind(self.updateModel, self));
             });
 
             return this;
@@ -206,13 +206,18 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.nodes.dayField.val(this.getDateStr(timestamp));
 
             // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
-            if (!this.mobileMode) this.nodes.dayField.trigger('change');
-            // TODO does it make sense to update the model here?!
-            this.updateModel();
+            if (!this.mobileMode) this.nodes.dayField.trigger('input');
         },
 
         updateModel: function () {
             var time = this.getTimestamp();
+            // events must have a time, set to previous time if user tries to set to null
+            // note: requires attribute does not work in all browsers, that's why we use this solution
+            if (this.chronos && (time === null || time === undefined)) {
+                this.updateView();
+                return;
+            }
+
             if (this.chronos || _.isNull(time) || _.isNumber(time)) {
                 var params = { validate: true, fulltime: this.isFullTime() };
                 this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
