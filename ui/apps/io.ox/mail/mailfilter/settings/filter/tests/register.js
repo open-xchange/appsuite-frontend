@@ -265,7 +265,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             ),
                             util.drawDeleteButton('test')
                         )
-                    ).find('legend').addClass('sr-only');
+                    ).find('[data-test-id="' + conditionKey + '"] label').addClass('sr-only');
                     if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) this.find('[data-test-id="' + conditionKey + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
 
                     util.handleUnsupportedComparisonValues({
@@ -393,7 +393,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             ),
                             util.drawDeleteButton('test')
                         )
-                    ).find('legend').addClass('sr-only');
+                    ).find('[data-test-id="' + conditionKey + '"] label').addClass('sr-only');
                     if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) this.find('[data-test-id="' + conditionKey + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
 
                     util.handleUnsupportedComparisonValues({
