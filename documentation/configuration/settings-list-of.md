@@ -611,6 +611,30 @@ settings!io.ox/mail
 **compose/simpleLineBreaks**
 > EXPERIMENTAL WORKAROUND: use simple line breaks
 
+**imageResize/enabled**
+> feature toggle to enable resizing of images
+
+**imageResize/small**
+> size of the target image (longest edge) for a small image as integer (default 320)
+
+**imageResize/medium**
+> size of the target image (longest edge) for a medium image as integer (default 640)
+
+**imageResize/large**
+> size of the target image (longest edge) for a large image as integer (default 1024)
+
+**imageResize/quality**
+> quality for the compression while resizing as float (default 0.75)
+
+**imageResize/imageSizeThreshold**
+> threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default 1024)
+
+**imageResize/fileSizeThreshold**
+> threshold for the size in byte of the image after which a resize is recommended as integer (default 1048576)
+
+**imageResize/fileSizeMax**
+> maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default 10485760)
+
 ## Compose: Attachments and Drive Mail
 
 [middleware configuration](https://documentation.open-xchange.com/components/middleware/config{{ site.baseurl }}/index.html#mode=search&term=compose.share)
