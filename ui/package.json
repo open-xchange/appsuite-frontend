@@ -73,7 +73,6 @@
     "jquery": "3.2.1",
     "jquery-touch-events": "git://github.com/benmajor/jQuery-Touch-Events.git#1.0.9",
     "marked": "0.3.6",
-    "mobiscroll": "git://github.com/acidb/mobiscroll.git#v2.17.3",
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",
     "pdfjs-dist": "1.9.426",

@@ -167,7 +167,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'col-xs-6 collapsible',
+                    className: 'col-sm-6 col-xs-12 collapsible',
                     attribute: 'start_time',
                     label: gt('Start date'),
                     clearButton: true,
@@ -201,7 +201,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'col-xs-6 collapsible',
+                    className: 'col-sm-6 col-xs-12 collapsible',
                     attribute: 'end_time',
                     label: gt('Due date'),
                     clearButton: true,

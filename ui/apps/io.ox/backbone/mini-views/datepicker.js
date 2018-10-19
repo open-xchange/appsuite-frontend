@@ -137,22 +137,9 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.updateView();
 
             if (this.mobileMode) {
-                require(['io.ox/core/tk/mobiscroll'], function (mobileSettings) {
-
-                    //don't overwrite default settings (see Bug 38847)
-                    self.mobileSettings = _.copy(mobileSettings);
-
-                    if (self.options.clearButton) {
-                        self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
-                    }
-                    if (!self.isFullTime()) {
-                        self.mobileSettings.preset = 'datetime';
-                    }
-
-                    // initialize mobiscroll plugin
-                    self.nodes.dayField.mobiscroll(self.mobileSettings);
-                    def.resolve();
-                });
+                self.nodes.dayField.attr('type', self.isFullTime() ? 'date' : 'datetime-local');
+                if (self.chronos) self.nodes.dayField.attr({ required: 'required', defaultValue: '' });
+                def.resolve();
             } else {
                 require(['io.ox/backbone/views/datepicker', 'io.ox/backbone/mini-views/combobox', 'io.ox/core/tk/datepicker'], function (Picker, Combobox) {
 
@@ -189,7 +176,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             def.then(function () {
                 // insert initial values
                 self.updateView();
-                self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+                self.nodes.dayField.on('input', _.bind(self.updateModel, self));
             });
 
             return this;
@@ -209,18 +196,28 @@ define('io.ox/backbone/mini-views/datepicker', [
             } else {
                 timestamp = this.model.getMoment(this.attribute);
             }
-            this.nodes.dayField.val(this.getDateStr(timestamp));
+
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
                 this.nodes.timezoneField.text(timestamp.zoneAbbr());
             }
+
+            this.toggleTimeInput(!this.isFullTime());
+            this.nodes.dayField.val(this.getDateStr(timestamp));
+
             // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
-            if (!this.mobileMode) this.nodes.dayField.trigger('change');
-            this.updateModel();
+            if (!this.mobileMode) this.nodes.dayField.trigger('input');
         },
 
         updateModel: function () {
             var time = this.getTimestamp();
+            // events must have a time, set to previous time if user tries to set to null
+            // note: requires attribute does not work in all browsers, that's why we use this solution
+            if (this.chronos && (time === null || time === undefined)) {
+                this.updateView();
+                return;
+            }
+
             if (this.chronos || _.isNull(time) || _.isNumber(time)) {
                 var params = { validate: true, fulltime: this.isFullTime() };
                 this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
@@ -240,8 +237,12 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         getDateStr: function (val) {
-            if (!this.isFullTime() && this.mobileMode) {
-                return val.format('l') + ' ' + val.format('LT');
+
+            if (val === undefined || val === null) return '';
+
+            if (this.mobileMode) {
+                if (this.isFullTime()) return val.format('YYYY-MM-DD');
+                return val.format('YYYY-MM-DDTHH:mm');
             }
             return val.format('l');
         },
@@ -253,15 +254,16 @@ define('io.ox/backbone/mini-views/datepicker', [
             // empty?
             if (dateStr === '') return null;
 
-            // change format string for datetime if timefield is present
-            if (!this.isFullTime()) {
+            if (this.mobileMode) {
+                if (this.isFullTime()) formatStr = 'YYYY-MM-DD';
+                formatStr = 'YYYY-MM-DDTHH:mm';
+            } else if (!this.isFullTime()) {
+                // change format string for datetime if timefield is present
                 formatStr += ' ' + 'LT';
-                if (!this.mobileMode) {
-                    if (this.nodes.timeField && this.nodes.timeField.val() !== '') {
-                        dateStr += ' ' + this.nodes.timeField.val();
-                    } else {
-                        formatStr = 'l';
-                    }
+                if (this.nodes.timeField && this.nodes.timeField.val() !== '') {
+                    dateStr += ' ' + this.nodes.timeField.val();
+                } else {
+                    formatStr = 'l';
                 }
             }
 
@@ -302,11 +304,12 @@ define('io.ox/backbone/mini-views/datepicker', [
         // toggle time input fields
         toggleTimeInput: function (show) {
             if (this.mobileMode) {
-                // mobiscroll may not be initialized yet, due to async loading.
-                if (this.nodes.dayField.mobiscroll) {
-                    this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
-                }
+                // prevent flickering
+                if ((show && this.nodes.dayField.attr('type') === 'datetime-local') || (!show && this.nodes.dayField.attr('type') === 'date')) return;
+                this.nodes.dayField.attr('type', show ? 'datetime-local' : 'date');
             } else {
+                // prevent flickering
+                if ((show && !this.$el.hasClass('dateonly')) || (!show && this.$el.hasClass('dateonly'))) return;
                 this.$el.toggleClass('dateonly', !show);
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');
             }
