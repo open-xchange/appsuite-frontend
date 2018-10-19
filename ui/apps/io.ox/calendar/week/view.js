@@ -331,7 +331,7 @@ define('io.ox/calendar/week/view', [
         },
 
         renderAppointment: function (model) {
-            var node = $('<div class="appointment">')
+            var node = $('<button type="button" class="appointment">')
                 .attr({
                     'data-cid': model.cid,
                     'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),

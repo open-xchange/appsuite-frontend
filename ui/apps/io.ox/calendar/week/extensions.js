@@ -27,8 +27,8 @@ define('io.ox/calendar/week/extensions', [
             if (!this.hasClass('modify')) return;
             var startDate = baton.view.model.get('startDate'),
                 endDate = startDate.clone().add(baton.view.numColumns, 'days');
-            if (!model.getMoment('startDate').isSame(startDate, 'day')) this.append($('<div class="resizable-handle resizable-w">'));
-            if (!model.getMoment('endDate').isSame(endDate, 'day')) this.append($('<div class="resizable-handle resizable-e">'));
+            if (!model.getMoment('startDate').isSame(startDate, 'day')) this.append($('<div class="resizable-handle resizable-w" aria-hidden="true">'));
+            if (!model.getMoment('endDate').isSame(endDate, 'day')) this.append($('<div class="resizable-handle resizable-e" aria-hidden="true">'));
         }
     });
 
@@ -39,8 +39,8 @@ define('io.ox/calendar/week/extensions', [
             var model = baton.model;
             if (util.isAllday(model)) return;
             if (!this.hasClass('modify')) return;
-            if (model.getMoment('startDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-n">'));
-            if (model.getMoment('endDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-s">'));
+            if (model.getMoment('startDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-n" aria-hidden="true">'));
+            if (model.getMoment('endDate').local().isSame(baton.date, 'day')) this.append($('<div class="resizable-handle resizable-s" aria-hidden="true">'));
         }
     });
 

@@ -44,7 +44,9 @@ define('io.ox/calendar/extensions', [
                 var model = baton.model,
                     folder = folderAPI.pool.getModel(model.get('folder')).toJSON();
 
-                var folderId = model.get('folder');
+                var folderId = model.get('folder'),
+                    title = _([model.get('summary'), model.get('location')]).compact().join(', ');
+
                 if (String(folder.id) === String(folderId)) addColors(this, model);
                 else if (folderId !== undefined) folderAPI.get(folderId).done(addColors.bind(this, this, model));
 
@@ -61,9 +63,9 @@ define('io.ox/calendar/extensions', [
                 }
 
                 this
-                    .attr('tabindex', 0)
+                    .attr('aria-label', title)
                     .append(
-                        $('<div class="appointment-content">').append(
+                        $('<div class="appointment-content" aria-hidden="true">').attr('title', title).append(
                             $('<div class="title-container">').append(
                                 util.returnIconsByType(model).type,
                                 model.get('summary') ? $('<div class="title">').text(gt.format('%1$s', model.get('summary') || '\u00A0')) : ''
