@@ -943,8 +943,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
                     var inputId = _.uniqueId('size_'),
                         sizeValues = {
-                            'over': gt('Is bigger than'),
-                            'under': gt('Is smaller than')
+                            'over': gt('Is bigger than (Size: B/KB/MB/GB)'),
+                            'under': gt('Is smaller than (Size: B/KB/MB/GB)')
                         }, li;
 
                     this.append(
