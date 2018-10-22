@@ -176,7 +176,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             def.then(function () {
                 // insert initial values
                 self.updateView();
-                self.nodes.dayField.on('input', _.bind(self.updateModel, self));
+                self.nodes.dayField.on(self.mobileMode ? 'input' : 'change', _.bind(self.updateModel, self));
             });
 
             return this;
@@ -206,7 +206,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.nodes.dayField.val(this.getDateStr(timestamp));
 
             // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
-            if (!this.mobileMode) this.nodes.dayField.trigger('input');
+            if (!this.mobileMode) this.nodes.dayField.trigger('change');
         },
 
         updateModel: function () {
