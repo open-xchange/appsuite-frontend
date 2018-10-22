@@ -267,33 +267,6 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            mobiscroll: {
-                files: [
-                    {
-                        src: [
-                            'node_modules/mobiscroll/js/mobiscroll.core.js',
-                            'node_modules/mobiscroll/js/mobiscroll.util.datetime.js',
-                            'node_modules/mobiscroll/js/mobiscroll.frame.js',
-                            'node_modules/mobiscroll/js/mobiscroll.scroller.js',
-                            'node_modules/mobiscroll/js/mobiscroll.datetimebase.js',
-                            'node_modules/mobiscroll/js/mobiscroll.datetime.js',
-                            'node_modules/mobiscroll/js/mobiscroll.frame.ios.js'
-                        ],
-                        dest: 'build/static/3rd.party/mobiscroll.js',
-                        nonull: true
-                    },
-                    {
-                        src: [
-                            'node_modules/mobiscroll/css/mobiscroll.frame.css',
-                            'node_modules/mobiscroll/css/mobiscroll.frame.ios.css',
-                            'node_modules/mobiscroll/css/mobiscroll.scroller.css',
-                            'node_modules/mobiscroll/css/mobiscroll.scroller.ios.css'
-                        ],
-                        dest: 'build/apps/3rd.party/mobiscroll.css',
-                        nonull: true
-                    }
-                ]
-            },
             tinymce: {
                 files: [
                     {

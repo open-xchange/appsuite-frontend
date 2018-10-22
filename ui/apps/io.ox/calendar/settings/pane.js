@@ -246,25 +246,6 @@ define('io.ox/calendar/settings/pane', [
                     )
                 );
             }
-        },
-        //
-        // sync via push
-        //
-        {
-            id: 'push',
-            index: INDEX += 100,
-            render: function () {
-                if (!(capabilities.has('websocket')) || !Modernizr.websockets) return;
-
-                this.$el.append(
-                    util.fieldset(gt('Calendar updates'),
-                        $('<div class="form-group">').append(
-                            //#. used in settings panel to enable calendar push updates
-                            util.checkbox('enablePushUpdates', gt('Enable live updates'), settings)
-                        )
-                    )
-                );
-            }
         }
     );
 });

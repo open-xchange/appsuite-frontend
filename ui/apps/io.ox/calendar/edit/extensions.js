@@ -259,7 +259,7 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
-                className: 'col-xs-6',
+                className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'startDate',
                 label: gt('Starts on'),
@@ -269,8 +269,6 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('Start time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:startDate', function (model) {
-                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -295,7 +293,7 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
-                className: 'col-xs-6',
+                className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'endDate',
                 label: gt('Ends on'),
@@ -305,8 +303,6 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('End time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:endDate', function (model) {
-                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -753,7 +749,7 @@ define('io.ox/calendar/edit/extensions', [
                     allowUndefined: true
                 });
             //#. showed inside a color picker. Used if an appointment should not have a custom color
-            dropdown.option('color', undefined, gt('Use calendar color'), { radio: true });
+            dropdown.option('color', '', gt('Use calendar color'), { radio: true });
             dropdown.$ul.find('[data-name="color"]').addClass('folder-default-color');
             menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append($('<div class="color-picker-scroll">').append(picker.render().$el)));
 

@@ -857,7 +857,6 @@ define('io.ox/core/folder/api', [
     }
 
     function flat(options) {
-
         options = _.extend({ module: undefined, cache: true }, options);
         if (options.module === 'calendar') options.module = 'event';
 
@@ -880,6 +879,8 @@ define('io.ox/core/folder/api', [
             });
             return $.when(cached);
         }
+
+        api.trigger('before:flat:' + options.module);
 
         return http.GET({
             module: 'folders',
@@ -954,6 +955,8 @@ define('io.ox/core/folder/api', [
             collectionId = getFlatCollectionId(module, 'sharing');
             sharing = processListResponse(collectionId, sharing);
             pool.addCollection(collectionId, sections.sharing = sharing, { reset: true });
+
+            api.trigger('after:flat:' + options.module);
             // done
             return sections;
         });
@@ -993,7 +996,16 @@ define('io.ox/core/folder/api', [
                     return list(model.get('folder_id'), { cache: false })
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();
-                                if ('title' in changes) api.trigger('after:rename', id, model.toJSON());
+
+                                if ('title' in changes) {
+
+                                    // it's possible that external storage adapter rename a folder again after a user-rename (e.g. #56749), depending on the result update drive icon/list view
+                                    var renamedByResponse = _.propertyOf(changes)('title') !== model.get('title');
+                                    if (renamedByResponse) api.trigger('rename', id, model.toJSON());
+
+                                    api.trigger('after:rename', id, model.toJSON());
+                                }
+
                                 return newId;
                             });
                 }

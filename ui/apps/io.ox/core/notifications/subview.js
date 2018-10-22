@@ -366,6 +366,7 @@ define('io.ox/core/notifications/subview', [
                 }
                 return true;
             }
+            return false;
         },
         addNotifications: function (items, silent) {
 
@@ -404,7 +405,7 @@ define('io.ox/core/notifications/subview', [
 
                 _(items).each(function (item) {
                     if (item.get) item = item.attributes;
-                    self.$el.find('[data-cid="' + _.cid(item) + '"]').remove();
+                    self.$el.find('[data-cid="' + _.cid(item) + '"],[model-cid="' + _.cid(item) + '"]').remove();
                 });
 
                 if (this.collection.size() === 0) {

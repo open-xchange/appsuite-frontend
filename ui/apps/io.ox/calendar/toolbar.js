@@ -143,14 +143,14 @@ define('io.ox/calendar/toolbar', [
     }
 
     function updatePrintLink(baton) {
-        if (baton.app.getWindow().currentPerspective !== 'list') return;
+        if (baton.app.perspective.getName() !== 'list') return;
         var link = this.$el.find('[data-name="print"]');
         link.toggleClass('disabled', baton.data && _.isEmpty(baton.data));
     }
 
     function print(baton, e) {
         e.preventDefault();
-        if (baton.app.getWindow().currentPerspective === 'list') {
+        if (baton.app.perspective.getName() === 'list') {
             if (!baton.data || _.isEmpty(baton.data)) return;
             actions.invoke('io.ox/calendar/detail/actions/print-appointment', null, baton);
         } else {
@@ -244,8 +244,8 @@ define('io.ox/calendar/toolbar', [
     });
 
     function prepareUpdateToolbar(app) {
-        var perspective = app.getWindow().getPerspective(),
-            list = perspective && perspective.name === 'list' ? app.listView.selection.get() : {};
+        var perspective = app.perspective,
+            list = perspective && perspective.getName() === 'list' ? app.listView.selection.get() : {};
         list = _(list).map(function (item) {
             if (_.isString(item)) return util.cid(item);
             return item;

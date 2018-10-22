@@ -18,7 +18,7 @@ define('io.ox/core/main/apps', [
         icon: icons['io.ox/mail']
     });
     ui.createApp({
-        name: 'io.ox/mail/datail',
+        name: 'io.ox/mail/detail',
         requires: 'webmail',
         refreshable: true
     });

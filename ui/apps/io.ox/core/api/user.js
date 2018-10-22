@@ -156,7 +156,7 @@ define('io.ox/core/api/user', [
                         api.trigger('update', data);
                         api.trigger('refresh.list');
                         // reset image?
-                        if (o.data.image1 === '') {
+                        if (o.data.image1 === null) {
                             // to clear picture halo's cache
                             contactsApi.trigger('update:image', data);
                             api.trigger('reset:image reset:image:' + o.id, { id: o.id });

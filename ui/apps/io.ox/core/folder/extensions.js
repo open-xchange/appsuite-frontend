@@ -297,6 +297,13 @@ define('io.ox/core/folder/extensions', [
                 tree: tree
             });
 
+            account.on('update', function (e, accountData) {
+                // only changes to the primary account are important
+                if (accountData.id !== 0) return;
+                node.options.title = extensions.getLocalFolderName();
+                node.renderFolderLabel();
+            });
+
             // open "My folders" whenever a folder is added to INBOX/root
             api.on('create:' + defaultId, function () {
                 node.toggle(true);

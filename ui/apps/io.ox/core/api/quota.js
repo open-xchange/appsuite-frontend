@@ -79,9 +79,10 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
                     id: folder.id,
                     type: 'filestorage'
                 },
+                appendColumns: false,
                 data: {
                     files: files.map(function (file) {
-                        return { size: file.size, name: file.name, mimetype: file.type };
+                        return { size: file.size, name: file.name };
                     })
                 }
             }).then(function (res) {

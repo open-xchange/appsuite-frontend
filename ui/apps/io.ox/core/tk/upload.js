@@ -393,38 +393,34 @@ define('io.ox/core/tk/upload', [
             });
         };
 
+        // returned deferred resolves or get's rejected with a list of error messages
+        // TODO: unit test
         this.validateFiles = function (newFiles, options) {
-            if (!options.folder || delegate.type === 'importEML') return $.when({});
+            if (!options.folder || delegate.type === 'importEML') return $.when([]);
             return folderAPI.get(options.folder).then(function (folder) {
-                if (folderAPI.is('infostore', folder)) {
-                    return require(['io.ox/core/api/quota']).then(function (quotaAPI) {
-                        return quotaAPI.checkQuota(folder, newFiles);
-                    });
-                }
-
-                // no quota
-                return $.when({});
+                // no quota check
+                if (!folderAPI.is('infostore', folder)) return $.when([]);
+                // quota check
+                return require(['io.ox/core/api/quota']).then(function (quotaAPI) {
+                    return quotaAPI.checkQuota(folder, newFiles);
+                });
             }).then(function (errors) {
-                if (errors.length === 0) return newFiles;
-
-                return require([
-                    'io.ox/core/tk/upload-problems'
-                ]).then(function (Problems) {
+                if (errors.length === 0) return [];
+                return require(['io.ox/core/tk/upload-problems']).then(function (Problems) {
+                    // show dialog and return rejected deferred with error list when dialog get's closed
                     return Problems.report(newFiles, errors);
                 });
             }, function (err) {
                 notifications.yell(err);
-                throw err;
+                return $.Deferred().reject([err]);
             });
         };
 
         this.offer = function (file, options) {
             var self = this,
                 newFiles = [].concat(file);
-            this.validateFiles(newFiles, options).then(function (validFiles) {
-                validFiles = validFiles || newFiles;
-                if (validFiles.length === 0) return;
-                _(validFiles).each(function (file) {
+            this.validateFiles(newFiles, options).then(function () {
+                _(newFiles).each(function (file) {
                     files.push({ file: file, options: options });
                 });
                 self.queueChanged();

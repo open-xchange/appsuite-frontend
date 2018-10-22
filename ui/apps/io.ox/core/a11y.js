@@ -271,7 +271,7 @@ define('io.ox/core/a11y', [], function () {
             catchLast = index === items.length - 1;
         // only jump in if first or last item; radio groups are a problem otherwise
         if (!catchFirst && !catchLast) return;
-        // e.preventDefault();
+        e.preventDefault();
         index += (e.shiftKey) ? -1 : 1;
         index = (index + items.length) % items.length;
         items.eq(index).focus();

@@ -72,7 +72,7 @@ define('io.ox/calendar/actions/create', [
         .build(function () {
             this.getContentNode().append(
                 // .# Variable will be replaced with the name of the public calendar
-                $('<p>').text(gt('The selected calendar "%1$s" is public. Dou you really want to create an appointment in this calendar?', folderTitle))
+                $('<p>').text(gt('The selected calendar "%1$s" is public. Do you really want to create an appointment in this calendar?', folderTitle))
             );
         })
         .addPrimaryButton('create', gt('Create in public calendar'))
@@ -96,10 +96,10 @@ define('io.ox/calendar/actions/create', [
             _.extend(params, obj);
         } else {
             var refDate = moment().startOf('hour').add(1, 'hours'),
-                perspective = baton.app.getWindow().getPerspective(),
+                perspective = baton.app.perspective,
                 now = _.now(), range;
 
-            switch (perspective.name) {
+            switch (perspective.getName()) {
                 case 'week':
                     range = calendarUtil.getCurrentRangeOptions();
                     break;

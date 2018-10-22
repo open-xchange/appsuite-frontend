@@ -115,12 +115,24 @@
           flex-direction: @direction;
 }
 
+.align-items(@align: stretch) {
+    -webkit-align-items: @align;
+    -ms-align-items: @align;
+    align-items: @align;
+}
+
 .align-self(@align: auto) {
     -webkit-align-self: @align;
     -moz-align-self: @align;
     -ms-align-self: @align;
     align-self: @align;
 }
+
+.justify-content(@justify: flex-start) {
+    -webkit-justify-content: @justify;
+    -ms-justify-content: @justify;
+    justify-content: @justify;
+  }
 
 .flex-wrap(@wrap: nowrap) {
     -webkit-flex-wrap: @wrap;

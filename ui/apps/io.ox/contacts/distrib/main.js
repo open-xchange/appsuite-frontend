@@ -40,7 +40,7 @@ define('io.ox/contacts/distrib/main', [
         });
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.contacts.distributionlist.html';
+            return 'ox.appsuite.user.sect.contacts.gui.createlist.html';
         };
 
         app.create = function (folderId, initdata) {

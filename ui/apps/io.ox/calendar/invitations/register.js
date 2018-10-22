@@ -98,6 +98,7 @@ define('io.ox/calendar/invitations/register', [
             this.util = options.util;
             this.settings = options.settings;
             this.AlarmsView = options.AlarmsView;
+            this.showDeeplinks = options.showDeeplinks;
 
             if (this.AlarmsView) {
                 this.alarmsModel = new Backbone.Model(this.model.toJSON());
@@ -123,7 +124,7 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(new ext.Baton({ model: fullModel }), { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true }));
+                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
                     });
                 });
             });
@@ -863,7 +864,8 @@ define('io.ox/calendar/invitations/register', [
                         settings: calendarSettings,
                         AlarmsView: AlarmsView,
                         yell: yell,
-                        mailModel: self.model
+                        mailModel: self.model,
+                        showDeeplinks: true
                     });
 
                     self.$el.append(

@@ -146,6 +146,7 @@ msgstr[1] "%1$d teadet."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
+#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -1358,12 +1359,6 @@ msgid "Appointments"
 msgstr "Kohtumised"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Kohtumised jagatud kalendrites"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Kohtumised jagatud kalendrites"
 
@@ -1754,7 +1749,6 @@ msgstr ""
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1793,11 +1787,6 @@ msgstr "Kalendrikuu vaade"
 msgid "Calendar name"
 msgstr "Kalendri vaade"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#, fuzzy
-msgid "Calendar updates"
-msgstr "Kalendri vaade"
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Kalendri vaade"
@@ -1807,6 +1796,10 @@ msgstr "Kalendri vaade"
 #, fuzzy
 msgid "Calendar/Addressbook"
 msgstr "Jagatud aadressiraamatud"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Calendar:"
+msgstr "Kalender:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -2180,7 +2173,6 @@ msgstr "Sulge vaatur"
 msgid "Collapse form"
 msgstr "Kitsenda vormi"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2601,12 +2593,6 @@ msgstr "Loo filtreerimisreegel"
 msgid "Create folder"
 msgstr "Lisa uus kaust"
 
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Add as public calendar"
-msgid "Create in public calendar"
-msgstr "Lisa avaliku kalendrina"
-
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Loo loend"
@@ -2615,6 +2601,10 @@ msgstr "Loo loend"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Looge uus %1$s konto"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Create new calendar"
+msgstr ""
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -3848,11 +3838,6 @@ msgstr "Luba %1$s"
 msgid "Enable Links"
 msgstr "Luba %1$s"
 
-#. used in settings panel to enable calendar push updates
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Enable live updates"
-msgstr ""
-
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
 msgstr ""
@@ -4870,7 +4855,6 @@ msgstr "Abi"
 msgid "Hidden address books"
 msgstr "Peidetud aadressiraamatud"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Peidetud kalendrid"
@@ -5084,18 +5068,6 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "Foto 1"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Images"
-msgid "Image size"
-msgstr "Pildid"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "Images"
-msgid "Image size:"
-msgstr "Pildid"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5437,16 +5409,6 @@ msgstr "Keelekohased vaikeseaded"
 msgid "Languages"
 msgstr "Keeled"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Large"
-msgstr ""
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Progress %1$s %"
-msgid "Large (%1$s px)"
-msgstr "Edenemine %1$s %"
-
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
 msgstr "Viimased 30 päeva"
@@ -5782,12 +5744,6 @@ msgstr "E-posti meeldetuletus"
 msgid "Mail reminder for"
 msgstr "E-posti meeldetuletus teemal"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail source"
-msgid "Mail size:"
-msgstr "E-posti allikas"
-
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "E-posti allikas"
@@ -5883,9 +5839,8 @@ msgstr "Märgi leviloendina"
 msgid "Mark as done"
 msgstr "Märgi tehtuks"
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Märgi loetuks"
 
@@ -5899,9 +5854,8 @@ msgstr "Märgi rämpspostiks"
 msgid "Mark as undone"
 msgstr "Märgi mittetehtuks"
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Märgi mitteloetuks"
 
@@ -5966,7 +5920,6 @@ msgstr "Ei vasta"
 msgid "Maximize"
 msgstr "Minimeeri"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Keskmine"
@@ -5975,12 +5928,6 @@ msgstr "Keskmine"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Keskmine"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Members (%1$d)"
-msgid "Medium (%1$s px)"
-msgstr "Liikmed (%1$d)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6246,7 +6193,6 @@ msgstr ""
 msgid "My address books"
 msgstr "Minu aadressiraamatud"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Minu kalendrid"
@@ -7067,12 +7013,6 @@ msgstr "Järjekord"
 msgid "Organizer"
 msgstr "Korraldaja"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Original mail"
-msgid "Original"
-msgstr "Algne e-kiri"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Algne e-kiri"
@@ -7214,6 +7154,10 @@ msgstr "Parooli tugevus: nõrk"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Parooli tugevus: vale pikkus"
+
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Pause auto-play mode"
+msgstr "Peata automaatse esitluse režiim"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7894,7 +7838,6 @@ msgstr "Omadused"
 msgid "Public address books"
 msgstr "Avalikud aadressiraamatud"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Avalikud kalendrid"
@@ -7968,6 +7911,10 @@ msgstr "RSS-kanal"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS-kanalid"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr "Loetud"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8606,6 +8553,10 @@ msgstr "Reegli nimi"
 msgid "Run auto-play "
 msgstr "Käivita automaatse esitluse režiim"
 
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Run auto-play mode"
+msgstr "Käivita automaatse esitluse režiim"
+
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
 msgstr "SMTP"
@@ -8780,6 +8731,7 @@ msgstr ""
 msgid "Security"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8816,6 +8768,10 @@ msgstr "Vali kõik"
 #, fuzzy
 msgid "Select all messages"
 msgstr "Kustuta kõik sõnumid"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Select calendar"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -9129,7 +9085,6 @@ msgstr "Jagatud aadressiraamatud"
 msgid "Shared by other users"
 msgstr "Ühiskasutuses teiste kasutajatega"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Jagatud kalendrid"
@@ -9407,12 +9362,6 @@ msgstr "Suurus"
 msgid "Sky blue"
 msgstr "Taevasinine"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-#| msgid "Repeat slideshow"
-msgid "Slideshow"
-msgstr "Korda esitlust"
-
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Esitlus / automaatne režiim piltidele"
@@ -9420,14 +9369,6 @@ msgstr "Esitlus / automaatne režiim piltidele"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Aeglased taotlused"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Small"
-msgstr ""
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Small (%1$s px)"
-msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -10158,12 +10099,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
-"The selected calendar \"%1$s\" is public. Dou you really want to create an "
-"appointment in this calendar?"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10360,13 +10295,9 @@ msgid "This appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-#, fuzzy
-#| msgid ""
-#| "This appointment is an exception. Changing the series does not affect "
-#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the exception does not affect the "
-"series."
+"This appointment is an exception. Changing the series does not affect "
+"exceptions."
 msgstr "See kohtumine on erand sarjas. Muudatused sarjas ei muuda erandeid."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -11168,11 +11099,6 @@ msgstr "Kasutajanimi"
 msgid "User data"
 msgstr "Kasutaja andmed"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-msgid "User defined color"
-msgstr "Uus kalender"
-
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
 msgstr "Kasutaja väljad"
@@ -11893,14 +11819,6 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Your recurrence rule does not fit to your start date."
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Your recurrence rule was changed automatically."
-msgstr ""
-
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -12410,10 +12328,6 @@ msgstr "muutmisõigused puuduvad"
 msgid "no read permissions"
 msgstr "lugemisõigused puuduvad"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "none"
-msgstr "puudub"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
@@ -12863,9 +12777,6 @@ msgstr "teie platvorm"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Kalendri töönädala vaade"
-
-#~ msgid "Calendar:"
-#~ msgstr "Kalender:"
 
 #~ msgid "Cannot add participant/member with an invalid mail address: %1$s"
 #~ msgstr "Osalejat/liiget ei saa lisada, kehtetu e-posti aadress: %1$s"
@@ -13361,9 +13272,6 @@ msgstr "teie platvorm"
 #~ msgid "Pause"
 #~ msgstr "Peata"
 
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Peata automaatse esitluse režiim"
-
 #~ msgid "Pause presentation"
 #~ msgstr "Peata esitlus"
 
@@ -13422,9 +13330,6 @@ msgstr "teie platvorm"
 #~ msgid "Quit"
 #~ msgstr "Välju"
 
-#~ msgid "Read"
-#~ msgstr "Loetud"
-
 #~ msgid "Recent activities"
 #~ msgstr "Hiljutised tegevused"
 
@@ -13444,9 +13349,6 @@ msgstr "teie platvorm"
 
 #~ msgid "Restore applications"
 #~ msgstr "Taasta rakendused"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Käivita automaatse esitluse režiim"
 
 #~ msgid "SMTP Login"
 #~ msgstr "SMTP sisselogimine"
@@ -14011,6 +13913,9 @@ msgstr "teie platvorm"
 
 #~ msgid "no expiry date"
 #~ msgstr "ilma kehtivuse lõputa"
+
+#~ msgid "none"
+#~ msgstr "puudub"
 
 #~ msgid "seconds"
 #~ msgstr "sekundit"

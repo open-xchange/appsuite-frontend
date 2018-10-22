@@ -20,10 +20,10 @@ define('io.ox/calendar/actions', [
     'io.ox/core/print',
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
-    'io.ox/calendar/actions/change-confirmation',
     'io.ox/core/folder/api',
-    'io.ox/core/yell'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, yell) {
+    'io.ox/core/yell',
+    'settings!io.ox/calendar'
+], function (ext, links, api, util, actions, print, gt, capabilities, folderAPI, yell, settings) {
 
     'use strict';
 
@@ -305,17 +305,8 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'calendar-printing',
-        requires: function (e) {
-            var win = e.baton.window;
-            if (_.device('!smartphone') && win && win.getPerspective) {
-                var pers = win.getPerspective();
-                return pers && pers.print;
-            }
-            return false;
-        },
         action: function (baton) {
-            var win = baton.app.getWindow(),
-                pers = win.getPerspective();
+            var pers = baton.app.perspective;
             if (pers.print) {
                 pers.print();
             }
@@ -360,16 +351,14 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/today', {
         requires: function (baton) {
-            var p = baton.baton.app.getWindow().getPerspective();
-
-            return !!p && (p.name === 'month' || p.name === 'week');
+            var p = baton.baton.app.perspective;
+            return !!p && (p.getName() === 'month' || p.getName() === 'week');
         },
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
 
-            if (p.view && p.view.setStartDate) {
-                p.view.setStartDate();
-                p.view.trigger('onRefresh');
+            if (p.setStartDate) {
+                p.setStartDate();
             } else if (p.gotoMonth) {
                 p.gotoMonth('today');
             }
@@ -384,15 +373,15 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             require(['io.ox/calendar/freetime/main', 'io.ox/core/api/user'], function (freetime, userAPI) {
                 userAPI.get().done(function (user) {
-                    var perspective = baton.app.getWindow().getPerspective(),
+                    var perspective = baton.app.perspective,
                         now = _.now(),
-                        startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                        startDate = perspective && perspective.model && perspective.model.get('date') ? perspective.model.get('date').valueOf() : now,
                         layout = perspective ? perspective.app.props.get('layout') : '';
 
                     // see if the current day is in the displayed week.
                     if (startDate < now && layout.indexOf('week:') === 0) {
                         // calculate end of week/workweek
-                        var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                        var max = startDate + 86400000 * (layout === 'week:workweek' ? settings.get('numDaysWorkweek') : 7);
                         if (now < max) {
                             startDate = now;
                         }
@@ -405,60 +394,30 @@ define('io.ox/calendar/actions', [
     });
 
     // Actions mobile
-    new Action('io.ox/calendar/actions/monthview/showNext', {
+    new Action('io.ox/calendar/actions/showNext', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.gotoMonth('next');
+            p.setStartDate('next');
         }
     });
 
-    new Action('io.ox/calendar/actions/monthview/showPrevious', {
+    new Action('io.ox/calendar/actions/showPrevious', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.gotoMonth('prev');
+            p.setStartDate('prev');
         }
     });
 
-    new Action('io.ox/calendar/actions/dayview/showNext', {
+    new Action('io.ox/calendar/actions/showToday', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.view.setStartDate('next');
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showPrevious', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.view.setStartDate('prev');
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showToday', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.view.setStartDate();
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/month/showToday', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.gotoMonth('today');
+            p.setStartDate(moment());
         }
     });
 

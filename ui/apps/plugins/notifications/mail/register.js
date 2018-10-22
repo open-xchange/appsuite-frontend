@@ -94,7 +94,7 @@ define('plugins/notifications/mail/register', [
 
         if (count > 0) {
             //#. %1$d number of unread mails
-            app.set('tooltip', gt.format('%1$d unread', count));
+            app.set('tooltip', gt('%1$d unread', count));
         } else {
             app.unset('tooltip');
         }

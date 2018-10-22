@@ -52,24 +52,24 @@ Scenario('Create appointment with all fields', async function (I) {
     // // 1) day view
     I.clickToolbar('View');
     I.click('Day');
-    I.waitForVisible('.week.dayview .appointment');
-    expect(await I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
+    I.waitForVisible('.weekview-container.day .appointment');
+    expect(await I.grabTextFrom(`.weekview-container.day .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.weekview-container.day .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.weekview-container.day .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 2) week view
     I.clickToolbar('View');
     I.click('Week');
-    I.waitForVisible('.week.weekview .appointment');
-    expect(await I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
+    I.waitForVisible('.weekview-container.week .appointment');
+    expect(await I.grabTextFrom(`.weekview-container.week .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.weekview-container.week .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.weekview-container.week .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 3) month view
     I.clickToolbar('View');
     I.click('Month');
-    I.waitForVisible('.month-view .appointment');
-    expect(await I.grabTextFrom(`.month-view .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.month-view .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.month-view .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
+    I.waitForVisible('.monthview-container .appointment');
+    expect(await I.grabTextFrom(`.monthview-container .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.monthview-container .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.monthview-container .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 4) list view
     I.clickToolbar('View');
     I.click('List');
@@ -122,7 +122,7 @@ Scenario('fullday appointments', async function (I) {
     });
     I.wait(0.5);
 
-    I.click('Fullday test', '.weekview .appointment');
+    I.click('Fullday test', '.weekview-container.week .appointment');
 
     I.see('5 days', '.io-ox-sidepopup .calendar-detail');
 

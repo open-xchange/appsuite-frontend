@@ -1119,6 +1119,36 @@ define('io.ox/calendar/util', [
             ].join('');
         },
 
+        openDeeplink: function (model, opt) {
+            opt = _({}).extend(opt);
+            model = new (require('io.ox/calendar/model').Model)(model.toJSON());
+
+            ox.launch('io.ox/calendar/main', { folder: model.get('folder') }).done(function () {
+                var app = this,
+                    perspective = opt.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                function cont(perspective) {
+                    if (perspective.selectAppointment) perspective.selectAppointment(model);
+                    if (opt.showDetails) {
+                        var e = $.Event('click', { target: app.perspective.$el });
+                        perspective.showAppointment(e, model.toJSON(), { arrow: false });
+                    }
+                }
+
+                app.folders.add(model.get('folder'));
+
+                // open in current perspective
+                if (app.perspective && settings.get('viewView') === perspective) cont(app.perspective, model);
+
+                app.pages.changePage(perspective, { disableAnimations: _.device('smartphone') });
+
+                // wait for perspective change
+                app.getWindow().one('change:perspective', function (e, perspective) {
+                    cont(perspective, model);
+                });
+            });
+        },
+
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
@@ -1171,21 +1201,18 @@ define('io.ox/calendar/util', [
         getCurrentRangeOptions: function () {
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};
-            var window = app.getWindow();
-            if (!window) return {};
-            var perspective = window.getPerspective();
+            var perspective = app.perspective;
             if (!perspective) return;
 
-            var rangeStart, rangeEnd;
-            switch (perspective.name) {
+            var rangeStart, rangeEnd, model = perspective.model;
+            switch (perspective.getName()) {
                 case 'week':
-                    var view = perspective.view;
-                    rangeStart = moment(view.startDate).utc();
-                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('startDate')).utc().add(model.get('numColumns'), 'days');
                     break;
                 case 'month':
-                    rangeStart = moment(perspective.firstMonth).startOf('week').utc();
-                    rangeEnd = moment(perspective.lastMonth).endOf('month').endOf('week').utc();
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('endDate')).utc();
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();
