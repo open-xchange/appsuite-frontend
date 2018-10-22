@@ -749,7 +749,7 @@ define('io.ox/calendar/edit/extensions', [
                     allowUndefined: true
                 });
             //#. showed inside a color picker. Used if an appointment should not have a custom color
-            dropdown.option('color', undefined, gt('Use calendar color'), { radio: true });
+            dropdown.option('color', '', gt('Use calendar color'), { radio: true });
             dropdown.$ul.find('[data-name="color"]').addClass('folder-default-color');
             menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append($('<div class="color-picker-scroll">').append(picker.render().$el)));
 
