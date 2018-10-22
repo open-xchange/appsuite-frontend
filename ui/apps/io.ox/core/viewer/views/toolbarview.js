@@ -144,7 +144,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-autoplay-start')
                         .attr({
-                            'aria-label': gt('Run auto-play ')
+                            'aria-label': gt('Run slideshow')
+                        });
+                }
+
+            },
+            'autoplaystop': {
+                prio: _.device('desktop') ? 'hi' : 'lo',
+                mobile: 'lo',
+                label: gt('Stop slideshow'),
+                ref: TOOLBAR_ACTION_ID + '/autoplaystop',
+                customize: function () {
+                    this.addClass('viewer-toolbar-autoplay-stop')
+                        .attr({
+                            'aria-label': gt('Stop slideshow')
                         });
                 }
 
@@ -563,6 +576,19 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
+    new Action(TOOLBAR_ACTION_ID + '/autoplaystop', {
+        requires: function (e) {
+            var model = e.baton.model;
+            var imageModelCount = model.collection.reduce(function (memo, model) { return (model.isImage() ? memo + 1 : memo); }, 0);
+            var autoplayStarted = e.baton.context.autoplayStarted;
+
+            return model.isImage() && autoplayStarted && (imageModelCount >= 2);
+        },
+        action: function (baton) {
+            baton.context.onAutoplayStop();
+        }
+    });
+
     // define the Backbone view
     var ToolbarView = DisposableView.extend({
 
@@ -719,6 +745,13 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onAutoplayStart: function () {
             this.viewerEvents.trigger('viewer:autoplay:toggle', 'running');
+        },
+
+        /**
+         * Publishes autoplay event to the MainView event aggregator.
+         */
+        onAutoplayStop: function () {
+            this.viewerEvents.trigger('viewer:autoplay:toggle', 'pausing');
         },
 
         /**
