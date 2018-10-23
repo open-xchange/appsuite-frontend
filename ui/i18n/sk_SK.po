@@ -163,7 +163,6 @@ msgstr[2] "%1$d oznámení."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
-#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -200,7 +199,9 @@ msgstr "%1$d vybraných"
 msgid "%1$d total"
 msgstr "%1$d celkom"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d neprečítaných"
 
@@ -281,19 +282,12 @@ msgstr "%1$s %2$s pred koncom."
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s pred začiatkom."
 
-#. add confirmation status behind appointment title
-#. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, c-format
-msgid "%1$s (Tentative)"
-msgstr "%1$s (nezáväzne)"
-
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "%1$s Toolbar"
 msgstr "Panel nástrojov %1$s"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "%1$s appointments selected"
 msgstr "%1$s schôdzok vybraných"
 
@@ -452,6 +446,12 @@ msgid_plural "%d days"
 msgstr[0] "%d deň"
 msgstr[1] "%d dni"
 msgstr[2] "%d dní"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create all-day appointment"
+msgid "%s %s, create all-day appointment"
+msgstr "Vytvoriť celodennú schôdzku"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -1227,7 +1227,7 @@ msgid "An error occurred."
 msgstr "Vyskytla sa chyba."
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "An error occurred. Please try again."
 msgstr "Vyskytla sa chyba. Prosím, skúste to znova neskôr."
 
@@ -1325,15 +1325,14 @@ msgstr "Použiť na všetky podpriečinky"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
 #: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Schôdzka"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "Appointment Details"
 msgstr "Podrobnosti schôdzky"
 
@@ -1346,10 +1345,6 @@ msgstr "Farba schôdzky"
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Pozvánky na schôdzky"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Appointment list"
-msgstr "Zoznam schôdzok"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -1372,10 +1367,16 @@ msgid "Appointment types"
 msgstr "Typy schôdzok"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
 msgstr "Schôdzky"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments in shared calendars"
+msgid "Appointments in public calendars"
+msgstr "Schôdzky v zdieľaných kalendároch"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1765,6 +1766,7 @@ msgstr "CalDav/CardDav"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1776,22 +1778,6 @@ msgstr "Kalendár"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendár"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Day View"
-msgstr "Zobrazenie kalendára - deň"
-
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-msgid "Calendar Month View"
-msgstr "Zobrazenie kalendára - mesiac"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Week View"
-msgstr "Zobrazenie kalendára - týždeň"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Workweek View"
-msgstr "Zobrazenie kalendára - pracovný týždeň"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
@@ -1809,10 +1795,6 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Calendar/Addressbook"
 msgstr "Kalendár/Adresár kontaktov"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "Kalendár:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -1845,7 +1827,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
+#: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -2081,7 +2063,6 @@ msgid "Cleaning up ..."
 msgstr "Prebieha čistenie..."
 
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
-#: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
 msgstr "Vyčistiť"
 
@@ -2187,6 +2168,7 @@ msgstr "Zatvoriť prehliadač"
 msgid "Collapse form"
 msgstr "Zbaliť formulár"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2278,8 +2260,7 @@ msgstr "Napísať novú správu"
 msgid "Conditions"
 msgstr "Podmienky"
 
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Confidential"
 msgstr "Dôverné"
 
@@ -2538,7 +2519,7 @@ msgstr ""
 "Nepodarilo sa uložiť nastavenia. Musí existovať aspoň jeden používateľ s "
 "právami správcu."
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "Could't load appointment data."
 msgstr "Nepodarilo sa načítať dáta schôdzky."
 
@@ -2605,6 +2586,12 @@ msgstr "Vytvoriť pravidlo filtra"
 msgid "Create folder"
 msgstr "Vytvoriť priečinok"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create new calendar"
+msgid "Create in public calendar"
+msgstr "Vytvoriť nový kalendár"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Vytvoriť zoznam"
@@ -2613,10 +2600,6 @@ msgstr "Vytvoriť zoznam"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Vytvoriť nový účet %1$s"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "Vytvoriť nový kalendár"
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -2778,10 +2761,6 @@ msgstr "Rozsah dátumov"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Deň"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Days"
-msgstr "Dni"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4881,6 +4860,7 @@ msgstr "Pomocník"
 msgid "Hidden address books"
 msgstr "Skryté adresáre kontaktov"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Skryté kalendáre"
@@ -5006,10 +4986,6 @@ msgstr "Hostiteľ"
 msgid "Hostname"
 msgstr "Názov počítača"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Hours"
-msgstr "Hodiny"
-
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
@@ -5093,6 +5069,18 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "Obrázok 1"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size"
+msgstr "Obrázky"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size:"
+msgstr "Obrázky"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5292,8 +5280,8 @@ msgstr "Pozvať na novú schôdzku"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "Je väčší ako"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -5309,7 +5297,9 @@ msgstr "Je približne"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
+#, fuzzy
+#| msgid "Is smaller than"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
 msgstr "Je menší ako"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
@@ -5435,6 +5425,18 @@ msgstr "Predvoľby špecifické pre jazyk"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Jazyky"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Target"
+msgid "Large"
+msgstr "Cieľ"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Progress %1$s %"
+msgid "Large (%1$s px)"
+msgstr "Priebeh %1$s %"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -5769,6 +5771,12 @@ msgstr "Pripomienka pošty"
 msgid "Mail reminder for"
 msgstr "Pripomienka pošty pre"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail source"
+msgid "Mail size:"
+msgstr "Zdroj pošty"
+
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "Zdroj pošty"
@@ -5864,8 +5872,9 @@ msgstr "Označiť ako distribučný zoznam"
 msgid "Mark as done"
 msgstr "Označiť ako hotové"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Označiť ako prečítané"
 
@@ -5879,8 +5888,9 @@ msgstr "Označiť ako Spam"
 msgid "Mark as undone"
 msgstr "Označiť ako vrátené"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Označiť ako neprečítané"
 
@@ -5944,6 +5954,7 @@ msgstr "Nezodpovedá"
 msgid "Maximize"
 msgstr "Maximalizovať"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Stredné"
@@ -5952,6 +5963,12 @@ msgstr "Stredné"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Stredná"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Members (%1$d)"
+msgid "Medium (%1$s px)"
+msgstr "Členovia (%1$d)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6050,10 +6067,6 @@ msgstr "Minimálna dĺžka hesla je %1$d."
 msgid "Minus"
 msgstr "Mínus"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Minutes"
-msgstr "Minúty"
-
 #. section name for contact fields in detail view
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Miscellaneous"
@@ -6093,10 +6106,6 @@ msgstr "Mesiac"
 #: module:io.ox/calendar/edit/main
 msgid "Monthly"
 msgstr "Mesačne"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Months"
-msgstr "Mesiace"
 
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
@@ -6220,6 +6229,7 @@ msgstr "Môj Kalendár Google"
 msgid "My address books"
 msgstr "Moje adresáre kontaktov"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Moje kalendáre"
@@ -6436,7 +6446,6 @@ msgstr "Nové pripomenutie úlohy"
 msgid "New task reminders"
 msgstr "Nové pripomenutia úloh"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -6448,6 +6457,12 @@ msgstr "Ďalší"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
 msgstr "Ďalší deň"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Next month"
+msgid "Next Month"
+msgstr "Ďalší mesiac"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Week"
@@ -6469,7 +6484,7 @@ msgstr "Ďalšia stránka"
 msgid "Next week"
 msgstr "Ďalší týždeň"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "Next year"
 msgstr "Ďalší rok"
 
@@ -6495,7 +6510,7 @@ msgstr "Zatiaľ žiadne tweety."
 msgid "No action available"
 msgstr "Nie sú dostupné žiadne operácie"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "No appointment selected"
 msgstr "Žiadna schôdzka nie je vybraná"
 
@@ -6804,7 +6819,6 @@ msgstr "Režime offline"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
@@ -7041,6 +7055,12 @@ msgstr "Poradie"
 msgid "Organizer"
 msgstr "Organizátor"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Original mail"
+msgid "Original"
+msgstr "Pôvodný email"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Pôvodný email"
@@ -7182,10 +7202,6 @@ msgstr "Sila hesla: slabé"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Sila hesla: nesprávna dĺžka"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "Pozastaviť režim automatického prehrávania"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7722,7 +7738,6 @@ msgstr "Náhľad"
 msgid "Preview not available"
 msgstr "Náhľad nie je k dispozícii"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -7731,6 +7746,12 @@ msgstr "Predošlé"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Predošlý deň"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Previous month"
+msgid "Previous Month"
+msgstr "Predošlý mesiac"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Week"
@@ -7754,7 +7775,7 @@ msgstr "Predošlá stránka"
 msgid "Previous week"
 msgstr "Predošlý týždeň"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Previous year"
 msgstr "Predošlý rok"
@@ -7807,8 +7828,8 @@ msgstr "Priorita"
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/view-grid-template.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -7864,6 +7885,7 @@ msgstr "Vlastnosti"
 msgid "Public address books"
 msgstr "Verejné adresáre kontaktov"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Verejné kalendáre"
@@ -7937,10 +7959,6 @@ msgstr "Kanál RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Kanály RSS"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "Prečítané"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8582,13 +8600,9 @@ msgstr "Názov pravidla"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
-#| msgid "Run auto-play mode"
-msgid "Run auto-play "
-msgstr "Spustiť režim automatického prehrávania"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "Spustiť režim automatického prehrávania"
+#| msgid "Repeat slideshow"
+msgid "Run slideshow"
+msgstr "Zopakovať prezentáciu"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
@@ -8764,7 +8778,6 @@ msgstr "Tajné"
 msgid "Security"
 msgstr "Bezpečnosť"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8800,10 +8813,6 @@ msgstr "Vybrať všetko"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Select all messages"
 msgstr "Vybrať všetky správy"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "Vybrať kalendár"
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -9122,6 +9131,7 @@ msgstr "Zdieľané adresáre kontaktov"
 msgid "Shared by other users"
 msgstr "Zdieľajú iní používatelia"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Zdieľané kalendáre"
@@ -9286,20 +9296,12 @@ msgid "Show names"
 msgstr "Zobraziť mená"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show next day"
-msgstr "Zobraziť ďalší deň"
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show next month"
 msgstr "Zobraziť ďalší mesiac"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Show or hide actions for advanced users."
 msgstr "Zobraziť alebo skryť operácie pre pokročilých používateľov."
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show previous day"
-msgstr "Zobraziť predošlý deň"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous month"
@@ -9399,6 +9401,10 @@ msgstr "Veľkosť"
 msgid "Sky blue"
 msgstr "Belasá"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Slideshow"
+msgstr "Prezetácia"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Režim prezentácie / automatického prehliadania obrázkov"
@@ -9406,6 +9412,14 @@ msgstr "Režim prezentácie / automatického prehliadania obrázkov"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Pomalé požiadavky"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -9618,6 +9632,12 @@ msgstr "Stav"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Stay signed in"
 msgstr "Zostať prihlásený"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Slideshow"
+msgid "Stop slideshow"
+msgstr "Prezetácia"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Street"
@@ -10142,6 +10162,12 @@ msgstr "Vybrané adresy. Stlačením klávesu Backspace alebo Delete odstránite
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
+"The selected calendar \"%1$s\" is public. Do you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10265,15 +10291,6 @@ msgstr ""
 "Vo vašom zariadení momentálne nie sú k dispozícii žiadne kompatibilné "
 "multimediálne zariadenia."
 
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled due to performance reasons."
-msgstr ""
-"V aktuálnom kalendári je viac ako %n schôdzok. Niektoré funkcie sú z dôvodu "
-"výkonnosti vypnuté."
-
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -10343,9 +10360,13 @@ msgid "This appointment"
 msgstr "Túto schôdzku"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "This appointment is an exception. Changing the series does not affect "
+#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr "Táto schôdzka je výnimka. Zmena série neovplyvní výnimky."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -11102,7 +11123,7 @@ msgstr "Použiť kategórie"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -11165,6 +11186,12 @@ msgstr "Používateľské meno"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
 msgstr "Dáta používateľa"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "User defined color"
+msgstr "Nový kalendár"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
@@ -11508,10 +11535,6 @@ msgstr "Rok"
 #: module:io.ox/calendar/edit/main
 msgid "Yearly"
 msgstr "Ročne"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Years"
-msgstr "Roky"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -11896,6 +11919,14 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
 msgstr "Vaša platforma nie je podporovaná!"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -12408,6 +12439,10 @@ msgstr "bez oprávnení na upravovanie"
 msgid "no read permissions"
 msgstr "bez oprávnení na čítanie"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr "žiadny"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
@@ -12719,6 +12754,9 @@ msgstr "vaša platforma"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (nezáväzne)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "Možnosti %1$s"
@@ -13319,6 +13357,9 @@ msgstr "vaša platforma"
 #~ msgstr ""
 #~ "Pozvanie na schôdzku. %1$s %2$s %3$s %4$s %5$s. Stlačením [Enter] otvoríte"
 
+#~ msgid "Appointment list"
+#~ msgstr "Zoznam schôdzok"
+
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Pripomenutie schôdzky. %1$s %2$s %3$s %4$s. Stlačením [Enter] otvoríte"
@@ -13724,11 +13765,26 @@ msgstr "vaša platforma"
 #~ msgid "CalDAV Login"
 #~ msgstr "Prihlásenie CalDAV"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Zobrazenie kalendára - deň"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Zobrazenie kalendára - mesiac"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Zobrazenie kalendára - týždeň"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Zobrazenie kalendára - pracovný týždeň"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Zobrazenie kalendára - vlastné"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Zobrazenie kalendára - pracovný týždeň"
+
+#~ msgid "Calendar:"
+#~ msgstr "Kalendár:"
 
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
@@ -14301,6 +14357,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Day View"
 #~ msgstr "Zobrazenie dňa"
+
+#~ msgid "Days"
+#~ msgstr "Dni"
 
 #~ msgid "Debug"
 #~ msgstr "Ladenie"
@@ -15543,6 +15602,9 @@ msgstr "vaša platforma"
 #~ msgid "Hong Kong"
 #~ msgstr "Hongkong"
 
+#~ msgid "Hours"
+#~ msgstr "Hodiny"
+
 #~ msgid "How does this work?"
 #~ msgstr "Ako to funguje?"
 
@@ -15918,6 +15980,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Is at most"
 #~ msgstr "Je najviac"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Je väčší ako"
 
 #~ msgid "Isle of Man"
 #~ msgstr "Man"
@@ -16329,6 +16394,9 @@ msgstr "vaša platforma"
 #~ msgid "Mime Type"
 #~ msgstr "Typ MIME"
 
+#~ msgid "Minutes"
+#~ msgstr "Minúty"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobil"
 
@@ -16388,6 +16456,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "%1$s %2$s každého mesiaca"
+
+#~ msgid "Months"
+#~ msgstr "Mesiace"
 
 #, fuzzy
 #~| msgid "Months"
@@ -16924,6 +16995,9 @@ msgstr "vaša platforma"
 #~ msgid "Pause Presentation"
 #~ msgstr "Cieľ"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pozastaviť režim automatického prehrávania"
+
 #~ msgid "Pause presentation"
 #~ msgstr "Pozastaviť prezentáciu"
 
@@ -17288,6 +17362,9 @@ msgstr "vaša platforma"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Strana %1$d z %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Prečítané"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "Režim len na čítanie"
 
@@ -17452,6 +17529,14 @@ msgstr "vaša platforma"
 
 #~ msgid "Rules"
 #~ msgstr "Pravidlá"
+
+#, fuzzy
+#~| msgid "Run auto-play mode"
+#~ msgid "Run auto-play "
+#~ msgstr "Spustiť režim automatického prehrávania"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Spustiť režim automatického prehrávania"
 
 #~ msgid "Running applications"
 #~ msgstr "Bežiace aplikácie"
@@ -17635,6 +17720,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Select appointment display type"
 #~ msgstr "Vyberte zobrazený typ schôdzky"
+
+#~ msgid "Select calendar"
+#~ msgstr "Vybrať kalendár"
 
 #~ msgid "Select from the list and add selected as members"
 #~ msgstr "Vybrať zo zoznamu a pridať vybraných ako členov"
@@ -17869,8 +17957,14 @@ msgstr "vaša platforma"
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "Zobraziť meno namiesto emailovej adresy v poliach Komu a Kópia:"
 
+#~ msgid "Show next day"
+#~ msgstr "Zobraziť ďalší deň"
+
 #~ msgid "Show original publication"
 #~ msgstr "Zobraziť pôvodnú publikáciu"
+
+#~ msgid "Show previous day"
+#~ msgstr "Zobraziť predošlý deň"
 
 #~ msgid "Show sender image?"
 #~ msgstr "Zobraziť obrázok odosielateľa?"
@@ -17942,9 +18036,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Skip this step"
 #~ msgstr "Preskočiť tento krok"
-
-#~ msgid "Slideshow"
-#~ msgstr "Prezetácia"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Režim prezentácie / automatického prehrávania"
@@ -18327,9 +18418,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Tanzania"
 #~ msgstr "Tanzánijská zjednotená republika"
-
-#~ msgid "Target"
-#~ msgstr "Cieľ"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Pozvanie na úlohu. %1$s %2$s %3$s. Stlačením [Enter] otvoríte"
@@ -18817,6 +18905,13 @@ msgstr "vaša platforma"
 
 #~ msgid "There are currently no participants."
 #~ msgstr "Momentálne nie sú pripojení žiadni účastníci."
+
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "V aktuálnom kalendári je viac ako %n schôdzok. Niektoré funkcie sú z "
+#~ "dôvodu výkonnosti vypnuté."
 
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
@@ -19714,6 +19809,9 @@ msgstr "vaša platforma"
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Každý rok %1$s %2$s v %3$d"
 
+#~ msgid "Years"
+#~ msgstr "Roky"
+
 #~ msgid "Yemen"
 #~ msgstr "Jemen"
 
@@ -20285,9 +20383,6 @@ msgstr "vaša platforma"
 
 #~ msgid "no expiry date"
 #~ msgstr "neobmedzená platnosť"
-
-#~ msgid "none"
-#~ msgstr "žiadny"
 
 #~ msgid "not sent"
 #~ msgstr "neodoslané"

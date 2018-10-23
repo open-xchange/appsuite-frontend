@@ -147,7 +147,6 @@ msgstr[1] "%1$d 個通知。"
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
-#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -182,7 +181,9 @@ msgstr "已選擇 %1$d 封"
 msgid "%1$d total"
 msgstr "共計 %1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d 未讀"
 
@@ -259,19 +260,12 @@ msgstr "結束前 %2$s 發出 %1$s。"
 msgid "%1$s %2$s before start."
 msgstr "開始前 %2$s 發出 %1$s。"
 
-#. add confirmation status behind appointment title
-#. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, c-format
-msgid "%1$s (Tentative)"
-msgstr "%1$s (暫定)"
-
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "%1$s Toolbar"
 msgstr "%1$s 工具列"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "%1$s appointments selected"
 msgstr "選擇了 %1$s 場約會"
 
@@ -426,6 +420,12 @@ msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
 msgstr[1] "%d 天"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create all-day appointment"
+msgid "%s %s, create all-day appointment"
+msgstr "建立全日約會"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -1185,7 +1185,7 @@ msgid "An error occurred."
 msgstr "發生錯誤。"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "An error occurred. Please try again."
 msgstr "發生錯誤。請稍後重試。"
 
@@ -1282,15 +1282,14 @@ msgstr "套用至所有子資料夾"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
 #: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "約會"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "Appointment Details"
 msgstr "約會詳情"
 
@@ -1303,10 +1302,6 @@ msgstr "約會色彩"
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "約會邀請"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Appointment list"
-msgstr "約會清單"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -1329,10 +1324,16 @@ msgid "Appointment types"
 msgstr "約會類型"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
 msgstr "約會"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments in shared calendars"
+msgid "Appointments in public calendars"
+msgstr "共享日曆中的約會"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1713,6 +1714,7 @@ msgstr "CalDav/CardDav"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1724,22 +1726,6 @@ msgstr "日曆"
 msgctxt "app"
 msgid "Calendar"
 msgstr "日曆"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Day View"
-msgstr "日曆日視圖"
-
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-msgid "Calendar Month View"
-msgstr "日曆月視圖"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Week View"
-msgstr "日曆週視圖"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Workweek View"
-msgstr "日曆工作週視圖"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
@@ -1757,10 +1743,6 @@ msgstr "日曆視圖"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Calendar/Addressbook"
 msgstr "行事曆/通訊錄"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "行事曆:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -1793,7 +1775,7 @@ msgstr "攝影機 %1$s"
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
+#: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -2025,7 +2007,6 @@ msgid "Cleaning up ..."
 msgstr "正在清理…"
 
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
-#: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
 msgstr "清除"
 
@@ -2130,6 +2111,7 @@ msgstr "關閉檢視器"
 msgid "Collapse form"
 msgstr "摺疊表單"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2221,8 +2203,7 @@ msgstr "撰寫新郵件"
 msgid "Conditions"
 msgstr "條件"
 
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Confidential"
 msgstr "機密"
 
@@ -2477,7 +2458,7 @@ msgid ""
 "administration rights."
 msgstr "無法儲存設定，必須有最少一個擁有管理員權力的使用者。"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "Could't load appointment data."
 msgstr "無法載入約會資料。"
 
@@ -2544,6 +2525,12 @@ msgstr "建立過濾器規則"
 msgid "Create folder"
 msgstr "建立資料夾"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create new calendar"
+msgid "Create in public calendar"
+msgstr "建立新行事曆"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "建立清單"
@@ -2552,10 +2539,6 @@ msgstr "建立清單"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "建立新的 %1$s 帳號"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "建立新行事曆"
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -2712,10 +2695,6 @@ msgstr "日期範圍"
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
-msgstr "日"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Days"
 msgstr "日"
 
 #. Context: Vacation notices
@@ -4766,6 +4745,7 @@ msgstr "説明"
 msgid "Hidden address books"
 msgstr "隱藏的通訊錄"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "隱藏的行事曆"
@@ -4891,10 +4871,6 @@ msgstr "主機"
 msgid "Hostname"
 msgstr "主機名稱"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Hours"
-msgstr "時"
-
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
@@ -4973,6 +4949,18 @@ msgstr "舉例來說，忽略現有約會對例如匯入國定假日類的行事
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "圖片 1"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size"
+msgstr "圖片"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Images"
+msgid "Image size:"
+msgstr "圖片"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5170,8 +5158,8 @@ msgstr "邀請至新約會"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "大於"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -5187,7 +5175,9 @@ msgstr "不完全是"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
+#, fuzzy
+#| msgid "Is smaller than"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
 msgstr "小於"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
@@ -5311,6 +5301,16 @@ msgstr "不同語言的細部設定"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "語言"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Progress %1$s %"
+msgid "Large (%1$s px)"
+msgstr "進度 %1$s %"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -5644,6 +5644,12 @@ msgstr "郵件提醒"
 msgid "Mail reminder for"
 msgstr "郵件提醒給"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail source"
+msgid "Mail size:"
+msgstr "郵件來源"
+
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "郵件來源"
@@ -5739,8 +5745,9 @@ msgstr "標示為通訊組列表"
 msgid "Mark as done"
 msgstr "標示為完成"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "標記為已讀"
 
@@ -5754,8 +5761,9 @@ msgstr "標示為垃圾信"
 msgid "Mark as undone"
 msgstr "標示為未完成"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "標記為未讀"
 
@@ -5819,6 +5827,7 @@ msgstr "不符合"
 msgid "Maximize"
 msgstr "最大化"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "媒體"
@@ -5827,6 +5836,12 @@ msgstr "媒體"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "中"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Members (%1$d)"
+msgid "Medium (%1$s px)"
+msgstr "成員（%1$d）"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -5924,10 +5939,6 @@ msgstr "最小密碼長度為 %1$d。"
 msgid "Minus"
 msgstr "減"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Minutes"
-msgstr "分鐘"
-
 #. section name for contact fields in detail view
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Miscellaneous"
@@ -5967,10 +5978,6 @@ msgstr "月"
 #: module:io.ox/calendar/edit/main
 msgid "Monthly"
 msgstr "每月"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Months"
-msgstr "月"
 
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
@@ -6094,6 +6101,7 @@ msgstr "我的 Google 行事曆"
 msgid "My address books"
 msgstr "我的通訊錄"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "我的行事曆"
@@ -6310,7 +6318,6 @@ msgstr "新任務提醒"
 msgid "New task reminders"
 msgstr "新任務提醒"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -6322,6 +6329,12 @@ msgstr "下一個"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
 msgstr "下一天"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Next month"
+msgid "Next Month"
+msgstr "下個月"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Week"
@@ -6343,7 +6356,7 @@ msgstr "下一頁"
 msgid "Next week"
 msgstr "下一週"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "Next year"
 msgstr "下一年"
 
@@ -6369,7 +6382,7 @@ msgstr "尚無推文。"
 msgid "No action available"
 msgstr "無操作可用"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "No appointment selected"
 msgstr "未選擇約會"
 
@@ -6671,7 +6684,6 @@ msgstr "離線模式"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "確定"
@@ -6904,6 +6916,12 @@ msgstr "訂購"
 msgid "Organizer"
 msgstr "組織"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#, fuzzy
+#| msgid "Original mail"
+msgid "Original"
+msgstr "原始郵件"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "原始郵件"
@@ -7045,10 +7063,6 @@ msgstr "密碼強度: 弱"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "密碼強度: 長度錯誤"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "暫停自動播放模式"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7569,7 +7583,6 @@ msgstr "預覽"
 msgid "Preview not available"
 msgstr "無法預覽"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -7578,6 +7591,12 @@ msgstr "上一個"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Day"
 msgstr "前一天"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Previous month"
+msgid "Previous Month"
+msgstr "前一個月"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Week"
@@ -7601,7 +7620,7 @@ msgstr "上一頁"
 msgid "Previous week"
 msgstr "前一週"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Previous year"
 msgstr "前一年"
@@ -7654,8 +7673,8 @@ msgstr "優先權"
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/view-grid-template.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -7711,6 +7730,7 @@ msgstr "屬性"
 msgid "Public address books"
 msgstr "公開通訊錄"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "公開行事曆"
@@ -7784,10 +7804,6 @@ msgstr "RSS 資訊來源"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS 資訊來源"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "閱讀"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8419,13 +8435,9 @@ msgstr "規則名稱"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
-#| msgid "Run auto-play mode"
-msgid "Run auto-play "
-msgstr "執行自動播放模式"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "執行自動播放模式"
+#| msgid "Repeat slideshow"
+msgid "Run slideshow"
+msgstr "重複投影片"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
@@ -8599,7 +8611,6 @@ msgstr "私密"
 msgid "Security"
 msgstr "安全性"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8634,10 +8645,6 @@ msgstr "選擇全部"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Select all messages"
 msgstr "選擇所有訊息"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "選擇行事曆"
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -8953,6 +8960,7 @@ msgstr "共享的通訊錄"
 msgid "Shared by other users"
 msgstr "由其他使用者分享"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "共享的行事曆"
@@ -9115,20 +9123,12 @@ msgid "Show names"
 msgstr "顯示名稱"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show next day"
-msgstr "顯示下一天"
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show next month"
 msgstr "顯示下個月"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Show or hide actions for advanced users."
 msgstr "顯示或隱藏進階使用者選項。"
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show previous day"
-msgstr "顯示上一天"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous month"
@@ -9228,6 +9228,10 @@ msgstr "大小"
 msgid "Sky blue"
 msgstr "天藍色"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Slideshow"
+msgstr "幻燈片"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "投影片 / 圖片自動播放模式"
@@ -9235,6 +9239,14 @@ msgstr "投影片 / 圖片自動播放模式"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "慢速請求"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr ""
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -9444,6 +9456,12 @@ msgstr "狀態"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Stay signed in"
 msgstr "保持登入"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Slideshow"
+msgid "Stop slideshow"
+msgstr "幻燈片"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Street"
@@ -9945,6 +9963,12 @@ msgstr "選擇的地址。按下 Backspace 或 Delete 即可移除。"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
+"The selected calendar \"%1$s\" is public. Do you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10053,13 +10077,6 @@ msgid ""
 "There are currently no compatible media devices available on your device."
 msgstr "您的裝置上目前沒有相容的媒體裝置。"
 
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled due to performance reasons."
-msgstr "目前的行事曆中有超過 %n 場約會，已停用某些功能以確保效能正常。"
-
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -10126,9 +10143,13 @@ msgid "This appointment"
 msgstr "此約會"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "This appointment is an exception. Changing the series does not affect "
+#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr "這場約會是系列約會當中的例外場次，修改系列時不會影響此例外場次。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -10847,7 +10868,7 @@ msgstr "使用分類"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -10906,6 +10927,12 @@ msgstr "使用者名稱"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
 msgstr "用戶資料"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "New calendar"
+msgid "User defined color"
+msgstr "新行事曆"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
@@ -11248,10 +11275,6 @@ msgstr "年"
 #: module:io.ox/calendar/edit/main
 msgid "Yearly"
 msgstr "每年"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Years"
-msgstr "年"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -11612,6 +11635,14 @@ msgstr "您的密碼如果包含大寫字母、數字、%1$s 等特殊符號時�
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
 msgstr "不支援您的平台！"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -12120,6 +12151,10 @@ msgstr "無編輯權限"
 msgid "no read permissions"
 msgstr "無閱讀權限"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr "無"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
@@ -12430,6 +12465,9 @@ msgstr "您的平台"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s。"
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (暫定)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s 選項"
@@ -12981,6 +13019,9 @@ msgstr "您的平台"
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
 #~ msgstr "約會邀請。%1$s %2$s %3$s %4$s %5$s。按 Enter 以開啟"
 
+#~ msgid "Appointment list"
+#~ msgstr "約會清單"
+
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr "約會提醒。%1$s %2$s %3$s %4$s。按 Enter 以開啟"
 
@@ -13356,11 +13397,26 @@ msgstr "您的平台"
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV 登入資訊"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "日曆日視圖"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "日曆月視圖"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "日曆週視圖"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "日曆工作週視圖"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "日曆自定義視圖"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "行事曆工作週視圖"
+
+#~ msgid "Calendar:"
+#~ msgstr "行事曆:"
 
 #~ msgid "Cambodia"
 #~ msgstr "柬埔寨"
@@ -13905,6 +13961,9 @@ msgstr "您的平台"
 
 #~ msgid "Day View"
 #~ msgstr "日視圖"
+
+#~ msgid "Days"
+#~ msgstr "日"
 
 #~ msgid "Debug"
 #~ msgstr "除錯"
@@ -14903,6 +14962,9 @@ msgstr "您的平台"
 #~ msgid "High contrast theme"
 #~ msgstr "高對比佈景主題"
 
+#~ msgid "Hours"
+#~ msgstr "時"
+
 #~ msgid "How does this work?"
 #~ msgstr "這個功能如何使用？"
 
@@ -15129,6 +15191,9 @@ msgstr "您的平台"
 #~ msgid "Inviting other participants"
 #~ msgstr "邀請其他參與者"
 
+#~ msgid "Is bigger than"
+#~ msgstr "大於"
+
 #~ msgid "Italian (Italy)"
 #~ msgstr "義大利文 (義大利)"
 
@@ -15331,6 +15396,9 @@ msgstr "您的平台"
 #~ msgid "Message is read"
 #~ msgstr "標記為已讀"
 
+#~ msgid "Minutes"
+#~ msgstr "分鐘"
+
 #~ msgid "Mobile"
 #~ msgstr "手機"
 
@@ -15353,6 +15421,9 @@ msgstr "您的平台"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "每月的  %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "月"
 
 #, fuzzy
 #~| msgid "Months"
@@ -15627,6 +15698,9 @@ msgstr "您的平台"
 #~ msgid "Pause Presentation"
 #~ msgstr "目的地"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "暫停自動播放模式"
+
 #~ msgid "Pause presentation"
 #~ msgstr "暫停簡報"
 
@@ -15827,6 +15901,9 @@ msgstr "您的平台"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "第 %1$d 頁，共 %2$d 頁"
 
+#~ msgid "Read"
+#~ msgstr "閱讀"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "唯讀模式"
 
@@ -15916,6 +15993,14 @@ msgstr "您的平台"
 #~ msgid "Rule applies until"
 #~ msgstr "規則套用至"
 
+#, fuzzy
+#~| msgid "Run auto-play mode"
+#~ msgid "Run auto-play "
+#~ msgstr "執行自動播放模式"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "執行自動播放模式"
+
 #~ msgid "Running applications"
 #~ msgstr "執行中的應用程式"
 
@@ -15989,6 +16074,9 @@ msgstr "您的平台"
 
 #~ msgid "Select Folder"
 #~ msgstr "選擇資料夾"
+
+#~ msgid "Select calendar"
+#~ msgstr "選擇行事曆"
 
 #~ msgid "Select none"
 #~ msgstr "全部不選"
@@ -16134,8 +16222,14 @@ msgstr "您的平台"
 #~ msgid "Show more..."
 #~ msgstr "顯示更多..."
 
+#~ msgid "Show next day"
+#~ msgstr "顯示下一天"
+
 #~ msgid "Show original publication"
 #~ msgstr "顯示原始發佈"
+
+#~ msgid "Show previous day"
+#~ msgstr "顯示上一天"
 
 #~ msgid "Show side panel"
 #~ msgstr "顯示側面板"
@@ -16186,9 +16280,6 @@ msgstr "您的平台"
 
 #~ msgid "Skip this step"
 #~ msgstr "略過此步驟"
-
-#~ msgid "Slideshow"
-#~ msgstr "幻燈片"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "簡報 / 自動播放模式"
@@ -16700,6 +16791,11 @@ msgstr "您的平台"
 
 #~ msgid "There are currently no participants."
 #~ msgstr "目前沒有參與者"
+
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr "目前的行事曆中有超過 %n 場約會，已停用某些功能以確保效能正常。"
 
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
@@ -17262,6 +17358,9 @@ msgstr "您的平台"
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "每年 %3$d 月的 %1$s %2$s"
 
+#~ msgid "Years"
+#~ msgstr "年"
+
 #~ msgid "Yes, always move them all"
 #~ msgstr "好，總是全部移動"
 
@@ -17601,9 +17700,6 @@ msgstr "您的平台"
 
 #~ msgid "no expiry date"
 #~ msgstr "不過期"
-
-#~ msgid "none"
-#~ msgstr "無"
 
 #~ msgid "november"
 #~ msgstr "十一月"
