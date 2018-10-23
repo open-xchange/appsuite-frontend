@@ -253,6 +253,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         this.get = function (id, callback) {
             var extension = _(extensions).chain()
                 .filter(function (obj) { return obj.id === id; }).first().value();
+            if (!_.isFunction(callback)) return extension;
             if (extension) {
                 callback(extension);
                 sort();
