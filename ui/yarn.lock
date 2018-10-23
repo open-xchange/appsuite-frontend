@@ -200,10 +200,10 @@ appserver@^0.6.0:
     proxy-agent "~2.1.0"
     serve-static "^1.12.3"
 
-appserver@^0.7.0-pre9:
-  version "0.7.0-pre9"
-  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre9.tgz#273bdfffe7a26e7557b75e0580ffb9cc2f53752d"
-  integrity sha512-FFynK0M+CTfMnne24nDqAo04bSr7GMEsnwmaX8XFcZnBEH11GV5JbTlnx2R4jaQU7nSRAltxjMHhc3w/9hQc8Q==
+appserver@^0.7.0-pre10:
+  version "0.7.0-pre10"
+  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre10.tgz#08c22af8a90ba4fa93653b9238283167db16f8fb"
+  integrity sha512-HskqdauWv595mekp4QfvaEvKmh5Wzy5BTQN1on4CoPJ0ZPbVwkQujd6voKZzeyMBxyW+O55ahGLY7pU3ygretA==
   dependencies:
     "@open-xchange/ui-middleware" "^7.10.0-0"
     connect "^3.6.2"
@@ -4690,7 +4690,7 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-open-xchange-shared-grunt-config@^0.15.0-pre2:
+open-xchange-shared-grunt-config@^0.15.0-pre3:
   version "0.15.0-pre3"
   resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.15.0-pre3.tgz#84f7279502236b1107a0000c96e669eb703b5762"
   integrity sha512-YfXPaqOY/yMUHEjZkIPrcx5o/mLY5H8Y2r9dTkxkIVp3sSfhNEO7tJa8ba/aOmEFMxgJqPQKBHMzjZPPM1E7XQ==
