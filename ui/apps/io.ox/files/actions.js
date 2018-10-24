@@ -689,7 +689,7 @@ define('io.ox/files/actions', [
                                                     } else {
                                                         //no error, must be success
                                                         require(['io.ox/core/yell'], function (yell) {
-                                                            yell('success', itemsLeft.length > 1 ? success.multiple : success.single);
+                                                            yell('success', list.length > 1 ? success.multiple : success.single);
                                                         });
                                                     }
 
