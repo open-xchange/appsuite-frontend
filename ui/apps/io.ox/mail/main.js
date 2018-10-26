@@ -1730,12 +1730,13 @@ define('io.ox/mail/main', [
         },
 
         'metrics': function (app) {
+
+            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
                 var nodes = app.getWindow().nodes,
                     node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container, .categories-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // A/B testing which add mail account button is prefered
                 metrics.watch({
@@ -1769,37 +1770,6 @@ define('io.ox/mail/main', [
                         type: 'click',
                         action: action,
                         detail: node.attr('data-value')
-                    });
-                });
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                toolbar.on('mousedown', '.category', function (e) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: 'select-tab',
-                        detail: $(e.currentTarget).attr('data-id')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-name'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
                 // folder tree action
