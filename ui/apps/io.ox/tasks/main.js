@@ -697,34 +697,12 @@ define('io.ox/tasks/main', [
 
         'metrics': function (app) {
 
+            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
                 var nodes = app.getWindow().nodes,
-                    toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
-                    metrics.trackEvent({
-                        app: 'tasks',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'tasks',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-name'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
-                    });
-                });
                 // vgrid toolbar
                 nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node = $(e.currentTarget);
