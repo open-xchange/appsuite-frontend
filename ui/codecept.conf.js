@@ -20,7 +20,6 @@ module.exports.config = {
             'waitForTimeout': 30000,
             'browser': 'chrome',
             'restart': true,
-            'windowSize': 'maximize',
             'desiredCapabilities': {
                 'browserName': 'chrome',
                 'chromeOptions': {
