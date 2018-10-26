@@ -469,6 +469,10 @@ define('io.ox/files/main', [
                                 .append(toolbar.render().$el)
                         );
 
+                        function updateCallback($toolbar) {
+                            toolbar.replaceToolbar($toolbar).initButtons();
+                        }
+
                         app.updateMyshareToolbar = _.debounce(function (cidList) {
                             var // turn cids into proper objects
                                 cids = _.uniq(cidList),
@@ -480,8 +484,9 @@ define('io.ox/files/main', [
                                 list = models, //_(models).invoke('toJSON'),
                                 // extract single object if length === 1
                                 data = list.length === 1 ? list[0] : list,
+                                $toolbar = toolbar.createToolbar(),
                                 baton = ext.Baton({
-                                    $el: toolbar.$list,
+                                    $el: $toolbar,
                                     app: app,
                                     data: data,
                                     models: models,
@@ -489,11 +494,11 @@ define('io.ox/files/main', [
                                     model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                                 }),
                                 ret = ext.point('io.ox/files/share/classic-toolbar')
-                                .invoke('draw', toolbar.$list.empty(), baton);
+                                .invoke('draw', $toolbar, baton);
 
-                            $.when.apply($, ret.value()).then(function () {
-                                toolbar.initButtons();
-                            });
+                                // draw toolbar
+                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
+
                         }, 10);
 
                         app.updateMyshareToolbar([]);
