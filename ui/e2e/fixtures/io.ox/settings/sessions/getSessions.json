@@ -1,5 +1,5 @@
 {
-    "request": "/ajax/sessionmanagement\\?action=all",
+    "request": "/appsuite/api/sessionmanagement\\?action=all",
     "response": {
         "data": [{
             "ipAddress": "827.23.423.23",

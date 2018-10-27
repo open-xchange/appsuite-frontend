@@ -24,7 +24,7 @@ module.exports.config = {
             'desiredCapabilities': {
                 'browserName': 'chrome',
                 'chromeOptions': {
-                    'args': ['no-sandbox', 'start-maximized']
+                    'args': ['no-sandbox']
                 },
                 'acceptSslCerts': true
             }

@@ -469,6 +469,10 @@ define('io.ox/files/main', [
                                 .append(toolbar.render().$el)
                         );
 
+                        function updateCallback($toolbar) {
+                            toolbar.replaceToolbar($toolbar).initButtons();
+                        }
+
                         app.updateMyshareToolbar = _.debounce(function (cidList) {
                             var // turn cids into proper objects
                                 cids = _.uniq(cidList),
@@ -480,8 +484,9 @@ define('io.ox/files/main', [
                                 list = models, //_(models).invoke('toJSON'),
                                 // extract single object if length === 1
                                 data = list.length === 1 ? list[0] : list,
+                                $toolbar = toolbar.createToolbar(),
                                 baton = ext.Baton({
-                                    $el: toolbar.$list,
+                                    $el: $toolbar,
                                     app: app,
                                     data: data,
                                     models: models,
@@ -489,11 +494,11 @@ define('io.ox/files/main', [
                                     model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                                 }),
                                 ret = ext.point('io.ox/files/share/classic-toolbar')
-                                .invoke('draw', toolbar.$list.empty(), baton);
+                                .invoke('draw', $toolbar, baton);
 
-                            $.when.apply($, ret.value()).then(function () {
-                                toolbar.initButtons();
-                            });
+                                // draw toolbar
+                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
+
                         }, 10);
 
                         app.updateMyshareToolbar([]);
@@ -1385,11 +1390,11 @@ define('io.ox/files/main', [
         },
 
         'metrics': function (app) {
+
+            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
                 var nodes = app.getWindow().nodes,
-                    //node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container'),
                     control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
                 metrics.watch({
@@ -1402,28 +1407,7 @@ define('io.ox/files/main', [
                     type: 'click',
                     action: 'add'
                 });
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
-                    });
-                });
+
                 // list view control toolbar dropdown
                 control.on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node =  $(e.target).closest('a'),

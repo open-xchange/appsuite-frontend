@@ -89,13 +89,12 @@ define('io.ox/mail/compose/resizeUtils', [
     function getDropDown(model) {
         var settingSmall = settings.get('features/imageResize/small', 320),
             settingMedium = settings.get('features/imageResize/medium', 640),
-            settingLarge = settings.get('features/imageResize/large', 1024);
-        model.set('imageResizeOption', 'original');
-        var dropDown = new ResizeDropDown({
-            model: model,
-            label: '',
-            caret: true
-        });
+            settingLarge = settings.get('features/imageResize/large', 1024),
+            dropDown = new ResizeDropDown({
+                model: model,
+                label: '',
+                caret: true
+            });
         if (_.device('smartphone')) {
             dropDown.header('Image size');
             dropDown.divider();

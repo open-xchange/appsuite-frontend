@@ -80,10 +80,11 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     // switch to calendar
     I.openApp('Calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
+    I.waitForVisible('.workweek .time-label-bar', 5);
+    I.wait(1);
     I.click('.workweek .time-label-bar');
-    I.waitForVisible('.timezone-label-dropdown');
+    I.waitForVisible('.timezone-label-dropdown [data-name="Asia/Tokyo"]');
     I.click('.timezone-label-dropdown [data-name="Asia/Tokyo"]');
     I.pressKey('Escape');
     I.waitForVisible('.workweek .timezone');

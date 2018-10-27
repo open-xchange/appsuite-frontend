@@ -502,9 +502,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         capabilities: 'infostore',
         requires: function (e) {
             var model = e.baton.model;
-            var currentApp = ox.ui.App.getCurrentApp().getName();
-            // detail is the target of popoutstandalone, no support for mail attachments
-            return model.get('group') !== 'localFile' && currentApp !== 'io.ox/files/detail';
+            // no support for mail attachments and no popout for already popped out viewer
+            return model.get('group') !== 'localFile' && !e.baton.context.standalone;
         },
         action: function (baton) {
             var fileModel;
