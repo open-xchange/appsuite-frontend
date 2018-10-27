@@ -96,7 +96,6 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment two', '.workweek .appointment .title');
     I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // switch on again
@@ -164,7 +163,6 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment one', '.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 1);
 
     // switch on again
@@ -232,7 +230,6 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment two', '.month-container .appointment .title');
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 1);
 
     // switch on again
@@ -299,7 +296,6 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment one', '.weekview-container.day .appointment .title');
     I.seeNumberOfElements('.weekview-container.day .appointment .title', 1);
 
     // switch on again
