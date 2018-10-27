@@ -30,12 +30,17 @@ Scenario('Create appointment with all fields', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
+    I.click('button[aria-label="Next Week"]');
+
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test title');
     I.fillField('Location', 'test location');
     I.selectOption('Visibility', 'Private');
+
+    I.click('[aria-label="Start time"]');
+    I.click('12:00 PM', 'fieldset[data-attribute="startDate"]');
 
     // // save
     var newAppointmentCID = await I.executeAsyncScript(function (done) {
