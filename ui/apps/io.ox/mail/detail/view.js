@@ -421,7 +421,7 @@ define('io.ox/mail/detail/view', [
                     // trigger click or keydown on iframe node to forward events properly -> to close none smart dropdowns correctly or jump to the listview on esc
                     html.on('keydown click', forwardEvent);
 
-                    if (_.device('ios && smartphone')) html.attr('class', 'ios smartphone');
+                    if (_.device('ios && smartphone')) html.addClass('ios smartphone');
 
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
                     $(this.contentDocument).find('body').replaceWith($content);
