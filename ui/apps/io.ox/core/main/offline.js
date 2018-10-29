@@ -19,13 +19,17 @@ define('io.ox/core/main/offline', [
     //
     // handle online/offline mode
     //
+    var visible = false;
+
     function showIndicator(text) {
-        $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200);
+        if (visible) return;
+        $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200, function () { visible = true; });
         notifications.yell('screenreader', text);
     }
 
     function hideIndicator() {
-        $('#io-ox-offline').stop().animate({ bottom: '-41px' }, 200, function () { $(this).hide(); });
+        if (!visible) return;
+        $('#io-ox-offline').stop().animate({ bottom: '-41px' }, 200, function () { $(this).hide(); visible = false; });
     }
 
     ox.on({
