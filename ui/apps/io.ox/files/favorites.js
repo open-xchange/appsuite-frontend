@@ -262,7 +262,7 @@ define('io.ox/files/favorites', [
             collection = api.pool.getCollection(collectionId);
         // convert folder model into file model
         model = new filesAPI.Model(model.toJSON());
-        model.set('index/' + collectionId, collection.length, { silent: true });
+        model.set('index/' + collectionId, true, { silent: true });
         collection.add(model);
         collection.sort();
     }

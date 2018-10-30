@@ -63,7 +63,7 @@ define('io.ox/files/actions/favorites', [
                 Settings.set(settingsId, favoriteSettings);
             });
         } else {
-            model.set('index/' + collectionId, collection.length, { silent: false });
+            model.set('index/' + collectionId, true, { silent: false });
             collection.add(model);
             collection.sort();
         }
@@ -116,7 +116,7 @@ define('io.ox/files/actions/favorites', [
                 Settings.set('favorites/infostore', favoriteSettings);
             });
         } else {
-            model.set('index/' + collectionId, collection.length, { silent: false });
+            model.set('index/' + collectionId, true, { silent: false });
             collection.remove(model);
         }
         api.propagate('favorite:remove', model);
