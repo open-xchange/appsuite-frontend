@@ -171,7 +171,7 @@ define('io.ox/contacts/distrib/main', [
                 }
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
                     app.setTitle($.trim($(this).val()) || gt('Distribution List'));
-                    fnToggleSave($(this).val());
+                    fnToggleSave($(this).val().trim());
                 }, 150));
             });
 
