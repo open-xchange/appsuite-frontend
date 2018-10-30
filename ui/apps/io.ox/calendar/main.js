@@ -467,6 +467,8 @@ define('io.ox/calendar/main', [
                         view.render();
                         app.getWindow().trigger('change:perspective', view);
                         app.perspective = views[item] = view;
+                        // finally store the layout. will not change anything if already selected
+                        app.props.set('layout', item);
                     }, function fail() {
                         if (item !== defaultPage) return app.pages.changePage(defaultPage);
                     });
