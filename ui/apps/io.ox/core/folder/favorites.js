@@ -173,7 +173,7 @@ define('io.ox/core/folder/favorites', [
         if (!model.get('module')) return;
         var collectionId = 'virtual/favorites/' + model.get('module'),
             collection = api.pool.getCollection(collectionId);
-        model.set('index/' + collectionId, collection.length, { silent: true });
+        model.set('index/' + collectionId, true, { silent: true });
         collection.add(model);
         collection.sort();
         api.trigger('favorite:add');
