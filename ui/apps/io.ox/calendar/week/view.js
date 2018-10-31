@@ -149,7 +149,7 @@ define('io.ox/calendar/week/view', [
 
             if (this.model.get('mode') === 'day' && this.opt.app.folders.list().length > 1) {
                 this.$el.append(
-                    $('<button href="#" class="btn btn-link merge-split" data-placement="bottom">')
+                    $('<button href="#" class="btn btn-link merge-split" data-placement="bottom" tabindex="-1">')
                 );
                 this.updateMergeview();
             }

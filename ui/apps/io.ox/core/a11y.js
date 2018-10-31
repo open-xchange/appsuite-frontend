@@ -344,7 +344,7 @@ define('io.ox/core/a11y', [], function () {
         if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
 
         var isList = $(e.currentTarget).is('ul');
-        var links = $(e.currentTarget).find(isList ? '> li > a, > li > button' : '> a, > button').filter(':visible');
+        var links = $(e.currentTarget).find(isList ? '> li > a, > li > button:not([disabled])' : '> a, > button:not([disabled])').filter(':visible');
 
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
