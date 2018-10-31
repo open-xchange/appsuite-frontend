@@ -229,6 +229,8 @@
                 &:last-child, .time:last-child { border-color: transparent; }
 
                 &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
+
+                &:focus { z-index: 1; }
             }
 
             &.today .timeslot { background-color: @calendar-today-background; }

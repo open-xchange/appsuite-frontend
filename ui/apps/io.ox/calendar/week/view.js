@@ -759,7 +759,9 @@ define('io.ox/calendar/week/view', [
                         'mouseleave .appointment': 'onHover',
                         'mousedown .timeslot': 'onLasso',
                         'mousedown .resizable-handle': 'onResize',
-                        'mousedown .appointment.modify': 'onDrag'
+                        'mousedown .appointment.modify': 'onDrag',
+                        'keydown': 'onKeydown',
+                        'blur .timeslot': 'onBlurTimeslot'
                     });
                 }
             }
@@ -1374,6 +1376,44 @@ define('io.ox/calendar/week/view', [
                     });
                 }
             });
+        },
+
+        onKeydown: function (e) {
+            if (!/(37|38|39|40)/.test(e.which)) return;
+            var focused = $(document.activeElement);
+            if (focused.hasClass('f6-target')) {
+                var day = this.$('.day.today');
+                if (day.length === 0) day = this.$('.day').first();
+                day.find('.timeslot').eq(15).attr('tabindex', -1).focus();
+            }
+            if (focused.hasClass('timeslot')) {
+                var elem, index;
+                switch (e.which) {
+                    // left
+                    case 37:
+                        index = focused.index();
+                        elem = focused.closest('.day').prev().find('.timeslot').eq(index);
+                        break;
+                    // right
+                    case 39:
+                        index = focused.index();
+                        elem = focused.closest('.day').next().find('.timeslot').eq(index);
+                        break;
+                    // upward
+                    case 38: elem = focused.prev(); break;
+                    // downward
+                    case 40: elem = focused.next(); break;
+                    default: // nothing
+                }
+                if (elem) {
+                    elem.attr('tabindex', -1).focus();
+                    e.preventDefault();
+                }
+            }
+        },
+
+        onBlurTimeslot: function (e) {
+            $(e.target).attr('tabindex', '');
         }
 
     });
