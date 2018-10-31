@@ -37,23 +37,16 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     I.click({ css: '[data-attribute="startDate"] input' });
 
-    const { isVisible, start, inTimezone } = await I.executeAsyncScript(function (done) {
+    const { isNextMonth, start, inTimezone } = await I.executeAsyncScript(function (done) {
         done({
-            isVisible: $(`.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`).length,
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
-            inTimezone: moment().hour(7).tz('Asia/Tokyo').format('h A')
+            inTimezone: moment().hour(7).tz('Asia/Tokyo').format('h A'),
+            isNextMonth: moment().startOf('week').month() < moment().startOf('week').add('8', 'days').month()
         });
     });
 
-   if (!isVisible) {
-        I.click('.date-picker.open [aria-label="Go to next month"]');
-        I.waitForVisible(start);
-        I.click(start);
-    } else {
-         I.click(start);
-    }
-
     I.click({ css: '[data-attribute="startDate"] input' });
+    if (isNextMonth) I.click('.date-picker.open[data-attribute="startDate"] .btn-next');
     I.click(start);
 
     I.click('.io-ox-calendar-edit-window .time-field');
