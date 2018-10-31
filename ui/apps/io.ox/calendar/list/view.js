@@ -186,7 +186,7 @@ define('io.ox/calendar/list/view', [
         beforeUpdateFolder: function (id, model) {
             if (model.get('module') !== 'calendar') return;
             if (!model.changed['com.openexchange.calendar.extendedProperties']) return;
-            self.updateColor(model);
+            this.updateColor(model);
         },
 
         updateColor: function (model) {
