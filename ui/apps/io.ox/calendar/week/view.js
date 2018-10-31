@@ -796,10 +796,15 @@ define('io.ox/calendar/week/view', [
             if (this.model.get('mergeView')) parent = this.$('.day');
             else parent = this.$('.day').eq(columnIndex);
             // attach to one or multiple parents
+            this.$currentTimeIndicator.detach();
             this.$currentTimeIndicator = this.$currentTimeIndicator.eq(0);
             parent.each(function (index) {
-                if (!self.$currentTimeIndicator.get(index)) self.$currentTimeIndicator = self.$currentTimeIndicator.add(self.$currentTimeIndicator.eq(0).clone().get(0));
-                $(this).append(self.$currentTimeIndicator.eq(index));
+                var indicator = self.$currentTimeIndicator.eq(index);
+                if (!self.$currentTimeIndicator.get(index)) {
+                    indicator = self.$currentTimeIndicator.eq(0).clone();
+                    self.$currentTimeIndicator = self.$currentTimeIndicator.add(indicator);
+                }
+                $(this).append(indicator);
             });
 
             if (!this.lastDate.isSame(moment(), 'day')) {
