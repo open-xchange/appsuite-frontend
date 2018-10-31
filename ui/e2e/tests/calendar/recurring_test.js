@@ -39,13 +39,15 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.fillField('Subject', 'test recurring');
     I.fillField('Location', 'invite location');
 
-    const { start } = await I.executeAsyncScript(function (done) {
+    const { start, isNextMonth } = await I.executeAsyncScript(function (done) {
         done({
-            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`
+            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
+            isNextMonth: moment().startOf('week').month() < moment().startOf('week').add('8', 'days').month()
         });
     });
 
     I.click({ css: '[data-attribute="startDate"] input' });
+    if (isNextMonth) I.click('.date-picker.open[data-attribute="startDate"] .btn-next');
     I.click(start);
 
     I.click('.io-ox-calendar-edit-window .time-field');

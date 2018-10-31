@@ -662,7 +662,7 @@ define('io.ox/mail/detail/content', [
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return { content: content, isLarge: baton.isLarge, type: baton.type };
+            return { content: content, isLarge: baton.isLarge, type: baton.type, isText: baton.isText };
         },
 
         beautifyPlainText: function (str) {

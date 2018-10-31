@@ -690,7 +690,9 @@ define('io.ox/core/tk/tokenfield', [
 
             this.getInput().on('focus blur updateWidth', function (e) {
                 var tokenfield = self.$el.data('bs.tokenfield');
-                tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
+                // tokenfield minwidth 320 caused height calculation to be broken as soon
+                // as there is less than 320 pixel space left in the search field
+                tokenfield.options.minWidth = e.type === 'focus' ? 1 : 0;
                 tokenfield.update();
             });
 

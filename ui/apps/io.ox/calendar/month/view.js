@@ -66,6 +66,9 @@ define('io.ox/calendar/month/view', [
         },
 
         initialize: function () {
+            this.monthText = $('<span>');
+            this.monthInfo = _.device('smartphone') ? $('<div class="info">') : $('<button class="info btn btn-link" tabindex="-1">');
+
             this.listenTo(this.model, 'change:startOfMonth', this.update);
             if (!_.device('smartphone')) this.listenTo(this.opt.app.props, 'change:showMiniCalendar change:folderview', this.onToggleDatepicker);
         },
@@ -76,8 +79,6 @@ define('io.ox/calendar/month/view', [
 
         render: function () {
             var self = this;
-
-            this.monthInfo = _.device('smartphone') ? $('<div class="info">') : $('<button class="info btn btn-link" tabindex="-1">');
 
             this.$el.empty();
             if (!_.device('smartphone')) {
@@ -95,7 +96,7 @@ define('io.ox/calendar/month/view', [
                 );
             }
 
-            this.$el.append(this.monthInfo.append(this.monthText = $('<span>')));
+            this.$el.append(this.monthInfo.append(this.monthText));
             this.update();
 
             if (!_.device('smartphone')) {

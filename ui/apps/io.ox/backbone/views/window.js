@@ -460,7 +460,8 @@ define('io.ox/backbone/views/window', [
         },
 
         onChangeTitle: function () {
-            var title = this.model.get('title').trim();
+            var title = this.model.get('title') || '';
+            title = title.trim();
             this.$title.text(title);
             this.$button.attr('aria-label', title);
             if (!this.model.get('minimized')) ox.trigger('change:document:title', this.model.get('title'));

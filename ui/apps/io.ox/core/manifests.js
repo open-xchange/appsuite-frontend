@@ -89,9 +89,10 @@ define.async('io.ox/core/manifests', [
                 after: this.pluginsFor('after:' + pointName)
             };
         },
-        isDisabled: function (id) {
+        isDisabled: function (path) {
+            if (ox.debug) console.warn('This method is deprecated and should not be used any longer.');
             validate();
-            return this.disabled[id];
+            return !this.plugins[path];
         },
         plugins: null,
         pluginPoints: null
@@ -113,7 +114,7 @@ define.async('io.ox/core/manifests', [
     function process(manifest) {
 
         if (!manifest.namespace) {
-            if (ox.debug) console.warn('Looks like an app is defined "the old way". Apps can not be defined in manifest files any longer, but should be defined explicitly in code.');
+            if (ox.debug) console.warn('Looks like an app is defined "the old way". Apps can not be defined in manifest files any longer, but should be defined explicitly in code.', manifest);
             return;
         }
 
@@ -149,7 +150,6 @@ define.async('io.ox/core/manifests', [
         reset: function () {
             manifestManager.plugins = null;
             manifestManager.pluginPoints = null;
-            manifestManager.disabled = null;
         }
     };
 
@@ -159,7 +159,6 @@ define.async('io.ox/core/manifests', [
 
         manifestManager.pluginPoints = {};
         manifestManager.plugins = {};
-        manifestManager.disabled = {};
 
         _(ox.serverConfig.manifests).each(process);
 

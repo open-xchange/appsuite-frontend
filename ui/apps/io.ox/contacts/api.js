@@ -429,7 +429,8 @@ define('io.ox/contacts/api', [
      */
     api.update = function (o) {
 
-        var attachmentHandlingNeeded = o.data.tempAttachmentIndicator;
+        var attachmentHandlingNeeded = o.data.tempAttachmentIndicator,
+            needsCacheWipe = false;
         delete o.data.tempAttachmentIndicator;
 
         if (_.isEmpty(o.data)) {
@@ -456,6 +457,10 @@ define('io.ox/contacts/api', [
 
         o.data = cleanUpData(o.data, { mode: 'update' });
 
+        // if there are changes to mail addresses we must clear the caches to ensure distributionlists in other folders that are using this contact have valid data
+        // use _.has here so null values are correctly detected
+        if (_(o.data).has('email1') || _(o.data).has('email2') || _(o.data).has('email3')) needsCacheWipe = true;
+
         // go!
         return http.PUT({
             module: 'contacts',
@@ -473,9 +478,10 @@ define('io.ox/contacts/api', [
             // get updated contact
             return api.get({ id: o.id, folder: o.folder }, false).then(function (data) {
                 return $.when(
+                    needsCacheWipe ? api.caches.get.clear() : '',
                     api.caches.get.add(data),
-                    api.caches.all.grepRemove(o.folder + api.DELIM),
-                    api.caches.list.remove({ id: o.id, folder: o.folder }),
+                    needsCacheWipe ? api.caches.all.clear() : api.caches.all.grepRemove(o.folder + api.DELIM),
+                    needsCacheWipe ? api.caches.list.clear() : api.caches.list.remove({ id: o.id, folder: o.folder }),
                     fetchCache.clear(),
                     data.user_id ? clearUserApiCache(data) : ''
                 )

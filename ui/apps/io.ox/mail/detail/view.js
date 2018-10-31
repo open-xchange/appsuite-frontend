@@ -396,10 +396,19 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
 
-            baton.content = content.get(baton.data, {}, baton.flow).content;
-            var $content = $(baton.content), resizing = 0,
-                self = this,
-                isHtml = !$content.hasClass('plain-text');
+            var contentData = content.get(baton.data, {}, baton.flow),
+                $content = $(contentData.content),
+                resizing = 0,
+                forwardEvent = function (e) {
+                    this.trigger(e);
+                }.bind(this);
+
+            baton.content = contentData.content;
+
+            // wrap plain text in body node, so we can treat plain text mails and html mails the same (replace vs append)
+            if (contentData.isText) {
+                $content = $('<body>').append($content);
+            }
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -409,35 +418,20 @@ define('io.ox/mail/detail/view', [
                     // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
-                    // trigger click on iframe node when theres a click in the iframe -> to close dropdowns correctly etc
-                    html.on('keydown', onKeyDown)
-                        .on('click', onClick);
+                    // trigger click or keydown on iframe node to forward events properly -> to close none smart dropdowns correctly or jump to the listview on esc
+                    html.on('keydown click', forwardEvent);
 
-                    if (_.device('ios && smartphone')) html.attr('class', 'ios smartphone');
+                    if (_.device('ios && smartphone')) html.addClass('ios smartphone');
 
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+                    $(this.contentDocument).find('body').replaceWith($content);
 
-                    if (isHtml) {
-                        $(this.contentDocument).find('body').replaceWith($content);
-                    } else {
-                        $(this.contentDocument).find('body').append($content);
-                    }
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
                         .trigger('resize');
                 }.bind(this));
             });
-
-            var onKeyDown = function (e) {
-                if (e.which !== 27) return;
-                // Sets focus on escape to the list view
-                this.closest('.window-container').find('.folder-tree .folder.selected, .list-item.selectable.selected').last().focus();
-            }.bind(this);
-
-            function onClick() {
-                self.trigger('click');
-            }
 
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins

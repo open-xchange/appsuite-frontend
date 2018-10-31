@@ -153,7 +153,8 @@ define('io.ox/settings/security/sessions/settings/pane', [
                 windows_phone: gt('CalDav/CardDav'),
                 windows: gt('CalDav/CardDav'),
                 generic_caldav: gt('CalDav'),
-                generic_carddav: gt('CardDav')
+                generic_carddav: gt('CardDav'),
+                webdav: gt('WebDAV')
             };
             return function () {
                 var deviceInfo = this.getDeviceInfo('client');
