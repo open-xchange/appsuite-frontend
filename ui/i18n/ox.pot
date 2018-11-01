@@ -12887,6 +12887,11 @@ msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 #: module:io.ox/core
+msgid "WebDAV"
+msgstr ""
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/core
 msgid "Exchange Active Sync"
 msgstr ""
 

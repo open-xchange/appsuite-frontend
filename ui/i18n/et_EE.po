@@ -11299,6 +11299,10 @@ msgstr[1] ""
 msgid "Weather • Season"
 msgstr "Ilm • Aastaaeg"
 
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr ""
+
 #. label for a list of webcam devices currently available
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
 msgid "Webcam"
