@@ -161,7 +161,7 @@ define('io.ox/core/main/appcontrol', [
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).split(','),
+                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
                 str = _.chain(list).filter(function (o) {
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
                 }).value().join(',');
