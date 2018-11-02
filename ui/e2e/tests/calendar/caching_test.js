@@ -67,7 +67,7 @@ Scenario('Create never ending appointment and check display in several views', a
         });
     });
 
-    I.click({ css: '[data-attribute="startDate"] input' });
+    I.click('~Date (M/D/YYYY)');
     I.click(start);
 
     I.click('All day', '.io-ox-calendar-edit-window');

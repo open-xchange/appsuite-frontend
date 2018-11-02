@@ -107,7 +107,7 @@ Scenario('fullday appointments', async function (I) {
     I.fillField('Subject', 'Fullday test');
     I.click('All day', '.checkbox > label');
 
-    I.click({ css: '[data-attribute="startDate"] input' });
+    I.click('~Date (M/D/YYYY)');
     const { start, end } = await I.executeAsyncScript(function (done) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('1', 'day').format('l')}"]`,
@@ -115,7 +115,7 @@ Scenario('fullday appointments', async function (I) {
         });
     });
     I.click(start);
-    I.click({ css: '[data-attribute="endDate"] input' });
+    I.click('~Date (M/D/YYYY)', '.dateinput[data-attribute="endDate"]');
     I.click(end);
 
     I.click('Create');

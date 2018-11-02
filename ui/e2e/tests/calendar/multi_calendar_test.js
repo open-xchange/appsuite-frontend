@@ -56,8 +56,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Location', 'invite location');
     I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -80,8 +80,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Location', 'invite location');
     I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -129,8 +129,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
     I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -146,8 +146,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Location', 'invite location');
     I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -196,8 +196,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
     I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -212,8 +212,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Location', 'invite location');
     I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -262,8 +262,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
     I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -279,8 +279,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.fillField('Location', 'invite location');
     I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');

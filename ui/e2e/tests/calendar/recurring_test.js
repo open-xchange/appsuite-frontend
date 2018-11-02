@@ -46,12 +46,12 @@ Scenario('Create recurring appointments with one participant', async function (I
         });
     });
 
-    I.click({ css: '[data-attribute="startDate"] input' });
-    if (isNextMonth) I.click('.date-picker.open[data-attribute="startDate"] .btn-next');
+    I.click('~Date (M/D/YYYY)');
+    if (isNextMonth) I.click('~Go to next month', '.date-picker.open');
     I.click(start);
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('.btn.btn-link.summary');

@@ -35,8 +35,6 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.fillField('Subject', 'test timezones');
     I.fillField('Location', 'invite location');
 
-    I.click({ css: '[data-attribute="startDate"] input' });
-
     const { isNextMonth, start, inTimezone } = await I.executeAsyncScript(function (done) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
@@ -45,13 +43,13 @@ Scenario('Create appointment and switch timezones', async function (I) {
         });
     });
 
-    I.click({ css: '[data-attribute="startDate"] input' });
-    if (isNextMonth) I.click('.date-picker.open[data-attribute="startDate"] .btn-next');
+    I.click('~Date (M/D/YYYY)');
+    if (isNextMonth) I.click('~Go to next month', '.date-picker.open');
     I.click(start);
 
-    I.click('.io-ox-calendar-edit-window .time-field');
+    I.click('~Start time');
 
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -68,9 +66,9 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
 
-    I.click({ css: '.io-ox-settings-window .leftside [title="Calendar"]' });
+    I.click('~Calendar', '.leftside');
     I.waitForVisible('.io-ox-settings-window .leftside [title="Favorite timezones"]');
-    I.click({ css: '.io-ox-settings-window .leftside [title="Favorite timezones"]' });
+    I.click('~Favorite timezones', '.leftside');
 
     I.waitForVisible('.rightside h1', 'Favorite timezones');
     I.waitForVisible('.rightside', 'Add timezone');
@@ -78,7 +76,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     I.waitForVisible('.io-ox-dialog-popup');
     I.selectOption('Time zone', '+09:00 JST Asia/Tokyo');
-    I.click('.io-ox-dialog-popup [data-action="add"]');
+    I.click('Add', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
 
     I.waitForVisible('.rightside li[title="Asia/Tokyo"]');
@@ -104,9 +102,8 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     I.waitForVisible('.io-ox-settings-window');
 
-    I.click({ css: '.io-ox-settings-window .leftside [title="Calendar"]' });
-    I.waitForVisible('.io-ox-settings-window .leftside [title="Favorite timezones"]');
-    I.click({ css: '.io-ox-settings-window .leftside [title="Favorite timezones"]' });
+    I.click('~Calendar', '.leftside');
+    I.click('~Favorite timezones', '.leftside');
     I.waitForVisible('.rightside li[title="Asia/Tokyo"]');
 
     // remove extra timezone
