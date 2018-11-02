@@ -41,7 +41,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
             inTimezone: moment().hour(7).tz('Asia/Tokyo').format('h A'),
-            isNextMonth: moment().startOf('week').month() < moment().startOf('week').add('8', 'days').month()
+            isNextMonth: moment().month() !== moment().add('8', 'days').month()
         });
     });
 

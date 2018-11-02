@@ -42,7 +42,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     const { start, isNextMonth } = await I.executeAsyncScript(function (done) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
-            isNextMonth: moment().startOf('week').month() < moment().startOf('week').add('8', 'days').month()
+            isNextMonth: moment().month() !== moment().add('8', 'days').month()
         });
     });
 
