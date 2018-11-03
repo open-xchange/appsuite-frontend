@@ -460,7 +460,8 @@ define('io.ox/mail/listview', [
             models = _(models).filter(function (model) {
                 var data = _(api.threads.get(model.cid)).first(),
                     lacksPreview = data && !data.text_preview;
-                if (lacksPreview) ids.push(_(data).pick('id', 'folder_id'));
+                    // no need to request models that actually have no preview again and again (empty mails)
+                if (lacksPreview && !model.hasNoPreview) ids.push(_(data).pick('id', 'folder_id'));
                 return lacksPreview;
             });
 
@@ -470,6 +471,9 @@ define('io.ox/mail/listview', [
                 _(models).each(function (model) {
                     var msg = _(api.threads.get(model.cid)).first(), cid = _.cid(msg);
                     model.set('text_preview', hash[cid]);
+                    // if a model has no preview mark it in the model, so we don't request it again all the time someone scrolls
+                    // don't mark it as part of the attributes to avoid triggering change events and reloading stuff (refresh does still work)
+                    if (hash[cid] === '') model.hasNoPreview = true;
                 });
             });
         },

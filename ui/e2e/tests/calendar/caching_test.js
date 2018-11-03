@@ -21,9 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create never ending appointment and check display in several views', async function (I, users) {
-    let [user] = users;
-
+Scenario('Create never ending appointment and check display in several views', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
@@ -42,9 +40,12 @@ Scenario('Create never ending appointment and check display in several views', a
     I.click('Month');
     I.waitForVisible('.monthview-container td.day.today');
 
+    // just skip 2 months, because "today" might still be visible in the "next" month
+    I.click('.monthview-container button[title="Next Month"]');
     I.click('.monthview-container button[title="Next Month"]');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 
+    I.click('.monthview-container button[title="Previous Month"]');
     I.click('.monthview-container button[title="Previous Month"]');
     I.waitForVisible('.monthview-container td.day.today');
 
@@ -66,7 +67,7 @@ Scenario('Create never ending appointment and check display in several views', a
         });
     });
 
-    I.click({ css: '[data-attribute="startDate"] input' });
+    I.click('~Date (M/D/YYYY)');
     I.click(start);
 
     I.click('All day', '.io-ox-calendar-edit-window');
@@ -109,6 +110,8 @@ Scenario('Create never ending appointment and check display in several views', a
     I.waitForVisible('.monthview-container .day .appointment .title');
     I.see('test caching', '.monthview-container .day .appointment .title');
 
+    // just skip 2 months, because "today" might still be visible in the "next" month
+    I.click('.monthview-container button[title="Next Month"]');
     I.click('.monthview-container button[title="Next Month"]');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 

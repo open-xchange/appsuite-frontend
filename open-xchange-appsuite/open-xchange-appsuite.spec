@@ -17,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 1
+%define         ox_release 2
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -609,6 +609,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Fri Nov 02 2018 Markus Wagner <markus.wagner@open-xchange.com>
+Second preview for 7.10.1 release
 * Thu Oct 11 2018 Markus Wagner <markus.wagner@open-xchange.com>
 First release candidate for 7.10.1
 * Mon Sep 10 2018 Markus Wagner <markus.wagner@open-xchange.com>

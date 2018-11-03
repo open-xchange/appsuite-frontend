@@ -61,7 +61,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
         };
 
         app.failRestore = function (point) {
-            if (point.restoreById) {
+            if (point.restoreById || !point.mode) {
                 delete point.restoreById;
                 return compose('edit')(point);
             }
@@ -131,7 +131,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                             app.model.dirty(false);
                             app.view.removeLogoutPoint();
                             app.quit();
-                            def.reject();
+                            def.reject(e);
                         });
                     });
                 });

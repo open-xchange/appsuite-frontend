@@ -1456,7 +1456,8 @@ define('io.ox/mail/api', [
         .then(function (response) {
             var hash = {};
             _(response).each(function (item) {
-                hash[_.cid(item)] = item.text_preview || '\u00a0';
+                // please don't change the empty string fallback. if setting this to something else this causes model change events and reloading stuff.
+                hash[_.cid(item)] = item.text_preview || '';
             });
             return hash;
         });

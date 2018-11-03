@@ -41,8 +41,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.fillField('Subject', 'test invite accept/decline/accept tentative');
     I.fillField('Location', 'invite location');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // add user 1
     I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);

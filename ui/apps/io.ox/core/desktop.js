@@ -762,7 +762,7 @@ define('io.ox/core/desktop', [
         },
 
         removeRestorePoint: function (id) {
-            var self =  this;
+            var self = this;
             return this.getSavePoints().then(function (list) {
                 list = list || [];
                 var ids = _(list).pluck('id'),
@@ -816,10 +816,7 @@ define('io.ox/core/desktop', [
                                         app.launch({ floatingWindowModel: model }).then(function () {
                                             // update unique id
                                             obj.id = this.get('uniqueID');
-                                            if (this.failRestore) {
-                                                // restore
-                                                return this.failRestore(obj.point);
-                                            }
+                                            if (this.failRestore) return this.failRestore(obj.point);
                                             return $.when();
                                         }).done(function () {
                                             // replace restore point with old id with restore point with new id (prevents duplicates)
@@ -827,6 +824,13 @@ define('io.ox/core/desktop', [
                                                 sp.push(obj);
                                                 self.setSavePoints(sp);
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
+                                            });
+                                        }).fail(function (e) {
+                                            if (!e || e.code !== 'MSG-0032') return;
+                                            // restoreById-savepoint after draft got deleted
+                                            _.delay(function () {
+                                                ox.ui.App.removeRestorePoint(oldId);
+                                                model.trigger('close');
                                             });
                                         });
                                         return;

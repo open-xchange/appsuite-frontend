@@ -42,16 +42,16 @@ Scenario('Create recurring appointments with one participant', async function (I
     const { start, isNextMonth } = await I.executeAsyncScript(function (done) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
-            isNextMonth: moment().startOf('week').month() < moment().startOf('week').add('8', 'days').month()
+            isNextMonth: moment().month() !== moment().add('8', 'days').month()
         });
     });
 
-    I.click({ css: '[data-attribute="startDate"] input' });
-    if (isNextMonth) I.click('.date-picker.open[data-attribute="startDate"] .btn-next');
+    I.click('~Date (M/D/YYYY)');
+    if (isNextMonth) I.click('~Go to next month', '.date-picker.open');
     I.click(start);
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('.btn.btn-link.summary');
