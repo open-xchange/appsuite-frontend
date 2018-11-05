@@ -231,7 +231,6 @@ define('plugins/notifications/calendar/register', [
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
                 nextAlarmTimer,
-                nextAlarm,
                 alarmsToShow = [],
                 subview = new Subview(options),
                 audioQueue = [],
@@ -261,6 +260,7 @@ define('plugins/notifications/calendar/register', [
             calAPI.on('resetChronosAlarms', function (alarms) {
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
+                    nextAlarmTime,
                     getIds = function () {
                         var ids = [];
                         subview.collection.forEach(function (model) {
@@ -270,17 +270,8 @@ define('plugins/notifications/calendar/register', [
                     },
                     timerFunction = function () {
                         var ids = getIds();
-                        if (nextAlarm.action === 'AUDIO') {
-                            playAlarm(nextAlarm);
-                        } else if (_(ids).indexOf(util.cid({ folder: nextAlarm.folder, id: nextAlarm.eventId, recurrenceId: nextAlarm.recurrenceId })) > -1) {
-                            // acknowledge duplicates (only one alarm per event)
-                            calAPI.acknowledgeAlarm(nextAlarm);
-                        } else {
-                            subview.addNotifications(nextAlarm);
-                            ids = getIds();
-                        }
 
-                        nextAlarm = undefined;
+                        nextAlarmTime = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
@@ -294,41 +285,33 @@ define('plugins/notifications/calendar/register', [
                                     subview.addNotifications(alarm);
                                     ids = getIds();
                                 }
-                            } else if (!nextAlarm || nextAlarm.time > alarm.time) {
-                                if (nextAlarm) {
-                                    temp.push(nextAlarm);
-                                }
-                                nextAlarm = alarm;
                             } else {
+                                if (!nextAlarmTime || nextAlarmTime > alarm.time) {
+                                    nextAlarmTime = alarm.time;
+                                }
                                 temp.push(alarm);
                             }
                         });
                         alarmsToShow = temp;
-                        if (nextAlarm) {
-                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).utc().valueOf() - new moment(now).utc().valueOf());
+                        if (nextAlarmTime) {
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).utc().valueOf() - new moment(now).utc().valueOf());
                         }
                     };
 
                 // clear old data
-                nextAlarm = undefined;
                 alarmsToShow = [];
                 if (nextAlarmTimer) {
                     clearTimeout(nextAlarmTimer);
                     nextAlarmTimer = undefined;
                 }
 
-                // decide where to put alarms, instant display/play sound, add as next alarm (used to set time for timer function) or put it in the queue
+                // decide where to put alarms, instant display/play sound or put it in the queue
                 _(alarms).each(function (alarm) {
                     if (alarm.time > now) {
-                        if (!nextAlarm || nextAlarm.time > alarm.time) {
-                            if (nextAlarm) {
-                                alarmsToShow.push(nextAlarm);
-                            }
-
-                            nextAlarm = alarm;
-                        } else {
-                            alarmsToShow.push(alarm);
+                        if (nextAlarmTime === undefined || nextAlarmTime > alarm.time) {
+                            nextAlarmTime = alarm.time;
                         }
+                        alarmsToShow.push(alarm);
                     } else if (alarm.action === 'AUDIO') {
                         playAlarm(alarm);
                     } else {
@@ -336,9 +319,10 @@ define('plugins/notifications/calendar/register', [
                     }
                 });
 
-                if (nextAlarm) {
-                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).valueOf() - new moment(now).valueOf());
+                if (nextAlarmTime !== undefined) {
+                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).valueOf() - new moment(now).valueOf());
                 }
+
                 var ids = getIds();
                 alarmsToAdd = _(alarmsToAdd).uniq(function (alarm) {
                     return util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId });
