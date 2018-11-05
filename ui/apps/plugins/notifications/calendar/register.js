@@ -309,11 +309,15 @@ define('plugins/notifications/calendar/register', [
                         }
                     };
 
+                // clear old data
                 nextAlarm = undefined;
+                alarmsToShow = [];
                 if (nextAlarmTimer) {
                     clearTimeout(nextAlarmTimer);
                     nextAlarmTimer = undefined;
                 }
+
+                // decide where to put alarms, instant display/play sound, add as next alarm (used to set time for timer function) or put it in the queue
                 _(alarms).each(function (alarm) {
                     if (alarm.time > now) {
                         if (!nextAlarm || nextAlarm.time > alarm.time) {
