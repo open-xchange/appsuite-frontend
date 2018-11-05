@@ -708,7 +708,6 @@ define('io.ox/calendar/api', [
                 };
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
-                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
 
                 return http.PUT({
                     module: 'chronos/alarm',
@@ -733,7 +732,6 @@ define('io.ox/calendar/api', [
                 };
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
-                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
 
                 return http.PUT({
                     module: 'chronos/alarm',
