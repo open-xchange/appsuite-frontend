@@ -567,9 +567,10 @@ define('io.ox/calendar/api', [
                 }, options);
 
                 // entity for users ressources etc, uri for externals
-                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; });
+                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; }),
+                    def = $.Deferred();
 
-                return http.PUT({
+                http.PUT({
                     module: 'chronos',
                     params: {
                         action: 'freeBusy',
@@ -582,8 +583,34 @@ define('io.ox/calendar/api', [
                     items.sort(function (a, b) {
                         return order.indexOf(a.attendee.entity || a.attendee.uri) - order.indexOf(b.attendee.entity || b.attendee.uri);
                     });
-                    return items;
+                    def.resolve(items);
+                },
+                function (err) {
+                    // to many events
+                    if (err.code !== 'CAL-5072') def.reject(err);
+                    // split request and send as multiple instead
+                    http.pause();
+                    _(list).each(function (attendee) {
+                        http.PUT({
+                            module: 'chronos',
+                            params: {
+                                action: 'freeBusy',
+                                from: options.from,
+                                until: options.until
+                            },
+                            data: { attendees: [attendee] }
+                        });
+                    });
+                    http.resume().then(function (result) {
+                        // change errors to empty arrays. If theres an error with one attendee we can still show the rest
+                        result = result.map(function (singleResult) {
+                            return singleResult.error ? { freeBusyTime: [] } : singleResult.data[0];
+                        });
+                        def.resolve(result);
+                    });
                 });
+
+                return def;
             },
 
             reduce: function (obj) {
