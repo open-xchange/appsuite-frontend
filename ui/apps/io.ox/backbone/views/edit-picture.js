@@ -79,7 +79,8 @@ define('io.ox/backbone/views/edit-picture', [
                             // a) dataUrl (webcam photo)
                             if (_.isString(file)) return file;
                             // b) server image
-                            if (!file || !file.lastModified) return imageurl;
+                            // add unique identifier to prevent caching bugs
+                            if (!file || !file.lastModified) return imageurl + '&' + $.param({ uniq: _.now() });
                             // c) local file
                             return getContent(file);
                         }).then(self.setImage.bind(self));
