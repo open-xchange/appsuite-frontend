@@ -64,34 +64,38 @@ define('plugins/notifications/calendar/register', [
                 },
                 onClickAccept = function (e) {
                     e.stopPropagation();
-                    var o = calAPI.reduce(model.attributes),
-                        appointmentData = model.attributes;
-                    require(['settings!io.ox/calendar', 'io.ox/calendar/util', 'io.ox/core/api/user'], function (calendarSettings, util, userAPI) {
-                        userAPI.get().then(function (user) {
-                            o.data = {
+                    require(['io.ox/calendar/util'], function (util) {
+                        calAPI.get(calAPI.reduce(model.attributes)).done(function (appointmentData) {
+                            var confirmation = {
                                 // default reminder
                                 alarms: util.getDefaultAlarms(appointmentData),
-                                attendee: util.createAttendee(user, { partStat: 'ACCEPTED' }),
-                                id: appointmentData.id,
-                                folder: appointmentData.folder
+                                // make sure to use the original data here, we don't want to accidentally change data we are not allowed too change
+                                attendee: _(appointmentData.get('attendees')).findWhere({ entity: ox.user_id }),
+                                id: appointmentData.get('id'),
+                                folder: appointmentData.get('folder')
                             };
 
+                            if (!confirmation.attendee) {
+                                yell('error', gt('Participant not found'));
+                                return;
+                            }
+                            confirmation.attendee.partStat = 'ACCEPTED';
+
                             var expand = util.getCurrentRangeOptions();
-                            calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
+                            calAPI.confirm(confirmation, _.extend({ checkConflicts: true }, expand)).done(function (result) {
                                 if (result && result.conflicts) {
                                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                                         conflictView.dialog(result.conflicts)
                                             .on('ignore', function () {
-                                                calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
+                                                calAPI.confirm(confirmation, _.extend({ checkConflicts: false }, expand));
                                             });
                                     });
                                     return;
                                 }
                             })
-                            .fail(function (error) {
-                                yell(error);
-                            });
-                        });
+                            .fail(yell);
+                        })
+                        .fail(yell);
                     });
                 };
 
