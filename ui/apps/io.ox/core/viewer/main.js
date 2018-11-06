@@ -111,7 +111,7 @@ define('io.ox/core/viewer/main', [
                         self.fileCollection.setStartIndex(data.files[0]);
                     }
                     // create main view and append main view to core
-                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {}, openedBy: data.openedBy, isSharing: isSharing() });
+                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: Boolean(data.standalone), opt: data.opt || {}, openedBy: data.openedBy, isSharing: isSharing() });
 
                     self.mainView.on('dispose', close);
 

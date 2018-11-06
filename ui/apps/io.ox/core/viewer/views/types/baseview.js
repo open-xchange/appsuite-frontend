@@ -34,9 +34,9 @@ define('io.ox/core/viewer/views/types/baseview', [
     var BaseView =  DisposableView.extend({
 
         // create slide root node
-        // <div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">
+        // <div class="swiper-slide" role="option" aria-selected="false">
         className: 'swiper-slide scrollable focusable',
-        attributes: { tabindex: -1, role: 'option', 'aria-selected': 'false' },
+        attributes: { role: 'option', 'aria-selected': 'false' },
 
         /**
          * Creates a file notification node with file name, icon and the notification text.
@@ -87,7 +87,7 @@ define('io.ox/core/viewer/views/types/baseview', [
             var downloadButton = $('<button type="button" class="btn btn-primary btn-file">').text(gt('Download %1$s', fileSize)).attr('aria-label', gt('Downlad')).attr('id', 'downloadviewerfile');
             notificationNode.append(downloadButton);
             var self = this;
-            downloadButton.on('mouseup keydown', function () {
+            downloadButton.on('click', function () {
                 var data = self.model.isFile() ? self.model.toJSON() : self.model.get('origData');
                 ActionsPattern.invoke(Util.getRefByModelSource(self.model.get('source')), self, ext.Baton({ model: self.model, data: data }));
             });
