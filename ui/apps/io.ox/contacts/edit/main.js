@@ -263,7 +263,9 @@ define('io.ox/contacts/edit/main', [
         });
 
         app.setQuit(function () {
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                isEdit = !!app.contact.get('id'),
+                type = isEdit ? 'edit' : 'default';
 
             if (getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -282,7 +284,7 @@ define('io.ox/contacts/edit/main', [
                         .done(function (action) {
                             if (action === 'delete') {
                                 def.resolve();
-                                model.factory.realm('edit').release();
+                                model.factory.realm(type).release();
                             } else {
                                 def.reject();
                             }
@@ -290,7 +292,7 @@ define('io.ox/contacts/edit/main', [
                 });
             } else {
                 def.resolve();
-                model.factory.realm('edit').release();
+                model.factory.realm(type).release();
             }
             //clean
             return def;
