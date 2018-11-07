@@ -466,7 +466,7 @@ define('io.ox/files/main', [
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
                                 .hide().addClass('myshares-list-control')
-                                .append(toolbar.render().$el)
+                                .prepend(toolbar.render().$el)
                         );
 
                         function updateCallback($toolbar) {
@@ -583,7 +583,7 @@ define('io.ox/files/main', [
                             app.myFavoritesListViewControl.render().$el
                                 .hide()
                                 .addClass('myfavorites-list-control')
-                                .append(toolbar.render().$el)
+                                .prepend(toolbar.render().$el)
                         );
 
                         function updateCallback($toolbar) {
@@ -1329,14 +1329,15 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             api.on('beforedelete', function (ids) {
-                var selection = app.listView.selection.get();
+                var selection = app.listView.selection;
                 var cids = _.map(ids, _.cid);
 
                 //intersection check for Bug 41861
-                if (_.intersection(cids, selection).length) {
-
+                if (_.intersection(cids, selection.get()).length) {
+                    // set the direction for dodge function
+                    selection.getPosition();
                     // change selection
-                    app.listView.selection.dodge();
+                    selection.dodge();
                     // optimization for many items
                     if (ids.length === 1) return;
                     // remove all DOM elements of current collection; keep the first item
