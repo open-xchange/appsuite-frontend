@@ -406,20 +406,19 @@ define('io.ox/core/tk/tokenfield', [
                     if (e.attrs) {
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value),
                             node = $(e.relatedTarget),
-                            label = node.find('.token-label');
+                            label = node.find('.token-label'),
+                            token = model.get('token'),
+                            hasLabel = token.label && token.label !== token.value,
+                            title = hasLabel ? token.label + ' ' + token.value : token.value;
+
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
 
-                        // a11y: set title
-                        node.attr('aria-label', function () {
-                            var token = model.get('token'),
-                                title = token.label;
-                            if (token.label !== token.value) {
-                                title = token.label ? token.label + ' ' + token.value : token.value;
-                            }
-                            //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
-                            return gt('%1$s. Press backspace to delete.', title);
-                        });
+                        // mouse hover tooltip / a11y title
+                        label.attr({ 'aria-hidden': true, 'title': title });
+                        //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                        node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
+
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
                     }
@@ -669,7 +668,7 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            this.$el.closest('div.tokenfield').attr('role', 'application').on('copy', function (e) {
+            this.$el.closest('div.tokenfield').on('copy', function (e) {
                 // value might contain more than one id so split
                 var values = e.target.value.split(', ');
 
