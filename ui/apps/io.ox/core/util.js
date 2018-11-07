@@ -129,7 +129,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'stat
 
         // detect URLs in plain text
         urlify: function (text) {
-            return text.replace(regUrl, function (url) {
+            return (text || '').replace(regUrl, function (url) {
                 var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
                 var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(fix.url))).append(that.breakableHTML(fix.url));

@@ -179,6 +179,7 @@ define('io.ox/search/items/view-template', [
             popup.idle().append(view.draw(baton.data, options));
             api.get(api.reduce(baton.data)).then(function (data) {
                 // render again with get response if needed
+                data = data.toJSON ? data.toJSON() : data;
                 if (!_.isEqual(baton.data, data)) {
                     popup.empty().append(
                         view.draw(data, options)
