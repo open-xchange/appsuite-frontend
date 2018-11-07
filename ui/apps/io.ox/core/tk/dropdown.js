@@ -249,6 +249,12 @@
         });
     }
 
+    function onResize(e) {
+        // do not clear menus when the resize event has been triggered
+        if (!e.originalEvent) return;
+        clearMenus(e);
+    }
+
     // global listener for dropdown handling
     $(document)
     .on('click.bs.dropdown.data-api', clearMenus)
@@ -257,6 +263,6 @@
     .on('keydown.bs.dropdown.data-api', '.dropdown-menu', keydownMenu)
     .on('keydown.bs.dropdown.data-api', '[role=menu]', onClickListItem)
     .on('focusout.dropdown.data-api', '.dropdown-menu', onFocusOut);
-    $(window).on('resize', _.throttle(clearMenus, 200));
+    $(window).on('resize', _.throttle(onResize, 200));
 
 })(jQuery);
