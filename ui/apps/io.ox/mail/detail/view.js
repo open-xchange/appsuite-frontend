@@ -400,6 +400,8 @@ define('io.ox/mail/detail/view', [
                 $content = $(contentData.content),
                 resizing = 0,
                 forwardEvent = function (e) {
+                    // forward events in iframe to parent window, set iframe as target, so closest selectors etc work as expected (needed in sidepopups for example)
+                    e.target = this[0];
                     this.trigger(e);
                 }.bind(this);
 
