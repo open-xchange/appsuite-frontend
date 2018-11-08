@@ -129,6 +129,9 @@ define('io.ox/settings/main', [
             var index = 100;
 
             _(apps).each(function (app) {
+                // filter apps which don't have required capability (upsell case)
+                if (!capabilities.has(app.get('requires'))) return;
+
                 ext.point('io.ox/settings/pane/main').extend(_.extend({}, {
                     title: app.get('description'),
                     ref: app.id,
@@ -300,11 +303,9 @@ define('io.ox/settings/main', [
         }
 
         function addModelsToPool(groupList) {
-
             var externalList = [];
 
             function processSubgroup(extPoint, subgroup) {
-
                 subgroup = subgroup + '/' + extPoint.id;
                 disableListetSettingsPanes(subgroup);
 
