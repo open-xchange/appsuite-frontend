@@ -1598,7 +1598,7 @@ define('io.ox/calendar/week/view', [
                 workStart: settings.get('startTime', 8) * 1,
                 workEnd: settings.get('endTime', 18) * 1
             });
-            this.model.trigger('change:worktime');
+            this.render();
         },
 
         onChangeAppointment: function (model) {
