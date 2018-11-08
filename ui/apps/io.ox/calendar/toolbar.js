@@ -165,25 +165,25 @@ define('io.ox/calendar/toolbar', [
         draw: function (baton) {
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'week:day', gt('Day'), { radio: true });
-            if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true });
-            dropdown.option('layout', 'week:week', gt('Week'), { radio: true })
-                .option('layout', 'month', gt('Month'), { radio: true })
-                .option('layout', 'year', gt('Year'), { radio: true })
-                .option('layout', 'list', gt('List'), { radio: true })
+            .group(gt('Layout'))
+            .option('layout', 'week:day', gt('Day'), { radio: true, group: true });
+            if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true, group: true });
+            dropdown.option('layout', 'week:week', gt('Week'), { radio: true, group: true })
+                .option('layout', 'month', gt('Month'), { radio: true, group: true })
+                .option('layout', 'year', gt('Year'), { radio: true, group: true })
+                .option('layout', 'list', gt('List'), { radio: true, group: true })
                 .divider()
-                .header(gt('Options'))
-                .option('folderview', true, gt('Folder view'))
-                .option('showMiniCalendar', true, gt('Mini calendar'));
+                .group(gt('Options'))
+                .option('folderview', true, gt('Folder view'), { group: true })
+                .option('showMiniCalendar', true, gt('Mini calendar'), { group: true });
 
             if (baton.app.props.get('layout') === 'month') {
-                dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
+                dropdown.option('showMonthviewWeekend', true, gt('Weekends'), { group: true });
                 // dropdown.option('showMonthviewCW', true, gt('CW'));
             }
 
             dropdown
-                .option('checkboxes', true, gt('Checkboxes'))
+                .option('checkboxes', true, gt('Checkboxes'), { group: true })
                 .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
                 .listenTo(baton.app.props, 'change:layout', updateColorOption);
 

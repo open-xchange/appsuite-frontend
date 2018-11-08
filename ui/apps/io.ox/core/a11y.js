@@ -245,7 +245,7 @@ define('io.ox/core/a11y', [], function () {
 
     function getPreviousTabbable(el) {
         var parent = arguments[1] || el.parent(),
-            tabbable = getTabbable(parent),
+            tabbable = getTabbable(parent).filter('[tabindex!="-1"]'),
             index = tabbable.index(el);
         if (index > 0) return tabbable.eq(index - 1);
         if (parent.is('body')) return tabbable.eq(tabbable.length - 1);
@@ -255,7 +255,7 @@ define('io.ox/core/a11y', [], function () {
 
     function getNextTabbable(el) {
         var parent = arguments[1] || el.parent(),
-            tabbable = getTabbable(parent),
+            tabbable = getTabbable(parent).filter('[tabindex!="-1"]'),
             index = tabbable.index(el);
         if (index < tabbable.length - 1) return tabbable.eq(index + 1);
         if (parent.is('body')) return tabbable.eq(0);
@@ -278,9 +278,9 @@ define('io.ox/core/a11y', [], function () {
     }
 
     function dropdownTrapFocus(e) {
-
+        if (e.which === 9) return;
         var dropdown = $(e.target).closest('ul.dropdown-menu'),
-            dropdownLinks = dropdown.find('> li:visible > a'),
+            dropdownLinks = dropdown.find('li:visible > a'),
             firstLink = dropdownLinks.first(),
             lastLink = dropdownLinks.last(),
             isLastLink = $(e.target).is(lastLink),
@@ -290,10 +290,10 @@ define('io.ox/core/a11y', [], function () {
         if (dropdownLinks.length === 1) return;
 
         // a11y - trap focus in context menu - prevent tabbing out of context menu
-        if ((!e.shiftKey && e.which === 9 && isLastLink) ||
+        /*if ((!e.shiftKey && e.which === 9 && isLastLink) ||
             (e.shiftKey && e.which === 9 && isFirstLink)) {
             return trapFocus(dropdown, e);
-        }
+        }*/
 
         // cursor up (38), page down (34), end (35)
         if (e.which === 38 && isFirstLink || e.which === 34 || e.which === 35) {
