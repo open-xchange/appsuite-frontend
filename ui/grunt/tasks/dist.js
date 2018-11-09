@@ -62,12 +62,17 @@ module.exports = function (grunt) {
             }
         }
     });
+    var fileList = ['*.js', 'static/**/*.js'],
+        uglifySkipList = [
+            'static/3rd.party/purify.min.js'
+        ],
+        ignoreList = uglifySkipList.map(function (f) { return '!' + f; });
 
     grunt.config.merge({
         uglify: {
             dist_rootfolder: {
                 files: [{
-                    src: ['*.js', 'static/**/*.js'],
+                    src: fileList.concat(ignoreList),
                     cwd: 'build/',
                     dest: 'dist/appsuite/',
                     filter: function (f) {
@@ -75,6 +80,18 @@ module.exports = function (grunt) {
                     },
                     expand: true
                 }]
+            }
+        }
+    });
+
+    grunt.config.merge({
+        copy: {
+            //copy js files which are not uglified
+            dist_uglifySkiplist: {
+                src: uglifySkipList,
+                cwd: 'build/',
+                dest: 'dist/appsuite/',
+                expand: true
             }
         }
     });
