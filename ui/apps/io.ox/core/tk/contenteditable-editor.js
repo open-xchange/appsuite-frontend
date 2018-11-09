@@ -119,7 +119,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         config: function (context) {
 
-            var enabled = settings.get('features/mentions', false);
+            var enabled = mailSettings.get('features/mentions', false);
 
             if (!enabled) return;
 
