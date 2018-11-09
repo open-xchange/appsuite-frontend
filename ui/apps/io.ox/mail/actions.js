@@ -17,14 +17,16 @@ define('io.ox/mail/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
     'io.ox/mail/util',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/print',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
+    'io.ox/core/viewer/views/types/typesregistry',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/core/capabilities'
-], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt, capabilities) {
+], function (ext, links, api, util, filesAPI, folderAPI, print, account, notifications, viewerTypes, settings, gt, capabilities) {
 
     'use strict';
 
@@ -455,8 +457,17 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/view-attachment', {
-        // TODO capabilites check, files filter?
-        requires: 'some',
+        requires: function (e) {
+            if (!e.collection.has('some')) { return false; }
+
+            var attachments = _.isArray(e.baton.data) ? e.baton.data : [e.baton.data];
+            var canView = _.some(attachments, function (data) {
+                var model = new filesAPI.Model(data);
+                return viewerTypes.canView(model);
+            });
+
+            return canView;
+        },
         multiple: function (attachmentList, baton) {
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
                 var options = { files: attachmentList, restoreFocus: baton.restoreFocus };

@@ -94,26 +94,39 @@ define('io.ox/core/viewer/views/types/typesregistry', [
         },
 
         /**
-         * Returns true whether the model represents a document file type.
+         * Returns true if the Viewer is able to display the data of the given model.
          *
          * @param {Object} model
          *  an OX Viewer model object.
          *
          * @returns {Boolean}
-         *  Whether he model represents a document file type.
+         *  Whether the Viewer is able to display the data of the given model.
+         */
+        canView: function (model) {
+            return (this.getTypeString(model) !== 'defaultview');
+        },
+
+        /**
+         * Returns true if the model represents a document file type.
+         *
+         * @param {Object} model
+         *  an OX Viewer model object.
+         *
+         * @returns {Boolean}
+         *  Whether the model represents a document file type.
          */
         isDocumentType: function (model) {
             return (this.getTypeString(model) === 'documentview');
         },
 
         /**
-         * Returns true whether the model represents a spreadsheet file type.
+         * Returns true if the model represents a spreadsheet file type.
          *
          * @param {Object} model
          *  an OX Viewer model object.
          *
          * @returns {Boolean}
-         *  Whether he model represents a spreadsheet file type.
+         *  Whether the model represents a spreadsheet file type.
          */
         isSpreadsheetType: function (model) {
             return (this.getTypeString(model) === 'spreadsheetview');
