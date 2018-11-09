@@ -212,9 +212,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
             }
 
-            // save model to view
-            this.model = model;
-
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), 'aria-label': gt('Previous') });
             nextSlide.attr({ title: gt('Next'), 'aria-label': gt('Next') });
@@ -1045,6 +1042,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 var collectionLength = self.collection.length;
                 var newIndex = (activeIndex >= collectionLength) ? collectionLength - 1 : activeIndex;
 
+                self.viewerEvents.trigger('viewer:displayeditem:change', self.collection.at(newIndex));
                 self.swiper.slideTo(newIndex + 1, 0, false);
                 self.loadSlide(newIndex, 'both');
             });
