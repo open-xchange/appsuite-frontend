@@ -76,10 +76,13 @@ define('io.ox/core/viewer/views/types/baseview', [
          * file.
          * @param {String} notification The notification message string
          * @param {String} [iconClass] A CSS class name to be applied on the file icon.
+          * @param {String} [buttonDescription] The optional buttonDescription message string.
          */
-        displayDownloadNotification: function (notification, iconClass) {
+        displayDownloadNotification: function (notification, iconClass, buttonDescription) {
 
-            var notificationNode = this.displayNotification(notification + gt('\n Please download the file using the button below.'), iconClass);
+            buttonDescription = buttonDescription ? buttonDescription : gt('\n Please download the file using the button below.');
+
+            var notificationNode = this.displayNotification(notification + buttonDescription, iconClass);
             notificationNode.css('white-space', 'pre');
             var fileSize = Util.renderItemSize(this.model);
             fileSize = fileSize.indexOf('-') === 0 ? '' : ' (' + fileSize + ')';
