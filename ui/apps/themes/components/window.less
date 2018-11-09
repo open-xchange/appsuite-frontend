@@ -602,11 +602,16 @@
 
             button {
                 color: white;
-                line-height: @headerHeight;
+                line-height: @headerHeight - 2;
                 padding: 0 8px;
                 display: inline-block;
                 &[data-action="close"] {
                     font-size: 18px;
+                }
+                &:focus {
+                    box-shadow: none;
+                    outline: 2px solid #A0A0A0;
+                    outline-offset: -4px;
                 }
             }
         }
