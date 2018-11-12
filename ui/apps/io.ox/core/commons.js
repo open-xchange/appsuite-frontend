@@ -315,22 +315,21 @@ define('io.ox/core/commons', [
                 });
             }
 
-            grid.on({
-                'change:prop:folder change:mode change:ids': function () {
-
-                    var folder_id = grid.prop('folder'), mode = grid.getMode();
-                    if (mode === 'all') {
-                        // non-search; show foldername
-                        drawFolderInfo(folder_id);
-                    } else if (mode === 'search') {
-                        var node = getInfoNode();
-                        node.find('.folder-name')
-                            .text(gt('Results'));
-                        node.find('.folder-count')
-                            .text('(' + grid.getIds().length + ')');
-                    }
+            function updateFolderInfo() {
+                var folder_id = grid.prop('folder'), mode = grid.getMode();
+                if (mode === 'all') {
+                    // non-search; show foldername
+                    drawFolderInfo(folder_id);
+                } else if (mode === 'search') {
+                    var node = getInfoNode();
+                    node.find('.folder-name')
+                        .text(gt('Results'));
+                    node.find('.folder-count')
+                        .text('(' + grid.getIds().length + ')');
                 }
-            });
+            }
+            grid.on('change:prop:folder change:mode change:ids', updateFolderInfo);
+            folderAPI.on('after:rename', updateFolderInfo);
 
             // unread counter for mail
             folderAPI.on('update:total', function (id) {

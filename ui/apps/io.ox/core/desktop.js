@@ -160,6 +160,10 @@ define('io.ox/core/desktop', [
 
                 var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
+                folderAPI.on('after:rename', function (id, data) {
+                    if (win) win.setTitle(data.title || '');
+                });
+
                 that = {
 
                     initialized: initialized.promise(),
