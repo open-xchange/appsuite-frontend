@@ -34,6 +34,11 @@
         background: @selected-background;
         outline: 0;
     }
+    & > [role="group"] > li > a:hover {
+        text-decoration: none;
+        color: @dropdown-link-hover-color;
+        background-color: @dropdown-link-hover-bg;
+    }
     & > li > a, & > [role="group"] > li > a {
         display: block;
         padding: 3px 20px;
@@ -90,7 +95,6 @@
                 width: 1em;
                 margin-right: 1em;
                 border-radius: 3px;
-                background-color: #fff;
             }
         }
 
