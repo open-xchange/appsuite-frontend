@@ -73,6 +73,12 @@ define('io.ox/files/actions/share', [
             view.render().$el
         );
 
+        // after the dialog is open, we have to trigger an update on the tokenfield, as the correct width can only be calculated once the nodes are actually in the dom.
+        dialog.on('open', function () {
+            var tokenfield = view.$el.find('input.tokenfield').data('bs.tokenfield');
+            if (tokenfield) tokenfield.update();
+        });
+
         // add dialog buttons
         dialog
             .addCancelButton()
