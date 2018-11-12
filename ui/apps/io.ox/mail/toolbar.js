@@ -267,39 +267,39 @@ define('io.ox/mail/toolbar', [
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'), { radio: true });
+            .group(gt('Layout'))
+            .option('layout', 'vertical', gt('Vertical'), { radio: true, group: true });
             // offer compact view only on desktop
-            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
-            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
-            .option('layout', 'list', gt('List'), { radio: true })
+            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true, group: true });
+            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true, group: true })
+            .option('layout', 'list', gt('List'), { radio: true, group: true })
             .divider();
 
             // feature: tabbed inbox
             if (capabilities.has('mail_categories') && !_.device('smartphone')) {
                 dropdown
-                .header(gt('Inbox'))
-                .option('categories', true, gt('Use categories'))
+                .group(gt('Inbox'))
+                .option('categories', true, gt('Use categories'), { group: true })
                 //#. term is followed by a space and three dots (' …')
                 //#. the dots refer to the term 'Categories' right above this dropdown entry
                 //#. so user reads it as 'Configure Categories'
-                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
+                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true, group: true })
                 .divider();
             }
 
             dropdown
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'));
+            .group(gt('Options'))
+            .option('folderview', true, gt('Folder view'), { group: true });
             if (settings.get('selectionMode') !== 'alternative') {
-                dropdown.option('checkboxes', true, gt('Checkboxes'));
+                dropdown.option('checkboxes', true, gt('Checkboxes'), { group: true });
             }
             if (baton.app.supportsTextPreview()) {
-                dropdown.option('textPreview', true, gt('Text preview'));
+                dropdown.option('textPreview', true, gt('Text preview'), { group: true });
             }
             dropdown
-            .option('contactPictures', true, gt('Contact pictures'))
-            .option('exactDates', true, gt('Exact dates'))
-            .option('alwaysShowSize', true, gt('Message size'))
+            .option('contactPictures', true, gt('Contact pictures'), { group: true })
+            .option('exactDates', true, gt('Exact dates'), { group: true })
+            .option('alwaysShowSize', true, gt('Message size'), { group: true })
             .divider();
 
             if (capabilities.has('mailfilter_v2')) {

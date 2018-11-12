@@ -1,3 +1,16 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
+ */
+
 define('io.ox/core/main/apps', [
     'io.ox/core/api/apps',
     'io.ox/core/capabilities',
@@ -7,6 +20,7 @@ define('io.ox/core/main/apps', [
 ], function (apps, capabilities, ui, icons, gt) {
     'use strict';
 
+    // Mail
     ui.createApp({
         id: 'io.ox/mail',
         name: 'io.ox/mail',
@@ -23,6 +37,7 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
+    // Calendar
     ui.createApp({
         id: 'io.ox/calendar',
         name: 'io.ox/calendar',
@@ -44,6 +59,7 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
+    // Contacts
     ui.createApp({
         id: 'io.ox/contacts',
         name: 'io.ox/contacts',
@@ -65,6 +81,7 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
+    // Portal
     ui.createApp({
         id: 'io.ox/portal',
         name: 'io.ox/portal',
@@ -75,6 +92,7 @@ define('io.ox/core/main/apps', [
         icon: icons['io.ox/portal']
     });
 
+    // Files
     ui.createApp({
         id: 'io.ox/files',
         name: 'io.ox/files',
@@ -91,6 +109,7 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
+    // Tasks
     ui.createApp({
         id: 'io.ox/tasks',
         name: 'io.ox/tasks',
@@ -112,6 +131,8 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
+
+    // Notes
     ui.createApp({
         id: 'io.ox/notes',
         name: 'io.ox/notes',
@@ -122,6 +143,7 @@ define('io.ox/core/main/apps', [
         searchable: true
     });
 
+    // Settings
     ui.createApp({
         id: 'io.ox/settings',
         name: 'io.ox/settings',

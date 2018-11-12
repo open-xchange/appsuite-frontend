@@ -417,6 +417,8 @@ define('io.ox/core/notifications/subview', [
             this.collection.remove(items, { silent: silent });
         },
         resetNotifications: function (items, silent) {
+            // prevent [undefined] arrays
+            items = items || [];
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }

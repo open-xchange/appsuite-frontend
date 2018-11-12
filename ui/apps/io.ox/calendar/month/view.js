@@ -36,15 +36,20 @@ define('io.ox/calendar/month/view', [
         mouseDragHelper: function (opt) {
             var self = this,
                 e = opt.event,
-                context = _.uniqueId('.drag-');
+                context = _.uniqueId('.drag-'),
+                // need this active tracker since mousemove events are throttled and may trigger the mousemove event
+                // even after the undelegate function has been called
+                active = true;
             if (e.which !== 1) return;
             opt.start.call(this, opt.event);
 
             this.delegate('mousemove' + context, opt.updateContext, _.throttle(function (e) {
                 if (e.which !== 1) return;
+                if (!active) return;
                 opt.update.call(self, e);
             }, 100));
             $(document).on('mouseup' + context, function (e) {
+                active = false;
                 self.undelegate('mousemove' + context);
                 $(document).off('mouseup' + context);
                 opt.end.call(self, e);

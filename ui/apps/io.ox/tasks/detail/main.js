@@ -27,9 +27,14 @@ define('io.ox/tasks/detail/main', [
     ox.ui.App.mediator(NAME, {
         'show-task': function (app) {
             app.showTask = function (task) {
+                var ecid = _.ecid(task);
                 api.get(task).done(function (data) {
                     var baton = ext.Baton({ data: data, app: app }),
                         handleDelete = function (e, tasks) {
+                            if (e.type === 'delete:' + ecid) {
+                                app.quit();
+                                return;
+                            }
                             _(tasks).each(function (taskObj) {
                                 if (taskObj.id === baton.data.id && taskObj.folder_id === baton.data.folder_id) {
                                     app.quit();
@@ -37,9 +42,9 @@ define('io.ox/tasks/detail/main', [
                             });
                         };
                     app.setTitle(data.title);
-                    api.on('delete', handleDelete);
+                    api.on('delete ' + 'delete:' + ecid, handleDelete);
                     app.on('quit', function () {
-                        api.off('delete', handleDelete);
+                        api.off('delete ' + 'delete:' + ecid, handleDelete);
                     });
 
                     app.getWindowNode().addClass('detail-view-app').append(

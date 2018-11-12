@@ -609,6 +609,11 @@ define('io.ox/calendar/freetime/timeView', [
                 self.bodyNode.idle();
                 // set appointments silent, force trigger to redraw correctly. (normal setting does not trigger correctly when just switching times)
                 self.model.set('timeSlots', timeSlots, { silent: true }).trigger('change:timeSlots');
+            }).fail(function (error) {
+                self.bodyNode.idle();
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
             });
         },
 

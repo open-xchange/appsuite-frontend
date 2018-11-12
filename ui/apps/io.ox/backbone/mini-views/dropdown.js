@@ -59,8 +59,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
             this.$overlay.remove();
-            this.$toggle.attr('aria-expanded', false).focus();
+            this.$toggle.attr('aria-expanded', false);
             delete this.$overlay;
+            if (this.lastEvent && this.lastEvent.which === 9) {
+                if (this.lastEvent.shiftKey) a11y.getPreviousTabbable(this.$toggle).focus();
+                else a11y.getNextTabbable(this.$toggle).focus();
+                delete this.lastEvent;
+            }
         },
 
         setDropdownOverlay: function () {
@@ -161,6 +166,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             }
         },
 
+        onKeyDownMenu: function (e) {
+            if (e.which !== 9) return;
+            this.lastEvent = e;
+        },
+
         open: function () {
             if (this.$el.hasClass('open') || this.$overlay) return;
             this.$toggle.trigger('click');
@@ -225,6 +235,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // not so nice but we need this for mobile support
             // if $ul pops out on the overlay, this line is also required
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
+            this.$ul.on('keydown', 'a', $.proxy(this.onKeyDownMenu, this));
 
             if (this.model) this.listenTo(this.model, 'change', this.options.update || this.update);
             if (this.options.dontProcessOnMobile) {
@@ -276,8 +287,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return _.isObject(value) ? JSON.stringify(value) : value;
         },
 
-        append: function (fn) {
-            this.$ul.append($('<li role="presentation">').append(fn));
+        append: function (fn, options) {
+            (options && options.group ? this.$ul.find('[role="group"]:last') : this.$ul).append(
+                $('<li role="presentation">').append(fn)
+            );
             return this;
         },
 
@@ -302,13 +315,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                                 'data-toggle': _.isBoolean(value) || options.toggleValue !== undefined,
                                 'data-toggle-value': options.toggleValue,
                                 'aria-label': ariaLabel,
-                                'title': options.title
+                                'title': options.title,
+                                tabindex: '-1'
                             });
 
             if (options.color) $option.addClass('color-flag');
 
-            return this.append(
-                $option
+            $option
                 // in firefox draggable=false is not enough to prevent dragging...
                 .on('dragstart', false)
                 // store original value
@@ -317,8 +330,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     // if the checkbox should have a color, add the information here
                     options.color ? addColor($checkMark, options.color).attr({ 'data-color': options.color, 'data-color-label': options.color }) : $checkMark,
                     _.isFunction(text) ? text() : $.txt(text)
-                )
-            );
+                );
+
+            return this.append($option, _.pick(options, 'group'));
         },
 
         // used to manually prevent the popup from closing.The only exception is a direct click on the toggle button. Make sure to reset this or the popup stays open when you don't want to
@@ -343,7 +357,19 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         header: function (text) {
-            this.$ul.append($('<li class="dropdown-header" role="separator">').text(text));
+            this.$ul.append(
+                $('<li class="dropdown-header" role="separator">').append(
+                    $('<span aria-hidden="true">').text(text)
+                )
+            );
+            return this;
+        },
+
+        group: function (text, nodes) {
+            this.header(text);
+            this.$ul.append(
+                $('<div role="group">').attr('aria-label', text).append(nodes)
+            );
             return this;
         },
 

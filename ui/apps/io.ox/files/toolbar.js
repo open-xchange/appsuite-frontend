@@ -330,16 +330,16 @@ define('io.ox/files/toolbar', [
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li', caret: true })
-                .header(gt('Layout'))
-                .option('layout', 'list', gt('List'))
-                .option('layout', 'icon', gt('Icons'))
-                .option('layout', 'tile', gt('Tiles'))
+                .group(gt('Layout'))
+                .option('layout', 'list', gt('List'), { group: true })
+                .option('layout', 'icon', gt('Icons'), { group: true })
+                .option('layout', 'tile', gt('Tiles'), { group: true })
                 .divider()
-                .header(gt('Options'))
-                .option('checkboxes', true, gt('Checkboxes'))
-                .option('folderview', true, gt('Folder view'));
+                .group(gt('Options'))
+                .option('checkboxes', true, gt('Checkboxes'), { group: true })
+                .option('folderview', true, gt('Folder view'), { group: true });
 
-            if (_.device('!touch')) dropdown.option('details', true, gt('File details'));
+            if (_.device('!touch')) dropdown.option('details', true, gt('File details'), { group: true });
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')

@@ -150,18 +150,19 @@ define('io.ox/core/viewer/views/mainview', [
                     swiper.slidePrev();
                 }
                 swiper.updateClickedSlide({ target: null });
-                self.displayerView.focusActiveSlide();
             }, 200);
 
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
-                var tabableActions = a11y.getTabbable(viewerRootEl),
-                    tabableActionsCount = tabableActions.length;
+                var tabableActions = a11y.getTabbable(viewerRootEl).filter(':not(.swiper-button-control):not([tabindex=-1])');
+                var tabableActionsCount = tabableActions.length;
+
                 // quit immediately if no tabable actions are found
                 if (tabableActionsCount === 0) { return; }
-                var focusedElementIndex = tabableActions.index(document.activeElement),
-                    traversalStep = event.shiftKey ? -1 : 1,
-                    nextElementIndex = focusedElementIndex + traversalStep;
+
+                var focusedElementIndex = tabableActions.index(document.activeElement);
+                var traversalStep = event.shiftKey ? -1 : 1;
+                var nextElementIndex = focusedElementIndex + traversalStep;
                 // prevent default TAB traversal
                 event.preventDefault();
                 // traverse to prev/next action
@@ -171,6 +172,18 @@ define('io.ox/core/viewer/views/mainview', [
                 // focus next action candidate
                 tabableActions.eq(nextElementIndex).visibleFocus();
             }
+
+            function handleLeftRightArrowKey(direction) {
+                // need to use defer here in order to let the toolbar navigation select the action link first
+                _.defer(function () {
+                    var toolbarFocused = $.contains(self.toolbarView.el, document.activeElement);
+                    // if the focus is inside the toolbar cursor left/right switches between toolbar links, otherwise between slides
+                    if (!toolbarFocused) {
+                        handleChangeSlide(direction);
+                    }
+                });
+            }
+
             switch (event.which) {
                 case 9: // TAB key
                     if (this.standalone) return;
@@ -186,10 +199,10 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    handleChangeSlide('left');
+                    handleLeftRightArrowKey('left');
                     break;
                 case 39: // right arrow
-                    handleChangeSlide('right');
+                    handleLeftRightArrowKey('right');
                     break;
                 case 33: // page up
                     event.preventDefault();

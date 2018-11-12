@@ -74,7 +74,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         requires: function (e) {
-            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+            return e.baton.model && e.baton.model.has('attendees');
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (recipients) {
@@ -103,7 +103,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
         requires: function (e) {
-            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1 && !capabilities.has('guest');
+            return e.baton.model && e.baton.model.has('attendees') && !capabilities.has('guest');
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/invite']).done(function (action) {

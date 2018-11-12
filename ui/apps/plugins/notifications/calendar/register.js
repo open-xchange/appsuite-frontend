@@ -64,34 +64,38 @@ define('plugins/notifications/calendar/register', [
                 },
                 onClickAccept = function (e) {
                     e.stopPropagation();
-                    var o = calAPI.reduce(model.attributes),
-                        appointmentData = model.attributes;
-                    require(['settings!io.ox/calendar', 'io.ox/calendar/util', 'io.ox/core/api/user'], function (calendarSettings, util, userAPI) {
-                        userAPI.get().then(function (user) {
-                            o.data = {
+                    require(['io.ox/calendar/util'], function (util) {
+                        calAPI.get(calAPI.reduce(model.attributes)).done(function (appointmentData) {
+                            var confirmation = {
                                 // default reminder
                                 alarms: util.getDefaultAlarms(appointmentData),
-                                attendee: util.createAttendee(user, { partStat: 'ACCEPTED' }),
-                                id: appointmentData.id,
-                                folder: appointmentData.folder
+                                // make sure to use the original data here, we don't want to accidentally change data we are not allowed too change
+                                attendee: _(appointmentData.get('attendees')).findWhere({ entity: ox.user_id }),
+                                id: appointmentData.get('id'),
+                                folder: appointmentData.get('folder')
                             };
 
+                            if (!confirmation.attendee) {
+                                yell('error', gt('Participant not found'));
+                                return;
+                            }
+                            confirmation.attendee.partStat = 'ACCEPTED';
+
                             var expand = util.getCurrentRangeOptions();
-                            calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
+                            calAPI.confirm(confirmation, _.extend({ checkConflicts: true }, expand)).done(function (result) {
                                 if (result && result.conflicts) {
                                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                                         conflictView.dialog(result.conflicts)
                                             .on('ignore', function () {
-                                                calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
+                                                calAPI.confirm(confirmation, _.extend({ checkConflicts: false }, expand));
                                             });
                                     });
                                     return;
                                 }
                             })
-                            .fail(function (error) {
-                                yell(error);
-                            });
-                        });
+                            .fail(yell);
+                        })
+                        .fail(yell);
                     });
                 };
 
@@ -231,7 +235,6 @@ define('plugins/notifications/calendar/register', [
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
                 nextAlarmTimer,
-                nextAlarm,
                 alarmsToShow = [],
                 subview = new Subview(options),
                 audioQueue = [],
@@ -261,6 +264,7 @@ define('plugins/notifications/calendar/register', [
             calAPI.on('resetChronosAlarms', function (alarms) {
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
+                    nextAlarmTime,
                     getIds = function () {
                         var ids = [];
                         subview.collection.forEach(function (model) {
@@ -270,17 +274,8 @@ define('plugins/notifications/calendar/register', [
                     },
                     timerFunction = function () {
                         var ids = getIds();
-                        if (nextAlarm.action === 'AUDIO') {
-                            playAlarm(nextAlarm);
-                        } else if (_(ids).indexOf(util.cid({ folder: nextAlarm.folder, id: nextAlarm.eventId, recurrenceId: nextAlarm.recurrenceId })) > -1) {
-                            // acknowledge duplicates (only one alarm per event)
-                            calAPI.acknowledgeAlarm(nextAlarm);
-                        } else {
-                            subview.addNotifications(nextAlarm);
-                            ids = getIds();
-                        }
 
-                        nextAlarm = undefined;
+                        nextAlarmTime = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
@@ -294,37 +289,33 @@ define('plugins/notifications/calendar/register', [
                                     subview.addNotifications(alarm);
                                     ids = getIds();
                                 }
-                            } else if (!nextAlarm || nextAlarm.time > alarm.time) {
-                                if (nextAlarm) {
-                                    temp.push(nextAlarm);
-                                }
-                                nextAlarm = alarm;
                             } else {
+                                if (!nextAlarmTime || nextAlarmTime > alarm.time) {
+                                    nextAlarmTime = alarm.time;
+                                }
                                 temp.push(alarm);
                             }
                         });
                         alarmsToShow = temp;
-                        if (nextAlarm) {
-                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).utc().valueOf() - new moment(now).utc().valueOf());
+                        if (nextAlarmTime) {
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).utc().valueOf() - new moment(now).utc().valueOf());
                         }
                     };
 
-                nextAlarm = undefined;
+                // clear old data
+                alarmsToShow = [];
                 if (nextAlarmTimer) {
                     clearTimeout(nextAlarmTimer);
                     nextAlarmTimer = undefined;
                 }
+
+                // decide where to put alarms, instant display/play sound or put it in the queue
                 _(alarms).each(function (alarm) {
                     if (alarm.time > now) {
-                        if (!nextAlarm || nextAlarm.time > alarm.time) {
-                            if (nextAlarm) {
-                                alarmsToShow.push(nextAlarm);
-                            }
-
-                            nextAlarm = alarm;
-                        } else {
-                            alarmsToShow.push(alarm);
+                        if (nextAlarmTime === undefined || nextAlarmTime > alarm.time) {
+                            nextAlarmTime = alarm.time;
                         }
+                        alarmsToShow.push(alarm);
                     } else if (alarm.action === 'AUDIO') {
                         playAlarm(alarm);
                     } else {
@@ -332,9 +323,10 @@ define('plugins/notifications/calendar/register', [
                     }
                 });
 
-                if (nextAlarm) {
-                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).valueOf() - new moment(now).valueOf());
+                if (nextAlarmTime !== undefined) {
+                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).valueOf() - new moment(now).valueOf());
                 }
+
                 var ids = getIds();
                 alarmsToAdd = _(alarmsToAdd).uniq(function (alarm) {
                     return util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId });

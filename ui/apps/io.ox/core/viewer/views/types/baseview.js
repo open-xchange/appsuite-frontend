@@ -34,9 +34,9 @@ define('io.ox/core/viewer/views/types/baseview', [
     var BaseView =  DisposableView.extend({
 
         // create slide root node
-        // <div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">
+        // <div class="swiper-slide" role="option" aria-selected="false">
         className: 'swiper-slide scrollable focusable',
-        attributes: { tabindex: -1, role: 'option', 'aria-selected': 'false' },
+        attributes: { role: 'option', 'aria-selected': 'false' },
 
         /**
          * Creates a file notification node with file name, icon and the notification text.
@@ -76,10 +76,13 @@ define('io.ox/core/viewer/views/types/baseview', [
          * file.
          * @param {String} notification The notification message string
          * @param {String} [iconClass] A CSS class name to be applied on the file icon.
+          * @param {String} [buttonDescription] The optional buttonDescription message string.
          */
-        displayDownloadNotification: function (notification, iconClass) {
+        displayDownloadNotification: function (notification, iconClass, buttonDescription) {
 
-            var notificationNode = this.displayNotification(notification + gt('\n Please download the file using the button below.'), iconClass);
+            buttonDescription = buttonDescription ? buttonDescription : gt('\n Please download the file using the button below.');
+
+            var notificationNode = this.displayNotification(notification + buttonDescription, iconClass);
             notificationNode.css('white-space', 'pre');
             var fileSize = Util.renderItemSize(this.model);
             fileSize = fileSize.indexOf('-') === 0 ? '' : ' (' + fileSize + ')';
@@ -87,7 +90,7 @@ define('io.ox/core/viewer/views/types/baseview', [
             var downloadButton = $('<button type="button" class="btn btn-primary btn-file">').text(gt('Download %1$s', fileSize)).attr('aria-label', gt('Downlad')).attr('id', 'downloadviewerfile');
             notificationNode.append(downloadButton);
             var self = this;
-            downloadButton.on('mouseup keydown', function () {
+            downloadButton.on('click', function () {
                 var data = self.model.isFile() ? self.model.toJSON() : self.model.get('origData');
                 ActionsPattern.invoke(Util.getRefByModelSource(self.model.get('source')), self, ext.Baton({ model: self.model, data: data }));
             });

@@ -29,10 +29,19 @@
         top: 15%;
         left: 42px;
     }
-    & > li > a:focus {
+    & > li > a:focus, & > [role="group"] > li > a:focus {
         color: @selected-color;
         background: @selected-background;
         outline: 0;
+    }
+    & > li > a, & > [role="group"] > li > a {
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: 1.42857143;
+        color: #333333;
+        white-space: nowrap;
     }
 }
 

@@ -62,6 +62,7 @@ define('io.ox/core/viewer/views/displayerview', [
     var DisplayerView = DisposableView.extend({
 
         className: 'viewer-displayer',
+        attributes: { role: 'main' },
 
         events: {
             'click a.fullscreen-button': 'toggleFullscreen'
@@ -167,14 +168,14 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this;
             var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">');
             var carouselInner = $('<div class="swiper-wrapper">');
-            var prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel" tabindex="-1"><i class="fa fa-angle-left" aria-hidden="true"></i></a>');
-            var nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel" tabindex="-1"><i class="fa fa-angle-right" aria-hidden="true"></i></a>');
+            var prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>');
+            var nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>');
             var caption = $('<div class="viewer-displayer-caption">');
             var fullscreen;
             var startIndex = this.collection.getStartIndex();
 
             var swiperParameter = {
-                loop: !this.standalone,
+                loop: !this.standalone && (this.collection.length > 1),
                 loopedSlides: 0,
                 followFinger: false,
                 simulateTouch: true,
@@ -211,9 +212,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
             }
 
-            // save model to view
-            this.model = model;
-
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), 'aria-label': gt('Previous') });
             nextSlide.attr({ title: gt('Next'), 'aria-label': gt('Next') });
@@ -234,7 +232,7 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             // append carousel to view
-            this.$el.append(carouselRoot, caption).attr({ tabindex: -1, role: 'main' });
+            this.$el.append(carouselRoot, caption);
             this.carouselRoot = carouselRoot;
 
             // initiate swiper
@@ -753,7 +751,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * Focuses the swiper's current active slide.
          */
         focusActiveSlide: function () {
-            this.swiper.slides.attr({ tabindex: -1, 'aria-selected': 'false' });
+            this.swiper.slides.removeAttr('tabindex').attr({ 'aria-selected': 'false' });
             this.getActiveSlideNode().attr({ tabindex: 0, 'aria-selected': 'true' }).visibleFocus();
         },
 
@@ -838,15 +836,27 @@ define('io.ox/core/viewer/views/displayerview', [
             this.lastSwiperZoomMode = (zoomLevel > currentZoomLevel) ? 'zoom_in' : 'zoom_out';
 
             function handleTransitionEnd() {
+                var activeElement = document.activeElement;
+                var activeSlideNode = self.getActiveSlideNode();
+
                 // for Safari the focus change is needed in order to update the scroll bars
-                if (_.device('safari && macos')) {
-                    self.getActiveSlideNode().blur();
-                }
+                self.getActiveSlideNode().blur();
+
                 containerNode.off('transitionend', handleTransitionEnd);
+
                 self.focusActiveSlide();
+
+                _.defer(function () {
+                    if (!activeSlideNode.is(activeElement)) {
+                        activeElement.focus();
+                    }
+                });
             }
 
-            containerNode.on('transitionend', handleTransitionEnd);
+            // workaround for Safari to update the scroll bars
+            if (_.device('safari && macos')) {
+                containerNode.on('transitionend', handleTransitionEnd);
+            }
 
             if (zoomLevel === 1) {
                 this.swiper.zoom.out();
@@ -974,7 +984,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // a11y
             activeSlideNode.attr({ 'aria-selected': 'true', tabindex: 0 });
-            previousSlideNode.attr({ 'aria-selected': 'false', tabindex: -1 });
+            previousSlideNode.removeAttr('tabindex').attr({ 'aria-selected': 'false' });
 
             // pause playback on audio and video slides
             previousSlideNode.find('audio, video').each(function () {
@@ -984,6 +994,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(this.swiper.realIndex));
 
             this.unloadDistantSlides(this.swiper.realIndex);
+
+            this.focusActiveSlide();
         },
 
         /**
@@ -1030,6 +1042,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 var collectionLength = self.collection.length;
                 var newIndex = (activeIndex >= collectionLength) ? collectionLength - 1 : activeIndex;
 
+                self.viewerEvents.trigger('viewer:displayeditem:change', self.collection.at(newIndex));
                 self.swiper.slideTo(newIndex + 1, 0, false);
                 self.loadSlide(newIndex, 'both');
             });

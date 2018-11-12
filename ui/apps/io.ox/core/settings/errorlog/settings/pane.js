@@ -90,7 +90,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
 
         onClickTab: function (e) {
             e.preventDefault();
-            $(e.target).tab('show');
+            $(e.target).closest('a').tab('show');
         },
 
         onUpdateStatistics: function (e) {
