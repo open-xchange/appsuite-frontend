@@ -20,6 +20,12 @@ msgid ""
 " Please download the file using the button below."
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2135,11 +2141,6 @@ msgstr "Sulge teadete ala"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Sulge Premium-funktsioonid"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Sulge %1$s meeldetuletus"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5298,6 +5299,10 @@ msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "E-kirjade liigitamine vaikimisi kategooriate alla võib aega võtta."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5385,15 +5390,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "Säilita kirjad, mis on saadetud pealkirjaga %1$s"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Keel"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "Keelekohased vaikeseaded"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Keel"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7100,6 +7111,13 @@ msgstr "Peiler"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Jaotis"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participants"
+msgid "Participant not found"
+msgstr "Osalejad"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -12910,6 +12928,9 @@ msgstr "teie platvorm"
 #, fuzzy
 #~ msgid "Close for %1$s"
 #~ msgstr "%1$s sulgemine"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Sulge %1$s meeldetuletus"
 
 #~ msgid "Color scheme"
 #~ msgstr "Värviskeem"

@@ -22,6 +22,18 @@ msgstr ""
 "\n"
 " Kérjük, töltse le a fájlt az alábbi gombot használva."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+" Kérjük, töltse le a fájlt az alábbi gombot használva."
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2131,11 +2143,6 @@ msgstr "Értesítési terület bezárása"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Prémium szolgáltatások bezárása"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Zárja le az emlékeztetőt: %1$s"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5301,6 +5308,10 @@ msgstr ""
 "Eltarthat egy ideig, amíg a közös levelek az alapértelmezett kategóriákhoz "
 "rendelődnek."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5388,15 +5399,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "%1$s tárgyú levelek megtartása"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Nyelv"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "Nyelvspecifikus alapértelmezés"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Nyelv"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7096,6 +7113,13 @@ msgstr "Személyhívó"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Része"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant related actions"
+msgid "Participant not found"
+msgstr "Résztvevőhöz kapcsolódó művelet"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -13044,6 +13068,9 @@ msgstr "az Ön rendszere"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Kattintson az ismétlődési nézet bezárásához"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Zárja le az emlékeztetőt: %1$s"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Emlékeztető bezárása"

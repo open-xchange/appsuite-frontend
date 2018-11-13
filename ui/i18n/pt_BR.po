@@ -23,6 +23,18 @@ msgstr ""
 "\n"
 "Baixe o arquivo usando o botão abaixo."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+"Baixe o arquivo usando o botão abaixo."
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2132,11 +2144,6 @@ msgstr "Fechar área de notificação"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Fechar recursos premium"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Fechar lembrete por %1$s"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5303,6 +5310,10 @@ msgstr ""
 "Levará algum tempo até que os e-mails comuns sejam atribuídos às categorias "
 "padrão."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5390,15 +5401,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "Manter e-mails com o assunto %1$s"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Idioma"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "Padrão específico da linguagem"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Idioma"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7102,6 +7119,13 @@ msgstr "Pager"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Parte"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant"
+msgid "Participant not found"
+msgstr "Participante"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -13791,6 +13815,9 @@ msgstr "sua plataforma"
 #~ msgid "Close recurrence view"
 #~ msgstr "Clique para fechar a visualização recorrente"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Fechar lembrete por %1$s"
+
 #~ msgid "Close this reminder"
 #~ msgstr "Fechar esse lembrete"
 
@@ -16432,9 +16459,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Parameter:"
 #~ msgstr "Parâmetro:"
-
-#~ msgid "Participant"
-#~ msgstr "Participante"
 
 #~ msgid "Participant:"
 #~ msgstr "Participante:"

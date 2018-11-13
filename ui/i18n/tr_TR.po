@@ -20,6 +20,18 @@ msgstr ""
 "\n"
 " Lütfen aşağıdaki düğmeye tıklayarak dosyayı indirin."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+" Lütfen aşağıdaki düğmeye tıklayarak dosyayı indirin."
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2101,11 +2113,6 @@ msgstr "Bildirim alanını kapat"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Premium özellikleri kapat"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "%1$s anımsatıcısını kapat"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5263,6 +5270,10 @@ msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "E-postaların varsayılan kategorilere atanması biraz zaman alabilir."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5350,15 +5361,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "%1$s konulu e-postaları sakla"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Dil"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "Dile özel varsayılan"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Dil"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7051,6 +7068,13 @@ msgstr "Çağrı cihazı"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Bölüm"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant related actions"
+msgid "Participant not found"
+msgstr "Katılımcıyı ilgilendiren eylemler"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -12540,6 +12564,9 @@ msgstr "platformunuz"
 
 #~ msgid "Calendar:"
 #~ msgstr "Takvim:"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "%1$s anımsatıcısını kapat"
 
 #~ msgid "Days"
 #~ msgstr "Günler"

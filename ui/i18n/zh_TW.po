@@ -22,6 +22,18 @@ msgstr ""
 "\n"
 "請點擊下面的按鈕下載檔案。"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+"請點擊下面的按鈕下載檔案。"
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2092,11 +2104,6 @@ msgstr "關閉通知區域"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "關閉收費功能"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "關閉 %1$s 提醒"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5201,6 +5208,10 @@ msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "需要一些時間才能將郵件分配到預設分類中。"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5288,15 +5299,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "保留主旨為 %1$s 的郵件"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "語言"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "不同語言的細部設定"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "語言"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -6991,6 +7008,13 @@ msgstr "尋呼機"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "部分"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant related actions"
+msgid "Participant not found"
+msgstr "與與會者相關的操作"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -13624,6 +13648,9 @@ msgstr "您的平台"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "點擊關閉重複發生視圖"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "關閉 %1$s 提醒"
 
 #~ msgid "Close search"
 #~ msgstr "關閉搜尋"

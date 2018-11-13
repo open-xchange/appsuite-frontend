@@ -24,6 +24,18 @@ msgstr ""
 "\n"
 " Ladda ned filen genom att använda knappen nedanför."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+" Ladda ned filen genom att använda knappen nedanför."
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2124,11 +2136,6 @@ msgstr "Stäng aviseringsområdet"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Stäng premiumfunktioner"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Stäng påminnelse för %1$s"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5277,6 +5284,10 @@ msgstr ""
 "Det kan ta lite tid tills meddelanden blir tilldelade till "
 "standardkategorierna."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5364,15 +5375,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "Behåll meddelanden med ämnet %1$s"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Språk"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "Språkspecifikt förval"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Språk"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7070,6 +7087,13 @@ msgstr "Sökare"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Del"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant %d for task %d is not found."
+msgid "Participant not found"
+msgstr "Deltagare %d för uppgift %d hittas inte."
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -14020,6 +14044,9 @@ msgstr "din plattform"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klicka för att stänga upprepningsvyn"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Stäng påminnelse för %1$s"
+
 #~ msgid "Close this reminder"
 #~ msgstr "Stäng påminnelse"
 
@@ -16664,9 +16691,6 @@ msgstr "din plattform"
 
 #~ msgid "Parsing problem in URL parameter \"%1$s\"."
 #~ msgstr "Tolkningsproblem i URL parametern \"%1$s\"."
-
-#~ msgid "Participant %d for task %d is not found."
-#~ msgstr "Deltagare %d för uppgift %d hittas inte."
 
 #~ msgid "Pause"
 #~ msgstr "Paus"

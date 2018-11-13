@@ -23,6 +23,18 @@ msgstr ""
 "\n"
 " 下のボタンを使ってファイルをダウンロードしてください。"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+" 下のボタンを使ってファイルをダウンロードしてください。"
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2087,11 +2099,6 @@ msgstr "通知エリアを閉じる"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "プレミアム機能を閉じます"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "%1$s のアラームを閉じる"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5225,6 +5232,10 @@ msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "一般的なメールを既定のタブに割り当てるに時間がかかります。"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5312,15 +5323,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "件名 %1$s のメールを保持"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "言語"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "言語に固有の既定値"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "言語"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7018,6 +7035,13 @@ msgstr "ポケットベル"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "パート"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant"
+msgid "Participant not found"
+msgstr "出席者"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -14411,6 +14435,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Close recurrence view"
 #~ msgstr "繰り返しビューを閉じるには、クリックしてください。"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "%1$s のアラームを閉じる"
+
 #~ msgid "Close search"
 #~ msgstr "検索を閉じる"
 
@@ -17696,9 +17723,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Parameter:"
 #~ msgstr "パラメータ:"
-
-#~ msgid "Participant"
-#~ msgstr "出席者"
 
 #~ msgid "Participant:"
 #~ msgstr "出席者:"

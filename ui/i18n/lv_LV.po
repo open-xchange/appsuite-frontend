@@ -21,6 +21,18 @@ msgstr ""
 "\n"
 " Lūdzu lejupielādējiet failu, izmantojot zemāk redzamo taustiņu."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| " Please download the file using the button below."
+msgid ""
+"\n"
+" You can also download the file using the button below."
+msgstr ""
+"\n"
+" Lūdzu lejupielādējiet failu, izmantojot zemāk redzamo taustiņu."
+
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
@@ -2136,11 +2148,6 @@ msgstr "Aizvērt paziņojumu apgabalu"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Aizvērt premiālās funkcijas"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Aizvērt %1$s atgādinājumu"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
@@ -5305,6 +5312,10 @@ msgstr ""
 "Visu pasta vēstuļu sakārtošana atbilstošajās kategorijās var prasīt zināmu "
 "laiku."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
@@ -5392,15 +5403,21 @@ msgid "Keep mails with subject %1$s"
 msgstr "Paturēt vēstules ar tematu %1$s"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Valoda"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
 msgstr "Specifiskie valodas noklusējumi"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Valoda"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7106,6 +7123,13 @@ msgstr "Peidžeris"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Daļa"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant"
+msgid "Participant not found"
+msgstr "Dalībnieks"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -13938,6 +13962,9 @@ msgstr "jūsu platforma"
 #~ msgid "Close quick config"
 #~ msgstr "Aizvērt ātro konfig."
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Aizvērt %1$s atgādinājumu"
+
 #~ msgid "Close search"
 #~ msgstr "Aizvērt meklēšanu"
 
@@ -16904,9 +16931,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Parameter:"
 #~ msgstr "Parametrs:"
-
-#~ msgid "Participant"
-#~ msgstr "Dalībnieks"
 
 #~ msgid "Participant:"
 #~ msgstr "Dalībnieks:"

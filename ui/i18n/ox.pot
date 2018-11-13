@@ -2961,6 +2961,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 #: apps/plugins/portal/xing/register.js
@@ -5030,6 +5032,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js
 #: module:io.ox/core/boot
 msgid "Languages"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
+msgid "Language:"
 msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js
@@ -7379,12 +7386,6 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js
-#: module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr ""
-
 #: apps/io.ox/core/tk/reminder-util.js
 #: module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js
@@ -8006,6 +8007,18 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/types/documentview.js
 #: module:io.ox/core
 msgid "Sorry, this page is not available at the moment."
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/documentview.js
+#: module:io.ox/core
+msgid "It takes a while converting the document."
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/documentview.js
+#: module:io.ox/core
+msgid ""
+"\n"
+" You can also download the file using the button below."
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/imageview.js
@@ -14011,6 +14024,11 @@ msgstr ""
 #: apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid "Participant not found"
 msgstr ""
 
 #. %1$s Appointment title
