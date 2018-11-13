@@ -103,6 +103,15 @@ define('io.ox/core/main/logout', [
         }
     });
 
+    function needsReload(target) {
+        // see bug 56170 and 61385
+        if (!/#autologout=true/.test(target)) return;
+        var parser = document.createElement('a');
+        parser.href = target;
+        return (location.host === parser.host) &&
+               (location.pathname === parser.pathname);
+    }
+
     var logout = function (opt) {
 
         opt = _.extend({
@@ -128,8 +137,11 @@ define('io.ox/core/main/logout', [
                                 logoutLocation = targetLocation || (fallback + (opt.autologout ? '#autologout=true' : ''));
                             // Substitute some variables
                             _.url.redirect(_.url.vars(logoutLocation));
-                            // prevent empty white pane (see bug 56170)
-                            if (/#autologout=true/.test(logoutLocation)) _.defer(location.reload.bind(location, true));
+
+                            if (needsReload(logoutLocation)) {
+                                // location.reload will cause an IE error
+                                _.defer(function () { location.reload(true); });
+                            }
                         });
                     });
         });
