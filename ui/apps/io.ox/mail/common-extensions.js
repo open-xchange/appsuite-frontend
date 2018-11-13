@@ -604,6 +604,9 @@ define('io.ox/mail/common-extensions', [
                         $(this).css({ display: 'inline-block' });
                         e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
                     });
+
+                    // previews for documents etc have a different style
+                    if (contentType && !(/^image\//).test(contentType)) this.$el.addClass('no-image');
                 };
 
             return function (baton) {
