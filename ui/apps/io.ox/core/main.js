@@ -86,6 +86,15 @@ define('io.ox/core/main', [
         return done.promise();
     };
 
+    function needsReload(target) {
+        // see bug 56170 and 61385
+        if (!/#autologout=true/.test(target)) return;
+        var parser = document.createElement('a');
+        parser.href = target;
+        return (location.host === parser.host) &&
+               (location.pathname === parser.pathname);
+    }
+
     var logout = function (opt) {
 
         opt = _.extend({
@@ -95,13 +104,15 @@ define('io.ox/core/main', [
         function sessionLogout() {
             session.logout().always(function () {
                 // get logout locations
-                var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
+                var targetLocation = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
                     fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                    logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                    logoutLocation = targetLocation || (fallback + (opt.autologout ? '#autologout=true' : ''));
                 // Substitute some variables
                 _.url.redirect(_.url.vars(logoutLocation));
-                // prevent empty white pane (see bug 56170)
-                if (/#autologout=true/.test(logoutLocation)) _.defer(window.location.reload.bind(window.location, true));
+                if (needsReload(logoutLocation)) {
+                    // location.reload will cause an IE error
+                    _.defer(function () { location.reload(true); });
+                }
             });
         }
 
