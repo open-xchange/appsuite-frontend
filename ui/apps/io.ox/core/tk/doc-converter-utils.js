@@ -236,13 +236,13 @@ define('io.ox/core/tk/doc-converter-utils', [
         // the PIM module id
         var moduleId = model.get('module');
 
-        if (model.isMailAttachment()) {
+        if (model.isMailAttachment() && !model.isEncrypted()) {
             return {
                 id: originalModel.mail.id,
                 source: 'mail',
                 attached: model.get('id'),
                 cryptoAuth: originalModel.auth ? originalModel.auth : '',
-                decrypt: originalModel && originalModel.security && originalModel.security.decrypted
+                decrypt: Boolean(originalModel && originalModel.security && originalModel.security.decrypted)
             };
 
         } else if (model.isPIMAttachment()) {
