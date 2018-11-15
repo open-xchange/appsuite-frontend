@@ -74,15 +74,16 @@ define('io.ox/core/viewer/views/types/baseview', [
         /**
          * Gives the user a notification message with a download button to download the
          * file.
-         * @param {String} notification The notification message string
+         * @param {String} notification The notification message, when empty no text is displayed at all
          * @param {String} [iconClass] A CSS class name to be applied on the file icon.
-          * @param {String} [buttonDescription] The optional buttonDescription message string.
+          * @param {String} [buttonDescription] The optional buttonDescription message string to override the default buttonDescription.
          */
         displayDownloadNotification: function (notification, iconClass, buttonDescription) {
 
             buttonDescription = buttonDescription ? buttonDescription : gt('\n Please download the file using the button below.');
+            notification = notification === '' ? '' : notification + buttonDescription;
 
-            var notificationNode = this.displayNotification(notification + buttonDescription, iconClass);
+            var notificationNode = this.displayNotification(notification, iconClass);
             notificationNode.css('white-space', 'pre');
             var fileSize = Util.renderItemSize(this.model);
             fileSize = fileSize.indexOf('-') === 0 ? '' : ' (' + fileSize + ')';

@@ -255,7 +255,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     var $node = $(node),
                         color = $node.data('color');
                     $node.removeClass('fa-check').addClass('fa-none');
-                    if (typeof color !== undefined && color !== false) {
+                    if (color) {
                         addColor($node, color);
                     }
                 });
@@ -268,7 +268,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                             var $node = $(node),
                                 color = $node.data('color');
                             $node.removeClass('fa-none').addClass('fa-check');
-                            if (typeof color !== undefined && color !== false) {
+                            if (color) {
                                 addColor($node, color);
                             }
                         });

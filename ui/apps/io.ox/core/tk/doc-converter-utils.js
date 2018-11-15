@@ -236,13 +236,13 @@ define('io.ox/core/tk/doc-converter-utils', [
         // the PIM module id
         var moduleId = model.get('module');
 
-        if (model.isMailAttachment()) {
+        if (model.isMailAttachment() && !model.isEncrypted()) {
             return {
                 id: originalModel.mail.id,
                 source: 'mail',
                 attached: model.get('id'),
                 cryptoAuth: originalModel.auth ? originalModel.auth : '',
-                decrypt: originalModel && originalModel.security && originalModel.security.decrypted
+                decrypt: Boolean(originalModel && originalModel.security && originalModel.security.decrypted)
             };
 
         } else if (model.isPIMAttachment()) {
@@ -256,11 +256,13 @@ define('io.ox/core/tk/doc-converter-utils', [
             // the Guard parameters
             var file_options = model.get('file_options');
             var file_options_params = file_options ? file_options.params : null;
+            var meta = model.get('meta');
+
             return {
                 source: 'guard',
                 cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
                 cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
-                mimetype: model.get('meta').OrigMime || model.get('file_mimetype')
+                mimetype: (meta && meta.OrigMime) || model.get('file_mimetype')
             };
         }
 

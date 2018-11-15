@@ -196,7 +196,7 @@ define('io.ox/backbone/views/edit-picture', [
                             getButton({ label: gt('Rotate image'), action: 'rotate', className: 'fa-repeat' })
                                 .on('click', this.onRotate.bind(this))
                         ).on('click', 'button', function (e) {
-                            $(e.target).tooltip('hide');
+                            $(e.currentTarget).tooltip('hide');
                         })
                     );
                     this.$('.empty-state').append(
@@ -208,7 +208,7 @@ define('io.ox/backbone/views/edit-picture', [
                                 .addClass('btn-lg')
                                 .on('click', this.onUserMedia.bind(this))
                         ).on('click', 'button', function (e) {
-                            $(e.target).tooltip('hide');
+                            $(e.currentTarget).tooltip('hide');
                         })
                     );
                 }
