@@ -60,7 +60,7 @@ define('io.ox/core/tk/tokenfield', [
             if (this._delimiters.length) {
                 // Split at delimiter; ignore delimiters in quotes
                 // delimiters are: comma, semi-colon, tab, newline
-                tokens = util.getAddresses(tokens);
+                tokens = _(tokens.split(new RegExp('[' + this._delimiters.join('|') + ']', 'g'))).map(function (str) { return str.trim(); });
             } else {
                 tokens = [tokens];
             }
@@ -97,6 +97,28 @@ define('io.ox/core/tk/tokenfield', [
 
         this.preventDeactivation = false;
         this.preventCreateTokens = false;
+    };
+
+    // and another overwrite. This time because of bug 61477
+    $.fn.tokenfield.Constructor.prototype.keypress = function (e) {
+        // Comma
+        if ($.inArray(e.which, this._triggerKeys) !== -1 && this.$input.is(document.activeElement)) {
+            var val = this.$input.val(),
+                quoting = /^"[^"]*$/.test(val);
+            if (quoting) return;
+            if (val) {
+                // if we are in edit mode, wait for the comma to actually appear in the input field. This way the token is divided correctly.
+                if (this.$input.data('edit')) {
+                    var self = this;
+                    this.$input.one('input', function () {
+                        self.createTokensFromInput(e);
+                    });
+                    return;
+                }
+                this.createTokensFromInput(e);
+            }
+            return false;
+        }
     };
 
     var uniqPModel = pModel.Participant.extend({
