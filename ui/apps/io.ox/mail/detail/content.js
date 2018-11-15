@@ -594,7 +594,7 @@ define('io.ox/mail/detail/content', [
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }), content,
+            var baton = new ext.Baton(_({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }).omit(function (val) { return val === undefined; })), content,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 
