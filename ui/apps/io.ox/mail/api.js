@@ -42,8 +42,8 @@ define('io.ox/mail/api', [
             return colorLabelResort[b.color_label] - colorLabelResort[a.color_label];
         };
 
-    // model pool
-    var pool = Pool.create('mail');
+    // model pool, global for debugging
+    var pool = window.mailpool = Pool.create('mail');
 
     var fixtoccbcc = settings.get('features/fixtoccbcc'),
         showDeleted = !settings.get('features/ignoreDeleted', false),
@@ -265,33 +265,45 @@ define('io.ox/mail/api', [
         api.threads.touch(model.toJSON());
     }
 
-    function allowImages(obj) {
-        if (util.authenticity('block', obj)) return false;
-        if (util.isWhiteListed(obj)) return true;
-        if (!settings.get('allowHtmlImages', false)) return false;
-        if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
-        return true;
+    function getPreferredView() {
+        return settings.get('allowHtmlMessages', true) ? 'html' : 'text';
     }
 
-    function defaultView(obj) {
-        if (!settings.get('allowHtmlMessages', true)) return 'text';
-        return allowImages(obj) ? 'html' : 'noimg';
+    function getView(data) {
+        // never show images for failed messages
+        if (util.authenticity('block', data)) return 'noimg';
+
+        // check authenticity && whitelist
+        var isTrusted = util.authenticity('box', data) === 'trusted';
+        var isWhiteListed = util.isWhiteListed(data);
+        if (isTrusted || isWhiteListed) return getPreferredView();
+
+        // check for general setting
+        if (!settings.get('allowHtmlImages', false)) return 'noimg';
+
+        // block images for specific folders
+        if (accountAPI.is('spam|confirmed_spam|trash', data.folder_id || data.folder)) return 'noimg';
+
+        // finally
+        return getPreferredView();
     }
 
     api.get = function (obj, options) {
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid),
-            cache = options && (options.cache !== undefined) ? options.cache : true;
+            useCache = options && (options.cache !== undefined) ? options.cache : true,
+            isDefaultView = obj.view === 'noimg' || !obj.view,
+            isComplete;
 
-        if (model && util.authenticity('box', model.toJSON()) === 'trusted') obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
-        if (model && util.isWhiteListed(model.toJSON())) obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
+        if (model) {
+            isComplete = !!model.get('attachments');
+            // check for cache hit
+            if (useCache && !obj.src && isComplete && isDefaultView) return $.when(model.toJSON());
+        }
 
-        // TODO: make this smarter
-        if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
-
-        // determine default view parameter
-        if (!obj.view) obj.view = defaultView(obj);
+        // set view if needed
+        if (!obj.view) obj.view = getView(_.extend({}, obj, model && model.toJSON()));
 
         // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
