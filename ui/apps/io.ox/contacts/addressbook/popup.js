@@ -709,7 +709,10 @@ define('io.ox/contacts/addressbook/popup', [
                     var list = this.store.get();
                     // pick relavant values
                     this.tokenview.render(_.map(list, function (obj) {
-                        return { title: obj.email, cid: obj.cid };
+                        return {
+                            title: obj.list ? obj.display_name + ' - ' + gt('Distribution list') : obj.email,
+                            cid: obj.cid,
+                            dist_list_length: obj.list ? obj.list.length : undefined };
                     }));
 
                     if (!list.length) return;
@@ -1021,7 +1024,9 @@ define('io.ox/contacts/addressbook/popup', [
         },
 
         render: function (list) {
-            var length = list.length,
+            var length = _(list).reduce(function (agg, item) {
+                    return agg + (item.dist_list_length ? item.dist_list_length : 1);
+                }, 0),
                 selectionLabel, description;
 
             this.$el.empty();
