@@ -189,6 +189,12 @@ Provides: open-xchange-appsuite-l10n
 Breaks: open-xchange-l10n-sv-se (<< 7.0.1)
 Description: Translation of the OX App Suite HTML5 client (sv_SE)
 
+Package: open-xchange-appsuite-l10n-tr-tr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-tr-tr
+Provides: open-xchange-appsuite-l10n
+Description: Translation of the OX App Suite HTML5 client (tr_TR)
+
 Package: open-xchange-appsuite-l10n-zh-cn
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-l10n-zh-cn
