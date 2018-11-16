@@ -435,6 +435,12 @@ define('io.ox/mail/detail/view', [
                 }.bind(this));
             });
 
+            // simple helper to enable resizing on
+            // browser resize events
+            function onBrowserResize() {
+                resizing = 0;
+            }
+
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins
                 // set height for iframe and its parent
@@ -459,8 +465,12 @@ define('io.ox/mail/detail/view', [
                 $(this).off().trigger('complete');
             });
 
+            // react on browser resize
+            $(window).on('resize', onBrowserResize);
+
             // remove event handlers on dispose
             this.on('dispose', function () {
+                $(window).off('resize', onBrowserResize);
                 $(this.contentWindow).off();
             });
         }
