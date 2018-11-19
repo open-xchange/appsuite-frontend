@@ -519,6 +519,22 @@ define('io.ox/mail/main', [
             app.listView.toggleCheckboxes(false);
         },
 
+        'react to markunread': function () {
+            // relevant to preserve the unread status when using list perspective as there is no parallel detailview opened
+            // if we would not save this state the mail would be marked as read when the detailview is opened without the user selecting a different mail
+            api.on('after:refresh.unseen', function (e, list) {
+                if (list.length === 1) api.setToUnread = list[0].cid;
+            });
+            // delete marker on selection change
+            app.listView.on('selection:multiple selection:one', function () {
+                delete api.setToUnread;
+            });
+            // delete marker on selection action wehn not in list perspective
+            app.listView.on('selection:action', function () {
+                if (app.props.get('layout') !== 'list') delete api.setToUnread;
+            });
+        },
+
         /*
          * Scroll-o-mat
          * Scroll to top if new unseen messages arrive
