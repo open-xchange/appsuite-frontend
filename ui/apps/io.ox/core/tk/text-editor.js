@@ -12,8 +12,9 @@
  */
 
 define('io.ox/core/tk/text-editor', [
-    'io.ox/core/tk/textproc'
-], function (textproc) {
+    'io.ox/core/tk/textproc',
+    'settings!io.ox/mail'
+], function (textproc, mailSettings) {
 
     'use strict';
 
@@ -161,7 +162,8 @@ define('io.ox/core/tk/text-editor', [
         // hint: does not detects the cite block
         this.getContentParts = function () {
             var content = this.getContent(),
-                index = content.indexOf('\n> ');
+                isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
+                index = content.indexOf(isForwardUnquoted ? '----' : '\n> ');
             // make sure that the quote part does not start with \n
             if (index >= 0) index++;
             // special case: initial reply/forward
