@@ -587,7 +587,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         startPdfDocumentWaitMessage: function () {
             this.PdfDocumentWaitTimer = window.setTimeout(function () {
-                this.displayDownloadNotification('', 'io-ox-busy');
+                this.displayDownloadNotification(gt('Your preview is being generated.'), 'io-ox-busy', gt('\n Alternatively you can download the file.'));
             }.bind(this), 5000);
         },
 
