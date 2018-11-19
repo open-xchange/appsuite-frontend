@@ -688,7 +688,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         // hint: does not detects the cite block
         this.getContentParts = function () {
             var content = this.getContent(),
-                index = content.indexOf('<blockquote type="cite">');
+                isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
+                index = content.indexOf(isForwardUnquoted ? '----' : '<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
             if (content.substring(0, 15) === '<blockquote><div>') index = 0;
             // special case: switching between signatures in such a mail
