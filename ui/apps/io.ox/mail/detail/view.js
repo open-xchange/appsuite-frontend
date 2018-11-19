@@ -678,6 +678,11 @@ define('io.ox/mail/detail/view', [
 
         onUnseen: function () {
             var data = this.model.toJSON();
+
+            // check if this mail was manually set to unread previously so we don't remove the unread state when not intended (only relevant for list perspective as the detailview is already drawn in other perspectives) see Bug 61525
+            if (this.model.cid === api.setToUnread) {
+                return;
+            }
             if (util.isToplevel(data)) api.markRead(data);
         },
 
@@ -751,7 +756,8 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).pipe(
+                        // check if this mail was manually set to unread previously so we don't remove the unread state when not intended (only relevant for list perspective as the detailview is already drawn in other perspectives) see Bug 61525
+                        api.get(_.extend({}, cid, { unseen: this.model.cid === api.setToUnread })).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
