@@ -254,9 +254,17 @@ define('io.ox/core/tk/doc-converter-utils', [
 
         } else if (model.isEncrypted()) {
             // the Guard parameters
-            var file_options = model.get('file_options');
-            var file_options_params = file_options ? file_options.params : null;
+            var file_options;
+            var file_options_params;
             var meta = model.get('meta');
+
+            if (model.isMailAttachment()) {
+                file_options = (originalModel && originalModel.file_options);
+            } else {
+                file_options = model.get('file_options');
+            }
+
+            file_options_params = file_options ? file_options.params : null;
 
             return {
                 source: 'guard',
