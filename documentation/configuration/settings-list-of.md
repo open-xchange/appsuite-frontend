@@ -549,6 +549,12 @@ settings!io.ox/mail
 **features/registerProtocolHandler**
 > Ask for mailto link registration (true/false)
 
+**features/trusted/user**
+> user-defined comma-separated list of mail adresses or specific domains
+
+**features/trusted/admin**
+> admin-defined comma-separated list of mail adresses or specific domains
+
 **unseenMessagesFolder**
 > Show folder with all unseen messages (true/false)
 
