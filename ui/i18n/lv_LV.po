@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
 "X-Generator: Poedit 2.2\n"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -11871,6 +11877,12 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Jūsu platforma netiek atbalstīta!"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Account is being created"
+msgid "Your preview is being generated."
+msgstr "Konts pašlaik tiek izveidots"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
 msgstr ""
@@ -13029,9 +13041,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Account Settings"
 #~ msgstr "Konta iestatījumi"
-
-#~ msgid "Account is being created"
-#~ msgstr "Konts pašlaik tiek izveidots"
 
 #~ msgid "Account:"
 #~ msgstr "Konts:"

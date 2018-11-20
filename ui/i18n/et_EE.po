@@ -14,6 +14,12 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1517228807.000000\n"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -11853,6 +11859,12 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Your reply has been sent"
+msgid "Your preview is being generated."
+msgstr "Teie vastus on saadetud"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
 msgstr ""
@@ -13928,9 +13940,6 @@ msgstr "teie platvorm"
 
 #~ msgid "Your messages"
 #~ msgstr "Teie sõnumid"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "Teie vastus on saadetud"
 
 #~ msgid "Your selected picture will be displayed after saving"
 #~ msgstr "Teie valitud pilt kuvatakse pärast salvestamist"

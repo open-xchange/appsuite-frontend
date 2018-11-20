@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.1.1\n"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -11521,6 +11527,12 @@ msgstr "您的密码会在它包含大写、数字、和如 %1$s 特殊字符时
 msgid "Your platform is not supported!"
 msgstr "您的平台暂不支持！"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Account is being created"
+msgid "Your preview is being generated."
+msgstr "正在创建户口"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
 msgstr ""
@@ -12644,9 +12656,6 @@ msgstr "您的平台"
 
 #~ msgid "Account Settings"
 #~ msgstr "账户设置"
-
-#~ msgid "Account is being created"
-#~ msgstr "正在创建户口"
 
 #~ msgid "Account:"
 #~ msgstr "账户："

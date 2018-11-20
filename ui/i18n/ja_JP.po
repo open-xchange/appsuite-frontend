@@ -14,6 +14,12 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.2\n"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -11670,6 +11676,12 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "ご利用のプラットフォームはサポートされていません。"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Account is being created"
+msgid "Your preview is being generated."
+msgstr "アカウントが現在作成中です。"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
 msgstr ""
@@ -12818,9 +12830,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Account Settings"
 #~ msgstr "アカウント設定"
-
-#~ msgid "Account is being created"
-#~ msgstr "アカウントが現在作成中です。"
 
 #~ msgid "Account:"
 #~ msgstr "アカウント:"

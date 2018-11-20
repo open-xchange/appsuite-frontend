@@ -15,6 +15,12 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Poedit 2.0.3\n"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -11905,6 +11911,12 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Platforma dumneavoastră nu este suportată!"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Account is being created"
+msgid "Your preview is being generated."
+msgstr "Contul este în curs de creare"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
 msgstr ""
@@ -13069,9 +13081,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Account Settings"
 #~ msgstr "Setări cont"
-
-#~ msgid "Account is being created"
-#~ msgstr "Contul este în curs de creare"
 
 #~ msgid "Account:"
 #~ msgstr "Cont:"

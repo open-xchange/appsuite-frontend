@@ -14,6 +14,12 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 1.8.9\n"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -11820,6 +11826,12 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Ваша платформа не поддерживается."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Account is being created"
+msgid "Your preview is being generated."
+msgstr "Учетная запись создается."
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
 msgstr ""
@@ -12836,9 +12848,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Account Settings"
 #~ msgstr "Параметры учетной записи"
-
-#~ msgid "Account is being created"
-#~ msgstr "Учетная запись создается."
 
 #~ msgid "Acknowledge all reminders"
 #~ msgstr "Отметить все напоминания как прочитанные"

@@ -8009,6 +8009,18 @@ msgstr ""
 msgid "Sorry, this page is not available at the moment."
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/types/documentview.js
+#: module:io.ox/core
+msgid "Your preview is being generated."
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/documentview.js
+#: module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/imageview.js
 #: module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
