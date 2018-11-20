@@ -325,30 +325,27 @@ define('io.ox/calendar/edit/extensions', [
         index: 550,
         nextTo: 'end-date',
         render: function () {
-            var model = this.model,
+            var helpBlock = $('<div class="col-xs-12 help-block">').hide(),
                 userTimezone = moment().tz(),
-                helpBlock = $('<div class="col-xs-12 help-block">').hide();
+                self = this;
 
             function setHint() {
-                var startTimezone = model.getMoment('startDate').tz(),
-                    endTimezone = model.getMoment('endDate').tz(),
+                var startTimezone = self.baton.model.getMoment('startDate').tz(),
+                    endTimezone = self.baton.model.getMoment('endDate').tz(),
                     isVisible = startTimezone !== userTimezone || endTimezone !== userTimezone;
                 helpBlock.toggle(isVisible);
                 if (isVisible) {
-                    var start = model.getMoment('startDate'),
-                        end = model.getMoment('endDate'),
-                        interval = calendarUtil.getTimeInterval(model.attributes, moment().tz()),
-                        duration = moment.duration(end.diff(start, 'ms')).humanize();
-                    helpBlock.text(
-                        //#. %1$s timezone abbreviation of the user
-                        //#. %2$s time interval of event
-                        //#. %2$s duration of event
-                        gt('In your timezone (%1$s): %2$s (Duration: %3$s)', userTimezone, interval, duration)
+                    var interval = calendarUtil.getDateTimeIntervalMarkup(self.baton.model.attributes, { zone: moment().tz(), noTimezoneLabel: true });
+                    interval.prepend($('<span>').append(userTimezone + ': '));
+                    helpBlock.empty();
+                    helpBlock.append(
+                        interval
                     );
                 }
             }
+
             this.$el.append(helpBlock);
-            this.listenTo(model, 'change:startDate change:endDate', setHint);
+            this.listenTo(this.baton.model, 'change:startDate change:endDate', setHint);
             setHint();
         }
     });

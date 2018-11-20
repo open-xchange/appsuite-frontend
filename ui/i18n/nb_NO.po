@@ -14,12 +14,6 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1505819964.000000\n"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-msgid ""
-"\n"
-" Alternatively you can download the file."
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
 "\n"
@@ -152,6 +146,7 @@ msgstr[1] "%1$d varsler."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
+#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -187,9 +182,7 @@ msgstr "%1$d valgt"
 msgid "%1$d total"
 msgstr "%1$d totalt"
 
-#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d uleste"
 
@@ -272,12 +265,19 @@ msgstr "%1$s %2$s."
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s %3$s."
 
+#. add confirmation status behind appointment title
+#. %1$s = apppintment title
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#, c-format
+msgid "%1$s (Tentative)"
+msgstr "%1$s (Foreløpig)"
+
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "%1$s Toolbar"
 msgstr "%1$s-verktøylinje"
 
-#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
 msgid "%1$s appointments selected"
 msgstr ""
 
@@ -438,12 +438,6 @@ msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dag"
 msgstr[1] "%d dager"
-
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create all-day appointment"
-msgid "%s %s, create all-day appointment"
-msgstr "Opprett heldagsavtale"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -1221,7 +1215,7 @@ msgid "An error occurred."
 msgstr "Det oppstod en feil."
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/perspective.js
+#: apps/io.ox/calendar/week/perspective.js
 msgid "An error occurred. Please try again."
 msgstr "Det oppstod en feil. Prøv på nytt."
 
@@ -1318,14 +1312,15 @@ msgstr "Bruk for alle undermapper"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Avtale"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/perspective.js
+#: apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
 msgstr "Avtaledetaljer"
 
@@ -1339,6 +1334,10 @@ msgstr "Avtaleliste"
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Avtaleinvitasjoner"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+msgid "Appointment list"
+msgstr "Avtaleliste"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -1361,16 +1360,10 @@ msgid "Appointment types"
 msgstr "Avtaletyper"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/perspective.js apps/io.ox/calendar/week/view.js
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
 msgstr "Avtaler"
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments in shared calendars"
-msgid "Appointments in public calendars"
-msgstr "Avtaler i delte kalendere"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1762,7 +1755,6 @@ msgstr ""
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1774,6 +1766,22 @@ msgstr "Kalender"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+msgid "Calendar Day View"
+msgstr "Dagsvisning"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+msgid "Calendar Month View"
+msgstr "Månedsvisning"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+msgid "Calendar Week View"
+msgstr "Ukevisning"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+msgid "Calendar Workweek View"
+msgstr "Arbeidsukesvisning"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #, fuzzy
@@ -1794,6 +1802,10 @@ msgstr "Kalendervisning"
 #, fuzzy
 msgid "Calendar/Addressbook"
 msgstr "Delte adressebøker"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Calendar:"
+msgstr "Kalender:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -1827,7 +1839,7 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/upsell.js
+#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -2063,6 +2075,7 @@ msgid "Cleaning up ..."
 msgstr "Rydder opp..."
 
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
 msgstr "Tøm"
 
@@ -2149,6 +2162,11 @@ msgstr "Lukk varslingsområdet"
 msgid "Close premium features"
 msgstr "Lukk premium-funksjoner"
 
+#. %1$s appointment or task title
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+msgid "Close reminder for %1$s"
+msgstr "Lukk påminnelse for %1$s"
+
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
 msgstr "Lukk denne varslingen"
@@ -2162,7 +2180,6 @@ msgstr "Lukk fremviseren"
 msgid "Collapse form"
 msgstr "Minimer skjema"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2254,7 +2271,8 @@ msgstr "Opprett ny e-post"
 msgid "Conditions"
 msgstr "Betingelser"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Confidential"
 msgstr ""
 
@@ -2516,7 +2534,7 @@ msgstr ""
 "Kunne ikke lagre innstillinger. Det må være minst en bruker med "
 "administratorrettigheter."
 
-#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
 msgid "Could't load appointment data."
 msgstr ""
 
@@ -2583,12 +2601,6 @@ msgstr "Opprett filterregel"
 msgid "Create folder"
 msgstr "Opprett mappe"
 
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Add as public calendar"
-msgid "Create in public calendar"
-msgstr "Legg til som offentlig kalender"
-
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Opprett ny liste"
@@ -2597,6 +2609,10 @@ msgstr "Opprett ny liste"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Opprett ny %1$s-konto"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Create new calendar"
+msgstr ""
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -2755,6 +2771,10 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Dag"
+
+#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
+msgid "Days"
+msgstr "Dager"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4842,7 +4862,6 @@ msgstr "Hjelp"
 msgid "Hidden address books"
 msgstr "Skjulte adressebøker"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Skjulte kalendere"
@@ -4968,6 +4987,10 @@ msgstr "Vert"
 msgid "Hostname"
 msgstr ""
 
+#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
+msgid "Hours"
+msgstr "Timer"
+
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
@@ -5052,18 +5075,6 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Image 1"
 msgstr "Bilde 1"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Images"
-msgid "Image size"
-msgstr "Bilder"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "Images"
-msgid "Image size:"
-msgstr "Bilder"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
@@ -5263,8 +5274,8 @@ msgstr "Inviter til ny avtale"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than (Size: B/KB/MB/GB)"
-msgstr ""
+msgid "Is bigger than"
+msgstr "Er større enn"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -5280,9 +5291,7 @@ msgstr "Er nøyaktig ikke"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Is smaller than"
-msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgid "Is smaller than"
 msgstr "Er mindre enn"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
@@ -5394,9 +5403,9 @@ msgid "Keep mails with subject %1$s"
 msgstr "Behold eposter med emnet %1$s"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
+#: module:io.ox/core apps/plugins/portal/xing/register.js
+#: module:plugins/portal
 msgid "Language"
 msgstr "Språk"
 
@@ -5405,24 +5414,8 @@ msgid "Language-specific default"
 msgstr "Språkspesifikk standard"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Language"
-msgid "Language:"
-msgstr "Språk"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Språk"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Large"
-msgstr ""
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Progress %1$s %"
-msgid "Large (%1$s px)"
-msgstr "Fremskritt %1$s %"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -5759,12 +5752,6 @@ msgstr "E-postpåminnelse"
 msgid "Mail reminder for"
 msgstr "E-postpåminnelse for"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail source"
-msgid "Mail size:"
-msgstr "E-postkilde"
-
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "E-postkilde"
@@ -5860,9 +5847,8 @@ msgstr "Merk som distribusjonsliste"
 msgid "Mark as done"
 msgstr "Marker som ferdig"
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Marker som lest"
 
@@ -5876,9 +5862,8 @@ msgstr "Merk som søppelpost"
 msgid "Mark as undone"
 msgstr "Merk som ugjort"
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Marker som ulest"
 
@@ -5943,7 +5928,6 @@ msgstr "Matcher ikke"
 msgid "Maximize"
 msgstr "Minimer"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Medium"
@@ -5952,12 +5936,6 @@ msgstr "Medium"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Medium"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Members (%1$d)"
-msgid "Medium (%1$s px)"
-msgstr "Medlemmer (%1$d)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6055,6 +6033,10 @@ msgstr "Minimum passordlengde er %1$d."
 msgid "Minus"
 msgstr "Minus"
 
+#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
+msgid "Minutes"
+msgstr "Minutter"
+
 #. section name for contact fields in detail view
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Miscellaneous"
@@ -6092,6 +6074,10 @@ msgstr "Måned"
 #: module:io.ox/calendar/edit/main
 msgid "Monthly"
 msgstr "Månedlig"
+
+#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
+msgid "Months"
+msgstr "Måneder"
 
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
@@ -6215,7 +6201,6 @@ msgstr ""
 msgid "My address books"
 msgstr "Mine adressebøker"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Mine kalendere"
@@ -6434,6 +6419,7 @@ msgstr "Ny oppgavepåminnelse"
 msgid "New task reminders"
 msgstr "Nye oppgavepåminnelser"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -6445,12 +6431,6 @@ msgstr "Neste"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
 msgstr "Neste dag"
-
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, fuzzy
-#| msgid "next Monday"
-msgid "Next Month"
-msgstr "neste mandag"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Week"
@@ -6472,7 +6452,7 @@ msgstr "Neste side"
 msgid "Next week"
 msgstr ""
 
-#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
 msgid "Next year"
 msgstr ""
 
@@ -6498,7 +6478,7 @@ msgstr "Ingen Tweets ennå."
 msgid "No action available"
 msgstr "Ingen handling tilgjengelig"
 
-#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
 msgid "No appointment selected"
 msgstr ""
 
@@ -6809,6 +6789,7 @@ msgstr "Frakoblet modus"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/core/tk/mobiscroll.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ok"
@@ -7044,12 +7025,6 @@ msgstr "Sorter"
 msgid "Organizer"
 msgstr "Arrangør"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-#, fuzzy
-#| msgid "Original mail"
-msgid "Original"
-msgstr "Opprinnelig epost"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Opprinnelig epost"
@@ -7119,13 +7094,6 @@ msgstr "Personsøker"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Del"
-
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-#, fuzzy
-#| msgid "Participants"
-msgid "Participant not found"
-msgstr "Deltakere"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7198,6 +7166,10 @@ msgstr "Passordstyrke: Svakt"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Passordstyrke: Feil lengde"
+
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Pause auto-play mode"
+msgstr "Pause automatisk avspilling"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7735,6 +7707,7 @@ msgstr "Forhåndsvisning"
 msgid "Preview not available"
 msgstr "Forhåndsvisning ikke tilgjengelig"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -7743,12 +7716,6 @@ msgstr "Forrige"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Forrige dag"
-
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Previous month"
-msgid "Previous Month"
-msgstr "Forrige måned"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Week"
@@ -7772,7 +7739,7 @@ msgstr "Forrige side"
 msgid "Previous week"
 msgstr "Forrige uke"
 
-#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Previous year"
 msgstr "Forrige år"
@@ -7825,8 +7792,8 @@ msgstr "Prioritet"
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-grid-template.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -7882,7 +7849,6 @@ msgstr "Egenskaper"
 msgid "Public address books"
 msgstr "Offentlige adressebøker"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Offentlige kalendere"
@@ -7956,6 +7922,10 @@ msgstr "RSS-strøm"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS-strøm"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr "Lest"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8589,9 +8559,13 @@ msgstr "Regelnavn"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
-#| msgid "Repeat slideshow"
-msgid "Run slideshow"
-msgstr "Gjenta lysbildefremvisning"
+#| msgid "Run auto-play mode"
+msgid "Run auto-play "
+msgstr "Kjør automatisk avspillingsmodus"
+
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Run auto-play mode"
+msgstr "Kjør automatisk avspillingsmodus"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
@@ -8767,6 +8741,7 @@ msgstr ""
 msgid "Security"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8803,6 +8778,10 @@ msgstr "Merk alle"
 #, fuzzy
 msgid "Select all messages"
 msgstr "Slett alle meldinger"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Select calendar"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -9116,7 +9095,6 @@ msgstr "Delte adressebøker"
 msgid "Shared by other users"
 msgstr "Delt av andre brukere"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Delte kalendere"
@@ -9278,6 +9256,10 @@ msgid "Show names"
 msgstr "Vis navn"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+msgid "Show next day"
+msgstr "Vis neste dag"
+
+#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #, fuzzy
 msgid "Show next month"
 msgstr "Gå til neste måned"
@@ -9285,6 +9267,10 @@ msgstr "Gå til neste måned"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Show or hide actions for advanced users."
 msgstr "Vis eller skjul handlinger for avanserte brukere."
+
+#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+msgid "Show previous day"
+msgstr "Vis forrige dag"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #, fuzzy
@@ -9386,10 +9372,6 @@ msgstr "Størrelse"
 msgid "Sky blue"
 msgstr "Himmelblå"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Slideshow"
-msgstr "Lysbildefremvisning"
-
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Lysbildefremvisning / automatisk avspilling for bilder"
@@ -9397,14 +9379,6 @@ msgstr "Lysbildefremvisning / automatisk avspilling for bilder"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Trege forespørsler"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Small"
-msgstr ""
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Small (%1$s px)"
-msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -9621,12 +9595,6 @@ msgstr "Status"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Stay signed in"
 msgstr "Forbli innlogget"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-#| msgid "Slideshow"
-msgid "Stop slideshow"
-msgstr "Lysbildefremvisning"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Street"
@@ -10136,12 +10104,6 @@ msgstr "Den valgte adressen. Trykk Backspace eller Delete for å fjerne."
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
-"The selected calendar \"%1$s\" is public. Do you really want to create an "
-"appointment in this calendar?"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10259,6 +10221,15 @@ msgid ""
 "There are currently no compatible media devices available on your device."
 msgstr ""
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr ""
+"Det er mer enn %n avtaler i den gjeldende kalenderen. Enkelte funksjoner er "
+"deaktivert av ytelsesgrunner."
+
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -10330,13 +10301,9 @@ msgid "This appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-#, fuzzy
-#| msgid ""
-#| "This appointment is an exception. Changing the series does not affect "
-#| "exceptions."
 msgid ""
-"This appointment is an exception. Changing the exception does not affect the "
-"series."
+"This appointment is an exception. Changing the series does not affect "
+"exceptions."
 msgstr "Denne avtalen er et unntak. Endring av serien påvirker ikke unntak."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -11082,7 +11049,7 @@ msgstr "Bruk kategorier"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -11145,11 +11112,6 @@ msgstr "Brukernavn"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
 msgstr "Brukerdata"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-msgid "User defined color"
-msgstr "Ny kalender"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
@@ -11325,10 +11287,6 @@ msgstr[1] ""
 msgid "Weather • Season"
 msgstr "Vær • Sesong"
 
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "WebDAV"
-msgstr ""
-
 #. label for a list of webcam devices currently available
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
 msgid "Webcam"
@@ -11497,6 +11455,10 @@ msgstr "År"
 #: module:io.ox/calendar/edit/main
 msgid "Yearly"
 msgstr "Årlig"
+
+#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
+msgid "Years"
+msgstr "År"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
@@ -11872,20 +11834,6 @@ msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your platform is not supported!"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, fuzzy
-#| msgid "Your reply has been sent"
-msgid "Your preview is being generated."
-msgstr "Svaret ditt ble sendt"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Your recurrence rule does not fit to your start date."
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Your recurrence rule was changed automatically."
 msgstr ""
 
 #. %1$s maximum file size
@@ -12398,10 +12346,6 @@ msgstr "ingen redigeringstillatelser"
 msgid "no read permissions"
 msgstr "ingen leserettigheter"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "none"
-msgstr "ingen"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
@@ -12661,9 +12605,6 @@ msgstr "plattformen din"
 #~ msgid "%1$s %2$s %3$s %4$s."
 #~ msgstr "%1$s %2$s %3$s %4$s."
 
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (Foreløpig)"
-
 #~ msgid "%1$s changed their status:"
 #~ msgstr "%1$s endret sin status:"
 
@@ -12881,9 +12822,6 @@ msgstr "plattformen din"
 #~ msgid "Apply to all messages?"
 #~ msgstr "Bruk for alle meldinger?"
 
-#~ msgid "Appointment list"
-#~ msgstr "Avtaleliste"
-
 #~ msgid "Appointment scheduling"
 #~ msgstr "Avtaleplanlegging"
 
@@ -12940,23 +12878,8 @@ msgstr "plattformen din"
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV-brukernavn"
 
-#~ msgid "Calendar Day View"
-#~ msgstr "Dagsvisning"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "Månedsvisning"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "Ukevisning"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "Arbeidsukesvisning"
-
 #~ msgid "Calendar workweek view"
 #~ msgstr "Kalender arbeidsukesvisning"
-
-#~ msgid "Calendar:"
-#~ msgstr "Kalender:"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV-brukernavn"
@@ -13023,9 +12946,6 @@ msgstr "plattformen din"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klikk for å lukke gjentagelsesoversikt"
-
-#~ msgid "Close reminder for %1$s"
-#~ msgstr "Lukk påminnelse for %1$s"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Lukk denne påminnelsen"
@@ -13105,9 +13025,6 @@ msgstr "plattformen din"
 
 #~ msgid "Day View"
 #~ msgstr "Dagsoversikt"
-
-#~ msgid "Days"
-#~ msgstr "Dager"
 
 #~ msgid "December"
 #~ msgstr "Desember"
@@ -13369,9 +13286,6 @@ msgstr "plattformen din"
 #~ msgid "High contrast theme"
 #~ msgstr "Bruk høye kontraster"
 
-#~ msgid "Hours"
-#~ msgstr "Timer"
-
 #~ msgid "How does this work?"
 #~ msgstr "Hvordan fungerer dette?"
 
@@ -13451,9 +13365,6 @@ msgstr "plattformen din"
 #~ msgstr ""
 #~ "Inviter folk via e-post. Hver mottaker vil få en individuell lenke for å "
 #~ "få tilgang til delte filer."
-
-#~ msgid "Is bigger than"
-#~ msgstr "Er større enn"
 
 #~ msgid "Item List"
 #~ msgstr "Elementliste"
@@ -13555,17 +13466,11 @@ msgstr "plattformen din"
 #~ msgid "May"
 #~ msgstr "mai"
 
-#~ msgid "Minutes"
-#~ msgstr "Minutter"
-
 #~ msgid "Monthly on day %1$d"
 #~ msgstr "Månedlig på dag %1$d"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Månedlig på %1$s %2$s"
-
-#~ msgid "Months"
-#~ msgstr "Måneder"
 
 #~ msgid "Move all %1$d messages to another folder"
 #~ msgstr "Flytt alle %1$d meldingene til en annen mappe"
@@ -13672,9 +13577,6 @@ msgstr "plattformen din"
 #~ msgid "Pause Presentation"
 #~ msgstr "Oppgaveinvitasjoner"
 
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pause automatisk avspilling"
-
 #~ msgid "Pause presentation"
 #~ msgstr "Pause presentasjon"
 
@@ -13779,9 +13681,6 @@ msgstr "plattformen din"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Side %1$d av %2$d"
 
-#~ msgid "Read"
-#~ msgstr "Lest"
-
 #~ msgid "Recent activities"
 #~ msgstr "Nylige aktiviteter"
 
@@ -13818,14 +13717,6 @@ msgstr "plattformen din"
 
 #~ msgid "Rule applies until"
 #~ msgstr "Bruk regel til"
-
-#, fuzzy
-#~| msgid "Run auto-play mode"
-#~ msgid "Run auto-play "
-#~ msgstr "Kjør automatisk avspillingsmodus"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Kjør automatisk avspillingsmodus"
 
 #~ msgid "SMTP Login"
 #~ msgstr "SMTP-brukernavn"
@@ -13945,14 +13836,8 @@ msgstr "plattformen din"
 #~ msgid "Show more comments"
 #~ msgstr "Vis flere kommentarer"
 
-#~ msgid "Show next day"
-#~ msgstr "Vis neste dag"
-
 #~ msgid "Show original publication"
 #~ msgstr "Vis opprinnelige utgivelse"
-
-#~ msgid "Show previous day"
-#~ msgstr "Vis forrige dag"
 
 #~ msgid "Show version history"
 #~ msgstr "Vis versjonshistorie"
@@ -13970,6 +13855,9 @@ msgstr "plattformen din"
 
 #~ msgid "Size (bytes)"
 #~ msgstr "Størrelse (byte)"
+
+#~ msgid "Slideshow"
+#~ msgstr "Lysbildefremvisning"
 
 #~| msgid "Smartphone settings:"
 #~ msgid "Smartphone"
@@ -14250,13 +14138,6 @@ msgstr "plattformen din"
 #~ msgid "There are currently no participants."
 #~ msgstr "Det er ingen deltagere."
 
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr ""
-#~ "Det er mer enn %n avtaler i den gjeldende kalenderen. Enkelte funksjoner "
-#~ "er deaktivert av ytelsesgrunner."
-
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "Det er allerede %1$d avtale i denne tidsrammen."
@@ -14495,9 +14376,6 @@ msgstr "plattformen din"
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Årlig på %1$s %2$s av %3$d"
 
-#~ msgid "Years"
-#~ msgstr "År"
-
 #~ msgid "Yes, always move them all"
 #~ msgstr "Ja, alltid flytt alle"
 
@@ -14570,6 +14448,9 @@ msgstr "plattformen din"
 
 #~ msgid "Your messages"
 #~ msgstr "Dine meldinger"
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Svaret ditt ble sendt"
 
 #~ msgid "Your selected picture will be displayed after saving"
 #~ msgstr "Din valgte bilde vises etter lagring"
@@ -14679,6 +14560,9 @@ msgstr "plattformen din"
 #~ msgid "next Friday"
 #~ msgstr "neste fredag"
 
+#~ msgid "next Monday"
+#~ msgstr "neste mandag"
+
 #~ msgid "next Saturday"
 #~ msgstr "neste lørdag"
 
@@ -14696,6 +14580,9 @@ msgstr "plattformen din"
 
 #~ msgid "no expiry date"
 #~ msgstr "ingen utløpsdato"
+
+#~ msgid "none"
+#~ msgstr "ingen"
 
 #~ msgid "optional password"
 #~ msgstr "valgfritt passord"

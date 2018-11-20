@@ -235,18 +235,36 @@ define('io.ox/core/tk/doc-converter-utils', [
         var originalModel = model.get('origData');
         // the PIM module id
         var moduleId = model.get('module');
+        // the Guard parameters
+        var file_options = null;
+        var file_options_params = null;
+        var meta = null;
+        // the resulting params
+        var params = null;
 
-        if (model.isMailAttachment() && !model.isEncrypted()) {
-            return {
+        if (model.isMailAttachment()) {
+            // the Guard parameters for mail
+            file_options = (originalModel && originalModel.file_options);
+            file_options_params = file_options ? file_options.params : null;
+
+            params = {
                 id: originalModel.mail.id,
                 source: 'mail',
-                attached: model.get('id'),
-                cryptoAuth: originalModel.auth ? originalModel.auth : '',
-                decrypt: Boolean(originalModel && originalModel.security && originalModel.security.decrypted)
+                attached: model.get('id')
             };
 
+            if (model.isEncrypted()) {
+                params.decrypt = true;
+                params.cryptoAuth = file_options_params ? file_options_params.cryptoAuth : '';
+                params.cryptoAction = file_options_params ? file_options_params.cryptoAction : '';
+
+            } else {
+                params.cryptoAuth = originalModel.auth ? originalModel.auth : '';
+                params.decrypt = Boolean(originalModel && originalModel.security && originalModel.security.decrypted);
+            }
+
         } else if (model.isPIMAttachment()) {
-            return {
+            params = {
                 source: Utils.MODULE_SOURCE_MAP[moduleId],
                 attached: originalModel.attached,
                 module: moduleId
@@ -254,11 +272,11 @@ define('io.ox/core/tk/doc-converter-utils', [
 
         } else if (model.isEncrypted()) {
             // the Guard parameters
-            var file_options = model.get('file_options');
-            var file_options_params = file_options ? file_options.params : null;
-            var meta = model.get('meta');
+            file_options = model.get('file_options');
+            file_options_params = file_options ? file_options.params : null;
+            meta = model.get('meta');
 
-            return {
+            params = {
                 source: 'guard',
                 cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
                 cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
@@ -266,7 +284,7 @@ define('io.ox/core/tk/doc-converter-utils', [
             };
         }
 
-        return null;
+        return params;
     };
 
     return Utils;
