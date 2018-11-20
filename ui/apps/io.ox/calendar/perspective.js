@@ -222,7 +222,7 @@ define('io.ox/calendar/perspective', [
             }
 
             function apiUpdate(model, options) {
-                var obj = _(model.toJSON()).pick('id', 'folder', 'recurrenceId', 'seriesId', 'startDate', 'endDate', 'timestamp');
+                var obj = _(model.toJSON()).pick('id', 'folder', 'recurrenceId', 'seriesId', 'rrule', 'startDate', 'endDate', 'timestamp');
 
                 api.update(obj, options).then(function success(data) {
                     if (!data || !data.conflicts) return nodes.idle();

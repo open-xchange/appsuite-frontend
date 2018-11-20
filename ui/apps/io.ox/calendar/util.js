@@ -700,7 +700,7 @@ define('io.ox/calendar/util', [
             return str;
         },
         // basically the same as in recurrence-view
-        // used to fix reccurence information when Ïging
+        // used to update reccurence information when moving events
         updateRecurrenceDate: function (event, oldDate) {
             if (!event || !oldDate) return;
 
