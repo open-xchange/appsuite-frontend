@@ -1376,11 +1376,11 @@ define('io.ox/files/main', [
         },
 
         'metrics': function (app) {
+
+            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
                 var nodes = app.getWindow().nodes,
-                    //node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container'),
                     control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
                 metrics.watch({
@@ -1393,28 +1393,7 @@ define('io.ox/files/main', [
                     type: 'click',
                     action: 'add'
                 });
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
-                    });
-                });
+
                 // list view control toolbar dropdown
                 control.on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node =  $(e.target).closest('a'),

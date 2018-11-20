@@ -20,9 +20,10 @@ define('io.ox/mail/detail/content', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/mail/detail/links',
+    'io.ox/mail/sanitizer',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, coreUtil, ext, capabilities, links, settings, gt) {
+], function (api, util, coreUtil, ext, capabilities, links, sanitizer, settings, gt) {
 
     'use strict';
 
@@ -652,7 +653,7 @@ define('io.ox/mail/detail/content', [
         beautifyPlainText: function (str) {
             var baton = ext.Baton({ data: str });
             ext.point('io.ox/mail/detail/beautify').invoke('process', this, baton);
-            return baton.data;
+            return sanitizer.simpleSanitize(baton.data);
         },
 
         transformForHTMLEditor: function (str) {
