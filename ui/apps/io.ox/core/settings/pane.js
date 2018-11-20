@@ -62,7 +62,9 @@ define('io.ox/core/settings/pane', [
                         });
                     },
 
-                    reloadHint: gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.'),
+                    reloadHint: capabilities.has('autologin') ?
+                        gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
+                        gt('Some settings (language, timezone, theme) require a relogin to take effect.'),
 
                     getLanguageOptions: function () {
                         return _(ox.serverConfig.languages).map(function (key, val) {
@@ -160,7 +162,10 @@ define('io.ox/core/settings/pane', [
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
                             if (!showNotice) return;
-                            notifications.yell('success', gt('The setting requires a reload or relogin to take effect.'));
+                            var message = capabilities.has('autologin') ?
+                                gt('The setting requires a reload or relogin to take effect.') :
+                                gt('The setting requires a relogin to take effect.');
+                            notifications.yell('success', message);
                         }
                     );
                 });
@@ -177,7 +182,11 @@ define('io.ox/core/settings/pane', [
                 this.$el.append(
                     $('<div class="help-block">').text(this.reloadHint + ' ').css('margin-bottom', '24px')
                     .append(
-                        $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
+                        $('<a href="#" role="button" data-action="reload">').text(
+                            capabilities.has('autologin') ?
+                                gt('Reload page') :
+                                gt('Relogin')
+                        ).on('click', reload)
                     )
                 );
 
