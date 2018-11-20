@@ -377,7 +377,6 @@ define('io.ox/core/api/account',
      * @return {promise} returns array of arrays
      */
     api.getAllSenderAddresses = function () {
-
         return api.all()
         .then(function (list) {
             return $.when.apply($, _(list).map(ensureDisplayName));
@@ -412,30 +411,30 @@ define('io.ox/core/api/account',
      * get all accounts
      * @return {deferred} returns array of account object
      */
-    api.all = function () {
+    api.all = function (options) {
+        var opt = _.extend({ useCache: true }, options);
 
         function load() {
-            if (_(api.cache).size() > 0) {
+            if (_(api.cache).size() > 0 && opt.useCache) {
                 // cache hit
                 return $.Deferred().resolve(_(api.cache).values());
-            } else {
-                // cache miss
-                return http.GET({
-                    module: 'account',
-                    params: { action: 'all' },
-                    appendColumns: true,
-                    processResponse: true
-                })
-                .then(function (data) {
-                    // process and add to cache
-                    data = process(data);
-                    api.cache = {};
-                    _(data).each(function (account) {
-                        api.cache[account.id] = process(account);
-                    });
-                    return data;
-                });
             }
+            // cache miss, refill cache on success
+            return http.GET({
+                module: 'account',
+                params: { action: 'all' },
+                appendColumns: true,
+                processResponse: true
+            })
+            .then(function (data) {
+                // process and add to cache
+                data = process(data);
+                api.cache = {};
+                _(data).each(function (account) {
+                    api.cache[account.id] = process(account);
+                });
+                return data;
+            });
         }
 
         return load().done(function (list) {
@@ -689,8 +688,7 @@ define('io.ox/core/api/account',
      */
 
     api.reload = function () {
-        api.cache = {};
-        return api.all();
+        return api.all({ useCache: false });
     };
 
     api.refresh = function () {

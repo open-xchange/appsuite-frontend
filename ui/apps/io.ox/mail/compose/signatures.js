@@ -106,7 +106,7 @@ define('io.ox/mail/compose/signatures', [
                 if (_.isEmpty(raw)) return;
                 // HTML: node content matches signature
                 if (this.get('editorMode') === 'html') {
-                    var node = $('<div>').append(content).find('div[class$="io-ox-signature"]:last');
+                    var node = $('<div>').append(content).children('div[class$="io-ox-signature"]:last');
                     return stripWhitespace(node.text()) === raw;
                 }
                 // TEXT: contains
@@ -170,7 +170,7 @@ define('io.ox/mail/compose/signatures', [
                 var isHTML = !!this.editor.find;
                 if (isHTML) {
                     // HTML
-                    this.editor.find('div[class$="io-ox-signature"]').each(function () {
+                    this.editor.children('div[class$="io-ox-signature"]').each(function () {
                         var node = $(this),
                             text = node.text(),
                             changed = getRaw(changedSignature) === stripWhitespace(text);
@@ -227,7 +227,7 @@ define('io.ox/mail/compose/signatures', [
 
             // remove current signature from editor
             if (isHTML) {
-                this.editor.find('div[class$="io-ox-signature"]').each(function () {
+                this.editor.children('div[class$="io-ox-signature"]').each(function () {
 
                     var node = $(this),
                         text = node.text(),

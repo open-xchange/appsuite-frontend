@@ -310,7 +310,7 @@ define('io.ox/core/tk/tokenfield', [
 
             // Remove on cut
             this.$el.closest('div.tokenfield').on('keydown', function (e) {
-                if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
+                if ((e.ctrlKey || e.metaKey) && e.keyCode === 88 && !$(e.target).hasClass('token-input')) {
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);
                     });
