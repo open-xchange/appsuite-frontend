@@ -123,7 +123,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             if (!enabled) return;
 
-            this.plugins = this.plugins + ' advlink paste oxmention';
+            this.plugins = this.plugins + ' oxmention';
 
             var model = context.view.model,
                 cachedResponse;
