@@ -1,5 +1,6 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
+const axe = require('axe-core');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -20,5 +21,15 @@ module.exports = actor({
         if (skipRefresh === true) return;
         this.click('#io-ox-refresh-icon');
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    },
+    grabAxeReport: async function () {
+        const report = await this.executeAsyncScript(function (axeSource, done) {
+            if (typeof axe === 'undefined') {
+                // eslint-disable-next-line no-eval
+                window.eval(axeSource);
+            }
+            window.axe.run($('html')).then(done);
+        }, axe.source);
+        return report;
     }
 });

@@ -30,6 +30,7 @@
   "devDependencies": {
     "@open-xchange/codecept-helper": "0.0.6",
     "appserver": "^0.7.0-pre9",
+    "axe-core": "^3.1.2",
     "chai": "^4.0.2",
     "codeceptjs": "^1.4.3",
     "eslint-plugin-codeceptjs": "^0.4.0",
