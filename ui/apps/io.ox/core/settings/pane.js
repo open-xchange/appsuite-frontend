@@ -60,24 +60,32 @@ define('io.ox/core/settings/pane', [
                     return setting === attr;
                 });
 
+                var message = capabilities.has('autologin') ?
+                    gt('The setting requires a reload or relogin to take effect.') :
+                    gt('The setting requires a relogin to take effect.');
                 settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
                     function success() {
 
                         if (showNotice) {
                             notifications.yell(
                                 'success',
-                                gt('The setting requires a reload or relogin to take effect.')
+                                message
                             );
                         }
                     }
                 );
             });
+
+            var reloadHint = capabilities.has('autologin') ?
+                gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
+                gt('Some settings (language, timezone, theme) require a relogin to take effect.');
+
             this.addClass('settings-container').append(
                 // headline
                 util.header(gt('Basic settings')),
                 // help text
                 $('<div class="help-block">')
-                .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
+                .text(reloadHint + ' ')
                 .css('margin-bottom', '24px')
                 .append(
                     $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
