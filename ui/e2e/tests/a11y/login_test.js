@@ -24,6 +24,5 @@ Scenario('Login page is accessible', async function (I) {
 
     I.waitForInvisible('#background-loader');
     const currentView = await I.grabAxeReport({ exclude: [['#io-ox-login-username'], ['#io-ox-login-password']] });
-    console.log(currentView.violations);
     expect(currentView).to.be.accessible;
 });
