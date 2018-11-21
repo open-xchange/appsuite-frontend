@@ -32,6 +32,5 @@ Scenario('Default List view w/o mail', async function (I) {
             'region': { enabled: false } // Feedback Button and Foldertree toggle should have a landmark role
         }
     });
-    console.log(currentView.violations);
     expect(currentView).to.be.accessible;
 });
