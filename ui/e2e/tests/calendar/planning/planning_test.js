@@ -67,6 +67,7 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.executeScript(function () {
         $('.freetime-time-view-body').scrollLeft(0);
     });
+
     I.click('.timeline-day:first-child .freetime-hour:nth-child(6)');
 
     //add a participant
@@ -89,6 +90,67 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.see('testdude1');
 
     I.click('Create');
+
+    I.logout();
+});
+
+Scenario('test planning view lasso', async function (I) {
+    I.login('app=io.ox/calendar');
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+
+    I.clickToolbar('Scheduling');
+
+    I.waitForVisible('.freetime-view-header');
+    I.waitForVisible('.freetime-view-body');
+
+    // scroll to start (I.scrollTo doesnt work)
+    I.executeScript(function () {
+        $('.freetime-time-view-body').scrollLeft(0);
+    });
+
+    // lasso
+    I.dragAndDrop('.freetime-table-cell:nth-child(6)', '.freetime-table-cell:nth-child(8)');
+
+    I.click('Create appointment');
+
+    I.dontSee('.freetime-view-header');
+    I.dontSee('.freetime-view-body');
+
+    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+
+    I.fillField('Subject', 'Planning View Test2');
+
+    I.waitForValue('[data-attribute="startDate"] .time-field', '12:30 PM');
+    I.waitForValue('[data-attribute="endDate"] .time-field', '2:30 PM');
+
+    I.click('Create');
+
+    I.logout();
+});
+
+Scenario('create distributionlist from planning view', async function (I) {
+    I.login('app=io.ox/calendar');
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+
+    I.clickToolbar('Scheduling');
+
+    I.waitForVisible('.freetime-view-header');
+    I.waitForVisible('.freetime-view-body');
+
+    //add a participant
+    I.fillField('.tt-input', 'testdude1@test.test');
+    I.pressKey('Enter');
+    I.see('testdude1');
+
+    I.click('Save as distribution list');
+
+    I.waitForVisible('.modal-header');
+    I.waitForVisible('.modal-body');
+
+    I.fillField('Name', 'Test distribution list');
+    I.click('Create distribution list');
+
+    I.click('.scheduling-app-close');
 
     I.logout();
 });
