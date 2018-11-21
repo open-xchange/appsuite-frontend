@@ -34,6 +34,7 @@ define('io.ox/core/settings/pane', [
 
     var INDEX = 0,
         MINUTES = 60000,
+        AUTOLOGIN = capabilities.has('autologin') && ox.secretCookie === true,
         availableApps = apps.forLauncher().filter(function (model) {
             var requires = model.get('requires');
             return upsell.has(requires);
@@ -66,7 +67,7 @@ define('io.ox/core/settings/pane', [
                         });
                     },
 
-                    reloadHint: capabilities.has('autologin') ?
+                    reloadHint: AUTOLOGIN ?
                         gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
                         gt('Some settings (language, timezone, theme) require a relogin to take effect.'),
 
@@ -166,7 +167,7 @@ define('io.ox/core/settings/pane', [
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
                             if (!showNotice) return;
-                            var message = capabilities.has('autologin') ?
+                            var message = AUTOLOGIN ?
                                 gt('The setting requires a reload or relogin to take effect.') :
                                 gt('The setting requires a relogin to take effect.');
                             notifications.yell('success', message);
@@ -187,7 +188,7 @@ define('io.ox/core/settings/pane', [
                     $('<div class="help-block">').text(this.reloadHint + ' ').css('margin-bottom', '24px')
                     .append(
                         $('<a href="#" role="button" data-action="reload">').text(
-                            capabilities.has('autologin') ?
+                            AUTOLOGIN ?
                                 gt('Reload page') :
                                 gt('Relogin')
                         ).on('click', reload)
