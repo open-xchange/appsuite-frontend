@@ -19,10 +19,10 @@ Before(async function (users) {
     await users.create();
 });
 
-Scenario.skip('Login page is accessible', async function (I) {
+Scenario('Login page is accessible', async function (I) {
     I.amOnPage('/');
 
-    I.waitForVisible('~Sign in');
+    I.waitForInvisible('#background-loader');
     const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });
