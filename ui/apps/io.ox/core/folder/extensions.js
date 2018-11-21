@@ -265,7 +265,7 @@ define('io.ox/core/folder/extensions', [
                 parent: tree
             });
             this.append(
-                view.render().$el.addClass('standard-folders')
+                view.render().$el.addClass('standard-folders').attr('role', 'presentation')
             );
             // show / hide folder on setting change
             view.listenTo(mailSettings, 'change:unseenMessagesFolder', function () {

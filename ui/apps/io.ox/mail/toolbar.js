@@ -266,7 +266,7 @@ define('io.ox/mail/toolbar', [
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
             .group(gt('Layout'))
             .option('layout', 'vertical', gt('Vertical'), { radio: true, group: true });
             // offer compact view only on desktop

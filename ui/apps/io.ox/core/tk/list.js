@@ -51,7 +51,7 @@ define('io.ox/core/tk/list', [
             '</li>'
         ),
 
-        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
+        busyIndicator: $('<li class="busy-indicator" role="presentation"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
 
         // disabled by default via 'hidden class'
         notification: $('<li class="abs notification hidden" role="presentation"></li>'),

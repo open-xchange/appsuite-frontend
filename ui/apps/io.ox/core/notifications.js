@@ -55,6 +55,9 @@ define('io.ox/core/notifications', [
 
             this.dropdown = new Dropdown({
                 tagName: 'li',
+                attributes: {
+                    role: 'presentation'
+                },
                 id: 'io-ox-notifications-icon',
                 className: 'launcher dropdown notifications-icon',
                 $ul: this.listNode,

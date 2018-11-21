@@ -221,6 +221,7 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var LaunchersView = Dropdown.extend({
+        attributes: { role: 'presentation' },
         tagName: 'li',
         className: 'launcher dropdown',
         id: 'io-ox-launcher',
