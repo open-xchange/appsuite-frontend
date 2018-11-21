@@ -19,10 +19,11 @@ Before(async function (users) {
     await users.create();
 });
 
-Scenario.skip('Login page is accessible', async function (I) {
+Scenario('Login page is accessible', async function (I) {
     I.amOnPage('/');
 
-    I.waitForVisible('~Sign in');
-    const currentView = await I.grabAxeReport();
+    I.waitForInvisible('#background-loader');
+    const currentView = await I.grabAxeReport({ exclude: [['#io-ox-login-username'], ['#io-ox-login-password']] });
+    console.log(currentView.violations);
     expect(currentView).to.be.accessible;
 });
