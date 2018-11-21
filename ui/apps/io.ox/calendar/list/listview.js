@@ -312,7 +312,7 @@ define('io.ox/calendar/list/listview', [
             if (this.tail) this.tail.remove();
             var m = moment(this.originalCollection.originalStart).add(this.originalCollection.range, 'month');
             this.$el.append(
-                this.tail = $('<li class="tail">').append(
+                this.tail = $('<li class="tail" role="presentation">').append(
                     $('<a href="#">')
                         .text(gt('Load appointments until %1$s', m.format('l')))
                         .on('click', this.onLoadMore.bind(this))
