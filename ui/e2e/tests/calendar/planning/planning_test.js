@@ -43,8 +43,8 @@ Scenario('use planning view opened from edit view', async function (I) {
 
     I.click('.modal-footer [data-action="save"]');
 
-    I.dontSee('.freetime-view-header');
-    I.dontSee('.freetime-view-body');
+    I.waitForInvisible('.freetime-view-header');
+    I.waitForInvisible('.freetime-view-body');
 
     I.waitForValue('[data-attribute="startDate"] .time-field', '12:00 PM');
     I.waitForValue('[data-attribute="endDate"] .time-field', '1:00 PM');
@@ -77,8 +77,8 @@ Scenario('use planning view as Standalone app', async function (I) {
 
     I.click('Create appointment');
 
-    I.dontSee('.freetime-view-header');
-    I.dontSee('.freetime-view-body');
+    I.waitForInvisible('.freetime-view-header');
+    I.waitForInvisible('.freetime-view-body');
 
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
 
@@ -113,8 +113,8 @@ Scenario('test planning view lasso', async function (I) {
 
     I.click('Create appointment');
 
-    I.dontSee('.freetime-view-header');
-    I.dontSee('.freetime-view-body');
+    I.waitForInvisible('.freetime-view-header');
+    I.waitForInvisible('.freetime-view-body');
 
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
 
@@ -149,6 +149,48 @@ Scenario('create distributionlist from planning view', async function (I) {
 
     I.fillField('Name', 'Test distribution list');
     I.click('Create distribution list');
+
+    I.click('.scheduling-app-close');
+
+    I.logout();
+});
+
+Scenario('check planning view options and minimizing behavior', async function (I) {
+    I.login('app=io.ox/calendar');
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+
+    I.clickToolbar('Scheduling');
+
+    I.waitForVisible('.freetime-view-header');
+    I.waitForVisible('.freetime-view-body');
+
+    I.waitForVisible('a.control.prev');
+    I.waitForVisible('a.control.next');
+    I.waitForVisible('.fa-minus');
+    I.waitForVisible('.fa-plus');
+    I.see('Options');
+
+    I.click('Options');
+
+    I.waitForVisible('[data-name="compact"]');
+    I.waitForVisible('[data-name="showFineGrid"]');
+    I.waitForVisible('[data-name="showFree"]');
+    I.waitForVisible('[data-value="week"]');
+    I.waitForVisible('[data-value="month"]');
+    I.waitForVisible('[data-name="onlyWorkingHours"]');
+
+    I.pressKey('Escape');
+
+    I.openApp('Mail');
+
+    I.waitForInvisible('.freetime-view-header');
+    I.waitForInvisible('.freetime-view-body');
+    I.waitForVisible('.taskbar-button[aria-label="Scheduling"]');
+
+    I.click('.taskbar-button[aria-label="Scheduling"]');
+
+    I.waitForVisible('.freetime-view-header');
+    I.waitForVisible('.freetime-view-body');
 
     I.click('.scheduling-app-close');
 
