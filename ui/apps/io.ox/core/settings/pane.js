@@ -30,6 +30,7 @@ define('io.ox/core/settings/pane', [
 
     var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal' }),
+        AUTOLOGIN = capabilities.has('autologin') && ox.secretCookie === true,
         MINUTES = 60000;
 
     function checkbox() {
@@ -60,7 +61,7 @@ define('io.ox/core/settings/pane', [
                     return setting === attr;
                 });
 
-                var message = capabilities.has('autologin') ?
+                var message = AUTOLOGIN ?
                     gt('The setting requires a reload or relogin to take effect.') :
                     gt('The setting requires a relogin to take effect.');
                 settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
@@ -76,7 +77,7 @@ define('io.ox/core/settings/pane', [
                 );
             });
 
-            var reloadHint = capabilities.has('autologin') ?
+            var reloadHint = AUTOLOGIN ?
                 gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
                 gt('Some settings (language, timezone, theme) require a relogin to take effect.');
 
