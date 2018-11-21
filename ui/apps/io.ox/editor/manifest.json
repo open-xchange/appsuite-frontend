@@ -1,7 +1,0 @@
-{
-    "title": "Editor",
-    "settings": false,
-    "requires": "infostore",
-    "visible": false,
-    "deeplink": true
-}
