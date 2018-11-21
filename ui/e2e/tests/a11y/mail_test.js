@@ -19,10 +19,19 @@ Before(async function (users) {
     await users.create();
 });
 
-Scenario.skip('Default List view w/o mail', async function (I) {
+Scenario('Default List view w/o mail', async function (I) {
     I.login('app=io.ox/mail');
 
     I.waitForElement('.mail-detail-pane');
-    const currentView = await I.grabAxeReport();
+    const currentView = await I.grabAxeReport({
+        exclude: [
+            ['#io\\.ox\\/mail-search-field82']  // Search field does not have a visible label
+        ]
+    }, {
+        rules: {
+            'region': { enabled: false } // Feedback Button and Foldertree toggle should have a landmark role
+        }
+    });
+    console.log(currentView.violations);
     expect(currentView).to.be.accessible;
 });
