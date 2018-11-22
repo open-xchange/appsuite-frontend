@@ -164,7 +164,7 @@ define('io.ox/calendar/toolbar', [
         index: 10000,
         draw: function (baton) {
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
             .group(gt('Layout'))
             .option('layout', 'week:day', gt('Day'), { radio: true, group: true });
             if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true, group: true });

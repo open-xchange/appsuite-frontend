@@ -76,11 +76,12 @@ define('io.ox/backbone/views/edit-picture', [
                         .then(function () {
                             var file = self.model.get('pictureFile'),
                                 imageurl = self.model.get('image1_url');
+                            // add unique identifier to prevent caching bugs
+                            if (imageurl) imageurl = imageurl + '&' + $.param({ uniq: _.now() });
                             // a) dataUrl (webcam photo)
                             if (_.isString(file)) return file;
-                            // b) server image
-                            // add unique identifier to prevent caching bugs
-                            if (!file || !file.lastModified) return imageurl + '&' + $.param({ uniq: _.now() });
+                            // b) server image (or blank)
+                            if (!file || !file.lastModified) return imageurl;
                             // c) local file
                             return getContent(file);
                         }).then(self.setImage.bind(self));

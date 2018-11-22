@@ -22,14 +22,15 @@ module.exports = actor({
         this.click('#io-ox-refresh-icon');
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
     },
-    grabAxeReport: async function () {
-        const report = await this.executeAsyncScript(function (axeSource, done) {
+    grabAxeReport: async function (context, options) {
+        const report = await this.executeAsyncScript(function (axeSource, context, options, done) {
             if (typeof axe === 'undefined') {
                 // eslint-disable-next-line no-eval
                 window.eval(axeSource);
             }
-            window.axe.run($('html')).then(done);
-        }, axe.source);
+            // Arity needs to be correct here so we need to compact arguments
+            window.axe.run.apply(this, _.compact([context || $('html'), options])).then(done);
+        }, axe.source, context, options);
         return report;
     }
 });

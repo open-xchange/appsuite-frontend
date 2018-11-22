@@ -131,7 +131,6 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
-
     // Notes
     ui.createApp({
         id: 'io.ox/notes',
@@ -141,6 +140,27 @@ define('io.ox/core/main/apps', [
         device: '!smartphone',
         refreshable: true,
         searchable: true
+    });
+
+    // Editor
+    ui.createApp({
+        id: 'io.ox/editor',
+        name: 'io.ox/editor',
+        title: gt('Editor'),
+        settings: false,
+        requires: 'infostore',
+        visible: false,
+        deeplink: true
+    });
+
+    // Search
+    ui.createApp({
+        id: 'io.ox/search',
+        name: 'io.ox/search',
+        title: gt('Search'),
+        requires: 'search',
+        settings: false,
+        visible: false
     });
 
     // Settings

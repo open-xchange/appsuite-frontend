@@ -265,7 +265,7 @@ define('io.ox/core/folder/extensions', [
                 parent: tree
             });
             this.append(
-                view.render().$el.addClass('standard-folders')
+                view.render().$el.addClass('standard-folders').attr('role', 'presentation')
             );
             // show / hide folder on setting change
             view.listenTo(mailSettings, 'change:unseenMessagesFolder', function () {
@@ -923,8 +923,9 @@ define('io.ox/core/folder/extensions', [
                 if (baton.context !== 'app') return;
                 if (capabilities.has('guest')) return;
                 var dropdown = new DropdownView({
+                    attributes: { role: 'presentation' },
                     tagName: 'li',
-                    className: 'presentation dropdown',
+                    className: 'dropdown',
                     $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
                         gt('Add new calendar'),
                         $('<i class="fa fa-caret-down" aria-hidden="true">')

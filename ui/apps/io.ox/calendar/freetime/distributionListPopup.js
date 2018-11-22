@@ -37,7 +37,7 @@ define('io.ox/calendar/freetime/distributionListPopup', [
         popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').attr('for', guid).text(gt('Name')).append(input),
             $('<div class="help-block">').text(gt('Please note that distribution lists cannot contain resources.')));
         popup.addCancelButton();
-        popup.addButton({ label: options.label || gt('Create distibution list'), action: 'save' });
+        popup.addButton({ label: options.label || gt('Create distribution list'), action: 'save' });
         popup.on('save', function () {
             if (input.val()) {
                 require(['io.ox/contacts/api', 'io.ox/core/folder/util'], function (api, folderUtil) {

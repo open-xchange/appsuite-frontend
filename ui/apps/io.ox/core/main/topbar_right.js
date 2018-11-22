@@ -307,6 +307,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
                 dropdown = new Dropdown({
+                    attributes: { role: 'presentation' },
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',
                     className: 'launcher dropdown',

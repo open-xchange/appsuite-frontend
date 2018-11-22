@@ -1,7 +1,0 @@
-{
-    "title": "Search",
-    "path": "io.ox/search/main",
-    "requires": "search",
-    "settings": false,
-    "visible": false
-}
