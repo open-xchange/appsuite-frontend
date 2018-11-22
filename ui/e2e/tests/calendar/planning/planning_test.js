@@ -46,8 +46,8 @@ Scenario('use planning view opened from edit view', async function (I) {
     I.waitForInvisible('.freetime-view-header');
     I.waitForInvisible('.freetime-view-body');
 
-    I.waitForValue('[data-attribute="startDate"] .time-field', '12:00 PM');
-    I.waitForValue('[data-attribute="endDate"] .time-field', '1:00 PM');
+    I.waitForValue({ css: '[data-attribute="startDate"] .time-field' }, '12:00 PM');
+    I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '1:00 PM');
 
     I.click('Create');
 
@@ -84,8 +84,8 @@ Scenario('use planning view as Standalone app', async function (I) {
 
     I.fillField('Subject', 'Planning View Test2');
 
-    I.waitForValue('[data-attribute="startDate"] .time-field', '12:00 PM');
-    I.waitForValue('[data-attribute="endDate"] .time-field', '1:00 PM');
+    I.waitForValue({ css: '[data-attribute="startDate"] .time-field' }, '12:00 PM');
+    I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '1:00 PM');
 
     I.see('testdude1');
 
@@ -120,8 +120,8 @@ Scenario('test planning view lasso', async function (I) {
 
     I.fillField('Subject', 'Planning View Test2');
 
-    I.waitForValue('[data-attribute="startDate"] .time-field', '12:30 PM');
-    I.waitForValue('[data-attribute="endDate"] .time-field', '2:30 PM');
+    I.waitForValue({ css: '[data-attribute="startDate"] .time-field' }, '12:30 PM');
+    I.waitForValue({ css: '[data-attribute="endDate"] .time-field' }, '2:30 PM');
 
     I.click('Create');
 
@@ -172,12 +172,12 @@ Scenario('check planning view options and minimizing behavior', async function (
 
     I.click('Options');
 
-    I.waitForVisible('[data-name="compact"]');
-    I.waitForVisible('[data-name="showFineGrid"]');
-    I.waitForVisible('[data-name="showFree"]');
-    I.waitForVisible('[data-value="week"]');
-    I.waitForVisible('[data-value="month"]');
-    I.waitForVisible('[data-name="onlyWorkingHours"]');
+    I.waitForVisible({ css: '[data-name="compact"]' });
+    I.waitForVisible({ css: '[data-name="showFineGrid"]' });
+    I.waitForVisible({ css: '[data-name="showFree"]' });
+    I.waitForVisible({ css: '[data-value="week"]' });
+    I.waitForVisible({ css: '[data-value="month"]' });
+    I.waitForVisible({ css: '[data-name="onlyWorkingHours"]' });
 
     I.pressKey('Escape');
 
