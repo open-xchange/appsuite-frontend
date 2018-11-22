@@ -14,7 +14,7 @@
 const { expect } = require('chai');
 
 const excludedElements = [
-    ['#io\\.ox\\/calendar-search-field80'],  // Search field does not have a visible label
+    ['#io\\.ox\\/calendar-search-field82'],  // Search field does not have a visible label
     ['.select-all[role="checkbox"]'] // role checkbox is not allowed here
 ];
 
