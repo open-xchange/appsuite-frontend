@@ -34,13 +34,13 @@ Scenario('create complete task', async function (I) {
     I.click('Expand form');
 
     I.click('All day');
-    I.fillField('[data-attribute="start_time"] .datepicker-day-field', '12/13/2114');
-    I.click('[data-attribute="start_time"] .time-field');
-    I.fillField('[data-attribute="start_time"] .time-field', '12:00 PM');
+    I.fillField({ css: '[data-attribute="start_time"] .datepicker-day-field' }, '12/13/2114');
+    I.click({ css: '[data-attribute="start_time"] .time-field' });
+    I.fillField({ css: '[data-attribute="start_time"] .time-field' }, '12:00 PM');
 
-    I.fillField('[data-attribute="end_time"] .datepicker-day-field', '12/13/2114');
-    I.click('[data-attribute="end_time"] .time-field');
-    I.fillField('[data-attribute="end_time"] .time-field', '1:00 PM');
+    I.fillField({ css: '[data-attribute="end_time"] .datepicker-day-field' }, '12/13/2114');
+    I.click({ css: '[data-attribute="end_time"] .time-field' });
+    I.fillField({ css: '[data-attribute="end_time"] .time-field' }, '1:00 PM');
 
     I.selectOption('Reminder', 'in one week');
     I.selectOption('Status', 'In progress');
@@ -49,22 +49,21 @@ Scenario('create complete task', async function (I) {
     I.fillField('.tt-input', 'testdude1@test.test');
 
     I.click('Show details');
-    I.waitForVisible('[name="target_duration"]');
 
-    I.fillField('[name="target_duration"]', '25');
-    I.fillField('[name="actual_duration"]', '45');
-    I.fillField('[name="target_costs"]', '27');
-    I.fillField('[name="actual_costs"]', '1337');
-    I.selectOption('[name="currency"]', 'EUR');
-    I.fillField('[name="trip_meter"]', '1337mm');
-    I.fillField('[name="billing_information"]', "Don't know any Bill");
-    I.fillField('[name="companies"]', 'Wurst Inc.');
+    I.fillField({ css: '[name="target_duration"]' }, '25');
+    I.fillField({ css: '[name="actual_duration"]' }, '45');
+    I.fillField({ css: '[name="target_costs"]' }, '27');
+    I.fillField({ css: '[name="actual_costs"]' }, '1337');
+    I.selectOption({ css: '[name="currency"]' }, 'EUR');
+    I.fillField({ css: '[name="trip_meter"]' }, '1337mm');
+    I.fillField({ css: '[name="billing_information"]' }, "Don't know any Bill");
+    I.fillField({ css: '[name="companies"]' }, 'Wurst Inc.');
 
     I.click('Create');
 
-    I.waitForVisible('.tasks-detailview');
+    I.seeElement('.tasks-detailview');
 
-    I.waitForVisible('[title="High priority"]');
+    I.seeElement({ css: '[title="High priority"]' });
     I.see('Test Task');
     I.see('Best Task evor!!!11elf');
 
