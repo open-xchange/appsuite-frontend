@@ -524,7 +524,7 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
-                if (baton.module !== 'calendar') return;
+                if (baton.module !== 'calendar' && baton.module !== 'tasks') return;
 
                 // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
                 var provider = baton.data['com.openexchange.calendar.provider'],
