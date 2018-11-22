@@ -107,9 +107,14 @@ define('io.ox/core/folder/actions/properties', [
         id: 'caldav-url',
         index: 300,
         render: function () {
-            var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties') || {},
-                usedForSync = extendedProperties.usedForSync || {};
-            if (!usedForSync || usedForSync.value !== 'true') return;
+            // make sure this works for tasks and calendar
+            if (this.model.get('module') === 'calendar') {
+                var extendedProperties = this.model.get('com.openexchange.calendar.extendedProperties') || {},
+                    usedForSync = extendedProperties.usedForSync || {};
+                if (!usedForSync || usedForSync.value !== 'true') return;
+                // for tasks also check if the capability is enabled and the folder is private
+            } else if (!(this.model.get('module') === 'tasks' && capabilities.has('caldav') && this.model.is('private'))) return;
+
             var url = this.model.get('com.openexchange.caldav.url');
             if (!url) return;
             this.$body.append(group(gt('CalDAV URL'), url));
