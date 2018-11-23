@@ -52,7 +52,7 @@ define('io.ox/calendar/year/view', [
                 _.range(firstDayOfWeek, firstDayOfWeek + 7).map(function (index) {
                     var day = moment().day(index % 7),
                         cell = $('<th>').text(day.format('dd'));
-                    if (index === 0 || index === 6) cell.addClass('weekend');
+                    if (day.day() === 0 || day.day() === 6) cell.addClass('weekend');
                     return cell;
                 })
             );
