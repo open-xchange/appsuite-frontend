@@ -246,18 +246,25 @@ define('io.ox/calendar/perspective', [
                         case 'series':
                             api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
                                 // calculate new dates if old dates are available
-                                var oldStartDate = masterModel.getMoment('startDate'),
-                                    startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(prevStartDate, 'ms'), 'ms'),
-                                    endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(prevEndDate, 'ms'), 'ms'),
-                                    format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
-                                masterModel.set({
-                                    startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
-                                    endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
-                                });
+                                var oldStartDate = masterModel.getMoment('startDate');
+                                if (model.hasFlag('overridden')) {
+                                    masterModel.set({
+                                        startDate: model.get('startDate'),
+                                        endDate: model.get('endDate')
+                                    });
+                                } else {
+                                    var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(prevStartDate, 'ms'), 'ms'),
+                                        endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(prevEndDate, 'ms'), 'ms'),
+                                        format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                                    masterModel.set({
+                                        startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
+                                        endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
+                                    });
+                                }
+
                                 util.updateRecurrenceDate(masterModel, oldStartDate);
                                 apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), {
-                                    checkConflicts: true,
-                                    recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                    checkConflicts: true
                                 }));
                             });
                             break;
