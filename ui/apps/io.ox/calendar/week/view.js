@@ -1311,6 +1311,15 @@ define('io.ox/calendar/week/view', [
                     cellHeight = this.model.get('cellHeight');
                     mousedownOrigin = { x: e.pageX, y: e.pageY };
                     sameDay = model.getMoment('startDate').local().isSame(model.getMoment('endDate').local(), 'day');
+                    // check if end date is right at midnight at the same day (this would lead to an incorrect sameDay check)
+                    if (!sameDay) {
+                        var tempMoment = moment(model.getMoment('endDate').local()).startOf('day');
+                        // end date is right at midnight, so it might still be the same day
+                        if (tempMoment.isSame(moment(model.getMoment('endDate').local()))) {
+                            tempMoment.subtract(1, 'seconds');
+                            sameDay = model.getMoment('startDate').local().isSame(tempMoment, 'day');
+                        }
+                    }
                     // offset in minutes in relation to the current grid size
                     startOffset = model.getMoment('startDate').local().minutes() % (60 / this.model.get('gridSize'));
                     numTimeslots = this.getNumTimeslots();
@@ -1342,12 +1351,13 @@ define('io.ox/calendar/week/view', [
                     if (sameDay) {
                         var top = target.index() - offsetSlots,
                             minutes = top / numTimeslots * 24 * 60 + startOffset,
-                            startMinutes = model.getMoment('startDate').diff(model.getMoment('startDate').local().startOf('day'), 'minutes');
+                            // yeah this tz construct looks strange but works (local() will not work in some edge cases)
+                            startMinutes = model.getMoment('startDate').diff(model.getMoment('startDate').tz(moment().tz()).startOf('day'), 'minutes');
                         diffMinutes = minutes - startMinutes;
                     }
 
-                    startDate = model.getMoment('startDate').local().add(diffDays, 'days').add(diffMinutes, 'minutes');
-                    endDate = model.getMoment('endDate').local().add(diffDays, 'days').add(diffMinutes, 'minutes');
+                    startDate = model.getMoment('startDate').tz(moment().tz()).add(diffDays, 'days').add(diffMinutes, 'minutes');
+                    endDate = model.getMoment('endDate').tz(moment().tz()).add(diffDays, 'days').add(diffMinutes, 'minutes');
 
                     startIndex = Math.max(0, startDate.diff(this.model.get('startDate'), 'days'));
                     var endIndex = Math.min(this.model.get('numColumns'), endDate.diff(this.model.get('startDate'), 'days'));
