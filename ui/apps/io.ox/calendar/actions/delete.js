@@ -42,7 +42,7 @@ define('io.ox/calendar/actions/delete', [
                     obj = obj instanceof Backbone.Model ? obj.attributes : obj;
                     var options = {
                         // prefer the seriesId over the id to make it work for exeptions
-                        id:  action === 'thisandfuture' ? obj.seriesId || obj.id : obj.id,
+                        id:  action === 'thisandfuture' || action === 'series' ? obj.seriesId || obj.id : obj.id,
                         folder: obj.folder,
                         recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
                     };
