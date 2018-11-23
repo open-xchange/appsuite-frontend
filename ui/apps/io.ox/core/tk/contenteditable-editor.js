@@ -114,6 +114,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         }())
     });
 
+    /*
+    // disabled for 7.10.1, will be removed with 7.10.2
     ext.point(POINT + '/options').extend({
         id: 'mention',
         index: INDEX += 100,
@@ -188,6 +190,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             });
         }
     });
+    */
 
     function splitContent_W3C(ed) {
         // get current range
