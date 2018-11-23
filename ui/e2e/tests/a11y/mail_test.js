@@ -25,7 +25,7 @@ Scenario('Default List view w/o mail', async function (I) {
     I.waitForElement('.mail-detail-pane');
     const currentView = await I.grabAxeReport({
         exclude: [
-            ['#io\\.ox\\/mail-search-field84']  // Search field does not have a visible label
+            ['[id^="io\\.ox\\/mail-search-field"]']  // Search field does not have a visible label
         ]
     }, {
         rules: {

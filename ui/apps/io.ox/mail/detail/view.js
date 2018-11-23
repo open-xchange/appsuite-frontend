@@ -431,6 +431,7 @@ define('io.ox/mail/detail/view', [
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
+                        .on('dragover drop', false)
                         .trigger('resize');
                 }.bind(this));
             });

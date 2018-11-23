@@ -14,36 +14,30 @@
 const { expect } = require('chai');
 
 const excludedElements = [
-    ['[id^="io\\.ox\\/calendar-search-field"]'],  // Search field does not have a visible label
+    ['[id^="io\\.ox\\/tasks-search-field"]'],  // Search field does not have a visible label
     ['.select-all[role="checkbox"]'] // role checkbox is not allowed here
 ];
 
 const excludedRules = {
-    'region': { enabled: false }, // Feedback Button and Foldertree toggle should have a landmark role
-    'landmark-no-duplicate-banner': { enabled: false } // No duplicate landmark (No header in contact detail)
+    'region': { enabled: false } // Feedback Button and Foldertree toggle should have a landmark role
 };
 
-Feature('A11y for Calendar App');
+Feature('A11y for Tasks App');
 
 Before(async function (users) {
     await users.create();
 });
 
-Scenario('Default List view w/o appointments', async function (I) {
+Scenario('Default List view w/o tasks', async function (I) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+    I.haveSetting('io.ox/tasks//showCheckboxes', true);
 
-    I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.login('app=io.ox/tasks');
+    I.waitForVisible('[data-app-name="io.ox/tasks"]', 5);
 
-    // create in list view for invitation accept
-    I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('List');
-    I.waitForVisible('.io-ox-center.multi-selection-message');
+    I.waitForVisible('.summary.empty');
 
     const currentView = await I.grabAxeReport({ exclude: excludedElements }, { rules: excludedRules });
     expect(currentView).to.be.accessible;
 });
-

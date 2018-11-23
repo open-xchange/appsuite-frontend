@@ -1,6 +1,7 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
 const axe = require('axe-core');
+const _ = require('underscore');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -29,8 +30,31 @@ module.exports = actor({
                 window.eval(axeSource);
             }
             // Arity needs to be correct here so we need to compact arguments
-            window.axe.run.apply(this, _.compact([context || $('html'), options])).then(done);
+            window.axe.run.apply(this, _.compact([context || $('html'), options])).then(function (report) {
+                try {
+                    var nodes = [];
+                    for (const violation of report.violations) {
+                        for (const node of violation.nodes) {
+                            nodes.push(node.target);
+                            for (const combinedNodes of [node.all, node.any, node.none]) {
+                                if (!_.isEmpty(combinedNodes)) {
+                                    for (const any of combinedNodes) {
+                                        for (const relatedNode of any.relatedNodes) {
+                                            nodes.push(relatedNode.target);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $(nodes.join(',')).css('border', '2px solid red');
+                } catch (err) {
+                    done(err.message);
+                }
+                done(report);
+            });
         }, axe.source, context, options);
+        if (typeof report === 'string') throw report;
         return report;
     }
 });

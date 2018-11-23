@@ -1385,9 +1385,6 @@ define('io.ox/mail/main', [
                 // looks for intersection
                 if (_.intersection(ids, selection).length) {
                     app.listView.selection.dodge();
-                    // we might have removed the mail defining the thread, so we need to refresh
-                    // the list or the thread will be gone until next refresh
-                    if (app.isThreaded()) api.once('deleted-mails', function () { app.listView.reload(); });
                     if (ids.length === 1) return;
                     app.listView.onBatchRemove(ids.slice(1));
                 }
