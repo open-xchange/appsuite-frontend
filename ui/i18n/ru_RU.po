@@ -2550,10 +2550,6 @@ msgid "Create contact"
 msgstr "Создать контакт"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Создать список рассылки"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3691,8 +3687,8 @@ msgstr "Изменить задачу"
 msgid "Edit to set a name."
 msgstr "Отредактируйте, чтобы определить имя."
 
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Редактор"
 
@@ -8660,9 +8656,9 @@ msgstr "Сине-зеленый"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -11364,14 +11360,10 @@ msgstr "Что вы хотите использовать?"
 msgid "What type of device do you want to configure?"
 msgstr "Устройство какого типа вы хотите настроить?"
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Что нового"
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Что нового в %1$s 7.10.0"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -13342,6 +13334,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Создать учетную запись  %s на основе определенных здесь данных"
+
+#~ msgid "Create distibution list"
+#~ msgstr "Создать список рассылки"
 
 #~ msgid "Create exception"
 #~ msgstr "Создать исключение"
@@ -16151,6 +16146,9 @@ msgstr "вашей платформы"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Отменить изменения?"
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Что нового в %1$s 7.10.0"
 
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "

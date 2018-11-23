@@ -2553,10 +2553,6 @@ msgid "Create contact"
 msgstr "Vytvoriť kontakt"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Vytvoriť distribučný zoznam"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3700,8 +3696,8 @@ msgstr "Upraviť úlohu"
 msgid "Edit to set a name."
 msgstr "Upravením nastavíte meno."
 
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Editor"
 
@@ -8683,9 +8679,9 @@ msgstr "Morská zelená"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -11409,14 +11405,10 @@ msgstr "Čo chcete použiť?"
 msgid "What type of device do you want to configure?"
 msgstr "Aký typ zariadenia chcete nakonfigurovať?"
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Novinky"
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Novinky v %1$s 7.10.0"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -14119,6 +14111,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Vytvoriť účet %s pomocou tu uložených údajov."
+
+#~ msgid "Create distibution list"
+#~ msgstr "Vytvoriť distribučný zoznam"
 
 #~ msgid "Create exception"
 #~ msgstr "Vytvoriť výnimku"
@@ -19686,6 +19681,9 @@ msgstr "vaša platforma"
 #~| msgid "Do you want to save your configuration?"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "Chcete uložiť vašu konfguráciu?"
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Novinky v %1$s 7.10.0"
 
 #~ msgid "When \"Reply all\":"
 #~ msgstr "Pri „Odpovedať všetkým“:"

@@ -2531,10 +2531,6 @@ msgid "Create contact"
 msgstr "Névjegy létrehozása"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Disztribúciós lista létrehozása"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3683,8 +3679,8 @@ msgstr "Feladat szerkesztése"
 msgid "Edit to set a name."
 msgstr "Szerkessze név beállításához."
 
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Szerkesztő"
 
@@ -8650,9 +8646,9 @@ msgstr "Tengerzöld"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -11365,14 +11361,10 @@ msgstr "Mit szeretne használni?"
 msgid "What type of device do you want to configure?"
 msgstr "Melyik típusú eszközt szeretne beállítani?"
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Újdonságok"
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Újdonságok a(z) %1$s 7.10.0 verzióban"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -13037,6 +13029,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "A névjegyadatai nem tölthetők be."
 
+#~ msgid "Create distibution list"
+#~ msgstr "Disztribúciós lista létrehozása"
+
 #~ msgid "Create exception"
 #~ msgstr "Kivétel létrehozása"
 
@@ -14517,6 +14512,9 @@ msgstr "az Ön rendszere"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Eldobja ezeket a módosításokat?"
+
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Újdonságok a(z) %1$s 7.10.0 verzióban"
 
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "

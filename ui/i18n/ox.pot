@@ -1245,6 +1245,7 @@ msgstr ""
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
 #: apps/io.ox/core/desktop.js
+#: apps/io.ox/core/main/apps.js
 #: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/find/extensions-facets.js
 #: apps/io.ox/find/main.js
@@ -2234,11 +2235,6 @@ msgstr ""
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
 #: module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain resources."
-msgstr ""
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-msgid "Create distibution list"
 msgstr ""
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
@@ -6192,6 +6188,15 @@ msgctxt "app"
 msgid "Notes"
 msgstr ""
 
+#: apps/io.ox/core/main/apps.js
+#: module:io.ox/core
+#: apps/io.ox/editor/main.js
+#: module:io.ox/editor
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Editor"
+msgstr ""
+
 #: apps/io.ox/core/main/autologout.js
 #: module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
@@ -8117,13 +8122,6 @@ msgstr ""
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
-msgstr ""
-
-#: apps/io.ox/editor/main.js
-#: module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail
-msgid "Editor"
 msgstr ""
 
 #: apps/io.ox/editor/main.js
@@ -13630,6 +13628,7 @@ msgstr ""
 msgid "Windows you have minimized will appear in all applications for easy access. You can maximize a window again by clicking on it."
 msgstr ""
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js
 #: module:io.ox/core
 msgid "What's new"
@@ -13638,12 +13637,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js
 #: module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
-msgstr ""
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js
-#: module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
 msgstr ""
 
 #. %1$s is the product name, e.g. OX App Suite
