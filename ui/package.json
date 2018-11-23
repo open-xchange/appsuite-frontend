@@ -8,7 +8,7 @@
   },
   "license": "CC-BY-NC-SA-2.5",
   "scripts": {
-    "e2e": "codeceptjs run",
+    "e2e": "codeceptjs run --reporter mocha-multi",
     "test": "grunt copy:specs karma:continuous"
   },
   "optionalDependencies": {
@@ -47,6 +47,8 @@
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "^0.0.32",
     "mocha": "^3.2.0",
+    "mocha-multi": "^1.0.1",
+    "mochawesome": "^3.1.1",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.11.0",
     "time-grunt": "^1.0.0",
