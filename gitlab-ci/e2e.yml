@@ -95,7 +95,7 @@ publish e2e failure report:
   script:
     - docker cp ui/build/e2e/ reports:/usr/share/nginx/html/$CI_PIPELINE_ID/
   environment:
-    name: reports/$CI_COMMIT_SHA
+    name: reports/$CI_PIPELINE_IID
     url: http://reports.ui.cloud.open-xchange.com/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   when: on_failure
@@ -109,7 +109,7 @@ remove e2e report:
   script:
     - docker exec reports rm -rf /usr/share/nginx/html/$CI_PIPELINE_ID
   environment:
-    name: reports/$CI_COMMIT_SHA
+    name: reports/$CI_PIPELINE_IID
     action: stop
   when: manual
 
