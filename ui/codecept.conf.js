@@ -14,7 +14,7 @@ module.exports.config = {
     'output': './build/e2e/',
     'helpers': {
         'Mochawesome': {
-            'uniqueScreenshotNames': 'true'
+            'uniqueScreenshotNames': true
         },
         'WebDriverIO': _.extend({}, {
             'url': process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
@@ -69,6 +69,12 @@ module.exports.config = {
         'reporterOptions': {
             'codeceptjs-cli-reporter': {
                 'stdout': '-'
+            },
+            'mocha-junit-reporter': {
+                'stdout': '-',
+                'options': {
+                    'mochaFile': './build/e2e/report.xml'
+                }
             },
             'mochawesome': {
                 'stdout': './build/e2e/console.log',
