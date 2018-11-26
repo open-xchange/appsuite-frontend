@@ -35,6 +35,11 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/hopscotch/-/hopscotch-0.0.1.tgz#33f6f97d9482540f47c58b32364af17c5a52c646"
   integrity sha512-Az3RGojtxuUhuNz3HjfWdze9jfZy0hBV70YKbDnQCI+TQsV2Zcs9Ez4NT3yzEiqzHnOhoX6bj8pDHKLj66TN6Q==
 
+"@open-xchange/jquery-touch-events@1.0.8-1f5ad59":
+  version "1.0.8-1f5ad59"
+  resolved "https://registry.yarnpkg.com/@open-xchange/jquery-touch-events/-/jquery-touch-events-1.0.8-1f5ad59.tgz#e2fff47e5d0ce49e89243fb3f0baac639a7068c1"
+  integrity sha512-5lm4nzHxZHjO4ikGKOzzKdUOQHs1upZVtDjfIBp6dSxBvKSoZCmseTpGq+vdfNGnm/fbffJK31bcOgT5Ts63ew==
+
 "@open-xchange/moment-interval@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@open-xchange/moment-interval/-/moment-interval-0.0.1.tgz#293778b2e4fe1605c9949692f9f8259ce11a3c33"
@@ -3652,10 +3657,6 @@ isstream@0.1.x, isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
-
-"jquery-touch-events@git://github.com/benmajor/jQuery-Touch-Events.git#1.0.9":
-  version "1.0.8"
-  resolved "git://github.com/benmajor/jQuery-Touch-Events.git#1f5ad5910c4f9d35c80f5a950356d55512795ab3"
 
 jquery@3.2.1:
   version "3.2.1"
