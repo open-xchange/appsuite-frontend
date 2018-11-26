@@ -53,8 +53,6 @@ module.exports = function (grunt) {
                         expand: true,
                         src: [
                             'bootstrap-datepicker/less/datepicker3.less',
-                            'bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'tinymce/{langs,plugins,skins,themes}/**/*',
                             '{hopscotch,emoji}/*.{js,css,png}'
                         ],
@@ -72,6 +70,8 @@ module.exports = function (grunt) {
                         flatten: true,
                         expand: true,
                         src: [
+                            '@open-xchange/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            '@open-xchange/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'socket.io-client/dist/socket.io.slim.js',
                             'bigscreen/bigscreen.min.js',
                             'chart.js/dist/Chart.min.js',
