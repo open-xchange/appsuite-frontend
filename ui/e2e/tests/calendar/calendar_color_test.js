@@ -71,7 +71,6 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.click('Appointment color');
-    let darkRed = await I.grabCssPropertyFrom(locate('i').before(locate('span').withText('dark red')), 'background-color');
     I.click('dark red');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
@@ -80,7 +79,8 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     appointmentColor = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).not.equal(appointmentColor);
-    expect(appointmentColor).equal(darkRed);
+    // the color might differ if the appointment has .hover class which is not predictable
+    expect(appointmentColor).be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
     // change color back to folder color
     I.click('test appointment one', '.workweek');
@@ -96,7 +96,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     appointmentColor = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).equal(appointmentColor);
-    expect(appointmentColor).not.equal(darkRed);
+    expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
     // remove
     I.click('test appointment one', '.workweek');
