@@ -7,6 +7,13 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.1.3.tgz#2c92469bac2b7fbff810b67fca07bd138b48af77"
   integrity sha512-gqmspPZOMW3MIRb9HlrnbZHXI1/KHTOroBwN1NcLL6pWxzqzEKGvRTq0W/PxS45OtQGbaFikSQpkS5zbnsQm2w==
 
+"@open-xchange/bootstrap-datepicker@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-datepicker/-/bootstrap-datepicker-1.3.1.tgz#d642f8b47d5d648e859503c260c17e7cdc40d956"
+  integrity sha512-C4j7PdTbG8Pmmc+jAwnX9cE5UnEdhkkNX164y9Z/TXZmRYGycVZPAqox/0vR45eXrCMgiogJo9vBd/59q89Wig==
+  dependencies:
+    jquery ">=1.7.1"
+
 "@open-xchange/codecept-helper@0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.6.tgz#2da550496d142412b655b6f0d87f21cc27580255"
@@ -662,12 +669,6 @@ boom@2.x.x:
   integrity sha1-OciRjO/1eZ+D+UkqhI9iWt0Mdm8=
   dependencies:
     hoek "2.x.x"
-
-"bootstrap-datepicker@git://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1":
-  version "1.3.1"
-  resolved "git://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#7d04685837737b69e9cdbcae41a7fea3cd21c004"
-  dependencies:
-    jquery ">=1.7.1"
 
 "bootstrap-tokenfield@git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07":
   version "0.12.1"
