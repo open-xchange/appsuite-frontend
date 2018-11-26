@@ -18,6 +18,10 @@ build documentation:
     paths:
       - doku/
     expire_in: 2 hours
+  only:
+    changes:
+      - ./documentation/**/*
+      - ui/package.json
 
 deploy documentation:
   stage: deploy

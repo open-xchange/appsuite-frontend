@@ -44,7 +44,6 @@ module.exports = function (grunt) {
         Promise.all([
             config.prefixes[0] + 'apps/io.ox/office/tk/definitions.less',
             config.prefixes[0] + 'apps/io.ox/office/tk/icons/definitions.less',
-            config.prefixes[0] + 'apps/io.ox/office/tk/icons/definitions.less',
             config.prefixes[0] + 'apps/io.ox/office/tk/icons/docs-icons.less',
             config.prefixes[0] + 'apps/oxguard/tour/style.less'
         ].map(function (fileName) {
