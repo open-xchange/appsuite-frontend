@@ -54,6 +54,7 @@ module.exports = function (grunt) {
                         src: [
                             'bootstrap-datepicker/less/datepicker3.less',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'tinymce/{langs,plugins,skins,themes}/**/*',
                             '{hopscotch,emoji}/*.{js,css,png}'
                         ],
@@ -73,7 +74,6 @@ module.exports = function (grunt) {
                         src: [
                             'socket.io-client/dist/socket.io.slim.js',
                             'bigscreen/bigscreen.min.js',
-                            'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'chart.js/dist/Chart.min.js',
                             'clipboard/dist/clipboard.min.js',
                             'croppie/croppie.min.js',
@@ -165,7 +165,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     ext: '.css',
-                    cwd: 'node_modules/bootstrap-tokenfield/less/',
+                    cwd: 'node_modules/@open-xchange/bootstrap-tokenfield/less/',
                     src: ['*.less'],
                     dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/'
                 }]

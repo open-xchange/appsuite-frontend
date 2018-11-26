@@ -14,6 +14,11 @@
   dependencies:
     jquery ">=1.7.1"
 
+"@open-xchange/bootstrap-tokenfield@0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.0.tgz#97fa5fb6f318f68ac2698cd2242d89ec4ae8db7d"
+  integrity sha512-EdLeFAXEnW+rotn+hDq8btKh1ufWMZsDtxHENqS5zMD9VDY9/b38AGZGuJLVm4ss2/IkCyMv35Q1WwunMlBAlg==
+
 "@open-xchange/codecept-helper@0.0.6":
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.6.tgz#2da550496d142412b655b6f0d87f21cc27580255"
@@ -669,10 +674,6 @@ boom@2.x.x:
   integrity sha1-OciRjO/1eZ+D+UkqhI9iWt0Mdm8=
   dependencies:
     hoek "2.x.x"
-
-"bootstrap-tokenfield@git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07":
-  version "0.12.1"
-  resolved "git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07"
 
 bootstrap@3.3.7:
   version "3.3.7"
