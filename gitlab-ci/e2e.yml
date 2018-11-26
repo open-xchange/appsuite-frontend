@@ -80,6 +80,7 @@ publish e2e reports for stable branches:
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/
+  when: always
   only:
     - develop
     - master
@@ -99,6 +100,10 @@ publish e2e failure report:
     url: http://reports.ui.cloud.open-xchange.com/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   when: on_failure
+  except:
+    - develop
+    - master
+    - master-*
 
 remove e2e report:
   stage: cleanup
