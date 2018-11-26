@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Add a distribution list to an existing distribution list', function (I) {
+Scenario.skip('Add a distribution list to an existing distribution list', function (I) {
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('[data-app-name="io.ox/contacts"]', 5);
