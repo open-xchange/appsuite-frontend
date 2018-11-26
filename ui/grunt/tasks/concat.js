@@ -26,7 +26,7 @@ module.exports = function (grunt) {
                         src: [
                             'node_modules/jquery/dist/jquery.js',
                             //'node_modules/jquery-migrate/dist/jquery-migrate.js',
-                            'node_modules/jquery-touch-events/src/jquery.mobile-events.min.js',
+                            'node_modules/@open-xchange/jquery-touch-events/src/jquery.mobile-events.min.js',
                             'node_modules/underscore/underscore.js', // load this before require.js to keep global object
                             'build/ox.js',
                             // add backbone and dot.js may be a AMD-variant would be better
