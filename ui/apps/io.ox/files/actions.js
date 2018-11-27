@@ -1063,7 +1063,7 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/premium/actions/synchronize', {
-        capabilities: 'boxcom || google || msliveconnect',
+        capabilities: 'boxcom || google || microsoftgraph',
         requires: function () {
             // use client onboarding here, since it is a setting and not a capability
             return capabilities.has('client-onboarding');

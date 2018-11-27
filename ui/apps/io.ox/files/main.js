@@ -218,7 +218,7 @@ define('io.ox/files/main', [
                 module: 'file',
                 upsell: {
                     title: gt('Need more space?'),
-                    requires: 'boxcom || google || msliveconnect',
+                    requires: 'boxcom || google || microsoftgraph',
                     id: 'files-folderview-quota',
                     icon: ''
                 },
@@ -1258,7 +1258,7 @@ define('io.ox/files/main', [
                         commons.addPremiumFeatures(baton.app, {
                             append: false,
                             upsellId: 'folderview/infostore/bottom',
-                            upsellRequires: 'boxcom || google || msliveconnect'
+                            upsellRequires: 'boxcom || google || microsoftgraph'
                         })
                     );
                 }
