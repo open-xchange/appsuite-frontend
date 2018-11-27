@@ -33,7 +33,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'list');
+            baton.app.pages.changePage('list', { disableAnimations: true });
         }
     });
 
@@ -42,7 +42,7 @@ define('io.ox/calendar/actions', [
             return true;
         },
         action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'month');
+            baton.app.pages.changePage('month', { disableAnimations: true });
         }
     });
 
@@ -51,7 +51,7 @@ define('io.ox/calendar/actions', [
             return _.device('!smartphone');
         },
         action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'week:week');
+            baton.app.pages.changePage(baton.app, 'week:week');
         }
     });
 
@@ -60,14 +60,14 @@ define('io.ox/calendar/actions', [
             return _.device('!smartphone');
         },
         action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'week:workweek');
+            baton.app.pages.changePage(baton.app, 'week:workweek');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-day-view', {
         requires: true,
         action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'week:day');
+            baton.app.pages.changePage(baton.app, 'week:day');
         }
     });
 
