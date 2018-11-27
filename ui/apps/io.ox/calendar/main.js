@@ -478,7 +478,7 @@ define('io.ox/calendar/main', [
                     if (!views[item]) return;
                     views[item].trigger('show');
                     app.perspective = views[item];
-                    settings.set('viewView', item);
+                    if (_.device('smartphone')) settings.set('viewView', item);
                 });
             });
         },
@@ -541,7 +541,8 @@ define('io.ox/calendar/main', [
          */
         'props': function (app) {
 
-            var view = settings.get('viewView') || 'week:week';
+            var view = _.device('!smartphone') ? settings.get('viewView') : undefined;
+            if (!view) view = 'week:week';
 
             // introduce shared properties
             app.props = new Backbone.Model({
@@ -603,7 +604,7 @@ define('io.ox/calendar/main', [
                 if (!options || options.fluent || app.props.get('find-result')) return;
                 var data = app.props.toJSON();
                 app.settings
-                    .set('viewView', data.layout)
+                    .set('viewView', _.device('smartphone') ? app.settings.get('viewView') : data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .set('showMiniCalendar', data.showMiniCalendar)
                     .set('showMonthviewWeekend', data.showMonthviewWeekend)
@@ -924,6 +925,18 @@ define('io.ox/calendar/main', [
 
     });
 
+    function getPerspective(perspective) {
+        if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], perspective) >= 0) {
+            perspective = 'week:day';
+        } else if (_.device('smartphone') && _.indexOf(['week:day', 'list', 'month'], perspective) < 0) {
+            perspective = 'week:day';
+        } else if (perspective === 'calendar') {
+            // corrupt data fix
+            perspective = 'week:workweek';
+        }
+        return perspective;
+    }
+
     // launcher
     app.setLauncher(function (options) {
 
@@ -969,15 +982,7 @@ define('io.ox/calendar/main', [
                 })
                 .done(function () {
                     // app perspective
-                    var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
-
-                    if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
-                        lastPerspective = 'week:day';
-                    } else if (lastPerspective === 'calendar') {
-                        // corrupt data fix
-                        lastPerspective = 'week:workweek';
-                    }
-
+                    var lastPerspective = getPerspective(options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout'));
                     app.pages.changePage(lastPerspective, { disableAnimations: true });
                 });
         }
@@ -996,14 +1001,8 @@ define('io.ox/calendar/main', [
                 defs.push(this.folder.set(options.folder));
             }
             if (options.perspective && options.perspective !== app.props.get('layout')) {
-                var perspective = options.perspective;
-                if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], perspective) >= 0) {
-                    perspective = 'week:day';
-                } else if (perspective === 'calendar') {
-                    // corrupt data fix
-                    perspective = 'week:workweek';
-                }
-                defs.push(app.props.set('layout', perspective));
+                var perspective = getPerspective(options.perspective);
+                if (_.device('smartphone')) defs.push(app.props.set('layout', perspective));
             }
             ret = $.when.apply(this, defs);
             ret.always(function () {
