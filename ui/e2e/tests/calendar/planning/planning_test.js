@@ -144,11 +144,10 @@ Scenario('create distributionlist from planning view', async function (I) {
 
     I.click('Save as distribution list');
 
-    I.waitForVisible('.modal-header');
-    I.waitForVisible('.modal-body');
+    I.waitForVisible('.io-ox-contacts-distrib-window');
 
     I.fillField('Name', 'Test distribution list');
-    I.click('Create distribution list');
+    I.click('Create list');
 
     I.click('.scheduling-app-close');
 

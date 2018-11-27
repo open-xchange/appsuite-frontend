@@ -601,10 +601,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 entity: 1337,
                 email: 'miss.test@test.com',
                 uri: 'mailto:miss.test@test.com',
-                contactInformation: {
-                    folder: 123,
-                    contact_id: 123456
-                },
                 contact: {
                     display_name: 'Test, Miss',
                     first_name: 'Miss',
@@ -644,10 +640,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 email: 'hannibal@a.team',
                 partStat: 'NEEDS-ACTION',
                 uri: 'mailto:hannibal@a.team',
-                contactInformation: {
-                    folder: 123,
-                    contact_id: 1337
-                },
                 contact: {
                     display_name: 'Smith, Hannibal',
                     first_name: 'Hannibal',
@@ -704,10 +696,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 email: 'vader@dark.side',
                 partStat: 'NEEDS-ACTION',
                 uri: 'mailto:vader@dark.side',
-                contactInformation: {
-                    folder: undefined,
-                    contact_id: undefined
-                },
                 contact: {
                     display_name: 'vader',
                     first_name: undefined,

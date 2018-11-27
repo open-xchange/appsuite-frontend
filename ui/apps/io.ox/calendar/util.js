@@ -873,7 +873,7 @@ define('io.ox/calendar/util', [
 
         // returns array of {mail, displayName} objects
         // resolves groups, eliminates duplicates, uses provided mail address of attendee, filters out resources
-        resolveParticipants: function (data, options) {
+        resolveAttendees: function (data, options) {
             options = options || {};
             // clone array
             var attendees = data.attendees.slice(),
@@ -881,11 +881,11 @@ define('io.ox/calendar/util', [
                 groups = [],
                 result = [];
 
-            var organizerIsExternalParticipant = !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
+            var organizerIsExternalParticipant = data.organizer && !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
                 return p.mail === data.organizer.email;
             });
 
-            if (!organizerIsExternalParticipant) {
+            if (data.organizer && !organizerIsExternalParticipant) {
                 attendees.unshift(data.organizer);
             }
 
@@ -1284,7 +1284,6 @@ define('io.ox/calendar/util', [
             }
             // not really needed. Added just for convenience. Helps if distribution list should be created
             if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
-                attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
                 attendee.contact = {
                     display_name: user.display_name,
                     first_name: user.first_name,

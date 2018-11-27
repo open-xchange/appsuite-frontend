@@ -77,7 +77,7 @@ define('io.ox/calendar/actions', [
             return e.baton.model && e.baton.model.has('attendees');
         },
         action: function (baton) {
-            util.resolveParticipants(baton.data, { filterSelf: true }).done(function (recipients) {
+            util.resolveAttendees(baton.data, { filterSelf: true }).done(function (recipients) {
                 var hash = {};
                 recipients = _(recipients)
                     .chain()
@@ -112,7 +112,7 @@ define('io.ox/calendar/actions', [
             return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
         },
         action: function (baton) {
-            util.resolveParticipants(baton.data).done(function (distlist) {
+            util.resolveAttendees(baton.data).done(function (distlist) {
                 require(['settings!io.ox/core'], function (coreSettings) {
                     ox.launch('io.ox/contacts/distrib/main')
                         .done(function () {
