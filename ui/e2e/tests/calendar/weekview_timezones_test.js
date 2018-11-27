@@ -35,11 +35,12 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.fillField('Subject', 'test timezones');
     I.fillField('Location', 'invite location');
 
-    const { isNextMonth, start, inTimezone } = await I.executeAsyncScript(function (done) {
+    const { isNextMonth, start, inTimezone, date } = await I.executeAsyncScript(function (done) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
             inTimezone: moment().hour(7).tz('Asia/Tokyo').format('h A'),
-            isNextMonth: moment().month() !== moment().add('8', 'days').month()
+            isNextMonth: moment().month() !== moment().add('8', 'days').month(),
+            date: moment().startOf('week').add('8', 'day').format('l')
         });
     });
 
@@ -95,6 +96,31 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.see('JST', '.workweek .timezone');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border:not(.in) .number');
     I.see(inTimezone, '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
+
+    I.click('test timezones');
+    I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
+    I.click('Edit', '.io-ox-sidepopup');
+    I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone')
+    I.click('.floating-window-content [data-attribute="startDate"] .timezone');
+    I.waitForVisible('.io-ox-dialog-popup [name="startTimezone"]');
+    I.selectOption('Start date timezone', '+09:00 JST Asia/Tokyo');
+    I.selectOption('End date timezone', '+09:00 JST Asia/Tokyo');
+    I.click('Change');
+    I.waitForDetached('.io-ox-dialog-popup');
+
+    I.waitForText('Europe/Berlin: ');
+    I.waitForText('Mon, ' + date);
+    I.waitForText('4:00 – 5:00 PM');
+
+    I.click('Discard', '.floating-window-content');
+    I.waitForVisible('.io-ox-dialog-popup');
+    I.click('Discard changes', '.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.floating-window-content');
+
+    I.waitForVisible('.io-ox-sidepopup [data-action="close"]');
+    I.click('.io-ox-sidepopup [data-action="close"]');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // switch to settings
     I.click('#io-ox-topbar-dropdown-icon');
