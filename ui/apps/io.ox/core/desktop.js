@@ -184,15 +184,6 @@ define('io.ox/core/desktop', [
 
                     set: (function () {
 
-                        /**
-                         * Change folder if the app has changed
-                         * @param {String} id
-                         * @param {file|folder} data
-                         * @param {Application} app
-                         * @param {Deferred} def
-                         * @param {Boolean} favorite
-                         *  change to the favorite section in the tree or not
-                         */
                         function change(id, data, app, def, favorite) {
                             //app has changed while folder was requested
                             var appchange = _.url.hash('app') !== app;
