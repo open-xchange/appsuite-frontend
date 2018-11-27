@@ -76,6 +76,7 @@ publish e2e reports for stable branches:
   dependencies:
     - run e2e tests
   script:
+    - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker cp ui/build/e2e/ reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
