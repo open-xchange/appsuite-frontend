@@ -74,8 +74,10 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 this.updateDateRange();
             },
             updateDateRange: function () {
-                var enabled = this.model.get('active') && this.model.get('activateTimeFrame');
-                this.$('.date-range .form-control').prop('disabled', !enabled);
+                var enabled = this.model.get('active') && this.model.get('activateTimeFrame'),
+                    formclass = _.device('smartphone') ? '.dateinput.mobile-mode' : '.form-control';
+
+                this.$('.date-range ' + formclass).prop('disabled', !enabled);
             },
             getAddresses: function () {
                 var name = contactsUtil.getMailFullName(this.data.user).trim();
