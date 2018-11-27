@@ -55,7 +55,7 @@ define('plugins/portal/calendar/register', [
                         isAllday = util.isAllday(model);
                     this.$el.append(
                         $('<li class="item" tabindex="0">')
-                        .css('text-decoration', declined ? 'line-through' : 'none')
+                        .addClass(declined ? 'declined' : '')
                         .data('item', model)
                         .append(
                             $('<div class="clearfix">').append(
