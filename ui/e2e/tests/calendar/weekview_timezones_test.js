@@ -10,7 +10,7 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-Feature('Calendar: Switch timezones');
+Feature('Calendar: Switch timezones').tag('3');
 
 Before(async function (users) {
     await users.create();

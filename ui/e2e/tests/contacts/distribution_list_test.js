@@ -10,7 +10,7 @@
  * @author Björn Köster <bjoern.koester@open-xchange.com>
  */
 
-Feature('Contacts: Distribution lists');
+Feature('Contacts: Distribution lists').tag('6');
 
 Before(async function (users) {
     await users.create();

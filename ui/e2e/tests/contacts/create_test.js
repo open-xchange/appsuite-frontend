@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Create new contact');
+Feature('Contacts: Create new contact').tag('6');
 
 Before(async function (users) {
     await users.create();

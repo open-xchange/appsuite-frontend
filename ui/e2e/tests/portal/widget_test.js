@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Portal widgets');
+Feature('Portal widgets').tag('5');
 
 Before(async function (users) {
     await users.create();

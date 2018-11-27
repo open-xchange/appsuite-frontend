@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Check for XSS in PIM attachment in contacts');
+Feature('Contacts: Check for XSS in PIM attachment in contacts').tag('6');
 
 Before(async function (users) {
     await users.create();

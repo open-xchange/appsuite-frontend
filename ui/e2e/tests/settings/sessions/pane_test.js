@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Sessions settings');
+Feature('Sessions settings').tag('5');
 
 Before(async function (users) {
     await users.create();

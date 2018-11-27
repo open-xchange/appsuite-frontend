@@ -12,7 +12,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Contact/User Picture');
+Feature('Contact/User Picture').tag('6');
 
 Before(async function (users) {
     await users.create();

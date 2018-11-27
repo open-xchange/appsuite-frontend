@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail Listview');
+Feature('Mail Listview').tag('4');
 
 Before(async function (users) {
     await users.create();

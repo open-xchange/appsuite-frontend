@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Calendar: Create new appointment');
+Feature('Calendar: Create new appointment').tag('3');
 
 Before(async function (users) {
     await users.create();

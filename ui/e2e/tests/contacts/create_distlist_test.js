@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Contacts: Create new distributionlist');
+Feature('Contacts: Create new distributionlist').tag('6');
 
 Before(async function (users) {
     await users.create();

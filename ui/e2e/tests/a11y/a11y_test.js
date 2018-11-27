@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Accessibility');
+Feature('Accessibility').tag('2');
 
 BeforeSuite(async function (users) {
     await users.create();

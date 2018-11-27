@@ -14,7 +14,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mailfilter');
+Feature('Mailfilter').tag('3');
 
 Before(async function (users) {
     await users.create();

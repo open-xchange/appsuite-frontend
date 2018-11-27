@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Calendar: Create appointment');
+Feature('Calendar: Create appointment').tag('3');
 
 Before(async function (users) {
     await users.create();

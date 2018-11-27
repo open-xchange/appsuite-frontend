@@ -46,9 +46,11 @@ run e2e tests:
   script:
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - yarn e2e
+    - '[ "$CI_NODE_INDEX" -eq "1" ] && yarn e2e -f @ -i || true'
+    - '[ "$CI_NODE_INDEX" -ne "1" ] && yarn e2e -f @$CI_NODE_INDEX || [ "$CI_NODE_INDEX" -eq "1" ]'
   tags:
     - e2e
+  parallel: 6
   artifacts:
     when: always
     paths:

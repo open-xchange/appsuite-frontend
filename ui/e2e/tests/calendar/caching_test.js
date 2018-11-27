@@ -11,7 +11,7 @@
  */
 
 
-Feature('Calendar: Create appointment');
+Feature('Calendar: Create appointment').tag('2');
 
 Before(async function (users) {
     await users.create();

@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Floating windows');
+Feature('Floating windows').tag('5');
 
 Before(async function (users) {
     await users.create();

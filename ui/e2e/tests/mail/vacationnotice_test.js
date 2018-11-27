@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Vacation notice');
+Feature('Vacation notice').tag('3');
 
 Before(async function (users) {
     await users.create();
