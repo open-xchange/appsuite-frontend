@@ -117,3 +117,56 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
 
     I.logout();
 });
+
+Scenario('Compose mail with different attachments', async function (I, users) {
+    const [user] = users;
+
+    await I.haveSetting('io.ox/mail//messageFormat', 'html');
+
+    I.login('app=io.ox/files', { user });
+
+    // create textfile in drive
+    I.clickToolbar('New');
+    I.click('Add note');
+    I.waitForVisible('.io-ox-editor');
+    I.fillField('Title', 'Testdocument.txt');
+    I.fillField('Note', 'Some content');
+    I.click('Save');
+    I.waitForText('Save', 5, '.floating-window');
+    I.click('Close');
+
+    I.openApp('Mail');
+
+    // workflow 6: Compose with local Attachment(s)
+    // workflow 7: Compose with file from Drive
+    // workflow 8: Compose with inline images
+    I.clickToolbar('Compose');
+
+    // upload local file via the hidden input in the toolbar
+    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+
+    // attach from drive
+    I.waitForInvisible('.window-blocker');
+    I.click('Attachments');
+    I.click('Add from Drive');
+    I.waitForText('Testdocument.txt');
+    I.click('Add');
+
+    // attach inline image
+    I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.wait(1);
+
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'Testsubject');
+    I.click('Send');
+
+    I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
+    I.click({ css: 'li.unread' });
+    I.waitForVisible('.mail-detail-pane .subject');
+    I.see('Testsubject', '.mail-detail-pane');
+    I.waitForVisible('.attachments');
+    I.see('3 attachments');
+
+    I.logout();
+
+});
