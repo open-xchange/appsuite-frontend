@@ -194,7 +194,7 @@ define(['io.ox/core/util'], function (util) {
                 expect(util.urlify('<http://www.foo.com/path>')).to.equal('&lt;<a href="http://www.foo.com/path" rel="noopener" target="_blank">http://www.foo.com/path</a>&gt;');
             });
 
-            it('removes malicous code', function () {
+            it('removes malicious code', function () {
                 expect(util.urlify('abc <script> alert(1337); </script> 123')).to.equal('abc  123');
             });
         });
