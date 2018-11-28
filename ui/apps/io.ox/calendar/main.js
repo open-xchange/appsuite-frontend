@@ -926,14 +926,17 @@ define('io.ox/calendar/main', [
     });
 
     function getPerspective(perspective) {
+        // check at first, if this is a known perspective
+        if (['week:day', 'month', 'list', 'week:workweek', 'week:week', 'year'].indexOf(perspective) < 0) {
+            perspective = _.device('smartphone') ? 'week:day' : 'week:workweek';
+        }
+
         if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], perspective) >= 0) {
             perspective = 'week:day';
         } else if (_.device('smartphone') && _.indexOf(['week:day', 'list', 'month'], perspective) < 0) {
             perspective = 'week:day';
-        } else if (perspective === 'calendar') {
-            // corrupt data fix
-            perspective = 'week:workweek';
         }
+
         return perspective;
     }
 
