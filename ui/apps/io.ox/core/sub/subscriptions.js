@@ -330,6 +330,8 @@ define('io.ox/core/sub/subscriptions', [
             createAccount(service, baton.subModel.get('wantedScopes')).then(function success(account) {
                 baton.subModel.setSource(service, { 'account': parseInt(account.id, 10) });
                 baton.view.trigger('subscribe');
+            }, function fail(error) {
+                showErrorInline(baton.view.popup.getBody(), gt('Error:'), error);
             });
         }
     });
