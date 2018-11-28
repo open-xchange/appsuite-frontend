@@ -2564,7 +2564,6 @@ msgstr "Opprett ny avtale"
 msgid "Create contact"
 msgstr "Opprett ny kontakt"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3146,7 +3145,6 @@ msgstr "Distribusjonsliste detaljer"
 msgid "Distribution list"
 msgstr "Distribusjonsliste"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Distribusjonsliste er lagret"
@@ -6240,7 +6238,6 @@ msgid "My tasks"
 msgstr "Mine oppgaver"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7406,10 +7403,6 @@ msgstr "Skriv inn en beskrivelse."
 msgid "Please enter a feed URL."
 msgstr "Skriv inn en feed URL."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Vennligst angi et navn for distribusjonslisten"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7497,11 +7490,6 @@ msgstr ""
 msgid "Please insert a date after the start date"
 msgstr "Vennligst angi en dato senere enn startdatoen"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#, fuzzy
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Merk at distribusjonslister ikke kan inneholde ressurser."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7578,10 +7566,6 @@ msgstr "Vennligst velg en gyldig bildefil som skal settes inn"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Vennligst velg minst én dag"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Vennligst velg minst én deltager"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -13718,12 +13702,22 @@ msgstr "plattformen din"
 #~ msgid "Please choose a sentence below."
 #~ msgstr "Vennligst velg en setning under."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Vennligst angi et navn for distribusjonslisten"
+
 #~ msgid ""
 #~ "Please feel free to rename tabs to better match your needs. Use "
 #~ "checkboxes to enable or disable specific tabs."
 #~ msgstr ""
 #~ "Endre gjerne navn på fanene for å passe dine ønsker. Bruk "
 #~ "avkrysningsboksene for å aktivere eller deaktivere faner."
+
+#, fuzzy
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Merk at distribusjonslister ikke kan inneholde ressurser."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Vennligst velg minst én deltager"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Vennligst fyll ut de manglende variablene: "

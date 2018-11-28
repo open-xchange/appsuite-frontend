@@ -2198,57 +2198,6 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr ""
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/distrib/create-dist-view.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js
-msgid "Create distribution list"
-msgstr ""
-
-#. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/distrib/create-dist-view.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
-#: apps/io.ox/contacts/view-detail.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
-#: apps/io.ox/files/favorite/view-options.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Name"
-msgstr ""
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr ""
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/distrib/main.js
-#: module:io.ox/contacts
-msgid "Distribution list has been saved"
-msgstr ""
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js
-#: module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr ""
-
 #: apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -4025,7 +3974,32 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
+msgid "Create distribution list"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js
 msgid "Edit distribution list"
+msgstr ""
+
+#. Name of distribution list
+#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core
+#: apps/io.ox/files/share/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Name"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js
@@ -4042,6 +4016,11 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js
 #: module:io.ox/contacts
 msgid "Distribution List"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/main.js
+#: module:io.ox/contacts
+msgid "Distribution list has been saved"
 msgstr ""
 
 #: apps/io.ox/contacts/distrib/main.js

@@ -2521,7 +2521,6 @@ msgstr "Create appointment"
 msgid "Create contact"
 msgstr "Create contact"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3096,7 +3095,6 @@ msgstr "Distribution List Details"
 msgid "Distribution list"
 msgstr "Distribution list"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Distribution list has been saved"
@@ -6177,7 +6175,6 @@ msgid "My tasks"
 msgstr "My tasks"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7324,10 +7321,6 @@ msgstr "Please enter a description."
 msgid "Please enter a feed URL."
 msgstr "Please enter a feed URL."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Please enter a name for the distribution list"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7415,10 +7408,6 @@ msgstr "Please grant access to your webcam first."
 msgid "Please insert a date after the start date"
 msgstr "Please insert a date after the start date"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Please note that distribution lists cannot contain resources."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Please note that other participants are removed on calendar import."
@@ -7494,10 +7483,6 @@ msgstr "Please select a valid image file to insert"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Please select at least one day"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Please select at least one participant"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -14547,6 +14532,9 @@ msgstr "your platform"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Please enter a valid number."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Please enter a name for the distribution list"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Please enter a valid date."
 
@@ -14557,11 +14545,17 @@ msgstr "your platform"
 #~ "Please feel free to rename tabs to better match your needs. Use "
 #~ "checkboxes to enable or disable specific tabs."
 
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Please note that distribution lists cannot contain resources."
+
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Please note that distribution lists cannot contain resources."
 
 #~ msgid "Please note that other participants are removed on calendar export."
 #~ msgstr "Please note that other participants are removed on calendar export."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Please select at least one participant"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Please specify these missing variables: "

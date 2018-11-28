@@ -2530,7 +2530,6 @@ msgstr "Találkozó létrehozása"
 msgid "Create contact"
 msgstr "Névjegy létrehozása"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3107,7 +3106,6 @@ msgstr "Disztribúciós lista részletei"
 msgid "Distribution list"
 msgstr "Disztribúciós lista"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "A disztribúciós lista mentve"
@@ -6189,7 +6187,6 @@ msgid "My tasks"
 msgstr "Saját feladatok"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7338,10 +7335,6 @@ msgstr "Adjon meg egy leírást."
 msgid "Please enter a feed URL."
 msgstr "Adjon meg egy hírforrás URL-t."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Adja meg a disztribúciós lista nevét"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7429,12 +7422,6 @@ msgstr "Először adjon hozzáférést a webkamerához."
 msgid "Please insert a date after the start date"
 msgstr "Adjon egy kezdődátum utáni napot"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr ""
-"Kérjük, vegye figyelembe, hogy a disztribúciós listák nem tartalmazhatnak "
-"erőforrásokat."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7511,10 +7498,6 @@ msgstr "Válassza ki a beszúrandó érvényes képfájlt"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Válasszon ki legalább egy napot"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Adjon meg legalább egy résztvevőt."
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -13726,12 +13709,20 @@ msgstr "az Ön rendszere"
 #~ msgid "Please choose a sentence below."
 #~ msgstr "Válasszon egy mondatot alább."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Adja meg a disztribúciós lista nevét"
+
 #~ msgid ""
 #~ "Please feel free to rename tabs to better match your needs. Use "
 #~ "checkboxes to enable or disable specific tabs."
 #~ msgstr ""
 #~ "Bármikor átnevezheti a lapokat és a jelölőnégyzet segítségével "
 #~ "engedélyezheti vagy letilthatja azokat."
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr ""
+#~ "Kérjük, vegye figyelembe, hogy a disztribúciós listák nem tartalmazhatnak "
+#~ "erőforrásokat."
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "A disztribúciós listák nem tartalmazhatnak erőforrásokat."
@@ -13740,6 +13731,9 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "Vegye figyelembe, hogy a többi résztvevő eltávolításra kerül a naptár "
 #~ "exportálásakor."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Adjon meg legalább egy résztvevőt."
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Adja meg ezeket a hiányzó változókat:"

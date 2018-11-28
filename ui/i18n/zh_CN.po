@@ -2467,7 +2467,6 @@ msgstr "创建约会"
 msgid "Create contact"
 msgstr "创建联系人"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3040,7 +3039,6 @@ msgstr "通讯组列表详情"
 msgid "Distribution list"
 msgstr "通讯组列表"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "已保存通讯组列表"
@@ -6055,7 +6053,6 @@ msgid "My tasks"
 msgstr "我的任务"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7191,10 +7188,6 @@ msgstr "请输入一个描述。"
 msgid "Please enter a feed URL."
 msgstr "请输入一个 feed URL。"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "请为通讯组列表输入一个名称"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7282,10 +7275,6 @@ msgstr "请首先允许访问您的网络摄像头。"
 msgid "Please insert a date after the start date"
 msgstr "请插入一个开始日期之后的日期"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "请注意通讯组列表不能包括资源。"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "请注意其他参与者在导入日历时被移除。"
@@ -7354,10 +7343,6 @@ msgstr "请选择一个有效图像文件作插入"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "请选择最少一天"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "请选择最少一个参与者"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -15714,6 +15699,9 @@ msgstr "您的平台"
 #~ msgid "Please enter a correct number."
 #~ msgstr "请输入一个正确数值。"
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "请为通讯组列表输入一个名称"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "请输入一个有效日期。"
 
@@ -15726,11 +15714,17 @@ msgstr "您的平台"
 #~ msgstr ""
 #~ "请自便更名选项卡以更配合您的需求。使用复选框以启用或请用指定的选项卡。"
 
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "请注意通讯组列表不能包括资源。"
+
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "请注意通讯组列表不能包含资源。"
 
 #~ msgid "Please note that other participants are removed on calendar export."
 #~ msgstr "请注意其他参与者在导出日历时被移除。"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "请选择最少一个参与者"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "请指定这些缺少的变量："

@@ -2549,7 +2549,6 @@ msgstr "Создать встречу"
 msgid "Create contact"
 msgstr "Создать контакт"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3124,7 +3123,6 @@ msgstr "Свойства списка рассылки"
 msgid "Distribution list"
 msgstr "Список рассылки"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Список рассылки сохранен"
@@ -6202,7 +6200,6 @@ msgid "My tasks"
 msgstr "Мои задачи"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7354,10 +7351,6 @@ msgstr "Заполните описание."
 msgid "Please enter a feed URL."
 msgstr "Введите адрес ленты."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Введите название для списка рассылки"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7445,10 +7438,6 @@ msgstr "Разрешите доступ к вашей веб-камере."
 msgid "Please insert a date after the start date"
 msgstr "Укажите дату, которая следует за датой начала."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Обратите внимание: списки рассылки не могут содержать ресурсы."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7526,10 +7515,6 @@ msgstr "Выберите файл изображения для вставки"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Выберите хотя бы один день"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Выберите хотя бы одного участника"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -14630,6 +14615,9 @@ msgstr "вашей платформы"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Введите действительный номер."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Введите название для списка рассылки"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Необходимо ввести действительную дату."
 
@@ -14640,6 +14628,9 @@ msgstr "вашей платформы"
 #~ "Вы можете переименовать вкладки по своему усмотрению. Чтобы включить или "
 #~ "отключить отдельные вкладки, установите или сбросьте их флажки."
 
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Обратите внимание: списки рассылки не могут содержать ресурсы."
+
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr ""
 #~ "Обратите внимание на то, что списки рассылки не могут содержать ресурсы."
@@ -14648,6 +14639,9 @@ msgstr "вашей платформы"
 #~ msgstr ""
 #~ "Обратите внимание, что при экспорте календаря другие участники будут "
 #~ "исключены."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Выберите хотя бы одного участника"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Укажите недостающие переменные: "

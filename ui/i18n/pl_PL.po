@@ -2558,7 +2558,6 @@ msgstr "Utwórz spotkanie"
 msgid "Create contact"
 msgstr "Utwórz kontakt"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3136,7 +3135,6 @@ msgstr "Szczegóły listy dystrybucyjnej"
 msgid "Distribution list"
 msgstr "Lista dystrybucyjna"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Lista dystrybucyjna została zapisana"
@@ -6229,7 +6227,6 @@ msgid "My tasks"
 msgstr "Moje zadania"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7383,10 +7380,6 @@ msgstr "Podaj opis."
 msgid "Please enter a feed URL."
 msgstr "Podaj adres URL kanału."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Wprowadź nazwę listy dystrybucyjnej"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7474,10 +7467,6 @@ msgstr "Najpierw przyznaj dostęp do kamery internetowej."
 msgid "Please insert a date after the start date"
 msgstr "Wprowadź datę przypadającą po dacie rozpoczęcia"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Pamiętaj, że listy dystrybucyjne nie mogą zawierać zasobów."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Pamiętaj, że inni uczestnicy są usuwani podczas importu kalendarza."
@@ -7553,10 +7542,6 @@ msgstr "Wybierz prawidłowy plik obrazu do wstawienia"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Wybierz co najmniej jeden dzień"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Wybierz co najmniej jednego uczestnika"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -14695,6 +14680,9 @@ msgstr "Twoja platforma"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Wpisz poprawną liczbę."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Wprowadź nazwę listy dystrybucyjnej"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Wpisz prawidłową datę."
 
@@ -14705,12 +14693,18 @@ msgstr "Twoja platforma"
 #~ "Możesz zmienić nazwy kart stosownie do własnych potrzeb. Aby włączyć lub "
 #~ "wyłączyć określone karty, użyj pól wyboru."
 
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Pamiętaj, że listy dystrybucyjne nie mogą zawierać zasobów."
+
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Pamiętaj, że listy dystrybucyjne nie mogą zawierać zasobów."
 
 #~ msgid "Please note that other participants are removed on calendar export."
 #~ msgstr ""
 #~ "Pamiętaj, że inni uczestnicy są usuwani podczas eksportowania kalendarza."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Wybierz co najmniej jednego uczestnika"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Podaj następujące brakujące zmienne:"

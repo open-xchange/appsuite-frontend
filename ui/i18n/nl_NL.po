@@ -2541,7 +2541,6 @@ msgstr "Afspraak maken"
 msgid "Create contact"
 msgstr "Contact aanmaken"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3116,7 +3115,6 @@ msgstr "Distributielijstdetail"
 msgid "Distribution list"
 msgstr "Distributielijst"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "De distributielijst is opgeslagen"
@@ -6213,7 +6211,6 @@ msgid "My tasks"
 msgstr "Mijn taken"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7372,10 +7369,6 @@ msgstr "Voer een omschrijving in."
 msgid "Please enter a feed URL."
 msgstr "Voer een feed URL in."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Geef alstublieft een naam voor de distributielijst"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7465,11 +7458,6 @@ msgstr "Geef eerst toestemming om uw webcam te gebruiken."
 msgid "Please insert a date after the start date"
 msgstr "Voer een datum in die na de startdatum valt"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr ""
-"Houd er rekening mee dat distributielijsten geen bronnen kunnen bevatten."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7548,10 +7536,6 @@ msgstr "Selecteer een geldig afbeeldingsbestand om in te voegen"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Selecteer alstublieft minimaal één dag"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Voeg alstublieft minimaal één deelnemer toe"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -14477,6 +14461,9 @@ msgstr "uw platform"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Voer alstublieft een geldig nummer in."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Geef alstublieft een naam voor de distributielijst"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Voer alstublieft een geldige datum in."
 
@@ -14487,6 +14474,10 @@ msgstr "uw platform"
 #~ "Hernoem de tabbladen naar behoeven, Gebruik de aankruisvakjes om "
 #~ "specifieke tabbladen aan en uit te zetten."
 
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr ""
+#~ "Houd er rekening mee dat distributielijsten geen bronnen kunnen bevatten."
+
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr ""
 #~ "Houd er rekening mee dat distributielijsten geen bronnen kunnen bevatten."
@@ -14495,6 +14486,9 @@ msgstr "uw platform"
 #~ msgstr ""
 #~ "Houd er rekening mee dat andere deelnemers verwijderd worden bij het "
 #~ "exporteren van de agenda."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Voeg alstublieft minimaal één deelnemer toe"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Geef alstublieft deze missende gegevens op: "

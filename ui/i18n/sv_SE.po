@@ -2526,7 +2526,6 @@ msgstr "Skapa möte"
 msgid "Create contact"
 msgstr "Skapa kontakt"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3102,7 +3101,6 @@ msgstr "Detaljer om utskickslista"
 msgid "Distribution list"
 msgstr "Utskickslista"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Sändlistan sparades"
@@ -6168,7 +6166,6 @@ msgid "My tasks"
 msgstr "Mina uppgifter"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7314,10 +7311,6 @@ msgstr "Skriv in en beskrivning."
 msgid "Please enter a feed URL."
 msgstr "Ange flödes-URL."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Ange ett namn för sändlistan"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7405,10 +7398,6 @@ msgstr "Ge åtkomst till din webbkamera först."
 msgid "Please insert a date after the start date"
 msgstr "Ange ett datum efter startdatumet"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Observera att sändlistor inte får innehålla resurser."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Observera att andra deltagare tas bort vid kalenderimport."
@@ -7484,10 +7473,6 @@ msgstr "Välj en giltig bildfil att infoga"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Välj minst en dag"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Välj minst en deltagare"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -16657,6 +16642,9 @@ msgstr "din plattform"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Ange ett korrekt nummer."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Ange ett namn för sändlistan"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Ange ett giltigt datum."
 
@@ -16670,11 +16658,17 @@ msgstr "din plattform"
 #~ msgid "Please make sure the file is readable by the groupware."
 #~ msgstr "Se till att filen är läsbar av "
 
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Observera att sändlistor inte får innehålla resurser."
+
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Observera att sändlistor inte får innehålla resurser."
 
 #~ msgid "Please note that other participants are removed on calendar export."
 #~ msgstr "Observera att andra deltagare tas bort vid kalenderexport."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Välj minst en deltagare"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Definiera dessa saknade variabler: "

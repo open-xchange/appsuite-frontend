@@ -2512,7 +2512,6 @@ msgstr "Randevu oluştur"
 msgid "Create contact"
 msgstr "Kişi oluştur"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3087,7 +3086,6 @@ msgstr "Dağıtım Listesi Ayrıntıları"
 msgid "Distribution list"
 msgstr "Dağıtım listesi"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Dağıtım listesi kaydedildi"
@@ -6166,7 +6164,6 @@ msgid "My tasks"
 msgstr "Görevlerim"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7313,10 +7310,6 @@ msgstr "Lütfen bir açıklama yazın."
 msgid "Please enter a feed URL."
 msgstr "Lütfen bir akış adresi ekleyin."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Lütfen dağıtım listesi için bir ad girin"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7404,10 +7397,6 @@ msgstr "Lütfen öncelikle kameranıza erişim izni verin."
 msgid "Please insert a date after the start date"
 msgstr "Lütfen başlangıç tarihinden sonra gelen bir tarih ekleyin"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Unutmayın ki dağıtım listeleri kaynak içeremez."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "Takvimleri içe aktarırken diğer katılımcıların silineceğini unutmayın."
@@ -7483,10 +7472,6 @@ msgstr "Eklemek için lütfen geçerli bir resim dosyası seçin"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Lütfen en az bir gün seçin"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Lütfen en az bir katılımcı seçin"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -12545,6 +12530,15 @@ msgstr "platformunuz"
 
 #~ msgid "Pick a time here"
 #~ msgstr "Bir zaman seçin"
+
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Lütfen dağıtım listesi için bir ad girin"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Unutmayın ki dağıtım listeleri kaynak içeremez."
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Lütfen en az bir katılımcı seçin"
 
 #~ msgid "Read"
 #~ msgstr "Okunmuş"

@@ -2537,7 +2537,6 @@ msgstr "Criar compromisso"
 msgid "Create contact"
 msgstr "Criar contato"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3115,7 +3114,6 @@ msgstr "Detalhes da lista de distribuição"
 msgid "Distribution list"
 msgstr "Lista de distribuição"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "A lista de distribuição foi salva"
@@ -6197,7 +6195,6 @@ msgid "My tasks"
 msgstr "Minhas tarefas"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7347,10 +7344,6 @@ msgstr "Insira uma descrição."
 msgid "Please enter a feed URL."
 msgstr "Insira uma URL do feed."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Digite um nome para a lista de distribuição"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7439,11 +7432,6 @@ msgstr "Primeiro conceda acesso a sua webcam."
 msgid "Please insert a date after the start date"
 msgstr "Insira uma data após a data de início"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr ""
-"Por favor, note que as listas de distribuição não podem conter recursos."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7521,10 +7509,6 @@ msgstr "Selecione um arquivo de imagem válido para inserir"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Selecione pelo menos um dia"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Selecione pelo menos um participante"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -16490,6 +16474,9 @@ msgstr "sua plataforma"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Por favor, insira um número correto."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Digite um nome para a lista de distribuição"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Insira uma data válida."
 
@@ -16506,6 +16493,10 @@ msgstr "sua plataforma"
 #~ msgstr ""
 #~ "Por favor, dê uma olhada na página %sInteresting UWA modules%s. Ela exibe "
 #~ "uma lista de widgets e seus dados associados."
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr ""
+#~ "Por favor, note que as listas de distribuição não podem conter recursos."
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Note que as litas de distribuição não podem conter recursos."
@@ -16541,6 +16532,9 @@ msgstr "sua plataforma"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Por favor, selecione um país para o endereço inicial"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Selecione pelo menos um participante"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Por favor, seleciona apenas uma publicação"

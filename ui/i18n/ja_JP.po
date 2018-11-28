@@ -2486,7 +2486,6 @@ msgstr "予定を作成"
 msgid "Create contact"
 msgstr "連絡先を作成"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3061,7 +3060,6 @@ msgstr "連絡先グループの詳細"
 msgid "Distribution list"
 msgstr "連絡先グループ"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "連絡先グループを保存しました"
@@ -6113,7 +6111,6 @@ msgid "My tasks"
 msgstr "自分の仕事"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7255,10 +7252,6 @@ msgstr "説明を入力してください。"
 msgid "Please enter a feed URL."
 msgstr "フィードの URL を入力してください。"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "連絡先グループの名前を入力してください"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7346,10 +7339,6 @@ msgstr "お使いのWebカメラへのアクセスを許可してください。
 msgid "Please insert a date after the start date"
 msgstr "開始日以降の日付を指定してください"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "配布リストにリソースを含めることはできません。"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr "他の参加者は予定表インポートから削除されます。"
@@ -7425,10 +7414,6 @@ msgstr "有効な画像ファイルを選択してください"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "曜日を選択してください"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "少なくとも１つの参加者を指定してください。"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -17743,6 +17728,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Please enter a correct number."
 #~ msgstr "正しい数を入力してください。"
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "連絡先グループの名前を入力してください"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "有効な日付を入力してください"
 
@@ -17762,6 +17750,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgstr ""
 #~ "%sOpen-Xchange UWA モジュール%s ページをご覧ください。ウィジェットやその関"
 #~ "連データの一覧があります。"
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "配布リストにリソースを含めることはできません。"
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "連絡先グループにリソースを含めることはできません。"
@@ -17801,6 +17792,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "送信元住所の国名を選択ください。"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "少なくとも１つの参加者を指定してください。"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "公開を一つだけ選択してください。"

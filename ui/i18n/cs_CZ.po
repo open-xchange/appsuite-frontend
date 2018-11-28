@@ -2544,7 +2544,6 @@ msgstr "Vytvořit schůzku"
 msgid "Create contact"
 msgstr "Vytvořit kontakt"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3119,7 +3118,6 @@ msgstr "Distribuční seznam, podrobnosti"
 msgid "Distribution list"
 msgstr "Distribuční seznam"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Distribuční seznam byl uložen"
@@ -6195,7 +6193,6 @@ msgid "My tasks"
 msgstr "Mé úkoly"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7349,10 +7346,6 @@ msgstr "Změňte, prosím, popis."
 msgid "Please enter a feed URL."
 msgstr "Zadejte, prosím, URL kanálu."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Zadejte, prosím, název distribučního seznamu"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7440,10 +7433,6 @@ msgstr "Nejprve povolte přístup ke své webkameře."
 msgid "Please insert a date after the start date"
 msgstr "Zadejte, prosím, pozdější datum, než je datum začátku"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Distribuční seznamy nemohou obsahovat zdroje."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7521,10 +7510,6 @@ msgstr "Vyberte, prosím, platný soubor s obrázkem k vložení"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Vyberte, prosím, alespoň jeden den"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Vyberte, prosím, alespoň jednoho účastníka"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -19093,6 +19078,9 @@ msgstr "vaše platforma"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Zadejte, prosím, správné číslo."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Zadejte, prosím, název distribučního seznamu"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Zadejte, prosím, platné datum."
 
@@ -19118,6 +19106,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Please invite the group %1$s to the appointment."
 #~ msgstr "Pozvěte, prosím, skupinu %1$s na schůzku."
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Distribuční seznamy nemohou obsahovat zdroje."
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Distribuční seznamy nemohou obsahovat zdroje."
@@ -19179,6 +19170,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Please select a file to insert"
 #~ msgstr "Vyberte, prosím, soubor k vložení"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Vyberte, prosím, alespoň jednoho účastníka"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Vyberte, prosím, jen jednu publikaci"

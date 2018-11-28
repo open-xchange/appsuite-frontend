@@ -2555,7 +2555,6 @@ msgstr "Creează o întâlnire"
 msgid "Create contact"
 msgstr "Creează un contact"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -3131,7 +3130,6 @@ msgstr "Detalii listă de distribuție"
 msgid "Distribution list"
 msgstr "Listă de distribuție"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Lista de distribuție a fost salvată"
@@ -6227,7 +6225,6 @@ msgid "My tasks"
 msgstr "Sarcinile mele"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7381,10 +7378,6 @@ msgstr "Introduceți o descirere."
 msgid "Please enter a feed URL."
 msgstr "Introduceți un URL pentru flux."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Introduceți un nume pentru lista de distribuție"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7472,10 +7465,6 @@ msgstr "Permiteți accesul la webcam înainte."
 msgid "Please insert a date after the start date"
 msgstr "Introduceți o dată după data de început."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Atenție: listele de distribuție nu pot conține resurse."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7551,10 +7540,6 @@ msgstr "Selectați un fișier imagine corect de inserat"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Selectați cel puțin o zi"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Selectați cel puțin un participant"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -17110,6 +17095,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Introduceți un număr corect."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Introduceți un nume pentru lista de distribuție"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Introduceți o dată corectă."
 
@@ -17130,6 +17118,9 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Consultați pagina %sModule UWA interesante%s. Aceasta prezintă o listă de "
 #~ "componente și datele lor asociate."
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Atenție: listele de distribuție nu pot conține resurse."
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Atenție: lista de distribuție nu poate conține resurse."
@@ -17172,6 +17163,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Please select a file to insert"
 #~ msgstr "Selectați fișierul de inserat"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Selectați cel puțin un participant"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Selectați o singură publicație"
