@@ -14,11 +14,12 @@
 define('io.ox/mail/compose/actions/send', [
     'io.ox/core/extensions',
     'io.ox/mail/compose/actions/extensions',
+    'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, mailAPI, settings, notifications, gt) {
+], function (ext, extensions, composeAPI, mailAPI, settings, notifications, gt) {
 
     'use strict';
 
@@ -146,8 +147,8 @@ define('io.ox/mail/compose/actions/send', [
             id: 'fix-draft-sendtype',
             index: 800,
             perform: function (baton) {
-                if (baton.mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                    baton.mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                if (baton.mail.sendtype === composeAPI.SENDTYPE.EDIT_DRAFT) {
+                    baton.mail.sendtype = composeAPI.SENDTYPE.DRAFT;
                 }
             }
         },
@@ -170,7 +171,7 @@ define('io.ox/mail/compose/actions/send', [
             id: 'send',
             index: 1000,
             perform: function (baton) {
-                return mailAPI.send(baton.mail, baton.mail.files);
+                return composeAPI.send(baton.mail, baton.mail.files);
             }
         },
         {
@@ -228,8 +229,8 @@ define('io.ox/mail/compose/actions/send', [
             index: 3000,
             perform: function (baton) {
                 // update base mail
-                var isReply = baton.mail.sendtype === mailAPI.SENDTYPE.REPLY,
-                    isForward = baton.mail.sendtype === mailAPI.SENDTYPE.FORWARD,
+                var isReply = baton.mail.sendtype === composeAPI.SENDTYPE.REPLY,
+                    isForward = baton.mail.sendtype === composeAPI.SENDTYPE.FORWARD,
                     sep = mailAPI.separator,
                     base, folder, id, msgrefs, ids;
 

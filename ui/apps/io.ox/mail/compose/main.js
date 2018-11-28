@@ -11,7 +11,12 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'gettext!io.ox/mail'], function (mailAPI, settings, gt) {
+define('io.ox/mail/compose/main', [
+    'io.ox/mail/compose/api',
+    'io.ox/mail/api',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (composeAPI, mailAPI, settings, gt) {
 
     'use strict';
 
@@ -166,13 +171,13 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
             var unblocked = function (sendtype) {
                 return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
             };
-            if (type === 'reply' && unblocked(mailAPI.SENDTYPE.REPLY)) {
+            if (type === 'reply' && unblocked(composeAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
             }
-            if (type === 'replyall' && unblocked(mailAPI.SENDTYPE.REPLY)) {
+            if (type === 'replyall' && unblocked(composeAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
             }
-            if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
+            if (type === 'forward' && unblocked(composeAPI.SENDTYPE.FORWARD)) {
                 var cid;
                 if (_.isArray(data)) {
                     cid = _(data).map(function (o) { return _.cid(o); }).join();
@@ -181,7 +186,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 }
                 return ox.ui.App.reuse('io.ox/mail:forward.' + cid);
             }
-            if (type === 'edit' && unblocked(mailAPI.SENDTYPE.DRAFT)) {
+            if (type === 'edit' && unblocked(composeAPI.SENDTYPE.DRAFT)) {
                 return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }

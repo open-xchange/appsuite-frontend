@@ -15,6 +15,7 @@
 define('io.ox/mail/main', [
     'io.ox/mail/util',
     'io.ox/mail/api',
+    'io.ox/mail/compose/api',
     'io.ox/core/commons',
     'io.ox/mail/listview',
     'io.ox/core/tk/list-control',
@@ -45,7 +46,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
+], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -1765,7 +1766,7 @@ define('io.ox/mail/main', [
                                 )
                             )
                         );
-                    api.queue.collection.on('progress', function (data) {
+                    composeAPI.queue.collection.on('progress', function (data) {
                         if (!data.count) {
                             // Workaround for Safari flex layout issue (see bug 46496)
                             if (_.device('safari')) $el.closest('.window-sidepanel').find('.folder-tree')[0].scrollTop += 1;

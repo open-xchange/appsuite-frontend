@@ -12,6 +12,7 @@
  */
 
 define('io.ox/mail/compose/model', [
+    'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/capabilities',
@@ -21,7 +22,7 @@ define('io.ox/mail/compose/model', [
     'io.ox/core/strings',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt) {
+], function (composeAPI, mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt) {
 
     'use strict';
 
@@ -41,12 +42,12 @@ define('io.ox/mail/compose/model', [
                 initial: true,
                 priority: 3,
                 sendDisplayName: !!settings.get('sendDisplayName', true),
-                sendtype: mailAPI.SENDTYPE.NORMAL,
+                sendtype: composeAPI.SENDTYPE.NORMAL,
                 defaultSignatureId: mailUtil.getDefaultSignature('compose'),
                 // identifier for empty signature (dropdown)
                 signatureId: '',
                 imageResizeOption: 'original',
-                csid: mailAPI.csid(),
+                csid: composeAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
                 infostore_ids_saved: [],
                 security: {
@@ -364,7 +365,7 @@ define('io.ox/mail/compose/model', [
 
         keepDraftOnClose: function () {
             if (settings.get('features/deleteDraftOnClose') !== true) return false;
-            return this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT || (this.get('flags') & 4) > 0;
+            return this.get('sendtype') === composeAPI.SENDTYPE.EDIT_DRAFT || (this.get('flags') & 4) > 0;
         }
     });
 

@@ -15,6 +15,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
+    'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/tk/textproc',
@@ -35,7 +36,7 @@ define('io.ox/mail/compose/view', [
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer, attachmentModel) {
+], function (extensions, Dropdown, ext, composeAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer, attachmentModel) {
 
     'use strict';
 
@@ -420,7 +421,7 @@ define('io.ox/mail/compose/view', [
                 _.url.hash('mailto', null);
             }
 
-            this.listenTo(mailAPI.queue.collection, 'change:pct', this.onSendProgress);
+            this.listenTo(composeAPI.queue.collection, 'change:pct', this.onSendProgress);
 
             ext.point(POINT + '/mailto').invoke('setup');
 
@@ -495,7 +496,7 @@ define('io.ox/mail/compose/view', [
             obj.embedded = true;
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
-            return mailAPI[mode](obj, this.messageFormat)
+            return composeAPI[mode](obj, this.messageFormat)
                 .then(accountAPI.getValidAddress)
                 .then(function checkTruncated(data) {
                     //check for truncated message content, warn the user, provide alternative
@@ -523,7 +524,7 @@ define('io.ox/mail/compose/view', [
                         return def.always(function () {
                             dialog.close();
                         }).then(function (obj) {
-                            return mailAPI[mode](obj, this.messageFormat);
+                            return composeAPI[mode](obj, this.messageFormat);
                         }, function () {
                             return $.when(data);
                         });
@@ -532,9 +533,9 @@ define('io.ox/mail/compose/view', [
                 })
                 .then(function (data) {
                     if (mode !== 'edit') {
-                        data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                        data.sendtype = mode === 'forward' ? composeAPI.SENDTYPE.FORWARD : composeAPI.SENDTYPE.REPLY;
                     } else {
-                        data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                        data.sendtype = composeAPI.SENDTYPE.EDIT_DRAFT;
                     }
                     data.mode = mode;
 
@@ -671,7 +672,7 @@ define('io.ox/mail/compose/view', [
                 self = this,
                 mail = this.model.getMailForAutosave();
 
-            mailAPI.autosave(mail).always(function (result) {
+            composeAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     var baton = new ext.Baton(result);
                     baton.model = model;
@@ -684,10 +685,10 @@ define('io.ox/mail/compose/view', [
                     model.set({
                         'autosavedAsDraft': true,
                         'msgref': result,
-                        'sendtype': mailAPI.SENDTYPE.EDIT_DRAFT,
+                        'sendtype': composeAPI.SENDTYPE.EDIT_DRAFT,
                         'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
                     });
-                    model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
+                    model.dirty(model.previous('sendtype') !== composeAPI.SENDTYPE.EDIT_DRAFT);
                     //#. %1$s is the time, the draft was saved
                     //#, c-format
                     self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
