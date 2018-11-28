@@ -203,3 +203,73 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 
     I.logout();
 });
+
+Scenario('Compose with drivemail attachment and edit draft', async function (I, users) {
+    const [user] = users;
+
+    await I.haveSetting('io.ox/mail//messageFormat', 'html');
+
+    I.login('app=io.ox/files', { user });
+
+    // create textfile in drive
+    I.clickToolbar('New');
+    I.click('Add note');
+    I.waitForVisible('.io-ox-editor');
+    I.fillField('Title', 'Testdocument.txt');
+    I.fillField('Note', 'Some content');
+    I.click('Save');
+    I.waitForText('Save', 5, '.floating-window');
+    I.click('Close');
+
+    I.openApp('Mail');
+
+    // workflow 10: Compose with Drive Mail attachment
+    I.clickToolbar('Compose');
+
+    // attach from drive
+    I.retry(5).click('Attachments');
+    I.click('Add from Drive');
+    I.waitForText('Testdocument.txt');
+    I.click('Add');
+
+    I.retry(5).click('Use Drive Mail');
+    I.click('Discard');
+    // TODO find out whether this should be shown with the new compose api
+    I.click('Save as draft');
+    I.waitForInvisible('.floating-window');
+
+    I.logout();
+
+    // workflow 11: Compose mail, add Drive-Mail attachment, close compose, logout, login, edit Draft, remove Drive-Mail option, send Mail
+    I.login('app=io.ox/mail', { user });
+
+    I.waitForText('Drafts');
+    I.selectFolder('Drafts');
+    I.click('.io-ox-mail-window .leftside ul li.list-item');
+    I.clickToolbar('Edit draft');
+    I.waitForText('Subject');
+
+    I.waitForText('Use Drive Mail');
+    // TODO this should be checked
+    I.retry(5).click('Use Drive Mail');
+    I.seeCheckboxIsChecked('Use Drive Mail');
+    I.seeNumberOfVisibleElements('.inline-items > li', 1);
+
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'Testsubject');
+    I.click('Send');
+    I.waitForInvisible('.floating-window');
+
+    I.selectFolder('Inbox');
+
+    I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
+    I.click({ css: 'li.unread' });
+    I.waitForVisible('.mail-detail-pane .subject');
+    I.see('Testsubject', '.mail-detail-pane');
+
+    I.switchTo('.mail-detail-frame');
+    I.see('Testdocument.txt');
+    I.switchTo();
+
+    I.logout();
+});
