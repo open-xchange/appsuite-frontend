@@ -178,7 +178,7 @@ define('io.ox/core/folder/extensions', [
     }
 
     function getAvailableServices() {
-        var services = ['google', 'dropbox', 'boxcom', 'microsoftgraph'];
+        var services = ['google', 'dropbox', 'boxcom', 'graph'];
 
         ext.point('io.ox/core/folder/storage-accounts/list').invoke('customize', services);
 
