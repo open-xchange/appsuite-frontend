@@ -6,53 +6,24 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_simple_applic
 
 # Getting Started
 
-First create a new folder helloWorld in your namespace in the app folder, in this example the namespace com.example will be used. (``apps/com.example/helloWorld\`)
+First create a new folder helloWorld in your namespace in the app folder, in this example the namespace com.example will be used. (`apps/com.example/helloWorld`)
 
-For starters we need two files: a manifest File `manifest.json` and the application file.
-It is convention to name your main application file `main.js`.
+For starters we need three files: a manifest File `manifest.json`, the main application file, and an entry point plugin registering the application within App Suite.
+It is convention to name your main application file `main.js` and the intrypoint file `register.js`.
 
-# Manifest
+## Manifest
 
-First create a `manifest.json` file, describing the basic properties of your app.
+First create a `manifest.json` file to register your plugin.
 
-```
+```JSON
 {
-    title: "Hello World",
-    company: "Open-Xchange",
-    icon: "/images/icon.png",
-    category: "Dev",
-    settings: false,
-    requires: "dev",
-    index: 100
+    "namespace": "core"
 }
-```
-
-Whilst developing, the manifest has to be added to src/manifests.json. Note: _Same as above except for the path, which is mandatory_.
-
-```
-...
-{
-    path: 'com.example/helloWorld/main',
-    title: "Hello World",
-    company: "Open-Xchange",
-    icon: "/images/icon.png",
-    category: "Dev",
-    settings: false,
-    requires: "dev",
-    index: 100
-},
-...
 ```
 
 You can find more detailed information on manifests here: [UI manifests explained]({{ site.baseurl }}/ui/customize/manifests.html).
 
-## Setting an app icon
-
-It is convention to place your app image into a subfolder of your app called images. The icon defined here will be displayed in the "Your applications" area.
-
-![](simple-application-01.png)
-
-# Simple application
+## Main application file
 
 This is the base skeleton of a new app with a window, that displays "Hello World".
 Please read the annotated source code of an example main.js below, it is quite self-explanatory.
@@ -106,6 +77,67 @@ ox.launch('com.example/helloWorld/main');
 
 ![](simple-application-02.png)
 
+## Register the app
+
+To make App Suite aware of a new app, it needs to be registered by a plugin.
+
+As a blueprint, this snippet can be used:
+
+```javascript
+define('com.example/helloWorld/register', [
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/desktop'
+], function (Stage, ui) {
+    'use strict';
+
+    new Stage('io.ox/core/stages', {
+        id: 'com.example/helloWorld',
+        // register before all core apps get registered
+        before: 'app_register',
+        run: function () {
+            var app = ui.createApp({
+                // a name is mandatory, it should be the path fo the main.js file
+                name: 'com.example/helloWorld',
+                // just a title for the app
+                title: 'Hello World',
+                // this app allows for deep links
+                refreshable: true,
+                // do not register settings
+                settings: false,
+                // this will be injected into DOM as is
+                icon: '<i class="fa fa-globe">'
+            });
+            ui.apps.add(app);
+        }
+    });
+});
+```
+
+### Adding the app to the launcher
+
+In order to add the app to the launcher, it also needs to be defined in the middleware configuration.
+The key is `io.ox/core//apps/list` and contains a comma separated list of app ids.
+If not specified, the id will be the same as the `name` attribute.
+
+For development purposes (if you don't have access to the middleware configuration), it is possible to manually set the list in the browser console.
+
+```javascript
+_.pluck(ox.ui.apps.forLauncher(),'id').join(',')
+// "io.ox/mail,io.ox/calendar,io.ox/contacts,io.ox/files,io.ox/portal,io.ox/tasks"
+require('settings!io.ox/core').set('apps/list', 'io.ox/mail,io.ox/calendar,io.ox/contacts,io.ox/files,io.ox/portal,io.ox/tasks,com.example/helloWorld').save();
+```
+
+Refresh the browser to activate the changes.
+
+### Setting an app icon
+
+The `icon` attribute can be used to define an icon for the app.
+The valua is injected directly into the DOM, so this can be an img tag, inline SVG code, or as in this example a font-awesome icon.
+
+# Advaned topics
+
+This section should help to implement some advanced use cases.
+
 ## Styles
 
 In order to prevent conflicts with other apps or base-styles you should add a css class with your namespace to the main node of your application.
@@ -126,12 +158,11 @@ define('com.example/helloWorld/main',
 
 A simple less file would look like this:
 
-```javascript
+```less
 .com-example-helloWorld {
     h1 {
         color: red;
     }
-    ...
 }
 ```
 
@@ -158,8 +189,6 @@ In our example it would look like this:
 //...
 ```
 
-Hint: If you want to check your app for untranslated strings, append &debug-i18n=true to the URL in your browser and refresh. If a string is not processed by gettext it will be highlighted.
-
 You can find more detailed information on this topic [here]({{ site.baseurl }}/ui/how-to/i18n.html).
 
 ## Making an application window chromeless
@@ -176,7 +205,7 @@ var win = ox.ui.createWindow({
 
 ## Creating a Dialog
 
-In order to open a dialog **io.ox/core/tk/dialogs** has to be required and use one of the supplied methods.
+In order to open a dialog `io.ox/core/tk/dialogs` has to be required and use one of the supplied methods.
 
 ```javascript
 win.nodes.main
@@ -186,12 +215,12 @@ win.nodes.main
             require(['io.ox/core/tk/dialogs'],
                 function (dialogs) {
                     new dialogs.ModalDialog({
-                            width: 600,
-                            easyOut: true
-                        })
-                        .append($('<p>').text('Hello world'))
-                        .addButton('close', 'Close')
-                        .show();
+                        width: 600,
+                        easyOut: true
+                    })
+                    .append($('<p>').text('Hello world'))
+                    .addButton('close', 'Close')
+                    .show();
                 }
             );
         })
@@ -200,24 +229,22 @@ win.nodes.main
 
 ![](simple-application-04.png)
 
-# Displaying a notification
+## Displaying a notification
 
-If you want to display notifications you can require \_io.ox/core/notifications_and use the yell method, like in the examples below.
+If you want to display notifications you can require `io.ox/core/notifications` and use the yell method, like in the examples below.
 
 ```javascript
-require(['io.ox/core/notifications'],
-    function (notifications) {
-        win.nodes.main
-            .append(
-                $('<a class="btn">').text('Display success notfication')
-                    .on('click', function () {
-                        notifications.yell('success', 'Ah success!');
-                    }),
-                $('<a class="btn">').text('Display error notfication')
-                    .on('click', function () {
-                        notifications.yell('error', 'Oh failed!');
-                    })
-            );
+require(['io.ox/core/notifications'], function (notifications) {
+    win.nodes.main.append(
+        $('<a class="btn">').text('Display success notfication')
+            .on('click', function () {
+                notifications.yell('success', 'Ah success!');
+            }),
+        $('<a class="btn">').text('Display error notfication')
+            .on('click', function () {
+                notifications.yell('error', 'Oh failed!');
+            })
+    );
 });
 ```
 
@@ -225,9 +252,9 @@ require(['io.ox/core/notifications'],
 
 You can find information about more advanced notifications [here]({{ site.baseurl }}/ui/customize/notifications.html).
 
-# Displaying a Halo View
+## Displaying a Halo View
 
-**For internal users**
+### Internal users
 
 ```javascript
 win.nodes.main.append(
@@ -237,7 +264,7 @@ win.nodes.main.append(
 );
 ```
 
-**For external users**
+### External users
 
 ```javascript
 win.nodes.main.append(
@@ -249,7 +276,7 @@ win.nodes.main.append(
 
 ![](simple-application-06.png)
 
-# Using settings
+# Integrate settings
 
 To get or set settings you have to create a settings subfolder, with a _defaults.js_ in which the default values are defined for your settings and a _model.js_.
 Below you will find a simple example of these files.
@@ -273,9 +300,9 @@ define('com.example/helloWorld/settings/defaults', [], function () {
 ## Model
 
 ```javascript
-define('com.example/helloWorld/settings/model',
-      ['settings!com.example/helloWorld'], function (settings) {
-
+define('com.example/helloWorld/settings/model', [
+    'settings!com.example/helloWorld'
+], function (settings) {
     'use strict';
 
     // Very simple default model
@@ -303,26 +330,32 @@ define('com.example/helloWorld/settings/model',
 ## Get/Set
 
 ```javascript
-require(['settings!com.example/helloWorld'],
-    function (settings) {
-        win.nodes.main
-            .append(
-                $('<label>').text(gt('Example Setting')),
-                $('<input type="checkbox">')
-                    .prop('checked', settings.get('exampleSetting', false))
-                    .on('change', function () {
-                        settings.set('exampleSetting', $(this).prop('checked')).save();
-                    })
-            );
-    });
+require([
+    'settings!com.example/helloWorld'
+], function (settings) {
+    win.nodes.main.append(
+        $('<label>').text(gt('Example Setting')).append(
+            $('<input type="checkbox">')
+                .prop('checked', settings.get('exampleSetting', false))
+                .on('change', function () {
+                    settings.set('exampleSetting', $(this).prop('checked')).save();
+                })
+        )
+    );
+});
 ```
 
-# Download full example
+Try to click the checkbox and refresh the page, you will see, the setting being persisted with the jslob service.
 
-You can download the example application here with all above shown examples above included.
+# Additional information
 
-[Hello World - Simple application full example.zip](Hello_World_-_Simple_application_full_example.zip)
+Some additional information can be found at the following resources.
 
-# Stuck somewhere?
+## Access full example
 
-You got stuck with a problem while developing? OXpedia might help you out with the article about [debugging the UI]({{ site.baseurl }}/ui/miscellaneous/debugging.html).
+A git repository containing a full working version created in this guide can be found in the [Hello World - Simple application](https://gitlab.open-xchange.com/frontend/examples/simple-application/) repository.
+
+## How to tackle problems
+
+You got stuck with a problem while developing?
+The documentation might help you out with the article about [debugging the UI]({{ site.baseurl }}/ui/miscellaneous/debugging.html).

@@ -13,8 +13,7 @@ The minimal declaration for an app looks like this:
 
 ```json
 {
-    "namespace": "core",
-    "path": "com.example/myapp/register"
+    "namespace": "core"
 }
 ```
 
