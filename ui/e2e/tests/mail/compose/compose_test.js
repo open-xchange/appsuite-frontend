@@ -170,3 +170,36 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.logout();
 
 });
+
+Scenario('Compose with inline image, which is removed again', async function (I, users) {
+    const [user] = users;
+
+    await I.haveSetting('io.ox/mail//messageFormat', 'html');
+
+    I.login('app=io.ox/mail', { user });
+
+    // workflow 9: Compose, add and remove inline image
+    I.clickToolbar('Compose');
+
+    // attach inline image
+    I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.wait(1);
+
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.click('img');
+        I.pressKey('Delete');
+    });
+
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'Testsubject');
+    I.click('Send');
+
+    I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
+    I.click({ css: 'li.unread' });
+    I.waitForVisible('.mail-detail-pane .subject');
+    I.see('Testsubject', '.mail-detail-pane');
+    I.waitForVisible('.mail-detail-frame');
+    I.dontSeeElement('.attachments');
+
+    I.logout();
+});
