@@ -64,8 +64,7 @@ module.exports = function (I) {
                 break;
             case 'upload':
                 // upload image (2.2 MB)
-                //I.attachFile('.picture-upload-view input[type="file"][name="file"]', 'e2e/media/portraits/abbs-johnson-722155-unsplash.jpg');
-                I.attachFile('.picture-upload-view input[type="file"][name="file"]', 'node_modules/e2e-tests-media/animals/sam-carter-191161-unsplash.jpg');
+                I.attachFile('.picture-upload-view input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
                 break;
             case 'check:empty-state':
                 I.seeElementInDOM('.empty-state');
