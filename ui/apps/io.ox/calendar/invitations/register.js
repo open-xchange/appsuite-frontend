@@ -442,8 +442,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getActions: function () {
-            if (this.getConfirmationStatus() !== 'ACCEPTED') return this.options.actions;
-            return _(this.options.actions).without('decline', 'tentative', 'accept');
+            return this.options.actions;
         },
 
         renderAnnotations: function () {
