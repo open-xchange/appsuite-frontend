@@ -80,7 +80,7 @@
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",
     "pdfjs-dist": "1.9.426",
-    "requirejs": "2.3.3",
+    "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.0.3",
     "swiper": "4.3.3",
