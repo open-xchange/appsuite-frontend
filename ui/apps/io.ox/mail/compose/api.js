@@ -381,5 +381,71 @@ define('io.ox/mail/compose/api', [
         };
     }());
 
+    // composition space
+    api.space = {
+
+        // limit (aktuell 3)
+        add: function (type, obj, opt) {
+            opt = _.extend({ vcard: false }, opt);
+            console.log('> ADD: ' + obj.id);
+            return http.POST({
+                module: 'mail/compose',
+                params: $.extend({}, {
+                    type: type,
+                    id: obj.id,
+                    folderId: obj.folder_id || obj.folder,
+                    vcard: opt.vcard
+                })
+            });
+        },
+
+        get: function (id) {
+            console.log('> GET: ' + id);
+            return http.GET({ url: 'api/mail/compose/' + id });
+        },
+
+
+        list: function () {
+            console.log('> LIST');
+            return http.GET({ url: 'api/mail/compose' });
+        },
+
+        remove: function (id) {
+            console.log('> REMOVE: ' + id);
+            return http.DELETE({ url: 'api/mail/compose/' + id }).then(function (data) {
+                if (data && data.success) return data;
+                return $.Deferred().reject({ action: 'remove', error: 'unknown', id: id });
+            });
+        },
+
+        reset: function () {
+            console.log('> RESET');
+            return api.space.list().then(function (list) {
+                // TODO: use case? adjust http pause/resume? add mw endpoint?
+                // process all updates
+                _(list).map(function (id) {
+                    return api.space.remove(id);
+                });
+                return $.when.apply($, list);
+            });
+        },
+
+        send: function (id, data) {
+            console.log('> SEND: ' + id);
+            return http.PATCH({
+                url: 'api/mail/compose/' + id + '/send',
+                params: $.extend({}, data)
+            });
+        },
+
+        update: function (id, data) {
+            console.log('> UPDATE: ' + id);
+            return http.PATCH({
+                url: 'api/mail/compose/' + id,
+                params: $.extend({}, data)
+            });
+        }
+    };
+
     return api;
 });
