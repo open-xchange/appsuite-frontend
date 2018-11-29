@@ -185,7 +185,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.attachments');
     // TODO need to see attachments of original email
-    I.see('2 attachment'); // currently 2 attachments as the inline images gets forwarded
+    I.see('2 attachments'); // currently 2 attachments as the inline images gets forwarded
 
     I.logout();
 
@@ -290,6 +290,50 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.switchTo('.mail-detail-frame');
     I.see('Testdocument.txt');
     I.switchTo();
+
+    I.logout();
+});
+
+Scenario('Compose mail with vcard and read receipt', async function (I, users) {
+    const user2 = await users.create();
+
+    I.login('app=io.ox/mail');
+
+    // workflow 13: Compose mail and attach v-card
+    // workflow 15: Compose with read-receipt
+    I.clickToolbar('Compose');
+
+    I.waitForText('Subject');
+    I.fillField('To', user2.get('primaryEmail'));
+    I.fillField('Subject', 'Testsubject');
+    I.click('Options');
+    I.click('Attach Vcard');
+    I.click('Options');
+    I.click('Request read receipt');
+    I.click('Send');
+    I.waitForInvisible('floating-window');
+    I.wait(1);
+
+    I.logout();
+
+    I.login('app=io.ox/mail', { user: user2 });
+
+    I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
+    I.click({ css: 'li.unread' });
+    I.waitForVisible('.mail-detail-pane .subject');
+    I.see('Testsubject', '.mail-detail-pane');
+    I.waitForVisible('.attachments');
+    I.see('1 attachment');
+
+    I.logout();
+
+    I.login('app=io.ox/mail');
+
+    // TODO check read aknowledgement
+    // I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
+    // I.click({ css: 'li.unread' });
+    // I.waitForVisible('.mail-detail-pane .subject');
+    // I.see('Read acknowledgement', '.mail-detail-pane');
 
     I.logout();
 });
