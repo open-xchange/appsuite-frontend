@@ -1355,10 +1355,10 @@ crc@^3.4.4:
   dependencies:
     buffer "^5.1.0"
 
-croppie@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/croppie/-/croppie-2.5.0.tgz#f730a29add1fd1e576437234bd047606864cc48e"
-  integrity sha512-15t25/EsHw1wrWF7FMWrzradchP1jO+6Qo7aA027SNqzG1AsqsTxQE7UHnMy2kSfMfwm4pCmezg6r8h/7p923A==
+croppie@2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/croppie/-/croppie-2.6.2.tgz#d605ceeffb4aea281f72a63c9a0a305db0a46e50"
+  integrity sha512-uvQI8XliWNWiquFCgIjwNoWCjbnQ/qvyitwIj8F4PjwrH40vniPmKSXmXaIbiWNojiraCi08PovKXfs8YXjMGg==
 
 cross-spawn@^5.0.1, cross-spawn@^5.1.0:
   version "5.1.0"
