@@ -34,7 +34,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
         module: 'io.ox/mail',
         type: 'signature'
     });
-    await I.haveSetting('io.ox/mail//appendVcard', false);
+    await I.haveSetting('io.ox/mail//appendVcard', true);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
 
     I.login('app=io.ox/mail');
@@ -227,7 +227,9 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 Scenario('Compose with drivemail attachment and edit draft', async function (I, users) {
     const [user] = users;
 
+    const user2 = await users.create();
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
+    await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
 
     I.login('app=io.ox/files');
 
@@ -253,6 +255,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.click('Add');
 
     I.retry(5).click('Use Drive Mail');
+    I.fillField('Subject', 'Testsubject');
     I.click('Discard');
     // TODO find out whether this should be shown with the new compose api
     I.click('Save as draft');
@@ -260,12 +263,25 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
     I.logout();
 
-    // workflow 11: Compose mail, add Drive-Mail attachment, close compose, logout, login, edit Draft, remove Drive-Mail option, send Mail
     I.login('app=io.ox/mail');
 
     I.waitForText('Drafts');
     I.selectFolder('Drafts');
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
+    I.click('.io-ox-mail-window li.list-item');
+
+    // workflow 17: Edit copy
+    I.clickToolbar('Edit copy');
+    I.waitForText('Subject');
+
+    I.fillField('To', user2.get('primaryEmail'));
+    I.click('Send');
+    I.waitForInvisible('.floating-window');
+    I.wait(1);
+    // TODO wait for visible items number should be one but is two to a bug/config problem on the test server
+    I.waitNumberOfVisibleElements('.io-ox-mail-window li.list-item', 2);
+
+    // workflow 11: Compose mail, add Drive-Mail attachment, close compose, logout, login, edit Draft, remove Drive-Mail option, send Mail
+    // workflow 16: Edit draft
     I.clickToolbar('Edit draft');
     I.waitForText('Subject');
 
@@ -279,6 +295,9 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.fillField('Subject', 'Testsubject');
     I.click('Send');
     I.waitForInvisible('.floating-window');
+    I.wait(1);
+    // TODO this should be uncommented as it should work. Is the same issue as above where the draft is not removed
+    // I.dontSeeElement('.io-ox-mail-window li.list-item');
 
     I.selectFolder('Inbox');
 
@@ -334,6 +353,33 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users) {
     // I.click({ css: 'li.unread' });
     // I.waitForVisible('.mail-detail-pane .subject');
     // I.see('Read acknowledgement', '.mail-detail-pane');
+
+    I.logout();
+});
+
+Scenario('Compose mail, refresh and continue work at restore point', async function (I, users) {
+    const [user] = users;
+
+    await I.haveSetting('io.ox/mail//messageFormat', 'text');
+
+    I.login();
+
+    I.clickToolbar('Compose');
+    I.waitForText('Subject');
+    I.fillField('To', user.get('primaryEmail'));
+    I.fillField('Subject', 'Testsubject');
+    I.fillField({ css: 'textarea.plain-text' }, 'Testcontent');
+    I.wait(11); // restore interval is 10 seconds
+
+    I.refreshPage();
+
+    I.waitForElement('#io-ox-taskbar');
+    I.retry(5).click('Mail: Testsubject', '#io-ox-taskbar');
+
+    I.waitForText('Subject');
+
+    I.seeInField('Subject', 'Testsubject');
+    I.seeInField({ css: 'textarea.plain-text' }, 'Testcontent');
 
     I.logout();
 });
