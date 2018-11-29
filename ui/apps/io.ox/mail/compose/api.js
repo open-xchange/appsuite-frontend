@@ -381,6 +381,36 @@ define('io.ox/mail/compose/api', [
         };
     }());
 
+    // TODO: remove
+    api.unittest = function (obj) {
+        var id, count;
+        return api.space.list().then(function (list) {
+            console.log(list);
+            count = list.length;
+            return api.space.add('forward', obj);
+        }).then(function (data) {
+            console.log(data.id);
+            id = data.id;
+            return api.space.get(data.id);
+        }).then(function (data) {
+            console.log(data);
+            return api.space.list();
+        }).then(function (list) {
+            console.log(list);
+            if (count + 1 !== list.length) console.log('%c' + 'COUNT', 'color: white; background-color: red');
+            if (!_.contains(list, id)) console.log('%c' + 'CONTAINS', 'color: white; background-color: red');
+            return api.space.remove(id);
+        }).then(function () {
+            return api.space.list();
+        }).then(function (list) {
+            console.log(list);
+            if (count !== list.length) console.log('%c' + 'COUNT', 'color: white; background-color: red');
+            if (_.contains(list, id)) console.log('%c' + 'CONTAINS', 'color: white; background-color: red');
+        }).catch(function () {
+            console.log('%c' + 'CATCH', 'color: white; background-color: red');
+        });
+    };
+
     // composition space
     api.space = {
 
