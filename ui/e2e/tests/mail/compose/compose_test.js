@@ -37,7 +37,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
     await I.haveSetting('io.ox/mail//appendVcard', false);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
 
-    I.login('app=io.ox/mail', { user });
+    I.login('app=io.ox/mail');
 
     // workflow 1: Compose & discard
     I.clickToolbar('Compose');
@@ -123,7 +123,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
 
-    I.login('app=io.ox/files', { user });
+    I.login('app=io.ox/files');
 
     // create textfile in drive
     I.clickToolbar('New');
@@ -147,7 +147,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
 
     // attach from drive
     I.waitForInvisible('.window-blocker');
-    I.click('Attachments');
+    I.retry(5).click('Attachments');
     I.click('Add from Drive');
     I.waitForText('Testdocument.txt');
     I.click('Add');
@@ -155,6 +155,8 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     // attach inline image
     I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
     I.wait(1);
+
+    I.seeNumberOfVisibleElements('.inline-items > li', 2);
 
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
@@ -167,6 +169,24 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.waitForVisible('.attachments');
     I.see('3 attachments');
 
+    // workflow 12: Reply e-mail with attachment and re-adds attachments of original mail
+    I.click('Reply');
+
+    // upload local file via the hidden input in the toolbar
+    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+
+    // TODO User selects "Add attachments from original email" in editor
+
+    I.click('Send');
+
+    I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
+    I.click({ css: 'li.unread' });
+    I.waitForVisible('.mail-detail-pane .subject');
+    I.see('Testsubject', '.mail-detail-pane');
+    I.waitForVisible('.attachments');
+    // TODO need to see attachments of original email
+    I.see('2 attachment'); // currently 2 attachments as the inline images gets forwarded
+
     I.logout();
 
 });
@@ -176,7 +196,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
 
-    I.login('app=io.ox/mail', { user });
+    I.login('app=io.ox/mail');
 
     // workflow 9: Compose, add and remove inline image
     I.clickToolbar('Compose');
@@ -209,7 +229,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
 
-    I.login('app=io.ox/files', { user });
+    I.login('app=io.ox/files');
 
     // create textfile in drive
     I.clickToolbar('New');
@@ -241,7 +261,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.logout();
 
     // workflow 11: Compose mail, add Drive-Mail attachment, close compose, logout, login, edit Draft, remove Drive-Mail option, send Mail
-    I.login('app=io.ox/mail', { user });
+    I.login('app=io.ox/mail');
 
     I.waitForText('Drafts');
     I.selectFolder('Drafts');
