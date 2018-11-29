@@ -440,8 +440,7 @@ define('io.ox/mail/main', [
 
             // register load listener which triggers complete
             collection.on('load reload', function () {
-                this.complete = true;
-                this.trigger('complete');
+                this.complete.setComplete(true);
             });
 
             // use mail API's "all-unseen" event to update counter (that is also used in top-bar)

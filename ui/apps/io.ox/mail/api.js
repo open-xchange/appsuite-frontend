@@ -1012,7 +1012,7 @@ define('io.ox/mail/api', [
         // clear affected collections
         _(pool.getByFolder(source)).each(function (collection) {
             collection.reset([]);
-            collection.complete = true;
+            collection.setComplete(true);
         });
 
         return http.wait(

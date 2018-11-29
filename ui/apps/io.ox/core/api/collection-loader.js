@@ -73,22 +73,12 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             });
 
             // track completeness
-            var complete = collection.complete;
-            if (type === 'load') {
-                complete = data.length < PAGE_SIZE;
-            } else if (type === 'paginate') {
-                // the first data element is the last currently visible element
-                // in the list, therefore <=1 is already complete
-                complete = data.length <= 1;
-            } else if (type === 'reload' && collection.complete) {
-                // Bug 61264: if the folder was empty before reload complete must
-                // be triggered to remove the busyIndicator
-                collection.trigger('complete', collection.complete);
-            }
-            if (complete !== collection.complete) {
-                collection.complete = complete;
-                collection.trigger('complete', complete);
-            }
+            // load: always complete if we get less than requested
+            // paginate: the first data element is the last currently visible element in the list, therefore <=1 is already complete
+            // reload: keep the previous state. no need to trigger complete
+            if (type === 'load') collection.setComplete(data.length < PAGE_SIZE);
+            else if (type === 'paginate') collection.setComplete(data.length <= 1);
+
             collection.trigger(type);
         }
 
@@ -130,7 +120,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
-            if (this.isBad(params.folder) || (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve)) {
+            if (this.isBad(params.folder) || ((collection.length > 0 || collection.complete) && !collection.expired && collection.sorted && !collection.preserve)) {
                 // reduce too large collections
                 var pageSize = collection.CUSTOM_PAGE_SIZE || this.PRIMARY_PAGE_SIZE;
                 if (collection.length > pageSize) {
