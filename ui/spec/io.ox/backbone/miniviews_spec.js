@@ -465,7 +465,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 // jump to February
                 this.view.$el.find('.month').val('1').trigger('change');
                 expect(this.view.value()).to.equal('1604-02-29');
-                expect(this.model.get('test')).to.equal(-11544768000000); // 1604-02-29 Error while detecting browser, using fallback
+                expect(this.model.get('test')).to.equal(-11544767608000); // 1604-02-29 Error while detecting browser, using fallback
             });
         });
 
