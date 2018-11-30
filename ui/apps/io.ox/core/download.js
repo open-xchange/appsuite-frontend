@@ -11,7 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
+define('io.ox/core/download', [
+    'io.ox/files/api',
+    'io.ox/mail/api',
+    'io.ox/core/yell',
+    'io.ox/core/capabilities',
+    'io.ox/backbone/views/modal',
+    'gettext!io.ox/core',
+    'io.ox/core/extensions'], function (api, mailAPI, yell, capabilities, ModalDialog, gt, ext) {
 
     /* global blankshield:true */
 
@@ -55,6 +62,36 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         form.submit();
     }
 
+    ext.point('io.ox/core/download/antiviruspopup').extend({
+        index: 100,
+        id: 'buttonThreatFound',
+        render: function (baton) {
+            console.log(baton);
+            if (baton.model.get('category') !== 'threatFound') return;
+            this.addButton({ action: 'ignore', label: gt('Download infected file') });
+        }
+    });
+
+    ext.point('io.ox/core/download/antiviruspopup').extend({
+        index: 200,
+        id: 'buttonNotScanned',
+        render: function (baton) {
+            if (baton.model.get('category') !== 'notScanned') return;
+            this.addButton({ action: 'ignore', label: gt('Download unscanned') });
+        }
+    });
+
+    ext.point('io.ox/core/download/antiviruspopup').extend({
+        index: 300,
+        id: 'message',
+        render: function (baton) {
+            this.$body.append($('<div class="alert">')
+                .text(baton.model.get('error'))
+                .css('margin-bottom', '0')
+                .addClass(baton.model.get('category') === 'threatFound' ? 'alert-danger' : 'alert-warning'));
+        }
+    });
+
     return {
 
         // publish utility functions for general use
@@ -66,11 +103,27 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
             return blankshield.open(url, '_blank');
         },
 
+        showAntiVirusPopup: function (error) {
+            error = {
+                error: 'ALERT! ALERT! TOTALLY DANGEROUS VIRUS FOUND !!!11elf',
+                // categories tbd: threatFound, notScanned
+                category: 'threatFound'
+            };
+            new ModalDialog({
+                title: gt('Anti virus warning'),
+                point: 'io.ox/core/download/antiviruspopup',
+                model: new Backbone.Model(error)
+            })
+            .addButton({ action: 'cancel', label: gt('OK') })
+            .open();
+        },
+
         // download single file
         file: function (options) {
 
             // on iOS we need a new window, so open this right now
-            var win = _.device('ios') && this.window('blank.html');
+            var win = _.device('ios') && this.window('blank.html'),
+                self = this;
 
             api.get(options).done(function (file) {
                 if (options.version) {
@@ -79,6 +132,13 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
                 if (options.filename) {
                     file = _.extend(file, { filename: options.filename });
                 }
+
+                if (capabilities.has('antivirus')) {
+                    options.params = (options.params || {});
+                    options.params.scan = true;
+                }
+                self.showAntiVirusPopup();
+
                 var url = api.getUrl(file, 'download', { params: options.params });
                 if (_.device('ios')) {
                     win.location = url;
