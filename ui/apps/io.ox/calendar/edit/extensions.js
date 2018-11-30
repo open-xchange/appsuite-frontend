@@ -403,6 +403,10 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12',
         index: 650,
         render: function () {
+
+            // changes not allowed when editing or creating an exception
+            if ((this.model.get('recurrenceId') && this.model.mode === 'appointment')) return;
+
             var helpNode = $('<div class="alert">'),
                 errorText = gt('Your recurrence rule does not fit to your start date.'),
                 helpText = gt('Your recurrence rule was changed automatically.'),
@@ -674,9 +678,9 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-sm-6 col-xs-12',
         render: function () {
 
-            // visibility flag only works in private folders
+            // visibility flag only works in private folders and does not work with exceptions
             var folder = this.model.get('folder');
-            if (!folderAPI.pool.getModel(folder).is('private')) return;
+            if (!folderAPI.pool.getModel(folder).is('private') || (this.model.get('recurrenceId') && this.model.mode === 'appointment')) return;
             var popoverUid = _.uniqueId('popover-'),
                 helpNode = $('<button type="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="manual" data-placement="left" data-content=" ">').attr('aria-label', gt('Visibility Help')).append('<i class="fa fa-question-circle" aria-hidden="true">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div id="' + popoverUid + '">' +

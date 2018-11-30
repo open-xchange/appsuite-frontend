@@ -23,7 +23,8 @@ define('io.ox/calendar/actions/edit', [
     return function (baton) {
         var o = api.reduce(baton.data);
 
-        util.showRecurrenceDialog(baton.data)
+        // allow editing the series on last occurence. This allows people to prolong the series by changing the rrule
+        util.showRecurrenceDialog(baton.data, { allowEditOnLastOccurence: true })
             .done(function (action) {
                 if (action === 'cancel') return;
 

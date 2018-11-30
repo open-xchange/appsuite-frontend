@@ -1148,15 +1148,16 @@ define('io.ox/calendar/util', [
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
-        showRecurrenceDialog: function (model) {
+        showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
+                options = options || {};
                 var dialog = new dialogs.ModalDialog();
                 // first occurence
                 if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
-                } else if (model.hasFlag('last_occurrence')) {
+                } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
                 } else {
                     dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
