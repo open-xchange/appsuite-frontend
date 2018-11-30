@@ -477,5 +477,46 @@ define('io.ox/mail/compose/api', [
         }
     };
 
+    // composition space
+    api.space.attachments = {
+
+        original: function (space) {
+            console.log('> ATTACHMENTS ORIGINAL: ' + space);
+            return http.POST({
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/original'
+            });
+        },
+        vcard: function (space) {
+            console.log('> ATTACHMENTS VCARD: ' + space);
+            return http.POST({
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/vcard'
+            });
+        },
+        add: function (space, file, type) {
+            console.log('> ATTACHMENTS VCARD: ' + space);
+            return http.POST({
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
+                params: $.extend({}, {
+                    file: file,
+                    contentDisposition: type || 'attachment'
+                })
+
+            });
+        },
+        get: function (space, attachment) {
+            console.log('> ATTACHMENTS GET: ' + space + ', ' + attachment);
+            return http.POST({
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
+            });
+        },
+        remove: function (space, attachment) {
+            console.log('> ATTACHMENTS REMOVE: ' + space + ', ' + attachment);
+            return http.DELETE({
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
+            });
+        }
+    };
+
+
     return api;
 });
