@@ -498,39 +498,41 @@ define('io.ox/mail/compose/view', [
 
             return composeAPI[mode](obj, this.messageFormat)
                 .then(accountAPI.getValidAddress)
-                .then(function checkTruncated(data) {
-                    //check for truncated message content, warn the user, provide alternative
-                    if (data.attachments[0].truncated) {
-                        //only truncated if forwarded inline and too large
-                        var dialog = new dialogs.ModalDialog(),
-                            def = $.Deferred();
+                // TOOD: clarifiy (trun)
+                // .then(function checkTruncated(data) {
 
-                        dialog
-                            .header($('<h4>').text(gt('This message has been truncated due to size limitations.')))
-                            .append(gt('Loading the full mail might lead to performance problems.'))
-                            .addPrimaryButton('useInline', gt('Continue'), 'useInline')
-                            .addButton('useInlineComplete', gt('Load full mail'), 'useInlineComplete')
-                            .addButton('useAttachment', gt('Add original message as attachment'), 'useAttachment')
-                            .on('useAttachment', function () {
-                                obj.attachOriginalMessage = true;
-                                def.resolve(obj);
-                            })
-                            .on('useInline', def.reject)
-                            .on('useInlineComplete', function () {
-                                delete obj.max_size;
-                                def.resolve(obj);
-                            })
-                            .show();
-                        return def.always(function () {
-                            dialog.close();
-                        }).then(function (obj) {
-                            return composeAPI[mode](obj, this.messageFormat);
-                        }, function () {
-                            return $.when(data);
-                        });
-                    }
-                    return data;
-                })
+                //     //check for truncated message content, warn the user, provide alternative
+                //     if (data.attachments[0] && data.attachments[0].truncated) {
+                //         //only truncated if forwarded inline and too large
+                //         var dialog = new dialogs.ModalDialog(),
+                //             def = $.Deferred();
+
+                //         dialog
+                //             .header($('<h4>').text(gt('This message has been truncated due to size limitations.')))
+                //             .append(gt('Loading the full mail might lead to performance problems.'))
+                //             .addPrimaryButton('useInline', gt('Continue'), 'useInline')
+                //             .addButton('useInlineComplete', gt('Load full mail'), 'useInlineComplete')
+                //             .addButton('useAttachment', gt('Add original message as attachment'), 'useAttachment')
+                //             .on('useAttachment', function () {
+                //                 obj.attachOriginalMessage = true;
+                //                 def.resolve(obj);
+                //             })
+                //             .on('useInline', def.reject)
+                //             .on('useInlineComplete', function () {
+                //                 delete obj.max_size;
+                //                 def.resolve(obj);
+                //             })
+                //             .show();
+                //         return def.always(function () {
+                //             dialog.close();
+                //         }).then(function (obj) {
+                //             return composeAPI[mode](obj, this.messageFormat);
+                //         }, function () {
+                //             return $.when(data);
+                //         });
+                //     }
+                //     return data;
+                // })
                 .then(function (data) {
                     if (mode !== 'edit') {
                         data.sendtype = mode === 'forward' ? composeAPI.SENDTYPE.FORWARD : composeAPI.SENDTYPE.REPLY;
