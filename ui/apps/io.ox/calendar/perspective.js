@@ -45,7 +45,7 @@ define('io.ox/calendar/perspective', [
             return events;
         },
 
-        initialize: function () {
+        initialize: function (options) {
             this.listenTo(this.model, 'change:date', this.onChangeDate);
             this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
             this.listenTo(api, 'create update', this.onCreateUpdateAppointment);
@@ -55,7 +55,7 @@ define('io.ox/calendar/perspective', [
             this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
             this.listenTo(folderAPI, 'before:update', this.beforeUpdateFolder);
 
-            this.followDeepLink();
+            this.followDeepLink(options.deepLink);
         },
 
         // needs to be implemented by the according view
@@ -331,29 +331,19 @@ define('io.ox/calendar/perspective', [
         },
 
         // id must be set in URL
-        followDeepLink: function () {
-            var cid = _.url.hash('id'), e, self = this;
-            if (cid) {
-                cid = cid.split(',', 1)[0];
+        followDeepLink: function (cid) {
+            if (!cid) return;
+            var e, self = this;
 
-                // see if id is missing the folder
-                if (cid.indexOf('.') === -1) {
-                    // cid is missing folder appointment cannot be restored
-                    if (!_.url.hash('folder')) return;
-                    // url has folder attribute. Add this
-                    cid = _.url.hash('folder') + '.' + cid;
+            api.get(api.cid(cid)).done(function (model) {
+                self.setStartDate(model.getMoment('startDate'));
+                if (_.device('smartphone')) {
+                    ox.launch('io.ox/calendar/detail/main', { cid: cid });
+                } else {
+                    e = $.Event('click', { target: self.$el });
+                    self.showAppointment(e, util.cid(cid), { arrow: false });
                 }
-
-                api.get(api.cid(cid)).done(function (model) {
-                    self.setStartDate(model.getMoment('startDate'));
-                    if (_.device('smartphone')) {
-                        ox.launch('io.ox/calendar/detail/main', { cid: cid });
-                    } else {
-                        e = $.Event('click', { target: self.$el });
-                        self.showAppointment(e, util.cid(cid), { arrow: false });
-                    }
-                });
-            }
+            });
         },
 
         onCreateUpdateAppointment: function (obj) {

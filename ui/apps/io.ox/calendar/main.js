@@ -452,7 +452,8 @@ define('io.ox/calendar/main', [
         'views': function (app) {
             var list = ['week:day', 'month', 'list'],
                 defaultPage = _.device('smartphone') ? 'week:day' : 'week:workweek',
-                views = {};
+                views = {},
+                deepLink = _.url.hash('id');
             if (_.device('!smartphone')) list.push('week:workweek', 'week:week', 'year');
             list.forEach(function (item) {
                 var node = app.pages.getPage(item);
@@ -462,7 +463,9 @@ define('io.ox/calendar/main', [
                         mode = split[1] || (_.device('smartphone') ? 'day' : 'workweek');
 
                     require(['io.ox/calendar/' + view + '/view']).then(function success(View) {
-                        var view = new View({ mode: mode, app: app });
+                        var view = new View({ mode: mode, app: app, deepLink: deepLink });
+                        // reset, because we only want a deepLink to happen once opening the app
+                        deepLink = null;
                         node.append(view.$el);
                         view.render();
                         app.getWindow().trigger('change:perspective', view);
